@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MET'S IEDC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#007BFF', // KSUM-like Blue
+                        secondary: '#6C757D',
+                        accent: '#28A745', // Green for success/innovation
+                        light: '#F8F9FA',
+                        dark: '#343A40',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Basic smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Active Nav Link Style */
+        .nav-link-active {
+            color: config('theme.colors.primary');
+            font-weight: 600;
+            border-bottom: 2px solid config('theme.colors.primary');
+        }
+        .nav-link {
+            padding-bottom: 0.25rem; /* For the border to sit nicely */
+            border-bottom: 2px solid transparent; /* Make space for active border */
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: config('theme.colors.primary');
+        }
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/343A40/FFFFFF?text=IEDC+Innovation+Hub') no-repeat center center;
+            background-size: cover;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* Page transition placeholder - can be expanded with JS */
+        .page {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .page.active {
+            display: block; /* Shown when active */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="font-inter bg-light text-dark">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="#home" class="flex items-center space-x-2 page-link">
+                    <img src="data:image/png;base64,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" alt="IEDC Logo" class="h-10 w-10 rounded-full">
+                    <span class="text-2xl font-bold text-primary">MET'S IEDC</span>
+                </a>
+
+                <nav class="hidden md:flex space-x-4 lg:space-x-6 items-center">
+                    <a href="#home" class="nav-link page-link nav-link-active">Home</a>
+                    <a href="#about" class="nav-link page-link">About Us</a>
+                    <a href="#events" class="nav-link page-link">Events</a>
+                    <a href="#initiatives" class="nav-link page-link">Initiatives</a>
+                    <a href="#news" class="nav-link page-link">News</a>
+                    <a href="#contact" class="nav-link page-link">Contact</a>
+                    <a href="student login.html" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-700 transition duration-300 page-link">Student Login</a>
+                    <a href="#admin-login" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition duration-300 page-link">Admin Login</a>
+                </nav>
+
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-dark focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-white z-40 pt-20 p-4 md:hidden">
+            <nav class="flex flex-col space-y-4">
+                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Home</a>
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">About Us</a>
+                <a href="#events" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Events</a>
+                <a href="#initiatives" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Initiatives</a>
+                <a href="#news" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">News</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Contact</a>
+                <a href="student login.html" class="mt-4 block w-full text-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-700 transition duration-300 page-link-mobile">Student Login</a>
+                <a href="#admin-login" class="mt-2 block w-full text-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition duration-300 page-link-mobile">Admin Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="page active">
+            <div class="hero-section text-white py-20 md:py-32">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Innovate. Incubate. Inspire.</h1>
+                    <p class="text-lg sm:text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Welcome to the Innovation and Entrepreneurship Development Centre, fostering student innovators and entrepreneurs under Kerala Startup Mission.</p>
+                    <div class="space-x-4">
+                        <a href="#events" class="bg-accent hover:bg-green-600 text-white font-semibold py-3 px-8 rounded-lg text-lg transition duration-300 page-link">Upcoming Events</a>
+                        <a href="#about" class="bg-white hover:bg-gray-200 text-primary font-semibold py-3 px-8 rounded-lg text-lg transition duration-300 page-link">Learn More</a>
+                    </div>
+                </div>
+            </div>
+
+            <section class="py-16 bg-white">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold text-dark">About IEDC</h2>
+                        <p class="text-secondary mt-2">Driving innovation from campus to community.</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <img src="EXCOM 2025.jpg" alt="IEDC Team" class="rounded-lg shadow-lg">
+                        </div>
+                        <div>
+                            <p class="text-lg text-secondary mb-4">The Innovation and Entrepreneurship Development Centre (IEDC) at Met's School of Engineering is a flagship initiative of Kerala Startup Mission (KSUM) to promote innovation and entrepreneurship among students and faculty.</p>
+                            <p class="text-lg text-secondary mb-6">We provide a platform for students to pursue entrepreneurial ventures, develop innovative products, and transform their ideas into viable businesses. Our focus is on creating a vibrant ecosystem that supports every stage of the startup journey.</p>
+                            <a href="#about" class="text-primary hover:underline font-semibold page-link">Read more about our mission & vision →</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-16 bg-light">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold text-dark">Upcoming Events</h2>
+                        <p class="text-secondary mt-2">Join our workshops, bootcamps, and competitions.</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="bg-white p-6 rounded-lg shadow-lg card-hover transition-all duration-300">
+                            <img src="IEDC CORE TEAM.jpg" alt="Event 1" class="rounded-md mb-4 w-full h-48 object-cover">
+                            <h3 class="text-xl font-semibold text-primary mb-2">IEDC Core Team Recruitment 2025</h3>
+                            <p class="text-sm text-secondary mb-1"><span class="font-semibold">Date:</span> May, 2025</p>
+                            <p class="text-sm text-secondary mb-3"><span class="font-semibold">Venue:</span> MET'S IEDC</p>
+                            <p class="text-secondary text-sm mb-4">We're Selecting 20 passionate students!</p>
+                            <a href="#events" class="text-accent hover:underline font-medium page-link">Learn More & Register</a>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg card-hover transition-all duration-300">
+                            <img src="https://placehold.co/400x250/FFC107/333333?text=Hackathon" alt="Event 2" class="rounded-md mb-4 w-full h-48 object-cover">
+                            <h3 class="text-xl font-semibold text-primary mb-2">InnovateHER Hackathon</h3>
+                            <p class="text-sm text-secondary mb-1"><span class="font-semibold">Date:</span> August 5, 2025</p>
+                            <p class="text-sm text-secondary mb-3"><span class="font-semibold">Venue:</span> Online</p>
+                            <p class="text-secondary text-sm mb-4">A 24-hour hackathon focused on solutions for social challenges. Open to all students.</p>
+                            <a href="#events" class="text-accent hover:underline font-medium page-link">Learn More & Register</a>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg card-hover transition-all duration-300">
+                            <img src="https://placehold.co/400x250/17A2B8/FFFFFF?text=Seminar" alt="Event 3" class="rounded-md mb-4 w-full h-48 object-cover">
+                            <h3 class="text-xl font-semibold text-primary mb-2">Investor Connect Meet</h3>
+                            <p class="text-sm text-secondary mb-1"><span class="font-semibold">Date:</span> September 10, 2025</p>
+                            <p class="text-sm text-secondary mb-3"><span class="font-semibold">Venue:</span> KSUM Hub, Kochi</p>
+                            <p class="text-secondary text-sm mb-4">An exclusive opportunity for IEDC startups to pitch to angel investors and VCs.</p>
+                            <a href="#events" class="text-accent hover:underline font-medium page-link">Learn More & Register</a>
+                        </div>
+                    </div>
+                     <div class="text-center mt-12">
+                        <a href="#events" class="bg-primary hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg text-lg transition duration-300 page-link">View All Events</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-16 bg-white">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold text-dark">Latest News</h2>
+                        <p class="text-secondary mt-2">Stay updated with our achievements and announcements.</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <article class="flex bg-light p-6 rounded-lg shadow-md">
+                            <img src="https://placehold.co/150x150/007BFF/FFFFFF?text=News+1" alt="News 1" class="w-1/3 h-auto object-cover rounded-md mr-6">
+                            <div>
+                                <h3 class="text-xl font-semibold text-primary mb-2">IEDC Team Wins National Innovation Award</h3>
+                                <p class="text-sm text-secondary mb-1">May 15, 2025</p>
+                                <p class="text-secondary text-sm mb-3">Our student team's project on sustainable agriculture technology has been recognized at the national level...</p>
+                                <a href="#news" class="text-accent hover:underline font-medium page-link">Read More</a>
+                            </div>
+                        </article>
+                        <article class="flex bg-light p-6 rounded-lg shadow-md">
+                            <img src="https://placehold.co/150x150/6C757D/FFFFFF?text=News+2" alt="News 2" class="w-1/3 h-auto object-cover rounded-md mr-6">
+                            <div>
+                                <h3 class="text-xl font-semibold text-primary mb-2">KSUM Announces New Funding Grant for IEDCs</h3>
+                                <p class="text-sm text-secondary mb-1">May 10, 2025</p>
+                                <p class="text-secondary text-sm mb-3">Kerala Startup Mission has unveiled a new grant to further support innovation hubs in colleges...</p>
+                                <a href="#news" class="text-accent hover:underline font-medium page-link">Read More</a>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="text-center mt-12">
+                        <a href="#news" class="bg-primary hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg text-lg transition duration-300 page-link">View All News</a>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <section id="about" class="page py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-primary">About MET'S IEDC</h1>
+                    <p class="text-xl text-secondary mt-4 max-w-2xl mx-auto">Fostering a culture of innovation and entrepreneurship, guided by Kerala Startup Mission.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-dark mb-4">Our Mission</h2>
+                        <p class="text-lg text-secondary mb-4">To create an entrepreneurial culture in our institution and to foster growth of innovation and entrepreneurship amongst the students, faculty, and staff. We aim to provide a platform for the students to pursue entrepreneurial activities and to translate their innovative ideas into commercially viable products or services.</p>
+                        <h2 class="text-2xl font-semibold text-dark mb-4 mt-8">Our Vision</h2>
+                        <p class="text-lg text-secondary">To be a leading center for innovation and entrepreneurship development, nurturing successful startups that contribute to economic growth and societal impact, in line with the objectives of Kerala Startup Mission.</p>
+                    </div>
+                    <div>
+                        <img src="https://placehold.co/600x450/E0E7FF/333333?text=Our+Vision+and+Mission" alt="IEDC Vision" class="rounded-lg shadow-xl">
+                    </div>
+                </div>
+
+                <div class="mb-16">
+                    <h2 class="text-3xl font-bold text-dark text-center mb-10">Meet the Team</h2>
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="bg-light p-6 rounded-lg shadow-lg text-center card-hover transition-all duration-300">
+                            <img src="https://placehold.co/150x150/007BFF/FFFFFF?text=Faculty+Lead" alt="Team Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-primary">
+                            <h3 class="text-xl font-semibold text-primary">Mr.Jerin George K</h3>
+                            <p class="text-secondary">IEDC Nodal Officer</p>
+                            <p class="text-sm text-dark mt-2">"Guiding students to unlock their innovative potential."</p>
+                        </div>
+                        <div class="bg-light p-6 rounded-lg shadow-lg text-center card-hover transition-all duration-300">
+                            <img src="https://placehold.co/150x150/28A745/FFFFFF?text=Student+CEO" alt="Team Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-accent">
+                            <h3 class="text-xl font-semibold text-primary">Chris Babu</h3>
+                            <p class="text-secondary">IEDC Student Lead I</p>
+                            <p class="text-sm text-dark mt-2">"Passionate about building a vibrant startup ecosystem on campus."</p>
+                        </div>
+                        <div class="bg-light p-6 rounded-lg shadow-lg text-center card-hover transition-all duration-300">
+                            <img src="https://placehold.co/150x150/FFC107/333333?text=Ex-Com+Member" alt="Team Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-yellow-500">
+                            <h3 class="text-xl font-semibold text-primary">Your Name (Ex-Com)</h3>
+                            <p class="text-secondary">Former Executive Committee</p>
+                            <p class="text-sm text-dark mt-2">"Proud to have contributed to the IEDC's growth."</p>
+                        </div>
+                        </div>
+                </div>
+
+                 <div>
+                    <h2 class="text-3xl font-bold text-dark text-center mb-10">Our Association with Kerala Startup Mission</h2>
+                    <div class="flex flex-col md:flex-row items-center bg-blue-50 p-8 rounded-lg shadow-md">
+                        <img src="https://startupmission.kerala.gov.in/images/logo.png" alt="Kerala Startup Mission Logo" class="h-24 md:h-32 mb-6 md:mb-0 md:mr-8" onerror="this.src='https://placehold.co/200x80/CCCCCC/FFFFFF?text=KSUM+Logo'; this.onerror=null;">
+                        <p class="text-lg text-secondary">Our IEDC operates under the guidance and support of the Kerala Startup Mission (KSUM), the central agency of the Government of Kerala for entrepreneurship development and incubation activities in Kerala. KSUM's initiatives are aimed at transforming Kerala into a vibrant startup hub. We actively participate in KSUM programs, leverage their network, and align our activities with their strategic goals for fostering innovation in the state.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="events" class="page py-16 md:py-24 bg-light">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-primary">Events Calendar</h1>
+                    <p class="text-xl text-secondary mt-4 max-w-2xl mx-auto">Discover our workshops, seminars, hackathons, and networking sessions.</p>
+                </div>
+
+                <div class="mb-16">
+                    <h2 class="text-2xl font-semibold text-dark mb-6">Upcoming Events</h2>
+                    <div class="space-y-8">
+                        <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-start card-hover transition-all duration-300">
+                            <img src="IEDC CORE TEAM.jpg" alt="Event" class="w-full md:w-1/3 h-48 object-cover rounded-md mb-4 md:mb-0 md:mr-6">
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-primary mb-2">IEDC Core Team Recruitment 2025</h3>
+                                <p class="text-sm text-secondary mb-1"><span class="font-semibold">Date:</span> May, 2025</p>
+                                <p class="text-sm text-secondary mb-3"><span class="font-semibold">Venue:</span> MET'S IEDC</p>
+                                <p class="text-secondary text-sm mb-4">We're Selecting 20 passionate students!</p>
+                                <a href="https://forms.gle/ea58fH6mAWSZ7RZG9" class="inline-block bg-accent text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300">Register Now</a>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-start card-hover transition-all duration-300">
+                            <img src="https://placehold.co/300x200/FFC107/333333?text=Event+Aug" alt="Event" class="w-full md:w-1/3 h-48 object-cover rounded-md mb-4 md:mb-0 md:mr-6">
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-primary mb-2">InnovateHER Hackathon</h3>
+                                <p class="text-sm text-secondary mb-1"><span class="font-semibold">Date:</span> August 5, 2025 (24 Hours)</p>
+                                <p class="text-sm text-secondary mb-3"><span class="font-semibold">Venue:</span> Online / Virtual Platform</p>
+                                <p class="text-secondary text-sm mb-4">Join us for a 24-hour online hackathon focused on developing innovative solutions to pressing social challenges. Themes include education, healthcare, and sustainability. Prizes and mentorship opportunities await!</p>
+                                <a href="#" class="inline-block bg-accent text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300">Learn More & Sign Up</a>
+                            </div>
+                        </div>
+                         <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-start card-hover transition-all duration-300">
+                            <img src="https://placehold.co/300x200/17A2B8/FFFFFF?text=Event+Sep" alt="Event" class="w-full md:w-1/3 h-48 object-cover rounded-md mb-4 md:mb-0 md:mr-6">
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-primary mb-2">Investor Connect & Pitch Day</h3>
+                                <p class="text-sm text-secondary mb-1"><span class="font-semibold">Date:</span> September 10, 2025</p>
+                                <p class="text-sm text-secondary mb-3"><span class="font-semibold">Venue:</span> KSUM Innovation Hub, Kochi (Travel support may be available)</p>
+                                <p class="text-secondary text-sm mb-4">An exclusive event for selected IEDC startups to pitch their ventures to a panel of angel investors, venture capitalists, and industry experts. A great opportunity for funding and networking.</p>
+                                <a href="#" class="inline-block bg-gray-400 text-white py-2 px-4 rounded-lg cursor-not-allowed" title="Applications Closed">Applications Closed</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-semibold text-dark mb-6">Past Events Highlights</h2>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white p-4 rounded-lg shadow-md">
+                            <img src="EVENT 1.jpg" alt="Past Event" class="rounded-md mb-3 w-full h-40 object-cover">
+                            <h4 class="text-md font-semibold text-primary">Pravaah</h4>
+                            <p class="text-xs text-secondary">February 20, 2025</p>
+                            <p class="text-xs text-secondary mt-1">Idea Pitching Competition IEDC CCE</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-md">
+                            <img src="EVENT 2.jpg" alt="Past Event" class="rounded-md mb-3 w-full h-40 object-cover">
+                            <h4 class="text-md font-semibold text-primary">KTU Idea Pitching Competition 2025</h4>
+                            <p class="text-xs text-secondary">March 20, 2025</p>
+                            <p class="text-xs text-secondary mt-1">IEDC,MET'S School of Engineering Mala (KSUMIEDC1163) in association with APJAKTU Start Up Cell has organised a College Level *IDEA PITCHING COMPETITION* on 19th March 2025</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-md">
+                            <img src="https://placehold.co/400x250/6C757D/FFFFFF?text=Past+Event+3" alt="Past Event" class="rounded-md mb-3 w-full h-40 object-cover">
+                            <h4 class="text-md font-semibold text-primary">Idea Pitching Competition</h4>
+                            <p class="text-xs text-secondary">February 15, 2025</p>
+                            <p class="text-xs text-secondary mt-1">Students presented innovative ideas to a panel of judges.</p>
+                        </div>
+                    </div>
+                    <div class="text-center mt-8">
+                        <a href="#" class="text-primary hover:underline">View Event Archive →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="initiatives" class="page py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-primary">Our Initiatives</h1>
+                    <p class="text-xl text-secondary mt-4 max-w-2xl mx-auto">Programs and support systems designed to nurture student innovation.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-light p-8 rounded-lg shadow-lg card-hover transition-all duration-300">
+                        <div class="flex items-center justify-center w-16 h-16 bg-primary text-white rounded-full mb-6 mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-dark text-center mb-3">Idea Incubation</h3>
+                        <p class="text-secondary text-center">We provide mentorship, resources, and seed funding opportunities to transform promising ideas into viable startup projects.</p>
+                    </div>
+                    <div class="bg-light p-8 rounded-lg shadow-lg card-hover transition-all duration-300">
+                        <div class="flex items-center justify-center w-16 h-16 bg-accent text-white rounded-full mb-6 mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-dark text-center mb-3">Skill Development Workshops</h3>
+                        <p class="text-secondary text-center">Regular workshops on cutting-edge technologies, business management, marketing, and intellectual property rights.</p>
+                    </div>
+                    <div class="bg-light p-8 rounded-lg shadow-lg card-hover transition-all duration-300">
+                         <div class="flex items-center justify-center w-16 h-16 bg-yellow-500 text-white rounded-full mb-6 mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-dark text-center mb-3">Mentor Connect Program</h3>
+                        <p class="text-secondary text-center">Connecting student entrepreneurs with experienced industry mentors, successful founders, and subject matter experts.</p>
+                    </div>
+                     <div class="bg-light p-8 rounded-lg shadow-lg card-hover transition-all duration-300">
+                         <div class="flex items-center justify-center w-16 h-16 bg-purple-600 text-white rounded-full mb-6 mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-dark text-center mb-3">Industry Linkages</h3>
+                        <p class="text-secondary text-center">Facilitating collaborations with industry partners for internships, projects, and technology transfer opportunities.</p>
+                    </div>
+                     <div class="bg-light p-8 rounded-lg shadow-lg card-hover transition-all duration-300">
+                         <div class="flex items-center justify-center w-16 h-16 bg-teal-500 text-white rounded-full mb-6 mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-dark text-center mb-3">Pitching Platforms</h3>
+                        <p class="text-secondary text-center">Organizing internal and participating in external pitching competitions to help students refine their ideas and gain exposure.</p>
+                    </div>
+                     <div class="bg-light p-8 rounded-lg shadow-lg card-hover transition-all duration-300">
+                         <div class="flex items-center justify-center w-16 h-16 bg-pink-500 text-white rounded-full mb-6 mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.87 12.87 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-dark text-center mb-3">Pre-Incubation Support</h3>
+                        <p class="text-secondary text-center">Providing early-stage support for student ventures, helping them develop prototypes and business models.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="news" class="page py-16 md:py-24 bg-light">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-primary">News & Updates</h1>
+                    <p class="text-xl text-secondary mt-4 max-w-2xl mx-auto">Stay informed about the latest happenings, achievements, and insights from our IEDC.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <article class="bg-white rounded-lg shadow-lg overflow-hidden card-hover transition-all duration-300">
+                        <img src="https://placehold.co/400x250/007BFF/FFFFFF?text=Innovation+Award" alt="Blog Post Image" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <p class="text-sm text-secondary mb-1">May 15, 2025 | Achievements</p>
+                            <h3 class="text-xl font-semibold text-dark mb-3 hover:text-primary transition">IEDC Team Wins National Innovation Award</h3>
+                            <p class="text-secondary text-sm mb-4">Our student team's project on sustainable agriculture technology has been recognized at the national level for its innovative approach and potential impact...</p>
+                            <a href="#" class="font-medium text-accent hover:underline">Read More →</a>
+                        </div>
+                    </article>
+                    <article class="bg-white rounded-lg shadow-lg overflow-hidden card-hover transition-all duration-300">
+                        <img src="https://placehold.co/400x250/6C757D/FFFFFF?text=KSUM+Grant" alt="Blog Post Image" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <p class="text-sm text-secondary mb-1">May 10, 2025 | Announcements</p>
+                            <h3 class="text-xl font-semibold text-dark mb-3 hover:text-primary transition">KSUM Announces New Funding Grant for IEDCs</h3>
+                            <p class="text-secondary text-sm mb-4">Kerala Startup Mission has unveiled a new grant to further support innovation hubs in colleges, enhancing resources for student entrepreneurs...</p>
+                            <a href="#" class="font-medium text-accent hover:underline">Read More →</a>
+                        </div>
+                    </article>
+                    <article class="bg-white rounded-lg shadow-lg overflow-hidden card-hover transition-all duration-300">
+                        <img src="https://placehold.co/400x250/28A745/FFFFFF?text=Startup+Success" alt="Blog Post Image" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <p class="text-sm text-secondary mb-1">April 28, 2025 | Success Stories</p>
+                            <h3 class="text-xl font-semibold text-dark mb-3 hover:text-primary transition">From Campus to Market: An IEDC Startup's Journey</h3>
+                            <p class="text-secondary text-sm mb-4">Read about how 'TechNova Solutions', a startup incubated at our IEDC, successfully launched its first product and secured seed funding...</p>
+                            <a href="#" class="font-medium text-accent hover:underline">Read More →</a>
+                        </div>
+                    </article>
+                    </div>
+                <div class="mt-12 flex justify-center">
+                    <nav class="flex space-x-2" aria-label="Pagination">
+                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                          Previous
+                        </a>
+                        <a href="#" aria-current="page" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-primary text-white text-sm font-medium">
+                          1
+                        </a>
+                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                          2
+                        </a>
+                        <a href="#" class="relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                          Next
+                        </a>
+                      </nav>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="page py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-primary">Get In Touch</h1>
+                    <p class="text-xl text-secondary mt-4 max-w-2xl mx-auto">We'd love to hear from you! Whether you're a student, faculty, industry partner, or just curious.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div class="bg-light p-8 rounded-lg shadow-lg">
+                        <h2 class="text-2xl font-semibold text-dark mb-6">Send us a Message</h2>
+                        <form action="#" method="POST"> <div class="mb-4">
+                                <label for="name" class="block text-sm font-medium text-secondary">Full Name</label>
+                                <input type="text" name="name" id="name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="email" class="block text-sm font-medium text-secondary">Email Address</label>
+                                <input type="email" name="email" id="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                            </div>
+                            <div class="mb-4">
+                                <label for="subject" class="block text-sm font-medium text-secondary">Subject</label>
+                                <input type="text" name="subject" id="subject" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                            </div>
+                            <div class="mb-6">
+                                <label for="message" class="block text-sm font-medium text-secondary">Message</label>
+                                <textarea name="message" id="message" rows="4" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"></textarea>
+                            </div>
+                            <div>
+                                <button type="submit" class="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold">Send Message</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="space-y-8">
+                        <div>
+                             <h2 class="text-2xl font-semibold text-dark mb-4">Contact Information</h2>
+                             <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <svg class="flex-shrink-0 h-6 w-6 text-primary mr-3 mt-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                    <div>
+                                        <h3 class="text-lg font-medium text-dark">Our Address</h3>
+                                        <p class="text-secondary">MET'S SCHOOL OF ENGINEERING, IEDC Cell</p>
+                                        <p class="text-secondary">P.O. Mala, Thrissur, Kerala, 680553</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                     <svg class="flex-shrink-0 h-6 w-6 text-primary mr-3 mt-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                    <div>
+                                        <h3 class="text-lg font-medium text-dark">Email Us</h3>
+                                        <p class="text-secondary">metsenggiedc@gmail.com</p>
+                                        <p class="text-secondary">metsengg.ac.in</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <svg class="flex-shrink-0 h-6 w-6 text-primary mr-3 mt-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.308 1.155a11.034 11.034 0 005.656 5.656l1.155-2.308a1 1 0 011.21-.502l4.493 1.498A1 1 0 0119 19.72V21a2 2 0 01-2 2h-.428A15.572 15.572 0 013 5V5z" /></svg>
+                                    <div>
+                                        <h3 class="text-lg font-medium text-dark">Call Us</h3>
+                                        <p class="text-secondary">Office: +91 7306226875</p>
+                                        <p class="text-secondary">Nodal Officer: +91 [Nodal Officer Phone]</p>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-semibold text-dark mb-4">Find Us on Map</h2>
+                            <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-md">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.591177148367!2d76.3226097147946!3d10.00092899283057!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080c948114db79%3A0x8f8c0f0e0f8b0f0e!2sKerala%20Startup%20Mission!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Google Maps Placeholder"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="student-login" class="page py-16 md:py-24 bg-gradient-to-br from-accent to-green-700 flex items-center justify-center min-h-screen">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-md mx-auto bg-white p-8 sm:p-10 rounded-xl shadow-2xl">
+                    <div class="text-center mb-8">
+                        <svg class="h-16 w-16 text-accent rounded-full mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        <h1 class="text-2xl sm:text-3xl font-bold text-accent">Student Portal</h1>
+                        <p class="text-secondary mt-2">Access IEDC Resources & Profile</p>
+                    </div>
+                    <form action="#" method="POST"> <div class="mb-6">
+                            <label for="student-id" class="block text-sm font-medium text-secondary mb-1">Student ID / Email</label>
+                            <input type="text" name="student-id" id="student-id" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent sm:text-sm" placeholder="yourid@example.com">
+                        </div>
+                        <div class="mb-6">
+                            <label for="student-password" class="block text-sm font-medium text-secondary mb-1">Password</label>
+                            <input type="password" name="student-password" id="student-password" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent sm:text-sm" placeholder="••••••••">
+                        </div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <input id="student-remember-me" name="student-remember-me" type="checkbox" class="h-4 w-4 text-accent focus:ring-green-400 border-gray-300 rounded">
+                                <label for="student-remember-me" class="ml-2 block text-sm text-secondary">Remember me</label>
+                            </div>
+                            <div class="text-sm">
+                                <a href="#" class="font-medium text-accent hover:text-green-700">Forgot password?</a>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-accent text-white py-3 px-6 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent transition duration-300 font-semibold text-lg">Sign In</button>
+                        </div>
+                        <p class="mt-6 text-center text-sm text-secondary">
+                            Don't have an account? <a href="#" class="font-medium text-accent hover:text-green-700">Register here</a>
+                        </p>
+                         <p class="mt-8 text-center text-xs text-secondary">
+                            This is a visual representation. Actual login and registration require backend implementation.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="admin-login" class="page py-16 md:py-24 bg-gradient-to-br from-primary to-blue-700 flex items-center justify-center min-h-screen">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-md mx-auto bg-white p-8 sm:p-10 rounded-xl shadow-2xl">
+                    <div class="text-center mb-8">
+                        <img src="https://placehold.co/80x80/007BFF/FFFFFF?text=IEDC" alt="IEDC Logo" class="h-16 w-16 rounded-full mx-auto mb-4">
+                        <h1 class="text-2xl sm:text-3xl font-bold text-primary">Admin Portal</h1>
+                        <p class="text-secondary mt-2">IEDC Management Access</p>
+                    </div>
+                    <form action="#" method="POST"> <div class="mb-6">
+                            <label for="admin-username" class="block text-sm font-medium text-secondary mb-1">Username / Email</label>
+                            <input type="text" name="admin-username" id="admin-username" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent sm:text-sm" placeholder="admin@iedc.com">
+                        </div>
+                        <div class="mb-6">
+                            <label for="admin-password" class="block text-sm font-medium text-secondary mb-1">Password</label>
+                            <input type="password" name="admin-password" id="admin-password" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent sm:text-sm" placeholder="••••••••">
+                        </div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <input id="admin-remember-me" name="admin-remember-me" type="checkbox" class="h-4 w-4 text-primary focus:ring-blue-400 border-gray-300 rounded">
+                                <label for="admin-remember-me" class="ml-2 block text-sm text-secondary">Remember me</label>
+                            </div>
+                            <div class="text-sm">
+                                <a href="#" class="font-medium text-primary hover:text-blue-700">Forgot password?</a>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-300 font-semibold text-lg">Sign In</button>
+                        </div>
+                    </form>
+                    <p class="mt-8 text-center text-sm text-secondary">
+                        This is a visual representation. Actual login requires backend implementation.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-dark text-light py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-white">MET'S IEDC</h3>
+                    <p class="text-gray-400 mb-4">Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.</p>
+                    <img src="https://ahalia.ac.in/wp-content/uploads/2022/08/iedc.jpg" alt="IEDC Ahalia Banner" style="width:50%; max-width:300px;">
+
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-white">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-primary transition page-link">Home</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-primary transition page-link">About Us</a></li>
+                        <li><a href="#events" class="text-gray-400 hover:text-primary transition page-link">Events</a></li>
+                        <li><a href="#initiatives" class="text-gray-400 hover:text-primary transition page-link">Initiatives</a></li>
+                        <li><a href="#news" class="text-gray-400 hover:text-primary transition page-link">News & Blog</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-primary transition page-link">Contact Us</a></li>
+                         <li><a href="https://startupmission.kerala.gov.in/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition">Kerala Startup Mission</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-white">Connect With Us</h3>
+                    <p class="text-gray-400 mb-2">Email: metsenggiedc@gmail.com</p>
+                    <p class="text-gray-400 mb-4">Phone: +91 7306226875</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-primary transition" aria-label="Facebook"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition" aria-label="Twitter"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-.424.728-.666 1.581-.666 2.477 0 1.61.823 3.027 2.074 3.863-.766-.024-1.483-.234-2.11-.583v.06c0 2.255 1.607 4.139 3.737 4.568-.39.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.307 3.198 4.342 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.202-.005-.403-.014-.602a9.46 9.46 0 002.323-2.41z"/></svg></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition" aria-label="LinkedIn"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.594-11.018-3.714v-2.155z"/></svg></a>
+                        <a href="https://www.instagram.com/metsiedc/" class="text-gray-400 hover:text-primary transition" aria-label="Instagram"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-8 text-center">
+                <p class="text-gray-500">© <span id="currentYear"></span> IEDC MET'S SCHOOL OF ENGINEERING. All Rights Reserved.</p>
+                <p class="text-xs text-gray-600 mt-1">Website Template by AI. Backend integration required for full functionality.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple Single Page App (SPA) like navigation
+        const pages = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('.page-link');
+        const mobileNavLinks = document.querySelectorAll('.page-link-mobile');
+        const desktopNavLinks = document.querySelectorAll('header nav.hidden a.nav-link, header nav.hidden a[href="#student-login"], header nav.hidden a[href="#admin-login"]'); // Updated to include login buttons
+
+        function showPage(pageId) {
+            pages.forEach(page => {
+                if (page.id === pageId) {
+                    page.classList.add('active');
+                } else {
+                    page.classList.remove('active');
+                }
+            });
+            window.scrollTo(0, 0); // Scroll to top on page change
+
+            // Update active state for desktop nav links (only for main page links, not buttons)
+            desktopNavLinks.forEach(link => {
+                if (link.classList.contains('nav-link')) { // Apply active style only to actual nav-links
+                    if (link.getAttribute('href') === `#${pageId}`) {
+                        link.classList.add('nav-link-active');
+                    } else {
+                        link.classList.remove('nav-link-active');
+                    }
+                }
+            });
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('href').substring(1);
+                showPage(pageId);
+                // Update URL hash
+                history.pushState(null, null, `#${pageId}`);
+            });
+        });
+        
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('href').substring(1);
+                showPage(pageId);
+                // Close mobile menu
+                document.getElementById('mobile-menu').classList.remove('open');
+                // Update URL hash
+                history.pushState(null, null, `#${pageId}`);
+            });
+        });
+
+
+        // Handle initial page load based on URL hash
+        function handlePageNavigation() {
+            const initialPageId = window.location.hash ? window.location.hash.substring(1) : 'home';
+            // Ensure a valid page ID is shown, default to home if not found
+            const validPage = document.getElementById(initialPageId);
+            if (validPage && validPage.classList.contains('page')) {
+                 showPage(initialPageId);
+            } else {
+                 showPage('home');
+                 history.replaceState(null, null, '#home'); // Correct the hash if invalid
+            }
+        }
+
+        // Listen to hash changes for browser back/forward buttons
+        window.addEventListener('popstate', handlePageNavigation);
+
+        // Initial page load
+        document.addEventListener('DOMContentLoaded', () => {
+            handlePageNavigation();
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+            });
+        });
+    </script>
+</body>
+</html>
