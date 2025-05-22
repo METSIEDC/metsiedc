@@ -77,6 +77,34 @@
         .mobile-menu.open {
             transform: translateX(0);
         }
+        /* Ensure body has some padding if using sticky header */
+         body {
+             padding-top: 0; /* Removed padding-top from body, handled by page sections */
+         }
+         .announcement-item {
+             background-color: #f8fafc;
+             border: 1px solid #e2e8f0;
+             border-radius: 0.75rem;
+             padding: 1rem;
+             transition: all 0.2s ease-in-out;
+         }
+         .announcement-item:hover {
+             background-color: #e2e8f0;
+             transform: translateY(-2px);
+             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+         }
+         .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #007BFF; /* Primary color */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="font-inter bg-light text-dark">
@@ -93,7 +121,7 @@
                     <a href="#home" class="nav-link page-link nav-link-active">Home</a>
                     <a href="#about" class="nav-link page-link">About Us</a>
                     <a href="#events" class="nav-link page-link">Events</a>
-                    <a href="#announcements" class="nav-link page-link">Announcements</a>
+                    <a href="announcement.html" class="nav-link">Announcements</a>
                     <a href="#initiatives" class="nav-link page-link">Initiatives</a>
                     <a href="#news" class="nav-link page-link">News</a>
                     <a href="#contact" class="nav-link page-link">Contact</a>
@@ -114,7 +142,7 @@
                 <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Home</a>
                 <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">About Us</a>
                 <a href="#events" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Events</a>
-               <a href="#announcements" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Announcements</a>
+                <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Announcements</a>
                 <a href="#initiatives" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Initiatives</a>
                 <a href="#news" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">News</a>
                 <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Contact</a>
@@ -691,10 +719,8 @@
             });
         });
     </script>
-    <script>
-        // NOTE: BASE_URL is still here for other sections (events, news) if you choose to use a backend for them.
-        // For the gallery, we are now using hardcoded data.
-        const BASE_URL = 'http://localhost:3000/api'; // Your Node.js backend URL (if used for other sections)
+       <script>
+        const BASE_URL = 'http://localhost:3000/api';
 
         // --- Page Switching Logic ---
         const pages = document.querySelectorAll('.page');
@@ -707,59 +733,63 @@
             pages.forEach(page => {
                 page.classList.remove('active');
             });
-            document.getElementById(id).classList.add('active');
+            const targetPage = document.getElementById(id);
+            if (targetPage) {
+                targetPage.classList.add('active');
 
-            // Update active class for desktop nav links
-            navLinks.forEach(link => {
-                link.classList.remove('nav-link-active');
-                if (link.getAttribute('href') === '#' + id) {
-                    link.classList.add('nav-link-active');
+                // Update active class for desktop nav links
+                navLinks.forEach(link => {
+                    link.classList.remove('nav-link-active');
+                    if (link.getAttribute('href') === '#' + id) {
+                        link.classList.add('nav-link-active');
+                    }
+                });
+
+                // Scroll to top of the page content, accounting for sticky header
+                const headerHeight = document.querySelector('header').offsetHeight;
+                window.scrollTo({
+                    top: targetPage.offsetTop - headerHeight,
+                    behavior: 'smooth'
+                });
+
+                // Trigger data loading for specific pages
+                if (id === 'events') {
+                    fetchAndDisplayEvents();
+                } else if (id === 'news') {
+                    fetchAndDisplayNews();
+                } else if (id === 'gallery') {
+                    displayGalleryImages();
+                } else if (id === 'home') {
+                    fetchAndDisplayEvents(true); // Load limited events for home
+                    fetchAndDisplayNews(true); // Load limited news for home
                 }
-            });
+            }
+
 
             // Close mobile menu if open
             mobileMenu.classList.remove('open');
-
-            // Scroll to top of the page content, accounting for sticky header
-            const headerHeight = document.querySelector('header').offsetHeight;
-            window.scrollTo({
-                top: document.getElementById(id).offsetTop - headerHeight,
-                behavior: 'smooth'
-            });
-
-            // Trigger data loading for specific pages
-            if (id === 'events') {
-                fetchAndDisplayEvents();
-            } else if (id === 'news') {
-                fetchAndDisplayNews();
-            } else if (id === 'gallery') {
-                // Directly call the gallery function, now using local data
-                displayGalleryImages();
-            } else if (id === 'home') {
-                // Also load content for sections within home (still assumes backend for these)
-                fetchAndDisplayEvents(true); // Load limited events for home
-                fetchAndDisplayNews(true); // Load limited news for home
-            } else if (id === 'announcements') {
-                loadAnnouncements(); // Load announcements when the page is active
-            }
         }
 
-        // Event listeners for desktop navigation
+        // Event listeners for desktop navigation (for internal links)
         navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const pageId = link.getAttribute('href').substring(1);
-                showPage(pageId);
-            });
+            if (link.getAttribute('href').startsWith('#')) { // Only handle internal hash links here
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.getAttribute('href').substring(1);
+                    showPage(pageId);
+                });
+            }
         });
 
-        // Event listeners for mobile navigation
+        // Event listeners for mobile navigation (for internal links)
         mobileNavLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const pageId = link.getAttribute('href').substring(1);
-                showPage(pageId);
-            });
+            if (link.getAttribute('href').startsWith('#')) { // Only handle internal hash links here
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.getAttribute('href').substring(1);
+                    showPage(pageId);
+                });
+            }
         });
 
         // Mobile menu toggle
@@ -920,72 +950,6 @@
             }
             const loadMoreButton = document.getElementById('load-more-gallery');
             if (loadMoreButton) loadMoreButton.style.display = 'none'; // Hide if all are displayed
-        }
-
-        // --- Announcements Functionality (Hardcoded Data) ---
-        const announcementsList = document.getElementById('announcements-list');
-
-        // Hardcoded announcements data
-        const dummyAnnouncements = [
-            {
-                title: "Important Circular: IEDC Annual Report Submission",
-                description: "All IEDC members are requested to submit their annual activity reports by June 30, 2025. Please refer to the attached circular for detailed guidelines.",
-                fileUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", // Dummy PDF link
-                fileName: "IEDC_Annual_Report_Circular.pdf",
-                date: "May 20, 2025",
-                time: "10:00 AM",
-                uploadedBy: "Admin"
-            },
-            {
-                title: "Workshop on AI in Healthcare - Registration Open!",
-                description: "Join our upcoming workshop on 'Applications of Artificial Intelligence in Healthcare' on June 15, 2025. Limited seats available. Register now!",
-                fileUrl: "https://www.africau.edu/images/default/sample.pdf", // Another dummy PDF link
-                fileName: "AI_Healthcare_Workshop_Details.pdf",
-                date: "May 18, 2025",
-                time: "02:30 PM",
-                uploadedBy: "Events Team"
-            },
-            {
-                title: "Notice: Startup Incubation Program Applications",
-                description: "The application window for our next Startup Incubation Program is now open. Find eligibility criteria and application process in the attached document.",
-                fileUrl: "https://www.buds.org.sg/images/publications/sample-pdf.pdf", // Yet another dummy PDF link
-                fileName: "Incubation_Program_Application.pdf",
-                date: "May 10, 2025",
-                time: "09:00 AM",
-                uploadedBy: "Nodal Officer"
-            }
-        ];
-
-        // Function to load and display announcements from hardcoded data
-        function loadAnnouncements() {
-            announcementsList.innerHTML = ''; // Clear existing announcements
-
-            if (dummyAnnouncements.length === 0) {
-                announcementsList.innerHTML = '<p class="text-center text-secondary">No announcements available yet.</p>';
-                return;
-            }
-
-            dummyAnnouncements.forEach((data) => {
-                const announcementItem = `
-                    <div class="announcement-item flex flex-col md:flex-row items-start md:items-center gap-4">
-                        <div class="flex-shrink-0 text-primary text-4xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-megaphone"><path d="m3 11 18-6v11l-18 6z"/><path d="M7 5v12"/><path d="M11 5v12"/><path d="M15 5v12"/></svg>
-                        </div>
-                        <div class="flex-grow">
-                            <h3 class="text-xl font-semibold text-dark">${data.title}</h3>
-                            <p class="text-sm text-secondary">${data.description}</p>
-                            <p class="text-xs text-gray-500 mt-1">Published: ${data.date} ${data.time} by ${data.uploadedBy}</p>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <a href="${data.fileUrl}" target="_blank" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="17" x2="12" y2="10"/><polyline points="9 14 12 17 15 14"/></svg>
-                                Download ${data.fileName}
-                            </a>
-                        </div>
-                    </div>
-                `;
-                announcementsList.innerHTML += announcementItem;
-            });
         }
 
         // --- Initial Load and Page Hash Handling ---
