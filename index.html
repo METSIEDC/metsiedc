@@ -93,7 +93,7 @@
                     <a href="#home" class="nav-link page-link nav-link-active">Home</a>
                     <a href="#about" class="nav-link page-link">About Us</a>
                     <a href="#events" class="nav-link page-link">Events</a>
-                   <a href="/metsiedc/announcements.html" class="nav-link page-link">Announcements</a>
+                    <a href="#announcements" class="nav-link page-link">Announcements</a>
                     <a href="#initiatives" class="nav-link page-link">Initiatives</a>
                     <a href="#news" class="nav-link page-link">News</a>
                     <a href="#contact" class="nav-link page-link">Contact</a>
@@ -114,7 +114,7 @@
                 <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Home</a>
                 <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">About Us</a>
                 <a href="#events" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Events</a>
-                <a href="/metsiedc/announcements.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Announcements</a>
+               <a href="#announcements" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Announcements</a>
                 <a href="#initiatives" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Initiatives</a>
                 <a href="#news" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">News</a>
                 <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Contact</a>
@@ -460,7 +460,42 @@
                 </div>
             </div>
         </section>
+<section id="announcements" class="page py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-primary">Official Announcements</h1>
+                    <p class="text-xl text-secondary mt-4 max-w-2xl mx-auto">Important circulars, notices, and updates from MET'S IEDC.</p>
+                </div>
 
+                <div id="announcement-upload-section" class="bg-light p-6 rounded-lg shadow-lg mb-12 hidden">
+                    <h2 class="text-2xl font-semibold text-dark mb-6">Upload New Announcement</h2>
+                    <form id="announcement-form" class="space-y-4">
+                        <div>
+                            <label for="announcement-title" class="block text-sm font-medium text-secondary">Title</label>
+                            <input type="text" id="announcement-title" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2" required>
+                        </div>
+                        <div>
+                            <label for="announcement-description" class="block text-sm font-medium text-secondary">Description</label>
+                            <textarea id="announcement-description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2" required></textarea>
+                        </div>
+                        <div>
+                            <label for="announcement-file" class="block text-sm font-medium text-secondary">Upload File (PDF, DOCX, etc.)</label>
+                            <input type="file" id="announcement-file" accept=".pdf,.doc,.docx,.txt" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-primary hover:file:bg-blue-100" required>
+                        </div>
+                        <button type="submit" id="upload-announcement-btn" class="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
+                            <span id="upload-button-text">Upload Announcement</span>
+                            <div id="upload-spinner" class="loading-spinner ml-3 hidden"></div>
+                        </button>
+                        <p id="upload-status-message" class="text-center text-sm mt-2"></p>
+                    </form>
+                </div>
+
+                <div id="announcements-list" class="space-y-6">
+                    <p class="text-center text-secondary">Loading announcements...</p>
+                    </div>
+                 <p id="current-user-id" class="text-xs text-gray-400 text-right mt-8">User ID: N/A</p>
+            </div>
+        </section>
         <section id="contact" class="page py-16 md:py-24 bg-white">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
@@ -654,6 +689,430 @@
                 mobileMenu.classList.toggle('open');
             });
         });
+    </script>
+     <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+
+        // Global Firebase instances and user ID
+        let app, db, auth, storage;
+        let userId = 'anonymous'; // Default to anonymous
+
+        // Get app ID and Firebase config from global variables provided by Canvas
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Initialize Firebase
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            storage = getStorage(app);
+            console.log("Firebase initialized successfully.");
+        } catch (error) {
+            console.error("Error initializing Firebase:", error);
+            document.getElementById('upload-status-message').textContent = 'Error: Firebase not initialized. Check console for details.';
+        }
+
+        // Authentication State Listener
+        onAuthStateChanged(auth, async (user) => {
+            const announcementUploadSection = document.getElementById('announcement-upload-section');
+            const currentUserIdDisplay = document.getElementById('current-user-id');
+
+            if (user) {
+                userId = user.uid;
+                console.log("User authenticated:", userId);
+                announcementUploadSection.classList.remove('hidden'); // Show upload form
+                currentUserIdDisplay.textContent = `User ID: ${userId}`;
+            } else {
+                // If no user, try signing in with custom token or anonymously
+                try {
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        console.log("Signed in with custom token.");
+                    } else {
+                        await signInAnonymously(auth);
+                        console.log("Signed in anonymously.");
+                    }
+                } catch (error) {
+                    console.error("Error during authentication:", error);
+                    announcementUploadSection.classList.add('hidden'); // Hide upload form if auth fails
+                    currentUserIdDisplay.textContent = `User ID: Authentication Failed`;
+                    // Display a user-friendly message without using alert()
+                    const statusMessage = document.getElementById('upload-status-message');
+                    statusMessage.textContent = 'Authentication required for uploads. Please ensure you are logged in.';
+                    statusMessage.style.color = 'red';
+                }
+            }
+            // After auth state is determined, load announcements
+            loadAnnouncements();
+        });
+
+
+        // --- Page Switching Logic ---
+        const pages = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('.page-link');
+        const mobileNavLinks = document.querySelectorAll('.page-link-mobile');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function showPage(id) {
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(id).classList.add('active');
+
+            // Update active class for desktop nav links
+            navLinks.forEach(link => {
+                link.classList.remove('nav-link-active');
+                if (link.getAttribute('href') === '#' + id) {
+                    link.classList.add('nav-link-active');
+                }
+            });
+
+            // Close mobile menu if open
+            mobileMenu.classList.remove('open');
+
+            // Scroll to top of the page content, accounting for sticky header
+            const headerHeight = document.querySelector('header').offsetHeight;
+            window.scrollTo({
+                top: document.getElementById(id).offsetTop - headerHeight,
+                behavior: 'smooth'
+            });
+
+            // Trigger data loading for specific pages
+            if (id === 'events') {
+                fetchAndDisplayEvents();
+            } else if (id === 'news') {
+                fetchAndDisplayNews();
+            } else if (id === 'gallery') {
+                displayGalleryImages(); // Now using local data
+            } else if (id === 'home') {
+                // Also load content for sections within home (these still assume backend for events/news)
+                fetchAndDisplayEvents(true); // Load limited events for home
+                fetchAndDisplayNews(true); // Load limited news for home
+            } else if (id === 'announcements') {
+                loadAnnouncements(); // Load announcements when the page is active
+            }
+        }
+
+        // Event listeners for desktop navigation
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('href').substring(1);
+                showPage(pageId);
+            });
+        });
+
+        // Event listeners for mobile navigation
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('href').substring(1);
+                showPage(pageId);
+            });
+        });
+
+        // Mobile menu toggle
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+
+
+        // --- Data Fetching Functions (for Events and News - still assumes backend) ---
+        // NOTE: The BASE_URL is kept for these sections if you decide to implement a backend for them.
+        const BASE_URL = 'http://localhost:3000/api'; // Placeholder: Update if you have a Node.js backend
+
+        // Function to fetch and display events (placeholder, assumes backend)
+        async function fetchAndDisplayEvents(isHomePage = false) {
+            const upcomingContainer = document.getElementById(isHomePage ? 'home-upcoming-events-container' : 'upcoming-events-container');
+            const pastContainer = document.getElementById(isHomePage ? 'home-past-events-container' : 'past-events-container');
+
+            if (upcomingContainer) upcomingContainer.innerHTML = '<p class="text-center text-secondary col-span-full">Loading upcoming events...</p>';
+            if (pastContainer) pastContainer.innerHTML = '<p class="text-center text-secondary col-span-full">Loading past events...</p>';
+
+            // Placeholder for actual event data
+            const dummyEvents = [
+                { title: "IEDC Core Team Recruitment 2025", date: "May 25, 2025", venue: "MET'S IEDC", description: "We're Selecting 20 passionate students! Join the core team and be part of the innovation journey. This is your chance to lead, organize, and contribute to the vibrant IEDC community.", image_url: "https://placehold.co/400x250/007BFF/FFFFFF?text=Recruitment", status: "Open for Registration" },
+                { title: "InnovateHER Hackathon", date: "August 5, 2025", venue: "Online / Virtual Platform", description: "Join us for a 24-hour online hackathon focused on developing innovative solutions to pressing social challenges. Themes include education, healthcare, and sustainability. Prizes and mentorship opportunities await!", image_url: "https://placehold.co/400x250/FFC107/333333?text=Hackathon", status: "Open for Registration" },
+                { title: "Investor Connect & Pitch Day", date: "September 10, 2025", venue: "KSUM Innovation Hub, Kochi", description: "An exclusive event for selected IEDC startups to pitch their ventures to a panel of angel investors, venture capitalists, and industry experts. A great opportunity for funding and networking.", image_url: "https://placehold.co/400x250/17A2B8/FFFFFF?text=Investor+Meet", status: "Applications Closed" },
+                { title: "Pravaah Idea Pitching Competition", date: "February 20, 2025", venue: "IEDC CCE", description: "Idea Pitching Competition IEDC CCE", image_url: "https://placehold.co/400x250/DC3545/FFFFFF?text=Pravaah", status: "Past" },
+                { title: "KTU Idea Pitching Competition 2025", date: "March 20, 2025", venue: "MET'S School of Engineering", description: "IEDC,MET'S School of Engineering Mala (KSUMIEDC1163) in association with APJAKTU Start Up Cell has organised a College Level *IDEA PITCHING COMPETITION* on 19th March 2025", image_url: "https://placehold.co/400x250/20C997/FFFFFF?text=KTU+Pitching", status: "Past" },
+                { title: "IPR Idea Pitching Competition 2025", date: "March 11, 2025", venue: "MET'S IEDC", description: "Winners of IPR Idea Pitching Competition 2025: First Prize: Abhinav V S S2 CSE, Second Prize: Christy Antony S2 CSE", image_url: "https://placehold.co/400x250/6F42C1/FFFFFF?text=IPR+Pitching", status: "Past" }
+            ];
+
+            const now = new Date();
+            const upcomingEvents = dummyEvents.filter(event => new Date(event.date) >= now);
+            const pastEvents = dummyEvents.filter(event => new Date(event.date) < now);
+
+            const eventsToShowUpcoming = isHomePage ? upcomingEvents.slice(0, 3) : upcomingEvents;
+            const eventsToShowPast = isHomePage ? pastEvents.slice(0, 3) : pastEvents;
+
+            if (upcomingContainer) {
+                upcomingContainer.innerHTML = '';
+                if (eventsToShowUpcoming.length === 0) {
+                    upcomingContainer.innerHTML = '<p class="text-center text-secondary col-span-full">No upcoming events at the moment.</p>';
+                } else {
+                    eventsToShowUpcoming.forEach(event => {
+                        const eventElement = `
+                            <div class="bg-white p-6 rounded-lg shadow-lg card-hover transition-all duration-300">
+                                <img src="${event.image_url}" alt="${event.title}" class="rounded-md mb-4 w-full h-48 object-cover" onerror="this.src='https://placehold.co/400x250/CCCCCC/FFFFFF?text=Event+Image'; this.onerror=null;">
+                                <h3 class="text-xl font-semibold text-primary mb-2">${event.title}</h3>
+                                <p class="text-sm text-secondary mb-1"><span class="font-semibold">Date:</span> ${event.date}</p>
+                                <p class="text-sm text-secondary mb-3"><span class="font-semibold">Venue:</span> ${event.venue}</p>
+                                <p class="text-secondary text-sm mb-4">${event.description}</p>
+                                <a href="#" class="inline-block ${event.status === 'Open for Registration' ? 'bg-accent hover:bg-green-600' : 'bg-gray-400 cursor-not-allowed'} text-white py-2 px-4 rounded-lg transition duration-300" ${event.status !== 'Open for Registration' ? 'title="Applications Closed"' : ''}>${event.status === 'Open for Registration' ? 'Register Now' : 'Applications Closed'}</a>
+                            </div>
+                        `;
+                        upcomingContainer.innerHTML += eventElement;
+                    });
+                }
+            }
+
+            if (pastContainer) {
+                pastContainer.innerHTML = '';
+                if (eventsToShowPast.length === 0) {
+                    pastContainer.innerHTML = '<p class="text-center text-secondary col-span-full">No past events to highlight.</p>';
+                } else {
+                    eventsToShowPast.forEach(event => {
+                        const pastEventElement = `
+                            <div class="bg-white p-4 rounded-lg shadow-md">
+                                <img src="${event.image_url}" alt="${event.title}" class="rounded-md mb-3 w-full h-40 object-cover" onerror="this.src='https://placehold.co/400x250/CCCCCC/FFFFFF?text=Past+Event'; this.onerror=null;">
+                                <h4 class="text-md font-semibold text-primary">${event.title}</h4>
+                                <p class="text-xs text-secondary">${event.date}</p>
+                                <p class="text-xs text-secondary mt-1">${event.description.substring(0, 70)}...</p>
+                            </div>
+                        `;
+                        pastContainer.innerHTML += pastEventElement;
+                    });
+                }
+            }
+        }
+
+        // Function to fetch and display news (placeholder, assumes backend)
+        async function fetchAndDisplayNews(isHomePage = false) {
+            const newsContainer = document.getElementById(isHomePage ? 'home-news-container' : 'news-container');
+            if (newsContainer) newsContainer.innerHTML = '<p class="text-center text-secondary col-span-full">Loading news...</p>';
+
+            // Placeholder for actual news data
+            const dummyNews = [
+                { title: "IEDC Team Wins National Innovation Award", date: "May 15, 2025", snippet: "Our student team's project on sustainable agriculture technology has been recognized at the national level...", image_url: "https://placehold.co/150x150/007BFF/FFFFFF?text=News+1" },
+                { title: "KSUM Announces New Funding Grant for IEDCs", date: "May 10, 2025", snippet: "Kerala Startup Mission has unveiled a new grant to further support innovation hubs in colleges...", image_url: "https://placehold.co/150x150/6C757D/FFFFFF?text=News+2" },
+                { title: "New Incubation Program Launched", date: "April 28, 2025", snippet: "Our new incubation program is now accepting applications for early-stage startups...", image_url: "https://placehold.co/150x150/28A745/FFFFFF?text=News+3" }
+            ];
+
+            const articlesToShow = isHomePage ? dummyNews.slice(0, 2) : dummyNews;
+
+            if (newsContainer) {
+                newsContainer.innerHTML = '';
+                if (articlesToShow.length === 0) {
+                    newsContainer.innerHTML = '<p class="text-center text-secondary col-span-full">No news articles at the moment.</p>';
+                } else {
+                    articlesToShow.forEach(article => {
+                        const newsElement = `
+                            <article class="flex bg-light p-6 rounded-lg shadow-md">
+                                <img src="${article.image_url}" alt="${article.title}" class="w-1/3 h-auto object-cover rounded-md mr-6" onerror="this.src='https://placehold.co/150x150/CCCCCC/FFFFFF?text=News+Image'; this.onerror=null;">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-primary mb-2">${article.title}</h3>
+                                    <p class="text-sm text-secondary mb-1">${article.date}</p>
+                                    <p class="text-secondary text-sm mb-3">${article.snippet}</p>
+                                    <a href="#" class="text-accent hover:underline font-medium">Read More</a>
+                                </div>
+                            </article>
+                        `;
+                        newsContainer.innerHTML += newsElement;
+                    });
+                }
+            }
+        }
+
+        // --- Hardcoded Gallery Data (No Backend Needed for this page) ---
+        const hardcodedGalleryImages = [
+            { url: "https://placehold.co/600x400/FF5733/FFFFFF?text=Bootcamp+Day+1", alt: "Startup Bootcamp Day 1" },
+            { url: "https://placehold.co/600x400/33FF57/FFFFFF?text=Hackathon+Team", alt: "InnovateHER Hackathon Team" },
+            { url: "https://placehold.co/600x400/3357FF/FFFFFF?text=Pitch+Day+Audience", alt: "Investor Connect Pitch Day Audience" },
+            { url: "https://placehold.co/600x400/FF33A1/FFFFFF?text=Workshop+Session", alt: "Design Thinking Workshop Session" },
+            { url: "https://placehold.co/600x400/A133FF/FFFFFF?text=Mentor+Session", alt: "Mentor Connect Program Session" },
+            { url: "https://placehold.co/600x400/33FFF6/FFFFFF?text=Networking+Event", alt: "Networking Event" },
+            { url: "https://placehold.co/600x400/FFB533/FFFFFF?text=Product+Demo", alt: "Product Demonstration" },
+            { url: "https://placehold.co/600x400/3388FF/FFFFFF?text=Award+Ceremony", alt: "Award Ceremony" },
+            { url: "https://placehold.co/600x400/88FF33/FFFFFF?text=Team+Photo", alt: "IEDC Team Photo" },
+            { url: "https://placehold.co/600x400/FF3333/FFFFFF?text=Innovation+Lab", alt: "Innovation Lab Activity" }
+            // Add more image objects here
+        ];
+
+        // Function to display gallery images from hardcoded data
+        function displayGalleryImages() {
+            const galleryContainer = document.getElementById('gallery-container');
+            if (galleryContainer) galleryContainer.innerHTML = ''; // Clear loading message
+
+            if (hardcodedGalleryImages.length === 0) {
+                galleryContainer.innerHTML = '<p class="text-center text-secondary col-span-full">No gallery images available yet.</p>';
+            } else {
+                hardcodedGalleryImages.forEach(image => {
+                    const imageElement = `
+                        <div class="relative overflow-hidden rounded-lg shadow-md group">
+                            <img src="${image.url}" alt="${image.alt}" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src='https://placehold.co/400x300/CCCCCC/FFFFFF?text=Gallery+Image'; this.onerror=null;">
+                            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <p class="text-white text-center font-semibold text-lg p-2">${image.alt}</p>
+                            </div>
+                        </div>
+                    `;
+                    galleryContainer.innerHTML += imageElement;
+                });
+            }
+            const loadMoreButton = document.getElementById('load-more-gallery');
+            if (loadMoreButton) loadMoreButton.style.display = 'none'; // Hide if all are displayed
+        }
+
+        // --- Announcements Functionality ---
+        const announcementForm = document.getElementById('announcement-form');
+        const announcementTitleInput = document.getElementById('announcement-title');
+        const announcementDescriptionInput = document.getElementById('announcement-description');
+        const announcementFileInput = document.getElementById('announcement-file');
+        const uploadAnnouncementBtn = document.getElementById('upload-announcement-btn');
+        const uploadButtonText = document.getElementById('upload-button-text');
+        const uploadSpinner = document.getElementById('upload-spinner');
+        const uploadStatusMessage = document.getElementById('upload-status-message');
+        const announcementsList = document.getElementById('announcements-list');
+
+        // Function to upload announcement
+        announcementForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!auth.currentUser) {
+                uploadStatusMessage.textContent = 'Error: You must be logged in to upload announcements.';
+                uploadStatusMessage.style.color = 'red';
+                return;
+            }
+
+            const title = announcementTitleInput.value.trim();
+            const description = announcementDescriptionInput.value.trim();
+            const file = announcementFileInput.files[0];
+
+            if (!title || !description || !file) {
+                uploadStatusMessage.textContent = 'Please fill in all fields and select a file.';
+                uploadStatusMessage.style.color = 'orange';
+                return;
+            }
+
+            uploadButtonText.textContent = 'Uploading...';
+            uploadSpinner.classList.remove('hidden');
+            uploadAnnouncementBtn.disabled = true;
+            uploadStatusMessage.textContent = ''; // Clear previous messages
+
+            try {
+                // 1. Upload file to Firebase Storage
+                const storageRef = ref(storage, `artifacts/${appId}/public/announcements/${file.name}`);
+                const uploadTask = await uploadBytes(storageRef, file);
+                const fileUrl = await getDownloadURL(uploadTask.ref);
+                console.log('File uploaded:', fileUrl);
+
+                // 2. Save announcement details to Firestore
+                const docRef = await addDoc(collection(db, `artifacts/${appId}/public/announcements`), {
+                    title: title,
+                    description: description,
+                    fileUrl: fileUrl,
+                    fileName: file.name,
+                    uploadedBy: userId, // Store the ID of the user who uploaded it
+                    timestamp: serverTimestamp() // Use server timestamp
+                });
+                console.log("Announcement written with ID: ", docRef.id);
+
+                uploadStatusMessage.textContent = 'Announcement uploaded successfully!';
+                uploadStatusMessage.style.color = 'green';
+                announcementForm.reset(); // Clear the form
+            } catch (error) {
+                console.error("Error uploading announcement:", error);
+                uploadStatusMessage.textContent = `Error uploading: ${error.message}`;
+                uploadStatusMessage.style.color = 'red';
+            } finally {
+                uploadButtonText.textContent = 'Upload Announcement';
+                uploadSpinner.classList.add('hidden');
+                uploadAnnouncementBtn.disabled = false;
+            }
+        });
+
+        // Function to load and display announcements from Firestore
+        function loadAnnouncements() {
+            if (!db) {
+                announcementsList.innerHTML = '<p class="text-center text-red-500">Database not available. Cannot load announcements.</p>';
+                return;
+            }
+
+            announcementsList.innerHTML = '<p class="text-center text-secondary">Loading announcements...</p>';
+
+            // Create a query to listen for real-time updates
+            const q = query(collection(db, `artifacts/${appId}/public/announcements`), orderBy("timestamp", "desc"));
+
+            onSnapshot(q, (snapshot) => {
+                announcementsList.innerHTML = ''; // Clear existing announcements
+                if (snapshot.empty) {
+                    announcementsList.innerHTML = '<p class="text-center text-secondary">No announcements available yet.</p>';
+                    return;
+                }
+
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const date = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleDateString() : 'N/A';
+                    const time = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+
+                    const announcementItem = `
+                        <div class="announcement-item flex flex-col md:flex-row items-start md:items-center gap-4">
+                            <div class="flex-shrink-0 text-primary text-4xl">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-megaphone"><path d="m3 11 18-6v11l-18 6z"/><path d="M7 5v12"/><path d="M11 5v12"/><path d="M15 5v12"/></svg>
+                            </div>
+                            <div class="flex-grow">
+                                <h3 class="text-xl font-semibold text-dark">${data.title}</h3>
+                                <p class="text-sm text-secondary">${data.description}</p>
+                                <p class="text-xs text-gray-500 mt-1">Published: ${date} ${time} by ${data.uploadedBy.substring(0, 8)}...</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <a href="${data.fileUrl}" target="_blank" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300 text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="17" x2="12" y2="10"/><polyline points="9 14 12 17 15 14"/></svg>
+                                    Download ${data.fileName}
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    announcementsList.innerHTML += announcementItem;
+                });
+            }, (error) => {
+                console.error("Error loading announcements:", error);
+                announcementsList.innerHTML = '<p class="text-center text-red-500">Failed to load announcements. Please check your internet connection or Firebase setup.</p>';
+            });
+        }
+
+
+        // --- Initial Load and Page Hash Handling ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Handle initial page load based on URL hash
+            const initialHash = window.location.hash.substring(1);
+            if (initialHash && document.getElementById(initialHash)) {
+                showPage(initialHash);
+            } else {
+                showPage('home'); // Default to home page
+            }
+
+            // Load initial data for home page sections (these still assume backend)
+            fetchAndDisplayEvents(true);
+            fetchAndDisplayNews(true);
+        });
+
+        // Listen for hash changes (e.g., when user navigates using browser back/forward)
+        window.addEventListener('hashchange', () => {
+            const newHash = window.location.hash.substring(1);
+            if (newHash && document.getElementById(newHash)) {
+                showPage(newHash);
+            } else {
+                showPage('home');
+            }
+        });
+
     </script>
 </body>
 </html>
