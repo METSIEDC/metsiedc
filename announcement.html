@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announcements - MET'S IEDC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Active Nav Link Style */
+        .nav-link-active {
+            color: #007BFF; /* Primary color */
+            font-weight: 600;
+            border-bottom: 2px solid #007BFF; /* Primary color */
+        }
+        .nav-link {
+            padding-bottom: 0.25rem; /* For the border to sit nicely */
+            border-bottom: 2px solid transparent; /* Make space for active border */
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #007BFF; /* Primary color */
+        }
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/343A40/FFFFFF?text=IEDC+Innovation+Hub') no-repeat center center;
+            background-size: cover;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* Page transition placeholder - can be expanded with JS */
+        .page {
+             display: block; /* Always visible on its own page */
+             animation: fadeIn 0.5s ease-in-out;
+             min-height: calc(100vh - 80px); /* Ensure page takes at least viewport height minus header */
+             padding-top: 80px; /* Offset for sticky header */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+         /* Ensure body has some padding if using sticky header */
+         body {
+             padding-top: 0; /* Removed padding-top from body, handled by page sections */
+         }
+         .announcement-item {
+             background-color: #f8fafc;
+             border: 1px solid #e2e8f0;
+             border-radius: 0.75rem;
+             padding: 1rem;
+             transition: all 0.2s ease-in-out;
+         }
+         .announcement-item:hover {
+             background-color: #e2e8f0;
+             transform: translateY(-2px);
+             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+         }
+         .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #007BFF; /* Primary color */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="font-inter bg-light text-dark">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="index.html#home" class="flex items-center space-x-2">
+                    <img src="https://placehold.co/40x40/007BFF/FFFFFF?text=IEDC" alt="IEDC Logo" class="h-10 w-10 rounded-full">
+                    <span class="text-2xl font-bold text-primary">IEDC KSUM</span>
+                </a>
+
+                <nav class="hidden md:flex space-x-4 lg:space-x-6 items-center">
+                    <a href="index.html#home" class="nav-link">Home</a>
+                    <a href="index.html#about" class="nav-link">About Us</a>
+                    <a href="index.html#events" class="nav-link">Events</a>
+                    <a href="index.html#initiatives" class="nav-link">Initiatives</a>
+                    <a href="index.html#news" class="nav-link">News</a>
+                    <a href="announcement.html" class="nav-link nav-link-active">Announcements</a>
+                    <a href="index.html#gallery" class="nav-link">Event Gallery</a>
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                    <a href="index.html#student-login" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-700 transition duration-300">Student Login</a>
+                    <a href="index.html#admin-login" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition duration-300">Admin Login</a>
+                </nav>
+
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-dark focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-white z-40 pt-20 p-4 md:hidden">
+            <nav class="flex flex-col space-y-4">
+                <a href="index.html#home" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Home</a>
+                <a href="index.html#about" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">About Us</a>
+                <a href="index.html#events" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Events</a>
+                <a href="index.html#initiatives" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Initiatives</a>
+                <a href="index.html#news" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">News</a>
+                <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Announcements</a>
+                <a href="index.html#gallery" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Event Gallery</a>
+                <a href="index.html#contact" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Contact</a>
+                <a href="index.html#student-login" class="mt-4 block w-full text-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-700 transition duration-300">Student Login</a>
+                <a href="index.html#admin-login" class="mt-2 block w-full text-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition duration-300">Admin Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="announcements-page" class="page py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold text-primary">Official Announcements</h1>
+                    <p class="text-xl text-secondary mt-4 max-w-2xl mx-auto">Important circulars, notices, and updates from MET'S IEDC.</p>
+                </div>
+
+                <div id="announcements-list" class="space-y-6">
+                    <p class="text-center text-secondary">Loading announcements...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white py-8">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-secondary">
+            <p>&copy; 2025 MET'S IEDC. All rights reserved.</p>
+            <p class="mt-2">Powered by Innovation & Entrepreneurship.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Mobile Menu Logic (Copied from index.html) ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+
+        // --- Announcements Functionality (Hardcoded Data) ---
+        const announcementsList = document.getElementById('announcements-list');
+
+        // Hardcoded announcements data (You can update fileUrl with your actual hosted links)
+        const dummyAnnouncements = [
+            {
+                title: "Important Circular: IEDC Annual Report Submission",
+                description: "All IEDC members are requested to submit their annual activity reports by June 30, 2025. Please refer to the attached circular for detailed guidelines.",
+                fileUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", // Dummy PDF link
+                fileName: "IEDC_Annual_Report_Circular.pdf",
+                date: "May 20, 2025",
+                time: "10:00 AM",
+                uploadedBy: "Admin"
+            },
+            {
+                title: "Workshop on AI in Healthcare - Registration Open!",
+                description: "Join our upcoming workshop on 'Applications of Artificial Intelligence in Healthcare' on June 15, 2025. Limited seats available. Register now!",
+                fileUrl: "https://www.africau.edu/images/default/sample.pdf", // Another dummy PDF link
+                fileName: "AI_Healthcare_Workshop_Details.pdf",
+                date: "May 18, 2025",
+                time: "02:30 PM",
+                uploadedBy: "Events Team"
+            },
+            {
+                title: "Notice: Startup Incubation Program Applications",
+                description: "The application window for our next Startup Incubation Program is now open. Find eligibility criteria and application process in the attached document.",
+                fileUrl: "https://www.buds.org.sg/images/publications/sample-pdf.pdf", // Yet another dummy PDF link
+                fileName: "Incubation_Program_Application.pdf",
+                date: "May 10, 2025",
+                time: "09:00 AM",
+                uploadedBy: "Nodal Officer"
+            }
+        ];
+
+        // Function to load and display announcements from hardcoded data
+        function loadAnnouncements() {
+            announcementsList.innerHTML = ''; // Clear existing announcements
+
+            if (dummyAnnouncements.length === 0) {
+                announcementsList.innerHTML = '<p class="text-center text-secondary">No announcements available yet.</p>';
+                return;
+            }
+
+            dummyAnnouncements.forEach((data) => {
+                const announcementItem = `
+                    <div class="announcement-item flex flex-col md:flex-row items-start md:items-center gap-4">
+                        <div class="flex-shrink-0 text-primary text-4xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-megaphone"><path d="m3 11 18-6v11l-18 6z"/><path d="M7 5v12"/><path d="M11 5v12"/><path d="M15 5v12"/></svg>
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-xl font-semibold text-dark">${data.title}</h3>
+                            <p class="text-sm text-secondary">${data.description}</p>
+                            <p class="text-xs text-gray-500 mt-1">Published: ${data.date} ${data.time} by ${data.uploadedBy}</p>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <a href="${data.fileUrl}" target="_blank" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300 text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="17" x2="12" y2="10"/><polyline points="9 14 12 17 15 14"/></svg>
+                                Download ${data.fileName}
+                            </a>
+                        </div>
+                    </div>
+                `;
+                announcementsList.innerHTML += announcementItem;
+            });
+        }
+
+        // Call loadAnnouncements when the page loads
+        document.addEventListener('DOMContentLoaded', loadAnnouncements);
+    </script>
+</body>
+</html>
