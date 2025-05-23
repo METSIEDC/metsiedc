@@ -120,6 +120,7 @@
                 <nav class="hidden md:flex space-x-4 lg:space-x-6 items-center">
                     <a href="#home" class="nav-link page-link nav-link-active">Home</a>
                     <a href="#about" class="nav-link page-link">About Us</a>
+                    <a href="team.html" class="nav-link">Our Team</a>
                     <a href="#events" class="nav-link page-link">Events</a>
                     <a href="announcement.html" class="nav-link">Announcements</a>
                     <a href="#initiatives" class="nav-link page-link">Initiatives</a>
@@ -141,6 +142,7 @@
             <nav class="flex flex-col space-y-4">
                 <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Home</a>
                 <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">About Us</a>
+                 <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Our Team</a>
                 <a href="#events" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Events</a>
                 <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Announcements</a>
                 <a href="#initiatives" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Initiatives</a>
@@ -740,11 +742,12 @@
                 // Update active class for desktop nav links
                 navLinks.forEach(link => {
                     link.classList.remove('nav-link-active');
-                    if (link.getAttribute('href') === '#' + id) {
+                    // Check if the link's hash matches the current page ID
+                    const linkHash = link.getAttribute('href').substring(1);
+                    if (linkHash === id) {
                         link.classList.add('nav-link-active');
                     }
                 });
-
                 // Scroll to top of the page content, accounting for sticky header
                 const headerHeight = document.querySelector('header').offsetHeight;
                 window.scrollTo({
