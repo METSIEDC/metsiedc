@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+  authDomain: "metsiedc-3010e.firebaseapp.com",
+  databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+  projectId: "metsiedc-3010e",
+  storageBucket: "metsiedc-3010e.firebasestorage.app",
+  messagingSenderId: "954403413150",
+  appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+  measurementId: "G-6E7EK0D7JG"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
     <meta name="title" content="METS IEDC">
 <meta name="description" content="Official website of METS IEDC - Innovation, Entrepreneurship and Projects.">
 <meta name="keywords" content="METS, METS IEDC, Engineering, IEDC Kerala, Student Startup, METS College">
