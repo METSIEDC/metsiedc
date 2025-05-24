@@ -83,12 +83,13 @@
         </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-    <script>
+
         // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
             apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
             authDomain: "metsiedc-3010e.firebaseapp.com",
@@ -101,8 +102,9 @@
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app); // Get the Auth service
+        const db = getFirestore(app); // Get the Firestore service
 
         // DOM Elements
         const loginTabBtn = document.getElementById('loginTabBtn');
@@ -126,7 +128,7 @@
         const passwordResetMessage = document.getElementById('passwordResetMessage');
 
         // Function to switch tabs
-        function showTab(tabName) {
+        window.showTab = function(tabName) { // Make global for onclick
             if (tabName === 'login') {
                 loginTabBtn.classList.add('active');
                 signupTabBtn.classList.remove('active');
@@ -162,9 +164,9 @@
             loginBtn.disabled = true;
 
             try {
-                await auth.signInWithEmailAndPassword(email, password);
-                // Redirect to a dashboard or home page after successful login
-                window.location.href = 'index.html'; // Or 'dashboard.html'
+                await signInWithEmailAndPassword(auth, email, password);
+                // Successful login! Redirect to the dashboard page.
+                window.location.href = 'dashboard.html';
             } catch (error) {
                 let errorMessage = 'An unknown error occurred.';
                 switch (error.code) {
@@ -221,13 +223,32 @@
             signupBtn.disabled = true;
 
             try {
-                await auth.createUserWithEmailAndPassword(email, password);
-                // Optionally send email verification
-                // await auth.currentUser.sendEmailVerification();
-                // console.log('Verification email sent!');
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
 
-                // Redirect after successful signup
-                window.location.href = 'index.html'; // Or 'dashboard.html'
+                // Create a basic user document in Firestore immediately after signup
+                // This ensures the dashboard has initial data to load for new users
+                await setDoc(doc(db, "users", user.uid), {
+                    email: user.email,
+                    displayName: user.displayName || '',
+                    bio: '',
+                    contactNumber: '',
+                    gender: '',
+                    dob: '',
+                    address: '',
+                    city: '',
+                    state: '',
+                    pincode: '',
+                    qualification: '',
+                    skills: '',
+                    linkedin: '',
+                    instagram: '',
+                    communicationMethod: '',
+                    createdAt: new Date()
+                }, { merge: true }); // Use merge: true to avoid overwriting if document somehow exists
+
+                // Successful signup! Redirect to the dashboard page.
+                window.location.href = 'dashboard.html';
             } catch (error) {
                 let errorMessage = 'An unknown error occurred.';
                 switch (error.code) {
@@ -270,7 +291,7 @@
             forgotPasswordLink.textContent = 'Sending...';
 
             try {
-                await auth.sendPasswordResetEmail(email);
+                await sendPasswordResetEmail(auth, email);
                 passwordResetMessage.classList.remove('hidden');
                 loginErrorDiv.classList.add('hidden'); // Hide any previous error
             } catch (error) {
@@ -290,6 +311,14 @@
             } finally {
                 forgotPasswordLink.style.pointerEvents = 'auto';
                 forgotPasswordLink.textContent = 'Forgot Password?';
+            }
+        });
+
+        // Optional: Redirect to dashboard if user is already logged in when visiting login.html
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, redirect them to the dashboard
+                window.location.href = 'dashboard.html';
             }
         });
 
