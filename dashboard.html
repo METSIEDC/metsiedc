@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - MET'S IEDC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e2e8f0; /* Lighter blue-gray background */
+            color: #2d3748; /* Darker text for better contrast */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* More pronounced shadow */
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        main {
+            flex-grow: 1;
+            padding: 2.5rem 0; /* Increased padding */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        footer {
+            background-color: #1a202c; /* Darker footer */
+            color: #cbd5e1;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem; /* Increased horizontal padding */
+        }
+        .text-primary {
+            color: #2563eb; /* A slightly bolder blue */
+        }
+        .bg-primary {
+            background-color: #2563eb;
+        }
+        .hover\:bg-blue-700:hover {
+            background-color: #1d4ed8; /* Darker hover state */
+        }
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3); /* Lighter spinner border */
+            border-left-color: #ffffff; /* White spinner color */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .tab-button {
+            padding: 0.75rem 1.75rem; /* Increased padding */
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            color: #6b7280;
+            transition: all 0.3s ease-in-out; /* Smoother transition */
+            border-radius: 0.5rem 0.5rem 0 0; /* Rounded top corners */
+        }
+        .tab-button.active {
+            border-bottom-color: #2563eb; /* Primary blue for active tab */
+            color: #2563eb;
+            font-weight: 600;
+            background-color: #f8fafc; /* Slightly lighter background for active tab */
+        }
+        .tab-button:hover:not(.active) {
+            color: #3b82f6; /* Lighter blue on hover */
+            background-color: #eff6ff; /* Lightest blue on hover */
+        }
+        .tab-content {
+            display: none;
+            padding: 2rem; /* Consistent padding for content */
+            background-color: #ffffff;
+            border-radius: 0.75rem; /* More rounded corners for content */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Deeper shadow */
+        }
+        .tab-content.active {
+            display: block;
+        }
+        /* Form input styling */
+        input[type="text"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="number"],
+        input[type="url"],
+        textarea,
+        select {
+            border: 1px solid #cbd5e0; /* Lighter border */
+            border-radius: 0.5rem; /* Rounded corners */
+            padding: 0.75rem 1rem; /* Increased padding */
+            transition: all 0.2s ease-in-out;
+        }
+        input[type="text"]:focus,
+        input[type="tel"]:focus,
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        input[type="url"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #2563eb; /* Primary blue on focus */
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); /* Subtle focus ring */
+            outline: none;
+        }
+        /* Button styling */
+        button[type="submit"] {
+            padding: 0.8rem 1.5rem; /* Larger buttons */
+            font-weight: 600;
+            border-radius: 0.5rem; /* Rounded corners */
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+        button[type="submit"]:hover {
+            transform: translateY(-2px); /* Lift effect on hover */
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
+        }
+        /* Specific button colors */
+        .bg-green-600 { background-color: #10b981; } /* Tailwind emerald-500 */
+        .hover\:bg-green-700:hover { background-color: #059669; } /* Tailwind emerald-600 */
+        .bg-blue-600 { background-color: #3b82f6; } /* Tailwind blue-500 */
+        .hover\:bg-blue-700:hover { background-color: #2563eb; } /* Tailwind blue-600 */
+        .bg-purple-600 { background-color: #8b5cf6; } /* Tailwind violet-500 */
+        .hover\:bg-purple-700:hover { background-color: #7c3aed; } /* Tailwind violet-600 */
+        .bg-orange-600 { background-color: #f97316; } /* Tailwind orange-500 */
+        .hover\:bg-orange-700:hover { background-color: #ea580c; } /* Tailwind orange-600 */
+        .bg-red-600 { background-color: #ef4444; } /* Tailwind red-500 */
+        .hover\:bg-red-700:hover { background-color: #dc2626; } /* Tailwind red-600 */
+
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            .tab-content.grid {
+                grid-template-columns: 1fr 1.5fr; /* Adjust column ratio for profile section */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-2">
+                <img src="https://placehold.co/40x40/2563eb/FFFFFF?text=IEDC" alt="IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
+                <span class="text-2xl font-bold text-primary">MET'S IEDC</span>
+            </a>
+            <nav>
+                <button id="logoutBtn" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300 shadow-md">Logout</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="max-w-5xl w-full mx-4">
+            <h1 class="text-4xl font-extrabold text-gray-800 mb-4 text-center">Your User Dashboard</h1>
+            <p class="text-lg text-gray-600 mb-8 text-center">Welcome back! Manage your profile and submissions here.</p>
+            <p class="text-lg text-gray-700 mb-8 text-center">Logged in as: <span id="userEmail" class="font-semibold text-primary">Loading...</span></p>
+
+            <div class="flex flex-wrap justify-center border-b border-gray-200 mb-8 bg-white rounded-t-lg shadow-sm">
+                <button id="profileTabBtn" class="tab-button active" onclick="showTab('profile')">My Profile</button>
+                <button id="submitProjectTabBtn" class="tab-button" onclick="showTab('submitProject')">Submit Project</button>
+                <button id="submitIdeaTabBtn" class="tab-button" onclick="showTab('submitIdea')">Submit Idea</button>
+                <button id="submitEventTabBtn" class="tab-button" onclick="showTab('submitEvent')">Submit Event</button>
+            </div>
+
+            <div id="profileSection" class="tab-content active grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="p-6 bg-gray-50 rounded-lg border border-gray-200 shadow-inner">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-5 border-b pb-3 border-gray-200">Your Profile Information</h3>
+                    <div class="space-y-3 text-gray-700">
+                        <p><span class="font-semibold text-gray-800">Name:</span> <span id="displayNameOutput">Not set</span></p>
+                        <p><span class="font-semibold text-gray-800">Bio:</span> <span id="bioOutput">Not set</span></p>
+                        <p><span class="font-semibold text-gray-800">Contact:</span> <span id="contactNumberOutput">Not set</span></p>
+                        <p><span class="font-semibold text-gray-800">Gender:</span> <span id="genderOutput">Not set</span></p>
+                        <p><span class="font-semibold text-gray-800">Date of Birth:</span> <span id="dobOutput">Not set</span></p>
+                        <p><span class="font-semibold text-gray-800">Address:</span> <span id="addressOutput">Not set</span></p>
+                        <p><span class="font-semibold text-gray-800">City:</span> <span id="cityOutput">Not set</span></p>
+                        <p><span class="font-semibold text-gray-800">State:</span> <span id="stateOutput">Not set</span></p>
+                        <p><span class="font-semibold text-gray-800">Pincode:</span> <span id="pincodeOutput">Not set</span></p>
+                        <p><span class="font-semibold text-gray-800">Qualification:</span> <span id="qualificationOutput">Not set</span></p>
+                        <p><span class="font-semibold text-gray-800">Skills:</span> <span id="skillsOutput">Not set</span></p>
+                        <p><span class="font-semibold text-gray-800">LinkedIn:</span> <span id="linkedinOutput">Not set</span></p>
+                        <p><span class="font-semibold text-gray-800">Instagram:</span> <span id="instagramOutput">Not set</span></p>
+                        <p><span class="font-semibold text-gray-800">Preferred Communication:</span> <span id="communicationOutput">Not set</span></p>
+                    </div>
+                </div>
+
+                <div class="text-left p-6 bg-white rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Update Your Profile</h2>
+                    <div id="profileStatusMessage" class="text-center text-sm p-2 mb-4 rounded-md hidden"></div>
+
+                    <form id="profileForm" class="space-y-4">
+                        <div>
+                            <label for="profileName" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
+                            <input type="text" id="profileName" class="w-full" placeholder="Your Full Name">
+                        </div>
+
+                        <div>
+                            <label for="profileBio" class="block text-gray-700 text-sm font-bold mb-2">Bio:</label>
+                            <textarea id="profileBio" rows="3" class="w-full" placeholder="Tell us about yourself..."></textarea>
+                        </div>
+
+                        <div>
+                            <label for="profileContact" class="block text-gray-700 text-sm font-bold mb-2">Contact Number:</label>
+                            <input type="tel" id="profileContact" class="w-full" placeholder="e.g., +91 9876543210">
+                        </div>
+
+                        <div>
+                            <label for="profileGender" class="block text-gray-700 text-sm font-bold mb-2">Gender:</label>
+                            <select id="profileGender" class="w-full">
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                                <option value="Prefer not to say">Prefer not to say</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="profileDob" class="block text-gray-700 text-sm font-bold mb-2">Date of Birth:</label>
+                            <input type="date" id="profileDob" class="w-full">
+                        </div>
+
+                        <div>
+                            <label for="profileAddress" class="block text-gray-700 text-sm font-bold mb-2">Address:</label>
+                            <textarea id="profileAddress" rows="2" class="w-full" placeholder="Street, Locality"></textarea>
+                        </div>
+
+                        <div>
+                            <label for="profileCity" class="block text-gray-700 text-sm font-bold mb-2">City:</label>
+                            <input type="text" id="profileCity" class="w-full" placeholder="Your City">
+                        </div>
+
+                        <div>
+                            <label for="profileState" class="block text-gray-700 text-sm font-bold mb-2">State:</label>
+                            <input type="text" id="profileState" class="w-full" placeholder="Your State">
+                        </div>
+
+                        <div>
+                            <label for="profilePincode" class="block text-gray-700 text-sm font-bold mb-2">Pincode:</label>
+                            <input type="number" id="profilePincode" class="w-full" placeholder="e.g., 680001">
+                        </div>
+
+                        <div>
+                            <label for="profileQualification" class="block text-gray-700 text-sm font-bold mb-2">Educational Qualification:</label>
+                            <select id="profileQualification" class="w-full">
+                                <option value="">Select Qualification</option>
+                                <option value="High School">High School</option>
+                                <option value="Diploma">Diploma</option>
+                                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                <option value="Master's Degree">Master's Degree</option>
+                                <option value="PhD">PhD</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="profileSkills" class="block text-gray-700 text-sm font-bold mb-2">Skills (comma-separated):</label>
+                            <input type="text" id="profileSkills" class="w-full" placeholder="e.g., JavaScript, Python, UI/UX Design">
+                        </div>
+
+                        <hr class="border-gray-200 my-4">
+
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Social & Web Links</h3>
+                        <div>
+                            <label for="profileLinkedIn" class="block text-gray-700 text-sm font-bold mb-2">LinkedIn Profile URL:</label>
+                            <input type="url" id="profileLinkedIn" class="w-full" placeholder="https://linkedin.com/in/yourprofile">
+                        </div>
+                        <div>
+                            <label for="profileInstagram" class="block text-gray-700 text-sm font-bold mb-2">Instagram Profile URL:</label>
+                            <input type="url" id="profileInstagram" class="w-full" placeholder="https://instagram.com/yourhandle">
+                        </div>
+
+                        <hr class="border-gray-200 my-4">
+
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Communication Preferences</h3>
+                        <div>
+                            <label for="profileCommunicationMethod" class="block text-gray-700 text-sm font-bold mb-2">Preferred Communication Method:</label>
+                            <select id="profileCommunicationMethod" class="w-full">
+                                <option value="">Select Method</option>
+                                <option value="Email">Email</option>
+                                <option value="Phone">Phone</option>
+                                <option value="WhatsApp">WhatsApp</option>
+                                <option value="Telegram">Telegram</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" id="saveProfileBtn" class="w-full bg-green-600 text-white flex items-center justify-center">
+                            <span id="saveProfileBtnText">Save Profile</span>
+                            <div id="saveProfileSpinner" class="loading-spinner ml-2 hidden"></div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="submitProjectSection" class="tab-content">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-left">Submit a New Project</h2>
+                <div id="projectStatusMessage" class="text-center text-sm p-2 mb-4 rounded-md hidden"></div>
+
+                <form id="projectForm" class="space-y-4 text-left">
+                    <div>
+                        <label for="projectTitle" class="block text-gray-700 text-sm font-bold mb-2">Project Title:</label>
+                        <input type="text" id="projectTitle" class="w-full" placeholder="e.g., Smart Waste Management System">
+                    </div>
+                    <div>
+                        <label for="projectDescription" class="block text-gray-700 text-sm font-bold mb-2">Project Description:</label>
+                        <textarea id="projectDescription" rows="4" class="w-full" placeholder="Briefly describe your project, its purpose, and key features."></textarea>
+                    </div>
+                    <div>
+                        <label for="projectTeamMembers" class="block text-gray-700 text-sm font-bold mb-2">Team Members (comma-separated):</label>
+                        <input type="text" id="projectTeamMembers" class="w-full" placeholder="e.g., John Doe, Jane Smith">
+                    </div>
+                    <div>
+                        <label for="projectTechnologies" class="block text-gray-700 text-sm font-bold mb-2">Technologies Used (comma-separated):</label>
+                        <input type="text" id="projectTechnologies" class="w-full" placeholder="e.g., Python, Arduino, Machine Learning">
+                    </div>
+                    <div>
+                        <label for="projectUrl" class="block text-gray-700 text-sm font-bold mb-2">Project URL (Optional):</label>
+                        <input type="url" id="projectUrl" class="w-full" placeholder="https://github.com/yourproject">
+                    </div>
+                    <div>
+                        <label for="projectStatus" class="block text-gray-700 text-sm font-bold mb-2">Project Status:</label>
+                        <select id="projectStatus" class="w-full">
+                            <option value="">Select Status</option>
+                            <option value="Idea Phase">Idea Phase</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Deployed">Deployed</option>
+                        </select>
+                    </div>
+                    <button type="submit" id="submitProjectBtn" class="w-full bg-blue-600 text-white flex items-center justify-center">
+                        <span id="submitProjectBtnText">Submit Project</span>
+                        <div id="submitProjectSpinner" class="loading-spinner ml-2 hidden"></div>
+                    </button>
+                </form>
+            </div>
+
+            <div id="submitIdeaSection" class="tab-content">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-left">Submit a New Idea</h2>
+                <div id="ideaStatusMessage" class="text-center text-sm p-2 mb-4 rounded-md hidden"></div>
+
+                <form id="ideaForm" class="space-y-4 text-left">
+                    <div>
+                        <label for="ideaTitle" class="block text-gray-700 text-sm font-bold mb-2">Idea Title:</label>
+                        <input type="text" id="ideaTitle" class="w-full" placeholder="e.g., AI-Powered Study Buddy">
+                    </div>
+                    <div>
+                        <label for="ideaDescription" class="block text-gray-700 text-sm font-bold mb-2">Idea Description:</label>
+                        <textarea id="ideaDescription" rows="4" class="w-full" placeholder="Explain your idea in detail. What is it? How does it work?"></textarea>
+                    </div>
+                    <div>
+                        <label for="ideaProblemSolved" class="block text-gray-700 text-sm font-bold mb-2">Problem Solved:</label>
+                        <textarea id="ideaProblemSolved" rows="2" class="w-full" placeholder="What real-world problem does your idea address?"></textarea>
+                    </div>
+                    <div>
+                        <label for="ideaTargetAudience" class="block text-gray-700 text-sm font-bold mb-2">Target Audience:</label>
+                        <input type="text" id="ideaTargetAudience" class="w-full" placeholder="e.g., College students, Small businesses">
+                    </div>
+                    <div>
+                        <label for="ideaInnovationLevel" class="block text-gray-700 text-sm font-bold mb-2">Innovation Level:</label>
+                        <select id="ideaInnovationLevel" class="w-full">
+                            <option value="">Select Level</option>
+                            <option value="Incremental">Incremental Improvement</option>
+                            <option value="Moderate">Moderate Innovation</option>
+                            <option value="Disruptive">Disruptive Innovation</option>
+                        </select>
+                    </div>
+                    <button type="submit" id="submitIdeaBtn" class="w-full bg-purple-600 text-white flex items-center justify-center">
+                        <span id="submitIdeaBtnText">Submit Idea</span>
+                        <div id="submitIdeaSpinner" class="loading-spinner ml-2 hidden"></div>
+                    </button>
+                </form>
+            </div>
+
+            <div id="submitEventSection" class="tab-content">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-left">Submit a New Event</h2>
+                <div id="eventStatusMessage" class="text-center text-sm p-2 mb-4 rounded-md hidden"></div>
+
+                <form id="eventForm" class="space-y-4 text-left">
+                    <div>
+                        <label for="eventTitle" class="block text-gray-700 text-sm font-bold mb-2">Event Title:</label>
+                        <input type="text" id="eventTitle" class="w-full" placeholder="e.g., Annual Hackathon 2025">
+                    </div>
+                    <div>
+                        <label for="eventDescription" class="block text-gray-700 text-sm font-bold mb-2">Event Description:</label>
+                        <textarea id="eventDescription" rows="4" class="w-full" placeholder="Provide a detailed description of the event."></textarea>
+                    </div>
+                    <div>
+                        <label for="eventVenue" class="block text-gray-700 text-sm font-bold mb-2">Event Venue:</label>
+                        <input type="text" id="eventVenue" class="w-full" placeholder="e.g., College Auditorium, Online">
+                    </div>
+                    <div>
+                        <label for="eventOrganizer" class="block text-gray-700 text-sm font-bold mb-2">Organizer (Optional):</label>
+                        <input type="text" id="eventOrganizer" class="w-full" placeholder="e.g., IEDC Core Team">
+                    </div>
+                    <div>
+                        <label for="eventRegistrationUrl" class="block text-gray-700 text-sm font-bold mb-2">Registration URL (Optional):</label>
+                        <input type="url" id="eventRegistrationUrl" class="w-full" placeholder="https://forms.gle/event_registration">
+                    </div>
+                    <button type="submit" id="submitEventBtn" class="w-full bg-orange-600 text-white flex items-center justify-center">
+                        <span id="submitEventBtnText">Submit Event</span>
+                        <div id="submitEventSpinner" class="loading-spinner ml-2 hidden"></div>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 MET'S IEDC. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+            authDomain: "metsiedc-3010e.firebaseapp.com",
+            databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+            projectId: "metsiedc-3010e",
+            messagingSenderId: "954403413150",
+            appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+            measurementId: "G-6E7EK0D7JG"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app); // Initialize Firestore
+
+        // Global variable to store current user object
+        let currentUser = null;
+
+        // --- DOM Elements ---
+        // General
+        const userEmailElement = document.getElementById('userEmail');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // Tabs
+        const profileTabBtn = document.getElementById('profileTabBtn');
+        const submitProjectTabBtn = document.getElementById('submitProjectTabBtn');
+        const submitIdeaTabBtn = document.getElementById('submitIdeaTabBtn');
+        const submitEventTabBtn = document.getElementById('submitEventTabBtn');
+
+        const profileSection = document.getElementById('profileSection');
+        const submitProjectSection = document.getElementById('submitProjectSection');
+        const submitIdeaSection = document.getElementById('submitIdeaSection');
+        const submitEventSection = document.getElementById('submitEventSection');
+
+        // Profile Form Inputs
+        const profileNameInput = document.getElementById('profileName');
+        const profileBioInput = document.getElementById('profileBio');
+        const profileContactInput = document.getElementById('profileContact');
+        const profileGenderInput = document.getElementById('profileGender');
+        const profileDobInput = document.getElementById('profileDob');
+        const profileAddressInput = document.getElementById('profileAddress');
+        const profileCityInput = document.getElementById('profileCity');
+        const profileStateInput = document.getElementById('profileState');
+        const profilePincodeInput = document.getElementById('profilePincode');
+        const profileQualificationInput = document.getElementById('profileQualification');
+        const profileSkillsInput = document.getElementById('profileSkills');
+        const profileLinkedInInput = document.getElementById('profileLinkedIn');
+        const profileInstagramInput = document.getElementById('profileInstagram');
+        const profileCommunicationMethodInput = document.getElementById('profileCommunicationMethod');
+
+        // Profile Display Outputs
+        const displayNameOutput = document.getElementById('displayNameOutput');
+        const bioOutput = document.getElementById('bioOutput');
+        const contactNumberOutput = document.getElementById('contactNumberOutput');
+        const genderOutput = document.getElementById('genderOutput');
+        const dobOutput = document.getElementById('dobOutput');
+        const addressOutput = document.getElementById('addressOutput');
+        const cityOutput = document.getElementById('cityOutput');
+        const stateOutput = document.getElementById('stateOutput');
+        const pincodeOutput = document.getElementById('pincodeOutput');
+        const qualificationOutput = document.getElementById('qualificationOutput');
+        const skillsOutput = document.getElementById('skillsOutput');
+        const linkedinOutput = document.getElementById('linkedinOutput');
+        const instagramOutput = document.getElementById('instagramOutput');
+        const communicationOutput = document.getElementById('communicationOutput');
+
+        // Profile Save Button & Status
+        const saveProfileBtn = document.getElementById('saveProfileBtn');
+        const saveProfileBtnText = document.getElementById('saveProfileBtnText');
+        const saveProfileSpinner = document.getElementById('saveProfileSpinner');
+        const profileStatusMessage = document.getElementById('profileStatusMessage');
+
+        // Project Form Inputs
+        const projectTitleInput = document.getElementById('projectTitle');
+        const projectDescriptionInput = document.getElementById('projectDescription');
+        const projectTeamMembersInput = document.getElementById('projectTeamMembers');
+        const projectTechnologiesInput = document.getElementById('projectTechnologies');
+        const projectUrlInput = document.getElementById('projectUrl');
+        const projectStatusInput = document.getElementById('projectStatus');
+
+        // Project Submit Button & Status
+        const submitProjectBtn = document.getElementById('submitProjectBtn');
+        const submitProjectBtnText = document.getElementById('submitProjectBtnText');
+        const submitProjectSpinner = document.getElementById('submitProjectSpinner');
+        const projectStatusMessage = document.getElementById('projectStatusMessage');
+
+        // Idea Form Inputs
+        const ideaTitleInput = document.getElementById('ideaTitle');
+        const ideaDescriptionInput = document.getElementById('ideaDescription');
+        const ideaProblemSolvedInput = document.getElementById('ideaProblemSolved');
+        const ideaTargetAudienceInput = document.getElementById('ideaTargetAudience');
+        const ideaInnovationLevelInput = document.getElementById('ideaInnovationLevel');
+
+        // Idea Submit Button & Status
+        const submitIdeaBtn = document.getElementById('submitIdeaBtn');
+        const submitIdeaBtnText = document.getElementById('submitIdeaBtnText');
+        const submitIdeaSpinner = document.getElementById('submitIdeaSpinner');
+        const ideaStatusMessage = document.getElementById('ideaStatusMessage');
+
+        // Event Form Inputs (Updated)
+        const eventTitleInput = document.getElementById('eventTitle');
+        const eventDescriptionInput = document.getElementById('eventDescription');
+        const eventVenueInput = document.getElementById('eventVenue');
+        const eventOrganizerInput = document.getElementById('eventOrganizer');
+        const eventRegistrationUrlInput = document.getElementById('eventRegistrationUrl');
+
+        // Event Submit Button & Status (Updated)
+        const submitEventBtn = document.getElementById('submitEventBtn');
+        const submitEventBtnText = document.getElementById('submitEventBtnText');
+        const submitEventSpinner = document.getElementById('submitEventSpinner');
+        const eventStatusMessage = document.getElementById('eventStatusMessage');
+
+
+        // --- Functions ---
+
+        // Function to display status messages for forms
+        function showStatusMessage(element, message, type = 'success') {
+            element.textContent = message;
+            element.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+            if (type === 'success') {
+                element.classList.add('bg-green-100', 'text-green-800');
+            } else if (type === 'error') {
+                element.classList.add('bg-red-100', 'text-red-800');
+            }
+            setTimeout(() => {
+                element.classList.add('hidden');
+            }, 5000); // Hide after 5 seconds
+        }
+
+        // Function to switch tabs
+        window.showTab = function(tabName) {
+            // Deactivate all tab buttons and hide all tab contents
+            profileTabBtn.classList.remove('active');
+            submitProjectTabBtn.classList.remove('active');
+            submitIdeaTabBtn.classList.remove('active');
+            submitEventTabBtn.classList.remove('active');
+
+            profileSection.classList.remove('active');
+            submitProjectSection.classList.remove('active');
+            submitIdeaSection.classList.remove('active');
+            submitEventSection.classList.remove('active');
+
+            // Activate the selected tab button and show its content
+            if (tabName === 'profile') {
+                profileTabBtn.classList.add('active');
+                profileSection.classList.add('active');
+            } else if (tabName === 'submitProject') {
+                submitProjectTabBtn.classList.add('active');
+                submitProjectSection.classList.add('active');
+            } else if (tabName === 'submitIdea') {
+                submitIdeaTabBtn.classList.add('active');
+                submitIdeaSection.classList.add('active');
+            } else if (tabName === 'submitEvent') {
+                submitEventTabBtn.classList.add('active');
+                submitEventSection.classList.add('active');
+            }
+        }
+
+        // Function to load user profile from Firestore
+        async function loadUserProfile(user) {
+            const userDocRef = doc(db, 'users', user.uid);
+            try {
+                const userDocSnap = await getDoc(userDocRef);
+                if (userDocSnap.exists()) {
+                    const data = userDocSnap.data();
+                    // Populate form fields
+                    profileNameInput.value = data.displayName || '';
+                    profileBioInput.value = data.bio || '';
+                    profileContactInput.value = data.contactNumber || '';
+                    profileGenderInput.value = data.gender || '';
+                    profileDobInput.value = data.dob || ''; // Date input expectsYYYY-MM-DD
+                    profileAddressInput.value = data.address || '';
+                    profileCityInput.value = data.city || '';
+                    profileStateInput.value = data.state || '';
+                    profilePincodeInput.value = data.pincode || '';
+                    profileQualificationInput.value = data.qualification || '';
+                    profileSkillsInput.value = data.skills || '';
+                    profileLinkedInInput.value = data.linkedin || '';
+                    profileInstagramInput.value = data.instagram || '';
+                    profileCommunicationMethodInput.value = data.communicationMethod || '';
+
+                    // Update display section
+                    displayNameOutput.textContent = data.displayName || 'Not set';
+                    bioOutput.textContent = data.bio || 'Not set';
+                    contactNumberOutput.textContent = data.contactNumber || 'Not set';
+                    genderOutput.textContent = data.gender || 'Not set';
+                    dobOutput.textContent = data.dob || 'Not set';
+                    addressOutput.textContent = data.address || 'Not set';
+                    cityOutput.textContent = data.city || 'Not set';
+                    stateOutput.textContent = data.state || 'Not set';
+                    pincodeOutput.textContent = data.pincode || 'Not set';
+                    qualificationOutput.textContent = data.qualification || 'Not set';
+                    skillsOutput.textContent = data.skills || 'Not set';
+                    linkedinOutput.textContent = data.linkedin || 'Not set';
+                    instagramOutput.textContent = data.instagram || 'Not set';
+                    communicationOutput.textContent = data.communicationMethod || 'Not set';
+
+                } else {
+                    // If user document doesn't exist, create a basic one with default empty values
+                    await setDoc(userDocRef, {
+                        email: user.email,
+                        displayName: user.displayName || '',
+                        bio: '',
+                        contactNumber: '',
+                        gender: '',
+                        dob: '',
+                        address: '',
+                        city: '',
+                        state: '',
+                        pincode: '',
+                        qualification: '',
+                        skills: '',
+                        linkedin: '',
+                        instagram: '',
+                        communicationMethod: '',
+                        createdAt: new Date()
+                    }, { merge: true });
+                    profileNameInput.value = user.displayName || '';
+
+                    // Update display section with defaults
+                    displayNameOutput.textContent = user.displayName || 'Not set';
+                    bioOutput.textContent = 'Not set';
+                    contactNumberOutput.textContent = 'Not set';
+                    genderOutput.textContent = 'Not set';
+                    dobOutput.textContent = 'Not set';
+                    addressOutput.textContent = 'Not set';
+                    cityOutput.textContent = 'Not set';
+                    stateOutput.textContent = 'Not set';
+                    pincodeOutput.textContent = 'Not set';
+                    qualificationOutput.textContent = 'Not set';
+                    skillsOutput.textContent = 'Not set';
+                    linkedinOutput.textContent = 'Not set';
+                    instagramOutput.textContent = 'Not set';
+                    communicationOutput.textContent = 'Not set';
+                }
+            } catch (error) {
+                console.error("Error loading user profile:", error);
+                showStatusMessage(profileStatusMessage, "Failed to load profile data.", "error");
+            }
+        }
+
+        // --- Event Listeners ---
+
+        // Listen for authentication state changes
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user; // Store current user
+                userEmailElement.textContent = user.email;
+                loadUserProfile(user); // Load profile data for the current user
+                showTab('profile'); // Default to profile tab on load
+            } else {
+                // User is signed out, redirect to login page
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Handle Logout
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                // Redirect will happen via onAuthStateChanged listener
+            } catch (error) {
+                console.error("Error signing out:", error);
+                alert("Failed to log out. Please try again."); // Consider a custom modal
+            }
+        });
+
+        // Handle Save Profile
+        saveProfileBtn.addEventListener('click', async (e) => {
+            e.preventDefault(); // Prevent default form submission
+
+            if (!currentUser) {
+                showStatusMessage(profileStatusMessage, "No user logged in.", "error");
+                return;
+            }
+
+            saveProfileBtnText.classList.add('hidden');
+            saveProfileSpinner.classList.remove('hidden');
+            saveProfileBtn.disabled = true;
+
+            // Get values from all input fields
+            const newName = profileNameInput.value.trim();
+            const newBio = profileBioInput.value.trim();
+            const newContact = profileContactInput.value.trim();
+            const newGender = profileGenderInput.value;
+            const newDob = profileDobInput.value;
+            const newAddress = profileAddressInput.value.trim();
+            const newCity = profileCityInput.value.trim();
+            const newState = profileStateInput.value.trim();
+            const newPincode = profilePincodeInput.value.trim();
+            const newQualification = profileQualificationInput.value;
+            const newSkills = profileSkillsInput.value.trim();
+            const newLinkedIn = profileLinkedInInput.value.trim();
+            const newInstagram = profileInstagramInput.value.trim();
+            const newCommunicationMethod = profileCommunicationMethodInput.value;
+
+            try {
+                // 1. Update Firebase Authentication profile (displayName only)
+                await updateProfile(currentUser, {
+                    displayName: newName,
+                });
+
+                // 2. Update all profile data in Firestore
+                const userDocRef = doc(db, 'users', currentUser.uid);
+                await setDoc(userDocRef, {
+                    displayName: newName,
+                    bio: newBio,
+                    contactNumber: newContact,
+                    gender: newGender,
+                    dob: newDob,
+                    address: newAddress,
+                    city: newCity,
+                    state: newState,
+                    pincode: newPincode,
+                    qualification: newQualification,
+                    skills: newSkills,
+                    linkedin: newLinkedIn,
+                    instagram: newInstagram,
+                    communicationMethod: newCommunicationMethod,
+                    updatedAt: new Date() // Add a timestamp for last update
+                }, { merge: true }); // Use merge: true to only update specified fields
+
+                showStatusMessage(profileStatusMessage, "Profile updated successfully!", "success");
+
+                // Refresh UI with potentially updated data from Firestore
+                loadUserProfile(currentUser);
+
+            } catch (error) {
+                console.error("Error updating profile:", error);
+                showStatusMessage(profileStatusMessage, `Failed to update profile: ${error.message}`, "error");
+            } finally {
+                saveProfileBtnText.classList.remove('hidden');
+                saveProfileSpinner.classList.add('hidden');
+                saveProfileBtn.disabled = false;
+            }
+        });
+
+        // Handle Submit Project
+        submitProjectBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            if (!currentUser) {
+                showStatusMessage(projectStatusMessage, "Please log in to submit a project.", "error");
+                return;
+            }
+
+            submitProjectBtnText.classList.add('hidden');
+            submitProjectSpinner.classList.remove('hidden');
+            submitProjectBtn.disabled = true;
+
+            const projectData = {
+                userId: currentUser.uid,
+                userEmail: currentUser.email,
+                title: projectTitleInput.value.trim(),
+                description: projectDescriptionInput.value.trim(),
+                teamMembers: projectTeamMembersInput.value.trim().split(',').map(m => m.trim()).filter(m => m),
+                technologies: projectTechnologiesInput.value.trim().split(',').map(t => t.trim()).filter(t => t),
+                url: projectUrlInput.value.trim(),
+                status: projectStatusInput.value,
+                submittedAt: new Date()
+            };
+
+            // Basic validation
+            if (!projectData.title || !projectData.description || !projectData.status) {
+                showStatusMessage(projectStatusMessage, "Please fill in all required project fields (Title, Description, Status).", "error");
+                submitProjectBtnText.classList.remove('hidden');
+                submitProjectSpinner.classList.add('hidden');
+                submitProjectBtn.disabled = false;
+                return;
+            }
+
+            try {
+                // Add a new document to the 'projects' collection
+                await addDoc(collection(db, 'projects'), projectData);
+                showStatusMessage(projectStatusMessage, "Project submitted successfully!", "success");
+                // Clear form
+                projectForm.reset();
+            } catch (error) {
+                console.error("Error submitting project:", error);
+                showStatusMessage(projectStatusMessage, `Failed to submit project: ${error.message}`, "error");
+            } finally {
+                submitProjectBtnText.classList.remove('hidden');
+                submitProjectSpinner.classList.add('hidden');
+                submitProjectBtn.disabled = false;
+            }
+        });
+
+        // Handle Submit Idea
+        submitIdeaBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            if (!currentUser) {
+                showStatusMessage(ideaStatusMessage, "Please log in to submit an idea.", "error");
+                return;
+            }
+
+            submitIdeaBtnText.classList.add('hidden');
+            submitIdeaSpinner.classList.remove('hidden');
+            submitIdeaBtn.disabled = true;
+
+            const ideaData = {
+                userId: currentUser.uid,
+                userEmail: currentUser.email,
+                title: ideaTitleInput.value.trim(),
+                description: ideaDescriptionInput.value.trim(),
+                problemSolved: ideaProblemSolvedInput.value.trim(),
+                targetAudience: ideaTargetAudienceInput.value.trim(),
+                innovationLevel: ideaInnovationLevelInput.value,
+                submittedAt: new Date()
+            };
+
+            // Basic validation
+            if (!ideaData.title || !ideaData.description || !ideaData.problemSolved || !ideaData.innovationLevel) {
+                showStatusMessage(ideaStatusMessage, "Please fill in all required idea fields (Title, Description, Problem Solved, Innovation Level).", "error");
+                submitIdeaBtnText.classList.remove('hidden');
+                submitIdeaSpinner.classList.add('hidden');
+                submitIdeaBtn.disabled = false;
+                return;
+            }
+
+            try {
+                // Add a new document to the 'ideas' collection
+                await addDoc(collection(db, 'ideas'), ideaData);
+                showStatusMessage(ideaStatusMessage, "Idea submitted successfully!", "success");
+                // Clear form
+                ideaForm.reset();
+            } catch (error) {
+                console.error("Error submitting idea:", error);
+                showStatusMessage(ideaStatusMessage, `Failed to submit idea: ${error.message}`, "error");
+            } finally {
+                submitIdeaBtnText.classList.remove('hidden');
+                submitIdeaSpinner.classList.add('hidden');
+                submitIdeaBtn.disabled = false;
+            }
+        });
+
+        // Handle Submit Event (Updated)
+        submitEventBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            if (!currentUser) {
+                showStatusMessage(eventStatusMessage, "Please log in to submit an event.", "error");
+                return;
+            }
+
+            submitEventBtnText.classList.add('hidden');
+            submitEventSpinner.classList.remove('hidden');
+            submitEventBtn.disabled = true;
+
+            const eventData = {
+                userId: currentUser.uid,
+                userEmail: currentUser.email,
+                title: eventTitleInput.value.trim(),
+                description: eventDescriptionInput.value.trim(),
+                venue: eventVenueInput.value.trim(),
+                organizer: eventOrganizerInput.value.trim(),
+                registrationUrl: eventRegistrationUrlInput.value.trim(),
+                submittedAt: new Date()
+            };
+
+            // Basic validation (updated)
+            if (!eventData.title || !eventData.description || !eventData.venue) {
+                showStatusMessage(eventStatusMessage, "Please fill in all required event fields (Title, Description, Venue).", "error");
+                submitEventBtnText.classList.remove('hidden');
+                submitEventSpinner.classList.add('hidden');
+                submitEventBtn.disabled = false;
+                return;
+            }
+
+            try {
+                // Add a new document to the 'events' collection
+                await addDoc(collection(db, 'events'), eventData);
+                showStatusMessage(eventStatusMessage, "Event submitted successfully!", "success");
+                // Clear form
+                eventForm.reset();
+            } catch (error) {
+                console.error("Error submitting event:", error);
+                showStatusMessage(eventStatusMessage, `Failed to submit event: ${error.message}`, "error");
+            } finally {
+                submitEventBtnText.classList.remove('hidden');
+                submitEventSpinner.classList.add('hidden');
+                submitEventBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
