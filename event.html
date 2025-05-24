@@ -282,5 +282,84 @@
         document.addEventListener('DOMContentLoaded', displayGalleryImages);
 
     </script>
+    <script>
+        const BASE_URL = 'http://localhost:3000/api';
+
+        // --- Page Switching Logic ---
+        const pages = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('.page-link');
+        const mobileNavLinks = document.querySelectorAll('.page-link-mobile');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function showPage(id) {
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            const targetPage = document.getElementById(id);
+            if (targetPage) {
+                targetPage.classList.add('active');
+
+                // Update active class for desktop nav links
+                navLinks.forEach(link => {
+                    link.classList.remove('nav-link-active');
+                    // Check if the link's hash matches the current page ID
+                    const linkHash = link.getAttribute('href').substring(1);
+                    if (linkHash === id) {
+                        link.classList.add('nav-link-active');
+                    }
+                });
+                // Scroll to top of the page content, accounting for sticky header
+                const headerHeight = document.querySelector('header').offsetHeight;
+                window.scrollTo({
+                    top: targetPage.offsetTop - headerHeight,
+                    behavior: 'smooth'
+                });
+
+                // Trigger data loading for specific pages
+                if (id === 'events') {
+                    fetchAndDisplayEvents();
+                } else if (id === 'news') {
+                    fetchAndDisplayNews();
+                } else if (id === 'gallery') {
+                    displayGalleryImages();
+                } else if (id === 'home') {
+                    fetchAndDisplayEvents(true); // Load limited events for home
+                    fetchAndDisplayNews(true); // Load limited news for home
+                }
+            }
+
+
+            // Close mobile menu if open
+            mobileMenu.classList.remove('open');
+        }
+
+        // Event listeners for desktop navigation (for internal links)
+        navLinks.forEach(link => {
+            if (link.getAttribute('href').startsWith('#')) { // Only handle internal hash links here
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.getAttribute('href').substring(1);
+                    showPage(pageId);
+                });
+            }
+        });
+
+        // Event listeners for mobile navigation (for internal links)
+        mobileNavLinks.forEach(link => {
+            if (link.getAttribute('href').startsWith('#')) { // Only handle internal hash links here
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.getAttribute('href').substring(1);
+                    showPage(pageId);
+                });
+            }
+        });
+
+        // Mobile menu toggle
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+         </script>
 </body>
 </html>
