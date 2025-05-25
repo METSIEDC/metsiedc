@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard - MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #e2e8f0; /* Lighter blue-gray background */
-            color: #2d3748; /* Darker text for better contrast */
+            background-color: #f0f4f8; /* Softer, light blue-gray background */
+            color: #334155; /* Darker text for better contrast */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
         header {
             background-color: #ffffff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* More pronounced shadow */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* More subtle, wider shadow */
             padding: 1rem 0;
             position: sticky;
             top: 0;
@@ -41,14 +41,14 @@
             margin: 0 auto;
             padding: 0 1.5rem; /* Increased horizontal padding */
         }
-        .text-primary {
-            color: #2563eb; /* A slightly bolder blue */
+        .text-brand-primary {
+            color: #2563eb; /* Consistent primary blue */
         }
-        .bg-primary {
+        .bg-brand-primary {
             background-color: #2563eb;
         }
-        .hover\:bg-blue-700:hover {
-            background-color: #1d4ed8; /* Darker hover state */
+        .hover\:bg-brand-primary-dark:hover {
+            background-color: #1d4ed8; /* Darker blue on hover */
         }
         .loading-spinner {
             border: 4px solid rgba(255, 255, 255, 0.3); /* Lighter spinner border */
@@ -63,10 +63,10 @@
             100% { transform: rotate(360deg); }
         }
         .tab-button {
-            padding: 0.75rem 1.75rem; /* Increased padding */
+            padding: 0.8rem 1.75rem; /* Increased padding */
             border-bottom: 3px solid transparent;
             font-weight: 500;
-            color: #6b7280;
+            color: #64748b; /* Gray text for inactive tabs */
             transition: all 0.3s ease-in-out; /* Smoother transition */
             border-radius: 0.5rem 0.5rem 0 0; /* Rounded top corners */
         }
@@ -98,10 +98,11 @@
         input[type="url"],
         textarea,
         select {
-            border: 1px solid #cbd5e0; /* Lighter border */
+            border: 1px solid #cbd5e1; /* Lighter border */
             border-radius: 0.5rem; /* Rounded corners */
             padding: 0.75rem 1rem; /* Increased padding */
             transition: all 0.2s ease-in-out;
+            font-size: 1rem; /* Ensure consistent font size */
         }
         input[type="text"]:focus,
         input[type="tel"]:focus,
@@ -116,15 +117,15 @@
         }
         /* Button styling */
         button[type="submit"] {
-            padding: 0.8rem 1.5rem; /* Larger buttons */
+            padding: 0.85rem 1.5rem; /* Larger buttons */
             font-weight: 600;
-            border-radius: 0.5rem; /* Rounded corners */
+            border-radius: 0.5rem; /* Rounded button corners */
             transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle button shadow */
         }
         button[type="submit"]:hover {
-            transform: translateY(-2px); /* Lift effect on hover */
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
+            transform: translateY(-1px); /* Slight lift on hover */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
         }
         /* Specific button colors */
         .bg-green-600 { background-color: #10b981; } /* Tailwind emerald-500 */
@@ -138,6 +139,25 @@
         .bg-red-600 { background-color: #ef4444; } /* Tailwind red-500 */
         .hover\:bg-red-700:hover { background-color: #dc2626; } /* Tailwind red-600 */
 
+        /* Status Message Styling */
+        .status-message {
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .status-message.error {
+            background-color: #fee2e2; /* Red-100 */
+            color: #ef4444; /* Red-500 */
+            border: 1px solid #fca5a5; /* Red-300 */
+        }
+        .status-message.success {
+            background-color: #d1fae5; /* Green-100 */
+            color: #10b981; /* Green-500 */
+            border: 1px solid #6ee7b7; /* Green-300 */
+        }
+
         /* Responsive adjustments */
         @media (min-width: 768px) {
             .tab-content.grid {
@@ -150,9 +170,9 @@
 
     <header>
         <div class="container flex items-center justify-between">
-            <a href="index.html" class="flex items-center space-x-2">
-                <img src="https://placehold.co/40x40/2563eb/FFFFFF?text=IEDC" alt="IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
-                <span class="text-2xl font-bold text-primary">MET'S IEDC</span>
+            <a href="index.html" class="flex items-center space-x-3">
+                <img src="https://placehold.co/50x50/2563eb/FFFFFF?text=IEDC" alt="IEDC Logo" class="h-12 w-12 rounded-full shadow-md">
+                <span class="text-3xl font-extrabold text-brand-primary">MET'S IEDC</span>
             </a>
             <nav>
                 <button id="logoutBtn" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300 shadow-md">Logout</button>
@@ -164,7 +184,7 @@
         <div class="max-w-5xl w-full mx-4">
             <h1 class="text-4xl font-extrabold text-gray-800 mb-4 text-center">Your User Dashboard</h1>
             <p class="text-lg text-gray-600 mb-8 text-center">Welcome back! Manage your profile and submissions here.</p>
-            <p class="text-lg text-gray-700 mb-8 text-center">Logged in as: <span id="userEmail" class="font-semibold text-primary">Loading...</span></p>
+            <p class="text-lg text-gray-700 mb-8 text-center">Logged in as: <span id="userEmail" class="font-semibold text-brand-primary">Loading...</span></p>
 
             <div class="flex flex-wrap justify-center border-b border-gray-200 mb-8 bg-white rounded-t-lg shadow-sm">
                 <button id="profileTabBtn" class="tab-button active" onclick="showTab('profile')">My Profile</button>
@@ -196,7 +216,7 @@
 
                 <div class="text-left p-6 bg-white rounded-lg shadow-md">
                     <h2 class="text-2xl font-bold text-gray-800 mb-6">Update Your Profile</h2>
-                    <div id="profileStatusMessage" class="text-center text-sm p-2 mb-4 rounded-md hidden"></div>
+                    <div id="profileStatusMessage" class="status-message hidden"></div>
 
                     <form id="profileForm" class="space-y-4">
                         <div>
@@ -304,7 +324,7 @@
 
             <div id="submitProjectSection" class="tab-content">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6 text-left">Submit a New Project</h2>
-                <div id="projectStatusMessage" class="text-center text-sm p-2 mb-4 rounded-md hidden"></div>
+                <div id="projectStatusMessage" class="status-message hidden"></div>
 
                 <form id="projectForm" class="space-y-4 text-left">
                     <div>
@@ -346,7 +366,7 @@
 
             <div id="submitIdeaSection" class="tab-content">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6 text-left">Submit a New Idea</h2>
-                <div id="ideaStatusMessage" class="text-center text-sm p-2 mb-4 rounded-md hidden"></div>
+                <div id="ideaStatusMessage" class="status-message hidden"></div>
 
                 <form id="ideaForm" class="space-y-4 text-left">
                     <div>
@@ -383,7 +403,7 @@
 
             <div id="submitEventSection" class="tab-content">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6 text-left">Submit a New Event</h2>
-                <div id="eventStatusMessage" class="text-center text-sm p-2 mb-4 rounded-md hidden"></div>
+                <div id="eventStatusMessage" class="status-message hidden"></div>
 
                 <form id="eventForm" class="space-y-4 text-left">
                     <div>
@@ -527,14 +547,14 @@
         const submitIdeaSpinner = document.getElementById('submitIdeaSpinner');
         const ideaStatusMessage = document.getElementById('ideaStatusMessage');
 
-        // Event Form Inputs (Updated)
+        // Event Form Inputs
         const eventTitleInput = document.getElementById('eventTitle');
         const eventDescriptionInput = document.getElementById('eventDescription');
         const eventVenueInput = document.getElementById('eventVenue');
         const eventOrganizerInput = document.getElementById('eventOrganizer');
         const eventRegistrationUrlInput = document.getElementById('eventRegistrationUrl');
 
-        // Event Submit Button & Status (Updated)
+        // Event Submit Button & Status
         const submitEventBtn = document.getElementById('submitEventBtn');
         const submitEventBtnText = document.getElementById('submitEventBtnText');
         const submitEventSpinner = document.getElementById('submitEventSpinner');
@@ -544,14 +564,11 @@
         // --- Functions ---
 
         // Function to display status messages for forms
-        function showStatusMessage(element, message, type = 'success') {
+        function showStatusMessage(element, message, type = 'error') { /* Default to error for safety */
             element.textContent = message;
-            element.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
-            if (type === 'success') {
-                element.classList.add('bg-green-100', 'text-green-800');
-            } else if (type === 'error') {
-                element.classList.add('bg-red-100', 'text-red-800');
-            }
+            element.classList.remove('hidden', 'status-message', 'error', 'success'); /* Clear all status classes */
+            element.classList.add('status-message', type); /* Add base and type class */
+            element.classList.remove('hidden');
             setTimeout(() => {
                 element.classList.add('hidden');
             }, 5000); // Hide after 5 seconds
@@ -598,7 +615,7 @@
                     profileBioInput.value = data.bio || '';
                     profileContactInput.value = data.contactNumber || '';
                     profileGenderInput.value = data.gender || '';
-                    profileDobInput.value = data.dob || ''; // Date input expectsYYYY-MM-DD
+                    profileDobInput.value = data.dob || ''; // Date input expects YYYY-MM-DD
                     profileAddressInput.value = data.address || '';
                     profileCityInput.value = data.city || '';
                     profileStateInput.value = data.state || '';
@@ -864,7 +881,7 @@
             }
         });
 
-        // Handle Submit Event (Updated)
+        // Handle Submit Event
         submitEventBtn.addEventListener('click', async (e) => {
             e.preventDefault();
 
@@ -888,7 +905,7 @@
                 submittedAt: new Date()
             };
 
-            // Basic validation (updated)
+            // Basic validation
             if (!eventData.title || !eventData.description || !eventData.venue) {
                 showStatusMessage(eventStatusMessage, "Please fill in all required event fields (Title, Description, Venue).", "error");
                 submitEventBtnText.classList.remove('hidden');
