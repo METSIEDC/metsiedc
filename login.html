@@ -7,6 +7,49 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+               /* Active Nav Link Style */
+        .nav-link-active {
+            color: config('theme.colors.primary');
+            font-weight: 600;
+            border-bottom: 2px solid config('theme.colors.primary');
+        }
+        .nav-link {
+            padding-bottom: 0.25rem; /* For the border to sit nicely */
+            border-bottom: 2px solid transparent; /* Make space for active border */
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: config('theme.colors.primary');
+        }
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/343A40/FFFFFF?text=IEDC+Innovation+Hub') no-repeat center center;
+            background-size: cover;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* Page transition placeholder - can be expanded with JS */
+        .page {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .page.active {
+            display: block; /* Shown when active */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        /* Ensure body has some padding if using sticky header */
+        /* Basic styling for the page */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f0f2f5;
@@ -45,7 +88,12 @@
     </style>
 </head>
 <body>
-
+  <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-2 text-primary hover:text-blue-700 transition duration-300">
+                <img src="https://media.licdn.com/dms/image/v2/D560BAQGxz7ZZcAfqrQ/company-logo_200_200/company-logo_200_200/0/1709994755954/iedckerala_logo?e=2147483647&v=beta&t=1wTZyD5-giLQyovu5X30_0oa_QQVrFk2fPL-msJVt8w" alt="IEDC Logo" class="h-10 w-10 rounded-full">
+                <span class="text-2xl font-bold">MET'S IEDC</span>
+            </a>
     <div class="login-container">
         <h2 class="text-3xl font-bold text-gray-800 mb-8">MET'S IEDC</h2>
 
