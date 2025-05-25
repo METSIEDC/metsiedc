@@ -1,81 +1,109 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MET'S IEDC - Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-               /* Active Nav Link Style */
-        .nav-link-active {
-            color: config('theme.colors.primary');
-            font-weight: 600;
-            border-bottom: 2px solid config('theme.colors.primary');
-        }
-        .nav-link {
-            padding-bottom: 0.25rem; /* For the border to sit nicely */
-            border-bottom: 2px solid transparent; /* Make space for active border */
-            transition: color 0.3s ease, border-bottom-color 0.3s ease;
-        }
-        .nav-link:hover {
-            color: config('theme.colors.primary');
-        }
-        .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/343A40/FFFFFF?text=IEDC+Innovation+Hub') no-repeat center center;
-            background-size: cover;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        /* Page transition placeholder - can be expanded with JS */
-        .page {
-            display: none; /* Hidden by default */
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        .page.active {
-            display: block; /* Shown when active */
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .mobile-menu {
-            transform: translateX(-100%);
-            transition: transform 0.3s ease-in-out;
-        }
-        .mobile-menu.open {
-            transform: translateX(0);
-        }
-        /* Ensure body has some padding if using sticky header */
-        /* Basic styling for the page */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
+            background-color: #f0f4f8; /* Softer, light blue-gray background */
             display: flex;
-            justify-content: center;
+            flex-direction: column; /* Allow header and main content to stack */
+            justify-content: flex-start; /* Start content from top */
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            color: #334155; /* Darker default text color */
+        }
+        header {
+            width: 100%;
+            background-color: #ffffff; /* White header background */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* More subtle, wider shadow */
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: center; /* Center content within header */
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-container {
+            max-width: 1200px; /* Match dashboard container width */
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* Align logo to left */
         }
         .login-container {
             background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 2.5rem;
+            border-radius: 12px; /* Slightly more rounded corners */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); /* More prominent shadow for the card */
+            padding: 3rem 2.5rem; /* Increased padding */
             width: 100%;
-            max-width: 450px;
+            max-width: 480px; /* Slightly wider */
             text-align: center;
+            margin-top: 3rem; /* Space below the header */
+            margin-bottom: 3rem; /* Ensure space at the bottom */
+        }
+        .text-brand-primary {
+            color: #2563eb; /* Consistent primary blue */
+        }
+        .bg-brand-primary {
+            background-color: #2563eb;
+        }
+        .hover\:bg-brand-primary-dark:hover {
+            background-color: #1d4ed8; /* Darker blue on hover */
+        }
+        .tab-button {
+            padding: 0.8rem 0; /* Adjusted padding */
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            color: #64748b; /* Gray text for inactive tabs */
+            transition: all 0.3s ease-in-out;
+            margin: 0 1rem; /* Space between tabs */
+            flex-grow: 0; /* Don't force equal width for tabs */
         }
         .tab-button.active {
-            border-bottom: 3px solid #007BFF; /* Primary color */
-            color: #007BFF;
+            border-bottom-color: #2563eb; /* Primary blue for active tab */
+            color: #2563eb;
             font-weight: 600;
         }
+        .tab-button:hover:not(.active) {
+            color: #3b82f6; /* Lighter blue on hover */
+        }
+        input[type="email"],
+        input[type="password"] {
+            border: 1px solid #cbd5e1; /* Lighter border */
+            border-radius: 8px; /* More rounded input fields */
+            padding: 0.8rem 1rem; /* Increased padding */
+            transition: all 0.2s ease-in-out;
+            font-size: 1rem;
+        }
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #2563eb; /* Primary blue on focus */
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); /* Subtle focus ring */
+            outline: none;
+        }
+        button {
+            padding: 0.85rem 1.5rem; /* Larger buttons */
+            font-weight: 600;
+            border-radius: 8px; /* Rounded button corners */
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle button shadow */
+        }
+        button:hover {
+            transform: translateY(-1px); /* Slight lift on hover */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
+        }
+        .bg-green-600 { background-color: #16a34a; } /* Tailwind green-600 for consistency */
+        .hover\:bg-green-700:hover { background-color: #15803d; } /* Darker green on hover */
+
         .loading-spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: #007BFF; /* Primary color */
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-left-color: #ffffff;
             border-radius: 50%;
             width: 24px;
             height: 24px;
@@ -85,30 +113,51 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        /* Status Message Styling */
+        .status-message {
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .status-message.error {
+            background-color: #fee2e2; /* Red-100 */
+            color: #ef4444; /* Red-500 */
+            border: 1px solid #fca5a5; /* Red-300 */
+        }
+        .status-message.success {
+            background-color: #d1fae5; /* Green-100 */
+            color: #10b981; /* Green-500 */
+            border: 1px solid #6ee7b7; /* Green-300 */
+        }
     </style>
 </head>
 <body>
-  <header class="bg-white shadow-md py-4">
-        <div class="container mx-auto flex items-center justify-between">
-            <a href="index.html" class="flex items-center space-x-2 text-primary hover:text-blue-700 transition duration-300">
-                <img src="https://media.licdn.com/dms/image/v2/D560BAQGxz7ZZcAfqrQ/company-logo_200_200/company-logo_200_200/0/1709994755954/iedckerala_logo?e=2147483647&v=beta&t=1wTZyD5-giLQyovu5X30_0oa_QQVrFk2fPL-msJVt8w" alt="IEDC Logo" class="h-10 w-10 rounded-full">
-                <span class="text-2xl font-bold">MET'S IEDC</span>
-            </a>
-              </header>
-    <div class="login-container">
-        <h2 class="text-3xl font-bold text-gray-800 mb-8">MET'S IEDC</h2>
 
-        <div class="flex justify-center mb-6 border-b border-gray-200">
-            <button id="loginTabBtn" class="tab-button flex-1 py-3 text-lg text-gray-600 focus:outline-none active" onclick="showTab('login')">Login</button>
-            <button id="signupTabBtn" class="tab-button flex-1 py-3 text-lg text-gray-600 focus:outline-none" onclick="showTab('signup')">Sign Up</button>
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="flex items-center space-x-3">
+                <img src="https://placehold.co/50x50/2563eb/FFFFFF?text=IEDC" alt="IEDC Logo" class="h-12 w-12 rounded-full shadow-md">
+                <span class="text-3xl font-extrabold text-brand-primary">MET'S IEDC</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="login-container">
+        <h2 class="text-3xl font-bold text-gray-800 mb-8">Welcome Back!</h2>
+
+        <div class="flex justify-center mb-8">
+            <button id="loginTabBtn" class="tab-button active" onclick="showTab('login')">Login</button>
+            <button id="signupTabBtn" class="tab-button" onclick="showTab('signup')">Sign Up</button>
         </div>
 
         <div id="loginForm" class="tab-content">
-            <h3 class="text-2xl font-semibold text-gray-700 mb-6">Login to your account</h3>
-            <div id="loginError" class="text-red-600 text-sm mb-4 hidden"></div>
-            <input type="email" id="loginEmail" placeholder="Email" class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <input type="password" id="loginPassword" placeholder="Password" class="w-full p-3 mb-6 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button id="loginBtn" class="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 flex items-center justify-center">
+            <h3 class="text-2xl font-semibold text-gray-700 mb-6">Sign in to your account</h3>
+            <div id="loginError" class="status-message error hidden"></div>
+            <input type="email" id="loginEmail" placeholder="Email Address" class="w-full p-3 mb-4">
+            <input type="password" id="loginPassword" placeholder="Password" class="w-full p-3 mb-6">
+            <button id="loginBtn" class="w-full bg-brand-primary text-white p-3 font-semibold hover:bg-brand-primary-dark transition duration-300 flex items-center justify-center">
                 <span id="loginBtnText">Login</span>
                 <div id="loginSpinner" class="loading-spinner ml-2 hidden"></div>
             </button>
@@ -117,17 +166,17 @@
 
         <div id="signupForm" class="tab-content hidden">
             <h3 class="text-2xl font-semibold text-gray-700 mb-6">Create a new account</h3>
-            <div id="signupError" class="text-red-600 text-sm mb-4 hidden"></div>
-            <input type="email" id="signupEmail" placeholder="Email" class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <input type="password" id="signupPassword" placeholder="Password" class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" class="w-full p-3 mb-6 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button id="signupBtn" class="w-full bg-green-600 text-white p-3 rounded-lg font-semibold hover:bg-green-700 transition duration-300 flex items-center justify-center">
+            <div id="signupError" class="status-message error hidden"></div>
+            <input type="email" id="signupEmail" placeholder="Email Address" class="w-full p-3 mb-4">
+            <input type="password" id="signupPassword" placeholder="Password (min 6 characters)" class="w-full p-3 mb-4">
+            <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" class="w-full p-3 mb-6">
+            <button id="signupBtn" class="w-full bg-green-600 text-white p-3 font-semibold hover:bg-green-700 transition duration-300 flex items-center justify-center">
                 <span id="signupBtnText">Sign Up</span>
                 <div id="signupSpinner" class="loading-spinner ml-2 hidden"></div>
             </button>
         </div>
 
-        <div id="passwordResetMessage" class="text-green-600 text-center mt-4 hidden">
+        <div id="passwordResetMessage" class="status-message success hidden mt-4">
             Password reset email sent! Check your inbox.
         </div>
     </div>
