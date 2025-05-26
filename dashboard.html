@@ -9,15 +9,15 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Softer, light blue-gray background */
-            color: #334155; /* Darker text for better contrast */
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text for contrast */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
         header {
-            background-color: #ffffff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* More subtle, wider shadow */
+            background-color: #2d3748; /* Slightly lighter dark for header */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* More prominent shadow */
             padding: 1rem 0;
             position: sticky;
             top: 0;
@@ -25,34 +25,35 @@
         }
         main {
             flex-grow: 1;
-            padding: 2.5rem 0; /* Increased padding */
+            padding: 3rem 0; /* Increased padding */
             display: flex;
             justify-content: center;
             align-items: flex-start;
         }
         footer {
-            background-color: #1a202c; /* Darker footer */
-            color: #cbd5e1;
-            padding: 2rem 0;
+            background-color: #1a202c; /* Consistent dark footer */
+            color: #a0aec0;
+            padding: 2.5rem 0;
             text-align: center;
+            border-top: 1px solid #4a5568; /* Subtle border */
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1.5rem; /* Increased horizontal padding */
+            padding: 0 2rem; /* Increased horizontal padding */
         }
         .text-brand-primary {
-            color: #2563eb; /* Consistent primary blue */
+            color: #667eea; /* A vibrant purple-blue */
         }
         .bg-brand-primary {
-            background-color: #2563eb;
+            background-color: #667eea;
         }
         .hover\:bg-brand-primary-dark:hover {
-            background-color: #1d4ed8; /* Darker blue on hover */
+            background-color: #5a67d8; /* Darker purple-blue on hover */
         }
         .loading-spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3); /* Lighter spinner border */
-            border-left-color: #ffffff; /* White spinner color */
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-left-color: #ffffff;
             border-radius: 50%;
             width: 24px;
             height: 24px;
@@ -63,29 +64,33 @@
             100% { transform: rotate(360deg); }
         }
         .tab-button {
-            padding: 0.8rem 1.75rem; /* Increased padding */
-            border-bottom: 3px solid transparent;
-            font-weight: 500;
-            color: #64748b; /* Gray text for inactive tabs */
-            transition: all 0.3s ease-in-out; /* Smoother transition */
-            border-radius: 0.5rem 0.5rem 0 0; /* Rounded top corners */
+            padding: 0.9rem 2rem; /* Larger padding */
+            border-radius: 9999px; /* Pill shape */
+            font-weight: 600;
+            color: #a0aec0; /* Lighter gray for inactive tabs */
+            transition: all 0.3s ease-in-out;
+            background-color: #2d3748; /* Darker background for tabs */
+            margin: 0 0.5rem; /* Space between tabs */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         .tab-button.active {
-            border-bottom-color: #2563eb; /* Primary blue for active tab */
-            color: #2563eb;
-            font-weight: 600;
-            background-color: #f8fafc; /* Slightly lighter background for active tab */
+            background-color: #667eea; /* Primary accent color for active tab */
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4); /* Glow effect */
+            transform: translateY(-2px);
         }
         .tab-button:hover:not(.active) {
-            color: #3b82f6; /* Lighter blue on hover */
-            background-color: #eff6ff; /* Lightest blue on hover */
+            color: #cbd5e1;
+            background-color: #4a5568; /* Slightly lighter dark on hover */
+            transform: translateY(-1px);
         }
         .tab-content {
             display: none;
-            padding: 2rem; /* Consistent padding for content */
-            background-color: #ffffff;
-            border-radius: 0.75rem; /* More rounded corners for content */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Deeper shadow */
+            padding: 2.5rem; /* Increased padding for content */
+            background-color: #2d3748; /* Content background */
+            border-radius: 1rem; /* More rounded corners */
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3), 0 5px 10px -5px rgba(0, 0, 0, 0.1); /* Deeper shadow */
+            border: 1px solid #4a5568; /* Subtle border */
         }
         .tab-content.active {
             display: block;
@@ -98,11 +103,17 @@
         input[type="url"],
         textarea,
         select {
-            border: 1px solid #cbd5e1; /* Lighter border */
-            border-radius: 0.5rem; /* Rounded corners */
-            padding: 0.75rem 1rem; /* Increased padding */
+            background-color: #4a5568; /* Darker input background */
+            border: 1px solid #667eea; /* Primary accent border */
+            border-radius: 0.75rem; /* More rounded corners */
+            padding: 0.9rem 1.25rem; /* Increased padding */
+            color: #e2e8f0; /* Light text color */
             transition: all 0.2s ease-in-out;
-            font-size: 1rem; /* Ensure consistent font size */
+            font-size: 1rem;
+        }
+        input[type="text"]::placeholder,
+        textarea::placeholder {
+            color: #a0aec0; /* Lighter placeholder text */
         }
         input[type="text"]:focus,
         input[type="tel"]:focus,
@@ -111,58 +122,80 @@
         input[type="url"]:focus,
         textarea:focus,
         select:focus {
-            border-color: #2563eb; /* Primary blue on focus */
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); /* Subtle focus ring */
+            border-color: #805ad5; /* A slightly different accent on focus */
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.3); /* More prominent focus ring */
             outline: none;
         }
         /* Button styling */
-        button[type="submit"] {
-            padding: 0.85rem 1.5rem; /* Larger buttons */
-            font-weight: 600;
-            border-radius: 0.5rem; /* Rounded button corners */
+        button[type="submit"],
+        .action-button {
+            padding: 1rem 2rem; /* Larger buttons */
+            font-weight: 700;
+            border-radius: 0.75rem; /* Rounded button corners */
             transition: all 0.3s ease-in-out;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle button shadow */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Deeper button shadow */
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
-        button[type="submit"]:hover {
-            transform: translateY(-1px); /* Slight lift on hover */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
+        button[type="submit"]:hover,
+        .action-button:hover {
+            transform: translateY(-3px); /* More pronounced lift on hover */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Even deeper shadow on hover */
         }
         /* Specific button colors */
-        .bg-green-600 { background-color: #10b981; } /* Tailwind emerald-500 */
-        .hover\:bg-green-700:hover { background-color: #059669; } /* Tailwind emerald-600 */
-        .bg-blue-600 { background-color: #3b82f6; } /* Tailwind blue-500 */
-        .hover\:bg-blue-700:hover { background-color: #2563eb; } /* Tailwind blue-600 */
-        .bg-purple-600 { background-color: #8b5cf6; } /* Tailwind violet-500 */
-        .hover\:bg-purple-700:hover { background-color: #7c3aed; } /* Tailwind violet-600 */
-        .bg-orange-600 { background-color: #f97316; } /* Tailwind orange-500 */
-        .hover\:bg-orange-700:hover { background-color: #ea580c; } /* Tailwind orange-600 */
-        .bg-red-600 { background-color: #ef4444; } /* Tailwind red-500 */
-        .hover\:bg-red-700:hover { background-color: #dc2626; } /* Tailwind red-600 */
+        .bg-green-600 { background-color: #48bb78; } /* Tailwind green-500 */
+        .hover\:bg-green-700:hover { background-color: #38a169; } /* Tailwind green-600 */
+        .bg-blue-600 { background-color: #667eea; } /* Primary purple-blue */
+        .hover\:bg-blue-700:hover { background-color: #5a67d8; } /* Darker purple-blue */
+        .bg-purple-600 { background-color: #805ad5; } /* Tailwind violet-500 */
+        .hover\:bg-purple-700:hover { background-color: #6b46c1; } /* Tailwind violet-600 */
+        .bg-orange-600 { background-color: #ed8936; } /* Tailwind orange-500 */
+        .hover\:bg-orange-700:hover { background-color: #dd6b20; } /* Tailwind orange-600 */
+        .bg-red-600 { background-color: #f56565; } /* Tailwind red-500 */
+        .hover\:bg-red-700:hover { background-color: #e53e3e; } /* Tailwind red-600 */
 
         /* Status Message Styling */
         .status-message {
-            padding: 0.75rem 1rem;
-            border-radius: 6px;
+            padding: 1rem 1.25rem;
+            border-radius: 0.75rem;
             margin-bottom: 1.5rem;
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
         .status-message.error {
-            background-color: #fee2e2; /* Red-100 */
-            color: #ef4444; /* Red-500 */
-            border: 1px solid #fca5a5; /* Red-300 */
+            background-color: #fed7d7; /* Red-100 */
+            color: #c53030; /* Red-700 */
+            border: 1px solid #fc8181; /* Red-400 */
         }
         .status-message.success {
-            background-color: #d1fae5; /* Green-100 */
-            color: #10b981; /* Green-500 */
-            border: 1px solid #6ee7b7; /* Green-300 */
+            background-color: #c6f6d5; /* Green-100 */
+            color: #2f855a; /* Green-700 */
+            border: 1px solid #68d391; /* Green-400 */
         }
 
         /* Responsive adjustments */
         @media (min-width: 768px) {
             .tab-content.grid {
-                grid-template-columns: 1fr 1.5fr; /* Adjust column ratio for profile section */
+                grid-template-columns: 1fr 1.2fr; /* Adjust column ratio for profile section */
             }
+        }
+        /* Profile Info specific styling */
+        .profile-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem; /* Space between icon and text */
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #4a5568; /* Subtle dashed line */
+        }
+        .profile-info-item:last-child {
+            border-bottom: none; /* No border for the last item */
+        }
+        .profile-info-item svg {
+            color: #667eea; /* Icon color */
+            flex-shrink: 0; /* Prevent icon from shrinking */
         }
     </style>
 </head>
@@ -171,22 +204,22 @@
     <header>
         <div class="container flex items-center justify-between">
             <a href="index.html" class="flex items-center space-x-3">
-                <img src="https://placehold.co/50x50/2563eb/FFFFFF?text=IEDC" alt="IEDC Logo" class="h-12 w-12 rounded-full shadow-md">
+                <img src="https://placehold.co/50x50/667eea/FFFFFF?text=IEDC" alt="IEDC Logo" class="h-12 w-12 rounded-full shadow-lg">
                 <span class="text-3xl font-extrabold text-brand-primary">MET'S IEDC</span>
             </a>
             <nav>
-                <button id="logoutBtn" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300 shadow-md">Logout</button>
+                <button id="logoutBtn" class="action-button px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700">Logout</button>
             </nav>
         </div>
     </header>
 
     <main>
         <div class="max-w-5xl w-full mx-4">
-            <h1 class="text-4xl font-extrabold text-gray-800 mb-4 text-center">Your User Dashboard</h1>
-            <p class="text-lg text-gray-600 mb-8 text-center">Welcome back! Manage your profile and submissions here.</p>
-            <p class="text-lg text-gray-700 mb-8 text-center">Logged in as: <span id="userEmail" class="font-semibold text-brand-primary">Loading...</span></p>
+            <h1 class="text-4xl font-extrabold text-white mb-4 text-center">Your Personal Dashboard</h1>
+            <p class="text-lg text-gray-400 mb-8 text-center">Manage your profile, projects, ideas, and events.</p>
+            <p class="text-md text-gray-500 mb-8 text-center">Logged in as: <span id="userEmail" class="font-semibold text-brand-primary">Loading...</span></p>
 
-            <div class="flex flex-wrap justify-center border-b border-gray-200 mb-8 bg-white rounded-t-lg shadow-sm">
+            <div class="flex flex-wrap justify-center border-b border-gray-700 mb-8 bg-gray-800 rounded-t-lg shadow-xl py-2">
                 <button id="profileTabBtn" class="tab-button active" onclick="showTab('profile')">My Profile</button>
                 <button id="submitProjectTabBtn" class="tab-button" onclick="showTab('submitProject')">Submit Project</button>
                 <button id="submitIdeaTabBtn" class="tab-button" onclick="showTab('submitIdea')">Submit Idea</button>
@@ -194,49 +227,96 @@
             </div>
 
             <div id="profileSection" class="tab-content active grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div class="p-6 bg-gray-50 rounded-lg border border-gray-200 shadow-inner">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-5 border-b pb-3 border-gray-200">Your Profile Information</h3>
-                    <div class="space-y-3 text-gray-700">
-                        <p><span class="font-semibold text-gray-800">Name:</span> <span id="displayNameOutput">Not set</span></p>
-                        <p><span class="font-semibold text-gray-800">Bio:</span> <span id="bioOutput">Not set</span></p>
-                        <p><span class="font-semibold text-gray-800">Contact:</span> <span id="contactNumberOutput">Not set</span></p>
-                        <p><span class="font-semibold text-gray-800">Gender:</span> <span id="genderOutput">Not set</span></p>
-                        <p><span class="font-semibold text-gray-800">Date of Birth:</span> <span id="dobOutput">Not set</span></p>
-                        <p><span class="font-semibold text-gray-800">Address:</span> <span id="addressOutput">Not set</span></p>
-                        <p><span class="font-semibold text-gray-800">City:</span> <span id="cityOutput">Not set</span></p>
-                        <p><span class="font-semibold text-gray-800">State:</span> <span id="stateOutput">Not set</span></p>
-                        <p><span class="font-semibold text-gray-800">Pincode:</span> <span id="pincodeOutput">Not set</span></p>
-                        <p><span class="font-semibold text-gray-800">Qualification:</span> <span id="qualificationOutput">Not set</span></p>
-                        <p><span class="font-semibold text-gray-800">Skills:</span> <span id="skillsOutput">Not set</span></p>
-                        <p><span class="font-semibold text-gray-800">LinkedIn:</span> <span id="linkedinOutput">Not set</span></p>
-                        <p><span class="font-semibold text-gray-800">Instagram:</span> <span id="instagramOutput">Not set</span></p>
-                        <p><span class="font-semibold text-gray-800">Preferred Communication:</span> <span id="communicationOutput">Not set</span></p>
+                <div class="p-6 bg-gray-700 rounded-lg border border-gray-600 shadow-inner flex flex-col items-center">
+                    <h3 class="text-2xl font-bold text-white mb-5 border-b pb-3 border-gray-600 w-full text-center">Your Profile Information</h3>
+
+                    <div class="w-32 h-32 rounded-full bg-gray-600 flex items-center justify-center text-gray-300 text-5xl font-bold mb-6 border-4 border-brand-primary shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+
+                    <div class="space-y-2 text-gray-300 w-full">
+                        <div class="profile-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            <span class="font-semibold text-white">Name:</span> <span id="displayNameOutput">Not set</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                            <span class="font-semibold text-white">Bio:</span> <span id="bioOutput">Not set</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2 2.18 2 2 0 0 1 4.08 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-1.18 2.19l-.7.48a17.45 17.45 0 0 0 6.29 6.29l.48-.7a2 2 0 0 1 2.19-1.18 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <span class="font-semibold text-white">Contact:</span> <span id="contactNumberOutput">Not set</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-2"><path d="M14 19a6 6 0 0 0-12 0"/><circle cx="8" cy="9" r="4"/><path d="M22 19a6 6 0 0 0-12 0"/><circle cx="16" cy="9" r="4"/></svg>
+                            <span class="font-semibold text-white">Gender:</span> <span id="genderOutput">Not set</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                            <span class="font-semibold text-white">Date of Birth:</span> <span id="dobOutput">Not set</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M12 18.3a.9.9 0 0 1-.9-.9c0-.4.3-.9.9-.9s.9.4.9.9c0 .4-.3.9-.9.9Z"/><path d="M12 22s8-4 8-10c0-4.4-3.6-8-8-8s-8 3.6-8 8c0 6 8 10 8 10Z"/></svg>
+                            <span class="font-semibold text-white">Address:</span> <span id="addressOutput">Not set</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-building"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>
+                            <span class="font-semibold text-white">City:</span> <span id="cityOutput">Not set</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map"><path d="M14.5 4l2.4 2.4"/><path d="M9.5 19.5l-1.4-1.4"/><path d="M2 8.5V2h6.5L22 17.5V22h-6.5L2 8.5Z"/></svg>
+                            <span class="font-semibold text-white">State:</span> <span id="stateOutput">Not set</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail-open"><path d="M21.2 8.4c.5.38.8.97.8 1.6V19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V10c0-.63.25-1.22.79-1.6L12 2l9.2 6.4Z"/><path d="M22 19V9l-10 7L2 9v10"/></svg>
+                            <span class="font-semibold text-white">Pincode:</span> <span id="pincodeOutput">Not set</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-graduation-cap"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                            <span class="font-semibold text-white">Qualification:</span> <span id="qualificationOutput">Not set</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wrench"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                            <span class="font-semibold text-white">Skills:</span> <span id="skillsOutput">Not set</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                            <span class="font-semibold text-white">LinkedIn:</span> <span id="linkedinOutput">Not set</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.645.07 4.85s-.012 3.584-.07 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.251-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.644-.07-4.85s.012-3.584.07-4.85c.149-3.227 1.664-4.771 4.919-4.919 1.266-.058 1.644-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.947.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.668-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162S15.403 5.838 12 5.838zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                            <span class="font-semibold text-white">Instagram:</span> <span id="instagramOutput">Not set</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            <span class="font-semibold text-white">Preferred Communication:</span> <span id="communicationOutput">Not set</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="text-left p-6 bg-white rounded-lg shadow-md">
+                <div class="text-left p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700">
                     <div id="profileFormContainer">
-                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Update Your Profile</h2>
+                        <h2 class="text-2xl font-bold text-white mb-6">Update Your Profile</h2>
                         <div id="profileStatusMessage" class="status-message hidden"></div>
 
                         <form id="profileForm" class="space-y-4">
                             <div>
-                                <label for="profileName" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
+                                <label for="profileName" class="block text-gray-300 text-sm font-bold mb-2">Name:</label>
                                 <input type="text" id="profileName" class="w-full" placeholder="Your Full Name">
                             </div>
 
                             <div>
-                                <label for="profileBio" class="block text-gray-700 text-sm font-bold mb-2">Bio:</label>
+                                <label for="profileBio" class="block text-gray-300 text-sm font-bold mb-2">Bio:</label>
                                 <textarea id="profileBio" rows="3" class="w-full" placeholder="Tell us about yourself..."></textarea>
                             </div>
 
                             <div>
-                                <label for="profileContact" class="block text-gray-700 text-sm font-bold mb-2">Contact Number:</label>
+                                <label for="profileContact" class="block text-gray-300 text-sm font-bold mb-2">Contact Number:</label>
                                 <input type="tel" id="profileContact" class="w-full" placeholder="e.g., +91 9876543210">
                             </div>
 
                             <div>
-                                <label for="profileGender" class="block text-gray-700 text-sm font-bold mb-2">Gender:</label>
+                                <label for="profileGender" class="block text-gray-300 text-sm font-bold mb-2">Gender:</label>
                                 <select id="profileGender" class="w-full">
                                     <option value="">Select Gender</option>
                                     <option value="Male">Male</option>
@@ -247,32 +327,32 @@
                             </div>
 
                             <div>
-                                <label for="profileDob" class="block text-gray-700 text-sm font-bold mb-2">Date of Birth:</label>
+                                <label for="profileDob" class="block text-gray-300 text-sm font-bold mb-2">Date of Birth:</label>
                                 <input type="date" id="profileDob" class="w-full">
                             </div>
 
                             <div>
-                                <label for="profileAddress" class="block text-gray-700 text-sm font-bold mb-2">Address:</label>
+                                <label for="profileAddress" class="block text-gray-300 text-sm font-bold mb-2">Address:</label>
                                 <textarea id="profileAddress" rows="2" class="w-full" placeholder="Street, Locality"></textarea>
                             </div>
 
                             <div>
-                                <label for="profileCity" class="block text-gray-700 text-sm font-bold mb-2">City:</label>
+                                <label for="profileCity" class="block text-gray-300 text-sm font-bold mb-2">City:</label>
                                 <input type="text" id="profileCity" class="w-full" placeholder="Your City">
                             </div>
 
                             <div>
-                                <label for="profileState" class="block text-gray-700 text-sm font-bold mb-2">State:</label>
+                                <label for="profileState" class="block text-gray-300 text-sm font-bold mb-2">State:</label>
                                 <input type="text" id="profileState" class="w-full" placeholder="Your State">
                             </div>
 
                             <div>
-                                <label for="profilePincode" class="block text-gray-700 text-sm font-bold mb-2">Pincode:</label>
+                                <label for="profilePincode" class="block text-gray-300 text-sm font-bold mb-2">Pincode:</label>
                                 <input type="number" id="profilePincode" class="w-full" placeholder="e.g., 680001">
                             </div>
 
                             <div>
-                                <label for="profileQualification" class="block text-gray-700 text-sm font-bold mb-2">Educational Qualification:</label>
+                                <label for="profileQualification" class="block text-gray-300 text-sm font-bold mb-2">Educational Qualification:</label>
                                 <select id="profileQualification" class="w-full">
                                     <option value="">Select Qualification</option>
                                     <option value="High School">High School</option>
@@ -285,27 +365,27 @@
                             </div>
 
                             <div>
-                                <label for="profileSkills" class="block text-gray-700 text-sm font-bold mb-2">Skills (comma-separated):</label>
+                                <label for="profileSkills" class="block text-gray-300 text-sm font-bold mb-2">Skills (comma-separated):</label>
                                 <input type="text" id="profileSkills" class="w-full" placeholder="e.g., JavaScript, Python, UI/UX Design">
                             </div>
 
-                            <hr class="border-gray-200 my-4">
+                            <hr class="border-gray-600 my-4">
 
-                            <h3 class="text-lg font-bold text-gray-800 mb-2">Social & Web Links</h3>
+                            <h3 class="text-lg font-bold text-white mb-2">Social & Web Links</h3>
                             <div>
-                                <label for="profileLinkedIn" class="block text-gray-700 text-sm font-bold mb-2">LinkedIn Profile URL:</label>
+                                <label for="profileLinkedIn" class="block text-gray-300 text-sm font-bold mb-2">LinkedIn Profile URL:</label>
                                 <input type="url" id="profileLinkedIn" class="w-full" placeholder="https://linkedin.com/in/yourprofile">
                             </div>
                             <div>
-                                <label for="profileInstagram" class="block text-gray-700 text-sm font-bold mb-2">Instagram Profile URL:</label>
+                                <label for="profileInstagram" class="block text-gray-300 text-sm font-bold mb-2">Instagram Profile URL:</label>
                                 <input type="url" id="profileInstagram" class="w-full" placeholder="https://instagram.com/yourhandle">
                             </div>
 
-                            <hr class="border-gray-200 my-4">
+                            <hr class="border-gray-600 my-4">
 
-                            <h3 class="text-lg font-bold text-gray-800 mb-2">Communication Preferences</h3>
+                            <h3 class="text-lg font-bold text-white mb-2">Communication Preferences</h3>
                             <div>
-                                <label for="profileCommunicationMethod" class="block text-gray-700 text-sm font-bold mb-2">Preferred Communication Method:</label>
+                                <label for="profileCommunicationMethod" class="block text-gray-300 text-sm font-bold mb-2">Preferred Communication Method:</label>
                                 <select id="profileCommunicationMethod" class="w-full">
                                     <option value="">Select Method</option>
                                     <option value="Email">Email</option>
@@ -315,7 +395,7 @@
                                 </select>
                             </div>
 
-                            <button type="submit" id="saveProfileBtn" class="w-full bg-green-600 text-white flex items-center justify-center">
+                            <button type="submit" id="saveProfileBtn" class="action-button w-full bg-green-600 text-white flex items-center justify-center">
                                 <span id="saveProfileBtnText">Save Profile</span>
                                 <div id="saveProfileSpinner" class="loading-spinner ml-2 hidden"></div>
                             </button>
@@ -324,9 +404,9 @@
 
                     <div id="profileUpdatedMessage" class="hidden text-center py-10">
                         <svg class="mx-auto h-16 w-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <p class="text-xl font-semibold text-gray-800 mt-4">Profile Updated Successfully!</p>
-                        <p class="text-gray-600 mt-2">Your changes have been saved.</p>
-                        <button id="editProfileAgainBtn" class="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 shadow-md">
+                        <p class="text-xl font-semibold text-white mt-4">Profile Updated Successfully!</p>
+                        <p class="text-gray-400 mt-2">Your changes have been saved.</p>
+                        <button id="editProfileAgainBtn" class="action-button mt-6 px-6 py-3 bg-blue-600 text-white">
                             Edit Profile
                         </button>
                     </div>
@@ -334,32 +414,32 @@
             </div>
 
             <div id="submitProjectSection" class="tab-content">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-left">Submit a New Project</h2>
+                <h2 class="text-2xl font-bold text-white mb-6 text-left">Submit a New Project</h2>
                 <div id="projectStatusMessage" class="status-message hidden"></div>
 
                 <form id="projectForm" class="space-y-4 text-left">
                     <div>
-                        <label for="projectTitle" class="block text-gray-700 text-sm font-bold mb-2">Project Title:</label>
+                        <label for="projectTitle" class="block text-gray-300 text-sm font-bold mb-2">Project Title:</label>
                         <input type="text" id="projectTitle" class="w-full" placeholder="e.g., Smart Waste Management System">
                     </div>
                     <div>
-                        <label for="projectDescription" class="block text-gray-700 text-sm font-bold mb-2">Project Description:</label>
+                        <label for="projectDescription" class="block text-gray-300 text-sm font-bold mb-2">Project Description:</label>
                         <textarea id="projectDescription" rows="4" class="w-full" placeholder="Briefly describe your project, its purpose, and key features."></textarea>
                     </div>
                     <div>
-                        <label for="projectTeamMembers" class="block text-gray-700 text-sm font-bold mb-2">Team Members (comma-separated):</label>
+                        <label for="projectTeamMembers" class="block text-gray-300 text-sm font-bold mb-2">Team Members (comma-separated):</label>
                         <input type="text" id="projectTeamMembers" class="w-full" placeholder="e.g., John Doe, Jane Smith">
                     </div>
                     <div>
-                        <label for="projectTechnologies" class="block text-gray-700 text-sm font-bold mb-2">Technologies Used (comma-separated):</label>
+                        <label for="projectTechnologies" class="block text-gray-300 text-sm font-bold mb-2">Technologies Used (comma-separated):</label>
                         <input type="text" id="projectTechnologies" class="w-full" placeholder="e.g., Python, Arduino, Machine Learning">
                     </div>
                     <div>
-                        <label for="projectUrl" class="block text-gray-700 text-sm font-bold mb-2">Project URL (Optional):</label>
+                        <label for="projectUrl" class="block text-gray-300 text-sm font-bold mb-2">Project URL (Optional):</label>
                         <input type="url" id="projectUrl" class="w-full" placeholder="https://github.com/yourproject">
                     </div>
                     <div>
-                        <label for="projectStatus" class="block text-gray-700 text-sm font-bold mb-2">Project Status:</label>
+                        <label for="projectStatus" class="block text-gray-300 text-sm font-bold mb-2">Project Status:</label>
                         <select id="projectStatus" class="w-full">
                             <option value="">Select Status</option>
                             <option value="Idea Phase">Idea Phase</option>
@@ -368,7 +448,7 @@
                             <option value="Deployed">Deployed</option>
                         </select>
                     </div>
-                    <button type="submit" id="submitProjectBtn" class="w-full bg-blue-600 text-white flex items-center justify-center">
+                    <button type="submit" id="submitProjectBtn" class="action-button w-full bg-blue-600 text-white flex items-center justify-center">
                         <span id="submitProjectBtnText">Submit Project</span>
                         <div id="submitProjectSpinner" class="loading-spinner ml-2 hidden"></div>
                     </button>
@@ -376,28 +456,28 @@
             </div>
 
             <div id="submitIdeaSection" class="tab-content">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-left">Submit a New Idea</h2>
+                <h2 class="text-2xl font-bold text-white mb-6 text-left">Submit a New Idea</h2>
                 <div id="ideaStatusMessage" class="status-message hidden"></div>
 
                 <form id="ideaForm" class="space-y-4 text-left">
                     <div>
-                        <label for="ideaTitle" class="block text-gray-700 text-sm font-bold mb-2">Idea Title:</label>
+                        <label for="ideaTitle" class="block text-gray-300 text-sm font-bold mb-2">Idea Title:</label>
                         <input type="text" id="ideaTitle" class="w-full" placeholder="e.g., AI-Powered Study Buddy">
                     </div>
                     <div>
-                        <label for="ideaDescription" class="block text-gray-700 text-sm font-bold mb-2">Idea Description:</label>
+                        <label for="ideaDescription" class="block text-gray-300 text-sm font-bold mb-2">Idea Description:</label>
                         <textarea id="ideaDescription" rows="4" class="w-full" placeholder="Explain your idea in detail. What is it? How does it work?"></textarea>
                     </div>
                     <div>
-                        <label for="ideaProblemSolved" class="block text-gray-700 text-sm font-bold mb-2">Problem Solved:</label>
+                        <label for="ideaProblemSolved" class="block text-gray-300 text-sm font-bold mb-2">Problem Solved:</label>
                         <textarea id="ideaProblemSolved" rows="2" class="w-full" placeholder="What real-world problem does your idea address?"></textarea>
                     </div>
                     <div>
-                        <label for="ideaTargetAudience" class="block text-gray-700 text-sm font-bold mb-2">Target Audience:</label>
+                        <label for="ideaTargetAudience" class="block text-gray-300 text-sm font-bold mb-2">Target Audience:</label>
                         <input type="text" id="ideaTargetAudience" class="w-full" placeholder="e.g., College students, Small businesses">
                     </div>
                     <div>
-                        <label for="ideaInnovationLevel" class="block text-gray-700 text-sm font-bold mb-2">Innovation Level:</label>
+                        <label for="ideaInnovationLevel" class="block text-gray-300 text-sm font-bold mb-2">Innovation Level:</label>
                         <select id="ideaInnovationLevel" class="w-full">
                             <option value="">Select Level</option>
                             <option value="Incremental">Incremental Improvement</option>
@@ -405,7 +485,7 @@
                             <option value="Disruptive">Disruptive Innovation</option>
                         </select>
                     </div>
-                    <button type="submit" id="submitIdeaBtn" class="w-full bg-purple-600 text-white flex items-center justify-center">
+                    <button type="submit" id="submitIdeaBtn" class="action-button w-full bg-purple-600 text-white flex items-center justify-center">
                         <span id="submitIdeaBtnText">Submit Idea</span>
                         <div id="submitIdeaSpinner" class="loading-spinner ml-2 hidden"></div>
                     </button>
@@ -413,31 +493,31 @@
             </div>
 
             <div id="submitEventSection" class="tab-content">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-left">Submit a New Event</h2>
+                <h2 class="text-2xl font-bold text-white mb-6 text-left">Submit a New Event</h2>
                 <div id="eventStatusMessage" class="status-message hidden"></div>
 
                 <form id="eventForm" class="space-y-4 text-left">
                     <div>
-                        <label for="eventTitle" class="block text-gray-700 text-sm font-bold mb-2">Event Title:</label>
+                        <label for="eventTitle" class="block text-gray-300 text-sm font-bold mb-2">Event Title:</label>
                         <input type="text" id="eventTitle" class="w-full" placeholder="e.g., Annual Hackathon 2025">
                     </div>
                     <div>
-                        <label for="eventDescription" class="block text-gray-700 text-sm font-bold mb-2">Event Description:</label>
+                        <label for="eventDescription" class="block text-gray-300 text-sm font-bold mb-2">Event Description:</label>
                         <textarea id="eventDescription" rows="4" class="w-full" placeholder="Provide a detailed description of the event."></textarea>
                     </div>
                     <div>
-                        <label for="eventVenue" class="block text-gray-700 text-sm font-bold mb-2">Event Venue:</label>
+                        <label for="eventVenue" class="block text-gray-300 text-sm font-bold mb-2">Event Venue:</label>
                         <input type="text" id="eventVenue" class="w-full" placeholder="e.g., College Auditorium, Online">
                     </div>
                     <div>
-                        <label for="eventOrganizer" class="block text-gray-700 text-sm font-bold mb-2">Organizer (Optional):</label>
+                        <label for="eventOrganizer" class="block text-gray-300 text-sm font-bold mb-2">Organizer (Optional):</label>
                         <input type="text" id="eventOrganizer" class="w-full" placeholder="e.g., IEDC Core Team">
                     </div>
                     <div>
-                        <label for="eventRegistrationUrl" class="block text-gray-700 text-sm font-bold mb-2">Registration URL (Optional):</label>
+                        <label for="eventRegistrationUrl" class="block text-gray-300 text-sm font-bold mb-2">Registration URL (Optional):</label>
                         <input type="url" id="eventRegistrationUrl" class="w-full" placeholder="https://forms.gle/event_registration">
                     </div>
-                    <button type="submit" id="submitEventBtn" class="w-full bg-orange-600 text-white flex items-center justify-center">
+                    <button type="submit" id="submitEventBtn" class="action-button w-full bg-orange-600 text-white flex items-center justify-center">
                         <span id="submitEventBtnText">Submit Event</span>
                         <div id="submitEventSpinner" class="loading-spinner ml-2 hidden"></div>
                     </button>
@@ -555,7 +635,7 @@
         const ideaTitleInput = document.getElementById('ideaTitle');
         const ideaDescriptionInput = document.getElementById('ideaDescription');
         const ideaProblemSolvedInput = document.getElementById('ideaProblemSolved');
-        const ideaTargetAudienceInput = document = document.getElementById('ideaTargetAudience');
+        const ideaTargetAudienceInput = document.getElementById('ideaTargetAudience');
         const ideaInnovationLevelInput = document.getElementById('ideaInnovationLevel');
 
         // Idea Submit Button & Status
@@ -593,6 +673,8 @@
 
         // Function to switch tabs
         window.showTab = function(tabName) {
+            console.log(`Activating tab: ${tabName}`); // Log the activated tab
+
             // Deactivate all tab buttons and hide all tab contents
             profileTabBtn.classList.remove('active');
             submitProjectTabBtn.classList.remove('active');
@@ -628,12 +710,14 @@
                 let data = {};
                 if (userDocSnap.exists()) {
                     data = userDocSnap.data();
+                    console.log("User profile data loaded:", data);
+
                     // Populate form fields
                     profileNameInput.value = data.displayName || '';
                     profileBioInput.value = data.bio || '';
                     profileContactInput.value = data.contactNumber || '';
                     profileGenderInput.value = data.gender || '';
-                    profileDobInput.value = data.dob || ''; // Date input expects YYYY-MM-DD
+                    profileDobInput.value = data.dob || ''; // Date input expectsYYYY-MM-DD
                     profileAddressInput.value = data.address || '';
                     profileCityInput.value = data.city || '';
                     profileStateInput.value = data.state || '';
@@ -661,6 +745,7 @@
                     communicationOutput.textContent = data.communicationMethod || 'Not set';
 
                 } else {
+                    console.log("User document does not exist, creating a basic one.");
                     // If user document doesn't exist, create a basic one with default empty values
                     await setDoc(userDocRef, {
                         email: user.email,
@@ -700,15 +785,18 @@
                 }
 
                 // Determine whether to show the form or the updated message initially
-                // Check if any significant profile data exists (e.g., name, bio, contact)
-                const isProfilePopulated = data.displayName || data.bio || data.contactNumber;
+                // Check if displayName is present and not empty
+                const isProfilePopulated = data.displayName && data.displayName.trim() !== '';
+                console.log("Is profile populated?", isProfilePopulated);
 
                 if (isProfilePopulated) {
                     profileFormContainer.classList.add('hidden');
                     profileUpdatedMessage.classList.remove('hidden');
+                    console.log("Hiding form, showing updated message.");
                 } else {
                     profileFormContainer.classList.remove('hidden');
                     profileUpdatedMessage.classList.add('hidden');
+                    console.log("Showing form, hiding updated message.");
                 }
 
 
@@ -725,10 +813,12 @@
             if (user) {
                 currentUser = user; // Store current user
                 userEmailElement.textContent = user.email;
+                console.log("Auth state changed: User logged in.", user.email);
                 loadUserProfile(user); // Load profile data for the current user
                 showTab('profile'); // Default to profile tab on load
             } else {
                 // User is signed out, redirect to login page
+                console.log("Auth state changed: User logged out, redirecting to login.html");
                 window.location.href = 'login.html';
             }
         });
@@ -737,19 +827,23 @@
         logoutBtn.addEventListener('click', async () => {
             try {
                 await signOut(auth);
+                console.log("User signed out.");
                 // Redirect will happen via onAuthStateChanged listener
             } catch (error) {
                 console.error("Error signing out:", error);
-                alert("Failed to log out. Please try again."); // Consider a custom modal
+                // Using alert for now, but consider a custom modal
+                alert("Failed to log out. Please try again.");
             }
         });
 
         // Handle Save Profile
         saveProfileBtn.addEventListener('click', async (e) => {
             e.preventDefault(); // Prevent default form submission
+            console.log("Save Profile button clicked.");
 
             if (!currentUser) {
                 showStatusMessage(profileStatusMessage, "No user logged in.", "error");
+                console.warn("Save Profile: No current user.");
                 return;
             }
 
@@ -778,6 +872,7 @@
                 await updateProfile(currentUser, {
                     displayName: newName,
                 });
+                console.log("Firebase Auth profile updated.");
 
                 // 2. Update all profile data in Firestore
                 const userDocRef = doc(db, 'users', currentUser.uid);
@@ -798,15 +893,18 @@
                     communicationMethod: newCommunicationMethod,
                     updatedAt: new Date() // Add a timestamp for last update
                 }, { merge: true }); // Use merge: true to only update specified fields
+                console.log("Firestore user document updated.");
 
                 showStatusMessage(profileStatusMessage, "Profile updated successfully!", "success");
 
                 // After successful update, hide the form and show the updated message
                 profileFormContainer.classList.add('hidden');
                 profileUpdatedMessage.classList.remove('hidden');
+                console.log("Form hidden, updated message shown.");
 
                 // Refresh UI with potentially updated data from Firestore
-                loadUserProfile(currentUser);
+                await loadUserProfile(currentUser); // Ensure data is re-loaded and displayed
+                console.log("loadUserProfile called after save.");
 
             } catch (error) {
                 console.error("Error updating profile:", error);
@@ -815,20 +913,24 @@
                 saveProfileBtnText.classList.remove('hidden');
                 saveProfileSpinner.classList.add('hidden');
                 saveProfileBtn.disabled = false;
+                console.log("Save Profile process finished.");
             }
         });
 
         // Handle "Edit Profile" button click (from the updated message)
         editProfileAgainBtn.addEventListener('click', () => {
+            console.log("Edit Profile button clicked.");
             profileUpdatedMessage.classList.add('hidden');
             profileFormContainer.classList.remove('hidden');
             profileStatusMessage.classList.add('hidden'); // Clear any old status message
+            console.log("Updated message hidden, form shown.");
         });
 
 
         // Handle Submit Project
         submitProjectBtn.addEventListener('click', async (e) => {
             e.preventDefault();
+            console.log("Submit Project button clicked.");
 
             if (!currentUser) {
                 showStatusMessage(projectStatusMessage, "Please log in to submit a project.", "error");
@@ -857,6 +959,7 @@
                 submitProjectBtnText.classList.remove('hidden');
                 submitProjectSpinner.classList.add('hidden');
                 submitProjectBtn.disabled = false;
+                console.warn("Project submission: Missing required fields.");
                 return;
             }
 
@@ -866,6 +969,7 @@
                 showStatusMessage(projectStatusMessage, "Project submitted successfully!", "success");
                 // Clear form
                 projectForm.reset();
+                console.log("Project submitted successfully.");
             } catch (error) {
                 console.error("Error submitting project:", error);
                 showStatusMessage(projectStatusMessage, `Failed to submit project: ${error.message}`, "error");
@@ -879,6 +983,7 @@
         // Handle Submit Idea
         submitIdeaBtn.addEventListener('click', async (e) => {
             e.preventDefault();
+            console.log("Submit Idea button clicked.");
 
             if (!currentUser) {
                 showStatusMessage(ideaStatusMessage, "Please log in to submit an idea.", "error");
@@ -906,6 +1011,7 @@
                 submitIdeaBtnText.classList.remove('hidden');
                 submitIdeaSpinner.classList.add('hidden');
                 submitIdeaBtn.disabled = false;
+                console.warn("Idea submission: Missing required fields.");
                 return;
             }
 
@@ -915,6 +1021,7 @@
                 showStatusMessage(ideaStatusMessage, "Idea submitted successfully!", "success");
                 // Clear form
                 ideaForm.reset();
+                console.log("Idea submitted successfully.");
             } catch (error) {
                 console.error("Error submitting idea:", error);
                 showStatusMessage(ideaStatusMessage, `Failed to submit idea: ${error.message}`, "error");
@@ -928,6 +1035,7 @@
         // Handle Submit Event
         submitEventBtn.addEventListener('click', async (e) => {
             e.preventDefault();
+            console.log("Submit Event button clicked.");
 
             if (!currentUser) {
                 showStatusMessage(eventStatusMessage, "Please log in to submit an event.", "error");
@@ -955,6 +1063,7 @@
                 submitEventBtnText.classList.remove('hidden');
                 submitEventSpinner.classList.add('hidden');
                 submitEventBtn.disabled = false;
+                console.warn("Event submission: Missing required fields.");
                 return;
             }
 
@@ -964,6 +1073,7 @@
                 showStatusMessage(eventStatusMessage, "Event submitted successfully!", "success");
                 // Clear form
                 eventForm.reset();
+                console.log("Event submitted successfully.");
             } catch (error) {
                 console.error("Error submitting event:", error);
                 showStatusMessage(eventStatusMessage, `Failed to submit event: ${error.message}`, "error");
