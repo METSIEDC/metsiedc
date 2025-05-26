@@ -85,15 +85,13 @@
             transform: translateY(-1px);
         }
         .tab-content {
-            display: none;
+            /* Removed display: none; and display: block; from here.
+               Visibility is now controlled by Tailwind's 'hidden' class. */
             padding: 2.5rem; /* Increased padding for content */
             background-color: #2d3748; /* Content background */
             border-radius: 1rem; /* More rounded corners */
             box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3), 0 5px 10px -5px rgba(0, 0, 0, 0.1); /* Deeper shadow */
             border: 1px solid #4a5568; /* Subtle border */
-        }
-        .tab-content.active {
-            display: block;
         }
         /* Form input styling */
         input[type="text"],
@@ -226,7 +224,7 @@
                 <button id="submitEventTabBtn" class="tab-button" onclick="showTab('submitEvent')">Submit Event</button>
             </div>
 
-            <div id="profileSection" class="tab-content active grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div id="profileSection" class="tab-content grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div class="p-6 bg-gray-700 rounded-lg border border-gray-600 shadow-inner flex flex-col items-center">
                     <h3 class="text-2xl font-bold text-white mb-5 border-b pb-3 border-gray-600 w-full text-center">Your Profile Information</h3>
 
@@ -413,7 +411,7 @@
                 </div>
             </div>
 
-            <div id="submitProjectSection" class="tab-content">
+            <div id="submitProjectSection" class="tab-content hidden">
                 <h2 class="text-2xl font-bold text-white mb-6 text-left">Submit a New Project</h2>
                 <div id="projectStatusMessage" class="status-message hidden"></div>
 
@@ -455,7 +453,7 @@
                 </form>
             </div>
 
-            <div id="submitIdeaSection" class="tab-content">
+            <div id="submitIdeaSection" class="tab-content hidden">
                 <h2 class="text-2xl font-bold text-white mb-6 text-left">Submit a New Idea</h2>
                 <div id="ideaStatusMessage" class="status-message hidden"></div>
 
@@ -492,7 +490,7 @@
                 </form>
             </div>
 
-            <div id="submitEventSection" class="tab-content">
+            <div id="submitEventSection" class="tab-content hidden">
                 <h2 class="text-2xl font-bold text-white mb-6 text-left">Submit a New Event</h2>
                 <div id="eventStatusMessage" class="status-message hidden"></div>
 
@@ -673,32 +671,29 @@
 
         // Function to switch tabs
         window.showTab = function(tabName) {
-            console.log(`Activating tab: ${tabName}`); // Log the activated tab
+            console.log(`Activating tab: ${tabName}`);
 
-            // Deactivate all tab buttons and hide all tab contents
-            profileTabBtn.classList.remove('active');
-            submitProjectTabBtn.classList.remove('active');
-            submitIdeaTabBtn.classList.remove('active');
-            submitEventTabBtn.classList.remove('active');
+            // Get all tab content sections and buttons
+            const allTabSections = [profileSection, submitProjectSection, submitIdeaSection, submitEventSection];
+            const allTabButtons = [profileTabBtn, submitProjectTabBtn, submitIdeaTabBtn, submitEventTabBtn];
 
-            profileSection.classList.remove('active');
-            submitProjectSection.classList.remove('active');
-            submitIdeaSection.classList.remove('active');
-            submitEventSection.classList.remove('active');
+            // Deactivate all tab buttons and hide all tab contents using Tailwind's 'hidden' class
+            allTabButtons.forEach(btn => btn.classList.remove('active'));
+            allTabSections.forEach(section => section.classList.add('hidden')); // Ensure all are hidden
 
-            // Activate the selected tab button and show its content
+            // Activate the selected tab button and show its content by removing 'hidden'
             if (tabName === 'profile') {
                 profileTabBtn.classList.add('active');
-                profileSection.classList.add('active');
+                profileSection.classList.remove('hidden');
             } else if (tabName === 'submitProject') {
                 submitProjectTabBtn.classList.add('active');
-                submitProjectSection.classList.add('active');
+                submitProjectSection.classList.remove('hidden');
             } else if (tabName === 'submitIdea') {
                 submitIdeaTabBtn.classList.add('active');
-                submitIdeaSection.classList.add('active');
+                submitIdeaSection.classList.remove('hidden');
             } else if (tabName === 'submitEvent') {
                 submitEventTabBtn.classList.add('active');
-                submitEventSection.classList.add('active');
+                submitEventSection.classList.remove('hidden');
             }
         }
 
