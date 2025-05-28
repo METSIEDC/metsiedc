@@ -103,117 +103,210 @@
             </button>
         </form>
     </div>
+        <script import React, { useState, useEffect } from 'react';
+    import { initializeApp } from 'firebase/app';
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signInWithCustomToken, signInAnonymously } from 'firebase/auth';
+    import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    // Global variables provided by the Canvas environment.
+    // These are automatically populated when your app runs in the Canvas.
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
-        // Your web app's Firebase configuration (replace with your actual config)
-        const firebaseConfig = {
-            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
-            authDomain: "metsiedc-3010e.firebaseapp.com",
-            databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
-            projectId: "metsiedc-3010e",
-            messagingSenderId: "954403413150",
-            appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
-            measurementId: "G-6E7EK0D7JG"
+    function AdminLogin() {
+        // State variables to manage form inputs, messages, and user status
+        const [email, setEmail] = useState('');
+        const [password, setPassword] = useState('');
+        const [message, setMessage] = useState('');
+        const [isAdmin, setIsAdmin] = useState(false);
+        const [currentUser, setCurrentUser] = useState(null); // Stores the Firebase User object
+        const [db, setDb] = useState(null); // Stores the Firestore instance
+        const [auth, setAuth] = useState(null); // Stores the Firebase Auth instance
+        const [isAuthReady, setIsAuthReady] = useState(false); // Flag to indicate if auth state has been checked
+
+        // useEffect hook for Firebase initialization and auth state listening
+        useEffect(() => {
+            // Initialize Firebase app and services (Firestore and Auth)
+            const app = initializeApp(firebaseConfig);
+            const firestoreDb = getFirestore(app);
+            const firebaseAuth = getAuth(app);
+            setDb(firestoreDb); // Store Firestore instance in state
+            setAuth(firebaseAuth); // Store Auth instance in state
+
+            // Set up an observer on the Auth state. This runs whenever the user's login status changes.
+            const unsubscribe = onAuthStateChanged(firebaseAuth, async (user) => {
+                setCurrentUser(user); // Update currentUser state
+                if (user) {
+                    // If a user is logged in, check if they are an admin
+                    const userIsAdmin = await checkAdminStatus(user.email, firestoreDb);
+                    setIsAdmin(userIsAdmin); // Update isAdmin state
+                    setMessage(userIsAdmin ? 'Logged in as Admin!' : 'Logged in as a regular user.');
+                } else {
+                    // If no user is logged in
+                    setIsAdmin(false);
+                    setMessage('Please log in.');
+                }
+                setIsAuthReady(true); // Mark authentication as ready after initial check
+            });
+
+            // Function to handle initial sign-in with custom token or anonymously
+            const signInWithToken = async () => {
+                if (initialAuthToken && firebaseAuth) {
+                    try {
+                        // Attempt to sign in with the provided custom token
+                        await signInWithCustomToken(firebaseAuth, initialAuthToken);
+                        console.log("Signed in with custom token.");
+                    } catch (error) {
+                        console.error("Error signing in with custom token:", error);
+                        // Fallback to anonymous sign-in if custom token fails or is not provided
+                        try {
+                            await signInAnonymously(firebaseAuth);
+                            console.log("Signed in anonymously.");
+                        } catch (anonError) {
+                            console.error("Error signing in anonymously:", anonError);
+                        }
+                    }
+                } else if (firebaseAuth) {
+                    // If no custom token is available, sign in anonymously
+                    try {
+                        await signInAnonymously(firebaseAuth);
+                        console.log("Signed in anonymously (no custom token).");
+                    } catch (anonError) {
+                        console.error("Error signing in anonymously:", anonError);
+                    }
+                }
+            };
+
+            // Call the sign-in function if auth is not yet initialized.
+            // This ensures the initial authentication state is set up.
+            if (!auth) {
+                signInWithToken();
+            }
+
+            // Cleanup function: unsubscribe from the auth state listener when the component unmounts
+            return () => unsubscribe();
+        }, [auth]); // Dependency array: re-run this effect if 'auth' changes (should only run once on mount)
+
+        /**
+         * Asynchronously checks if a given email address is registered as an admin in Firestore.
+         * @param {string} userEmail - The email of the user to check.
+         * @param {object} firestoreDb - The Firestore database instance.
+         * @returns {Promise<boolean>} - Resolves to true if the email is an admin, false otherwise.
+         */
+        const checkAdminStatus = async (userEmail, firestoreDb) => {
+            // Basic validation: ensure Firestore DB is initialized and email is provided
+            if (!firestoreDb || !userEmail) {
+                console.warn("Firestore DB not initialized or userEmail is missing.");
+                return false;
+            }
+
+            try {
+                // Construct the path to the adminEmails collection using the global __app_id.
+                // This ensures data isolation for different applications in the Canvas environment.
+                const adminEmailsCollectionRef = collection(firestoreDb, `artifacts/${appId}/public/data/adminEmails`);
+                // Create a query to find documents where the 'email' field matches the user's email
+                const q = query(adminEmailsCollectionRef, where("email", "==", userEmail));
+                // Execute the query and get the documents
+                const querySnapshot = await getDocs(q);
+
+                // If the query snapshot is not empty, it means a matching admin email was found.
+                return !querySnapshot.empty;
+            } catch (error) {
+                console.error("Error checking admin status:", error);
+                return false; // Return false in case of an error
+            }
         };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+        /**
+         * Handles the login form submission.
+         * @param {Event} e - The form submission event.
+         */
+        const handleLogin = async (e) => {
+            e.preventDefault(); // Prevent default form submission behavior (page reload)
 
-        // --- DOM Elements ---
-        const adminEmailInput = document.getElementById('adminEmail');
-        const adminPasswordInput = document.getElementById('adminPassword');
-        const loginBtn = document.getElementById('loginBtn');
-        const loginBtnText = document.getElementById('loginBtnText');
-        const loginSpinner = document.getElementById('loginSpinner');
-        const errorMessageDiv = document.getElementById('errorMessage');
-        const adminLoginForm = document.getElementById('adminLoginForm');
-
-        // --- Configuration: Allowed Admin Emails ---
-        // IMPORTANT: For production, this list should ideally be stored securely
-        // (e.g., in Firestore with strict security rules, or fetched via a Cloud Function)
-        // rather than hardcoded in client-side JavaScript for better security.
-        const allowedAdminEmails = [
-            "iedcadmins@metsiedc.com", // Replace with your actual admin emails
-            "admin@example.com",
-            "john.doe@example.com"
-        ];
-
-        // --- Functions ---
-        function showLoading(isLoading) {
-            if (isLoading) {
-                loginBtnText.classList.add('hidden');
-                loginSpinner.classList.remove('hidden');
-                loginBtn.disabled = true;
-            } else {
-                loginBtnText.classList.remove('hidden');
-                loginSpinner.classList.add('hidden');
-                loginBtn.disabled = false;
-            }
-        }
-
-        function showErrorMessage(message) {
-            errorMessageDiv.textContent = message;
-            errorMessageDiv.classList.remove('hidden');
-            setTimeout(() => {
-                errorMessageDiv.classList.add('hidden');
-            }, 5000); // Hide after 5 seconds
-        }
-
-        // --- Event Listener ---
-        adminLoginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            showLoading(true);
-            errorMessageDiv.classList.add('hidden'); // Hide previous errors
-
-            const email = adminEmailInput.value.trim();
-            const password = adminPasswordInput.value.trim();
-
-            if (!email || !password) {
-                showErrorMessage("Please enter both email and password.");
-                showLoading(false);
+            // Ensure Firebase Auth is initialized
+            if (!auth) {
+                setMessage("Firebase Auth not initialized.");
                 return;
             }
 
             try {
+                // Attempt to sign in the user with the provided email and password
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
+                const user = userCredential.user; // Get the logged-in user object
+                setMessage('Logged in successfully! Checking admin status...');
 
-                // Check if the logged-in user's email is in the allowed list
-                if (allowedAdminEmails.includes(user.email)) {
-                    console.log("Admin login successful for:", user.email);
-                    window.location.href = 'admin_dashboard.html'; // Redirect to admin dashboard
-                } else {
-                    // Not an allowed admin email, log them out immediately
-                    await signOut(auth);
-                    showErrorMessage("You are not authorized to access the admin panel.");
-                    console.warn("Unauthorized login attempt:", user.email);
-                }
+                // After successful email/password login, check if this user is an admin
+                const userIsAdmin = await checkAdminStatus(user.email, db);
+                setIsAdmin(userIsAdmin); // Update admin status in state
+                setMessage(userIsAdmin ? 'Logged in as Admin!' : 'Logged in as a regular user.');
+
             } catch (error) {
-                console.error("Admin login error:", error);
-                let message = "An unknown error occurred during login.";
-                switch (error.code) {
-                    case 'auth/user-not-found':
-                    case 'auth/wrong-password':
-                        message = 'Invalid email or password.';
-                        break;
-                    case 'auth/invalid-email':
-                        message = 'The email address is not valid.';
-                        break;
-                    case 'auth/too-many-requests':
-                        message = 'Too many login attempts. Please try again later.';
-                        break;
-                    default:
-                        message = error.message;
-                }
-                showErrorMessage(message);
-            } finally {
-                showLoading(false);
+                // Handle login errors (e.g., wrong password, user not found)
+                console.error("Login Error:", error);
+                setMessage(`Login failed: ${error.message}`);
+                setIsAdmin(false); // Ensure admin status is false on login failure
             }
-        });
-    </script>
+        };
+
+        // Get the current user's ID for display.
+        // This is important for multi-user apps to identify who is logged in.
+        const userId = auth?.currentUser?.uid || 'Not logged in';
+
+        return (
+            <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4 font-inter">
+                <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+                    <h2 className="text-2xl font-bold text-primary mb-6 text-center">Admin Login</h2>
+                    {/* Display the current user ID for debugging/identification */}
+                    <p className="text-sm text-gray-600 mb-4 text-center">Current User ID: {userId}</p>
+
+                    <form onSubmit={handleLogin} className="space-y-4">
+                        <div>
+                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                            <input
+                                type="email"
+                                id="email"
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent sm:text-sm"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+                            <input
+                                type="password"
+                                id="password"
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent focus:border-accent sm:text-sm"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            className="w-full bg-primary hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300"
+                        >
+                            Login
+                        </button>
+                    </form>
+
+                    {/* Display messages based on authentication and admin status */}
+                    {isAuthReady && ( // Only show message after auth state has been determined
+                        <div className="mt-6 text-center">
+                            <p className={`font-medium ${isAdmin ? 'text-green-600' : 'text-red-600'}`}>{message}</p>
+                            {currentUser && (
+                                <p className="text-sm text-gray-500 mt-2">Logged in as: {currentUser.email}</p>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    }
+
+    export default AdminLogin;
+         </Script>
 </body>
 </html>
