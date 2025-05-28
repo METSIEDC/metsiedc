@@ -307,6 +307,136 @@
     }
 
     export default AdminLogin;
-         </Script>
+        </script>
+              <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global variables provided by the Canvas environment.
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let app;
+        let auth;
+        let db;
+        let userIdDisplay;
+        let messageDisplay;
+        let loggedInUserEmailDisplay;
+        let adminLoginForm;
+        let emailInput;
+        let passwordInput;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+
+            userIdDisplay = document.getElementById('userIdDisplay');
+            messageDisplay = document.getElementById('messageDisplay');
+            loggedInUserEmailDisplay = document.getElementById('loggedInUserEmail');
+            adminLoginForm = document.getElementById('adminLoginForm');
+            emailInput = document.getElementById('email');
+            passwordInput = document.getElementById('password');
+
+            // Sign in with custom token or anonymously if available
+            if (initialAuthToken) {
+                try {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                    console.log("Signed in with custom token.");
+                } catch (error) {
+                    console.error("Error signing in with custom token:", error);
+                    await signInAnonymously(auth); // Fallback to anonymous
+                }
+            } else {
+                await signInAnonymously(auth); // Sign in anonymously if no custom token
+            }
+
+            // Listen for authentication state changes
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userIdDisplay.textContent = `Current User ID: ${user.uid}`;
+                    loggedInUserEmailDisplay.textContent = `Logged in as: ${user.email || 'Anonymous'}`;
+                    const userIsAdmin = await checkAdminStatus(user.email, db);
+                    if (userIsAdmin) {
+                        messageDisplay.textContent = 'Logged in as Admin!';
+                        messageDisplay.classList.remove('text-red-600', 'text-gray-700');
+                        messageDisplay.classList.add('text-green-600');
+                        // REDIRECTION HERE
+                        window.location.href = '/admin_dashboard.html';
+                    } else {
+                        messageDisplay.textContent = 'Logged in as a regular user (not admin).';
+                        messageDisplay.classList.remove('text-green-600', 'text-gray-700');
+                        messageDisplay.classList.add('text-red-600');
+                    }
+                } else {
+                    userIdDisplay.textContent = `Current User ID: Not logged in`;
+                    loggedInUserEmailDisplay.textContent = '';
+                    messageDisplay.textContent = 'Please log in.';
+                    messageDisplay.classList.remove('text-green-600', 'text-red-600');
+                    messageDisplay.classList.add('text-gray-700');
+                }
+            });
+
+            // Handle login form submission
+            adminLoginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = emailInput.value;
+                const password = passwordInput.value;
+
+                try {
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+                    messageDisplay.textContent = 'Logged in successfully! Checking admin status...';
+                    messageDisplay.classList.remove('text-green-600', 'text-red-600');
+                    messageDisplay.classList.add('text-gray-700');
+
+                    const userIsAdmin = await checkAdminStatus(user.email, db);
+                    if (userIsAdmin) {
+                        messageDisplay.textContent = 'Logged in as Admin!';
+                        messageDisplay.classList.remove('text-red-600', 'text-gray-700');
+                        messageDisplay.classList.add('text-green-600');
+                        // REDIRECTION HERE
+                        window.location.href = '/admin_dashboard.html';
+                    } else {
+                        messageDisplay.textContent = 'Login successful, but not an admin.';
+                        messageDisplay.classList.remove('text-green-600', 'text-gray-700');
+                        messageDisplay.classList.add('text-red-600');
+                    }
+                } catch (error) {
+                    console.error("Login Error:", error);
+                    messageDisplay.textContent = `Login failed: ${error.message}`;
+                    messageDisplay.classList.remove('text-green-600', 'text-gray-700');
+                    messageDisplay.classList.add('text-red-600');
+                }
+            });
+        });
+
+        /**
+         * Checks if a given email is registered as an admin in Firestore.
+         * @param {string} userEmail The email to check.
+         * @param {object} firestoreDb The Firestore database instance.
+         * @returns {Promise<boolean>} True if the email is an admin, false otherwise.
+         */
+        async function checkAdminStatus(userEmail, firestoreDb) {
+            if (!firestoreDb || !userEmail) {
+                console.warn("Firestore DB not initialized or userEmail is missing.");
+                return false;
+            }
+
+            try {
+                // Path for public admin emails collection
+                const adminEmailsCollectionRef = collection(firestoreDb, `artifacts/${appId}/public/data/adminEmails`);
+                const q = query(adminEmailsCollectionRef, where("email", "==", userEmail));
+                const querySnapshot = await getDocs(q);
+
+                return !querySnapshot.empty;
+            } catch (error) {
+                console.error("Error checking admin status:", error);
+                return false;
+            }
+        }
+    </script>
 </body>
 </html>
