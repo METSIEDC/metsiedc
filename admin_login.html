@@ -435,7 +435,7 @@
 
             try {
                 // Path for public admin emails collection
-                const adminEmailsCollectionRef = collection(firestoreDb, `artifacts/${appId}/public/data/adminEmails`);
+                const adminEmailsCollectionRef = collection(firestoreDb, `/artifacts/default-app-id/adminEmails`);
                 const q = query(adminEmailsCollectionRef, where("email", "==", userEmail));
                 const querySnapshot = await getDocs(q);
 
