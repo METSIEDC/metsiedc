@@ -7,32 +7,36 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Basic smooth scroll */
+        /* Basic smooth scroll for navigation */
         html {
             scroll-behavior: smooth;
         }
 
         /* Define custom Tailwind colors using CSS variables for easier theming */
+        /* These variables allow for consistent color application across the site */
         :root {
-            --color-primary: #2563EB; /* Tailwind blue-600 for main accents */
-            --color-primary-dark: #1D4ED8; /* Tailwind blue-700 for darker primary */
-            --color-accent: #10B981;  /* Tailwind emerald-500 */
-            --color-dark-text: #111827; /* Tailwind gray-900 */
-            --color-light-bg: #F9FAFB; /* Tailwind gray-50 */
-            --color-secondary-text: #4B5563; /* Tailwind gray-600 */
+            --color-primary: #2563EB; /* Tailwind blue-600: Used for main brand accents */
+            --color-primary-dark: #1D4ED8; /* Tailwind blue-700: Darker shade for hover states or strong accents */
+            --color-accent: #10B981;  /* Tailwind emerald-500: Used for secondary actions like student login */
+            --color-accent-dark: #059669; /* Tailwind emerald-600: Darker accent for hover states */
+            --color-dark-text: #111827; /* Tailwind gray-900: Primary text color */
+            --color-light-bg: #F3F4F6; /* Tailwind gray-100: Soft background color for sections */
+            --color-lighter-bg: #F9FAFB; /* Tailwind gray-50: Even lighter background */
+            --color-secondary-text: #4B5563; /* Tailwind gray-600: Secondary text color */
         }
 
-        /* Apply custom colors using Tailwind utility classes where appropriate */
+        /* Applying custom colors via Tailwind utility classes */
         .text-primary { color: var(--color-primary); }
         .bg-primary { background-color: var(--color-primary); }
         .hover\:bg-primary-dark:hover { background-color: var(--color-primary-dark); }
         .bg-accent { background-color: var(--color-accent); }
-        .hover\:bg-accent-dark:hover { background-color: #059669; } /* Tailwind emerald-600 */
+        .hover\:bg-accent-dark:hover { background-color: var(--color-accent-dark); }
         .text-dark { color: var(--color-dark-text); }
         .bg-light { background-color: var(--color-light-bg); }
+        .bg-lighter { background-color: var(--color-lighter-bg); }
         .text-secondary { color: var(--color-secondary-text); }
 
-        /* Active Nav Link Style */
+        /* Navigation Link Styles */
         .nav-link-active {
             color: var(--color-primary);
             font-weight: 600;
@@ -47,77 +51,91 @@
             color: var(--color-primary);
         }
 
+        /* Hero section background (if used elsewhere, keeping for consistency) */
         .hero-section {
             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/343A40/FFFFFF?text=IEDC+Innovation+Hub') no-repeat center center;
             background-size: cover;
         }
 
+        /* Page transition animation for smooth loading */
         .page {
             display: block;
             animation: fadeIn 0.5s ease-in-out;
-            min-height: calc(100vh - 80px);
-            padding-top: 80px; /* Offset for sticky header */
+            min-height: calc(100vh - 80px); /* Ensure content fills space above footer */
+            padding-top: 80px; /* Offset for sticky header to prevent content overlap */
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Mobile menu specific styles */
         .mobile-menu {
-            transform: translateX(-100%);
+            transform: translateX(-100%); /* Hidden by default */
             transition: transform 0.3s ease-in-out;
         }
         .mobile-menu.open {
-            transform: translateX(0);
+            transform: translateX(0); /* Slides in when open */
         }
         body {
-            padding-top: 0;
+            padding-top: 0; /* Important for sticky header to work correctly */
         }
 
-        /* NEW UI STYLES FOR ANNOUNCEMENTS */
+        /* === NEW UI STYLES FOR ANNOUNCEMENTS CARDS === */
         .announcement-card {
-            background-color: white;
-            border-radius: 1.25rem; /* More rounded */
-            padding: 2rem; /* Increased padding */
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 4px 10px -2px rgba(0, 0, 0, 0.05); /* Softer, deeper shadow */
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother transition */
+            background-color: white; /* Clean white background for cards */
+            border-radius: 1.5rem; /* Even more rounded corners for a softer look */
+            padding: 2.25rem; /* Increased padding within cards */
+            /* Custom, subtle, and diffused shadow for depth */
+            box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.09), 0 5px 15px -3px rgba(0, 0, 0, 0.05);
+            transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); /* Smoother, more natural transition */
             display: flex;
             flex-direction: column;
-            gap: 1.5rem; /* Gap between sections in the card */
+            gap: 1.5rem; /* Space between card elements (icon/title, description, meta, button) */
+            height: auto; /* Allow height to adjust based on content */
         }
 
         .announcement-card:hover {
-            transform: translateY(-8px) scale(1.01); /* More pronounced lift and slight scale */
-            box-shadow: 0 15px 35px -8px rgba(0, 0, 0, 0.15), 0 6px 15px -3px rgba(0, 0, 0, 0.08); /* Stronger hover shadow */
+            transform: translateY(-10px) scale(1.015); /* More noticeable lift and slight scale */
+            /* Enhanced shadow on hover for a "popping" effect */
+            box-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.15), 0 8px 20px -5px rgba(0, 0, 0, 0.08);
         }
 
         .announcement-icon-container {
-            background: linear-gradient(to right, var(--color-primary), var(--color-primary-dark));
-            border-radius: 0.75rem; /* Rounded square for icon background */
-            padding: 0.75rem;
-            display: inline-flex; /* To fit content */
+            /* Gradient background for the icon container */
+            background: linear-gradient(to bottom right, var(--color-primary), var(--color-primary-dark));
+            border-radius: 0.875rem; /* Slightly more rounded than inner icon */
+            padding: 0.875rem; /* Padding around the icon */
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for the icon itself */
         }
 
         .announcement-icon {
             color: white; /* Icon color */
-            width: 28px;
-            height: 28px;
+            width: 32px; /* Larger icon size */
+            height: 32px;
         }
 
         .download-button {
-            background: linear-gradient(to right, var(--color-accent), #059669); /* Gradient for download button */
+            /* Gradient background for the download button */
+            background: linear-gradient(to right, var(--color-accent), var(--color-accent-dark));
             transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            font-weight: 600; /* Semi-bold text */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            font-weight: 600; /* Semi-bold text for buttons */
+            text-align: center; /* Center text within button */
+            display: inline-flex; /* Use flexbox for icon and text alignment */
+            align-items: center;
+            justify-content: center; /* Center content horizontally */
         }
 
         .download-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px); /* Slightly more lift on hover */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
         }
 
+        /* Loading spinner animation */
         .loading-spinner {
             border: 4px solid rgba(0, 0, 0, 0.1);
             border-left-color: var(--color-primary);
@@ -138,7 +156,7 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <a href="index.html#home" class="flex items-center space-x-2">
-                    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw8REhUQEBMVFRUVFhUVFRUXFhcWFxsVGRUWGBgXFxkYHiggHB8mHxYWITEtJSkrLi4uHR8zRDMtNygtLisBCgoKDg0OGxAQGy0fICUrLS8rLSstLS0rMC4tLS0vLS4tKy0tLS0rNy0tLS0rLS0tNS0tMDctLS4tLS0rLS0rLf/AABEIAMgAyAMBIgACEQEDEQH/xAAbAAEAAQUBAAAAAAAAAAAAAAAABgEDBAUHAv/EAEMQAAEDAgQEAwMJAwsFAAAAAAEAAgMEEQUGEiExQVFhEyJxMkKxByNSYoGRwdHwFKHxNTZyc4KDsrPC0uE0hLTD4v/EABkBAQADAQEAAAAAAAAAAAAAAAABAwQCBf/EAC4RAQACAgECBAMHBQAAAAAAAAABAgMRBBITBSExYSKBsRQyQVFx0eEjQqHB8P/aAAwDAQACEQMRAD8A7iiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiIgIiICIiAiIgIiICIiAiIgIiICIiIgIiICIiIgIiICIiAiIgIiIP/Z" alt="IEDC Logo" class="h-10 w-10 rounded-full">
+                    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw8REhUQEBMVFRUVFhUVFRUXFhcWFxsVGRUWGBgXFxkYHiggHB8mHxYWITEtJSkrLi4uHR8zRDMtNygtLisBCgoKDg0OGxAQGy0fICUrLS8rLSstLS0rMC4tLS0vLS4tKy0tLS0rNy0tLS0rLS0tNS0tMDctLS4tLS0rLS0rLf/AABEIAMgAyAMBIgACEQEDEQH/xAAbAAEAAQUBAAAAAAAAAAAAAAAABgEDBAUHAv/EAEMQAAEDAgQEAwMJAwsFAAAAAAEAAgMEEQUGEiExQVFhEyJxMkKxByNSYoGRwdHwFKHxNTZyc4KDsrPC0uE0hLTD4v/EABkBAQADAQEAAAAAAAAAAAAAAAABAwQCBf/EAC4RAQACAgECBAMHBQAAAAAAAAABAgMRBBITBSExYSKBsRQyQVFx0eEjQqHB8P/aAAwDAQACEQMRAD8A7iiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiIP/Z" alt="IEDC Logo" class="h-10 w-10 rounded-full">
                     <span class="text-2xl font-extrabold text-primary">MET'S IEDC</span>
                 </a>
 
@@ -182,14 +200,14 @@
     </header>
 
     <main>
-        <section id="announcements-page" class="page py-16 md:py-24 bg-gray-50">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl"> <!-- Increased max-width for better card display -->
-                <div class="text-center mb-12">
-                    <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">Official Announcements</h1> <!-- Darker title for contrast -->
-                    <p class="text-lg md:text-xl text-gray-600 mt-4 max-w-2xl mx-auto">Stay updated with the latest circulars, notices, and important information from MET'S IEDC.</p> <!-- Refined description -->
+        <section id="announcements-page" class="page py-16 md:py-24 bg-lighter"> <!-- Changed to bg-lighter for a softer page background -->
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl"> <!-- Increased max-width for more spacious grid -->
+                <div class="text-center mb-16"> <!-- Increased bottom margin for heading section -->
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight">Official Announcements</h1>
+                    <p class="text-lg md:text-xl text-gray-700 mt-4 max-w-3xl mx-auto">Stay updated with the latest circulars, notices, and important information from MET'S IEDC. We are committed to keeping our community informed and engaged.</p> <!-- Enhanced description -->
                 </div>
 
-                <div id="announcements-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> <!-- Responsive grid layout -->
+                <div id="announcements-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"> <!-- Added xl:grid-cols-4 for very large screens, increased gap -->
                     <p class="col-span-full text-center text-gray-600">Loading announcements...</p>
                 </div>
             </div>
@@ -215,11 +233,11 @@
         // --- Announcements Functionality (Hardcoded Data) ---
         const announcementsList = document.getElementById('announcements-list');
 
-        // Hardcoded announcements data
+        // Hardcoded announcements data (expanded for better demonstration)
         const dummyAnnouncements = [
             {
                 title: "Core Team Recruitment 2025",
-                description: "All students who applied for the METS IEDC Core Team are informed that the recruitment process has moved to the next round. The interview will be conducted online on June 25, 2025, from 10:00 AM to 12:30 PM via Google Meet.",
+                description: "All students who applied for the METS IEDC Core Team are informed that the recruitment process has moved to the next round. The interview will be conducted online on June 25, 2025, from 10:00 AM to 12:30 PM via Google Meet. Please check your registered email for details.",
                 fileUrl: "", // This is intentionally empty for debugging demonstration
                 fileName: "",
                 date: "June 15, 2025",
@@ -228,7 +246,7 @@
             },
             {
                 title: "IEDC Member Eligibility Criteria Released",
-                description: "All intrested students are encouraged to review the updated eligibility criteria for becoming a member of MET'S IEDC.The document outlines participation requirements, preferred skill sets, selection process, and code of conduct.",
+                description: "All interested students are encouraged to review the updated eligibility criteria for becoming a member of MET'S IEDC. The document outlines participation requirements, preferred skill sets, selection process, and code of conduct for the upcoming academic year.",
                 fileUrl: "Blog-News/IEDC Member Eligibility Criteria.pdf",
                 fileName: "IEDC_Member_Eligibility_Criteria.pdf",
                 date: "May 23, 2025",
@@ -237,7 +255,7 @@
             },
             {
                 title: "Mandatory Presence and Leave Approval for Execcom Members",
-                description: "All Execcom members are hereby reminded that attendance in Execcom meetings is mandatory. While participation in other IEDC events is not compulsory, presence is highly encouraged.Leave requests must be informed in advance and approved by the Nodal Officer.Strict adherence is expected, except in cases of medical emergencies.",
+                description: "All Execcom members are hereby reminded that attendance in Execcom meetings is mandatory. While participation in other IEDC events is not compulsory, presence is highly encouraged. Leave requests must be informed in advance and approved by the Nodal Officer. Strict adherence is expected, except in cases of medical emergencies.",
                 fileUrl: "Blog-News/Mandatory Presence & Leave Approval.jpg",
                 fileName: "Mandatory Presence & Leave Approval.jpg",
                 date: "June 03, 2025",
@@ -246,7 +264,7 @@
             },
             {
                 title: "New Innovation Challenge Announced",
-                description: "Get ready to unleash your creativity! The annual IEDC Innovation Challenge is now open for applications. This year's theme focuses on sustainable solutions for urban living. Teams of up to four members are encouraged to participate.",
+                description: "Get ready to unleash your creativity! The annual IEDC Innovation Challenge is now open for applications. This year's theme focuses on sustainable solutions for urban living and renewable energy sources. Teams of up to four members are encouraged to participate.",
                 fileUrl: "Blog-News/Innovation_Challenge_Guidelines.pdf",
                 fileName: "Innovation_Challenge_Guidelines.pdf",
                 date: "June 10, 2025",
@@ -255,12 +273,21 @@
             },
             {
                 title: "Workshop on AI in Healthcare Postponed",
-                description: "Due to unforeseen circumstances, the 'AI in Healthcare' workshop scheduled for July 1st has been postponed. A new date will be announced shortly. We apologize for any inconvenience caused.",
+                description: "Due to unforeseen circumstances, the 'AI in Healthcare' workshop scheduled for July 1st has been postponed to a later date. A new date and registration link will be announced shortly. We apologize for any inconvenience caused and appreciate your understanding.",
                 fileUrl: "",
                 fileName: "",
                 date: "June 12, 2025",
                 time: "03:15 PM",
                 uploadedBy: "Events Team"
+            },
+            {
+                title: "Orientation Session for New Members",
+                description: "A mandatory orientation session for all new IEDC members will be held on July 10, 2025, at the Innovation Hub. This session will cover IEDC's vision, upcoming activities, and how you can contribute to our initiatives.",
+                fileUrl: "",
+                fileName: "",
+                date: "June 20, 2025",
+                time: "10:00 AM",
+                uploadedBy: "Membership Lead"
             }
         ];
 
@@ -269,15 +296,15 @@
             announcementsList.innerHTML = ''; // Clear existing announcements
 
             if (dummyAnnouncements.length === 0) {
-                announcementsList.innerHTML = '<p class="col-span-full text-center text-gray-600">No announcements available yet.</p>';
+                announcementsList.innerHTML = '<p class="col-span-full text-center text-gray-600 py-10">No announcements available yet. Please check back later!</p>';
                 return;
             }
 
             dummyAnnouncements.forEach((data) => {
                 // Conditional rendering of the download button (debugged logic preserved)
                 const downloadButtonHtml = data.fileUrl && data.fileName ? `
-                    <div class="mt-4">
-                        <a href="${data.fileUrl}" target="_blank" class="download-button inline-flex items-center justify-center px-6 py-3 rounded-lg text-white text-base font-medium shadow-md w-full md:w-auto">
+                    <div class="mt-auto pt-4"> <!-- mt-auto pushes button to bottom, pt-4 adds top padding -->
+                        <a href="${data.fileUrl}" target="_blank" class="download-button inline-flex items-center justify-center px-6 py-3 rounded-xl text-white text-base font-medium shadow-lg w-full">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="17" x2="12" y2="10"/><polyline points="9 14 12 17 15 14"/></svg>
                             Download ${data.fileName}
                         </a>
@@ -297,8 +324,8 @@
                             </div>
                             <h3 class="text-xl font-bold text-gray-900 leading-tight">${data.title}</h3>
                         </div>
-                        <p class="text-base text-gray-700 leading-relaxed">${data.description}</p>
-                        <div class="text-sm text-gray-500">
+                        <p class="text-base text-gray-700 leading-relaxed flex-grow">${data.description}</p> <!-- flex-grow allows description to take available space -->
+                        <div class="text-sm text-gray-500 mt-auto"> <!-- mt-auto pushes date/time/by to bottom -->
                             <span class="font-medium">Published:</span> ${data.date} at ${data.time} <br>
                             <span class="font-medium">By:</span> ${data.uploadedBy}
                         </div>
@@ -314,4 +341,3 @@
     </script>
 </body>
 </html>
-
