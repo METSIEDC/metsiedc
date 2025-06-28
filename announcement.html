@@ -12,35 +12,37 @@
             scroll-behavior: smooth;
         }
 
-        /* Define custom Tailwind colors using CSS variables for easier theming */
-        /* These variables allow for consistent color application across the site */
+        /* Define NEW custom Tailwind colors based on the provided image theme */
         :root {
-            --color-primary: #2563EB; /* Tailwind blue-600: Used for main brand accents */
-            --color-primary-dark: #1D4ED8; /* Tailwind blue-700: Darker shade for hover states or strong accents */
-            --color-accent: #10B981;  /* Tailwind emerald-500: Used for secondary actions like student login */
-            --color-accent-dark: #059669; /* Tailwind emerald-600: Darker accent for hover states */
-            --color-dark-text: #111827; /* Tailwind gray-900: Primary text color */
-            --color-light-bg: #F3F4F6; /* Tailwind gray-100: Soft background color for sections */
-            --color-lighter-bg: #F9FAFB; /* Tailwind gray-50: Even lighter background */
-            --color-secondary-text: #4B5563; /* Tailwind gray-600: Secondary text color */
+            --color-background: #F3F3F5; /* Very light gray/white from the image */
+            --color-dark-purple: #262039; /* Deep, desaturated dark purple/navy from the image */
+            --color-vibrant-purple: #8A60CC; /* Vibrant purple accent from the image */
+            --color-vibrant-purple-dark: #6C4CA8; /* Darker vibrant purple for hover */
+            --color-muted-gray: #8E8A9C; /* Muted gray/purple for secondary text */
+            --color-white: #FFFFFF; /* Pure white for cards */
+            --color-subtle-border: #E0E0E0; /* Light gray for subtle borders/dividers */
         }
 
         /* Applying custom colors via Tailwind utility classes */
-        .text-primary { color: var(--color-primary); }
-        .bg-primary { background-color: var(--color-primary); }
-        .hover\:bg-primary-dark:hover { background-color: var(--color-primary-dark); }
-        .bg-accent { background-color: var(--color-accent); }
-        .hover\:bg-accent-dark:hover { background-color: var(--color-accent-dark); }
-        .text-dark { color: var(--color-dark-text); }
-        .bg-light { background-color: var(--color-light-bg); }
-        .bg-lighter { background-color: var(--color-lighter-bg); }
-        .text-secondary { color: var(--color-secondary-text); }
+        .text-primary-brand { color: var(--color-vibrant-purple); }
+        .bg-primary-brand { background-color: var(--color-vibrant-purple); }
+        .hover\:bg-primary-brand-dark:hover { background-color: var(--color-vibrant-purple-dark); }
+
+        .text-dark-heading { color: var(--color-dark-purple); }
+        .bg-dark-section { background-color: var(--color-dark-purple); }
+
+        .text-muted { color: var(--color-muted-gray); }
+
+        .bg-page-background { background-color: var(--color-background); }
+        .bg-card-background { background-color: var(--color-white); }
+        .bg-header-footer { background-color: var(--color-white); } /* Header/footer match card background for clean look */
+
 
         /* Navigation Link Styles */
         .nav-link-active {
-            color: var(--color-primary);
+            color: var(--color-vibrant-purple);
             font-weight: 600;
-            border-bottom: 2px solid var(--color-primary);
+            border-bottom: 2px solid var(--color-vibrant-purple);
         }
         .nav-link {
             padding-bottom: 0.25rem;
@@ -48,16 +50,10 @@
             transition: color 0.3s ease, border-bottom-color 0.3s ease;
         }
         .nav-link:hover {
-            color: var(--color-primary);
+            color: var(--color-vibrant-purple);
         }
 
-        /* Hero section background (if used elsewhere, keeping for consistency) */
-        .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/343A40/FFFFFF?text=IEDC+Innovation+Hub') no-repeat center center;
-            background-size: cover;
-        }
-
-        /* Page transition animation for smooth loading */
+        /* Page transition animation */
         .page {
             display: block;
             animation: fadeIn 0.5s ease-in-out;
@@ -81,64 +77,76 @@
             padding-top: 0; /* Important for sticky header to work correctly */
         }
 
-        /* === NEW UI STYLES FOR ANNOUNCEMENTS CARDS === */
+        /* === UI STYLES FOR ANNOUNCEMENTS CARDS (Clean & Modern) === */
         .announcement-card {
-            background-color: white; /* Clean white background for cards */
-            border-radius: 1.5rem; /* Even more rounded corners for a softer look */
-            padding: 2.25rem; /* Increased padding within cards */
-            /* Custom, subtle, and diffused shadow for depth */
-            box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.09), 0 5px 15px -3px rgba(0, 0, 0, 0.05);
-            transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); /* Smoother, more natural transition */
+            background-color: var(--color-card-background);
+            border-radius: 0.75rem; /* Consistent rounding */
+            padding: 2rem;
+            /* Subtle, clean shadow for depth, matching the image aesthetic */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease-in-out;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem; /* Space between card elements (icon/title, description, meta, button) */
-            height: auto; /* Allow height to adjust based on content */
+            gap: 1.25rem;
+            height: auto;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        /* Fixed widths for horizontal desktop layout */
+        @media (min-width: 768px) {
+            .announcement-card {
+                width: 300px; /* Standard width for cards */
+            }
+        }
+        @media (min-width: 1024px) {
+            .announcement-card {
+                width: 320px; /* Slightly wider on larger desktops */
+            }
         }
 
         .announcement-card:hover {
-            transform: translateY(-10px) scale(1.015); /* More noticeable lift and slight scale */
-            /* Enhanced shadow on hover for a "popping" effect */
-            box-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.15), 0 8px 20px -5px rgba(0, 0, 0, 0.08);
+            transform: translateY(-5px); /* Moderate lift on hover */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* Slightly more prominent shadow on hover */
         }
 
         .announcement-icon-container {
-            /* Gradient background for the icon container */
-            background: linear-gradient(to bottom right, var(--color-primary), var(--color-primary-dark));
-            border-radius: 0.875rem; /* Slightly more rounded than inner icon */
-            padding: 0.875rem; /* Padding around the icon */
+            background-color: var(--color-vibrant-purple); /* Solid vibrant purple background for icon */
+            border-radius: 0.5rem; /* Square icon container with rounded corners */
+            padding: 0.6rem;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for the icon itself */
         }
 
         .announcement-icon {
-            color: white; /* Icon color */
-            width: 32px; /* Larger icon size */
-            height: 32px;
+            color: white;
+            width: 24px;
+            height: 24px;
         }
 
         .download-button {
-            /* Gradient background for the download button */
-            background: linear-gradient(to right, var(--color-accent), var(--color-accent-dark));
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            font-weight: 600; /* Semi-bold text for buttons */
-            text-align: center; /* Center text within button */
-            display: inline-flex; /* Use flexbox for icon and text alignment */
+            background-color: var(--color-vibrant-purple); /* Solid vibrant purple for download button */
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* Subtle shadow for button */
+            font-weight: 500;
+            text-align: center;
+            display: inline-flex;
             align-items: center;
-            justify-content: center; /* Center content horizontally */
+            justify-content: center;
+            color: white; /* White text on purple button */
         }
 
         .download-button:hover {
-            transform: translateY(-3px); /* Slightly more lift on hover */
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+            background-color: var(--color-vibrant-purple-dark); /* Darker purple on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
         }
 
         /* Loading spinner animation */
         .loading-spinner {
             border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: var(--color-primary);
+            border-left-color: var(--color-vibrant-purple);
             border-radius: 50%;
             width: 24px;
             height: 24px;
@@ -148,73 +156,91 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Custom scrollbar styling for the horizontal list */
+        .horizontal-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+            background: var(--color-background); /* Track matches page background */
+            border-radius: 10px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+            background: var(--color-vibrant-purple); /* Thumb is vibrant purple */
+            border-radius: 10px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: var(--color-vibrant-purple-dark);
+        }
     </style>
 </head>
-<body class="font-inter bg-gray-100 text-dark">
+<body class="font-inter bg-page-background text-dark-heading">
 
-    <header class="bg-white shadow-lg sticky top-0 z-50">
+    <header class="bg-header-footer shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <a href="index.html#home" class="flex items-center space-x-2">
-                    <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Finnovate.startupmission.in%2Fbranding%2F&psig=AOvVaw3HRkqh-X6HObt75uvGa_ID&ust=1750172233145000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMjs59-Z9o0DFQAAAAAdAAAAABAE" alt="IEDC Logo" class="h-10 w-10 rounded-full">
-                    <span class="text-2xl font-extrabold text-primary">MET'S IEDC</span>
+                    <!-- FIXED: Using a direct link for the logo - please replace with your actual logo path -->
+                    <img src="https://innovate.startupmission.in/wp-content/uploads/2023/10/iedc_logo.png" alt="IEDC Logo" class="h-10 w-10 rounded-full shadow-sm">
+                    <span class="text-2xl font-extrabold text-dark-heading">MET'S IEDC</span>
                 </a>
 
                 <nav class="hidden md:flex space-x-4 lg:space-x-6 items-center">
-                    <a href="index.html#home" class="nav-link">Home</a>
-                    <a href="index.html#about" class="nav-link">About Us</a>
-                    <a href="team.html" class="nav-link">Our Team</a>
-                    <a href="index.html#events" class="nav-link">Events</a>
-                    <a href="index.html#initiatives" class="nav-link">Initiatives</a>
-                    <a href="index.html#news" class="nav-link">News</a>
-                    <a href="announcement.html" class="nav-link nav-link-active">Announcements</a>
-                    <a href="event.html" class="nav-link">Event Gallery</a>
-                    <a href="index.html#contact" class="nav-link">Contact</a>
-                    <a href="login.html" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition duration-300">Student Login</a>
-                    <a href="index.html#admin-login" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition duration-300">Admin Login</a>
+                    <a href="index.html#home" class="nav-link text-dark-heading">Home</a>
+                    <a href="index.html#about" class="nav-link text-dark-heading">About Us</a>
+                    <a href="team.html" class="nav-link text-dark-heading">Our Team</a>
+                    <a href="index.html#events" class="nav-link text-dark-heading">Events</a>
+                    <a href="index.html#initiatives" class="nav-link text-dark-heading">Initiatives</a>
+                    <a href="index.html#news" class="nav-link text-dark-heading">News</a>
+                    <a href="announcement.html" class="nav-link nav-link-active text-primary-brand">Announcements</a>
+                    <a href="event.html" class="nav-link text-dark-heading">Event Gallery</a>
+                    <a href="index.html#contact" class="nav-link text-dark-heading">Contact</a>
+                    <a href="login.html" class="px-4 py-2 bg-primary-brand text-white rounded-lg hover:bg-primary-brand-dark transition duration-300 shadow">Student Login</a>
+                    <a href="index.html#admin-login" class="px-4 py-2 bg-dark-purple text-white rounded-lg hover:bg-muted transition duration-300 shadow">Admin Login</a>
                 </nav>
 
                 <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-dark focus:outline-none">
+                    <button id="mobile-menu-button" class="text-dark-heading focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-white z-40 pt-20 p-4 md:hidden">
+        <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-card-background z-40 pt-20 p-4 md:hidden">
             <nav class="flex flex-col space-y-4">
-                <a href="index.html#home" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Home</a>
-                <a href="index.html#about" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">About Us</a>
-                <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Our Team</a>
-                <a href="index.html#events" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Events</a>
-                <a href="index.html#initiatives" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Initiatives</a>
-                <a href="index.html#news" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">News</a>
-                <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Announcements</a>
-                <a href="event.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Event Gallery</a>
-                <a href="index.html#contact" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Contact</a>
-                <a href="login.html" class="mt-4 block w-full text-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition duration-300">Student Login</a>
-                <a href="index.html#admin-login" class="mt-2 block w-full text-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition duration-300">Admin Login</a>
+                <a href="index.html#home" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Home</a>
+                <a href="index.html#about" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">About Us</a>
+                <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Our Team</a>
+                <a href="index.html#events" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Events</a>
+                <a href="index.html#initiatives" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Initiatives</a>
+                <a href="index.html#news" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">News</a>
+                <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-primary-brand hover:bg-gray-100">Announcements</a>
+                <a href="event.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Event Gallery</a>
+                <a href="index.html#contact" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Contact</a>
+                <a href="login.html" class="mt-4 block w-full text-center px-4 py-2 bg-primary-brand text-white rounded-lg hover:bg-primary-brand-dark transition duration-300 shadow">Student Login</a>
+                <a href="index.html#admin-login" class="mt-2 block w-full text-center px-4 py-2 bg-dark-purple text-white rounded-lg hover:bg-muted transition duration-300 shadow">Admin Login</a>
             </nav>
         </div>
     </header>
 
     <main>
-        <section id="announcements-page" class="page py-16 md:py-24 bg-lighter"> <!-- Changed to bg-lighter for a softer page background -->
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl"> <!-- Increased max-width for more spacious grid -->
-                <div class="text-center mb-16"> <!-- Increased bottom margin for heading section -->
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight">Official Announcements</h1>
-                    <p class="text-lg md:text-xl text-gray-700 mt-4 max-w-3xl mx-auto">Stay updated with the latest circulars, notices, and important information from MET'S IEDC. We are committed to keeping our community informed and engaged.</p> <!-- Enhanced description -->
+        <section id="announcements-page" class="page py-16 md:py-24 bg-page-background"> <!-- Page background -->
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+                <div class="text-center mb-16">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-dark-heading leading-tight">Official Announcements</h1>
+                    <p class="text-lg md:text-xl text-muted mt-4 max-w-3xl mx-auto">Stay updated with the latest circulars, notices, and important information from MET'S IEDC. We are committed to keeping our community informed and engaged.</p>
                 </div>
 
-                <div id="announcements-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"> <!-- Added xl:grid-cols-4 for very large screens, increased gap -->
-                    <p class="col-span-full text-center text-gray-600">Loading announcements...</p>
+                <div id="announcements-list" class="grid grid-cols-1 gap-8 md:flex md:flex-row md:gap-6 md:overflow-x-auto md:pb-4 horizontal-scroll-container">
+                    <p class="col-span-full text-center text-muted md:hidden">Loading announcements...</p>
+                    <p class="col-span-full text-center text-muted hidden md:block">Scroll right to see more announcements!</p>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="bg-gray-900 text-gray-300 py-8">
+    <footer class="bg-dark-purple text-gray-300 py-8"> <!-- Footer background -->
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
             <p>&copy; 2025 IEDC MET'S SCHOOL OF ENGINEERING. All Rights Reserved.</p>
             <p class="mt-2">Powered by Innovation & Entrepreneurship. Developed by Muhammed Shahil.</p>
@@ -243,11 +269,11 @@
                 date: "June 23, 2025",
                 time: "08:53 AM",
                 uploadedBy: "Admin"
-             },       
+             },
             {
                 title: "Core Team Recruitment 2025",
                 description: "All students who applied for the METS IEDC Core Team are informed that the recruitment process has moved to the next round. The interview will be conducted online on June 25, 2025, from 10:00 AM to 12:30 PM via Google Meet. Please check your registered email for details.",
-                fileUrl: "Blog-News/IEDC_METS_2025_04.pdf", // This is intentionally empty for debugging demonstration
+                fileUrl: "Blog-News/IEDC_METS_2025_04.pdf",
                 fileName: "IEDC_METS_2025_04.pdf",
                 date: "June 16, 2025",
                 time: "08:29 PM",
@@ -305,15 +331,14 @@
             announcementsList.innerHTML = ''; // Clear existing announcements
 
             if (dummyAnnouncements.length === 0) {
-                announcementsList.innerHTML = '<p class="col-span-full text-center text-gray-600 py-10">No announcements available yet. Please check back later!</p>';
+                announcementsList.innerHTML = '<p class="col-span-full text-center text-muted py-10">No announcements available yet. Please check back later!</p>';
                 return;
             }
 
             dummyAnnouncements.forEach((data) => {
-                // Conditional rendering of the download button (debugged logic preserved)
                 const downloadButtonHtml = data.fileUrl && data.fileName ? `
                     <div class="mt-auto pt-4"> <!-- mt-auto pushes button to bottom, pt-4 adds top padding -->
-                        <a href="${data.fileUrl}" target="_blank" class="download-button inline-flex items-center justify-center px-6 py-3 rounded-xl text-white text-base font-medium shadow-lg w-full">
+                        <a href="${data.fileUrl}" target="_blank" class="download-button inline-flex items-center justify-center px-6 py-3 rounded-xl text-white text-base font-medium shadow w-full">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="17" x2="12" y2="10"/><polyline points="9 14 12 17 15 14"/></svg>
                             Download ${data.fileName}
                         </a>
@@ -331,10 +356,10 @@
                                     <path d="M15 5v12"/>
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-bold text-gray-900 leading-tight">${data.title}</h3>
+                            <h3 class="text-xl font-bold text-dark-heading leading-tight">${data.title}</h3>
                         </div>
-                        <p class="text-base text-gray-700 leading-relaxed flex-grow">${data.description}</p> <!-- flex-grow allows description to take available space -->
-                        <div class="text-sm text-gray-500 mt-auto"> <!-- mt-auto pushes date/time/by to bottom -->
+                        <p class="text-base text-muted leading-relaxed flex-grow">${data.description}</p>
+                        <div class="text-sm text-gray-500 mt-auto">
                             <span class="font-medium">Published:</span> ${data.date} at ${data.time} <br>
                             <span class="font-medium">By:</span> ${data.uploadedBy}
                         </div>
