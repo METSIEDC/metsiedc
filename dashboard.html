@@ -504,23 +504,24 @@
             </div>
 
             <nav class="sidebar-nav-container flex flex-col gap-2 w-full">
-                <a id="dashboardOverviewTabBtn" class="sidebar-nav-item active" onclick="showTab('dashboardOverview')">
+                <!-- Removed onclick attributes and added data-tab-id for JS listener -->
+                <a id="dashboardOverviewTabBtn" class="sidebar-nav-item active" data-tab-id="dashboardOverview">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                     <span>Dashboard</span>
                 </a>
-                <a id="profileTabBtn" class="sidebar-nav-item" onclick="showTab('profile')">
+                <a id="profileTabBtn" class="sidebar-nav-item" data-tab-id="profile">
                     <i data-lucide="user" class="w-5 h-5"></i>
                     <span>My Profile</span>
                 </a>
-                <a id="submitProjectTabBtn" class="sidebar-nav-item" onclick="showTab('submitProject')">
+                <a id="submitProjectTabBtn" class="sidebar-nav-item" data-tab-id="submitProject">
                     <i data-lucide="folder-plus" class="w-5 h-5"></i>
                     <span>Submit Project</span>
                 </a>
-                <a id="submitIdeaTabBtn" class="sidebar-nav-item" onclick="showTab('submitIdea')">
+                <a id="submitIdeaTabBtn" class="sidebar-nav-item" data-tab-id="submitIdea">
                     <i data-lucide="lightbulb" class="w-5 h-5"></i>
                     <span>Submit Idea</span>
                 </a>
-                <a id="submitEventTabBtn" class="sidebar-nav-item" onclick="showTab('submitEvent')">
+                <a id="submitEventTabBtn" class="sidebar-nav-item" data-tab-id="submitEvent">
                     <i data-lucide="calendar-check" class="w-5 h-5"></i>
                     <span>Propose Event</span>
                 </a>
@@ -926,7 +927,7 @@
     <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signOut, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"; // Removed signInAnonymously, signInWithCustomToken
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Initialize Lucide icons
@@ -1085,7 +1086,8 @@
                 displayStatusMessage(document.getElementById('profileStatusMessage'), 'Profile updated successfully!', 'success');
                 console.log("Profile saved:", profileData);
                 fetchProfileData(currentUserId); // Re-fetch to update displayed info and form
-            } catch (e) {
+            }
+            catch (e) {
                 displayStatusMessage(document.getElementById('profileStatusMessage'), 'Error saving profile: ' + e.message, 'error');
                 console.error("Error saving profile document:", e);
             }
@@ -1223,6 +1225,20 @@
                 sidebar.classList.remove('open');
                 document.body.style.overflow = ''; // Restore body scroll
             });
+
+            // Add event listeners to sidebar navigation items to close the menu
+            document.querySelectorAll('.sidebar-nav-item').forEach(item => {
+                // Ensure we don't add listener to the logout button twice, as it has its own handler
+                if (item.id !== 'logoutBtnSidebar') {
+                    item.addEventListener('click', function() {
+                        const tabId = this.dataset.tabId; // Get the data-tab-id
+                        if (tabId) {
+                            showTab(tabId); // Call showTab
+                        }
+                    });
+                }
+            });
+
         } else {
             console.error("Mobile menu toggle, sidebar, or close button not found. Mobile menu might not function.");
         }
@@ -1232,6 +1248,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             // The onAuthStateChanged listener handles showing the initial tab
             // once authentication is confirmed.
+            // If the user is already authenticated when the page loads,
+            // onAuthStateChanged will handle showing the dashboardOverview.
+            // Otherwise, it will redirect to login.
         });
     </script>
 </body>
