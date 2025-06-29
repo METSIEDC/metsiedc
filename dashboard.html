@@ -926,7 +926,7 @@
     <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signOut, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"; // Removed signInAnonymously, signInWithCustomToken
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Initialize Lucide icons
@@ -944,9 +944,7 @@
             measurementId: "G-6E7EK0D7JG"
         };
 
-        // Firebase variables (appId from Canvas, initialAuthToken for auth)
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id'; // Keep appId from Canvas if available
 
         let app;
         let auth;
@@ -962,10 +960,9 @@
         } catch (error) {
             console.error("Firebase initialization failed:", error);
             // In a production app, you might show a user-friendly error message here
-            // For now, logging to console is sufficient for debugging.
         }
 
-        // Authentication State Change Listener
+        // Authentication State Change Listener - **Crucial for login/logout flow**
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUserId = user.uid;
@@ -979,16 +976,16 @@
                 if (db) {
                     fetchProfileData(currentUserId);
                 } else {
-                    console.error("Firestore DB not available, cannot fetch profile data on auth state change.");
+                    console.warn("Firestore DB not available, cannot fetch profile data on auth state change.");
                 }
+                showTab('dashboardOverview'); // Ensure dashboard tab is shown after successful login
 
             } else {
                 currentUserId = null;
                 console.log("User is logged out or not authenticated.");
-                // Redirect to login if not authenticated (unless on login page itself)
+                // Redirect to login IF NOT ALREADY ON LOGIN PAGE
                 if (window.location.pathname.endsWith('/login.html')) {
-                    // Do nothing if already on login page
-                    console.log("Already on login page. Not redirecting.");
+                    console.log("Already on login page. No redirection needed.");
                 } else {
                     console.log("Redirecting to login page...");
                     window.location.href = 'login.html';
@@ -996,41 +993,16 @@
             }
         });
 
-        // Attempt initial sign-in if no user is present
-        async function authenticateUser() {
-            if (auth && !auth.currentUser) {
-                try {
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                        console.log("Signed in with custom token using initialAuthToken.");
-                    } else {
-                        await signInAnonymously(auth);
-                        console.log("Signed in anonymously.");
-                    }
-                } catch (error) {
-                    console.error("Error during initial authentication:", error);
-                    // Handle specific errors like token invalid, etc.
-                }
-            } else if (auth && auth.currentUser) {
-                console.log("User already authenticated on page load.");
-            } else {
-                console.error("Firebase Auth not initialized during authenticateUser call.");
-            }
-        }
-
-        // Call authenticateUser on page load
-        document.addEventListener('DOMContentLoaded', authenticateUser);
-
         // --- Logout Functionality ---
         async function handleLogout() {
             if (auth) {
                 try {
                     await signOut(auth);
                     console.log("User signed out successfully.");
-                    // onAuthStateChanged will handle the redirect to login.html
+                    // The onAuthStateChanged listener above will handle the redirect.
                 } catch (error) {
                     console.error("Error signing out:", error);
-                    // Display a user-friendly message, e.g., "Logout failed. Please try again."
+                    // Use a custom message box instead of alert() if possible
                     alert("Logout failed: " + error.message); 
                 }
             } else {
@@ -1144,7 +1116,7 @@
 
             // Close mobile sidebar if open after clicking a tab
             const sidebar = document.getElementById('sidebar');
-            if (sidebar.classList.contains('open')) {
+            if (sidebar && sidebar.classList.contains('open')) { // Added check for sidebar
                 sidebar.classList.remove('open');
                 document.body.style.overflow = ''; // Restore body scroll
             }
@@ -1152,6 +1124,7 @@
 
         // --- Form Handling & Status Messages ---
         function displayStatusMessage(element, message, type) {
+            if (!element) return; // Guard against null element
             element.classList.remove('hidden', 'error', 'success');
             element.classList.add(type);
             element.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${type === 'success' ? 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' : 'M10 14l2-2m0 0l2-2m-2 2L8 8m2 2l-2 2m9-2a9 9 0 11-18 0 9 9 0 0118 0z'}"></path></svg>${message}`;
@@ -1161,9 +1134,14 @@
         }
 
         function resetDisplayedProfileInfo() {
-            document.getElementById('userEmailHeader').textContent = 'user@example.com';
-            document.getElementById('userAvatarHeader').textContent = 'U';
-            document.getElementById('displayNameBanner').textContent = 'User';
+            const userEmailHeader = document.getElementById('userEmailHeader');
+            if (userEmailHeader) userEmailHeader.textContent = 'user@example.com';
+            
+            const userAvatarHeader = document.getElementById('userAvatarHeader');
+            if (userAvatarHeader) userAvatarHeader.textContent = 'U';
+
+            const displayNameBanner = document.getElementById('displayNameBanner');
+            if (displayNameBanner) displayNameBanner.textContent = 'User';
 
             const profileOutputElements = [
                 'displayNameOutput', 'bioOutput', 'contactNumberOutput', 'genderOutput', 'dobOutput',
@@ -1172,8 +1150,13 @@
             ];
             profileOutputElements.forEach(id => {
                 const element = document.getElementById(id);
-                if (element) { // Check if element exists before setting textContent
-                    element.textContent = 'Not set';
+                if (element) {
+                     // For link elements, set innerHTML to plain text "Not set"
+                    if (id === 'linkedinOutput' || id === 'instagramOutput') {
+                        element.innerHTML = 'Not set';
+                    } else {
+                        element.textContent = 'Not set';
+                    }
                 }
             });
             const profileForm = document.getElementById('profileForm');
@@ -1241,17 +1224,14 @@
                 document.body.style.overflow = ''; // Restore body scroll
             });
         } else {
-            console.error("Mobile menu toggle, sidebar, or close button not found.");
+            console.error("Mobile menu toggle, sidebar, or close button not found. Mobile menu might not function.");
         }
 
 
         // Initial load: show dashboard overview
         document.addEventListener('DOMContentLoaded', () => {
-            // Ensure Firebase is initialized before attempting to authenticate or show tabs.
-            // The `onAuthStateChanged` listener will take care of calling `authenticateUser`
-            // and then `fetchProfileData` and `showTab('dashboardOverview')`
+            // The onAuthStateChanged listener handles showing the initial tab
             // once authentication is confirmed.
-            showTab('dashboardOverview'); // Show Dashboard Overview tab by default on initial load
         });
     </script>
 </body>
