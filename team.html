@@ -6,364 +6,362 @@
     <title>Our Team - MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Lucide Icons for social media links -->
+    <!-- Lucide Icons for social media links and navigation arrows -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         /* Define a consistent color palette */
         :root {
             --color-primary: #007BFF; /* A vibrant blue for primary elements */
             --color-accent: #28A745; /* A strong green for accent elements */
-            --color-light: #F8F8FA; /* Very light background for body */
-            --color-dark: #343A40; /* Dark text/background */
-            --color-secondary: #6C757D; /* Muted text/icons */
-            --color-white: #FFFFFF;
-            --color-gray-100: #F3F4F6;
-            --color-gray-600: #4B5563;
-            --color-gray-700: #374151;
-            --color-blue-700: #1D4ED8;
-            --color-green-700: #059669;
-            --color-pink-500: #EC4899; /* For Instagram hover */
-
-            /* Colors from the Board of Directors image */
-            --color-background-dark-red: #3A030A; /* Deeper red for background */
-            --color-card-red: #E12133; /* The prominent red for card bottom */
-            --color-card-top-light: #FFFFFF; /* White for card top */
-            --color-text-on-dark-bg: #E0E0E0; /* Light text on dark background */
-            --color-text-on-red: #FFFFFF; /* White text on red background */
-            --color-border-subtle: rgba(255, 255, 255, 0.1); /* Subtle white border */
+            --color-light-background: #F4F7FC; /* Very light, almost white background */
+            --color-card-background: #FFFFFF; /* Pure white for cards */
+            --color-dark-text: #343A40; /* Dark text/headings */
+            --color-muted-text: #6C757D; /* Muted text for descriptions/secondary info */
+            --color-border: #E0E0E0; /* Light border color */
+            --color-shadow-light: rgba(0, 0, 0, 0.05); /* Light shadow for cards */
+            --color-shadow-medium: rgba(0, 0, 0, 0.1); /* Medium shadow for hover */
         }
 
-        /* Basic smooth scroll */
         html {
             scroll-behavior: smooth;
         }
-        /* Active Nav Link Style */
-        .nav-link-active {
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-light-background);
+            color: var(--color-dark-text);
+            padding-top: 0; /* No padding-top on body, header handles offset */
+        }
+
+        /* Header Styling */
+        .main-header {
+            background-color: var(--color-card-background);
+            box-shadow: 0 2px 4px var(--color-shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .main-header .nav-link {
+            padding: 0.5rem 1rem;
+            color: var(--color-dark-text);
+            font-weight: 500;
+            transition: color 0.2s ease-in-out;
+        }
+        .main-header .nav-link:hover {
+            color: var(--color-primary);
+        }
+        .main-header .nav-link-active {
             color: var(--color-primary);
             font-weight: 600;
-            border-bottom: 2px solid var(--color-primary);
         }
-        .nav-link {
-            padding-bottom: 0.25rem;
-            border-bottom: 2px solid transparent;
-            transition: color 0.3s ease, border-bottom-color 0.3s ease;
-        }
-        .nav-link:hover {
-            color: var(--color-primary);
-        }
-        .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/343A40/FFFFFF?text=IEDC+Innovation+Hub') no-repeat center center;
-            background-size: cover;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        .page {
-            display: block; /* Always visible on its own page */
-            animation: fadeIn 0.5s ease-in-out;
-            min-height: calc(100vh - 80px); /* Ensure page takes at least viewport height minus header */
-            padding-top: 80px; /* Offset for sticky header */
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+
+        /* Mobile Menu Overlay */
         .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-card-background);
+            z-index: 100;
             transform: translateX(-100%);
             transition: transform 0.3s ease-in-out;
+            padding-top: 5rem; /* Space for header */
         }
         .mobile-menu.open {
             transform: translateX(0);
         }
-        body {
-            padding-top: 0;
-            font-family: 'Inter', sans-serif; /* Apply Inter font to body */
-            color: var(--color-dark); /* Apply dark text color */
-            background-color: var(--color-light); /* Apply light background color */
+        .mobile-menu-close-button {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--color-dark-text);
         }
-        
-        /* Team Section Specifics */
+
+        /* Team Page Section */
         #team-page {
-            background-color: var(--color-background-dark-red); /* Dark background from the image */
-            color: var(--color-text-on-dark-bg); /* Light text on dark background */
+            padding: 4rem 1.5rem; /* Responsive padding */
+            text-align: center;
         }
-        #team-page h1, #team-page p.text-xl {
-            color: var(--color-text-on-dark-bg); /* Ensure headings are visible */
+        #team-page h1 {
+            font-size: 2.5rem; /* text-4xl */
+            font-weight: 800; /* font-extrabold */
+            color: var(--color-dark-text);
+            margin-bottom: 0.5rem;
         }
-
-        /* Team Member Card Styling */
-        .team-member-card {
-            background-color: var(--color-card-top-light); /* White background for the card */
-            border-radius: 0.75rem; /* Default for all corners */
-            border-top-right-radius: 2rem; /* Larger specific radius */
-            border-bottom-left-radius: 2rem; /* Larger specific radius */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.15); /* Stronger shadow */
-            overflow: hidden; /* Crucial for internal elements not to break radius */
-            position: relative; /* For absolute positioning of image and label */
-            height: 320px; /* Fixed height for consistent card size */
-            width: 260px; /* Fixed width for consistent card size */
-            display: flex;
-            flex-direction: column; /* Stack content vertically */
-            align-items: center; /* Center content horizontally */
-            justify-content: space-between; /* Push top and bottom content apart */
-            transition: all 0.2s ease-in-out; /* Smooth transitions for hover */
-        }
-        .team-member-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2); /* Enhanced hover shadow */
+        #team-page .section-description {
+            font-size: 1.125rem; /* text-xl */
+            color: var(--color-muted-text);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .card-content-top {
-            width: 100%;
-            height: 50%; /* Top half of the card is white */
-            position: relative; /* To contain the image if needed, though image is absolute to parent */
-            background-color: var(--color-card-top-light); /* Explicitly set white background */
-            z-index: 1; /* Below the image */
-        }
-
-        .team-member-img {
-            width: 140px; /* Image size */
-            height: 140px;
-            border-radius: 50%;
-            object-fit: cover;
-            position: absolute; /* Position over the card */
-            top: calc(50% - 70px); /* Centers image vertically relative to its own height (140px/2) */
-            left: 50%; /* Center horizontally */
-            transform: translateX(-50%); /* Adjust for horizontal centering */
-            z-index: 2; /* Ensure image is on top of everything */
-            border: 5px solid var(--color-white); /* White border around image */
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* Subtle shadow for depth */
-        }
-
-        .card-content-bottom {
-            background-color: var(--color-card-red);
-            color: var(--color-text-on-red);
-            padding: 1.5rem 1rem; /* Standard padding */
-            padding-top: 5rem; /* Adjusted padding-top to accommodate image overlap */
-            width: 100%;
-            height: 50%; /* Bottom half of the card is red */
+        /* Featured Member Card */
+        .featured-member-card {
+            background-color: var(--color-card-background);
+            border-radius: 1.5rem; /* More rounded corners */
+            box-shadow: 0 8px 20px var(--color-shadow-medium);
+            padding: 2rem;
+            max-width: 400px; /* Max width for the card */
+            margin: 0 auto 3rem auto; /* Center card and add bottom margin */
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-end; /* Push content to bottom */
             text-align: center;
-            z-index: 0; /* Below the image */
         }
-        
-        .card-content-bottom h3 {
-            font-weight: 800; /* Extra bold for names */
-            margin-bottom: 0.25rem; /* Tighter spacing for name/role */
-            line-height: 1.2;
+        .featured-member-img {
+            width: 160px; /* Larger circular image */
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 4px solid var(--color-primary); /* Border color from logo */
         }
-
-        .card-content-bottom p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-bottom: 1rem; /* Space before social icons */
+        .featured-member-name {
+            font-size: 1.75rem; /* text-3xl */
+            font-weight: 700;
+            color: var(--color-dark-text);
+            margin-bottom: 0.5rem;
         }
-
-        .card-vertical-label {
-            position: absolute;
-            top: 1.5rem; /* Position from the top of the entire card */
-            right: -0.5rem; /* Overlap slightly with the card edge */
-            width: 100px; /* Width of the label block */
-            text-align: center;
-            transform: translateY(0%) rotate(90deg) translateX(0%); /* Rotate from its top-left */
-            transform-origin: top left; /* Pivot point for rotation */
-            font-size: 0.7rem; /* Smaller font */
-            font-weight: 800; /* Extra bold */
-            color: rgba(255, 255, 255, 0.4); /* Faded white */
-            white-space: nowrap; /* Prevent wrapping */
-            text-transform: uppercase;
-            letter-spacing: 0.15em; /* Slightly more spaced */
-            padding: 0.5rem 0; /* Vertical padding inside label */
-            background-color: var(--color-card-red); /* Match the red background */
-            border-top-right-radius: 0.75rem; /* Rounded corner for the label itself */
-            border-bottom-right-radius: 0.75rem;
-            z-index: 3; /* Ensure it's on top */
-        }
-
-        /* Adjusted social icon styling for new card */
-        .card-content-bottom .social-icons {
-            display: flex; /* Ensure flex for centering icons */
-            justify-content: center;
-            align-items: center;
-            gap: 0.75rem; /* Space between icons */
-            color: var(--color-text-on-red); /* Icons are white on red background */
-            margin-top: 0; /* No extra margin here */
-        }
-        .card-content-bottom .social-icons a {
-            color: inherit; /* Inherit color from parent */
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
-        }
-        .card-content-bottom .social-icons a:hover {
-            opacity: 1;
-        }
-
-        /* --- New Grid Layout for Team Members --- */
-        #team-members-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* Responsive columns */
-            gap: 2rem; /* Gap between cards */
-            justify-items: center; /* Center items in their grid cells */
-            align-items: center; /* Center items vertically in their grid cells */
-            max-width: 1400px; /* Max width to contain the grid */
-            margin: 0 auto; /* Center the grid container */
-            padding-top: 2rem; /* Add some space above the grid */
-            padding-bottom: 2rem; /* Add some space below the grid */
-        }
-
-        /* Special styling for the Nodal Officer card (first element) */
-        .nodal-officer-main {
-            height: 380px; /* Make it taller */
-            width: 300px; /* Make it wider */
-            background-color: var(--color-card-top-light); /* Ensure white top background */
-            /* Overlap slightly with its neighbors to create a "central" effect */
+        .featured-member-role {
+            font-size: 1.125rem; /* text-lg */
+            color: var(--color-primary); /* Primary color for role */
             margin-bottom: 1rem;
-            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.5), 0 4px 8px -2px rgba(0, 0, 0, 0.25); /* More prominent shadow */
-            z-index: 10; /* Bring to front */
         }
-        .nodal-officer-main .team-member-img {
-            width: 170px; /* Larger image for central card */
-            height: 170px;
-            top: calc(50% - 85px); /* Adjust top to center new image size */
+        .featured-member-bio {
+            font-size: 0.95rem;
+            color: var(--color-muted-text);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
         }
-        .nodal-officer-main .card-content-bottom {
-            padding-top: 6rem; /* Adjust padding for larger image overlap */
+        .featured-member-socials {
+            display: flex;
+            gap: 1rem;
         }
-
-        /* Grid positioning for the Nodal Officer on larger screens */
-        @media (min-width: 1024px) { /* Larger screens */
-            #team-members-container {
-                grid-template-columns: repeat(4, 1fr); /* Example: 4 columns */
-                /* Manual placement of the central officer */
-                display: flex; /* Use flexbox to center content initially */
-                flex-wrap: wrap; /* Allow wrapping */
-                justify-content: center; /* Center items */
-                align-items: flex-start; /* Align items to start for row formation */
-            }
-
-            .nodal-officer-main {
-                /* For desktop, force it to the second position to allow other elements to wrap around */
-                order: 2; /* Place it after the first two members */
-                margin: 0 2rem 2rem 2rem; /* Custom margin to create space around */
-            }
-
-            /* Adjust order for surrounding members on desktop to try to simulate the radiating effect */
-            .team-member-card:not(.nodal-officer-main) {
-                margin: 1rem; /* Consistent spacing */
-            }
-
-            /* Adjust flex basis or width for items to wrap more naturally around the center */
-            .team-member-card {
-                flex: 0 0 calc(25% - 2rem); /* Approx 4 items per row, considering gaps */
-            }
-             .nodal-officer-main {
-                flex: 0 0 300px; /* Fixed width for the main officer */
-            }
+        .featured-member-socials .lucide {
+            color: var(--color-muted-text);
+            transition: color 0.2s ease-in-out;
+        }
+        .featured-member-socials a:hover .lucide {
+            color: var(--color-primary);
         }
 
-        @media (min-width: 768px) and (max-width: 1023px) { /* Tablet screens */
-            #team-members-container {
-                grid-template-columns: repeat(3, 1fr); /* 3 columns for tablets */
-            }
-            .nodal-officer-main {
-                grid-column: 2; /* Center on 3-column layout */
-            }
+        /* Other Members Horizontal Scroll */
+        .other-members-wrapper {
+            max-width: 900px; /* Max width for the scrollable area */
+            margin: 0 auto;
+        }
+        .other-members-scroll-container {
+            display: flex;
+            overflow-x: auto; /* Enable horizontal scrolling */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            padding-bottom: 1rem; /* Space for scrollbar */
+            gap: 1.5rem; /* Space between avatars */
+            justify-content: center; /* Center items if they don't fill the width */
+            align-items: center;
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: var(--color-primary) var(--color-light-background); /* Firefox */
+        }
+        /* Custom scrollbar for Webkit browsers */
+        .other-members-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .other-members-scroll-container::-webkit-scrollbar-track {
+            background: var(--color-light-background);
+            border-radius: 10px;
+        }
+        .other-members-scroll-container::-webkit-scrollbar-thumb {
+            background: var(--color-primary);
+            border-radius: 10px;
         }
 
-        @media (min-width: 640px) and (max-width: 767px) { /* Small laptops/large phones */
-             #team-members-container {
-                grid-template-columns: repeat(2, 1fr); /* 2 columns for smaller screens */
-            }
-            .nodal-officer-main {
-                grid-column: 1 / -1; /* Full width to stay central */
-            }
+        .other-member-avatar {
+            width: 80px; /* Size for small circular avatars */
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0; /* Prevent shrinking */
+            border: 2px solid var(--color-border);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        }
+        .other-member-avatar:hover {
+            transform: translateY(-5px);
+            border-color: var(--color-primary);
         }
 
+        /* Navigation Arrows */
+        .scroll-navigation {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .scroll-button {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .scroll-button:hover {
+            background-color: #0056b3; /* Darker primary */
+            transform: scale(1.05);
+        }
 
-        /* Custom colors for Tailwind classes */
-        .bg-primary { background-color: var(--color-primary); }
-        .text-primary { color: var(--color-primary); }
-        .hover\:bg-blue-700:hover { background-color: var(--color-blue-700); }
-        .bg-accent { background-color: var(--color-accent); }
-        .hover\:bg-green-700:hover { background-color: var(--color-green-700); }
-        .text-dark { color: var(--color-dark); }
-        .text-secondary { color: var(--color-secondary); }
-        .text-gray { color: var(--color-secondary); } /* Alias for consistency */
-        .bg-dark { background-color: var(--color-dark); }
-        .hover\:text-pink-500:hover { color: var(--color-pink-500); }
-        .hover\:text-blue-700:hover { color: var(--color-blue-700); } /* Added for LinkedIn */
+        /* Footer */
+        footer {
+            background-color: var(--color-dark-text); /* Dark background for footer */
+            color: var(--color-muted-text);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            margin-top: 4rem; /* Space from content */
+        }
+        footer p {
+            font-size: 0.875rem; /* text-sm */
+        }
+        footer .border-t {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 1rem;
+            }
+            .main-header .hidden.md\:flex {
+                display: none; /* Hide desktop nav */
+            }
+            .main-header #mobile-menu-button {
+                display: block; /* Show hamburger */
+            }
+            #team-page {
+                padding: 3rem 1rem;
+            }
+            #team-page h1 {
+                font-size: 2rem;
+            }
+            .featured-member-card {
+                padding: 1.5rem;
+            }
+            .featured-member-img {
+                width: 120px;
+                height: 120px;
+            }
+            .featured-member-name {
+                font-size: 1.5rem;
+            }
+            .other-members-scroll-container {
+                justify-content: flex-start; /* Align left for better mobile scroll experience */
+            }
+        }
     </style>
 </head>
-<body class="font-inter bg-light text-dark">
+<body class="font-inter bg-light-background text-dark-text">
 
-    <header class="bg-white shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <a href="index.html#home" class="flex items-center space-x-2">
-                    <!-- Placeholder logo - replace with your actual logo URL -->
-                    <img src="https://placehold.co/40x40/007BFF/FFFFFF?text=IEDC" alt="IEDC Logo" class="h-10 w-10 rounded-full">
-                    <span class="text-2xl font-bold text-primary">MET'S IEDC</span>
-                </a>
+    <header class="main-header">
+        <a href="index.html#home" class="flex items-center space-x-2">
+            <!-- Logo from previous iteration, adapting to new style -->
+            <img src="https://placehold.co/40x40/007BFF/FFFFFF?text=IEDC" alt="IEDC Logo" class="h-10 w-10 rounded-full">
+            <span class="text-2xl font-bold text-primary">MET'S IEDC</span>
+        </a>
 
-                <nav class="hidden md:flex space-x-4 lg:space-x-6 items-center">
-                    <a href="index.html#home" class="nav-link">Home</a>
-                    <a href="index.html#about" class="nav-link">About Us</a>
-                    <a href="team.html" class="nav-link nav-link-active">Our Team</a>
-                    <a href="index.html#events" class="nav-link">Events</a>
-                    <a href="index.html#initiatives" class="nav-link">Initiatives</a>
-                    <a href="index.html#news" class="nav-link">News</a>
-                    <a href="announcement.html" class="nav-link">Announcements</a>
-                    <a href="index.html#contact" class="nav-link">Contact</a>
-                    <a href="login.html" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-700 transition duration-300">Student Login</a>
-                    <a href="admin_login.html" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition duration-300">Admin Login</a>
-                </nav>
+        <nav class="hidden md:flex space-x-6 items-center">
+            <a href="index.html#home" class="nav-link">Home</a>
+            <a href="index.html#about" class="nav-link">About Us</a>
+            <a href="team.html" class="nav-link nav-link-active">Our Team</a>
+            <a href="index.html#events" class="nav-link">Events</a>
+            <a href="index.html#initiatives" class="nav-link">Initiatives</a>
+            <a href="index.html#news" class="nav-link">News</a>
+            <a href="announcement.html" class="nav-link">Announcements</a>
+            <a href="index.html#contact" class="nav-link">Contact</a>
+            <a href="login.html" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-700 transition duration-300">Student Login</a>
+            <a href="admin_login.html" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition duration-300">Admin Login</a>
+        </nav>
 
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-dark focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-white z-40 pt-20 p-4 md:hidden">
-            <nav class="flex flex-col space-y-4">
-                <a href="index.html#home" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Home</a>
-                <a href="index.html#about" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">About Us</a>
-                <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Our Team</a>
-                <a href="index.html#events" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Events</a>
-                <a href="index.html#initiatives" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Initiatives</a>
-                <a href="index.html#news" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">News</a>
-                <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Announcements</a>
-                <a href="index.html#contact" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Contact</a>
-                <a href="login.html" class="mt-4 block w-full text-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-700 transition duration-300">Student Login</a>
-                <a href="admin_login.html" class="mt-2 block w-full text-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition duration-300">Admin Login</a>
-            </nav>
+        <div class="md:hidden">
+            <button id="mobile-menu-button" class="text-dark-text focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
         </div>
     </header>
 
+    <div id="mobile-menu" class="mobile-menu">
+        <button id="mobile-menu-close-button" class="mobile-menu-close-button">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <nav class="flex flex-col space-y-4 px-4">
+            <a href="index.html#home" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">Home</a>
+            <a href="index.html#about" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">About Us</a>
+            <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">Our Team</a>
+            <a href="index.html#events" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">Events</a>
+            <a href="index.html#initiatives" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">Initiatives</a>
+            <a href="index.html#news" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">News</a>
+            <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">Announcements</a>
+            <a href="index.html#contact" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">Contact</a>
+            <a href="login.html" class="mt-4 block w-full text-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-700 transition duration-300">Student Login</a>
+            <a href="admin_login.html" class="mt-2 block w-full text-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition duration-300">Admin Login</a>
+        </nav>
+    </div>
+
     <main>
-        <section id="team-page" class="page py-16 md:py-24">
+        <section id="team-page">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
-                    <h1 class="text-4xl font-extrabold">Meet Our Dedicated Team</h1>
-                    <p class="text-xl mt-4 max-w-2xl mx-auto">The individuals driving innovation and entrepreneurship at MET'S IEDC.</p>
+                    <h1>Team Members</h1>
+                    <p class="section-description">Meet the dedicated individuals who drive innovation and entrepreneurship at MET'S IEDC.</p>
                 </div>
 
-                <div id="team-members-container">
-                    <p class="text-center col-span-full text-text-on-dark-bg">Loading team members...</p>
+                <!-- Featured Team Member (Nodal Officer) -->
+                <div id="featured-member" class="featured-member-card">
+                    <img id="featured-member-img" src="" alt="Featured Member" class="featured-member-img">
+                    <h2 id="featured-member-name" class="featured-member-name"></h2>
+                    <p id="featured-member-role" class="featured-member-role"></p>
+                    <p id="featured-member-bio" class="featured-member-bio">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                    <div id="featured-member-socials" class="featured-member-socials">
+                        <!-- Social icons will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Other Team Members (Horizontal Scroll) -->
+                <div class="other-members-wrapper">
+                    <div id="other-members-scroll-container" class="other-members-scroll-container">
+                        <!-- Other member avatars will be populated here -->
+                    </div>
+                    <div class="scroll-navigation">
+                        <button id="scroll-left-btn" class="scroll-button">
+                            <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                        </button>
+                        <button id="scroll-right-btn" class="scroll-button">
+                            <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="bg-dark text-gray py-8">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-secondary">
-            <div class="mt-8 border-t border-gray-700 pt-8 text-center">  
+    <footer>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mt-8 border-t pt-8">  
                 <p>&copy; 2025 IEDC MET'S SCHOOL OF ENGINEERING. All Rights Reserved.</p>
                 <p class="mt-2">Powered by Innovation & Entrepreneurship.</p>
                 <p class="mt-2">Developed by Muhammed Shahil.</p>
@@ -372,18 +370,23 @@
     </footer>
 
     <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
         // --- Mobile Menu Logic ---
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuCloseButton = document.getElementById('mobile-menu-close-button');
 
-        if (mobileMenuButton && mobileMenu) {
+        if (mobileMenuButton && mobileMenu && mobileMenuCloseButton) {
             mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('open');
-                if (mobileMenu.classList.contains('open')) {
-                    document.body.style.overflow = 'hidden';
-                } else {
-                    document.body.style.overflow = '';
-                }
+                mobileMenu.classList.add('open');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            });
+
+            mobileMenuCloseButton.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                document.body.style.overflow = ''; // Restore scrolling
             });
 
             mobileMenu.querySelectorAll('a').forEach(link => {
@@ -395,125 +398,152 @@
         }
 
         // --- Team Members Data ---
-        // Nodal Officer is placed first to facilitate central positioning
         const teamMembers = [
             {
                 name: "Mrs.Rekha M",
                 role: "IEDC Nodal Officer",
-                imageUrl: "https://placehold.co/150x150/E12133/FFFFFF?text=RM", // Image with red background to match card
+                imageUrl: "https://placehold.co/150x150/007BFF/FFFFFF?text=RM",
                 instagramUrl: "https://www.instagram.com/rekhamatthew/",
-                linkedinUrl: ""
+                linkedinUrl: "https://www.linkedin.com/in/rekhamatthew-example" // Example
             },
             {
                 name: "Chris Babu",
                 role: "IEDC Student Lead I",
-                imageUrl: "https://placehold.co/150x150/007BFF/FFFFFF?text=CB",
+                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=CB",
                 instagramUrl: "https://www.instagram.com/chris_babu_?igsh=MXVpOG8zbXBrMzloMA==",
                 linkedinUrl: "https://www.linkedin.com/in/chris-babu/"
             },
             {
                 name: "Deena Abbas Kalathil",
                 role: "Student Lead II",
-                imageUrl: "https://placehold.co/150x150/007BFF/FFFFFF?text=DAK",
+                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=DAK",
                 instagramUrl: "https://www.instagram.com/deena_abbas_?igsh=MXZ6NnowYWE3Z2U4Nw==",
                 linkedinUrl: "https://www.linkedin.com/in/deena-abbas-kalathil-2a09bb314"
             },
             {
                 name: "Habeeb Rahman",
                 role: "IPR & Research Lead",
-                imageUrl: "https://placehold.co/150x150/007BFF/FFFFFF?text=HR",
+                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=HR",
                 instagramUrl: "https://www.instagram.com/h.abe.eb?igsh=ZTU5cGlrZGdoOWhv",
                 linkedinUrl: ""
             },
             {
                 name: "Abhijith S Menon",
                 role: "Finance Lead",
-                imageUrl: "https://placehold.co/150x150/007BFF/FFFFFF?text=ASM",
+                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=ASM",
                 instagramUrl: "https://www.instagram.com/.abhijithmenon._?igsh=NmVvYm5xdm53YnBk",
                 linkedinUrl: ""
             },
             {
                 name: "Arshina Arsal",
                 role: "Quality & Operation Lead",
-                imageUrl: "https://placehold.co/150x150/007BFF/FFFFFF?text=AA",
+                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=AA",
                 instagramUrl: "https://www.instagram.com/ar_7_.sh_?igsh=MWExdmk2amZuMmJ4Ng==",
                 linkedinUrl: "https://www.linkedin.com/in/arshina-arsal-8931a5339"
             },
             {
                 name: "Abhinav V S",
                 role: "Branding & Marketing Lead",
-                imageUrl: "https://placehold.co/150x150/007BFF/FFFFFF?text=AVS",
+                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=AVS",
                 instagramUrl: "https://www.instagram.com/abhinav__v_s_/?utm_source=ig_web_button_share_sheet",
                 linkedinUrl: ""
             },
             {
                 name: "Christy Antony",
                 role: "Technology Lead",
-                imageUrl: "https://placehold.co/150x150/007BFF/FFFFFF?text=CA",
+                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=CA",
                 instagramUrl: "https://www.instagram.com/iamkrizte?igsh=MXFhMG5rYmV1YWRxcg==",
                 linkedinUrl: "https://www.linkedin.com/in/christy-antony-b96725331?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app "
             },
             {
                 name: "Muhammed Shahil",
                 role: "Community Lead",
-                imageUrl: "https://placehold.co/150x150/007BFF/FFFFFF?text=MS",
+                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=MS",
                 instagramUrl: "https://www.instagram.com/_zhahil_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
                 linkedinUrl: ""
             },
             {
                 name: "Ajina Mathew",
                 role: "Creative & Innovation Lead",
-                imageUrl: "https://placehold.co/150x150/007BFF/FFFFFF?text=AM",
+                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=AM",
                 instagramUrl: "",
                 linkedinUrl: ""
             },
             {
                 name: "Ann Treesa Saji",
                 role: "Women's Innovation Lead",
-                imageUrl: "https://placehold.co/150x150/007BFF/FFFFFF?text=ATS",
+                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=ATS",
                 instagramUrl: "https://www.instagram.com/__ann_treesa_saji___/?utm_source=ig_web_button_share_sheet",
                 linkedinUrl: "https://www.linkedin.com/in/ann-treesa-saji-286603340?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app "
             }
         ];
 
-        // Function to display team members
+        let currentFeaturedMemberIndex = 0; // Start with the Nodal Officer
+
         function displayTeamMembers() {
-            const container = document.getElementById('team-members-container');
-            container.innerHTML = ''; // Clear loading message
+            const featuredMember = teamMembers[currentFeaturedMemberIndex];
+            const otherMembers = teamMembers.filter((_, index) => index !== currentFeaturedMemberIndex);
 
-            if (teamMembers.length === 0) {
-                container.innerHTML = '<p class="text-center col-span-full text-text-on-dark-bg">No team members to display yet.</p>';
-                return;
+            // Populate Featured Member Card
+            document.getElementById('featured-member-img').src = featuredMember.imageUrl.replace('80x80', '160x160'); // Ensure larger image
+            document.getElementById('featured-member-img').alt = featuredMember.name;
+            document.getElementById('featured-member-name').textContent = featuredMember.name;
+            document.getElementById('featured-member-role').textContent = featuredMember.role;
+            // You might want to add a 'bio' field to your teamMembers data
+            document.getElementById('featured-member-bio').textContent = featuredMember.bio || "Leading the charge in innovation and entrepreneurship, guiding our team to new heights.";
+
+            const featuredSocialsContainer = document.getElementById('featured-member-socials');
+            featuredSocialsContainer.innerHTML = '';
+            if (featuredMember.instagramUrl) {
+                featuredSocialsContainer.innerHTML += `<a href="${featuredMember.instagramUrl}" target="_blank"><i data-lucide="instagram" class="w-6 h-6"></i></a>`;
             }
+            if (featuredMember.linkedinUrl) {
+                featuredSocialsContainer.innerHTML += `<a href="${featuredMember.linkedinUrl}" target="_blank"><i data-lucide="linkedin" class="w-6 h-6"></i></a>`;
+            }
+            lucide.createIcons(); // Re-create icons for featured member
 
-            teamMembers.forEach((member, index) => {
-                let cardClass = '';
-                if (index === 0) { // Apply special class to the Nodal Officer (first in array)
-                    cardClass = 'nodal-officer-main';
-                }
-
-                const memberCard = `
-                    <div class="team-member-card ${cardClass}">
-                        <div class="card-content-top"></div> <!-- Empty div for white top half -->
-                        <img class="team-member-img" src="${member.imageUrl}" alt="${member.name}" onerror="this.src='https://placehold.co/150x150/CCCCCC/FFFFFF?text=No+Image'; this.onerror=null;">
-                        <div class="card-content-bottom">
-                            <h3 class="text-xl font-extrabold mb-1">${member.name}</h3>
-                            <p class="text-md">${member.role}</p>
-                            <div class="social-icons flex justify-center space-x-4">
-                                ${member.instagramUrl ? `<a href="${member.instagramUrl}" target="_blank"><i data-lucide="instagram" class="w-6 h-6"></i></a>` : ''}
-                                ${member.linkedinUrl ? `<a href="${member.linkedinUrl}" target="_blank"><i data-lucide="linkedin" class="w-6 h-6"></i></a>` : ''}
-                            </div>
-                        </div>
-                        <div class="card-vertical-label">IEDC</div>
-                    </div>
-                `;
-                container.innerHTML += memberCard;
+            // Populate Other Members Scroll Container
+            const otherMembersContainer = document.getElementById('other-members-scroll-container');
+            otherMembersContainer.innerHTML = '';
+            otherMembers.forEach((member, index) => {
+                const avatarDiv = document.createElement('div');
+                avatarDiv.classList.add('other-member-avatar');
+                avatarDiv.innerHTML = `<img src="${member.imageUrl}" alt="${member.name}" class="w-full h-full object-cover rounded-full">`;
+                avatarDiv.title = member.name; // Tooltip for name
+                avatarDiv.addEventListener('click', () => {
+                    // Find the index of the clicked member in the original teamMembers array
+                    const originalIndex = teamMembers.findIndex(tm => tm.name === member.name);
+                    if (originalIndex !== -1) {
+                        currentFeaturedMemberIndex = originalIndex;
+                        displayTeamMembers(); // Re-render with new featured member
+                    }
+                });
+                otherMembersContainer.appendChild(avatarDiv);
             });
-            // Re-create Lucide icons after new HTML is added
-            lucide.createIcons();
         }
 
-        // Call the function to display team members when the page loads
+        // --- Horizontal Scroll Navigation ---
+        const scrollContainer = document.getElementById('other-members-scroll-container');
+        const scrollLeftBtn = document.getElementById('scroll-left-btn');
+        const scrollRightBtn = document.getElementById('scroll-right-btn');
+
+        if (scrollContainer && scrollLeftBtn && scrollRightBtn) {
+            scrollLeftBtn.addEventListener('click', () => {
+                scrollContainer.scrollBy({
+                    left: -200, // Scroll left by 200px
+                    behavior: 'smooth'
+                });
+            });
+
+            scrollRightBtn.addEventListener('click', () => {
+                scrollContainer.scrollBy({
+                    left: 200, // Scroll right by 200px
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Initial display on page load
         document.addEventListener('DOMContentLoaded', displayTeamMembers);
     </script>
 </body>
