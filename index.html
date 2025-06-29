@@ -165,6 +165,151 @@
             background-color: rgba(255, 255, 255, 1);
             color: #000;
         }
+        <style>
+    /* Basic smooth scroll */
+    html {
+        scroll-behavior: smooth;
+    }
+    /* Active Nav Link Style */
+    .nav-link-active {
+        color: var(--color-primary); /* Using CSS variable */
+        font-weight: 600;
+        border-bottom: 2px solid var(--color-primary); /* Using CSS variable */
+    }
+    .nav-link {
+        padding-bottom: 0.25rem; /* For the border to sit nicely */
+        border-bottom: 2px solid transparent; /* Make space for active border */
+        transition: color 0.3s ease, border-bottom-color 0.3s ease;
+    }
+    .nav-link:hover {
+        color: var(--color-primary); /* Using CSS variable */
+    }
+    .hero-section {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/343A40/FFFFFF?text=IEDC+Innovation+Hub') no-repeat center center;
+        background-size: cover;
+    }
+    .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    /* Page transition placeholder - can be expanded with JS */
+    .page {
+        display: none; /* Hidden by default */
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    .page.active {
+        display: block; /* Shown when active */
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .mobile-menu {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+    }
+    .mobile-menu.open {
+        transform: translateX(0);
+    }
+    /* Ensure body has some padding if using sticky header */
+    body {
+        padding-top: 0; /* Removed padding-top from body, handled by page sections */
+    }
+    
+    /* NEW: Process Section Colors and Styles */
+    :root {
+        /* Existing colors should be here */
+        --color-primary: #007BFF;
+        --color-accent: #28A745;
+        --color-light: #F8F9FA; /* Changed to F8F9FA for page bg */
+        --color-dark: #343A40;
+        --color-secondary: #6C757D;
+
+        /* New colors for the Process section */
+        --color-process-green-light: #8DC63F; /* Light green for the number/icon box */
+        --color-process-green-dark: #6B9E2B; /* Darker green for text in box */
+        --color-process-bg-light: #F4F7FC; /* Overall background for this section, from image */
+        --color-process-card-bg: #FFFFFF; /* White for the main description card */
+        --color-process-shadow: rgba(0, 0, 0, 0.1); /* Subtle shadow for process cards */
+    }
+
+    #our-process {
+        background-color: var(--color-process-bg-light); /* Apply the new light background */
+        color: var(--color-dark); /* Ensure main text is dark */
+    }
+
+    /* Styling for each process step card */
+    .process-step-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center horizontally */
+        margin-bottom: 2rem; /* Space between steps in grid */
+    }
+
+    /* Styling for the green number and icon box */
+    .step-number-icon-wrapper {
+        background-color: var(--color-process-green-light);
+        color: var(--color-process-green-dark); /* Darker green text/icon */
+        border-radius: 0.75rem; /* Base rounded corners */
+        border-top-left-radius: 2.5rem; /* Larger border radius for top-left */
+        border-bottom-right-radius: 2.5rem; /* Larger border radius for bottom-right */
+        padding: 1.25rem 2rem; /* Adjust padding to fit content */
+        display: flex;
+        align-items: center;
+        gap: 0.75rem; /* Space between number and icon */
+        font-weight: 800; /* Extra bold */
+        font-size: 1.875rem; /* text-3xl for the number */
+        position: relative;
+        z-index: 2; /* Ensure it's above the content card for the pointer */
+        box-shadow: 0 4px 8px var(--color-process-shadow); /* Shadow for the green box */
+    }
+
+    .step-number-icon-wrapper .step-icon {
+        width: 1.875rem; /* text-3xl icon size */
+        height: 1.875rem;
+        stroke-width: 2.5px; /* Thicker stroke for icons */
+    }
+
+    /* Styling for the content box */
+    .step-content {
+        background-color: var(--color-process-card-bg);
+        border-radius: 0.75rem; /* Standard rounded corners */
+        padding: 2rem; /* Padding inside the content box */
+        margin-top: -1.5rem; /* Overlap with the green box */
+        position: relative;
+        z-index: 1; /* Below the green box */
+        box-shadow: 0 4px 8px var(--color-process-shadow); /* Shadow for the content box */
+        text-align: left; /* Align text to left */
+        padding-top: 3rem; /* Increase top padding to create space for overlap + pointer */
+    }
+
+    /* Pseudo-element for the pointer/tail */
+    .step-content::before {
+        content: '';
+        position: absolute;
+        top: -14px; /* Position it slightly above to overlap the green box */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 15px solid transparent; /* Triangle base */
+        border-right: 15px solid transparent; /* Triangle base */
+        border-bottom: 15px solid var(--color-process-card-bg); /* Triangle pointer color (white) */
+        z-index: 3; /* Ensure pointer is on top of content box and below green box if needed */
+    }
+
+    .step-content .step-title {
+        font-size: 1.125rem; /* text-lg */
+        font-weight: 700;
+        color: var(--color-process-green-dark); /* Title color from image */
+        margin-bottom: 0.5rem;
+    }
+
+    .step-content .step-description {
+        font-size: 0.95rem;
+        color: var(--color-muted-text);
+        line-height: 1.6;
+    }
     </style>
 </head>
 <body class="font-inter bg-light text-dark">
@@ -342,44 +487,60 @@
                 </div>
             </section>
 
-            <section class="py-16 bg-light">
-                <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center mb-12">
-                        <h2 class="text-3xl font-bold text-dark">Upcoming Events</h2>
-                        <p class="text-secondary mt-2">Join our workshops, bootcamps, and competitions.</p>
-                    </div>
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="bg-white p-6 rounded-lg shadow-lg card-hover transition-all duration-300">
-                                <img src="https://placehold.co/400x250/FFC107/333333?text=NO EVENT" alt="Event 2" class="rounded-md mb-4 w-full h-48 object-cover">
-                            <h3 class="text-xl font-semibold text-primary mb-2">NA</h3>
-                            <p class="text-sm text-secondary mb-1"><span class="font-semibold">Date:</span>NA</p>
-                            <p class="text-sm text-secondary mb-3"><span class="font-semibold">Venue:</span> NA</p>
-                            <p class="text-secondary text-sm mb-4">NA</p>
-                            <a href="#events" class="text-accent hover:underline font-medium page-link">Learn More & Register</a>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-lg card-hover transition-all duration-300">
-                            <img src="https://placehold.co/400x250/FFC107/333333?text=NO EVENT" alt="Event 2" class="rounded-md mb-4 w-full h-48 object-cover">
-                            <h3 class="text-xl font-semibold text-primary mb-2">NA</h3>
-                            <p class="text-sm text-secondary mb-1"><span class="font-semibold">Date:</span> NA</p>
-                            <p class="text-sm text-secondary mb-3"><span class="font-semibold">Venue:</span> NA</p>
-                            <p class="text-secondary text-sm mb-4">NA</p>
-                            <a href="#events" class="text-accent hover:underline font-medium page-link">Learn More & Register</a>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-lg card-hover transition-all duration-300">
-                            <img src="https://placehold.co/400x250/17A2B8/FFFFFF?text=NO EVENT" alt="Event 3" class="rounded-md mb-4 w-full h-48 object-cover">
-                            <h3 class="text-xl font-semibold text-primary mb-2">NA</h3>
-                            <p class="text-sm text-secondary mb-1"><span class="font-semibold">Date:</span> NA</p>
-                            <p class="text-sm text-secondary mb-3"><span class="font-semibold">Venue:</span> NA</p>
-                            <p class="text-secondary text-sm mb-4">NA</p>
-                            <a href="#events" class="text-accent hover:underline font-medium page-link">Learn More & Register</a>
-                        </div>
-                    </div>
-                     <div class="text-center mt-12">
-                        <a href="#events" class="bg-primary hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg text-lg transition duration-300 page-link">View All Events</a>
-                    </div>
+            <section class="py-16" id="our-process">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-dark">Our Process</h2>
+            <p class="text-secondary mt-2">Follow these simple steps to understand how we work.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Step 1 -->
+            <div class="process-step-card">
+                <div class="step-number-icon-wrapper">
+                    <span class="step-number">01</span>
+                    <i data-lucide="home" class="step-icon"></i>
                 </div>
-            </section>
-
+                <div class="step-content">
+                    <h3 class="step-title">STEP ONE</h3>
+                    <p class="step-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p>
+                </div>
+            </div>
+            <!-- Step 2 -->
+            <div class="process-step-card">
+                <div class="step-number-icon-wrapper">
+                    <span class="step-number">02</span>
+                    <i data-lucide="alarm-clock" class="step-icon"></i>
+                </div>
+                <div class="step-content">
+                    <h3 class="step-title">STEP TWO</h3>
+                    <p class="step-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p>
+                </div>
+            </div>
+            <!-- Step 3 (Visually "04" in your image) -->
+            <div class="process-step-card">
+                <div class="step-number-icon-wrapper">
+                    <span class="step-number">04</span>
+                    <i data-lucide="mail" class="step-icon"></i>
+                </div>
+                <div class="step-content">
+                    <h3 class="step-title">STEP FOUR</h3>
+                    <p class="step-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p>
+                </div>
+            </div>
+            <!-- Step 4 (Visually "03" in your image) -->
+            <div class="process-step-card">
+                <div class="step-number-icon-wrapper">
+                    <span class="step-number">03</span>
+                    <i data-lucide="message-circle-code" class="step-icon"></i>
+                </div>
+                <div class="step-content">
+                    <h3 class="step-title">STEP THREE</h3>
+                    <p class="step-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
             <section class="py-16 bg-white">
                 <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center mb-12">
