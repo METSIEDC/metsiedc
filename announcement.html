@@ -232,20 +232,6 @@
             text-align: center;
         }
 
-        /* Loading spinner for announcements */
-        .loading-spinner-announcements {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: var(--color-primary-blue);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         /* Responsive Adjustments */
         @media (max-width: 767px) {
             .hero-section {
@@ -391,9 +377,9 @@
         <!-- Announcement List -->
         <section class="announcement-list-container">
             <div class="container">
-                <div id="announcements-list" class="flex flex-col gap-4 items-center justify-center py-10">
-                    <div class="loading-spinner-announcements" id="loadingSpinner"></div>
-                    <p class="text-center text-muted w-full" id="noAnnouncementsMessage">Initializing app and connecting to database...</p>
+                <div id="announcements-list" class="flex flex-col gap-4">
+                    <!-- Announcements will be loaded here by JavaScript -->
+                    <!-- Initial content will be rendered by renderAnnouncements() on DOMContentLoaded -->
                 </div>
             </div>
         </section>
@@ -406,71 +392,48 @@
         </div>
     </footer>
 
-    <!-- Firebase SDK Imports -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, query, onSnapshot, orderBy, setDoc, getDocs, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <script>
+        // Initialize Lucide icons on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
 
-        // Global Firebase variables (provided by Canvas environment)
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        // IMPORTANT: Ensure firebaseConfig is parsed safely and checked for validity
-        let firebaseConfig = {};
-        if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-            try {
-                firebaseConfig = JSON.parse(__firebase_config);
-                // Basic validation: Check if essential properties exist
-                if (!firebaseConfig.apiKey || !firebaseConfig.projectId || !firebaseConfig.appId) {
-                    throw new Error("Invalid Firebase config: Missing essential properties.");
-                }
-            } catch (error) {
-                console.error("Error parsing __firebase_config:", error);
-                document.getElementById('noAnnouncementsMessage').textContent = "Error: Invalid Firebase configuration. Check console.";
-                document.getElementById('loadingSpinner').classList.add('hidden');
-                // Exit early if config is bad
-                throw new Error("Firebase configuration error."); 
-            }
-        } else {
-            console.error("__firebase_config is undefined or empty. Cannot initialize Firebase.");
-            document.getElementById('noAnnouncementsMessage').textContent = "Error: Firebase configuration missing.";
-            document.getElementById('loadingSpinner').classList.add('hidden');
-            // Exit early if config is missing
-            throw new Error("Firebase configuration missing.");
-        }
-        
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        // --- Mobile Menu Logic ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
 
-        let app;
-        let db;
-        let auth;
-        let currentUserId = null; 
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling background
+        });
 
-        // Initialize Firebase
-        try {
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-            console.log("Firebase app and Firestore initialized successfully.");
-        } catch (error) {
-            console.error("Error initializing Firebase:", error);
-            document.getElementById('noAnnouncementsMessage').textContent = "Error: Firebase initialization failed. Check console for details.";
-            document.getElementById('loadingSpinner').classList.add('hidden');
-            // Exit early if Firebase failed to initialize
-            throw new Error("Firebase initialization failed."); 
-        }
+        closeMobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+            document.body.style.overflow = ''; // Restore scrolling
+        });
 
-        // Dummy Announcements Data to Seed (These will be added only once if the collection is empty)
-        const initialAnnouncements = [
+        // Close mobile menu when a link is clicked inside it
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // --- Announcements Data (Hardcoded directly in JS) ---
+        // This is the data that will be displayed on the page.
+        const allAnnouncementsData = [
             {
                 title: "The Official Interview Instructions and Final Shortlist",
                 description: "The final shortlist for IEDC METS Core Team interviews is out — with names, departments, interview time slots, and Zoom guidelines included. Check the official circular for full details.",
                 category: "news",
                 date: "Jun 23",
                 year: "2025",
-                fileUrl: "https://innovate.startupmission.in/wp-content/uploads/2023/10/IEDC_Circulars_2024_07.pdf", // Placeholder URL
+                fileUrl: "https://innovate.startupmission.in/wp-content/uploads/2023/10/IEDC_Circulars_2024_07.pdf", // Example URL
                 fileName: "_IEDC_METS_2025_07.pdf",
                 uploadedBy: "Admin",
-                timestamp: Date.now() - (1000 * 60 * 60 * 24 * 5)
+                timestamp: 1719200000000 // Example timestamp for sorting (ms since epoch)
             },
             {
                 title: "Core Team Recruitment 2025",
@@ -478,10 +441,10 @@
                 category: "news",
                 date: "Jun 16",
                 year: "2025",
-                fileUrl: "https://innovate.startupmission.in/wp-content/uploads/2023/10/IEDC_Circulars_2024_04.pdf", // Placeholder URL
+                fileUrl: "https://innovate.startupmission.in/wp-content/uploads/2023/10/IEDC_Circulars_2024_04.pdf", // Example URL
                 fileName: "IEDC_METS_2025_04.pdf",
                 uploadedBy: "Admin",
-                timestamp: Date.now() - (1000 * 60 * 60 * 24 * 12)
+                timestamp: 1718600000000
             },
             {
                 title: "IEDC Member Eligibility Criteria Released",
@@ -489,10 +452,10 @@
                 category: "activities",
                 date: "May 23",
                 year: "2025",
-                fileUrl: "https://innovate.startupmission.in/wp-content/uploads/2023/10/IEDC_Circulars_2024_06.pdf", // Placeholder URL
+                fileUrl: "https://innovate.startupmission.in/wp-content/uploads/2023/10/IEDC_Circulars_2024_06.pdf", // Example URL
                 fileName: "IEDC_Member_Eligibility_Criteria.pdf",
                 uploadedBy: "Admin",
-                timestamp: Date.now() - (1000 * 60 * 60 * 24 * 35)
+                timestamp: 1716300000000
             },
             {
                 title: "Mandatory Presence and Leave Approval for Execcom Members",
@@ -500,10 +463,10 @@
                 category: "activities",
                 date: "Jun 03",
                 year: "2025",
-                fileUrl: "https://innovate.startupmission.in/wp-content/uploads/2023/10/IEDC_Circulars_2024_05.pdf", // Placeholder URL
+                fileUrl: "https://innovate.startupmission.in/wp-content/uploads/2023/10/IEDC_Circulars_2024_05.pdf", // Example URL
                 fileName: "Mandatory_Presence_Leave_Approval.pdf",
                 uploadedBy: "Admin",
-                timestamp: Date.now() - (1000 * 60 * 60 * 24 * 25)
+                timestamp: 1717400000000
             },
             {
                 title: "Upcoming Workshop: Introduction to IoT",
@@ -511,10 +474,10 @@
                 category: "news",
                 date: "Jul 10",
                 year: "2025",
-                fileUrl: "",
+                fileUrl: "", // No file for this one
                 fileName: "",
                 uploadedBy: "Team Lead",
-                timestamp: Date.now() + (1000 * 60 * 60 * 24 * 10)
+                timestamp: 1720600000000
             },
             {
                 title: "Annual Tech Fest Dates Announced!",
@@ -522,93 +485,22 @@
                 category: "news",
                 date: "Aug 01",
                 year: "2025",
-                fileUrl: "",
+                fileUrl: "", // No file for this one
                 fileName: "",
                 uploadedBy: "Event Coordinator",
-                timestamp: Date.now() + (1000 * 60 * 60 * 24 * 40)
+                timestamp: 1722500000000
             }
-        ];
+        ].sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp descending (newest first)
 
 
-        // Function to seed initial announcements into Firestore if the collection is empty
-        async function seedAnnouncements() {
-            if (!db) {
-                console.error("Firestore DB instance is null in seedAnnouncements. Skipping.");
-                return;
-            }
-
-            const announcementsCollectionRef = collection(db, `artifacts/${appId}/public/data/announcements`);
-            
-            try {
-                // Using getDocs to fetch documents and check if the collection is empty
-                const q = query(announcementsCollectionRef);
-                const snapshot = await getDocs(q);
-
-                if (snapshot.empty) {
-                    console.log("Announcements collection is empty, seeding initial data...");
-                    for (const announcement of initialAnnouncements) {
-                        // Using a more robust unique ID with timestamp and a random string
-                        const docId = `announcement_${announcement.timestamp}_${Math.random().toString(36).substring(2, 10)}`;
-                        await setDoc(doc(announcementsCollectionRef, docId), announcement);
-                    }
-                    console.log("Initial announcements seeded.");
-                } else {
-                    console.log("Announcements collection already contains data, skipping seeding.");
-                }
-            } catch (error) {
-                console.error("Error during seeding process:", error);
-                // Do not rethrow, allow the app to continue trying to fetch data
-            }
-        }
-
-
-        // Authenticate user anonymously
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUserId = user.uid;
-                console.log("Authenticated as:", currentUserId);
-                // Ensure db is available before trying to seed/listen
-                if (db) {
-                    await seedAnnouncements(); // Ensure announcements exist first
-                    setupAnnouncementsListener(); // Then, set up the real-time listener
-                } else {
-                     console.error("Firestore DB instance not available after authentication. Cannot set up listener.");
-                     noAnnouncementsMessage.textContent = "Error: Database not ready after authentication.";
-                     loadingSpinner.classList.add('hidden');
-                }
-            } else {
-                try {
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                        console.log("Signed in with custom token.");
-                    } else {
-                        await signInAnonymously(auth);
-                        console.log("Signed in anonymously.");
-                    }
-                } catch (error) {
-                    console.error("Error during authentication:", error);
-                    noAnnouncementsMessage.textContent = "Authentication failed. Please refresh the page.";
-                    loadingSpinner.classList.add('hidden');
-                }
-            }
-        });
-
-
-        // Global variable to store fetched announcements
-        let allAnnouncements = [];
         let currentFilter = 'all'; // Default filter
         const announcementsList = document.getElementById('announcements-list');
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        const noAnnouncementsMessage = document.getElementById('noAnnouncementsMessage');
         const searchInput = document.getElementById('searchInput');
-
 
         // Function to render announcements based on filter and search query
         function renderAnnouncements() {
-            loadingSpinner.classList.add('hidden'); // Always hide spinner when render is called
-            
             const searchQuery = searchInput.value.toLowerCase();
-            const filteredAnnouncements = allAnnouncements.filter(announcement => {
+            const filteredAnnouncements = allAnnouncementsData.filter(announcement => {
                 const matchesCategory = currentFilter === 'all' || announcement.category === currentFilter;
                 const matchesSearch = announcement.title.toLowerCase().includes(searchQuery) ||
                                       announcement.description.toLowerCase().includes(searchQuery);
@@ -618,11 +510,10 @@
             announcementsList.innerHTML = ''; // Clear previous content
 
             if (filteredAnnouncements.length === 0) {
-                noAnnouncementsMessage.textContent = `No announcements found matching your criteria.`;
-                noAnnouncementsMessage.classList.remove('hidden');
+                announcementsList.innerHTML = `
+                    <p class="text-center text-muted py-10 w-full">No announcements found matching your criteria.</p>
+                `;
                 return;
-            } else {
-                noAnnouncementsMessage.classList.add('hidden'); // Hide message if results exist
             }
 
             filteredAnnouncements.forEach(announcement => {
@@ -671,57 +562,9 @@
         // Event listener for search input
         searchInput.addEventListener('input', renderAnnouncements);
 
-        // --- Firebase Firestore Listener for Announcements ---
-        function setupAnnouncementsListener() {
-            if (!db) {
-                console.error("Firestore DB instance is null in setupAnnouncementsListener. Cannot set up listener.");
-                noAnnouncementsMessage.textContent = "Error: Database not ready.";
-                loadingSpinner.classList.add('hidden');
-                return;
-            }
-
-            // Show loading state while fetching data
-            loadingSpinner.classList.remove('hidden');
-            noAnnouncementsMessage.textContent = 'Fetching announcements...';
-            noAnnouncementsMessage.classList.remove('hidden');
-
-            const announcementsCollectionRef = collection(db, `artifacts/${appId}/public/data/announcements`);
-            // Ordering by timestamp ensures the latest announcements are at the top
-            const q = query(announcementsCollectionRef, orderBy('timestamp', 'desc')); 
-
-            // onSnapshot provides real-time updates
-            onSnapshot(q, (snapshot) => {
-                allAnnouncements = [];
-                if (snapshot.empty) {
-                    console.log("No announcements found in Firestore.");
-                    noAnnouncementsMessage.textContent = "No announcements available yet.";
-                    noAnnouncementsMessage.classList.remove('hidden');
-                    loadingSpinner.classList.add('hidden');
-                    return;
-                }
-                snapshot.forEach((doc) => {
-                    allAnnouncements.push(doc.data());
-                });
-                console.log(`Announcements fetched: ${allAnnouncements.length} items.`); 
-                renderAnnouncements(); // Render announcements after fetching
-            }, (error) => {
-                console.error("Error fetching announcements:", error);
-                noAnnouncementsMessage.textContent = "Error loading announcements. Please try again.";
-                loadingSpinner.classList.add('hidden');
-            });
-        }
-
-        // Initial setup on page load:
+        // Initial render on page load
         document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons(); // For static icons in header etc.
-
-            loadingSpinner.classList.remove('hidden');
-            noAnnouncementsMessage.textContent = 'Initializing app and connecting to database...';
-            noAnnouncementsMessage.classList.remove('hidden');
-
-            // The onAuthStateChanged listener at the global scope will automatically
-            // handle Firebase authentication and, once authenticated,
-            // will call seedAnnouncements and setupAnnouncementsListener.
+            renderAnnouncements(); // Populate announcements on page load
         });
     </script>
 </body>
