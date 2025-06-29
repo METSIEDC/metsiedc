@@ -6,93 +6,209 @@
     <title>User Dashboard - MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons for a clean, modern look -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        /* NEW Color Palette based on provided image */
+        :root {
+            --color-light-background: #F8F8FA; /* Very light background for body/main content */
+            --color-sidebar-background: #FFFFFF; /* Pure white for sidebar and cards */
+            --color-dark-text: #333333; /* Dark gray for headings and main text */
+            --color-muted-text: #7A7A80; /* Muted gray for secondary text/labels */
+            --color-accent-purple: #8C6CEF; /* Vibrant purple from the image */
+            --color-accent-purple-light: #F0EDFD; /* Very light purple for banner background */
+            --color-accent-purple-dark: #6E53CC; /* Darker purple for hover */
+            --color-accent-yellow: #FFC107; /* Yellow for specific highlight cards */
+            --color-accent-blue: #60BEEF; /* Light blue for specific highlight cards */
+            --color-border-light: #E0E0E0; /* Light gray for subtle borders */
+            --color-border-subtle-dark: #D4D4D8; /* Slightly darker light border */
+            --color-shadow-light: rgba(0, 0, 0, 0.05); /* Light shadow for cards */
+            --color-shadow-medium: rgba(0, 0, 0, 0.1); /* Medium shadow for hover/header */
+            --color-red-error: #EF4444; /* Standard Red */
+            --color-green-success: #22C55E; /* Standard Green */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #1a202c; /* Dark background */
-            color: #e2e8f0; /* Light text for contrast */
+            background-color: var(--color-light-background);
+            color: var(--color-dark-text);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            /* Flex layout for sidebar and main content */
         }
-        header {
-            background-color: #2d3748; /* Slightly lighter dark for header */
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* More prominent shadow */
-            padding: 1rem 0;
+
+        /* Sidebar specific styles */
+        .sidebar {
+            width: 250px; /* Fixed width for sidebar */
+            background-color: var(--color-sidebar-background);
+            box-shadow: 2px 0 10px var(--color-shadow-light); /* Shadow on the right */
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0; /* Prevent sidebar from shrinking */
             position: sticky;
             top: 0;
-            z-index: 100;
+            height: 100vh; /* Make sidebar take full viewport height */
+            overflow-y: auto; /* Enable scrolling for long content */
+            z-index: 100; /* Ensure it stays on top */
         }
-        main {
-            flex-grow: 1;
-            padding: 3rem 0; /* Increased padding */
+
+        .sidebar-nav-item {
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0.5rem;
+            color: var(--color-muted-text);
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            width: 100%;
+            cursor: pointer;
         }
-        footer {
-            background-color: #1a202c; /* Consistent dark footer */
-            color: #a0aec0;
-            padding: 2.5rem 0;
-            text-align: center;
-            border-top: 1px solid #4a5568; /* Subtle border */
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem; /* Increased horizontal padding */
-        }
-        .text-brand-primary {
-            color: #f7f8fa; /* A vibrant purple-blue */
-        }
-        .bg-brand-primary {
-            background-color: #667eea;
-        }
-        .hover\:bg-brand-primary-dark:hover {
-            background-color: #5a67d8; /* Darker purple-blue on hover */
-        }
-        .loading-spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-left-color: #ffffff;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .tab-button {
-            padding: 0.9rem 2rem; /* Larger padding */
-            border-radius: 9999px; /* Pill shape */
+
+        .sidebar-nav-item.active {
+            background-color: var(--color-accent-purple-light); /* Light purple background for active */
+            color: var(--color-accent-purple); /* Vibrant purple text for active */
             font-weight: 600;
-            color: #a0aec0; /* Lighter gray for inactive tabs */
-            transition: all 0.3s ease-in-out;
-            background-color: #2d3748; /* Darker background for tabs */
-            margin: 0 0.5rem; /* Space between tabs */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-        .tab-button.active {
-            background-color: #667eea; /* Primary accent color for active tab */
-            color: #ffffff;
-            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4); /* Glow effect */
-            transform: translateY(-2px);
+
+        .sidebar-nav-item:hover:not(.active) {
+            background-color: #F3F3F5; /* Subtle hover background */
+            color: var(--color-dark-text);
         }
-        .tab-button:hover:not(.active) {
-            color: #cbd5e1;
-            background-color: #4a5568; /* Slightly lighter dark on hover */
-            transform: translateY(-1px);
+
+        .sidebar-bottom-item {
+            margin-top: auto; /* Pushes item to the bottom */
+            border-top: 1px solid var(--color-border-light);
+            padding-top: 1.5rem;
+            width: 100%;
+            text-align: center;
         }
+
+        /* Main content area styles */
+        .main-content {
+            flex-grow: 1;
+            padding: 2.5rem 3rem; /* Generous padding */
+            overflow-y: auto; /* Enable scrolling for main content */
+        }
+
+        /* Header in main content */
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--color-border-light);
+            padding-bottom: 1.5rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--color-accent-purple);
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-left: 1rem; /* Space from name */
+        }
+        .header-icons .lucide {
+            color: var(--color-muted-text);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .header-icons .lucide:hover {
+            color: var(--color-dark-text);
+        }
+
+        /* Dashboard Banner */
+        .dashboard-banner {
+            background-color: var(--color-accent-purple-light); /* Light purple background */
+            border-radius: 1rem;
+            padding: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            overflow: hidden; /* For the illustration */
+            position: relative;
+        }
+        .dashboard-banner h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-dark-text);
+            margin-bottom: 0.5rem;
+        }
+        .dashboard-banner p {
+            color: var(--color-muted-text);
+            font-size: 1.1rem;
+        }
+        .dashboard-banner-illustration {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 250px; /* Adjust size of illustration */
+            height: 250px;
+            opacity: 0.7; /* Make it subtle */
+            pointer-events: none; /* Ensure it doesn't block clicks */
+        }
+        /* Dashboard Overview Cards */
+        .overview-card {
+            background-color: var(--color-sidebar-background);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px var(--color-shadow-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 0.5rem;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .overview-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px var(--color-shadow-medium);
+        }
+        .overview-card .icon-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+            font-size: 1.5rem;
+        }
+        .overview-card.yellow .icon-circle { background-color: var(--color-accent-yellow); color: white; }
+        .overview-card.purple .icon-circle { background-color: var(--color-accent-purple); color: white; }
+        .overview-card.blue .icon-circle { background-color: var(--color-accent-blue); color: white; }
+        .overview-card .value {
+            font-size: 2.25rem; /* text-4xl equivalent */
+            font-weight: 800; /* font-extrabold equivalent */
+            color: var(--color-dark-text);
+            line-height: 1; /* Tighten line height */
+        }
+        .overview-card .label {
+            font-size: 0.95rem;
+            color: var(--color-muted-text);
+            font-weight: 500;
+        }
+
+        /* General Card/Content Styling (for tab sections) */
         .tab-content {
-            /* Removed display: none; and display: block; from here.
-               Visibility is now controlled by Tailwind's 'hidden' class. */
-            padding: 2.5rem; /* Increased padding for content */
-            background-color: #2d3748; /* Content background */
-            border-radius: 1rem; /* More rounded corners */
-            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3), 0 5px 10px -5px rgba(0, 0, 0, 0.1); /* Deeper shadow */
-            border: 1px solid #4a5568; /* Subtle border */
+            background-color: var(--color-sidebar-background);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            box-shadow: 0 4px 10px var(--color-shadow-light);
+            margin-top: 2rem; /* Space between overview and tabs */
         }
+
         /* Form input styling */
         input[type="text"],
         input[type="tel"],
@@ -101,17 +217,17 @@
         input[type="url"],
         textarea,
         select {
-            background-color: #4a5568; /* Darker input background */
-            border: 1px solid #667eea; /* Primary accent border */
-            border-radius: 0.75rem; /* More rounded corners */
-            padding: 0.9rem 1.25rem; /* Increased padding */
-            color: #e2e8f0; /* Light text color */
+            background-color: var(--color-light-background); /* Lighter background for inputs */
+            border: 1px solid var(--color-border-subtle-dark);
+            border-radius: 0.5rem; /* Slightly less rounded */
+            padding: 0.8rem 1rem;
+            color: var(--color-dark-text);
             transition: all 0.2s ease-in-out;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
         input[type="text"]::placeholder,
         textarea::placeholder {
-            color: #a0aec0; /* Lighter placeholder text */
+            color: var(--color-muted-text);
         }
         input[type="text"]:focus,
         input[type="tel"]:focus,
@@ -120,201 +236,425 @@
         input[type="url"]:focus,
         textarea:focus,
         select:focus {
-            border-color: #805ad5; /* A slightly different accent on focus */
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.3); /* More prominent focus ring */
+            border-color: var(--color-accent-purple);
+            box-shadow: 0 0 0 3px rgba(140, 108, 239, 0.2); /* Purple focus ring */
             outline: none;
         }
+
         /* Button styling */
-        button[type="submit"],
-        .action-button {
-            padding: 1rem 2rem; /* Larger buttons */
-            font-weight: 700;
-            border-radius: 0.75rem; /* Rounded button corners */
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Deeper button shadow */
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        .action-button,
+        button[type="submit"] {
+            padding: 0.8rem 1.8rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 2px 5px var(--color-shadow-light);
+            text-transform: capitalize; /* More natural capitalization */
+            letter-spacing: normal;
         }
-        button[type="submit"]:hover,
-        .action-button:hover {
-            transform: translateY(-3px); /* More pronounced lift on hover */
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Even deeper shadow on hover */
+        .action-button:hover,
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--color-shadow-medium);
         }
         /* Specific button colors */
-        .bg-green-600 { background-color: #48bb78; } /* Tailwind green-500 */
-        .hover\:bg-green-700:hover { background-color: #38a169; } /* Tailwind green-600 */
-        .bg-blue-600 { background-color: #667eea; } /* Primary purple-blue */
-        .hover\:bg-blue-700:hover { background-color: #5a67d8; } /* Darker purple-blue */
-        .bg-purple-600 { background-color: #805ad5; } /* Tailwind violet-500 */
-        .hover\:bg-purple-700:hover { background-color: #6b46c1; } /* Tailwind violet-600 */
-        .bg-orange-600 { background-color: #ed8936; } /* Tailwind orange-500 */
-        .hover\:bg-orange-700:hover { background-color: #dd6b20; } /* Tailwind orange-600 */
-        .bg-red-600 { background-color: #f56565; } /* Tailwind red-500 */
-        .hover\:bg-red-700:hover { background-color: #e53e3e; } /* Tailwind red-600 */
+        .bg-primary-action { background-color: var(--color-accent-purple); color: white; }
+        .hover\:bg-primary-action-dark:hover { background-color: var(--color-accent-purple-dark); }
+        .bg-red-action { background-color: var(--color-red-error); color: white; }
+        .hover\:bg-red-action-dark:hover { background-color: var(--color-button-logout-hover); } /* Fix for variable name */
 
         /* Status Message Styling */
         .status-message {
             padding: 1rem 1.25rem;
-            border-radius: 0.75rem;
+            border-radius: 0.5rem;
             margin-bottom: 1.5rem;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 500;
             display: flex;
             align-items: center;
             gap: 0.75rem;
         }
         .status-message.error {
-            background-color: #fed7d7; /* Red-100 */
-            color: #c53030; /* Red-700 */
-            border: 1px solid #fc8181; /* Red-400 */
+            background-color: #FEE2E2; /* Red-100 */
+            color: var(--color-red-error);
+            border: 1px solid var(--color-red-error);
         }
         .status-message.success {
-            background-color: #c6f6d5; /* Green-100 */
-            color: #2f855a; /* Green-700 */
-            border: 1px solid #68d391; /* Green-400 */
+            background-color: #DCFCE7; /* Green-100 */
+            color: var(--color-green-success);
+            border: 1px solid var(--color-green-success);
         }
 
-        /* Responsive adjustments */
-        @media (min-width: 768px) {
-            .tab-content.grid {
-                grid-template-columns: 1fr 1.2fr; /* Adjust column ratio for profile section */
-            }
-        }
         /* Profile Info specific styling */
         .profile-info-item {
             display: flex;
-            align-items: center;
-            gap: 0.75rem; /* Space between icon and text */
-            padding: 0.5rem 0;
-            border-bottom: 1px dashed #4a5568; /* Subtle dashed line */
+            align-items: flex-start; /* Align items to start for multi-line text */
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px dashed var(--color-border-light);
+            color: var(--color-dark-text); /* Ensure text is dark for readability */
         }
         .profile-info-item:last-child {
-            border-bottom: none; /* No border for the last item */
+            border-bottom: none;
         }
         .profile-info-item svg {
-            color: #667eea; /* Icon color */
-            flex-shrink: 0; /* Prevent icon from shrinking */
+            color: var(--color-accent-purple); /* Icon color */
+            flex-shrink: 0;
+            margin-top: 0.2rem; /* Slight adjustment for icon alignment */
+        }
+        .profile-info-item .label {
+            font-weight: 600; /* Bolder label */
+            color: var(--color-dark-text);
+            flex-shrink: 0;
+            width: 100px; /* Fixed width for labels for alignment */
+        }
+        .profile-info-item .value {
+            color: var(--color-muted-text);
+            flex-grow: 1; /* Value takes remaining space */
+        }
+        .profile-image-placeholder {
+            width: 100px; /* Smaller, cleaner profile image */
+            height: 100px;
+            background-color: var(--color-accent-purple-light); /* Light purple background */
+            border: 3px solid var(--color-accent-purple); /* Purple border */
+            box-shadow: 0 2px 8px var(--color-shadow-medium);
+            font-size: 3rem; /* Smaller icon inside */
+            color: var(--color-accent-purple);
+        }
+
+        /* Responsive adjustments for sidebar and layout */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column; /* Stack sidebar and content on small screens */
+            }
+            .sidebar {
+                width: 100%; /* Full width sidebar */
+                height: auto; /* Auto height on mobile */
+                position: static; /* No sticky on mobile */
+                padding: 1rem 0.5rem;
+                box-shadow: 0 2px 10px var(--color-shadow-light); /* Shadow at bottom */
+                overflow-y: visible; /* No internal scroll */
+                border-radius: 0 0 1rem 1rem; /* Rounded bottom corners */
+            }
+            .sidebar-logo-section {
+                justify-content: center; /* Center logo on mobile */
+                margin-bottom: 1rem;
+            }
+            .sidebar-nav-item {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+            .sidebar-nav-container {
+                flex-direction: row; /* Horizontal scrollable nav on mobile */
+                overflow-x: auto;
+                width: 100%;
+                justify-content: flex-start;
+                padding-bottom: 0.5rem; /* Space for scrollbar */
+                gap: 0.5rem;
+            }
+            .sidebar-nav-item {
+                flex-shrink: 0; /* Prevent items from shrinking */
+                width: auto;
+            }
+            .sidebar-bottom-item {
+                display: none; /* Hide upgrade button on small screens to save space */
+            }
+            .main-content {
+                padding: 1.5rem 1rem; /* Reduced padding on mobile */
+            }
+            .main-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+                margin-bottom: 1.5rem;
+                padding-bottom: 1rem;
+            }
+            .main-header .user-info {
+                width: 100%;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .dashboard-banner {
+                padding: 1.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+            }
+            .dashboard-banner h2 {
+                font-size: 1.8rem;
+            }
+            .dashboard-banner p {
+                font-size: 1rem;
+            }
+            .dashboard-banner-illustration {
+                position: static; /* Place illustration inline */
+                width: 150px;
+                height: 150px;
+                margin-top: 1rem;
+                align-self: center;
+            }
+            .overview-cards-grid {
+                grid-template-columns: 1fr; /* Stack cards on mobile */
+                gap: 1rem;
+            }
+            .overview-card {
+                padding: 1rem;
+            }
+            .overview-card .value {
+                font-size: 1.8rem;
+            }
+            .tab-content {
+                padding: 1.5rem;
+            }
+            .profile-info-item .label {
+                width: 80px; /* Adjust label width */
+            }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="container flex items-center justify-between">
-            <a href="index.html" class="flex items-center space-x-3">
-                <img src="data:image/jpeg;base64,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REQEREEB+U3BampfSGniLwx0msgja5itxP1XKmfctVBmixCgaTOxw1tFgTb2X78fokcxbop+iCGYri2MxujlhpRJG+JhfESNbJd9Qu03PLr9i1GGYJX1uIR19ZCKdkWnS33jpuWi3Hibkmy6UiDneacv10NcMToGiQm2uPa99Iadri4Itw3usHFqXGMWMcM1OKaFrtTietrX3NzsTYAc11JEEI+UjAppaKGCljL/AA5GeUWuGNje2+/qFbz9lyaoo4DCwmeDRsCAbFoDgN+RDT9inaIINlvLctPhM8JZ8/PHOS3a+pzHMY2/oB95VjAsDqmYNNTPiIlcJdLDa5va3Oy6AiDn+E4FVNwWWldGRM4SWYSLm7rjmtflyoxuigbTsoA4NLjdzhfzOLuTu66giCA58w2uraGntB89ra+SMEeXyPB4nuFiPqcwywimZSshGgRmTUA4N0huxL9vsBXSUQRXK2To6WkkppCHunDhM4bDdpGlt+Qud+59FFMLoMZwl744IRUwvdcW3F+GqwN2mwF+S6qiCOZTnxOUySVzGRNOgRRNtcW1aidyd7t4nlwCkaIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiIP/Z" class="h-12 w-12 rounded-full shadow-lg">
-                <span class="text-3xl font-extrabold text-brand-primary">MET'S IEDC</span>
-            </a>
-            <nav>
-                <button id="logoutBtn" class="action-button px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700">Logout</button>
-            </nav>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="sidebar-logo-section flex items-center space-x-2 mb-8">
+            <img src="https://innovate.startupmission.in/wp-content/uploads/2023/10/iedc_logo.png" alt="MET'S IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
+            <span class="text-2xl font-extrabold text-dark-text">MET'S IEDC</span>
         </div>
-    </header>
 
-    <main>
-        <div class="max-w-5xl w-full mx-4">
-            <h1 class="text-4xl font-extrabold text-white mb-4 text-center">Your Personal Dashboard</h1>
-            <p class="text-lg text-gray-400 mb-8 text-center">Manage your profile, projects, ideas, and events.</p>
-            <p class="text-md text-gray-500 mb-8 text-center">Logged in as: <span id="userEmail" class="font-semibold text-brand-primary">Loading...</span></p>
+        <nav class="sidebar-nav-container flex flex-col gap-2 w-full">
+            <a id="dashboardTabBtn" class="sidebar-nav-item active" onclick="showTab('dashboardOverview')">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                <span>Dashboard</span>
+            </a>
+            <a id="profileTabBtn" class="sidebar-nav-item" onclick="showTab('profile')">
+                <i data-lucide="user" class="w-5 h-5"></i>
+                <span>My Profile</span>
+            </a>
+            <a id="submitProjectTabBtn" class="sidebar-nav-item" onclick="showTab('submitProject')">
+                <i data-lucide="folder-plus" class="w-5 h-5"></i>
+                <span>Submit Project</span>
+            </a>
+            <a id="submitIdeaTabBtn" class="sidebar-nav-item" onclick="showTab('submitIdea')">
+                <i data-lucide="lightbulb" class="w-5 h-5"></i>
+                <span>Submit Idea</span>
+            </a>
+            <a id="submitEventTabBtn" class="sidebar-nav-item" onclick="showTab('submitEvent')">
+                <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                <span>Propose Event</span>
+            </a>
+            <!-- Logout in sidebar -->
+            <button id="logoutBtnSidebar" class="sidebar-nav-item mt-4 bg-red-action text-white hover:bg-red-action-dark justify-center">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Logout</span>
+            </button>
+        </nav>
 
-            <div class="flex flex-wrap justify-center border-b border-gray-700 mb-8 bg-gray-800 rounded-t-lg shadow-xl py-2">
-                <button id="profileTabBtn" class="tab-button active" onclick="showTab('profile')">My Profile</button>
-                <button id="submitProjectTabBtn" class="tab-button" onclick="showTab('submitProject')">Submit Project</button>
-                <button id="submitIdeaTabBtn" class="tab-button" onclick="showTab('submitIdea')">Submit Idea</button>
-                <button id="submitEventTabBtn" class="tab-button" onclick="showTab('submitEvent')">Submit Event</button>
+        <div class="sidebar-bottom-item">
+            <!-- You can place an "Upgrade" or "Help" section here -->
+            <button class="action-button px-4 py-2 bg-accent-purple text-white hover:bg-accent-purple-dark rounded-md text-sm">
+                <i data-lucide="help-circle" class="w-4 h-4 mr-2 inline-block"></i>
+                Get Help
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Main Content Header -->
+        <div class="main-header">
+            <div class="flex flex-col">
+                <h1 class="text-3xl font-extrabold text-dark-text">Dashboard</h1>
+                <p class="text-md text-muted">Monday, 22 March 2025</p>
+            </div>
+            <div class="flex items-center">
+                <div class="header-icons flex gap-4 mr-4">
+                    <i data-lucide="bell" class="w-6 h-6"></i>
+                    <i data-lucide="settings" class="w-6 h-6"></i>
+                </div>
+                <div class="flex items-center cursor-pointer">
+                    <span class="text-dark-text font-semibold mr-2 hidden sm:block" id="userEmailHeader">Loading...</span>
+                    <div class="user-avatar" id="userAvatarHeader">AJ</div>
+                </div>
+                <button id="logoutBtnHeader" class="action-button px-4 py-2 bg-red-action text-white rounded-md ml-4 hidden sm:block hover:bg-red-action-dark">Logout</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Overview Section (New Tab Content) -->
+        <div id="dashboardOverviewSection" class="tab-content">
+            <!-- Hi, Alyssa Banner -->
+            <div class="dashboard-banner flex-col sm:flex-row items-start sm:items-center">
+                <div>
+                    <h2 class="font-extrabold">Hi, <span id="displayNameBanner">Alyssa</span></h2>
+                    <p>Ready to start your day with some pitch decks?</p>
+                </div>
+                <!-- Simple placeholder illustration matching the image style -->
+                <svg class="dashboard-banner-illustration" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="50" width="300" height="180" rx="20" fill="#E0E7ED"/>
+                    <rect x="50" y="0" width="200" height="150" rx="15" fill="#C4B4E3"/>
+                    <circle cx="280" cy="80" r="40" fill="#A088E0"/>
+                    <path d="M220 180 C200 250, 300 250, 280 180 L220 180 Z" fill="#8C6CEF"/>
+                    <circle cx="250" cy="190" r="30" fill="#F0EDFD"/>
+                    <path d="M180 120 L220 120 L220 140 L180 140 Z" fill="#FFFFFF"/>
+                    <path d="M190 150 Q200 160, 210 150 L200 130 Z" fill="#FFC107"/>
+                </svg>
             </div>
 
-            <div id="profileSection" class="tab-content grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div class="p-6 bg-gray-700 rounded-lg border border-gray-600 shadow-inner flex flex-col items-center">
-                    <h3 class="text-2xl font-bold text-white mb-5 border-b pb-3 border-gray-600 w-full text-center">Your Profile Information</h3>
+            <!-- Overview Cards -->
+            <h3 class="text-xl font-bold text-dark-text mb-4">Overview</h3>
+            <div class="overview-cards-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="overview-card yellow">
+                    <div class="icon-circle">
+                        <i data-lucide="trending-up" class="w-6 h-6"></i>
+                    </div>
+                    <div class="value">85%</div>
+                    <div class="label">Completion Rate</div>
+                </div>
+                <div class="overview-card purple">
+                    <div class="icon-circle">
+                        <i data-lucide="check-circle" class="w-6 h-6"></i>
+                    </div>
+                    <div class="value">77%</div>
+                    <div class="label">Tasks Complete</div>
+                </div>
+                <div class="overview-card blue">
+                    <div class="icon-circle">
+                        <i data-lucide="lightbulb" class="w-6 h-6"></i>
+                    </div>
+                    <div class="value">91</div>
+                    <div class="label">Unique Ideas</div>
+                </div>
+                <div class="overview-card">
+                    <div class="icon-circle" style="background-color: var(--color-muted-text);"><i data-lucide="eye" class="w-6 h-6"></i></div>
+                    <div class="value">126</div>
+                    <div class="label">Total Views</div>
+                </div>
+            </div>
 
-                    <div class="w-32 h-32 rounded-full bg-gray-600 flex items-center justify-center text-gray-300 text-5xl font-bold mb-6 border-4 border-brand-primary shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <!-- Placeholder for Project List - similar to image -->
+            <h3 class="text-xl font-bold text-dark-text mb-4">Recent Submissions</h3>
+            <div class="grid grid-cols-1 gap-4">
+                <div class="bg-sidebar-background rounded-lg shadow-md p-5 flex items-center gap-4 border border-border-light">
+                    <div class="w-20 h-20 bg-accent-purple-light rounded-md flex-shrink-0 flex items-center justify-center">
+                        <!-- Placeholder for small image/icon -->
+                        <img src="https://placehold.co/80x80/8C6CEF/FFFFFF?text=Project" alt="Project Thumbnail" class="rounded-md object-cover w-full h-full">
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="text-lg font-semibold text-dark-text">Next-Gen Fashion AI</h4>
+                        <p class="text-sm text-muted mb-1">AI-powered design and style prediction platform.</p>
+                        <span class="text-xs text-muted">10 Slides • <span class="font-semibold text-accent-purple">Public</span></span>
+                    </div>
+                    <!-- Status indicator -->
+                    <div class="bg-green-success w-3 h-3 rounded-full flex-shrink-0"></div>
+                </div>
+                <div class="bg-sidebar-background rounded-lg shadow-md p-5 flex items-center gap-4 border border-border-light">
+                    <div class="w-20 h-20 bg-accent-purple-light rounded-md flex-shrink-0 flex items-center justify-center">
+                        <img src="https://placehold.co/80x80/8C6CEF/FFFFFF?text=Marketing" alt="Marketing Thumbnail" class="rounded-md object-cover w-full h-full">
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="text-lg font-semibold text-dark-text">Digital Marketing Today</h4>
+                        <p class="text-sm text-muted mb-1">Strategies for effective online presence.</p>
+                        <span class="text-xs text-muted">8 Slides • <span class="font-semibold text-muted">Private</span></span>
+                    </div>
+                    <!-- Status indicator -->
+                    <div class="bg-muted-text w-3 h-3 rounded-full flex-shrink-0"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Profile Section -->
+        <div id="profileSection" class="tab-content hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="p-8 bg-light-background rounded-xl border border-border-light shadow-inner flex flex-col items-center">
+                    <h3 class="text-2xl font-bold text-dark-text mb-6 border-b pb-4 border-border-subtle-dark w-full text-center">Your Profile Information</h3>
+
+                    <div class="profile-image-placeholder rounded-full flex items-center justify-center font-bold mb-8">
+                        <i data-lucide="user" class="w-16 h-16"></i>
                     </div>
 
-                    <div class="space-y-2 text-gray-300 w-full">
+                    <div class="space-y-3 w-full">
                         <div class="profile-info-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            <span class="font-semibold text-white">Name:</span> <span id="displayNameOutput">Not set</span>
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                            <span class="label">Name:</span> <span class="value" id="displayNameOutput">Not set</span>
                         </div>
                         <div class="profile-info-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                            <span class="font-semibold text-white">Bio:</span> <span id="bioOutput">Not set</span>
+                            <i data-lucide="book-open" class="w-5 h-5"></i>
+                            <span class="label">Bio:</span> <span class="value" id="bioOutput">Not set</span>
                         </div>
                         <div class="profile-info-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2 2.18 2 2 0 0 1 4.08 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-1.18 2.19l-.7.48a17.45 17.45 0 0 0 6.29 6.29l.48-.7a2 2 0 0 1 2.19-1.18 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            <span class="font-semibold text-white">Contact:</span> <span id="contactNumberOutput">Not set</span>
+                            <i data-lucide="phone" class="w-5 h-5"></i>
+                            <span class="label">Contact:</span> <span class="value" id="contactNumberOutput">Not set</span>
                         </div>
                         <div class="profile-info-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-2"><path d="M14 19a6 6 0 0 0-12 0"/><circle cx="8" cy="9" r="4"/><path d="M22 19a6 6 0 0 0-12 0"/><circle cx="16" cy="9" r="4"/></svg>
-                            <span class="font-semibold text-white">Gender:</span> <span id="genderOutput">Not set</span>
+                            <i data-lucide="users-2" class="w-5 h-5"></i>
+                            <span class="label">Gender:</span> <span class="value" id="genderOutput">Not set</span>
                         </div>
                         <div class="profile-info-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-                            <span class="font-semibold text-white">Date of Birth:</span> <span id="dobOutput">Not set</span>
+                            <i data-lucide="calendar" class="w-5 h-5"></i>
+                            <span class="label">Date of Birth:</span> <span class="value" id="dobOutput">Not set</span>
                         </div>
                         <div class="profile-info-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M12 18.3a.9.9 0 0 1-.9-.9c0-.4.3-.9.9-.9s.9.4.9.9c0 .4-.3.9-.9.9Z"/><path d="M12 22s8-4 8-10c0-4.4-3.6-8-8-8s-8 3.6-8 8c0 6 8 10 8 10Z"/></svg>
-                            <span class="font-semibold text-white">Address:</span> <span id="addressOutput">Not set</span>
+                            <i data-lucide="map-pin" class="w-5 h-5"></i>
+                            <span class="label">Address:</span> <span class="value" id="addressOutput">Not set</span>
                         </div>
                         <div class="profile-info-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-building"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>
-                            <span class="font-semibold text-white">City:</span> <span id="cityOutput">Not set</span>
+                            <i data-lucide="map" class="w-5 h-5"></i>
+                            <span class="label">City:</span> <span class="value" id="cityOutput">Not set</span>
                         </div>
                         <div class="profile-info-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map"><path d="M14.5 4l2.4 2.4"/><path d="M9.5 19.5l-1.4-1.4"/><path d="M2 8.5V2h6.5L22 17.5V22h-6.5L2 8.5Z"/></svg>
-                            <span class="font-semibold text-white">State:</span> <span id="stateOutput">Not set</span>
+                            <i data-lucide="map-pin" class="w-5 h-5"></i>
+                            <span class="label">State:</span> <span class="value" id="stateOutput">Not set</span>
                         </div>
                         <div class="profile-info-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail-open"><path d="M21.2 8.4c.5.38.8.97.8 1.6V19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V10c0-.63.25-1.22.79-1.6L12 2l9.2 6.4Z"/><path d="M22 19V9l-10 7L2 9v10"/></svg>
-                            <span class="font-semibold text-white">Pincode:</span> <span id="pincodeOutput">Not set</span>
+                            <i data-lucide="mail-open" class="w-5 h-5"></i>
+                            <span class="label">Pincode:</span> <span class="value" id="pincodeOutput">Not set</span>
                         </div>
                         <div class="profile-info-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-graduation-cap"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                            <span class="font-semibold text-white">Qualification:</span> <span id="qualificationOutput">Not set</span>
+                            <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                            <span class="label">Qualification:</span> <span class="value" id="qualificationOutput">Not set</span>
                         </div>
                         <div class="profile-info-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wrench"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                            <span class="font-semibold text-white">Skills:</span> <span id="skillsOutput">Not set</span>
+                            <i data-lucide="wrench" class="w-5 h-5"></i>
+                            <span class="label">Skills:</span> <span class="value" id="skillsOutput">Not set</span>
                         </div>
                         <div class="profile-info-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                            <span class="font-semibold text-white">LinkedIn:</span> <span id="linkedinOutput">Not set</span>
+                            <i data-lucide="linkedin" class="w-5 h-5"></i>
+                            <span class="label">LinkedIn:</span> <span class="value" id="linkedinOutput">Not set</span>
                         </div>
                         <div class="profile-info-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.645.07 4.85s-.012 3.584-.07 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.251-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.644-.07-4.85s.012-3.584.07-4.85c.149-3.227 1.664-4.771 4.919-4.919 1.266-.058 1.644-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.947.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.668-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162S15.403 5.838 12 5.838zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                            <span class="font-semibold text-white">Instagram:</span> <span id="instagramOutput">Not set</span>
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                            <span class="label">Instagram:</span> <span class="value" id="instagramOutput">Not set</span>
                         </div>
                         <div class="profile-info-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                            <span class="font-semibold text-white">Preferred Communication:</span> <span id="communicationOutput">Not set</span>
+                            <i data-lucide="message-square" class="w-5 h-5"></i>
+                            <span class="label">Comm. Pref:</span> <span class="value" id="communicationOutput">Not set</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="text-left p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700">
+                <div class="text-left p-8 bg-sidebar-background rounded-xl shadow-md border border-border-light">
                     <div id="profileFormContainer">
-                        <h2 class="text-2xl font-bold text-white mb-6">Update Your Profile</h2>
+                        <h2 class="text-2xl font-bold text-dark-text mb-6">Update Your Profile</h2>
                         <div id="profileStatusMessage" class="status-message hidden"></div>
 
-                        <form id="profileForm" class="space-y-4">
+                        <form id="profileForm" class="space-y-5">
                             <div>
-                                <label for="profileName" class="block text-gray-300 text-sm font-bold mb-2">Name:</label>
+                                <label for="profileName" class="block text-dark-text text-sm font-bold mb-2">Name:</label>
                                 <input type="text" id="profileName" class="w-full" placeholder="Your Full Name">
                             </div>
 
                             <div>
-                                <label for="profileBio" class="block text-gray-300 text-sm font-bold mb-2">Bio:</label>
+                                <label for="profileBio" class="block text-dark-text text-sm font-bold mb-2">Bio:</label>
                                 <textarea id="profileBio" rows="3" class="w-full" placeholder="Tell us about yourself..."></textarea>
                             </div>
 
                             <div>
-                                <label for="profileContact" class="block text-gray-300 text-sm font-bold mb-2">Contact Number:</label>
+                                <label for="profileContact" class="block text-dark-text text-sm font-bold mb-2">Contact Number:</label>
                                 <input type="tel" id="profileContact" class="w-full" placeholder="e.g., +91 9876543210">
                             </div>
 
                             <div>
-                                <label for="profileGender" class="block text-gray-300 text-sm font-bold mb-2">Gender:</label>
+                                <label for="profileGender" class="block text-dark-text text-sm font-bold mb-2">Gender:</label>
                                 <select id="profileGender" class="w-full">
                                     <option value="">Select Gender</option>
                                     <option value="Male">Male</option>
@@ -325,32 +665,32 @@
                             </div>
 
                             <div>
-                                <label for="profileDob" class="block text-gray-300 text-sm font-bold mb-2">Date of Birth:</label>
+                                <label for="profileDob" class="block text-dark-text text-sm font-bold mb-2">Date of Birth:</label>
                                 <input type="date" id="profileDob" class="w-full">
                             </div>
 
                             <div>
-                                <label for="profileAddress" class="block text-gray-300 text-sm font-bold mb-2">Address:</label>
+                                <label for="profileAddress" class="block text-dark-text text-sm font-bold mb-2">Address:</label>
                                 <textarea id="profileAddress" rows="2" class="w-full" placeholder="Street, Locality"></textarea>
                             </div>
 
                             <div>
-                                <label for="profileCity" class="block text-gray-300 text-sm font-bold mb-2">City:</label>
+                                <label for="profileCity" class="block text-dark-text text-sm font-bold mb-2">City:</label>
                                 <input type="text" id="profileCity" class="w-full" placeholder="Your City">
                             </div>
 
                             <div>
-                                <label for="profileState" class="block text-gray-300 text-sm font-bold mb-2">State:</label>
+                                <label for="profileState" class="block text-dark-text text-sm font-bold mb-2">State:</label>
                                 <input type="text" id="profileState" class="w-full" placeholder="Your State">
                             </div>
 
                             <div>
-                                <label for="profilePincode" class="block text-gray-300 text-sm font-bold mb-2">Pincode:</label>
+                                <label for="profilePincode" class="block text-dark-text text-sm font-bold mb-2">Pincode:</label>
                                 <input type="number" id="profilePincode" class="w-full" placeholder="e.g., 680001">
                             </div>
 
                             <div>
-                                <label for="profileQualification" class="block text-gray-300 text-sm font-bold mb-2">Educational Qualification:</label>
+                                <label for="profileQualification" class="block text-dark-text text-sm font-bold mb-2">Educational Qualification:</label>
                                 <select id="profileQualification" class="w-full">
                                     <option value="">Select Qualification</option>
                                     <option value="High School">High School</option>
@@ -363,27 +703,27 @@
                             </div>
 
                             <div>
-                                <label for="profileSkills" class="block text-gray-300 text-sm font-bold mb-2">Skills (comma-separated):</label>
+                                <label for="profileSkills" class="block text-dark-text text-sm font-bold mb-2">Skills (comma-separated):</label>
                                 <input type="text" id="profileSkills" class="w-full" placeholder="e.g., JavaScript, Python, UI/UX Design">
                             </div>
 
-                            <hr class="border-gray-600 my-4">
+                            <hr class="border-border-light my-4">
 
-                            <h3 class="text-lg font-bold text-white mb-2">Social & Web Links</h3>
+                            <h3 class="text-lg font-bold text-dark-text mb-2">Social & Web Links</h3>
                             <div>
-                                <label for="profileLinkedIn" class="block text-gray-300 text-sm font-bold mb-2">LinkedIn Profile URL:</label>
+                                <label for="profileLinkedIn" class="block text-dark-text text-sm font-bold mb-2">LinkedIn Profile URL:</label>
                                 <input type="url" id="profileLinkedIn" class="w-full" placeholder="https://linkedin.com/in/yourprofile">
                             </div>
                             <div>
-                                <label for="profileInstagram" class="block text-gray-300 text-sm font-bold mb-2">Instagram Profile URL:</label>
+                                <label for="profileInstagram" class="block text-dark-text text-sm font-bold mb-2">Instagram Profile URL:</label>
                                 <input type="url" id="profileInstagram" class="w-full" placeholder="https://instagram.com/yourhandle">
                             </div>
 
-                            <hr class="border-gray-600 my-4">
+                            <hr class="border-border-light my-4">
 
-                            <h3 class="text-lg font-bold text-white mb-2">Communication Preferences</h3>
+                            <h3 class="text-lg font-bold text-dark-text mb-2">Communication Preferences</h3>
                             <div>
-                                <label for="profileCommunicationMethod" class="block text-gray-300 text-sm font-bold mb-2">Preferred Communication Method:</label>
+                                <label for="profileCommunicationMethod" class="block text-dark-text text-sm font-bold mb-2">Preferred Communication Method:</label>
                                 <select id="profileCommunicationMethod" class="w-full">
                                     <option value="">Select Method</option>
                                     <option value="Email">Email</option>
@@ -393,692 +733,321 @@
                                 </select>
                             </div>
 
-                            <button type="submit" id="saveProfileBtn" class="action-button w-full bg-green-600 text-white flex items-center justify-center">
-                                <span id="saveProfileBtnText">Save Profile</span>
-                                <div id="saveProfileSpinner" class="loading-spinner ml-2 hidden"></div>
-                            </button>
+                            <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Save Profile</button>
                         </form>
-                    </div>
-
-                    <div id="profileUpdatedMessage" class="hidden text-center py-10">
-                        <svg class="mx-auto h-16 w-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <p class="text-xl font-semibold text-white mt-4">Profile Updated Successfully!</p>
-                        <p class="text-gray-400 mt-2">Your changes have been saved.</p>
-                        <button id="editProfileAgainBtn" class="action-button mt-6 px-6 py-3 bg-blue-600 text-white">
-                            Edit Profile
-                        </button>
                     </div>
                 </div>
             </div>
-
-            <div id="submitProjectSection" class="tab-content hidden">
-                <h2 class="text-2xl font-bold text-white mb-6 text-left">Submit a New Project</h2>
-                <div id="projectStatusMessage" class="status-message hidden"></div>
-
-                <form id="projectForm" class="space-y-4 text-left">
-                    <div>
-                        <label for="projectTitle" class="block text-gray-300 text-sm font-bold mb-2">Project Title:</label>
-                        <input type="text" id="projectTitle" class="w-full" placeholder="e.g., Smart Waste Management System">
-                    </div>
-                    <div>
-                        <label for="projectDescription" class="block text-gray-300 text-sm font-bold mb-2">Project Description:</label>
-                        <textarea id="projectDescription" rows="4" class="w-full" placeholder="Briefly describe your project, its purpose, and key features."></textarea>
-                    </div>
-                    <div>
-                        <label for="projectTeamMembers" class="block text-gray-300 text-sm font-bold mb-2">Team Members (comma-separated):</label>
-                        <input type="text" id="projectTeamMembers" class="w-full" placeholder="e.g., John Doe, Jane Smith">
-                    </div>
-                    <div>
-                        <label for="projectTechnologies" class="block text-gray-300 text-sm font-bold mb-2">Technologies Used (comma-separated):</label>
-                        <input type="text" id="projectTechnologies" class="w-full" placeholder="e.g., Python, Arduino, Machine Learning">
-                    </div>
-                    <div>
-                        <label for="projectUrl" class="block text-gray-300 text-sm font-bold mb-2">Project URL (Optional):</label>
-                        <input type="url" id="projectUrl" class="w-full" placeholder="https://github.com/yourproject">
-                    </div>
-                    <div>
-                        <label for="projectStatus" class="block text-gray-300 text-sm font-bold mb-2">Project Status:</label>
-                        <select id="projectStatus" class="w-full">
-                            <option value="">Select Status</option>
-                            <option value="Idea Phase">Idea Phase</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Completed">Completed</option>
-                            <option value="Deployed">Deployed</option>
-                        </select>
-                    </div>
-                    <button type="submit" id="submitProjectBtn" class="action-button w-full bg-blue-600 text-white flex items-center justify-center">
-                        <span id="submitProjectBtnText">Submit Project</span>
-                        <div id="submitProjectSpinner" class="loading-spinner ml-2 hidden"></div>
-                    </button>
-                </form>
-            </div>
-
-            <div id="submitIdeaSection" class="tab-content hidden">
-                <h2 class="text-2xl font-bold text-white mb-6 text-left">Submit a New Idea</h2>
-                <div id="ideaStatusMessage" class="status-message hidden"></div>
-
-                <form id="ideaForm" class="space-y-4 text-left">
-                    <div>
-                        <label for="ideaTitle" class="block text-gray-300 text-sm font-bold mb-2">Idea Title:</label>
-                        <input type="text" id="ideaTitle" class="w-full" placeholder="e.g., AI-Powered Study Buddy">
-                    </div>
-                    <div>
-                        <label for="ideaDescription" class="block text-gray-300 text-sm font-bold mb-2">Idea Description:</label>
-                        <textarea id="ideaDescription" rows="4" class="w-full" placeholder="Explain your idea in detail. What is it? How does it work?"></textarea>
-                    </div>
-                    <div>
-                        <label for="ideaProblemSolved" class="block text-gray-300 text-sm font-bold mb-2">Problem Solved:</label>
-                        <textarea id="ideaProblemSolved" rows="2" class="w-full" placeholder="What real-world problem does your idea address?"></textarea>
-                    </div>
-                    <div>
-                        <label for="ideaTargetAudience" class="block text-gray-300 text-sm font-bold mb-2">Target Audience:</label>
-                        <input type="text" id="ideaTargetAudience" class="w-full" placeholder="e.g., College students, Small businesses">
-                    </div>
-                    <div>
-                        <label for="ideaInnovationLevel" class="block text-gray-300 text-sm font-bold mb-2">Innovation Level:</label>
-                        <select id="ideaInnovationLevel" class="w-full">
-                            <option value="">Select Level</option>
-                            <option value="Incremental">Incremental Improvement</option>
-                            <option value="Moderate">Moderate Innovation</option>
-                            <option value="Disruptive">Disruptive Innovation</option>
-                        </select>
-                    </div>
-                    <button type="submit" id="submitIdeaBtn" class="action-button w-full bg-purple-600 text-white flex items-center justify-center">
-                        <span id="submitIdeaBtnText">Submit Idea</span>
-                        <div id="submitIdeaSpinner" class="loading-spinner ml-2 hidden"></div>
-                    </button>
-                </form>
-            </div>
-
-            <div id="submitEventSection" class="tab-content hidden">
-                <h2 class="text-2xl font-bold text-white mb-6 text-left">Submit a New Event</h2>
-                <div id="eventStatusMessage" class="status-message hidden"></div>
-
-                <form id="eventForm" class="space-y-4 text-left">
-                    <div>
-                        <label for="eventTitle" class="block text-gray-300 text-sm font-bold mb-2">Event Title:</label>
-                        <input type="text" id="eventTitle" class="w-full" placeholder="e.g., Annual Hackathon 2025">
-                    </div>
-                    <div>
-                        <label for="eventDescription" class="block text-gray-300 text-sm font-bold mb-2">Event Description:</label>
-                        <textarea id="eventDescription" rows="4" class="w-full" placeholder="Provide a detailed description of the event."></textarea>
-                    </div>
-                    <div>
-                        <label for="eventVenue" class="block text-gray-300 text-sm font-bold mb-2">Event Venue:</label>
-                        <input type="text" id="eventVenue" class="w-full" placeholder="e.g., College Auditorium, Online">
-                    </div>
-                    <div>
-                        <label for="eventOrganizer" class="block text-gray-300 text-sm font-bold mb-2">Organizer (Optional):</label>
-                        <input type="text" id="eventOrganizer" class="w-full" placeholder="e.g., IEDC Core Team">
-                    </div>
-                    <div>
-                        <label for="eventRegistrationUrl" class="block text-gray-300 text-sm font-bold mb-2">Registration URL (Optional):</label>
-                        <input type="url" id="eventRegistrationUrl" class="w-full" placeholder="https://forms.gle/event_registration">
-                    </div>
-                    <button type="submit" id="submitEventBtn" class="action-button w-full bg-orange-600 text-white flex items-center justify-center">
-                        <span id="submitEventBtnText">Submit Event</span>
-                        <div id="submitEventSpinner" class="loading-spinner ml-2 hidden"></div>
-                    </button>
-                </form>
-            </div>
-
         </div>
-    </main>
 
+        <!-- Submit Project Section -->
+        <div id="submitProjectSection" class="tab-content hidden">
+            <h2 class="text-2xl font-bold text-dark-text mb-6">Submit a New Project</h2>
+            <div id="projectStatusMessage" class="status-message hidden"></div>
+            <form id="projectForm" class="space-y-5">
+                <div>
+                    <label for="projectName" class="block text-dark-text text-sm font-bold mb-2">Project Name:</label>
+                    <input type="text" id="projectName" class="w-full" placeholder="e.g., Smart Waste Management System">
+                </div>
+                <div>
+                    <label for="projectDescription" class="block text-dark-text text-sm font-bold mb-2">Project Description:</label>
+                    <textarea id="projectDescription" rows="5" class="w-full" placeholder="Provide a detailed description of your project, its purpose, and key features."></textarea>
+                </div>
+                <div>
+                    <label for="projectTeamMembers" class="block text-dark-text text-sm font-bold mb-2">Team Members (comma-separated names/emails):</label>
+                    <input type="text" id="projectTeamMembers" class="w-full" placeholder="e.g., Alice, Bob, Charlie">
+                </div>
+                <div>
+                    <label for="projectTechnologyStack" class="block text-dark-text text-sm font-bold mb-2">Technology Stack (comma-separated):</label>
+                    <input type="text" id="projectTechnologyStack" class="w-full" placeholder="e.g., Python, Arduino, Machine Learning">
+                </div>
+                <div>
+                    <label for="projectLink" class="block text-dark-text text-sm font-bold mb-2">Project Link (GitHub, Demo, etc.):</label>
+                    <input type="url" id="projectLink" class="w-full" placeholder="https://github.com/yourproject">
+                </div>
+                <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Submit Project</button>
+            </form>
+        </div>
+
+        <!-- Submit Idea Section -->
+        <div id="submitIdeaSection" class="tab-content hidden">
+            <h2 class="text-2xl font-bold text-dark-text mb-6">Submit a New Idea</h2>
+            <div id="ideaStatusMessage" class="status-message hidden"></div>
+            <form id="ideaForm" class="space-y-5">
+                <div>
+                    <label for="ideaName" class="block text-dark-text text-sm font-bold mb-2">Idea Title:</label>
+                    <input type="text" id="ideaName" class="w-full" placeholder="e.g., AI-Powered Study Buddy">
+                </div>
+                <div>
+                    <label for="ideaDescription" class="block text-dark-text text-sm font-bold mb-2">Idea Description:</label>
+                    <textarea id="ideaDescription" rows="5" class="w-full" placeholder="Describe your innovative idea, the problem it solves, and its potential impact."></textarea>
+                </div>
+                <div>
+                    <label for="ideaCategory" class="block text-dark-text text-sm font-bold mb-2">Category:</label>
+                    <select id="ideaCategory" class="w-full">
+                        <option value="">Select Category</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Education">Education</option>
+                        <option value="Environment">Environment</option>
+                        <option value="Agriculture">Agriculture</option>
+                        <option value="FinTech">FinTech</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Submit Idea</button>
+            </form>
+        </div>
+
+        <!-- Propose Event Section -->
+        <div id="submitEventSection" class="tab-content hidden">
+            <h2 class="text-2xl font-bold text-dark-text mb-6">Propose a New Event</h2>
+            <div id="eventStatusMessage" class="status-message hidden"></div>
+            <form id="eventForm" class="space-y-5">
+                <div>
+                    <label for="eventName" class="block text-dark-text text-sm font-bold mb-2">Event Title:</label>
+                    <input type="text" id="eventName" class="w-full" placeholder="e.g., Workshop on Robotics">
+                </div>
+                <div>
+                    <label for="eventDescription" class="block text-dark-text text-sm font-bold mb-2">Event Description:</label>
+                    <textarea id="eventDescription" rows="5" class="w-full" placeholder="Describe the event, its objectives, and target audience."></textarea>
+                </div>
+                <div>
+                    <label for="eventDate" class="block text-dark-text text-sm font-bold mb-2">Date:</label>
+                    <input type="date" id="eventDate" class="w-full">
+                </div>
+                <div>
+                    <label for="eventTime" class="block text-dark-text text-sm font-bold mb-2">Time:</label>
+                    <input type="text" id="eventTime" class="w-full" placeholder="e.g., 10:00 AM - 1:00 PM">
+                </div>
+                <div>
+                    <label for="eventVenue" class="block text-dark-text text-sm font-bold mb-2">Venue:</label>
+                    <input type="text" id="eventVenue" class="w-full" placeholder="e.g., IEDC Innovation Lab">
+                </div>
+                <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Propose Event</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer - Moved inside main-content div or adjust layout for full width -->
+    <!-- For this dashboard style, often the footer is minimal or integrated directly into the main content scroll area -->
+    <!-- Keeping it separate for now as per original structure, but styling for new theme -->
     <footer>
         <div class="container">
-            <p>&copy;2025 IEDC MET'S SCHOOL OF ENGINEERING. All Rights Reserved.</p>
-             <p>Powered by Innovation & Entrepreneurship.</p>
-            <p>Developed by Muhammed Shahil.</p>
+            <p>&copy; 2025 MET'S IEDC. All Rights Reserved.</p>
         </div>
     </footer>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
 
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
-            authDomain: "metsiedc-3010e.firebaseapp.com",
-            databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
-            projectId: "metsiedc-3010e",
-            messagingSenderId: "954403413150",
-            appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
-            measurementId: "G-6E7EK0D7JG"
-        };
+        // --- Tab Switching Logic (Modified for Sidebar) ---
+        function showTab(tabId) {
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(tabContent => {
+                tabContent.classList.add('hidden');
+            });
+            // Deactivate all sidebar nav items
+            document.querySelectorAll('.sidebar-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app); // Initialize Firestore
+            // Show the selected tab content
+            const targetSection = document.getElementById(tabId + 'Section');
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            } else {
+                console.error("Target section not found:", tabId + 'Section');
+            }
 
-        // Global variable to store current user object
-        let currentUser = null;
+            // Activate the clicked sidebar nav item
+            const targetButton = document.getElementById(tabId + 'TabBtn');
+            if (targetButton) {
+                targetButton.classList.add('active');
+            } else {
+                console.error("Target button not found:", tabId + 'TabBtn');
+            }
+        }
 
-        // --- DOM Elements ---
-        // General
-        const userEmailElement = document.getElementById('userEmail');
-        const logoutBtn = document.getElementById('logoutBtn');
+        // --- Mock Data and Form Handling (Client-side only) ---
+        // In a real application, this data would come from a server (e.g., Firestore)
+        // and form submissions would send data to a backend.
 
-        // Tabs
-        const profileTabBtn = document.getElementById('profileTabBtn');
-        const submitProjectTabBtn = document.getElementById('submitProjectTabBtn');
-        const submitIdeaTabBtn = document.getElementById('submitIdeaTabBtn');
-        const submitEventTabBtn = document.getElementById('submitEventTabBtn');
+        const userEmailHeaderSpan = document.getElementById('userEmailHeader');
+        const userAvatarHeaderDiv = document.getElementById('userAvatarHeader');
+        const displayNameBanner = document.getElementById('displayNameBanner');
 
-        const profileSection = document.getElementById('profileSection');
-        const submitProjectSection = document.getElementById('submitProjectSection');
-        const submitIdeaSection = document.getElementById('submitIdeaSection');
-        const submitEventSection = document.getElementById('submitEventSection');
-
-        // Profile Form Inputs
-        const profileNameInput = document.getElementById('profileName');
-        const profileBioInput = document.getElementById('profileBio');
-        const profileContactInput = document.getElementById('profileContact');
-        const profileGenderInput = document.getElementById('profileGender');
-        const profileDobInput = document.getElementById('profileDob');
-        const profileAddressInput = document.getElementById('profileAddress');
-        const profileCityInput = document.getElementById('profileCity');
-        const profileStateInput = document.getElementById('profileState');
-        const profilePincodeInput = document.getElementById('profilePincode');
-        const profileQualificationInput = document.getElementById('profileQualification');
-        const profileSkillsInput = document.getElementById('profileSkills');
-        const profileLinkedInInput = document.getElementById('profileLinkedIn');
-        const profileInstagramInput = document.getElementById('profileInstagram');
-        const profileCommunicationMethodInput = document.getElementById('profileCommunicationMethod');
-
-        // Profile Display Outputs
-        const displayNameOutput = document.getElementById('displayNameOutput');
-        const bioOutput = document.getElementById('bioOutput');
-        const contactNumberOutput = document.getElementById('contactNumberOutput');
-        const genderOutput = document.getElementById('genderOutput');
-        const dobOutput = document.getElementById('dobOutput');
-        const addressOutput = document.getElementById('addressOutput');
-        const cityOutput = document.getElementById('cityOutput');
-        const stateOutput = document.getElementById('stateOutput');
-        const pincodeOutput = document.getElementById('pincodeOutput');
-        const qualificationOutput = document.getElementById('qualificationOutput');
-        const skillsOutput = document.getElementById('skillsOutput');
-        const linkedinOutput = document.getElementById('linkedinOutput');
-        const instagramOutput = document.getElementById('instagramOutput');
-        const communicationOutput = document.getElementById('communicationOutput');
-
-        // Profile Save Button & Status
-        const saveProfileBtn = document.getElementById('saveProfileBtn');
-        const saveProfileBtnText = document.getElementById('saveProfileBtnText');
-        const saveProfileSpinner = document.getElementById('saveProfileSpinner');
         const profileStatusMessage = document.getElementById('profileStatusMessage');
-
-        // New Profile Section elements for showing/hiding form
-        const profileFormContainer = document.getElementById('profileFormContainer');
-        const profileUpdatedMessage = document.getElementById('profileUpdatedMessage');
-        const editProfileAgainBtn = document.getElementById('editProfileAgainBtn');
-
-
-        // Project Form Inputs
-        const projectTitleInput = document.getElementById('projectTitle');
-        const projectDescriptionInput = document.getElementById('projectDescription');
-        const projectTeamMembersInput = document.getElementById('projectTeamMembers');
-        const projectTechnologiesInput = document.getElementById('projectTechnologies');
-        const projectUrlInput = document.getElementById('projectUrl');
-        const projectStatusInput = document.getElementById('projectStatus');
-
-        // Project Submit Button & Status
-        const submitProjectBtn = document.getElementById('submitProjectBtn');
-        const submitProjectBtnText = document.getElementById('submitProjectBtnText');
-        const submitProjectSpinner = document.getElementById('submitProjectSpinner');
         const projectStatusMessage = document.getElementById('projectStatusMessage');
-
-        // Idea Form Inputs
-        const ideaTitleInput = document.getElementById('ideaTitle');
-        const ideaDescriptionInput = document.getElementById('ideaDescription');
-        const ideaProblemSolvedInput = document.getElementById('ideaProblemSolved');
-        const ideaTargetAudienceInput = document.getElementById('ideaTargetAudience');
-        const ideaInnovationLevelInput = document.getElementById('ideaInnovationLevel');
-
-        // Idea Submit Button & Status
-        const submitIdeaBtn = document.getElementById('submitIdeaBtn');
-        const submitIdeaBtnText = document.getElementById('submitIdeaBtnText');
-        const submitIdeaSpinner = document.getElementById('submitIdeaSpinner');
         const ideaStatusMessage = document.getElementById('ideaStatusMessage');
-
-        // Event Form Inputs
-        const eventTitleInput = document.getElementById('eventTitle');
-        const eventDescriptionInput = document.getElementById('eventDescription');
-        const eventVenueInput = document.getElementById('eventVenue');
-        const eventOrganizerInput = document.getElementById('eventOrganizer');
-        const eventRegistrationUrlInput = document.getElementById('eventRegistrationUrl');
-
-        // Event Submit Button & Status
-        const submitEventBtn = document.getElementById('submitEventBtn');
-        const submitEventBtnText = document.getElementById('submitEventBtnText');
-        const submitEventSpinner = document.getElementById('submitEventSpinner');
         const eventStatusMessage = document.getElementById('eventStatusMessage');
 
-
-        // --- Functions ---
-
-        // Function to display status messages for forms
-        function showStatusMessage(element, message, type = 'error') { /* Default to error for safety */
-            element.textContent = message;
-            element.classList.remove('hidden', 'status-message', 'error', 'success'); /* Clear all status classes */
-            element.classList.add('status-message', type); /* Add base and type class */
-            element.classList.remove('hidden');
+        // Function to display status messages
+        function displayStatusMessage(element, message, type) {
+            element.classList.remove('hidden', 'error', 'success');
+            element.classList.add(type);
+            // Updated SVG icons for a cleaner look
+            element.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${type === 'success' ? 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' : 'M10 14l2-2m0 0l2-2m-2 2L8 8m2 2l-2 2m9-2a9 9 0 11-18 0 9 9 0 0118 0z'}"></path></svg>${message}`;
             setTimeout(() => {
                 element.classList.add('hidden');
-            }, 5000); // Hide after 5 seconds
+            }, 5000);
         }
 
-        // Function to switch tabs
-        window.showTab = function(tabName) {
-            console.log(`Activating tab: ${tabName}`);
+        // Initial user data (mocked)
+        let currentUser = {
+            email: "alyssa.jones@example.com",
+            initials: "AJ", // For avatar
+            profile: {
+                displayName: "Alyssa Jones",
+                bio: "Passionate innovator and aspiring entrepreneur, ready to tackle new challenges.",
+                contactNumber: "+91 9876543210",
+                gender: "Female",
+                dob: "2001-11-20",
+                address: "456 Creative Lane, Innovate City",
+                city: "Bengaluru",
+                state: "Karnataka",
+                pincode: "560001",
+                qualification: "Bachelor's Degree",
+                skills: "UI/UX Design, Figma, Prototyping, User Research, Frontend Development (React)",
+                linkedin: "https://linkedin.com/in/alyssajones",
+                instagram: "https://instagram.com/alyssa_designs",
+                communicationMethod: "Email"
+            },
+            projects: [],
+            ideas: [],
+            events: []
+        };
 
-            // Get all tab content sections and buttons
-            const allTabSections = [profileSection, submitProjectSection, submitIdeaSection, submitEventSection];
-            const allTabButtons = [profileTabBtn, submitProjectTabBtn, submitIdeaTabBtn, submitEventTabBtn];
+        // Load profile data into form and display
+        function loadProfileData() {
+            userEmailHeaderSpan.textContent = currentUser.email;
+            userAvatarHeaderDiv.textContent = currentUser.initials;
+            displayNameBanner.textContent = currentUser.profile.displayName.split(' ')[0]; // First name for banner
 
-            // Deactivate all tab buttons and hide all tab contents using Tailwind's 'hidden' class
-            allTabButtons.forEach(btn => btn.classList.remove('active'));
-            allTabSections.forEach(section => section.classList.add('hidden')); // Ensure all are hidden
+            document.getElementById('profileName').value = currentUser.profile.displayName || '';
+            document.getElementById('profileBio').value = currentUser.profile.bio || '';
+            document.getElementById('profileContact').value = currentUser.profile.contactNumber || '';
+            document.getElementById('profileGender').value = currentUser.profile.gender || '';
+            document.getElementById('profileDob').value = currentUser.profile.dob || '';
+            document.getElementById('profileAddress').value = currentUser.profile.address || '';
+            document.getElementById('profileCity').value = currentUser.profile.city || '';
+            document.getElementById('profileState').value = currentUser.profile.state || '';
+            document.getElementById('profilePincode').value = currentUser.profile.pincode || '';
+            document.getElementById('profileQualification').value = currentUser.profile.qualification || '';
+            document.getElementById('profileSkills').value = currentUser.profile.skills || '';
+            document.getElementById('profileLinkedIn').value = currentUser.profile.linkedin || '';
+            document.getElementById('profileInstagram').value = currentUser.profile.instagram || '';
+            document.getElementById('profileCommunicationMethod').value = currentUser.profile.communicationMethod || '';
 
-            // Activate the selected tab button and show its content by removing 'hidden'
-            if (tabName === 'profile') {
-                profileTabBtn.classList.add('active');
-                profileSection.classList.remove('hidden');
-            } else if (tabName === 'submitProject') {
-                submitProjectTabBtn.classList.add('active');
-                submitProjectSection.classList.remove('hidden');
-            } else if (tabName === 'submitIdea') {
-                submitIdeaTabBtn.classList.add('active');
-                submitIdeaSection.classList.remove('hidden');
-            } else if (tabName === 'submitEvent') {
-                submitEventTabBtn.classList.add('active');
-                submitEventSection.classList.remove('hidden');
-            }
+            // Update displayed profile info
+            document.getElementById('displayNameOutput').textContent = currentUser.profile.displayName || 'Not set';
+            document.getElementById('bioOutput').textContent = currentUser.profile.bio || 'Not set';
+            document.getElementById('contactNumberOutput').textContent = currentUser.profile.contactNumber || 'Not set';
+            document.getElementById('genderOutput').textContent = currentUser.profile.gender || 'Not set';
+            document.getElementById('dobOutput').textContent = currentUser.profile.dob || 'Not set';
+            document.getElementById('addressOutput').textContent = currentUser.profile.address || 'Not set';
+            document.getElementById('cityOutput').textContent = currentUser.profile.city || 'Not set';
+            document.getElementById('stateOutput').textContent = currentUser.profile.state || 'Not set';
+            document.getElementById('pincodeOutput').textContent = currentUser.profile.pincode || 'Not set';
+            document.getElementById('qualificationOutput').textContent = currentUser.profile.qualification || 'Not set';
+            document.getElementById('skillsOutput').textContent = currentUser.profile.skills || 'Not set';
+            document.getElementById('linkedinOutput').textContent = currentUser.profile.linkedin || 'Not set';
+            document.getElementById('instagramOutput').textContent = currentUser.profile.instagram || 'Not set';
+            document.getElementById('communicationOutput').textContent = currentUser.profile.communicationMethod || 'Not set';
         }
 
-        // Function to load user profile from Firestore
-        async function loadUserProfile(user) {
-            const userDocRef = doc(db, 'users', user.uid);
-            try {
-                const userDocSnap = await getDoc(userDocRef);
-                let data = {};
-                if (userDocSnap.exists()) {
-                    data = userDocSnap.data();
-                    console.log("User profile data loaded:", data);
+        // Handle Profile Form Submission
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            currentUser.profile = {
+                displayName: document.getElementById('profileName').value,
+                bio: document.getElementById('profileBio').value,
+                contactNumber: document.getElementById('profileContact').value,
+                gender: document.getElementById('profileGender').value,
+                dob: document.getElementById('profileDob').value,
+                address: document.getElementById('profileAddress').value,
+                city: document.getElementById('profileCity').value,
+                state: document.getElementById('profileState').value,
+                pincode: document.getElementById('profilePincode').value,
+                qualification: document.getElementById('profileQualification').value,
+                skills: document.getElementById('profileSkills').value,
+                linkedin: document.getElementById('profileLinkedIn').value,
+                instagram: document.getElementById('profileInstagram').value,
+                communicationMethod: document.getElementById('profileCommunicationMethod').value
+            };
+            loadProfileData(); // Update displayed data
+            displayStatusMessage(profileStatusMessage, 'Profile updated successfully!', 'success');
+        });
 
-                    // Populate form fields
-                    profileNameInput.value = data.displayName || '';
-                    profileBioInput.value = data.bio || '';
-                    profileContactInput.value = data.contactNumber || '';
-                    profileGenderInput.value = data.gender || '';
-                    profileDobInput.value = data.dob || ''; // Date input expectsYYYY-MM-DD
-                    profileAddressInput.value = data.address || '';
-                    profileCityInput.value = data.city || '';
-                    profileStateInput.value = data.state || '';
-                    profilePincodeInput.value = data.pincode || '';
-                    profileQualificationInput.value = data.qualification || '';
-                    profileSkillsInput.value = data.skills || '';
-                    profileLinkedInInput.value = data.linkedin || '';
-                    profileInstagramInput.value = data.instagram || '';
-                    profileCommunicationMethodInput.value = data.communicationMethod || '';
-
-                    // Update display section
-                    displayNameOutput.textContent = data.displayName || 'Not set';
-                    bioOutput.textContent = data.bio || 'Not set';
-                    contactNumberOutput.textContent = data.contactNumber || 'Not set';
-                    genderOutput.textContent = data.gender || 'Not set';
-                    dobOutput.textContent = data.dob || 'Not set';
-                    addressOutput.textContent = data.address || 'Not set';
-                    cityOutput.textContent = data.city || 'Not set';
-                    stateOutput.textContent = data.state || 'Not set';
-                    pincodeOutput.textContent = data.pincode || 'Not set';
-                    qualificationOutput.textContent = data.qualification || 'Not set';
-                    skillsOutput.textContent = data.skills || 'Not set';
-                    linkedinOutput.textContent = data.linkedin || 'Not set';
-                    instagramOutput.textContent = data.instagram || 'Not set';
-                    communicationOutput.textContent = data.communicationMethod || 'Not set';
-
-                } else {
-                    console.log("User document does not exist, creating a basic one.");
-                    // If user document doesn't exist, create a basic one with default empty values
-                    await setDoc(userDocRef, {
-                        email: user.email,
-                        displayName: user.displayName || '',
-                        bio: '',
-                        contactNumber: '',
-                        gender: '',
-                        dob: '',
-                        address: '',
-                        city: '',
-                        state: '',
-                        pincode: '',
-                        qualification: '',
-                        skills: '',
-                        linkedin: '',
-                        instagram: '',
-                        communicationMethod: '',
-                        createdAt: new Date()
-                    }, { merge: true });
-                    profileNameInput.value = user.displayName || '';
-
-                    // Update display section with defaults
-                    displayNameOutput.textContent = user.displayName || 'Not set';
-                    bioOutput.textContent = 'Not set';
-                    contactNumberOutput.textContent = 'Not set';
-                    genderOutput.textContent = 'Not set';
-                    dobOutput.textContent = 'Not set';
-                    addressOutput.textContent = 'Not set';
-                    cityOutput.textContent = 'Not set';
-                    stateOutput.textContent = 'Not set';
-                    pincodeOutput.textContent = 'Not set';
-                    qualificationOutput.textContent = 'Not set';
-                    skillsOutput.textContent = 'Not set';
-                    linkedinOutput.textContent = 'Not set';
-                    instagramOutput.textContent = 'Not set';
-                    communicationOutput.textContent = 'Not set';
-                }
-
-                // Determine whether to show the form or the updated message initially
-                // Check if displayName is present and not empty
-                const isProfilePopulated = data.displayName && data.displayName.trim() !== '';
-                console.log("Is profile populated?", isProfilePopulated);
-
-                if (isProfilePopulated) {
-                    profileFormContainer.classList.add('hidden');
-                    profileUpdatedMessage.classList.remove('hidden');
-                    console.log("Hiding form, showing updated message.");
-                } else {
-                    profileFormContainer.classList.remove('hidden');
-                    profileUpdatedMessage.classList.add('hidden');
-                    console.log("Showing form, hiding updated message.");
-                }
-
-
-            } catch (error) {
-                console.error("Error loading user profile:", error);
-                showStatusMessage(profileStatusMessage, "Failed to load profile data.", "error");
-            }
-        }
-
-        // --- Event Listeners ---
-
-        // Listen for authentication state changes
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user; // Store current user
-                userEmailElement.textContent = user.email;
-                console.log("Auth state changed: User logged in.", user.email);
-                loadUserProfile(user); // Load profile data for the current user
-                showTab('profile'); // Default to profile tab on load
+        // Handle Project Form Submission
+        document.getElementById('projectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newProject = {
+                name: document.getElementById('projectName').value,
+                description: document.getElementById('projectDescription').value,
+                teamMembers: document.getElementById('projectTeamMembers').value,
+                technologyStack: document.getElementById('projectTechnologyStack').value,
+                link: document.getElementById('projectLink').value
+            };
+            if (newProject.name && newProject.description) {
+                currentUser.projects.push(newProject);
+                displayStatusMessage(projectStatusMessage, 'Project submitted successfully!', 'success');
+                this.reset(); // Clear form
             } else {
-                // User is signed out, redirect to login page
-                console.log("Auth state changed: User logged out, redirecting to login.html");
-                window.location.href = 'login.html';
+                displayStatusMessage(projectStatusMessage, 'Please fill in Project Name and Description.', 'error');
+            }
+        });
+
+        // Handle Idea Form Submission
+        document.getElementById('ideaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newIdea = {
+                name: document.getElementById('ideaName').value,
+                description: document.getElementById('ideaDescription').value,
+                category: document.getElementById('ideaCategory').value
+            };
+            if (newIdea.name && newIdea.description) {
+                currentUser.ideas.push(newIdea);
+                displayStatusMessage(ideaStatusMessage, 'Idea submitted successfully!', 'success');
+                this.reset(); // Clear form
+            } else {
+                displayStatusMessage(ideaStatusMessage, 'Please fill in Idea Title and Description.', 'error');
+            }
+        });
+
+        // Handle Event Form Submission
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newEvent = {
+                name: document.getElementById('eventName').value,
+                description: document.getElementById('eventDescription').value,
+                date: document.getElementById('eventDate').value,
+                time: document.getElementById('eventTime').value,
+                venue: document.getElementById('eventVenue').value
+            };
+            if (newEvent.name && newEvent.description && newEvent.date && newEvent.time && newEvent.venue) {
+                currentUser.events.push(newEvent);
+                displayStatusMessage(eventStatusMessage, 'Event proposed successfully!', 'success');
+                this.reset(); // Clear form
+            } else {
+                displayStatusMessage(eventStatusMessage, 'Please fill in all event details.', 'error');
             }
         });
 
         // Handle Logout
-        logoutBtn.addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-                console.log("User signed out.");
-                // Redirect will happen via onAuthStateChanged listener
-            } catch (error) {
-                console.error("Error signing out:", error);
-                // Using alert for now, but consider a custom modal
-                alert("Failed to log out. Please try again.");
-            }
+        document.getElementById('logoutBtnHeader').addEventListener('click', function() {
+            alert('Logged out successfully (mock action) from header');
+            window.location.href = 'login.html'; // Redirect to login page
+        });
+        document.getElementById('logoutBtnSidebar').addEventListener('click', function() {
+            alert('Logged out successfully (mock action) from sidebar');
+            window.location.href = 'login.html'; // Redirect to login page
         });
 
-        // Handle Save Profile
-        saveProfileBtn.addEventListener('click', async (e) => {
-            e.preventDefault(); // Prevent default form submission
-            console.log("Save Profile button clicked.");
-
-            if (!currentUser) {
-                showStatusMessage(profileStatusMessage, "No user logged in.", "error");
-                console.warn("Save Profile: No current user.");
-                return;
-            }
-
-            saveProfileBtnText.classList.add('hidden');
-            saveProfileSpinner.classList.remove('hidden');
-            saveProfileBtn.disabled = true;
-
-            // Get values from all input fields
-            const newName = profileNameInput.value.trim();
-            const newBio = profileBioInput.value.trim();
-            const newContact = profileContactInput.value.trim();
-            const newGender = profileGenderInput.value;
-            const newDob = profileDobInput.value;
-            const newAddress = profileAddressInput.value.trim();
-            const newCity = profileCityInput.value.trim();
-            const newState = profileStateInput.value.trim();
-            const newPincode = profilePincodeInput.value.trim();
-            const newQualification = profileQualificationInput.value;
-            const newSkills = profileSkillsInput.value.trim();
-            const newLinkedIn = profileLinkedInInput.value.trim();
-            const newInstagram = profileInstagramInput.value.trim();
-            const newCommunicationMethod = profileCommunicationMethodInput.value;
-
-            try {
-                // 1. Update Firebase Authentication profile (displayName only)
-                await updateProfile(currentUser, {
-                    displayName: newName,
-                });
-                console.log("Firebase Auth profile updated.");
-
-                // 2. Update all profile data in Firestore
-                const userDocRef = doc(db, 'users', currentUser.uid);
-                await setDoc(userDocRef, {
-                    displayName: newName,
-                    bio: newBio,
-                    contactNumber: newContact,
-                    gender: newGender,
-                    dob: newDob,
-                    address: newAddress,
-                    city: newCity,
-                    state: newState,
-                    pincode: newPincode,
-                    qualification: newQualification,
-                    skills: newSkills,
-                    linkedin: newLinkedIn,
-                    instagram: newInstagram,
-                    communicationMethod: newCommunicationMethod,
-                    updatedAt: new Date() // Add a timestamp for last update
-                }, { merge: true }); // Use merge: true to only update specified fields
-                console.log("Firestore user document updated.");
-
-                showStatusMessage(profileStatusMessage, "Profile updated successfully!", "success");
-
-                // After successful update, hide the form and show the updated message
-                profileFormContainer.classList.add('hidden');
-                profileUpdatedMessage.classList.remove('hidden');
-                console.log("Form hidden, updated message shown.");
-
-                // Refresh UI with potentially updated data from Firestore
-                await loadUserProfile(currentUser); // Ensure data is re-loaded and displayed
-                console.log("loadUserProfile called after save.");
-
-            } catch (error) {
-                console.error("Error updating profile:", error);
-                showStatusMessage(profileStatusMessage, `Failed to update profile: ${error.message}`, "error");
-            } finally {
-                saveProfileBtnText.classList.remove('hidden');
-                saveProfileSpinner.classList.add('hidden');
-                saveProfileBtn.disabled = false;
-                console.log("Save Profile process finished.");
-            }
-        });
-
-        // Handle "Edit Profile" button click (from the updated message)
-        editProfileAgainBtn.addEventListener('click', () => {
-            console.log("Edit Profile button clicked.");
-            profileUpdatedMessage.classList.add('hidden');
-            profileFormContainer.classList.remove('hidden');
-            profileStatusMessage.classList.add('hidden'); // Clear any old status message
-            console.log("Updated message hidden, form shown.");
-        });
-
-
-        // Handle Submit Project
-        submitProjectBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            console.log("Submit Project button clicked.");
-
-            if (!currentUser) {
-                showStatusMessage(projectStatusMessage, "Please log in to submit a project.", "error");
-                return;
-            }
-
-            submitProjectBtnText.classList.add('hidden');
-            submitProjectSpinner.classList.remove('hidden');
-            submitProjectBtn.disabled = true;
-
-            const projectData = {
-                userId: currentUser.uid,
-                userEmail: currentUser.email,
-                title: projectTitleInput.value.trim(),
-                description: projectDescriptionInput.value.trim(),
-                teamMembers: projectTeamMembersInput.value.trim().split(',').map(m => m.trim()).filter(m => m),
-                technologies: projectTechnologiesInput.value.trim().split(',').map(t => t.trim()).filter(t => t),
-                url: projectUrlInput.value.trim(),
-                status: projectStatusInput.value,
-                submittedAt: new Date()
-            };
-
-            // Basic validation
-            if (!projectData.title || !projectData.description || !projectData.status) {
-                showStatusMessage(projectStatusMessage, "Please fill in all required project fields (Title, Description, Status).", "error");
-                submitProjectBtnText.classList.remove('hidden');
-                submitProjectSpinner.classList.add('hidden');
-                submitProjectBtn.disabled = false;
-                console.warn("Project submission: Missing required fields.");
-                return;
-            }
-
-            try {
-                // Add a new document to the 'projects' collection
-                await addDoc(collection(db, 'projects'), projectData);
-                showStatusMessage(projectStatusMessage, "Project submitted successfully!", "success");
-                // Clear form
-                projectForm.reset();
-                console.log("Project submitted successfully.");
-            } catch (error) {
-                console.error("Error submitting project:", error);
-                showStatusMessage(projectStatusMessage, `Failed to submit project: ${error.message}`, "error");
-            } finally {
-                submitProjectBtnText.classList.remove('hidden');
-                submitProjectSpinner.classList.add('hidden');
-                submitProjectBtn.disabled = false;
-            }
-        });
-
-        // Handle Submit Idea
-        submitIdeaBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            console.log("Submit Idea button clicked.");
-
-            if (!currentUser) {
-                showStatusMessage(ideaStatusMessage, "Please log in to submit an idea.", "error");
-                return;
-            }
-
-            submitIdeaBtnText.classList.add('hidden');
-            submitIdeaSpinner.classList.remove('hidden');
-            submitIdeaBtn.disabled = true;
-
-            const ideaData = {
-                userId: currentUser.uid,
-                userEmail: currentUser.email,
-                title: ideaTitleInput.value.trim(),
-                description: ideaDescriptionInput.value.trim(),
-                problemSolved: ideaProblemSolvedInput.value.trim(),
-                targetAudience: ideaTargetAudienceInput.value.trim(),
-                innovationLevel: ideaInnovationLevelInput.value,
-                submittedAt: new Date()
-            };
-
-            // Basic validation
-            if (!ideaData.title || !ideaData.description || !ideaData.problemSolved || !ideaData.innovationLevel) {
-                showStatusMessage(ideaStatusMessage, "Please fill in all required idea fields (Title, Description, Problem Solved, Innovation Level).", "error");
-                submitIdeaBtnText.classList.remove('hidden');
-                submitIdeaSpinner.classList.add('hidden');
-                submitIdeaBtn.disabled = false;
-                console.warn("Idea submission: Missing required fields.");
-                return;
-            }
-
-            try {
-                // Add a new document to the 'ideas' collection
-                await addDoc(collection(db, 'ideas'), ideaData);
-                showStatusMessage(ideaStatusMessage, "Idea submitted successfully!", "success");
-                // Clear form
-                ideaForm.reset();
-                console.log("Idea submitted successfully.");
-            } catch (error) {
-                console.error("Error submitting idea:", error);
-                showStatusMessage(ideaStatusMessage, `Failed to submit idea: ${error.message}`, "error");
-            } finally {
-                submitIdeaBtnText.classList.remove('hidden');
-                submitIdeaSpinner.classList.add('hidden');
-                submitIdeaBtn.disabled = false;
-            }
-        });
-
-        // Handle Submit Event
-        submitEventBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            console.log("Submit Event button clicked.");
-
-            if (!currentUser) {
-                showStatusMessage(eventStatusMessage, "Please log in to submit an event.", "error");
-                return;
-            }
-
-            submitEventBtnText.classList.add('hidden');
-            submitEventSpinner.classList.remove('hidden');
-            submitEventBtn.disabled = true;
-
-            const eventData = {
-                userId: currentUser.uid,
-                userEmail: currentUser.email,
-                title: eventTitleInput.value.trim(),
-                description: eventDescriptionInput.value.trim(),
-                venue: eventVenueInput.value.trim(),
-                organizer: eventOrganizerInput.value.trim(),
-                registrationUrl: eventRegistrationUrlInput.value.trim(),
-                submittedAt: new Date()
-            };
-
-            // Basic validation
-            if (!eventData.title || !eventData.description || !eventData.venue) {
-                showStatusMessage(eventStatusMessage, "Please fill in all required event fields (Title, Description, Venue).", "error");
-                submitEventBtnText.classList.remove('hidden');
-                submitEventSpinner.classList.add('hidden');
-                submitEventBtn.disabled = false;
-                console.warn("Event submission: Missing required fields.");
-                return;
-            }
-
-            try {
-                // Add a new document to the 'events' collection
-                await addDoc(collection(db, 'events'), eventData);
-                showStatusMessage(eventStatusMessage, "Event submitted successfully!", "success");
-                // Clear form
-                eventForm.reset();
-                console.log("Event submitted successfully.");
-            } catch (error) {
-                console.error("Error submitting event:", error);
-                showStatusMessage(eventStatusMessage, `Failed to submit event: ${error.message}`, "error");
-            } finally {
-                submitEventBtnText.classList.remove('hidden');
-                submitEventSpinner.classList.add('hidden');
-                submitEventBtn.disabled = false;
-            }
+        // Initial load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfileData(); // Load profile data on page load
+            showTab('dashboardOverview'); // Show Dashboard Overview tab by default
         });
     </script>
 </body>
