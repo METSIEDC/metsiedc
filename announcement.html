@@ -323,6 +323,27 @@
             footer {
                 padding: 2rem 1rem; /* Adjust footer padding */
             }
+
+            /* Mobile menu specific styles */
+            .mobile-menu {
+                transform: translateX(-100%); /* Hidden by default */
+                transition: transform 0.3s ease-in-out;
+                position: fixed; /* Ensures it overlays correctly */
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: var(--color-card-background); /* Use white for mobile menu background */
+                z-index: 999; /* Higher z-index to cover everything */
+                padding-top: 1rem; /* Adjust padding for close button */
+                padding-left: 1rem;
+                padding-right: 1rem;
+                overflow-y: auto; /* Allow scrolling if menu content is long */
+                box-shadow: 0 0 20px rgba(0,0,0,0.2); /* Add shadow to menu */
+            }
+            .mobile-menu.open {
+                transform: translateX(0); /* Slides in when open */
+            }
         }
     </style>
 </head>
@@ -358,9 +379,9 @@
         </div>
         <!-- Mobile Menu Overlay -->
         <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-card-background z-40 p-4 md:hidden">
-            <div class="flex justify-end">
+            <div class="flex justify-end pr-4 pt-2"> <!-- Added padding for close button position -->
                 <button id="close-mobile-menu" class="text-dark-heading focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             <nav class="flex flex-col space-y-4 mt-8">
