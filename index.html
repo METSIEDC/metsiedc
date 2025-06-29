@@ -166,6 +166,7 @@
             color: #000;
         }
         <style>
+   <style>
     /* Basic smooth scroll */
     html {
         scroll-behavior: smooth;
@@ -215,100 +216,217 @@
     body {
         padding-top: 0; /* Removed padding-top from body, handled by page sections */
     }
-    
-    /* NEW: Process Section Colors and Styles */
+    /* Removed old announcement-item specific styles */
+    /* Removed old loading-spinner styles */
+    /* Removed old modal specific styles */
+
+    /* Define a consistent color palette */
     :root {
-        /* Existing colors should be here */
-        --color-primary: #007BFF;
-        --color-accent: #28A745;
-        --color-light: #F8F9FA; /* Changed to F8F9FA for page bg */
-        --color-dark: #343A40;
-        --color-secondary: #6C757D;
+        --color-primary: #007BFF; /* A vibrant blue for primary elements */
+        --color-accent: #28A745; /* A strong green for accent elements */
+        --color-light: #F8F9FA; /* Very light background for body */
+        --color-dark: #343A40; /* Dark text/background */
+        --color-secondary: #6C757D; /* Muted text/icons */
+        --color-white: #FFFFFF;
+        --color-gray-100: #F3F4F6;
+        --color-gray-600: #4B5563;
+        --color-gray-700: #374151;
+        --color-blue-700: #1D4ED8;
+        --color-green-700: #059669;
+        --color-pink-500: #EC4899; /* For Instagram hover */
 
-        /* New colors for the Process section */
-        --color-process-green-light: #8DC63F; /* Light green for the number/icon box */
-        --color-process-green-dark: #6B9E2B; /* Darker green for text in box */
-        --color-process-bg-light: #F4F7FC; /* Overall background for this section, from image */
-        --color-process-card-bg: #FFFFFF; /* White for the main description card */
-        --color-process-shadow: rgba(0, 0, 0, 0.1); /* Subtle shadow for process cards */
+        /* NEW: Colors for the Events Section from the image */
+        --color-event-background: #F8F9FA; /* Very light background of the section */
+        --color-event-orange: #FFC107; /* The distinct orange/yellow color for tags and buttons */
+        --color-event-orange-text: #333333; /* Dark text on orange background */
+        --color-event-card-shadow: rgba(0, 0, 0, 0.1);
     }
 
-    #our-process {
-        background-color: var(--color-process-bg-light); /* Apply the new light background */
-        color: var(--color-dark); /* Ensure main text is dark */
+    /* Events Section specific styles */
+    #events {
+        background-color: var(--color-event-background);
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+    #events .section-title {
+        font-size: 2.5rem; /* Equivalent to text-4xl from example */
+        font-weight: 700; /* font-bold */
+        color: var(--color-dark);
+        margin-bottom: 0.5rem;
+    }
+    #events .section-description {
+        font-size: 1rem; /* Smaller description text */
+        color: var(--color-secondary);
+        margin-bottom: 3rem; /* Space below description */
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    /* Styling for each process step card */
-    .process-step-card {
+    /* Event Category Filters */
+    .event-filters {
+        display: flex;
+        flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        justify-content: center;
+        gap: 0.75rem; /* Space between buttons */
+        margin-bottom: 3rem; /* Space below filters */
+    }
+    .event-filter-button {
+        background-color: var(--color-event-orange);
+        color: var(--color-event-orange-text);
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem; /* Rounded corners for buttons */
+        font-size: 0.875rem; /* text-sm */
+        font-weight: 600; /* font-semibold */
+        transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+        cursor: pointer;
+        border: none; /* Remove default button border */
+    }
+    .event-filter-button:hover {
+        background-color: #e6b000; /* Slightly darker orange on hover */
+        transform: translateY(-2px);
+    }
+
+    /* Event Card Styling */
+    .event-card {
+        background-color: var(--color-white);
+        border-radius: 0.75rem; /* Rounded corners for the card */
+        box-shadow: 0 4px 10px var(--color-event-card-shadow);
+        overflow: hidden; /* Ensures image respects border-radius */
         display: flex;
         flex-direction: column;
-        align-items: center; /* Center horizontally */
-        margin-bottom: 2rem; /* Space between steps in grid */
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    .event-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
     }
 
-    /* Styling for the green number and icon box */
-    .step-number-icon-wrapper {
-        background-color: var(--color-process-green-light);
-        color: var(--color-process-green-dark); /* Darker green text/icon */
-        border-radius: 0.75rem; /* Base rounded corners */
-        border-top-left-radius: 2.5rem; /* Larger border radius for top-left */
-        border-bottom-right-radius: 2.5rem; /* Larger border radius for bottom-right */
-        padding: 1.25rem 2rem; /* Adjust padding to fit content */
+    .event-card-image {
+        width: 100%;
+        height: 200px; /* Fixed height for event images */
+        object-fit: cover;
+        display: block; /* Remove extra space below image */
+    }
+
+    .event-card-content {
+        padding: 1.5rem; /* Padding inside the content area */
+        flex-grow: 1; /* Allows content to push footer down */
         display: flex;
-        align-items: center;
-        gap: 0.75rem; /* Space between number and icon */
-        font-weight: 800; /* Extra bold */
-        font-size: 1.875rem; /* text-3xl for the number */
-        position: relative;
-        z-index: 2; /* Ensure it's above the content card for the pointer */
-        box-shadow: 0 4px 8px var(--color-process-shadow); /* Shadow for the green box */
+        flex-direction: column;
     }
 
-    .step-number-icon-wrapper .step-icon {
-        width: 1.875rem; /* text-3xl icon size */
-        height: 1.875rem;
-        stroke-width: 2.5px; /* Thicker stroke for icons */
+    .event-card-tags {
+        display: flex;
+        gap: 0.5rem; /* Space between tags */
+        margin-bottom: 0.75rem;
+    }
+    .event-tag {
+        background-color: var(--color-event-orange);
+        color: var(--color-event-orange-text);
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.5rem;
+        font-size: 0.75rem; /* text-xs */
+        font-weight: 600;
+        text-transform: uppercase;
     }
 
-    /* Styling for the content box */
-    .step-content {
-        background-color: var(--color-process-card-bg);
-        border-radius: 0.75rem; /* Standard rounded corners */
-        padding: 2rem; /* Padding inside the content box */
-        margin-top: -1.5rem; /* Overlap with the green box */
-        position: relative;
-        z-index: 1; /* Below the green box */
-        box-shadow: 0 4px 8px var(--color-process-shadow); /* Shadow for the content box */
-        text-align: left; /* Align text to left */
-        padding-top: 3rem; /* Increase top padding to create space for overlap + pointer */
-    }
-
-    /* Pseudo-element for the pointer/tail */
-    .step-content::before {
-        content: '';
-        position: absolute;
-        top: -14px; /* Position it slightly above to overlap the green box */
-        left: 50%;
-        transform: translateX(-50%);
-        width: 0;
-        height: 0;
-        border-left: 15px solid transparent; /* Triangle base */
-        border-right: 15px solid transparent; /* Triangle base */
-        border-bottom: 15px solid var(--color-process-card-bg); /* Triangle pointer color (white) */
-        z-index: 3; /* Ensure pointer is on top of content box and below green box if needed */
-    }
-
-    .step-content .step-title {
-        font-size: 1.125rem; /* text-lg */
+    .event-card-title {
+        font-size: 1.25rem; /* text-xl */
         font-weight: 700;
-        color: var(--color-process-green-dark); /* Title color from image */
+        color: var(--color-dark);
         margin-bottom: 0.5rem;
     }
 
-    .step-content .step-description {
+    .event-card-meta {
+        font-size: 0.875rem; /* text-sm */
+        color: var(--color-secondary);
+        margin-bottom: 1rem;
+    }
+    .event-card-meta span {
+        font-weight: 500; /* Medium font weight for labels */
+    }
+
+    .event-card-description {
         font-size: 0.95rem;
-        color: var(--color-muted-text);
-        line-height: 1.6;
+        color: var(--color-secondary);
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+        flex-grow: 1; /* Allows description to take available space */
+    }
+
+    .event-card-link {
+        color: var(--color-primary); /* Primary blue for the link */
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex; /* For icon alignment */
+        align-items: center;
+        gap: 0.25rem;
+        transition: color 0.2s ease-in-out;
+    }
+    .event-card-link:hover {
+        color: #0056b3; /* Darker blue on hover */
+        text-decoration: underline;
+    }
+    .event-card-link .lucide {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    /* View All Events Button */
+    .view-all-events-btn {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        font-weight: 600;
+        padding: 0.75rem 2rem;
+        border-radius: 0.5rem;
+        font-size: 1.125rem; /* text-lg */
+        transition: background-color 0.3s ease-in-out;
+        display: inline-block; /* For centering */
+        margin-top: 3rem; /* Space above button */
+    }
+    .view-all-events-btn:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+
+    /* Responsive grid for events */
+    .events-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive columns */
+        gap: 2rem; /* Gap between cards */
+        justify-items: center; /* Center cards in their grid cells */
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* General responsive adjustments */
+    @media (max-width: 768px) {
+        #events {
+            padding: 3rem 1rem;
+        }
+        #events .section-title {
+            font-size: 2rem;
+        }
+        .event-filter-button {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+        .event-card-image {
+            height: 180px;
+        }
+        .event-card-content {
+            padding: 1rem;
+        }
+        .event-card-title {
+            font-size: 1.125rem;
+        }
+        .event-card-meta, .event-card-description {
+            font-size: 0.875rem;
+        }
+        .view-all-events-btn {
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
+        }
     }
     </style>
 </head>
@@ -487,60 +605,148 @@
                 </div>
             </section>
 
-            <section class="py-16" id="our-process">
+            <section class="py-16" id="events">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-dark">Our Process</h2>
-            <p class="text-secondary mt-2">Follow these simple steps to understand how we work.</p>
+            <h2 class="section-title">Upcoming Events</h2>
+            <p class="section-description">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+            </p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Step 1 -->
-            <div class="process-step-card">
-                <div class="step-number-icon-wrapper">
-                    <span class="step-number">01</span>
-                    <i data-lucide="home" class="step-icon"></i>
-                </div>
-                <div class="step-content">
-                    <h3 class="step-title">STEP ONE</h3>
-                    <p class="step-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p>
-                </div>
-            </div>
-            <!-- Step 2 -->
-            <div class="process-step-card">
-                <div class="step-number-icon-wrapper">
-                    <span class="step-number">02</span>
-                    <i data-lucide="alarm-clock" class="step-icon"></i>
-                </div>
-                <div class="step-content">
-                    <h3 class="step-title">STEP TWO</h3>
-                    <p class="step-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p>
-                </div>
-            </div>
-            <!-- Step 3 (Visually "04" in your image) -->
-            <div class="process-step-card">
-                <div class="step-number-icon-wrapper">
-                    <span class="step-number">04</span>
-                    <i data-lucide="mail" class="step-icon"></i>
-                </div>
-                <div class="step-content">
-                    <h3 class="step-title">STEP FOUR</h3>
-                    <p class="step-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p>
+
+        <div class="event-filters">
+            <button class="event-filter-button">All</button>
+            <button class="event-filter-button">Art</button>
+            <button class="event-filter-button">Business</button>
+            <button class="event-filter-button">Education</button>
+            <button class="event-filter-button">Festival</button>
+            <button class="event-filter-button">Coded</button>
+            <button class="event-filter-button">Sports</button>
+            <button class="event-filter-button">Music</button>
+        </div>
+
+        <div class="events-grid">
+            <!-- Event Card 1 -->
+            <div class="event-card">
+                <img src="https://placehold.co/600x400/D0D0D0/333333?text=Meeting" alt="Event 1" class="event-card-image">
+                <div class="event-card-content">
+                    <div class="event-card-tags">
+                        <span class="event-tag">Business</span>
+                        <span class="event-tag">Upcoming</span>
+                    </div>
+                    <h3 class="event-card-title">Mixone 2IT Meeting</h3>
+                    <p class="event-card-meta"><span>Date:</span> November 10, 2020 | <span>Venue:</span> Milan</p>
+                    <p class="event-card-description">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.
+                    </p>
+                    <a href="#event-details-1" class="event-card-link">
+                        Read More <i data-lucide="arrow-right"></i>
+                    </a>
                 </div>
             </div>
-            <!-- Step 4 (Visually "03" in your image) -->
-            <div class="process-step-card">
-                <div class="step-number-icon-wrapper">
-                    <span class="step-number">03</span>
-                    <i data-lucide="message-circle-code" class="step-icon"></i>
-                </div>
-                <div class="step-content">
-                    <h3 class="step-title">STEP THREE</h3>
-                    <p class="step-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p>
+
+            <!-- Event Card 2 -->
+            <div class="event-card">
+                <img src="https://placehold.co/600x400/C0C0C0/333333?text=Fair" alt="Event 2" class="event-card-image">
+                <div class="event-card-content">
+                    <div class="event-card-tags">
+                        <span class="event-tag">Technology</span>
+                        <span class="event-tag">Upcoming</span>
+                    </div>
+                    <h3 class="event-card-title">Gaming X2021 Fair</h3>
+                    <p class="event-card-meta"><span>Date:</span> March 1, 2021 | <span>Venue:</span> Istanbul</p>
+                    <p class="event-card-description">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.
+                    </p>
+                    <a href="#event-details-2" class="event-card-link">
+                        Read More <i data-lucide="arrow-right"></i>
+                    </a>
                 </div>
             </div>
+
+            <!-- Event Card 3 -->
+            <div class="event-card">
+                <img src="https://placehold.co/600x400/B0B0B0/333333?text=Conference" alt="Event 3" class="event-card-image">
+                <div class="event-card-content">
+                    <div class="event-card-tags">
+                        <span class="event-tag">Business</span>
+                        <span class="event-tag">Upcoming</span>
+                    </div>
+                    <h3 class="event-card-title">Eventwharp Conference</h3>
+                    <p class="event-card-meta"><span>Date:</span> March 12, 2021 | <span>Venue:</span> Jordan</p>
+                    <p class="event-card-description">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.
+                    </p>
+                    <a href="#event-details-3" class="event-card-link">
+                        Read More <i data-lucide="arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Event Card 4 (Past Event) -->
+            <div class="event-card">
+                <img src="https://placehold.co/600x400/A0A0A0/333333?text=Future" alt="Event 4" class="event-card-image">
+                <div class="event-card-content">
+                    <div class="event-card-tags">
+                        <span class="event-tag">Technology</span>
+                        <span class="event-tag">Past</span>
+                    </div>
+                    <h3 class="event-card-title">The Future of Currencies</h3>
+                    <p class="event-card-meta"><span>Date:</span> Feb 28, 2020 | <span>Venue:</span> NYC</p>
+                    <p class="event-card-description">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.
+                    </p>
+                    <a href="#event-details-4" class="event-card-link">
+                        Read More <i data-lucide="arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Event Card 5 (Past Event) -->
+            <div class="event-card">
+                <img src="https://placehold.co/600x400/909090/333333?text=Wedding" alt="Event 5" class="event-card-image">
+                <div class="event-card-content">
+                    <div class="event-card-tags">
+                        <span class="event-tag">Lifestyle</span>
+                        <span class="event-tag">Past</span>
+                    </div>
+                    <h3 class="event-card-title">Wedding of James & Helen</h3>
+                    <p class="event-card-meta"><span>Date:</span> Jan 15, 2020 | <span>Venue:</span> Paris</p>
+                    <p class="event-card-description">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.
+                    </p>
+                    <a href="#event-details-5" class="event-card-link">
+                        Read More <i data-lucide="arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Event Card 6 (Past Event) -->
+            <div class="event-card">
+                <img src="https://placehold.co/600x400/808080/333333?text=Fashion" alt="Event 6" class="event-card-image">
+                <div class="event-card-content">
+                    <div class="event-card-tags">
+                        <span class="event-tag">Arts</span>
+                        <span class="event-tag">Past</span>
+                    </div>
+                    <h3 class="event-card-title">Fashion Carnival 2021</h3>
+                    <p class="event-card-meta"><span>Date:</span> Dec 5, 2020 | <span>Venue:</span> London</p>
+                    <p class="event-card-description">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.
+                    </p>
+                    <a href="#event-details-6" class="event-card-link">
+                        Read More <i data-lucide="arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center">
+            <a href="#events" class="view-all-events-btn">View All Events</a>
         </div>
     </div>
 </section>
+
             <section class="py-16 bg-white">
                 <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center mb-12">
