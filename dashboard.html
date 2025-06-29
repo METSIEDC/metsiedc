@@ -33,8 +33,14 @@
             background-color: var(--color-light-background);
             color: var(--color-dark-text);
             min-height: 100vh;
+            display: flex; /* Flex container for sidebar and main wrapper */
+        }
+
+        /* Dashboard Wrapper for Sidebar and Main Content */
+        .dashboard-wrapper {
             display: flex;
-            /* Flex layout for sidebar and main content */
+            min-height: 100vh;
+            width: 100%;
         }
 
         /* Sidebar specific styles */
@@ -47,7 +53,7 @@
             flex-direction: column;
             align-items: center;
             flex-shrink: 0; /* Prevent sidebar from shrinking */
-            position: sticky;
+            position: sticky; /* Make sidebar sticky */
             top: 0;
             height: 100vh; /* Make sidebar take full viewport height */
             overflow-y: auto; /* Enable scrolling for long content */
@@ -87,9 +93,10 @@
         }
 
         /* Main content area styles */
-        .main-content {
+        .dashboard-main-wrapper {
             flex-grow: 1;
-            padding: 2.5rem 3rem; /* Generous padding */
+            display: flex;
+            flex-direction: column; /* Stack header, main, footer vertically */
             overflow-y: auto; /* Enable scrolling for main content */
         }
 
@@ -98,9 +105,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2.5rem;
+            padding: 2.5rem 3rem; /* Generous padding */
             border-bottom: 1px solid var(--color-border-light);
-            padding-bottom: 1.5rem;
+            background-color: var(--color-light-background); /* Header background */
+            position: sticky; /* Sticky header within main content wrapper */
+            top: 0;
+            z-index: 50; /* Below sidebar */
         }
 
         .user-avatar {
@@ -200,13 +210,16 @@
             font-weight: 500;
         }
 
-        /* General Card/Content Styling (for tab sections) */
+        /* General Tab Content Styling */
         .tab-content {
             background-color: var(--color-sidebar-background);
             border-radius: 1rem;
             padding: 2.5rem;
             box-shadow: 0 4px 10px var(--color-shadow-light);
-            margin-top: 2rem; /* Space between overview and tabs */
+            margin-top: 2rem; /* Space between overview/previous tab and current tab */
+            margin-left: 3rem; /* Aligned with main content padding */
+            margin-right: 3rem;
+            margin-bottom: 2rem; /* Space before footer */
         }
 
         /* Form input styling */
@@ -261,7 +274,7 @@
         .bg-primary-action { background-color: var(--color-accent-purple); color: white; }
         .hover\:bg-primary-action-dark:hover { background-color: var(--color-accent-purple-dark); }
         .bg-red-action { background-color: var(--color-red-error); color: white; }
-        .hover\:bg-red-action-dark:hover { background-color: var(--color-button-logout-hover); } /* Fix for variable name */
+        .hover\:bg-red-action-dark:hover { background-color: var(--color-accent-purple-dark); /* Using dark purple for consistency */ }
 
         /* Status Message Styling */
         .status-message {
@@ -324,8 +337,8 @@
 
         /* Responsive adjustments for sidebar and layout */
         @media (max-width: 768px) {
-            body {
-                flex-direction: column; /* Stack sidebar and content on small screens */
+            .dashboard-wrapper {
+                flex-direction: column; /* Stack sidebar and main content on small screens */
             }
             .sidebar {
                 width: 100%; /* Full width sidebar */
@@ -339,10 +352,6 @@
             .sidebar-logo-section {
                 justify-content: center; /* Center logo on mobile */
                 margin-bottom: 1rem;
-            }
-            .sidebar-nav-item {
-                padding: 0.6rem 1rem;
-                font-size: 0.9rem;
             }
             .sidebar-nav-container {
                 flex-direction: row; /* Horizontal scrollable nav on mobile */
@@ -359,15 +368,16 @@
             .sidebar-bottom-item {
                 display: none; /* Hide upgrade button on small screens to save space */
             }
-            .main-content {
-                padding: 1.5rem 1rem; /* Reduced padding on mobile */
+            .dashboard-main-wrapper {
+                padding: 0; /* Remove overall padding, content sections will add their own */
             }
             .main-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 0.75rem;
                 margin-bottom: 1.5rem;
-                padding-bottom: 1rem;
+                padding: 1.5rem 1rem; /* Reduced padding on mobile */
+                position: static; /* No sticky on mobile header */
             }
             .main-header .user-info {
                 width: 100%;
@@ -406,436 +416,441 @@
             }
             .tab-content {
                 padding: 1.5rem;
+                margin-left: 1rem; /* Adjust margins for mobile */
+                margin-right: 1rem;
+                margin-bottom: 1rem;
             }
             .profile-info-item .label {
-                width: 80px; /* Adjust label width */
+                width: 80px; /* Adjust label width for smaller screens */
+            }
+            footer {
+                padding: 1.5rem 1rem;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar Navigation -->
-    <div class="sidebar">
-        <div class="sidebar-logo-section flex items-center space-x-2 mb-8">
-            <img src="https://innovate.startupmission.in/wp-content/uploads/2023/10/iedc_logo.png" alt="MET'S IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
-            <span class="text-2xl font-extrabold text-dark-text">MET'S IEDC</span>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-logo-section flex items-center space-x-2 mb-8">
+                <img src="iedc logo.jpg" alt="MET'S IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
+                <span class="text-2xl font-extrabold text-dark-text">MET'S IEDC</span>
+            </div>
+
+            <nav class="sidebar-nav-container flex flex-col gap-2 w-full">
+                <a id="dashboardOverviewTabBtn" class="sidebar-nav-item active" onclick="showTab('dashboardOverview')">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a id="profileTabBtn" class="sidebar-nav-item" onclick="showTab('profile')">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                    <span>My Profile</span>
+                </a>
+                <a id="submitProjectTabBtn" class="sidebar-nav-item" onclick="showTab('submitProject')">
+                    <i data-lucide="folder-plus" class="w-5 h-5"></i>
+                    <span>Submit Project</span>
+                </a>
+                <a id="submitIdeaTabBtn" class="sidebar-nav-item" onclick="showTab('submitIdea')">
+                    <i data-lucide="lightbulb" class="w-5 h-5"></i>
+                    <span>Submit Idea</span>
+                </a>
+                <a id="submitEventTabBtn" class="sidebar-nav-item" onclick="showTab('submitEvent')">
+                    <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                    <span>Propose Event</span>
+                </a>
+                <!-- Logout in sidebar -->
+                <button id="logoutBtnSidebar" class="sidebar-nav-item mt-4 bg-red-action text-white hover:bg-red-action-dark justify-center">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                    <span>Logout</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-bottom-item">
+                <button class="action-button px-4 py-2 bg-accent-purple text-white hover:bg-accent-purple-dark rounded-md text-sm">
+                    <i data-lucide="help-circle" class="w-4 h-4 mr-2 inline-block"></i>
+                    Get Help
+                </button>
+            </div>
         </div>
 
-        <nav class="sidebar-nav-container flex flex-col gap-2 w-full">
-            <a id="dashboardTabBtn" class="sidebar-nav-item active" onclick="showTab('dashboardOverview')">
-                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                <span>Dashboard</span>
-            </a>
-            <a id="profileTabBtn" class="sidebar-nav-item" onclick="showTab('profile')">
-                <i data-lucide="user" class="w-5 h-5"></i>
-                <span>My Profile</span>
-            </a>
-            <a id="submitProjectTabBtn" class="sidebar-nav-item" onclick="showTab('submitProject')">
-                <i data-lucide="folder-plus" class="w-5 h-5"></i>
-                <span>Submit Project</span>
-            </a>
-            <a id="submitIdeaTabBtn" class="sidebar-nav-item" onclick="showTab('submitIdea')">
-                <i data-lucide="lightbulb" class="w-5 h-5"></i>
-                <span>Submit Idea</span>
-            </a>
-            <a id="submitEventTabBtn" class="sidebar-nav-item" onclick="showTab('submitEvent')">
-                <i data-lucide="calendar-check" class="w-5 h-5"></i>
-                <span>Propose Event</span>
-            </a>
-            <!-- Logout in sidebar -->
-            <button id="logoutBtnSidebar" class="sidebar-nav-item mt-4 bg-red-action text-white hover:bg-red-action-dark justify-center">
-                <i data-lucide="log-out" class="w-5 h-5"></i>
-                <span>Logout</span>
-            </button>
-        </nav>
+        <!-- Main Content Area -->
+        <div class="dashboard-main-wrapper">
+            <!-- Main Content Header -->
+            <div class="main-header">
+                <div class="flex flex-col">
+                    <h1 class="text-3xl font-extrabold text-dark-text">Dashboard</h1>
+                    <p class="text-md text-muted">Monday, 22 March 2025</p>
+                </div>
+                <div class="flex items-center">
+                    <div class="header-icons flex gap-4 mr-4">
+                        <i data-lucide="bell" class="w-6 h-6"></i>
+                        <i data-lucide="settings" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex items-center cursor-pointer">
+                        <span class="text-dark-text font-semibold mr-2 hidden sm:block" id="userEmailHeader">user@example.com</span>
+                        <div class="user-avatar" id="userAvatarHeader">U</div>
+                    </div>
+                    <button id="logoutBtnHeader" class="action-button px-4 py-2 bg-red-action text-white rounded-md ml-4 hidden sm:block hover:bg-red-action-dark">Logout</button>
+                </div>
+            </div>
 
-        <div class="sidebar-bottom-item">
-            <!-- You can place an "Upgrade" or "Help" section here -->
-            <button class="action-button px-4 py-2 bg-accent-purple text-white hover:bg-accent-purple-dark rounded-md text-sm">
-                <i data-lucide="help-circle" class="w-4 h-4 mr-2 inline-block"></i>
-                Get Help
-            </button>
+            <!-- Dashboard Overview Section (New Tab Content) -->
+            <div id="dashboardOverviewSection" class="tab-content">
+                <!-- Hi, Alyssa Banner -->
+                <div class="dashboard-banner flex-col sm:flex-row items-start sm:items-center">
+                    <div>
+                        <h2 class="font-extrabold">Hi, <span id="displayNameBanner">User</span></h2>
+                        <p>Ready to start your day with some exciting innovations?</p>
+                    </div>
+                    <!-- Simple placeholder illustration matching the image style -->
+                    <svg class="dashboard-banner-illustration" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0" y="50" width="300" height="180" rx="20" fill="#E0E7ED"/>
+                        <rect x="50" y="0" width="200" height="150" rx="15" fill="#C4B4E3"/>
+                        <circle cx="280" cy="80" r="40" fill="#A088E0"/>
+                        <path d="M220 180 C200 250, 300 250, 280 180 L220 180 Z" fill="#8C6CEF"/>
+                        <circle cx="250" cy="190" r="30" fill="#F0EDFD"/>
+                        <path d="M180 120 L220 120 L220 140 L180 140 Z" fill="#FFFFFF"/>
+                        <path d="M190 150 Q200 160, 210 150 L200 130 Z" fill="#FFC107"/>
+                    </svg>
+                </div>
+
+                <!-- Overview Cards -->
+                <h3 class="text-xl font-bold text-dark-text mb-4">Overview</h3>
+                <div class="overview-cards-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="overview-card yellow">
+                        <div class="icon-circle">
+                            <i data-lucide="trending-up" class="w-6 h-6"></i>
+                        </div>
+                        <div class="value">--%</div>
+                        <div class="label">Completion Rate</div>
+                    </div>
+                    <div class="overview-card purple">
+                        <div class="icon-circle">
+                            <i data-lucide="check-circle" class="w-6 h-6"></i>
+                        </div>
+                        <div class="value">--</div>
+                        <div class="label">Tasks Complete</div>
+                    </div>
+                    <div class="overview-card blue">
+                        <div class="icon-circle">
+                            <i data-lucide="lightbulb" class="w-6 h-6"></i>
+                        </div>
+                        <div class="value">--</div>
+                        <div class="label">Unique Ideas</div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="icon-circle" style="background-color: var(--color-muted-text);"><i data-lucide="eye" class="w-6 h-6"></i></div>
+                        <div class="value">--</div>
+                        <div class="label">Total Views</div>
+                    </div>
+                </div>
+
+                <!-- Placeholder for Project List - similar to image -->
+                <h3 class="text-xl font-bold text-dark-text mb-4">Recent Submissions</h3>
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="bg-sidebar-background rounded-lg shadow-md p-5 flex items-center gap-4 border border-border-light">
+                        <div class="w-20 h-20 bg-accent-purple-light rounded-md flex-shrink-0 flex items-center justify-center">
+                            <!-- Placeholder for small image/icon -->
+                            <img src="https://placehold.co/80x80/8C6CEF/FFFFFF?text=Project" alt="Project Thumbnail" class="rounded-md object-cover w-full h-full">
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="text-lg font-semibold text-dark-text">No Recent Project</h4>
+                            <p class="text-sm text-muted mb-1">No description available.</p>
+                            <span class="text-xs text-muted">0 Slides • <span class="font-semibold" style="color: var(--color-muted-text);">N/A</span></span>
+                        </div>
+                        <!-- Status indicator -->
+                        <div class="bg-muted-text w-3 h-3 rounded-full flex-shrink-0"></div>
+                    </div>
+                    <div class="bg-sidebar-background rounded-lg shadow-md p-5 flex items-center gap-4 border border-border-light">
+                        <div class="w-20 h-20 bg-accent-purple-light rounded-md flex-shrink-0 flex items-center justify-center">
+                            <img src="https://placehold.co/80x80/8C6CEF/FFFFFF?text=Idea" alt="Idea Thumbnail" class="rounded-md object-cover w-full h-full">
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="text-lg font-semibold text-dark-text">No Recent Idea</h4>
+                            <p class="text-sm text-muted mb-1">No description available.</p>
+                            <span class="text-xs text-muted">0 Submissions • <span class="font-semibold" style="color: var(--color-muted-text);">N/A</span></span>
+                        </div>
+                        <!-- Status indicator -->
+                        <div class="bg-muted-text w-3 h-3 rounded-full flex-shrink-0"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Profile Section -->
+            <div id="profileSection" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="p-8 bg-light-background rounded-xl border border-border-light shadow-inner flex flex-col items-center">
+                        <h3 class="text-2xl font-bold text-dark-text mb-6 border-b pb-4 border-border-subtle-dark w-full text-center">Your Profile Information</h3>
+
+                        <div class="profile-image-placeholder rounded-full flex items-center justify-center font-bold mb-8">
+                            <i data-lucide="user" class="w-16 h-16"></i>
+                        </div>
+
+                        <div class="space-y-3 w-full">
+                            <div class="profile-info-item">
+                                <i data-lucide="user" class="w-5 h-5"></i>
+                                <span class="label">Name:</span> <span class="value" id="displayNameOutput">Not set</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <i data-lucide="book-open" class="w-5 h-5"></i>
+                                <span class="label">Bio:</span> <span class="value" id="bioOutput">Not set</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <i data-lucide="phone" class="w-5 h-5"></i>
+                                <span class="label">Contact:</span> <span class="value" id="contactNumberOutput">Not set</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <i data-lucide="users-2" class="w-5 h-5"></i>
+                                <span class="label">Gender:</span> <span class="value" id="genderOutput">Not set</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <i data-lucide="calendar" class="w-5 h-5"></i>
+                                <span class="label">Date of Birth:</span> <span class="value" id="dobOutput">Not set</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <i data-lucide="map-pin" class="w-5 h-5"></i>
+                                <span class="label">Address:</span> <span class="value" id="addressOutput">Not set</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <i data-lucide="map" class="w-5 h-5"></i>
+                                <span class="label">City:</span> <span class="value" id="cityOutput">Not set</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <i data-lucide="map-pin" class="w-5 h-5"></i>
+                                <span class="label">State:</span> <span class="value" id="stateOutput">Not set</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <i data-lucide="mail-open" class="w-5 h-5"></i>
+                                <span class="label">Pincode:</span> <span class="value" id="pincodeOutput">Not set</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                                <span class="label">Qualification:</span> <span class="value" id="qualificationOutput">Not set</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <i data-lucide="wrench" class="w-5 h-5"></i>
+                                <span class="label">Skills:</span> <span class="value" id="skillsOutput">Not set</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <i data-lucide="linkedin" class="w-5 h-5"></i>
+                                <span class="label">LinkedIn:</span> <span class="value" id="linkedinOutput">Not set</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <i data-lucide="instagram" class="w-5 h-5"></i>
+                                <span class="label">Instagram:</span> <span class="value" id="instagramOutput">Not set</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <i data-lucide="message-square" class="w-5 h-5"></i>
+                                <span class="label">Comm. Pref:</span> <span class="value" id="communicationOutput">Not set</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-left p-8 bg-sidebar-background rounded-xl shadow-md border border-border-light">
+                        <div id="profileFormContainer">
+                            <h2 class="text-2xl font-bold text-dark-text mb-6">Update Your Profile</h2>
+                            <div id="profileStatusMessage" class="status-message hidden"></div>
+
+                            <form id="profileForm" class="space-y-5">
+                                <div>
+                                    <label for="profileName" class="block text-dark-text text-sm font-bold mb-2">Name:</label>
+                                    <input type="text" id="profileName" class="w-full" placeholder="Your Full Name">
+                                </div>
+
+                                <div>
+                                    <label for="profileBio" class="block text-dark-text text-sm font-bold mb-2">Bio:</label>
+                                    <textarea id="profileBio" rows="3" class="w-full" placeholder="Tell us about yourself..."></textarea>
+                                </div>
+
+                                <div>
+                                    <label for="profileContact" class="block text-dark-text text-sm font-bold mb-2">Contact Number:</label>
+                                    <input type="tel" id="profileContact" class="w-full" placeholder="e.g., +91 9876543210">
+                                </div>
+
+                                <div>
+                                    <label for="profileGender" class="block text-dark-text text-sm font-bold mb-2">Gender:</label>
+                                    <select id="profileGender" class="w-full">
+                                        <option value="">Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                        <option value="Prefer not to say">Prefer not to say</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="profileDob" class="block text-dark-text text-sm font-bold mb-2">Date of Birth:</label>
+                                    <input type="date" id="profileDob" class="w-full">
+                                </div>
+
+                                <div>
+                                    <label for="profileAddress" class="block text-dark-text text-sm font-bold mb-2">Address:</label>
+                                    <textarea id="profileAddress" rows="2" class="w-full" placeholder="Street, Locality"></textarea>
+                                </div>
+
+                                <div>
+                                    <label for="profileCity" class="block text-dark-text text-sm font-bold mb-2">City:</label>
+                                    <input type="text" id="profileCity" class="w-full" placeholder="Your City">
+                                </div>
+
+                                <div>
+                                    <label for="profileState" class="block text-dark-text text-sm font-bold mb-2">State:</label>
+                                    <input type="text" id="profileState" class="w-full" placeholder="Your State">
+                                </div>
+
+                                <div>
+                                    <label for="profilePincode" class="block text-dark-text text-sm font-bold mb-2">Pincode:</label>
+                                    <input type="number" id="profilePincode" class="w-full" placeholder="e.g., 680001">
+                                </div>
+
+                                <div>
+                                    <label for="profileQualification" class="block text-dark-text text-sm font-bold mb-2">Educational Qualification:</label>
+                                    <select id="profileQualification" class="w-full">
+                                        <option value="">Select Qualification</option>
+                                        <option value="High School">High School</option>
+                                        <option value="Diploma">Diploma</option>
+                                        <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                        <option value="Master's Degree">Master's Degree</option>
+                                        <option value="PhD">PhD</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="profileSkills" class="block text-dark-text text-sm font-bold mb-2">Skills (comma-separated):</label>
+                                    <input type="text" id="profileSkills" class="w-full" placeholder="e.g., JavaScript, Python, UI/UX Design">
+                                </div>
+
+                                <hr class="border-border-light my-4">
+
+                                <h3 class="text-lg font-bold text-dark-text mb-2">Social & Web Links</h3>
+                                <div>
+                                    <label for="profileLinkedIn" class="block text-dark-text text-sm font-bold mb-2">LinkedIn Profile URL:</label>
+                                    <input type="url" id="profileLinkedIn" class="w-full" placeholder="https://linkedin.com/in/yourprofile">
+                                </div>
+                                <div>
+                                    <label for="profileInstagram" class="block text-dark-text text-sm font-bold mb-2">Instagram Profile URL:</label>
+                                    <input type="url" id="profileInstagram" class="w-full" placeholder="https://instagram.com/yourhandle">
+                                </div>
+
+                                <hr class="border-border-light my-4">
+
+                                <h3 class="text-lg font-bold text-dark-text mb-2">Communication Preferences</h3>
+                                <div>
+                                    <label for="profileCommunicationMethod" class="block text-dark-text text-sm font-bold mb-2">Preferred Communication Method:</label>
+                                    <select id="profileCommunicationMethod" class="w-full">
+                                        <option value="">Select Method</option>
+                                        <option value="Email">Email</option>
+                                        <option value="Phone">Phone</option>
+                                        <option value="WhatsApp">WhatsApp</option>
+                                        <option value="Telegram">Telegram</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Save Profile</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Project Section -->
+            <div id="submitProjectSection" class="tab-content hidden">
+                <h2 class="text-2xl font-bold text-dark-text mb-6">Submit a New Project</h2>
+                <div id="projectStatusMessage" class="status-message hidden"></div>
+                <form id="projectForm" class="space-y-5">
+                    <div>
+                        <label for="projectName" class="block text-dark-text text-sm font-bold mb-2">Project Name:</label>
+                        <input type="text" id="projectName" class="w-full" placeholder="e.g., Smart Waste Management System">
+                    </div>
+                    <div>
+                        <label for="projectDescription" class="block text-dark-text text-sm font-bold mb-2">Project Description:</label>
+                        <textarea id="projectDescription" rows="5" class="w-full" placeholder="Provide a detailed description of your project, its purpose, and key features."></textarea>
+                    </div>
+                    <div>
+                        <label for="projectTeamMembers" class="block text-dark-text text-sm font-bold mb-2">Team Members (comma-separated names/emails):</label>
+                        <input type="text" id="projectTeamMembers" class="w-full" placeholder="e.g., Alice, Bob, Charlie">
+                    </div>
+                    <div>
+                        <label for="projectTechnologyStack" class="block text-dark-text text-sm font-bold mb-2">Technology Stack (comma-separated):</label>
+                        <input type="text" id="projectTechnologyStack" class="w-full" placeholder="e.g., Python, Arduino, Machine Learning">
+                    </div>
+                    <div>
+                        <label for="projectLink" class="block text-dark-text text-sm font-bold mb-2">Project Link (GitHub, Demo, etc.):</label>
+                        <input type="url" id="projectLink" class="w-full" placeholder="https://github.com/yourproject">
+                    </div>
+                    <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Submit Project</button>
+                </form>
+            </div>
+
+            <!-- Submit Idea Section -->
+            <div id="submitIdeaSection" class="tab-content hidden">
+                <h2 class="text-2xl font-bold text-dark-text mb-6">Submit a New Idea</h2>
+                <div id="ideaStatusMessage" class="status-message hidden"></div>
+                <form id="ideaForm" class="space-y-5">
+                    <div>
+                        <label for="ideaName" class="block text-dark-text text-sm font-bold mb-2">Idea Title:</label>
+                        <input type="text" id="ideaName" class="w-full" placeholder="e.g., AI-Powered Study Buddy">
+                    </div>
+                    <div>
+                        <label for="ideaDescription" class="block text-dark-text text-sm font-bold mb-2">Idea Description:</label>
+                        <textarea id="ideaDescription" rows="5" class="w-full" placeholder="Describe your innovative idea, the problem it solves, and its potential impact."></textarea>
+                    </div>
+                    <div>
+                        <label for="ideaCategory" class="block text-dark-text text-sm font-bold mb-2">Category:</label>
+                        <select id="ideaCategory" class="w-full">
+                            <option value="">Select Category</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Education">Education</option>
+                            <option value="Environment">Environment</option>
+                            <option value="Agriculture">Agriculture</option>
+                            <option value="FinTech">FinTech</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Submit Idea</button>
+                </form>
+            </div>
+
+            <!-- Propose Event Section -->
+            <div id="submitEventSection" class="tab-content hidden">
+                <h2 class="text-2xl font-bold text-dark-text mb-6">Propose a New Event</h2>
+                <div id="eventStatusMessage" class="status-message hidden"></div>
+                <form id="eventForm" class="space-y-5">
+                    <div>
+                        <label for="eventName" class="block text-dark-text text-sm font-bold mb-2">Event Title:</label>
+                        <input type="text" id="eventName" class="w-full" placeholder="e.g., Workshop on Robotics">
+                    </div>
+                    <div>
+                        <label for="eventDescription" class="block text-dark-text text-sm font-bold mb-2">Event Description:</label>
+                        <textarea id="eventDescription" rows="5" class="w-full" placeholder="Describe the event, its objectives, and target audience."></textarea>
+                    </div>
+                    <div>
+                        <label for="eventDate" class="block text-dark-text text-sm font-bold mb-2">Date:</label>
+                        <input type="date" id="eventDate" class="w-full">
+                    </div>
+                    <div>
+                        <label for="eventTime" class="block text-dark-text text-sm font-bold mb-2">Time:</label>
+                        <input type="text" id="eventTime" class="w-full" placeholder="e.g., 10:00 AM - 1:00 PM">
+                    </div>
+                    <div>
+                        <label for="eventVenue" class="block text-dark-text text-sm font-bold mb-2">Venue:</label>
+                        <input type="text" id="eventVenue" class="w-full" placeholder="e.g., IEDC Innovation Lab">
+                    </div>
+                    <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Propose Event</button>
+                </form>
+            </div>
+
+            <!-- Footer - Now correctly placed within the main content flow -->
+            <footer>
+                <div class="container py-8"> <!-- Added padding here as main-content overall padding is reduced -->
+                    <p>&copy; 2025 MET'S IEDC. All Rights Reserved.</p>
+                </div>
+            </footer>
         </div>
     </div>
-
-    <!-- Main Content Area -->
-    <div class="main-content">
-        <!-- Main Content Header -->
-        <div class="main-header">
-            <div class="flex flex-col">
-                <h1 class="text-3xl font-extrabold text-dark-text">Dashboard</h1>
-                <p class="text-md text-muted">Monday, 22 March 2025</p>
-            </div>
-            <div class="flex items-center">
-                <div class="header-icons flex gap-4 mr-4">
-                    <i data-lucide="bell" class="w-6 h-6"></i>
-                    <i data-lucide="settings" class="w-6 h-6"></i>
-                </div>
-                <div class="flex items-center cursor-pointer">
-                    <span class="text-dark-text font-semibold mr-2 hidden sm:block" id="userEmailHeader">Loading...</span>
-                    <div class="user-avatar" id="userAvatarHeader">AJ</div>
-                </div>
-                <button id="logoutBtnHeader" class="action-button px-4 py-2 bg-red-action text-white rounded-md ml-4 hidden sm:block hover:bg-red-action-dark">Logout</button>
-            </div>
-        </div>
-
-        <!-- Dashboard Overview Section (New Tab Content) -->
-        <div id="dashboardOverviewSection" class="tab-content">
-            <!-- Hi, Alyssa Banner -->
-            <div class="dashboard-banner flex-col sm:flex-row items-start sm:items-center">
-                <div>
-                    <h2 class="font-extrabold">Hi, <span id="displayNameBanner">Alyssa</span></h2>
-                    <p>Ready to start your day with some pitch decks?</p>
-                </div>
-                <!-- Simple placeholder illustration matching the image style -->
-                <svg class="dashboard-banner-illustration" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0" y="50" width="300" height="180" rx="20" fill="#E0E7ED"/>
-                    <rect x="50" y="0" width="200" height="150" rx="15" fill="#C4B4E3"/>
-                    <circle cx="280" cy="80" r="40" fill="#A088E0"/>
-                    <path d="M220 180 C200 250, 300 250, 280 180 L220 180 Z" fill="#8C6CEF"/>
-                    <circle cx="250" cy="190" r="30" fill="#F0EDFD"/>
-                    <path d="M180 120 L220 120 L220 140 L180 140 Z" fill="#FFFFFF"/>
-                    <path d="M190 150 Q200 160, 210 150 L200 130 Z" fill="#FFC107"/>
-                </svg>
-            </div>
-
-            <!-- Overview Cards -->
-            <h3 class="text-xl font-bold text-dark-text mb-4">Overview</h3>
-            <div class="overview-cards-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="overview-card yellow">
-                    <div class="icon-circle">
-                        <i data-lucide="trending-up" class="w-6 h-6"></i>
-                    </div>
-                    <div class="value">85%</div>
-                    <div class="label">Completion Rate</div>
-                </div>
-                <div class="overview-card purple">
-                    <div class="icon-circle">
-                        <i data-lucide="check-circle" class="w-6 h-6"></i>
-                    </div>
-                    <div class="value">77%</div>
-                    <div class="label">Tasks Complete</div>
-                </div>
-                <div class="overview-card blue">
-                    <div class="icon-circle">
-                        <i data-lucide="lightbulb" class="w-6 h-6"></i>
-                    </div>
-                    <div class="value">91</div>
-                    <div class="label">Unique Ideas</div>
-                </div>
-                <div class="overview-card">
-                    <div class="icon-circle" style="background-color: var(--color-muted-text);"><i data-lucide="eye" class="w-6 h-6"></i></div>
-                    <div class="value">126</div>
-                    <div class="label">Total Views</div>
-                </div>
-            </div>
-
-            <!-- Placeholder for Project List - similar to image -->
-            <h3 class="text-xl font-bold text-dark-text mb-4">Recent Submissions</h3>
-            <div class="grid grid-cols-1 gap-4">
-                <div class="bg-sidebar-background rounded-lg shadow-md p-5 flex items-center gap-4 border border-border-light">
-                    <div class="w-20 h-20 bg-accent-purple-light rounded-md flex-shrink-0 flex items-center justify-center">
-                        <!-- Placeholder for small image/icon -->
-                        <img src="https://placehold.co/80x80/8C6CEF/FFFFFF?text=Project" alt="Project Thumbnail" class="rounded-md object-cover w-full h-full">
-                    </div>
-                    <div class="flex-grow">
-                        <h4 class="text-lg font-semibold text-dark-text">Next-Gen Fashion AI</h4>
-                        <p class="text-sm text-muted mb-1">AI-powered design and style prediction platform.</p>
-                        <span class="text-xs text-muted">10 Slides • <span class="font-semibold text-accent-purple">Public</span></span>
-                    </div>
-                    <!-- Status indicator -->
-                    <div class="bg-green-success w-3 h-3 rounded-full flex-shrink-0"></div>
-                </div>
-                <div class="bg-sidebar-background rounded-lg shadow-md p-5 flex items-center gap-4 border border-border-light">
-                    <div class="w-20 h-20 bg-accent-purple-light rounded-md flex-shrink-0 flex items-center justify-center">
-                        <img src="https://placehold.co/80x80/8C6CEF/FFFFFF?text=Marketing" alt="Marketing Thumbnail" class="rounded-md object-cover w-full h-full">
-                    </div>
-                    <div class="flex-grow">
-                        <h4 class="text-lg font-semibold text-dark-text">Digital Marketing Today</h4>
-                        <p class="text-sm text-muted mb-1">Strategies for effective online presence.</p>
-                        <span class="text-xs text-muted">8 Slides • <span class="font-semibold text-muted">Private</span></span>
-                    </div>
-                    <!-- Status indicator -->
-                    <div class="bg-muted-text w-3 h-3 rounded-full flex-shrink-0"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- My Profile Section -->
-        <div id="profileSection" class="tab-content hidden">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div class="p-8 bg-light-background rounded-xl border border-border-light shadow-inner flex flex-col items-center">
-                    <h3 class="text-2xl font-bold text-dark-text mb-6 border-b pb-4 border-border-subtle-dark w-full text-center">Your Profile Information</h3>
-
-                    <div class="profile-image-placeholder rounded-full flex items-center justify-center font-bold mb-8">
-                        <i data-lucide="user" class="w-16 h-16"></i>
-                    </div>
-
-                    <div class="space-y-3 w-full">
-                        <div class="profile-info-item">
-                            <i data-lucide="user" class="w-5 h-5"></i>
-                            <span class="label">Name:</span> <span class="value" id="displayNameOutput">Not set</span>
-                        </div>
-                        <div class="profile-info-item">
-                            <i data-lucide="book-open" class="w-5 h-5"></i>
-                            <span class="label">Bio:</span> <span class="value" id="bioOutput">Not set</span>
-                        </div>
-                        <div class="profile-info-item">
-                            <i data-lucide="phone" class="w-5 h-5"></i>
-                            <span class="label">Contact:</span> <span class="value" id="contactNumberOutput">Not set</span>
-                        </div>
-                        <div class="profile-info-item">
-                            <i data-lucide="users-2" class="w-5 h-5"></i>
-                            <span class="label">Gender:</span> <span class="value" id="genderOutput">Not set</span>
-                        </div>
-                        <div class="profile-info-item">
-                            <i data-lucide="calendar" class="w-5 h-5"></i>
-                            <span class="label">Date of Birth:</span> <span class="value" id="dobOutput">Not set</span>
-                        </div>
-                        <div class="profile-info-item">
-                            <i data-lucide="map-pin" class="w-5 h-5"></i>
-                            <span class="label">Address:</span> <span class="value" id="addressOutput">Not set</span>
-                        </div>
-                        <div class="profile-info-item">
-                            <i data-lucide="map" class="w-5 h-5"></i>
-                            <span class="label">City:</span> <span class="value" id="cityOutput">Not set</span>
-                        </div>
-                        <div class="profile-info-item">
-                            <i data-lucide="map-pin" class="w-5 h-5"></i>
-                            <span class="label">State:</span> <span class="value" id="stateOutput">Not set</span>
-                        </div>
-                        <div class="profile-info-item">
-                            <i data-lucide="mail-open" class="w-5 h-5"></i>
-                            <span class="label">Pincode:</span> <span class="value" id="pincodeOutput">Not set</span>
-                        </div>
-                        <div class="profile-info-item">
-                            <i data-lucide="graduation-cap" class="w-5 h-5"></i>
-                            <span class="label">Qualification:</span> <span class="value" id="qualificationOutput">Not set</span>
-                        </div>
-                        <div class="profile-info-item">
-                            <i data-lucide="wrench" class="w-5 h-5"></i>
-                            <span class="label">Skills:</span> <span class="value" id="skillsOutput">Not set</span>
-                        </div>
-                        <div class="profile-info-item">
-                            <i data-lucide="linkedin" class="w-5 h-5"></i>
-                            <span class="label">LinkedIn:</span> <span class="value" id="linkedinOutput">Not set</span>
-                        </div>
-                        <div class="profile-info-item">
-                            <i data-lucide="instagram" class="w-5 h-5"></i>
-                            <span class="label">Instagram:</span> <span class="value" id="instagramOutput">Not set</span>
-                        </div>
-                        <div class="profile-info-item">
-                            <i data-lucide="message-square" class="w-5 h-5"></i>
-                            <span class="label">Comm. Pref:</span> <span class="value" id="communicationOutput">Not set</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="text-left p-8 bg-sidebar-background rounded-xl shadow-md border border-border-light">
-                    <div id="profileFormContainer">
-                        <h2 class="text-2xl font-bold text-dark-text mb-6">Update Your Profile</h2>
-                        <div id="profileStatusMessage" class="status-message hidden"></div>
-
-                        <form id="profileForm" class="space-y-5">
-                            <div>
-                                <label for="profileName" class="block text-dark-text text-sm font-bold mb-2">Name:</label>
-                                <input type="text" id="profileName" class="w-full" placeholder="Your Full Name">
-                            </div>
-
-                            <div>
-                                <label for="profileBio" class="block text-dark-text text-sm font-bold mb-2">Bio:</label>
-                                <textarea id="profileBio" rows="3" class="w-full" placeholder="Tell us about yourself..."></textarea>
-                            </div>
-
-                            <div>
-                                <label for="profileContact" class="block text-dark-text text-sm font-bold mb-2">Contact Number:</label>
-                                <input type="tel" id="profileContact" class="w-full" placeholder="e.g., +91 9876543210">
-                            </div>
-
-                            <div>
-                                <label for="profileGender" class="block text-dark-text text-sm font-bold mb-2">Gender:</label>
-                                <select id="profileGender" class="w-full">
-                                    <option value="">Select Gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                    <option value="Prefer not to say">Prefer not to say</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label for="profileDob" class="block text-dark-text text-sm font-bold mb-2">Date of Birth:</label>
-                                <input type="date" id="profileDob" class="w-full">
-                            </div>
-
-                            <div>
-                                <label for="profileAddress" class="block text-dark-text text-sm font-bold mb-2">Address:</label>
-                                <textarea id="profileAddress" rows="2" class="w-full" placeholder="Street, Locality"></textarea>
-                            </div>
-
-                            <div>
-                                <label for="profileCity" class="block text-dark-text text-sm font-bold mb-2">City:</label>
-                                <input type="text" id="profileCity" class="w-full" placeholder="Your City">
-                            </div>
-
-                            <div>
-                                <label for="profileState" class="block text-dark-text text-sm font-bold mb-2">State:</label>
-                                <input type="text" id="profileState" class="w-full" placeholder="Your State">
-                            </div>
-
-                            <div>
-                                <label for="profilePincode" class="block text-dark-text text-sm font-bold mb-2">Pincode:</label>
-                                <input type="number" id="profilePincode" class="w-full" placeholder="e.g., 680001">
-                            </div>
-
-                            <div>
-                                <label for="profileQualification" class="block text-dark-text text-sm font-bold mb-2">Educational Qualification:</label>
-                                <select id="profileQualification" class="w-full">
-                                    <option value="">Select Qualification</option>
-                                    <option value="High School">High School</option>
-                                    <option value="Diploma">Diploma</option>
-                                    <option value="Bachelor's Degree">Bachelor's Degree</option>
-                                    <option value="Master's Degree">Master's Degree</option>
-                                    <option value="PhD">PhD</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label for="profileSkills" class="block text-dark-text text-sm font-bold mb-2">Skills (comma-separated):</label>
-                                <input type="text" id="profileSkills" class="w-full" placeholder="e.g., JavaScript, Python, UI/UX Design">
-                            </div>
-
-                            <hr class="border-border-light my-4">
-
-                            <h3 class="text-lg font-bold text-dark-text mb-2">Social & Web Links</h3>
-                            <div>
-                                <label for="profileLinkedIn" class="block text-dark-text text-sm font-bold mb-2">LinkedIn Profile URL:</label>
-                                <input type="url" id="profileLinkedIn" class="w-full" placeholder="https://linkedin.com/in/yourprofile">
-                            </div>
-                            <div>
-                                <label for="profileInstagram" class="block text-dark-text text-sm font-bold mb-2">Instagram Profile URL:</label>
-                                <input type="url" id="profileInstagram" class="w-full" placeholder="https://instagram.com/yourhandle">
-                            </div>
-
-                            <hr class="border-border-light my-4">
-
-                            <h3 class="text-lg font-bold text-dark-text mb-2">Communication Preferences</h3>
-                            <div>
-                                <label for="profileCommunicationMethod" class="block text-dark-text text-sm font-bold mb-2">Preferred Communication Method:</label>
-                                <select id="profileCommunicationMethod" class="w-full">
-                                    <option value="">Select Method</option>
-                                    <option value="Email">Email</option>
-                                    <option value="Phone">Phone</option>
-                                    <option value="WhatsApp">WhatsApp</option>
-                                    <option value="Telegram">Telegram</option>
-                                </select>
-                            </div>
-
-                            <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Save Profile</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Submit Project Section -->
-        <div id="submitProjectSection" class="tab-content hidden">
-            <h2 class="text-2xl font-bold text-dark-text mb-6">Submit a New Project</h2>
-            <div id="projectStatusMessage" class="status-message hidden"></div>
-            <form id="projectForm" class="space-y-5">
-                <div>
-                    <label for="projectName" class="block text-dark-text text-sm font-bold mb-2">Project Name:</label>
-                    <input type="text" id="projectName" class="w-full" placeholder="e.g., Smart Waste Management System">
-                </div>
-                <div>
-                    <label for="projectDescription" class="block text-dark-text text-sm font-bold mb-2">Project Description:</label>
-                    <textarea id="projectDescription" rows="5" class="w-full" placeholder="Provide a detailed description of your project, its purpose, and key features."></textarea>
-                </div>
-                <div>
-                    <label for="projectTeamMembers" class="block text-dark-text text-sm font-bold mb-2">Team Members (comma-separated names/emails):</label>
-                    <input type="text" id="projectTeamMembers" class="w-full" placeholder="e.g., Alice, Bob, Charlie">
-                </div>
-                <div>
-                    <label for="projectTechnologyStack" class="block text-dark-text text-sm font-bold mb-2">Technology Stack (comma-separated):</label>
-                    <input type="text" id="projectTechnologyStack" class="w-full" placeholder="e.g., Python, Arduino, Machine Learning">
-                </div>
-                <div>
-                    <label for="projectLink" class="block text-dark-text text-sm font-bold mb-2">Project Link (GitHub, Demo, etc.):</label>
-                    <input type="url" id="projectLink" class="w-full" placeholder="https://github.com/yourproject">
-                </div>
-                <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Submit Project</button>
-            </form>
-        </div>
-
-        <!-- Submit Idea Section -->
-        <div id="submitIdeaSection" class="tab-content hidden">
-            <h2 class="text-2xl font-bold text-dark-text mb-6">Submit a New Idea</h2>
-            <div id="ideaStatusMessage" class="status-message hidden"></div>
-            <form id="ideaForm" class="space-y-5">
-                <div>
-                    <label for="ideaName" class="block text-dark-text text-sm font-bold mb-2">Idea Title:</label>
-                    <input type="text" id="ideaName" class="w-full" placeholder="e.g., AI-Powered Study Buddy">
-                </div>
-                <div>
-                    <label for="ideaDescription" class="block text-dark-text text-sm font-bold mb-2">Idea Description:</label>
-                    <textarea id="ideaDescription" rows="5" class="w-full" placeholder="Describe your innovative idea, the problem it solves, and its potential impact."></textarea>
-                </div>
-                <div>
-                    <label for="ideaCategory" class="block text-dark-text text-sm font-bold mb-2">Category:</label>
-                    <select id="ideaCategory" class="w-full">
-                        <option value="">Select Category</option>
-                        <option value="Healthcare">Healthcare</option>
-                        <option value="Education">Education</option>
-                        <option value="Environment">Environment</option>
-                        <option value="Agriculture">Agriculture</option>
-                        <option value="FinTech">FinTech</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Submit Idea</button>
-            </form>
-        </div>
-
-        <!-- Propose Event Section -->
-        <div id="submitEventSection" class="tab-content hidden">
-            <h2 class="text-2xl font-bold text-dark-text mb-6">Propose a New Event</h2>
-            <div id="eventStatusMessage" class="status-message hidden"></div>
-            <form id="eventForm" class="space-y-5">
-                <div>
-                    <label for="eventName" class="block text-dark-text text-sm font-bold mb-2">Event Title:</label>
-                    <input type="text" id="eventName" class="w-full" placeholder="e.g., Workshop on Robotics">
-                </div>
-                <div>
-                    <label for="eventDescription" class="block text-dark-text text-sm font-bold mb-2">Event Description:</label>
-                    <textarea id="eventDescription" rows="5" class="w-full" placeholder="Describe the event, its objectives, and target audience."></textarea>
-                </div>
-                <div>
-                    <label for="eventDate" class="block text-dark-text text-sm font-bold mb-2">Date:</label>
-                    <input type="date" id="eventDate" class="w-full">
-                </div>
-                <div>
-                    <label for="eventTime" class="block text-dark-text text-sm font-bold mb-2">Time:</label>
-                    <input type="text" id="eventTime" class="w-full" placeholder="e.g., 10:00 AM - 1:00 PM">
-                </div>
-                <div>
-                    <label for="eventVenue" class="block text-dark-text text-sm font-bold mb-2">Venue:</label>
-                    <input type="text" id="eventVenue" class="w-full" placeholder="e.g., IEDC Innovation Lab">
-                </div>
-                <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Propose Event</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Footer - Moved inside main-content div or adjust layout for full width -->
-    <!-- For this dashboard style, often the footer is minimal or integrated directly into the main content scroll area -->
-    <!-- Keeping it separate for now as per original structure, but styling for new theme -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 MET'S IEDC. All Rights Reserved.</p>
-        </div>
-    </footer>
 
     <script>
         // Initialize Lucide icons
@@ -869,13 +884,9 @@
             }
         }
 
-        // --- Mock Data and Form Handling (Client-side only) ---
-        // In a real application, this data would come from a server (e.g., Firestore)
-        // and form submissions would send data to a backend.
-
-        const userEmailHeaderSpan = document.getElementById('userEmailHeader');
-        const userAvatarHeaderDiv = document.getElementById('userAvatarHeader');
-        const displayNameBanner = document.getElementById('displayNameBanner');
+        // --- Form Handling (Client-side only - NO DATA STORAGE) ---
+        // These forms now only provide visual feedback (success/error messages)
+        // and clear the form. They do NOT store or manipulate any user data.
 
         const profileStatusMessage = document.getElementById('profileStatusMessage');
         const projectStatusMessage = document.getElementById('projectStatusMessage');
@@ -886,167 +897,79 @@
         function displayStatusMessage(element, message, type) {
             element.classList.remove('hidden', 'error', 'success');
             element.classList.add(type);
-            // Updated SVG icons for a cleaner look
             element.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${type === 'success' ? 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' : 'M10 14l2-2m0 0l2-2m-2 2L8 8m2 2l-2 2m9-2a9 9 0 11-18 0 9 9 0 0118 0z'}"></path></svg>${message}`;
             setTimeout(() => {
                 element.classList.add('hidden');
             }, 5000);
         }
 
-        // Initial user data (mocked)
-        let currentUser = {
-            email: "alyssa.jones@example.com",
-            initials: "AJ", // For avatar
-            profile: {
-                displayName: "Alyssa Jones",
-                bio: "Passionate innovator and aspiring entrepreneur, ready to tackle new challenges.",
-                contactNumber: "+91 9876543210",
-                gender: "Female",
-                dob: "2001-11-20",
-                address: "456 Creative Lane, Innovate City",
-                city: "Bengaluru",
-                state: "Karnataka",
-                pincode: "560001",
-                qualification: "Bachelor's Degree",
-                skills: "UI/UX Design, Figma, Prototyping, User Research, Frontend Development (React)",
-                linkedin: "https://linkedin.com/in/alyssajones",
-                instagram: "https://instagram.com/alyssa_designs",
-                communicationMethod: "Email"
-            },
-            projects: [],
-            ideas: [],
-            events: []
-        };
+        // Function to set default "Not set" or empty values for displayed profile info
+        function resetDisplayedProfileInfo() {
+            document.getElementById('userEmailHeader').textContent = 'user@example.com';
+            document.getElementById('userAvatarHeader').textContent = 'U'; // Default avatar initial
+            document.getElementById('displayNameBanner').textContent = 'User'; // Default banner name
 
-        // Load profile data into form and display
-        function loadProfileData() {
-            userEmailHeaderSpan.textContent = currentUser.email;
-            userAvatarHeaderDiv.textContent = currentUser.initials;
-            displayNameBanner.textContent = currentUser.profile.displayName.split(' ')[0]; // First name for banner
+            const profileOutputElements = [
+                'displayNameOutput', 'bioOutput', 'contactNumberOutput', 'genderOutput', 'dobOutput',
+                'addressOutput', 'cityOutput', 'stateOutput', 'pincodeOutput', 'qualificationOutput',
+                'skillsOutput', 'linkedinOutput', 'instagramOutput', 'communicationOutput'
+            ];
+            profileOutputElements.forEach(id => {
+                document.getElementById(id).textContent = 'Not set';
+            });
 
-            document.getElementById('profileName').value = currentUser.profile.displayName || '';
-            document.getElementById('profileBio').value = currentUser.profile.bio || '';
-            document.getElementById('profileContact').value = currentUser.profile.contactNumber || '';
-            document.getElementById('profileGender').value = currentUser.profile.gender || '';
-            document.getElementById('profileDob').value = currentUser.profile.dob || '';
-            document.getElementById('profileAddress').value = currentUser.profile.address || '';
-            document.getElementById('profileCity').value = currentUser.profile.city || '';
-            document.getElementById('profileState').value = currentUser.profile.state || '';
-            document.getElementById('profilePincode').value = currentUser.profile.pincode || '';
-            document.getElementById('profileQualification').value = currentUser.profile.qualification || '';
-            document.getElementById('profileSkills').value = currentUser.profile.skills || '';
-            document.getElementById('profileLinkedIn').value = currentUser.profile.linkedin || '';
-            document.getElementById('profileInstagram').value = currentUser.profile.instagram || '';
-            document.getElementById('profileCommunicationMethod').value = currentUser.profile.communicationMethod || '';
-
-            // Update displayed profile info
-            document.getElementById('displayNameOutput').textContent = currentUser.profile.displayName || 'Not set';
-            document.getElementById('bioOutput').textContent = currentUser.profile.bio || 'Not set';
-            document.getElementById('contactNumberOutput').textContent = currentUser.profile.contactNumber || 'Not set';
-            document.getElementById('genderOutput').textContent = currentUser.profile.gender || 'Not set';
-            document.getElementById('dobOutput').textContent = currentUser.profile.dob || 'Not set';
-            document.getElementById('addressOutput').textContent = currentUser.profile.address || 'Not set';
-            document.getElementById('cityOutput').textContent = currentUser.profile.city || 'Not set';
-            document.getElementById('stateOutput').textContent = currentUser.profile.state || 'Not set';
-            document.getElementById('pincodeOutput').textContent = currentUser.profile.pincode || 'Not set';
-            document.getElementById('qualificationOutput').textContent = currentUser.profile.qualification || 'Not set';
-            document.getElementById('skillsOutput').textContent = currentUser.profile.skills || 'Not set';
-            document.getElementById('linkedinOutput').textContent = currentUser.profile.linkedin || 'Not set';
-            document.getElementById('instagramOutput').textContent = currentUser.profile.instagram || 'Not set';
-            document.getElementById('communicationOutput').textContent = currentUser.profile.communicationMethod || 'Not set';
+            // Reset form fields to empty
+            document.getElementById('profileForm').reset();
         }
 
-        // Handle Profile Form Submission
+
+        // Handle Profile Form Submission (No data storage)
         document.getElementById('profileForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            currentUser.profile = {
-                displayName: document.getElementById('profileName').value,
-                bio: document.getElementById('profileBio').value,
-                contactNumber: document.getElementById('profileContact').value,
-                gender: document.getElementById('profileGender').value,
-                dob: document.getElementById('profileDob').value,
-                address: document.getElementById('profileAddress').value,
-                city: document.getElementById('profileCity').value,
-                state: document.getElementById('profileState').value,
-                pincode: document.getElementById('profilePincode').value,
-                qualification: document.getElementById('profileQualification').value,
-                skills: document.getElementById('profileSkills').value,
-                linkedin: document.getElementById('profileLinkedIn').value,
-                instagram: document.getElementById('profileInstagram').value,
-                communicationMethod: document.getElementById('profileCommunicationMethod').value
-            };
-            loadProfileData(); // Update displayed data
-            displayStatusMessage(profileStatusMessage, 'Profile updated successfully!', 'success');
+            // In a real app, data would be sent to a backend here.
+            // For now, just show a success message and clear the form.
+            displayStatusMessage(profileStatusMessage, 'Profile update simulated (no data stored).', 'success');
+            this.reset();
+            resetDisplayedProfileInfo(); // Reset displayed info to "Not set" after "submission"
         });
 
-        // Handle Project Form Submission
+        // Handle Project Form Submission (No data storage)
         document.getElementById('projectForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const newProject = {
-                name: document.getElementById('projectName').value,
-                description: document.getElementById('projectDescription').value,
-                teamMembers: document.getElementById('projectTeamMembers').value,
-                technologyStack: document.getElementById('projectTechnologyStack').value,
-                link: document.getElementById('projectLink').value
-            };
-            if (newProject.name && newProject.description) {
-                currentUser.projects.push(newProject);
-                displayStatusMessage(projectStatusMessage, 'Project submitted successfully!', 'success');
-                this.reset(); // Clear form
-            } else {
-                displayStatusMessage(projectStatusMessage, 'Please fill in Project Name and Description.', 'error');
-            }
+            // In a real app, data would be sent to a backend here.
+            displayStatusMessage(projectStatusMessage, 'Project submission simulated (no data stored).', 'success');
+            this.reset();
         });
 
-        // Handle Idea Form Submission
+        // Handle Idea Form Submission (No data storage)
         document.getElementById('ideaForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const newIdea = {
-                name: document.getElementById('ideaName').value,
-                description: document.getElementById('ideaDescription').value,
-                category: document.getElementById('ideaCategory').value
-            };
-            if (newIdea.name && newIdea.description) {
-                currentUser.ideas.push(newIdea);
-                displayStatusMessage(ideaStatusMessage, 'Idea submitted successfully!', 'success');
-                this.reset(); // Clear form
-            } else {
-                displayStatusMessage(ideaStatusMessage, 'Please fill in Idea Title and Description.', 'error');
-            }
+            // In a real app, data would be sent to a backend here.
+            displayStatusMessage(ideaStatusMessage, 'Idea submission simulated (no data stored).', 'success');
+            this.reset();
         });
 
-        // Handle Event Form Submission
+        // Handle Event Form Submission (No data storage)
         document.getElementById('eventForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const newEvent = {
-                name: document.getElementById('eventName').value,
-                description: document.getElementById('eventDescription').value,
-                date: document.getElementById('eventDate').value,
-                time: document.getElementById('eventTime').value,
-                venue: document.getElementById('eventVenue').value
-            };
-            if (newEvent.name && newEvent.description && newEvent.date && newEvent.time && newEvent.venue) {
-                currentUser.events.push(newEvent);
-                displayStatusMessage(eventStatusMessage, 'Event proposed successfully!', 'success');
-                this.reset(); // Clear form
-            } else {
-                displayStatusMessage(eventStatusMessage, 'Please fill in all event details.', 'error');
-            }
+            // In a real app, data would be sent to a backend here.
+            displayStatusMessage(eventStatusMessage, 'Event proposal simulated (no data stored).', 'success');
+            this.reset();
         });
 
         // Handle Logout
         document.getElementById('logoutBtnHeader').addEventListener('click', function() {
-            alert('Logged out successfully (mock action) from header');
+            alert('Logged out successfully (mock action) - header button');
             window.location.href = 'login.html'; // Redirect to login page
         });
         document.getElementById('logoutBtnSidebar').addEventListener('click', function() {
-            alert('Logged out successfully (mock action) from sidebar');
+            alert('Logged out successfully (mock action) - sidebar button');
             window.location.href = 'login.html'; // Redirect to login page
         });
 
         // Initial load
         document.addEventListener('DOMContentLoaded', () => {
-            loadProfileData(); // Load profile data on page load
+            resetDisplayedProfileInfo(); // Initialize displayed profile info to "Not set"
             showTab('dashboardOverview'); // Show Dashboard Overview tab by default
         });
     </script>
