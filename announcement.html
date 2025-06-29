@@ -6,150 +6,239 @@
     <title>Announcements - MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons for a clean, modern look -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Basic smooth scroll for navigation */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Define NEW custom Tailwind colors based on the provided image theme */
+        /* NEW Color Palette based on provided image */
         :root {
-            --color-background: #F3F3F5; /* Very light gray/white from the image */
-            --color-dark-purple: #262039; /* Deep, desaturated dark purple/navy from the image */
-            --color-vibrant-purple: #8A60CC; /* Vibrant purple accent from the image */
-            --color-vibrant-purple-dark: #6C4CA8; /* Darker vibrant purple for hover */
-            --color-muted-gray: #8E8A9C; /* Muted gray/purple for secondary text */
-            --color-white: #FFFFFF; /* Pure white for cards */
-            --color-subtle-border: #E0E0E0; /* Light gray for subtle borders/dividers */
+            --color-light-background: #F8F8FA; /* Very light background for body */
+            --color-card-background: #FFFFFF; /* Pure white for main content areas */
+            --color-dark-text: #333333; /* Dark gray for headings and main text */
+            --color-muted-text: #7A7A80; /* Muted gray for secondary text/labels */
+            --color-primary-blue: #00BFFF; /* Vibrant Sky Blue - Main accent color from image */
+            --color-primary-blue-light: #E0F7FA; /* Very light blue for subtle accents/backgrounds */
+            --color-primary-blue-dark: #008DCC; /* Darker blue for hover */
+            --color-border-light: #E0E0E0; /* Light gray for subtle borders */
+            --color-border-subtle-dark: #D4D4D8; /* Slightly darker light border */
+            --color-shadow-light: rgba(0, 0, 0, 0.05); /* Light shadow for cards */
+            --color-shadow-medium: rgba(0, 0, 0, 0.1); /* Medium shadow for hover/header */
+            --color-placeholder-text: #B0B0B0; /* Placeholder text color */
         }
 
-        /* Applying custom colors via Tailwind utility classes */
-        .text-primary-brand { color: var(--color-vibrant-purple); }
-        .bg-primary-brand { background-color: var(--color-vibrant-purple); }
-        .hover\:bg-primary-brand-dark:hover { background-color: var(--color-vibrant-purple-dark); }
-
-        .text-dark-heading { color: var(--color-dark-purple); }
-        .bg-dark-section { background-color: var(--color-dark-purple); }
-
-        .text-muted { color: var(--color-muted-gray); }
-
-        .bg-page-background { background-color: var(--color-background); }
-        .bg-card-background { background-color: var(--color-white); }
-        .bg-header-footer { background-color: var(--color-white); } /* Header/footer match card background for clean look */
-
-
-        /* Navigation Link Styles */
-        .nav-link-active {
-            color: var(--color-vibrant-purple);
-            font-weight: 600;
-            border-bottom: 2px solid var(--color-vibrant-purple);
-        }
-        .nav-link {
-            padding-bottom: 0.25rem;
-            border-bottom: 2px solid transparent;
-            transition: color 0.3s ease, border-bottom-color 0.3s ease;
-        }
-        .nav-link:hover {
-            color: var(--color-vibrant-purple);
-        }
-
-        /* Page transition animation */
-        .page {
-            display: block;
-            animation: fadeIn 0.5s ease-in-out;
-            min-height: calc(100vh - 80px); /* Ensure content fills space above footer */
-            padding-top: 80px; /* Offset for sticky header to prevent content overlap */
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Mobile menu specific styles */
-        .mobile-menu {
-            transform: translateX(-100%); /* Hidden by default */
-            transition: transform 0.3s ease-in-out;
-        }
-        .mobile-menu.open {
-            transform: translateX(0); /* Slides in when open */
-        }
         body {
-            padding-top: 0; /* Important for sticky header to work correctly */
-        }
-
-        /* === UI STYLES FOR ANNOUNCEMENTS CARDS (Clean & Modern) === */
-        .announcement-card {
-            background-color: var(--color-card-background);
-            border-radius: 0.75rem; /* Consistent rounding */
-            padding: 2rem;
-            /* Subtle, clean shadow for depth, matching the image aesthetic */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-            transition: all 0.2s ease-in-out;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-light-background);
+            color: var(--color-dark-text);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            gap: 1.25rem;
-            height: auto;
-            flex-shrink: 0;
-            width: 100%;
         }
 
-        /* Fixed widths for horizontal desktop layout */
-        @media (min-width: 768px) {
-            .announcement-card {
-                width: 300px; /* Standard width for cards */
-            }
-        }
-        @media (min-width: 1024px) {
-            .announcement-card {
-                width: 320px; /* Slightly wider on larger desktops */
-            }
+        /* Utility classes using custom colors */
+        .text-primary-blue { color: var(--color-primary-blue); }
+        .bg-primary-blue { background-color: var(--color-primary-blue); }
+        .hover\:bg-primary-blue-dark:hover { background-color: var(--color-primary-blue-dark); }
+        .text-dark-heading { color: var(--color-dark-text); }
+        .text-muted { color: var(--color-muted-text); }
+        .bg-card-background { background-color: var(--color-card-background); }
+        .bg-page-background { background-color: var(--color-light-background); }
+
+        /* General Container and Spacing */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
 
-        .announcement-card:hover {
-            transform: translateY(-5px); /* Moderate lift on hover */
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* Slightly more prominent shadow on hover */
+        /* Header Specific Styles */
+        header {
+            background-color: var(--color-card-background);
+            box-shadow: 0 2px 8px var(--color-shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 50;
         }
-
-        .announcement-icon-container {
-            background-color: var(--color-vibrant-purple); /* Solid vibrant purple background for icon */
-            border-radius: 0.5rem; /* Square icon container with rounded corners */
-            padding: 0.6rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .announcement-icon {
-            color: white;
-            width: 24px;
-            height: 24px;
-        }
-
-        .download-button {
-            background-color: var(--color-vibrant-purple); /* Solid vibrant purple for download button */
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* Subtle shadow for button */
+        .header-link {
+            color: var(--color-muted-text);
             font-weight: 500;
-            text-align: center;
+            transition: color 0.2s ease;
+        }
+        .header-link:hover {
+            color: var(--color-dark-text);
+        }
+        .header-accent-link {
+             color: var(--color-primary-blue);
+             font-weight: 600;
+        }
+        .header-border {
+            border-left: 1px solid var(--color-border-light);
+            padding-left: 1rem;
+            margin-left: 1rem;
+        }
+
+        /* Announcements Hero Section */
+        .hero-section {
+            background-color: var(--color-card-background);
+            padding: 4rem 0; /* More vertical padding */
+            border-bottom: 1px solid var(--color-border-light);
+            position: relative; /* For the background shapes */
+            overflow: hidden;
+        }
+        .hero-section::before,
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            background-color: var(--color-primary-blue-light);
+            border-radius: 50%;
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hero-section::before {
+            width: 250px;
+            height: 250px;
+            top: -100px;
+            left: -100px;
+        }
+        .hero-section::after {
+            width: 300px;
+            height: 300px;
+            bottom: -150px;
+            right: -150px;
+        }
+        .hero-content {
+            position: relative; /* Bring content above pseudo-elements */
+            z-index: 1;
+        }
+        .megaphone-icon {
+            color: var(--color-primary-blue);
+            width: 80px;
+            height: 80px;
+        }
+        .search-input {
+            border: 1px solid var(--color-border-subtle-dark);
+            border-radius: 0.5rem;
+            padding: 0.8rem 1rem;
+            color: var(--color-dark-text);
+            transition: all 0.2s ease-in-out;
+            font-size: 1rem;
+        }
+        .search-input::placeholder {
+            color: var(--color-placeholder-text);
+        }
+        .search-input:focus {
+            border-color: var(--color-primary-blue);
+            box-shadow: 0 0 0 3px rgba(0, 191, 255, 0.2); /* Blue focus ring */
+            outline: none;
+        }
+
+        /* Tabs Navigation */
+        .tabs-nav {
+            background-color: var(--color-card-background);
+            border-bottom: 1px solid var(--color-border-light);
+            padding-top: 1rem; /* Space from search bar */
+            padding-left: 1.5rem; /* Match container padding */
+            padding-right: 1.5rem;
+        }
+        .tabs-nav .container {
+            border-bottom: 2px solid transparent; /* This creates the underline for tabs */
+        }
+        .tab-button {
+            padding: 0.75rem 0; /* Adjust padding */
+            font-weight: 500;
+            color: var(--color-muted-text);
+            border-bottom: 3px solid transparent; /* Individual tab underline */
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            margin-right: 1.5rem; /* Space between tab buttons */
+        }
+        .tab-button:last-child {
+            margin-right: 0;
+        }
+        .tab-button.active {
+            color: var(--color-primary-blue);
+            font-weight: 600;
+            border-bottom-color: var(--color-primary-blue);
+        }
+        .tab-button:hover:not(.active) {
+            color: var(--color-dark-text);
+        }
+
+        /* Announcement List Section */
+        .announcement-list-container {
+            padding: 3rem 0; /* Vertical padding */
+        }
+        .announcement-item {
+            display: flex;
+            background-color: var(--color-card-background);
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 8px var(--color-shadow-light);
+            padding: 1.5rem 2rem;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .announcement-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px var(--color-shadow-medium);
+        }
+        .announcement-date-col {
+            flex-shrink: 0;
+            width: 100px; /* Fixed width for date column */
+            text-align: right;
+            padding-right: 1.5rem;
+            border-right: 1px solid var(--color-border-light);
+        }
+        .announcement-date-col .month-day {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--color-dark-text);
+        }
+        .announcement-date-col .year {
+            font-size: 0.9rem;
+            color: var(--color-muted-text);
+        }
+        .announcement-content-col {
+            flex-grow: 1;
+            padding-left: 1.5rem;
+        }
+        .announcement-content-col h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-dark-text);
+            margin-bottom: 0.5rem;
+        }
+        .announcement-content-col p {
+            font-size: 0.95rem;
+            color: var(--color-muted-text);
+        }
+        .download-link {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            color: white; /* White text on purple button */
+            color: var(--color-primary-blue);
+            font-weight: 500;
+            margin-top: 0.5rem;
+            transition: color 0.2s ease;
+        }
+        .download-link:hover {
+            color: var(--color-primary-blue-dark);
         }
 
-        .download-button:hover {
-            background-color: var(--color-vibrant-purple-dark); /* Darker purple on hover */
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+        /* Footer */
+        footer {
+            background-color: var(--color-card-background); /* Footer matches card background */
+            border-top: 1px solid var(--color-border-light);
+            color: var(--color-muted-text);
+            padding: 2.5rem 0;
+            text-align: center;
         }
 
-        /* Loading spinner animation */
-        .loading-spinner {
+        /* Loading spinner for announcements */
+        .loading-spinner-announcements {
             border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: var(--color-vibrant-purple);
+            border-left-color: var(--color-primary-blue);
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 30px;
+            height: 30px;
             animation: spin 1s linear infinite;
         }
         @keyframes spin {
@@ -157,194 +246,451 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Custom scrollbar styling for the horizontal list */
-        .horizontal-scroll-container::-webkit-scrollbar {
-            height: 8px;
-        }
-        .horizontal-scroll-container::-webkit-scrollbar-track {
-            background: var(--color-background); /* Track matches page background */
-            border-radius: 10px;
-        }
-        .horizontal-scroll-container::-webkit-scrollbar-thumb {
-            background: var(--color-vibrant-purple); /* Thumb is vibrant purple */
-            border-radius: 10px;
-        }
-        .horizontal-scroll-container::-webkit-scrollbar-thumb:hover {
-            background: var(--color-vibrant-purple-dark);
+        /* Responsive Adjustments */
+        @media (max-width: 767px) {
+            .hero-section {
+                padding: 2.5rem 0;
+            }
+            .hero-section::before,
+            .hero-section::after {
+                display: none; /* Hide complex shapes on mobile */
+            }
+            .megaphone-icon {
+                width: 60px;
+                height: 60px;
+            }
+            .hero-section h1 {
+                font-size: 2.5rem;
+                margin-top: 1rem;
+            }
+            .hero-section p {
+                font-size: 1rem;
+            }
+            .search-input {
+                padding: 0.7rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            .tabs-nav {
+                padding-top: 0.5rem;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            .tabs-nav > div {
+                justify-content: space-around; /* Distribute tabs evenly */
+            }
+            .tab-button {
+                font-size: 0.9rem;
+                padding: 0.6rem 0.5rem;
+                margin-right: 0.5rem; /* Reduced space between tab buttons */
+            }
+            .announcement-list-container {
+                padding: 2rem 0;
+            }
+            .announcement-item {
+                flex-direction: column; /* Stack date and content on mobile */
+                padding: 1rem 1.25rem;
+                gap: 0.75rem;
+            }
+            .announcement-date-col {
+                width: 100%;
+                text-align: left;
+                padding-right: 0;
+                border-right: none;
+                border-bottom: 1px dashed var(--color-border-light); /* Dashed separator */
+                padding-bottom: 0.5rem;
+            }
+            .announcement-content-col {
+                padding-left: 0;
+            }
+            .announcement-content-col h3 {
+                font-size: 1rem;
+            }
+            .announcement-content-col p {
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
-<body class="font-inter bg-page-background text-dark-heading">
+<body class="bg-page-background">
 
-    <header class="bg-header-footer shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <a href="index.html#home" class="flex items-center space-x-2">
-                    <!-- FIXED: Using a direct link for the logo - please replace with your actual logo path -->
-                    <img src="https://innovate.startupmission.in/wp-content/uploads/2023/10/iedc_logo.png" alt="IEDC Logo" class="h-10 w-10 rounded-full shadow-sm">
-                    <span class="text-2xl font-extrabold text-dark-heading">MET'S IEDC</span>
-                </a>
+    <header>
+        <div class="container flex items-center justify-between h-16 sm:h-20">
+            <a href="index.html" class="flex items-center space-x-2">
+                <img src="https://innovate.startupmission.in/wp-content/uploads/2023/10/iedc_logo.png" alt="IEDC Logo" class="h-8 w-8 sm:h-10 sm:w-10 rounded-full shadow-sm">
+                <span class="text-xl sm:text-2xl font-extrabold text-dark-heading">MET'S IEDC</span>
+            </a>
 
-                <nav class="hidden md:flex space-x-4 lg:space-x-6 items-center">
-                    <a href="index.html#home" class="nav-link text-dark-heading">Home</a>
-                    <a href="index.html#about" class="nav-link text-dark-heading">About Us</a>
-                    <a href="team.html" class="nav-link text-dark-heading">Our Team</a>
-                    <a href="index.html#events" class="nav-link text-dark-heading">Events</a>
-                    <a href="index.html#initiatives" class="nav-link text-dark-heading">Initiatives</a>
-                    <a href="index.html#news" class="nav-link text-dark-heading">News</a>
-                    <a href="announcement.html" class="nav-link nav-link-active text-primary-brand">Announcements</a>
-                    <a href="event.html" class="nav-link text-dark-heading">Event Gallery</a>
-                    <a href="index.html#contact" class="nav-link text-dark-heading">Contact</a>
-                    <a href="login.html" class="px-4 py-2 bg-primary-brand text-white rounded-lg hover:bg-primary-brand-dark transition duration-300 shadow">Student Login</a>
-                    <a href="index.html#admin-login" class="px-4 py-2 bg-dark-purple text-white rounded-lg hover:bg-muted transition duration-300 shadow">Admin Login</a>
+            <div class="flex items-center space-x-4">
+                <nav class="hidden md:flex items-center space-x-4">
+                    <a href="#" class="header-link">Help center</a>
+                    <a href="#" class="header-link flex items-center">
+                        Products <i data-lucide="chevron-down" class="w-4 h-4 ml-1"></i>
+                    </a>
                 </nav>
 
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-dark-heading focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                    </button>
+                <div class="hidden sm:flex items-center header-border">
+                    <a href="index.html" class="header-link mr-4">Go back to homepage</a>
+                    <a href="#" class="header-link flex items-center">
+                        <img src="https://flagcdn.com/w20/in.png" alt="India Flag" class="w-5 h-auto mr-1"> English <i data-lucide="chevron-down" class="w-4 h-4 ml-1"></i>
+                    </a>
                 </div>
+
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-button" class="md:hidden text-dark-heading focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
             </div>
         </div>
-
-        <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-card-background z-40 pt-20 p-4 md:hidden">
-            <nav class="flex flex-col space-y-4">
-                <a href="index.html#home" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Home</a>
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-card-background z-40 p-4 md:hidden">
+            <div class="flex justify-end">
+                <button id="close-mobile-menu" class="text-dark-heading focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <nav class="flex flex-col space-y-4 mt-8">
+                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Home</a>
                 <a href="index.html#about" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">About Us</a>
                 <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Our Team</a>
                 <a href="index.html#events" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Events</a>
                 <a href="index.html#initiatives" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Initiatives</a>
                 <a href="index.html#news" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">News</a>
-                <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-primary-brand hover:bg-gray-100">Announcements</a>
+                <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-primary-blue hover:bg-gray-100">Announcements</a>
                 <a href="event.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Event Gallery</a>
                 <a href="index.html#contact" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Contact</a>
-                <a href="login.html" class="mt-4 block w-full text-center px-4 py-2 bg-primary-brand text-white rounded-lg hover:bg-primary-brand-dark transition duration-300 shadow">Student Login</a>
-                <a href="index.html#admin-login" class="mt-2 block w-full text-center px-4 py-2 bg-dark-purple text-white rounded-lg hover:bg-muted transition duration-300 shadow">Admin Login</a>
+                <a href="login.html" class="mt-4 block w-full text-center px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-primary-blue-dark transition duration-300 shadow">Student Login</a>
+                <a href="dashboard.html" class="mt-2 block w-full text-center px-4 py-2 bg-muted-text text-white rounded-lg hover:bg-dark-text transition duration-300 shadow">Admin Login</a>
             </nav>
         </div>
     </header>
 
     <main>
-        <section id="announcements-page" class="page py-16 md:py-24 bg-page-background"> <!-- Page background -->
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-                <div class="text-center mb-16">
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-dark-heading leading-tight">Official Announcements</h1>
-                    <p class="text-lg md:text-xl text-muted mt-4 max-w-3xl mx-auto">Stay updated with the latest circulars, notices, and important information from MET'S IEDC. We are committed to keeping our community informed and engaged.</p>
+        <!-- Hero Section: Title and Search -->
+        <section class="hero-section">
+            <div class="container hero-content text-center">
+                <div class="flex flex-col items-center mb-6">
+                    <i data-lucide="megaphone" class="megaphone-icon mb-4"></i>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-dark-heading leading-tight mb-4">Announcements</h1>
+                    <div class="relative w-full max-w-lg mx-auto">
+                        <input type="text" id="searchInput" class="w-full search-input pl-12 pr-4 py-3" placeholder="Search articles">
+                        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted"></i>
+                    </div>
                 </div>
+            </div>
+        </section>
 
-                <div id="announcements-list" class="grid grid-cols-1 gap-8 md:flex md:flex-row md:gap-6 md:overflow-x-auto md:pb-4 horizontal-scroll-container">
-                    <p class="col-span-full text-center text-muted md:hidden">Loading announcements...</p>
-                    <p class="col-span-full text-center text-muted hidden md:block">Scroll right to see more announcements!</p>
+        <!-- Tabs Navigation -->
+        <nav class="tabs-nav sticky top-16 sm:top-20 z-40">
+            <div class="container flex space-x-6 sm:space-x-8 lg:space-x-12">
+                <button class="tab-button active" onclick="filterAnnouncements('all')">All</button>
+                <button class="tab-button" onclick="filterAnnouncements('news')">News</button>
+                <button class="tab-button" onclick="filterAnnouncements('activities')">Activities</button>
+            </div>
+        </nav>
+
+        <!-- Announcement List -->
+        <section class="announcement-list-container">
+            <div class="container">
+                <div id="announcements-list" class="flex flex-col gap-4 items-center justify-center py-10">
+                    <div class="loading-spinner-announcements" id="loadingSpinner"></div>
+                    <p class="text-center text-muted w-full" id="noAnnouncementsMessage">Initializing app and connecting...</p>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="bg-dark-purple text-gray-300 py-8"> <!-- Footer background -->
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
+    <footer>
+        <div class="container text-muted">
             <p>&copy; 2025 IEDC MET'S SCHOOL OF ENGINEERING. All Rights Reserved.</p>
-            <p class="mt-2">Powered by Innovation & Entrepreneurship. Developed by Muhammed Shahil.</p>
+            <p class="mt-2">Innovate. Educate. Empower. Developed by Muhammed Shahil.</p>
         </div>
     </footer>
 
-    <script>
-        // --- Mobile Menu Logic ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
+    <!-- Firebase SDK Imports -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, query, onSnapshot, orderBy, setDoc, getDocs, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('open');
-        });
+        // Global Firebase variables (provided by Canvas environment)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
-        // --- Announcements Functionality (Hardcoded Data) ---
-        const announcementsList = document.getElementById('announcements-list');
+        let app;
+        let db;
+        let auth;
+        let currentUserId = null; 
 
-        // Hardcoded announcements data (expanded for better demonstration)
-        const dummyAnnouncements = [
-             {
+        // Initialize Firebase
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            console.log("Firebase app and Firestore initialized successfully.");
+        } catch (error) {
+            console.error("Error initializing Firebase:", error);
+            document.getElementById('noAnnouncementsMessage').textContent = "Error: Firebase initialization failed. Check console for details.";
+            document.getElementById('loadingSpinner').classList.add('hidden');
+            // Exit early if Firebase failed to initialize
+            throw new Error("Firebase initialization failed."); 
+        }
+
+        // Dummy Announcements Data to Seed (These will be added only once if the collection is empty)
+        const initialAnnouncements = [
+            {
                 title: "The Official Interview Instructions and Final Shortlist",
                 description: "The final shortlist for IEDC METS Core Team interviews is out — with names, departments, interview time slots, and Zoom guidelines included. Check the official circular for full details.",
-                fileUrl: "Blog-News/_IEDC_METS_2025_07.pdf",
+                category: "news",
+                date: "Jun 23",
+                year: "2025",
+                fileUrl: "https://innovate.startupmission.in/wp-content/uploads/2023/10/IEDC_Circulars_2024_07.pdf", // Placeholder URL
                 fileName: "_IEDC_METS_2025_07.pdf",
-                date: "June 23, 2025",
-                time: "08:53 AM",
-                uploadedBy: "Admin"
-             },
+                uploadedBy: "Admin",
+                timestamp: Date.now() - (1000 * 60 * 60 * 24 * 5)
+            },
             {
                 title: "Core Team Recruitment 2025",
                 description: "All students who applied for the METS IEDC Core Team are informed that the recruitment process has moved to the next round. The interview will be conducted online on June 25, 2025, from 10:00 AM to 12:30 PM via Google Meet. Please check your registered email for details.",
-                fileUrl: "Blog-News/IEDC_METS_2025_04.pdf",
+                category: "news",
+                date: "Jun 16",
+                year: "2025",
+                fileUrl: "https://innovate.startupmission.in/wp-content/uploads/2023/10/IEDC_Circulars_2024_04.pdf", // Placeholder URL
                 fileName: "IEDC_METS_2025_04.pdf",
-                date: "June 16, 2025",
-                time: "08:29 PM",
-                uploadedBy: "Admin"
+                uploadedBy: "Admin",
+                timestamp: Date.now() - (1000 * 60 * 60 * 24 * 12)
             },
             {
                 title: "IEDC Member Eligibility Criteria Released",
                 description: "All interested students are encouraged to review the updated eligibility criteria for becoming a member of MET'S IEDC. The document outlines participation requirements, preferred skill sets, selection process, and code of conduct for the upcoming academic year.",
-                fileUrl: "Blog-News/IEDC Member Eligibility Criteria.pdf",
+                category: "activities",
+                date: "May 23",
+                year: "2025",
+                fileUrl: "https://innovate.startupmission.in/wp-content/uploads/2023/10/IEDC_Circulars_2024_06.pdf", // Placeholder URL
                 fileName: "IEDC_Member_Eligibility_Criteria.pdf",
-                date: "May 23, 2025",
-                time: "12:02 AM",
-                uploadedBy: "Admin"
+                uploadedBy: "Admin",
+                timestamp: Date.now() - (1000 * 60 * 60 * 24 * 35)
             },
             {
                 title: "Mandatory Presence and Leave Approval for Execcom Members",
                 description: "All Execcom members are hereby reminded that attendance in Execcom meetings is mandatory. While participation in other IEDC events is not compulsory, presence is highly encouraged. Leave requests must be informed in advance and approved by the Nodal Officer. Strict adherence is expected, except in cases of medical emergencies.",
-                fileUrl: "Blog-News/Mandatory Presence & Leave Approval.jpg",
-                fileName: "Mandatory Presence & Leave Approval.jpg",
-                date: "June 03, 2025",
-                time: "07:32 PM",
-                uploadedBy: "Admin"
+                category: "activities",
+                date: "Jun 03",
+                year: "2025",
+                fileUrl: "https://innovate.startupmission.in/wp-content/uploads/2023/10/IEDC_Circulars_2024_05.pdf", // Placeholder URL
+                fileName: "Mandatory_Presence_Leave_Approval.pdf",
+                uploadedBy: "Admin",
+                timestamp: Date.now() - (1000 * 60 * 60 * 24 * 25)
+            },
+            {
+                title: "Upcoming Workshop: Introduction to IoT",
+                description: "A hands-on workshop on the Internet of Things (IoT) will be conducted next month. Learn about sensors, microcontrollers, and cloud integration for smart devices.",
+                category: "news",
+                date: "Jul 10",
+                year: "2025",
+                fileUrl: "",
+                fileName: "",
+                uploadedBy: "Team Lead",
+                timestamp: Date.now() + (1000 * 60 * 60 * 24 * 10)
+            },
+            {
+                title: "Annual Tech Fest Dates Announced!",
+                description: "Get ready for the biggest tech fest of the year! Dates for our annual innovation and technology festival have been finalized. More details on events and registrations coming soon.",
+                category: "news",
+                date: "Aug 01",
+                year: "2025",
+                fileUrl: "",
+                fileName: "",
+                uploadedBy: "Event Coordinator",
+                timestamp: Date.now() + (1000 * 60 * 60 * 24 * 40)
             }
         ];
 
-        // Function to load and display announcements from hardcoded data
-        function loadAnnouncements() {
-            announcementsList.innerHTML = ''; // Clear existing announcements
 
-            if (dummyAnnouncements.length === 0) {
-                announcementsList.innerHTML = '<p class="col-span-full text-center text-muted py-10">No announcements available yet. Please check back later!</p>';
+        // Function to seed initial announcements into Firestore if the collection is empty
+        async function seedAnnouncements() {
+            if (!db) {
+                console.error("Firestore not initialized for seeding. Skipping seedAnnouncements.");
                 return;
             }
 
-            dummyAnnouncements.forEach((data) => {
-                const downloadButtonHtml = data.fileUrl && data.fileName ? `
-                    <div class="mt-auto pt-4"> <!-- mt-auto pushes button to bottom, pt-4 adds top padding -->
-                        <a href="${data.fileUrl}" target="_blank" class="download-button inline-flex items-center justify-center px-6 py-3 rounded-xl text-white text-base font-medium shadow w-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="17" x2="12" y2="10"/><polyline points="9 14 12 17 15 14"/></svg>
-                            Download ${data.fileName}
-                        </a>
-                    </div>
+            const announcementsCollectionRef = collection(db, `artifacts/${appId}/public/data/announcements`);
+            
+            try {
+                const q = query(announcementsCollectionRef);
+                const snapshot = await getDocs(q); // Use getDocs for a one-time fetch to check emptiness
+
+                if (snapshot.empty) {
+                    console.log("Announcements collection is empty, seeding initial data...");
+                    for (const announcement of initialAnnouncements) {
+                        // Use timestamp as part of the document ID to ensure uniqueness and orderability
+                        await setDoc(doc(announcementsCollectionRef, `announcement_${announcement.timestamp}_${Math.random().toString(36).substring(7)}`), announcement);
+                    }
+                    console.log("Initial announcements seeded.");
+                } else {
+                    console.log("Announcements collection already contains data, skipping seeding.");
+                }
+            } catch (error) {
+                console.error("Error during seeding process:", error);
+                // Even if seeding fails, we should still try to listen for existing data
+            }
+        }
+
+
+        // Authenticate user anonymously
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUserId = user.uid;
+                console.log("Authenticated as:", currentUserId);
+                // Ensure db is available before trying to seed/listen
+                if (db) {
+                    await seedAnnouncements(); // Ensure announcements exist first
+                    setupAnnouncementsListener(); // Then, set up the real-time listener
+                } else {
+                     console.error("Firestore DB instance not available after authentication.");
+                     noAnnouncementsMessage.textContent = "Error: Database not ready after authentication.";
+                     loadingSpinner.classList.add('hidden');
+                }
+            } else {
+                try {
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        console.log("Signed in with custom token.");
+                    } else {
+                        await signInAnonymously(auth);
+                        console.log("Signed in anonymously.");
+                    }
+                } catch (error) {
+                    console.error("Error during authentication:", error);
+                    noAnnouncementsMessage.textContent = "Error authenticating. Please try again.";
+                    loadingSpinner.classList.add('hidden');
+                }
+            }
+        });
+
+
+        // Global variable to store fetched announcements
+        let allAnnouncements = [];
+        let currentFilter = 'all'; // Default filter
+        const announcementsList = document.getElementById('announcements-list');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const noAnnouncementsMessage = document.getElementById('noAnnouncementsMessage');
+        const searchInput = document.getElementById('searchInput');
+
+        // Function to render announcements based on filter and search query
+        function renderAnnouncements() {
+            loadingSpinner.classList.add('hidden'); // Always hide spinner when render is called
+            
+            const searchQuery = searchInput.value.toLowerCase();
+            const filteredAnnouncements = allAnnouncements.filter(announcement => {
+                const matchesCategory = currentFilter === 'all' || announcement.category === currentFilter;
+                const matchesSearch = announcement.title.toLowerCase().includes(searchQuery) ||
+                                      announcement.description.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+
+            announcementsList.innerHTML = ''; // Clear previous content
+
+            if (filteredAnnouncements.length === 0) {
+                noAnnouncementsMessage.textContent = `No announcements found matching your criteria.`;
+                noAnnouncementsMessage.classList.remove('hidden');
+                return;
+            } else {
+                noAnnouncementsMessage.classList.add('hidden'); // Hide message if results exist
+            }
+
+            filteredAnnouncements.forEach(announcement => {
+                const downloadLinkHtml = announcement.fileUrl && announcement.fileName ? `
+                    <a href="${announcement.fileUrl}" target="_blank" class="download-link text-primary-blue hover:text-primary-blue-dark">
+                        <i data-lucide="download" class="w-4 h-4 mr-1"></i> Download ${announcement.fileName}
+                    </a>
                 ` : '';
 
-                const announcementItem = `
-                    <div class="announcement-card">
-                        <div class="flex items-center gap-4">
-                            <div class="announcement-icon-container">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="announcement-icon lucide lucide-megaphone">
-                                    <path d="m3 11 18-6v11l-18 6z"/>
-                                    <path d="M7 5v12"/>
-                                    <path d="M11 5v12"/>
-                                    <path d="M15 5v12"/>
-                                </svg>
-                            </div>
-                            <h3 class="text-xl font-bold text-dark-heading leading-tight">${data.title}</h3>
+                const itemHtml = `
+                    <div class="announcement-item gap-4">
+                        <div class="announcement-date-col">
+                            <div class="month-day">${announcement.date}</div>
+                            <div class="year">${announcement.year}</div>
                         </div>
-                        <p class="text-base text-muted leading-relaxed flex-grow">${data.description}</p>
-                        <div class="text-sm text-gray-500 mt-auto">
-                            <span class="font-medium">Published:</span> ${data.date} at ${data.time} <br>
-                            <span class="font-medium">By:</span> ${data.uploadedBy}
+                        <div class="announcement-content-col">
+                            <h3>${announcement.title}</h3>
+                            <p>${announcement.description}</p>
+                            ${downloadLinkHtml}
                         </div>
-                        ${downloadButtonHtml}
                     </div>
                 `;
-                announcementsList.innerHTML += announcementItem;
+                announcementsList.innerHTML += itemHtml;
+            });
+
+            // Re-create Lucide icons for newly added elements
+            lucide.createIcons();
+        }
+
+        // Function to handle tab clicks
+        function filterAnnouncements(category) {
+            currentFilter = category;
+            document.querySelectorAll('.tab-button').forEach(button => {
+                // Use textContent for comparison as it directly reflects the button text
+                if (button.textContent.toLowerCase().trim() === category.toLowerCase().trim()) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+            // Clear search input on tab change (common UI pattern)
+            searchInput.value = ''; 
+            renderAnnouncements(); // Re-render with new filter and cleared search
+        }
+
+        // Event listener for search input
+        searchInput.addEventListener('input', renderAnnouncements);
+
+        // --- Firebase Firestore Listener for Announcements ---
+        function setupAnnouncementsListener() {
+            if (!db) {
+                console.error("Firestore not initialized for listener. Skipping setupAnnouncementsListener.");
+                noAnnouncementsMessage.textContent = "Error: Database not ready.";
+                loadingSpinner.classList.add('hidden');
+                return;
+            }
+
+            loadingSpinner.classList.remove('hidden');
+            noAnnouncementsMessage.textContent = 'Loading announcements...';
+            noAnnouncementsMessage.classList.remove('hidden');
+
+            const announcementsCollectionRef = collection(db, `artifacts/${appId}/public/data/announcements`);
+            // Ordering by timestamp ensures the latest announcements are at the top
+            const q = query(announcementsCollectionRef, orderBy('timestamp', 'desc')); 
+
+            onSnapshot(q, (snapshot) => {
+                allAnnouncements = [];
+                snapshot.forEach((doc) => {
+                    allAnnouncements.push(doc.data());
+                });
+                console.log("Announcements fetched:", allAnnouncements.length, "items."); 
+                renderAnnouncements(); // Render announcements after fetching
+            }, (error) => {
+                console.error("Error fetching announcements:", error);
+                noAnnouncementsMessage.textContent = "Error loading announcements. Please try again.";
+                loadingSpinner.classList.add('hidden');
             });
         }
 
-        // Call loadAnnouncements when the page loads
-        document.addEventListener('DOMContentLoaded', loadAnnouncements);
+        // Initial setup on page load:
+        // 1. Initialize Lucide icons for static elements.
+        // 2. Set initial loading state.
+        // 3. Firebase authentication (onAuthStateChanged) will then handle seeding and listener setup.
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons(); // For static icons in header etc.
+
+            loadingSpinner.classList.remove('hidden');
+            noAnnouncementsMessage.textContent = 'Initializing app and connecting to database...';
+            noAnnouncementsMessage.classList.remove('hidden');
+
+            // Firebase authentication `onAuthStateChanged` will run automatically
+            // after the app initializes and will call `seedAnnouncements` and `setupAnnouncementsListener`
+            // once authentication is complete.
+        });
     </script>
 </body>
 </html>
