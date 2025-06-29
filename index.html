@@ -228,62 +228,100 @@
             </div>
 
             <!-- Carousel -->
-             <a href="event.html">
-            <section class="py-8 bg-light">
-                <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="swiper mySwiper rounded-lg shadow-lg">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <img src="EVENTS/PRIZE ON.jpg" class="w-full h-96 object-cover rounded-lg" alt=" ARYSE Kerala - Quiz Competition">
-                            </div>
-                                <img src="EVENTS/Idea Pitching Competion in Pravaah.jpg" class="w-full h-96 object-cover rounded-lg" alt="Idea Pitching Competition">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="EVENTS/CHRISS AT CLUSTER.jpg" class="w-full h-96 object-cover rounded-lg" alt="CHRIS AT CLUSTER">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="EVENTS/EVENT 1.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="EVENTS/EVENT 2.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="EVENTS/IEDC CCE METS.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="EVENTS/IEDC CCE.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="EVENTS/KTU IDEA PITCHING.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="EVENTS/no file.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="EVENTS/PRIZE.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
-                            </div>
-                        </div>
-                        <div class="swiper-pagination"></div>
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
+          <a href="event.html">
+    <section class="py-8 bg-white"> <!-- Changed background to white for consistency with other light theme elements -->
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Swiper Container - Adjusted shadow for a modern look -->
+            <div class="swiper mySwiper rounded-lg shadow-xl overflow-hidden" style="--swiper-navigation-color: #8C6CEF; --swiper-pagination-color: #8C6CEF;">
+                <div class="swiper-wrapper">
+                    <!-- Swiper Slides -->
+                    <div class="swiper-slide">
+                        <img src="EVENTS/PRIZE ON.jpg" class="w-full h-96 object-cover rounded-lg" alt="ARYSE Kerala - Quiz Competition">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="EVENTS/Idea Pitching Competion in Pravaah.jpg" class="w-full h-96 object-cover rounded-lg" alt="Idea Pitching Competition">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="EVENTS/CHRISS AT CLUSTER.jpg" class="w-full h-96 object-cover rounded-lg" alt="CHRIS AT CLUSTER">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="EVENTS/EVENT 1.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="EVENTS/EVENT 2.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="EVENTS/IEDC CCE METS.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="EVENTS/IEDC CCE.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="EVENTS/KTU IDEA PITCHING.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="EVENTS/no file.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="EVENTS/PRIZE.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
                     </div>
                 </div>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        new Swiper('.mySwiper', {
-                            loop: true,
-                            autoplay: { delay: 3500, disableOnInteraction: false },
-                            pagination: { el: '.swiper-pagination', clickable: true },
-                            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                            slidesPerView: 1,
-                            spaceBetween: 20,
-                            effect: 'fade',
-                        });
-                    });
-                </script>
-            </section>
-            </a>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+                <!-- Add Navigation (Next/Prev buttons) -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </section>
+</a>
 
+<!-- Required Swiper CSS and JS -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        new Swiper('.mySwiper', {
+            effect: 'coverflow', // Enables the 3D coverflow effect
+            grabCursor: true,   // Changes cursor to grabbing hand
+            centeredSlides: true, // Centers the active slide
+            slidesPerView: 'auto', // Adjusts slides per view based on container
+            coverflowEffect: {
+                rotate: 50,     // Slide rotation in degrees
+                stretch: 0,     // Space between slides in px
+                depth: 100,     // Depth offset of the slides (z-axis)
+                modifier: 1,    // Effect multiplier
+                slideShadows: true, // Enables shadows on slides
+            },
+            loop: true,         // Loop through slides
+            autoplay: {
+                delay: 3000,      // Autoplay delay in ms (3 seconds)
+                disableOnInteraction: false, // Continue autoplay after user interaction
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            // Responsive breakpoints - adjust slidesPerView for smaller screens
+            breakpoints: {
+                640: { // Tailwind's 'sm' breakpoint
+                    slidesPerView: 1,
+                },
+                768: { // Tailwind's 'md' breakpoint
+                    slidesPerView: 2, // Show 2 slides on medium screens
+                },
+                1024: { // Tailwind's 'lg' breakpoint
+                    slidesPerView: 3, // Show 3 slides on large screens (main effect)
+                },
+            },
+        });
+    });
+</script>
 
             <section class="py-16 bg-white">
                 <div class="container mx-auto px-4 sm:px-6 lg:px-8">
