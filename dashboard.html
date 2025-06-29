@@ -45,7 +45,7 @@
 
         /* Sidebar specific styles */
         .sidebar {
-            width: 250px; /* Fixed width for sidebar */
+            width: 250px; /* Fixed width for desktop sidebar */
             background-color: var(--color-sidebar-background);
             box-shadow: 2px 0 10px var(--color-shadow-light); /* Shadow on the right */
             padding: 2rem 1.5rem;
@@ -340,49 +340,107 @@
             .dashboard-wrapper {
                 flex-direction: column; /* Stack sidebar and main content on small screens */
             }
+
+            /* Mobile Sidebar styles - now a slide-down overlay */
             .sidebar {
-                width: 100%; /* Full width sidebar */
-                height: auto; /* Auto height on mobile */
-                position: static; /* No sticky on mobile */
-                padding: 1rem 0.5rem;
-                box-shadow: 0 2px 10px var(--color-shadow-light); /* Shadow at bottom */
-                overflow-y: visible; /* No internal scroll */
-                border-radius: 0 0 1rem 1rem; /* Rounded bottom corners */
-            }
-            .sidebar-logo-section {
-                justify-content: center; /* Center logo on mobile */
-                margin-bottom: 1rem;
-            }
-            .sidebar-nav-container {
-                flex-direction: row; /* Horizontal scrollable nav on mobile */
-                overflow-x: auto;
-                width: 100%;
-                justify-content: flex-start;
-                padding-bottom: 0.5rem; /* Space for scrollbar */
-                gap: 0.5rem;
-            }
-            .sidebar-nav-item {
-                flex-shrink: 0; /* Prevent items from shrinking */
-                width: auto;
-            }
-            .sidebar-bottom-item {
-                display: none; /* Hide upgrade button on small screens to save space */
-            }
-            .dashboard-main-wrapper {
-                padding: 0; /* Remove overall padding, content sections will add their own */
-            }
-            .main-header {
+                width: 100%; /* Full width */
+                height: 100vh; /* Full height to overlay */
+                position: fixed; /* Fixed position for overlay */
+                top: 0;
+                left: 0;
+                transform: translateY(-100%); /* Initially hidden off-screen (up) */
+                transition: transform 0.3s ease-in-out; /* Smooth transition */
+                z-index: 200; /* Higher than header */
+                padding: 1.5rem; /* Consistent padding */
+                display: flex; /* Keep flex for content layout */
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 0.75rem;
-                margin-bottom: 1.5rem;
+                align-items: center;
+                justify-content: flex-start; /* Align content to top */
+                background-color: var(--color-sidebar-background); /* Ensure background is solid */
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2); /* Stronger shadow for overlay */
+            }
+
+            .sidebar.open {
+                transform: translateY(0); /* Slide down into view */
+            }
+
+            .sidebar-logo-section {
+                width: 100%; /* Ensure logo section spans full width */
+                display: flex; /* Make it a flex container */
+                justify-content: space-between; /* To push close button to end */
+                align-items: center; /* Vertically align items */
+                margin-bottom: 2rem;
+            }
+
+            .sidebar-logo-section .close-mobile-menu {
+                display: block; /* Show close button on mobile */
+                cursor: pointer;
+                color: var(--color-dark-text); /* Match text color */
+            }
+
+            .sidebar-nav-container {
+                flex-direction: column; /* Stack nav items vertically */
+                overflow-x: visible; /* No horizontal scroll */
+                flex-grow: 1; /* Allow nav items to take space */
+                align-items: center; /* Center nav items */
+                text-align: center;
+                width: 100%; /* Ensure container takes full width */
+            }
+
+            .sidebar-nav-item {
+                width: 80%; /* Make nav items wider for better click area */
+                justify-content: center; /* Center text and icon */
+                margin-bottom: 0.75rem; /* Space between items */
+            }
+            
+            .sidebar-bottom-item { /* Get Help button */
+                display: block; /* Make visible again if needed in overlay */
+                margin-top: 1.5rem; /* Adjust spacing */
+            }
+
+            /* Main Header adjustments */
+            .main-header {
+                flex-direction: row; /* Keep header horizontal on mobile */
+                align-items: center;
+                justify-content: space-between; /* Space out items */
+                gap: 0; /* Remove gap */
                 padding: 1.5rem 1rem; /* Reduced padding on mobile */
-                position: static; /* No sticky on mobile header */
+                position: sticky; /* Keep sticky on mobile header */
+                top: 0;
             }
             .main-header .user-info {
-                width: 100%;
-                justify-content: space-between;
+                display: flex; /* Ensure user info is always flex */
                 align-items: center;
+                width: auto; /* Auto width, not 100% */
+                justify-content: flex-end; /* Align to right */
+            }
+            .main-header .userEmailHeader {
+                display: none !important; /* Hide email on mobile header */
+            }
+
+            /* Show mobile menu toggle button in header */
+            .main-header .mobile-menu-toggle {
+                display: block; /* Show hamburger icon */
+                margin-right: 1rem; /* Space from user avatar */
+                cursor: pointer;
+                color: var(--color-dark-text);
+            }
+
+            /* Hide logout button in header on mobile */
+            .main-header .logoutBtnHeader {
+                display: none !important; /* Ensure header logout is hidden on mobile */
+            }
+            /* Show logout button in sidebar on mobile */
+            .sidebar #logoutBtnSidebar {
+                display: flex; /* Ensure it's visible in the overlay */
+                margin-top: auto; /* Push to bottom of the menu */
+                width: 80%; /* Make it wide within the menu */
+                justify-content: center; /* Center button content */
+            }
+
+            /* Other general mobile adjustments */
+            .dashboard-main-wrapper {
+                padding: 0; /* Remove overall padding, content sections will add their own */
             }
             .dashboard-banner {
                 padding: 1.5rem;
@@ -433,10 +491,16 @@
 
     <div class="dashboard-wrapper">
         <!-- Sidebar Navigation -->
-        <div class="sidebar">
-            <div class="sidebar-logo-section flex items-center space-x-2 mb-8">
-                <img src="iedc logo.jpg" alt="MET'S IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
-                <span class="text-2xl font-extrabold text-dark-text">MET'S IEDC</span>
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-logo-section">
+                <div class="flex items-center space-x-2">
+                    <img src="https://innovate.startupmission.in/wp-content/uploads/2023/10/iedc_logo.png" alt="MET'S IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
+                    <span class="text-2xl font-extrabold text-dark-text">MET'S IEDC</span>
+                </div>
+                <!-- Close button for mobile menu -->
+                <button id="close-mobile-sidebar" class="close-mobile-menu hidden md:hidden">
+                    <i data-lucide="x" class="w-8 h-8"></i>
+                </button>
             </div>
 
             <nav class="sidebar-nav-container flex flex-col gap-2 w-full">
@@ -460,8 +524,8 @@
                     <i data-lucide="calendar-check" class="w-5 h-5"></i>
                     <span>Propose Event</span>
                 </a>
-                <!-- Logout in sidebar -->
-                <button id="logoutBtnSidebar" class="sidebar-nav-item mt-4 bg-red-action text-white hover:bg-red-action-dark justify-center">
+                <!-- Logout in sidebar - visible on mobile -->
+                <button id="logoutBtnSidebar" class="sidebar-nav-item mt-4 bg-red-action text-white hover:bg-red-action-dark">
                     <i data-lucide="log-out" class="w-5 h-5"></i>
                     <span>Logout</span>
                 </button>
@@ -479,19 +543,26 @@
         <div class="dashboard-main-wrapper">
             <!-- Main Content Header -->
             <div class="main-header">
-                <div class="flex flex-col">
-                    <h1 class="text-3xl font-extrabold text-dark-text">Dashboard</h1>
-                    <p class="text-md text-muted">Monday, 22 March 2025</p>
+                <div class="flex items-center">
+                    <!-- Mobile menu toggle button (hamburger icon) -->
+                    <button id="mobile-menu-toggle" class="mobile-menu-toggle hidden md:hidden mr-4">
+                        <i data-lucide="menu" class="w-8 h-8"></i>
+                    </button>
+                    <div class="flex flex-col">
+                        <h1 class="text-3xl font-extrabold text-dark-text">Dashboard</h1>
+                        <p class="text-md text-muted">Monday, 22 March 2025</p>
+                    </div>
                 </div>
                 <div class="flex items-center">
                     <div class="header-icons flex gap-4 mr-4">
                         <i data-lucide="bell" class="w-6 h-6"></i>
                         <i data-lucide="settings" class="w-6 h-6"></i>
                     </div>
-                    <div class="flex items-center cursor-pointer">
+                    <div class="flex items-center cursor-pointer user-info">
                         <span class="text-dark-text font-semibold mr-2 hidden sm:block" id="userEmailHeader">user@example.com</span>
                         <div class="user-avatar" id="userAvatarHeader">U</div>
                     </div>
+                    <!-- Logout in header - hidden on mobile -->
                     <button id="logoutBtnHeader" class="action-button px-4 py-2 bg-red-action text-white rounded-md ml-4 hidden sm:block hover:bg-red-action-dark">Logout</button>
                 </div>
             </div>
@@ -852,22 +923,211 @@
         </div>
     </div>
 
-    <script>
+    <!-- Firebase SDK Imports -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
         // Initialize Lucide icons
         lucide.createIcons();
 
-        // --- Tab Switching Logic (Modified for Sidebar) ---
+        // YOUR FIREBASE CONFIGURATION (Provided by user)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+            authDomain: "metsiedc-3010e.firebaseapp.com",
+            databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+            projectId: "metsiedc-3010e",
+            storageBucket: "metsiedc-3010e.firebasestorage.app",
+            messagingSenderId: "954403413150",
+            appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+            measurementId: "G-6E7EK0D7JG"
+        };
+
+        // Firebase variables (appId from Canvas, initialAuthToken for auth)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let app;
+        let auth;
+        let db;
+        let currentUserId = null;
+
+        // Firebase Initialization
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app); // Get Firestore instance
+            console.log("Firebase app and Firestore initialized successfully.");
+        } catch (error) {
+            console.error("Firebase initialization failed:", error);
+            // In a production app, you might show a user-friendly error message here
+            // For now, logging to console is sufficient for debugging.
+        }
+
+        // Authentication State Change Listener
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUserId = user.uid;
+                console.log("User is logged in:", currentUserId, "Email:", user.email);
+                // Update UI elements with user info
+                document.getElementById('userEmailHeader').textContent = user.email || 'Welcome User';
+                document.getElementById('userAvatarHeader').textContent = user.email ? user.email.charAt(0).toUpperCase() : 'U';
+                document.getElementById('displayNameBanner').textContent = user.email ? user.email.split('@')[0] : 'User';
+                
+                // Fetch profile data only if the database is initialized
+                if (db) {
+                    fetchProfileData(currentUserId);
+                } else {
+                    console.error("Firestore DB not available, cannot fetch profile data on auth state change.");
+                }
+
+            } else {
+                currentUserId = null;
+                console.log("User is logged out or not authenticated.");
+                // Redirect to login if not authenticated (unless on login page itself)
+                if (window.location.pathname.endsWith('/login.html')) {
+                    // Do nothing if already on login page
+                    console.log("Already on login page. Not redirecting.");
+                } else {
+                    console.log("Redirecting to login page...");
+                    window.location.href = 'login.html';
+                }
+            }
+        });
+
+        // Attempt initial sign-in if no user is present
+        async function authenticateUser() {
+            if (auth && !auth.currentUser) {
+                try {
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        console.log("Signed in with custom token using initialAuthToken.");
+                    } else {
+                        await signInAnonymously(auth);
+                        console.log("Signed in anonymously.");
+                    }
+                } catch (error) {
+                    console.error("Error during initial authentication:", error);
+                    // Handle specific errors like token invalid, etc.
+                }
+            } else if (auth && auth.currentUser) {
+                console.log("User already authenticated on page load.");
+            } else {
+                console.error("Firebase Auth not initialized during authenticateUser call.");
+            }
+        }
+
+        // Call authenticateUser on page load
+        document.addEventListener('DOMContentLoaded', authenticateUser);
+
+        // --- Logout Functionality ---
+        async function handleLogout() {
+            if (auth) {
+                try {
+                    await signOut(auth);
+                    console.log("User signed out successfully.");
+                    // onAuthStateChanged will handle the redirect to login.html
+                } catch (error) {
+                    console.error("Error signing out:", error);
+                    // Display a user-friendly message, e.g., "Logout failed. Please try again."
+                    alert("Logout failed: " + error.message); 
+                }
+            } else {
+                console.warn("Firebase Auth not initialized. Cannot perform logout.");
+                alert("Application error: Firebase not ready for logout.");
+            }
+        }
+
+        // Attach logout listeners
+        document.getElementById('logoutBtnHeader').addEventListener('click', handleLogout);
+        document.getElementById('logoutBtnSidebar').addEventListener('click', handleLogout);
+
+
+        // --- Profile Data Management with Firestore ---
+        async function fetchProfileData(userId) {
+            if (!db) {
+                console.error("Firestore DB is not initialized. Cannot fetch profile data.");
+                return;
+            }
+            // Private data path for profile
+            const userProfileRef = doc(db, `artifacts/${appId}/users/${userId}/profile`, 'userProfile');
+            try {
+                const docSnap = await getDoc(userProfileRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    console.log("Profile data fetched:", data);
+                    // Update display fields
+                    document.getElementById('displayNameOutput').textContent = data.profileName || 'Not set';
+                    document.getElementById('bioOutput').textContent = data.profileBio || 'Not set';
+                    document.getElementById('contactNumberOutput').textContent = data.profileContact || 'Not set';
+                    document.getElementById('genderOutput').textContent = data.profileGender || 'Not set';
+                    document.getElementById('dobOutput').textContent = data.profileDob || 'Not set';
+                    document.getElementById('addressOutput').textContent = data.profileAddress || 'Not set';
+                    document.getElementById('cityOutput').textContent = data.profileCity || 'Not set';
+                    document.getElementById('stateOutput').textContent = data.profileState || 'Not set';
+                    document.getElementById('pincodeOutput').textContent = data.profilePincode || 'Not set';
+                    document.getElementById('qualificationOutput').textContent = data.profileQualification || 'Not set';
+                    document.getElementById('skillsOutput').textContent = data.profileSkills || 'Not set';
+                    // For links, ensure they are rendered as actual links
+                    document.getElementById('linkedinOutput').innerHTML = data.profileLinkedIn ? `<a href="${data.profileLinkedIn}" target="_blank" class="text-accent-purple hover:underline">${data.profileLinkedIn}</a>` : 'Not set';
+                    document.getElementById('instagramOutput').innerHTML = data.profileInstagram ? `<a href="${data.profileInstagram}" target="_blank" class="text-accent-purple hover:underline">${data.profileInstagram}</a>` : 'Not set';
+                    document.getElementById('communicationOutput').textContent = data.profileCommunicationMethod || 'Not set';
+
+                    // Update form fields for editing
+                    document.getElementById('profileName').value = data.profileName || '';
+                    document.getElementById('profileBio').value = data.profileBio || '';
+                    document.getElementById('profileContact').value = data.profileContact || '';
+                    document.getElementById('profileGender').value = data.profileGender || '';
+                    document.getElementById('profileDob').value = data.profileDob || '';
+                    document.getElementById('profileAddress').value = data.profileAddress || '';
+                    document.getElementById('profileCity').value = data.profileCity || '';
+                    document.getElementById('profileState').value = data.profileState || '';
+                    document.getElementById('profilePincode').value = data.profilePincode || '';
+                    document.getElementById('profileQualification').value = data.profileQualification || '';
+                    document.getElementById('profileSkills').value = data.profileSkills || '';
+                    document.getElementById('profileLinkedIn').value = data.profileLinkedIn || '';
+                    document.getElementById('profileInstagram').value = data.profileInstagram || '';
+                    document.getElementById('profileCommunicationMethod').value = data.profileCommunicationMethod || '';
+                } else {
+                    console.log("No profile data found for user:", userId);
+                    resetDisplayedProfileInfo(); // Reset to default "Not set" if no data
+                }
+            } catch (e) {
+                console.error("Error fetching profile document:", e);
+                displayStatusMessage(document.getElementById('profileStatusMessage'), 'Error loading profile. ' + e.message, 'error');
+                resetDisplayedProfileInfo();
+            }
+        }
+
+        async function saveProfileData(profileData) {
+            if (!db || !currentUserId) {
+                displayStatusMessage(document.getElementById('profileStatusMessage'), 'Error: Not authenticated or database not ready.', 'error');
+                console.error("Not authenticated or Firestore DB not initialized. Cannot save profile.");
+                return;
+            }
+
+            const userProfileRef = doc(db, `artifacts/${appId}/users/${currentUserId}/profile`, 'userProfile');
+            try {
+                await setDoc(userProfileRef, profileData, { merge: true }); // Use merge: true to update fields
+                displayStatusMessage(document.getElementById('profileStatusMessage'), 'Profile updated successfully!', 'success');
+                console.log("Profile saved:", profileData);
+                fetchProfileData(currentUserId); // Re-fetch to update displayed info and form
+            } catch (e) {
+                displayStatusMessage(document.getElementById('profileStatusMessage'), 'Error saving profile: ' + e.message, 'error');
+                console.error("Error saving profile document:", e);
+            }
+        }
+
+        // --- Tab Switching Logic ---
         function showTab(tabId) {
-            // Hide all tab content
             document.querySelectorAll('.tab-content').forEach(tabContent => {
                 tabContent.classList.add('hidden');
             });
-            // Deactivate all sidebar nav items
             document.querySelectorAll('.sidebar-nav-item').forEach(item => {
                 item.classList.remove('active');
             });
 
-            // Show the selected tab content
             const targetSection = document.getElementById(tabId + 'Section');
             if (targetSection) {
                 targetSection.classList.remove('hidden');
@@ -875,25 +1135,22 @@
                 console.error("Target section not found:", tabId + 'Section');
             }
 
-            // Activate the clicked sidebar nav item
             const targetButton = document.getElementById(tabId + 'TabBtn');
             if (targetButton) {
                 targetButton.classList.add('active');
             } else {
                 console.error("Target button not found:", tabId + 'TabBtn');
             }
+
+            // Close mobile sidebar if open after clicking a tab
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                document.body.style.overflow = ''; // Restore body scroll
+            }
         }
 
-        // --- Form Handling (Client-side only - NO DATA STORAGE) ---
-        // These forms now only provide visual feedback (success/error messages)
-        // and clear the form. They do NOT store or manipulate any user data.
-
-        const profileStatusMessage = document.getElementById('profileStatusMessage');
-        const projectStatusMessage = document.getElementById('projectStatusMessage');
-        const ideaStatusMessage = document.getElementById('ideaStatusMessage');
-        const eventStatusMessage = document.getElementById('eventStatusMessage');
-
-        // Function to display status messages
+        // --- Form Handling & Status Messages ---
         function displayStatusMessage(element, message, type) {
             element.classList.remove('hidden', 'error', 'success');
             element.classList.add(type);
@@ -903,11 +1160,10 @@
             }, 5000);
         }
 
-        // Function to set default "Not set" or empty values for displayed profile info
         function resetDisplayedProfileInfo() {
             document.getElementById('userEmailHeader').textContent = 'user@example.com';
-            document.getElementById('userAvatarHeader').textContent = 'U'; // Default avatar initial
-            document.getElementById('displayNameBanner').textContent = 'User'; // Default banner name
+            document.getElementById('userAvatarHeader').textContent = 'U';
+            document.getElementById('displayNameBanner').textContent = 'User';
 
             const profileOutputElements = [
                 'displayNameOutput', 'bioOutput', 'contactNumberOutput', 'genderOutput', 'dobOutput',
@@ -915,62 +1171,87 @@
                 'skillsOutput', 'linkedinOutput', 'instagramOutput', 'communicationOutput'
             ];
             profileOutputElements.forEach(id => {
-                document.getElementById(id).textContent = 'Not set';
+                const element = document.getElementById(id);
+                if (element) { // Check if element exists before setting textContent
+                    element.textContent = 'Not set';
+                }
+            });
+            const profileForm = document.getElementById('profileForm');
+            if (profileForm) {
+                profileForm.reset();
+            }
+        }
+
+        // Handle Profile Form Submission
+        document.getElementById('profileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const profileData = {
+                profileName: document.getElementById('profileName').value,
+                profileBio: document.getElementById('profileBio').value,
+                profileContact: document.getElementById('profileContact').value,
+                profileGender: document.getElementById('profileGender').value,
+                profileDob: document.getElementById('profileDob').value,
+                profileAddress: document.getElementById('profileAddress').value,
+                profileCity: document.getElementById('profileCity').value,
+                profileState: document.getElementById('profileState').value,
+                profilePincode: document.getElementById('profilePincode').value,
+                profileQualification: document.getElementById('profileQualification').value,
+                profileSkills: document.getElementById('profileSkills').value,
+                profileLinkedIn: document.getElementById('profileLinkedIn').value,
+                profileInstagram: document.getElementById('profileInstagram').value,
+                profileCommunicationMethod: document.getElementById('profileCommunicationMethod').value
+            };
+            await saveProfileData(profileData);
+        });
+
+        // Handle Project Form Submission (Mock - no Firestore)
+        document.getElementById('projectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            displayStatusMessage(document.getElementById('projectStatusMessage'), 'Project submission simulated (no data stored).', 'success');
+            this.reset();
+        });
+
+        // Handle Idea Form Submission (Mock - no Firestore)
+        document.getElementById('ideaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            displayStatusMessage(document.getElementById('ideaStatusMessage'), 'Idea submission simulated (no data stored).', 'success');
+            this.reset();
+        });
+
+        // Handle Event Form Submission (Mock - no Firestore)
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            displayStatusMessage(document.getElementById('eventStatusMessage'), 'Event proposal simulated (no data stored).', 'success');
+            this.reset();
+        });
+
+        // --- Mobile Sidebar Toggle Logic ---
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const closeMobileSidebarBtn = document.getElementById('close-mobile-sidebar');
+
+        if (mobileMenuToggle && sidebar && closeMobileSidebarBtn) {
+            mobileMenuToggle.addEventListener('click', () => {
+                sidebar.classList.add('open');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling main content
             });
 
-            // Reset form fields to empty
-            document.getElementById('profileForm').reset();
+            closeMobileSidebarBtn.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                document.body.style.overflow = ''; // Restore body scroll
+            });
+        } else {
+            console.error("Mobile menu toggle, sidebar, or close button not found.");
         }
 
 
-        // Handle Profile Form Submission (No data storage)
-        document.getElementById('profileForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // In a real app, data would be sent to a backend here.
-            // For now, just show a success message and clear the form.
-            displayStatusMessage(profileStatusMessage, 'Profile update simulated (no data stored).', 'success');
-            this.reset();
-            resetDisplayedProfileInfo(); // Reset displayed info to "Not set" after "submission"
-        });
-
-        // Handle Project Form Submission (No data storage)
-        document.getElementById('projectForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // In a real app, data would be sent to a backend here.
-            displayStatusMessage(projectStatusMessage, 'Project submission simulated (no data stored).', 'success');
-            this.reset();
-        });
-
-        // Handle Idea Form Submission (No data storage)
-        document.getElementById('ideaForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // In a real app, data would be sent to a backend here.
-            displayStatusMessage(ideaStatusMessage, 'Idea submission simulated (no data stored).', 'success');
-            this.reset();
-        });
-
-        // Handle Event Form Submission (No data storage)
-        document.getElementById('eventForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // In a real app, data would be sent to a backend here.
-            displayStatusMessage(eventStatusMessage, 'Event proposal simulated (no data stored).', 'success');
-            this.reset();
-        });
-
-        // Handle Logout
-        document.getElementById('logoutBtnHeader').addEventListener('click', function() {
-            alert('Logged out successfully (mock action) - header button');
-            window.location.href = 'login.html'; // Redirect to login page
-        });
-        document.getElementById('logoutBtnSidebar').addEventListener('click', function() {
-            alert('Logged out successfully (mock action) - sidebar button');
-            window.location.href = 'login.html'; // Redirect to login page
-        });
-
-        // Initial load
+        // Initial load: show dashboard overview
         document.addEventListener('DOMContentLoaded', () => {
-            resetDisplayedProfileInfo(); // Initialize displayed profile info to "Not set"
-            showTab('dashboardOverview'); // Show Dashboard Overview tab by default
+            // Ensure Firebase is initialized before attempting to authenticate or show tabs.
+            // The `onAuthStateChanged` listener will take care of calling `authenticateUser`
+            // and then `fetchProfileData` and `showTab('dashboardOverview')`
+            // once authentication is confirmed.
+            showTab('dashboardOverview'); // Show Dashboard Overview tab by default on initial load
         });
     </script>
 </body>
