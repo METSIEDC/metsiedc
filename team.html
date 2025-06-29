@@ -11,15 +11,20 @@
     <style>
         /* Define a consistent color palette */
         :root {
-            --color-primary: #007BFF; /* A vibrant blue for primary elements */
-            --color-accent: #28A745; /* A strong green for accent elements */
-            --color-light-background: #F4F7FC; /* Very light, almost white background */
-            --color-card-background: #FFFFFF; /* Pure white for cards */
-            --color-dark-text: #343A40; /* Dark text/headings */
-            --color-muted-text: #6C757D; /* Muted text for descriptions/secondary info */
-            --color-border: #E0E0E0; /* Light border color */
-            --color-shadow-light: rgba(0, 0, 0, 0.05); /* Light shadow for cards */
-            --color-shadow-medium: rgba(0, 0, 0, 0.1); /* Medium shadow for hover */
+            --color-primary: #007BFF; /* A vibrant blue for primary elements (e.g., login buttons, active links) */
+            --color-accent: #28A745; /* A strong green for accent elements (e.g., student login) */
+            --color-page-bg: #F8F9FA; /* Very light grey background for the page */
+            --color-card-bg: #FFFFFF; /* Pure white for cards */
+            --color-main-text: #343A40; /* Dark text for headings and main content */
+            --color-sub-text: #6C757D; /* Muted text for descriptions and secondary info */
+            --color-border-light: #E9ECEF; /* Light border color */
+            --color-shadow: rgba(0, 0, 0, 0.08); /* Light shadow for cards */
+
+            /* Specific social media colors */
+            --color-linkedin-blue: #0A66C2;
+            --color-instagram-pink: #E1306C;
+            --color-facebook-blue: #1877F2; /* Added for completeness if needed */
+            --color-twitter-blue: #1DA1F2; /* Added for completeness if needed */
         }
 
         html {
@@ -27,15 +32,15 @@
         }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--color-light-background);
-            color: var(--color-dark-text);
+            background-color: var(--color-page-bg);
+            color: var(--color-main-text);
             padding-top: 0; /* No padding-top on body, header handles offset */
         }
 
         /* Header Styling */
         .main-header {
-            background-color: var(--color-card-background);
-            box-shadow: 0 2px 4px var(--color-shadow-light);
+            background-color: var(--color-card-bg);
+            box-shadow: 0 2px 4px var(--color-shadow);
             position: sticky;
             top: 0;
             z-index: 50;
@@ -46,7 +51,7 @@
         }
         .main-header .nav-link {
             padding: 0.5rem 1rem;
-            color: var(--color-dark-text);
+            color: var(--color-main-text);
             font-weight: 500;
             transition: color 0.2s ease-in-out;
         }
@@ -65,11 +70,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--color-card-background);
+            background-color: var(--color-card-bg);
             z-index: 100;
             transform: translateX(-100%);
             transition: transform 0.3s ease-in-out;
             padding-top: 5rem; /* Space for header */
+            overflow-y: auto; /* Allow scrolling for long menus */
         }
         .mobile-menu.open {
             transform: translateX(0);
@@ -81,154 +87,175 @@
             background: none;
             border: none;
             cursor: pointer;
-            color: var(--color-dark-text);
+            color: var(--color-main-text);
+            z-index: 101; /* Ensure button is on top */
         }
 
         /* Team Page Section */
         #team-page {
             padding: 4rem 1.5rem; /* Responsive padding */
             text-align: center;
+            background-color: var(--color-page-bg);
         }
         #team-page h1 {
             font-size: 2.5rem; /* text-4xl */
             font-weight: 800; /* font-extrabold */
-            color: var(--color-dark-text);
+            color: var(--color-main-text);
             margin-bottom: 0.5rem;
         }
         #team-page .section-description {
             font-size: 1.125rem; /* text-xl */
-            color: var(--color-muted-text);
+            color: var(--color-sub-text);
             margin-bottom: 3rem;
-            max-width: 600px;
+            max-width: 800px; /* Wider description */
             margin-left: auto;
             margin-right: auto;
+            line-height: 1.6;
         }
 
-        /* Featured Member Card */
-        .featured-member-card {
-            background-color: var(--color-card-background);
-            border-radius: 1.5rem; /* More rounded corners */
-            box-shadow: 0 8px 20px var(--color-shadow-medium);
-            padding: 2rem;
-            max-width: 400px; /* Max width for the card */
-            margin: 0 auto 3rem auto; /* Center card and add bottom margin */
+        /* Team Member Card Styling */
+        .team-member-card {
+            background-color: var(--color-card-bg);
+            border-radius: 0.75rem; /* Rounded corners for the whole card */
+            overflow: hidden; /* Important for image inside to respect border-radius */
+            box-shadow: 0 4px 12px var(--color-shadow);
+            transition: all 0.3s ease-in-out;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-        .featured-member-img {
-            width: 160px; /* Larger circular image */
-            height: 160px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            border: 4px solid var(--color-primary); /* Border color from logo */
-        }
-        .featured-member-name {
-            font-size: 1.75rem; /* text-3xl */
-            font-weight: 700;
-            color: var(--color-dark-text);
-            margin-bottom: 0.5rem;
-        }
-        .featured-member-role {
-            font-size: 1.125rem; /* text-lg */
-            color: var(--color-primary); /* Primary color for role */
-            margin-bottom: 1rem;
-        }
-        .featured-member-bio {
-            font-size: 0.95rem;
-            color: var(--color-muted-text);
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-        .featured-member-socials {
-            display: flex;
-            gap: 1rem;
-        }
-        .featured-member-socials .lucide {
-            color: var(--color-muted-text);
-            transition: color 0.2s ease-in-out;
-        }
-        .featured-member-socials a:hover .lucide {
-            color: var(--color-primary);
+            position: relative; /* For the arrow icon positioning */
         }
 
-        /* Other Members Horizontal Scroll */
-        .other-members-wrapper {
-            max-width: 900px; /* Max width for the scrollable area */
-            margin: 0 auto;
-        }
-        .other-members-scroll-container {
-            display: flex;
-            overflow-x: auto; /* Enable horizontal scrolling */
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-            padding-bottom: 1rem; /* Space for scrollbar */
-            gap: 1.5rem; /* Space between avatars */
-            justify-content: center; /* Center items if they don't fill the width */
-            align-items: center;
-            scrollbar-width: thin; /* Firefox */
-            scrollbar-color: var(--color-primary) var(--color-light-background); /* Firefox */
-        }
-        /* Custom scrollbar for Webkit browsers */
-        .other-members-scroll-container::-webkit-scrollbar {
-            height: 8px;
-        }
-        .other-members-scroll-container::-webkit-scrollbar-track {
-            background: var(--color-light-background);
-            border-radius: 10px;
-        }
-        .other-members-scroll-container::-webkit-scrollbar-thumb {
-            background: var(--color-primary);
-            border-radius: 10px;
-        }
-
-        .other-member-avatar {
-            width: 80px; /* Size for small circular avatars */
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            flex-shrink: 0; /* Prevent shrinking */
-            border: 2px solid var(--color-border);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
-        }
-        .other-member-avatar:hover {
+        .team-member-card:hover {
             transform: translateY(-5px);
-            border-color: var(--color-primary);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
-        /* Navigation Arrows */
-        .scroll-navigation {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
+        .team-member-image-wrapper {
+            width: 100%;
+            height: 250px; /* Fixed height for consistent image size */
+            overflow: hidden; /* Ensure image doesn't overflow if larger */
+            position: relative; /* For potential overlays */
         }
-        .scroll-button {
-            background-color: var(--color-primary);
+
+        .team-member-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%); /* Make images black and white */
+            transition: filter 0.3s ease-in-out;
+        }
+
+        .team-member-card:hover .team-member-image-wrapper img {
+            filter: grayscale(0%); /* Colorize on hover */
+        }
+
+        .social-links-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Always 2 columns as per image */
+            border-top: 1px solid var(--color-border-light); /* Separator */
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center content within social link */
+            padding: 0.75rem 0.5rem;
+            font-size: 0.875rem;
+            color: var(--color-white); /* Text and icon white by default */
+            background-color: var(--color-sub-text); /* Default grey background */
+            text-decoration: none;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+            gap: 0.25rem; /* Small gap between icon and text */
+        }
+        /* Remove default hover background */
+        .social-link:hover {
+            background-color: var(--color-sub-text); /* Keep it grey by default */
+        }
+
+        .social-link .lucide {
+            width: 18px; /* Smaller icon size */
+            height: 18px;
+        }
+
+        /* Specific social colors for links */
+        .social-link.linkedin-link { background-color: var(--color-linkedin-blue); }
+        .social-link.instagram-link { background-color: var(--color-instagram-pink); }
+        .social-link.facebook-link { background-color: var(--color-facebook-blue); }
+        .social-link.twitter-link { background-color: var(--color-twitter-blue); }
+
+        /* Highlighted card styling (similar to LinkedIn active state in example) */
+        .team-member-card.highlighted {
+            box-shadow: 0 0 0 3px var(--color-linkedin-blue); /* A prominent border */
+        }
+        /* When highlighted, the social link matching the highlight spans full width */
+        .team-member-card.highlighted .social-links-container .social-link.linkedin-link {
+            grid-column: span 2; /* Make LinkedIn link span full width */
+            background-color: var(--color-linkedin-blue); /* Ensure it's blue */
+        }
+        /* Hide other social links if a card is highlighted (as per example) */
+        .team-member-card.highlighted .social-links-container .social-link:not(.linkedin-link) {
+            display: none;
+        }
+        
+        .member-details {
+            padding: 1.5rem;
+            text-align: left;
+            position: relative; /* For arrow positioning */
+        }
+
+        .member-name {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600;
+            color: var(--color-main-text);
+            margin-bottom: 0.25rem;
+        }
+
+        .member-role {
+            font-size: 0.95rem;
+            color: var(--color-sub-text);
+        }
+
+        .view-profile-arrow {
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-primary); /* Primary blue for arrow background */
             color: var(--color-white);
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            transition: background-color 0.3s ease-in-out;
             cursor: pointer;
-            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        .scroll-button:hover {
-            background-color: #0056b3; /* Darker primary */
-            transform: scale(1.05);
+
+        .view-profile-arrow:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        .view-profile-arrow .lucide {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Grid Layout for Team Members */
+        #team-members-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive columns */
+            gap: 2rem; /* Gap between cards */
+            justify-items: center; /* Center cards in their grid cells */
+            max-width: 1200px; /* Max width for the grid */
+            margin: 0 auto; /* Center the grid container */
+            padding-top: 2rem; /* Add some space above the grid */
+            padding-bottom: 2rem; /* Add some space below the grid */
         }
 
         /* Footer */
         footer {
-            background-color: var(--color-dark-text); /* Dark background for footer */
-            color: var(--color-muted-text);
+            background-color: var(--color-main-text); /* Dark background for footer */
+            color: var(--color-sub-text);
             padding: 2rem 1.5rem;
             text-align: center;
             margin-top: 4rem; /* Space from content */
@@ -257,23 +284,17 @@
             #team-page h1 {
                 font-size: 2rem;
             }
-            .featured-member-card {
-                padding: 1.5rem;
+            .team-member-image-wrapper {
+                height: 200px; /* Smaller image height on mobile */
             }
-            .featured-member-img {
-                width: 120px;
-                height: 120px;
-            }
-            .featured-member-name {
-                font-size: 1.5rem;
-            }
-            .other-members-scroll-container {
-                justify-content: flex-start; /* Align left for better mobile scroll experience */
+            #team-members-container {
+                grid-template-columns: 1fr; /* Single column on mobile */
+                gap: 1.5rem;
             }
         }
     </style>
 </head>
-<body class="font-inter bg-light-background text-dark-text">
+<body class="font-inter bg-page-bg text-main-text">
 
     <header class="main-header">
         <a href="index.html#home" class="flex items-center space-x-2">
@@ -296,7 +317,7 @@
         </nav>
 
         <div class="md:hidden">
-            <button id="mobile-menu-button" class="text-dark-text focus:outline-none">
+            <button id="mobile-menu-button" class="text-main-text focus:outline-none">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
         </div>
@@ -307,14 +328,14 @@
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
         <nav class="flex flex-col space-y-4 px-4">
-            <a href="index.html#home" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">Home</a>
-            <a href="index.html#about" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">About Us</a>
-            <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">Our Team</a>
-            <a href="index.html#events" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">Events</a>
-            <a href="index.html#initiatives" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">Initiatives</a>
-            <a href="index.html#news" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">News</a>
-            <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">Announcements</a>
-            <a href="index.html#contact" class="block px-3 py-2 rounded-md text-base font-medium text-dark-text hover:bg-gray-100">Contact</a>
+            <a href="index.html#home" class="block px-3 py-2 rounded-md text-base font-medium text-main-text hover:bg-gray-100">Home</a>
+            <a href="index.html#about" class="block px-3 py-2 rounded-md text-base font-medium text-main-text hover:bg-gray-100">About Us</a>
+            <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-main-text hover:bg-gray-100">Our Team</a>
+            <a href="index.html#events" class="block px-3 py-2 rounded-md text-base font-medium text-main-text hover:bg-gray-100">Events</a>
+            <a href="index.html#initiatives" class="block px-3 py-2 rounded-md text-base font-medium text-main-text hover:bg-gray-100">Initiatives</a>
+            <a href="index.html#news" class="block px-3 py-2 rounded-md text-base font-medium text-main-text hover:bg-gray-100">News</a>
+            <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-main-text hover:bg-gray-100">Announcements</a>
+            <a href="index.html#contact" class="block px-3 py-2 rounded-md text-base font-medium text-main-text hover:bg-gray-100">Contact</a>
             <a href="login.html" class="mt-4 block w-full text-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-700 transition duration-300">Student Login</a>
             <a href="admin_login.html" class="mt-2 block w-full text-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition duration-300">Admin Login</a>
         </nav>
@@ -324,36 +345,15 @@
         <section id="team-page">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
-                    <h1>Team Members</h1>
-                    <p class="section-description">Meet the dedicated individuals who drive innovation and entrepreneurship at MET'S IEDC.</p>
-                </div>
-
-                <!-- Featured Team Member (Nodal Officer) -->
-                <div id="featured-member" class="featured-member-card">
-                    <img id="featured-member-img" src="" alt="Featured Member" class="featured-member-img">
-                    <h2 id="featured-member-name" class="featured-member-name"></h2>
-                    <p id="featured-member-role" class="featured-member-role"></p>
-                    <p id="featured-member-bio" class="featured-member-bio">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    <h1>Our Team</h1>
+                    <p class="section-description">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit dolor aliquot. 
+                        Laborer consectetur laborer et dolor magna dolor aliquot, laborer consectetur adipisicing elit, sed do dolor.
                     </p>
-                    <div id="featured-member-socials" class="featured-member-socials">
-                        <!-- Social icons will be populated here -->
-                    </div>
                 </div>
 
-                <!-- Other Team Members (Horizontal Scroll) -->
-                <div class="other-members-wrapper">
-                    <div id="other-members-scroll-container" class="other-members-scroll-container">
-                        <!-- Other member avatars will be populated here -->
-                    </div>
-                    <div class="scroll-navigation">
-                        <button id="scroll-left-btn" class="scroll-button">
-                            <i data-lucide="chevron-left" class="w-6 h-6"></i>
-                        </button>
-                        <button id="scroll-right-btn" class="scroll-button">
-                            <i data-lucide="chevron-right" class="w-6 h-6"></i>
-                        </button>
-                    </div>
+                <div id="team-members-container">
+                    <p class="text-center col-span-full text-sub-text">Loading team members...</p>
                 </div>
             </div>
         </section>
@@ -402,148 +402,172 @@
             {
                 name: "Mrs.Rekha M",
                 role: "IEDC Nodal Officer",
-                imageUrl: "Members/NODAL OFFICER.jpg",
-                instagramUrl: "https://www.instagram.com/rekhamatthew/", // Replace with actual URL
-                linkedinUrl: "" // Replace with actual URL // Example
+                imageUrl: "https://placehold.co/500x500/E9ECEF/6C757D?text=RM",
+                socials: {
+                    facebook: "", // No Facebook URL
+                    twitter: "",  // No Twitter URL
+                    linkedin: "https://www.linkedin.com/in/rekhamatthew/",
+                    instagram: "https://www.instagram.com/rekhamatthew/"
+                }
             },
             {
                 name: "Chris Babu",
                 role: "IEDC Student Lead I",
-                imageUrl: "Members/CHRISS.jpg",
-                instagramUrl: "https://www.instagram.com/chris_babu_?igsh=MXVpOG8zbXBrMzloMA==",
-                linkedinUrl: "https://www.linkedin.com/in/chris-babu/"
+                imageUrl: "https://placehold.co/500x500/E9ECEF/6C757D?text=CB",
+                socials: {
+                    facebook: "",
+                    twitter: "",
+                    linkedin: "https://www.linkedin.com/in/chris-babu/",
+                    instagram: "https://www.instagram.com/chris_babu_?igsh=MXVpOG8zbXBrMzloMA=="
+                }
             },
             {
                 name: "Deena Abbas Kalathil",
                 role: "Student Lead II",
-                imageUrl: "Members/DEENA.jpg",
-                instagramUrl: "https://www.instagram.com/deena_abbas_?igsh=MXZ6NnowYWE3Z2U4Nw== ",
-                linkedinUrl: "https://www.linkedin.com/in/deena-abbas-kalathil-2a09bb314"
+                imageUrl: "https://placehold.co/500x500/E9ECEF/6C757D?text=DAK",
+                socials: {
+                    facebook: "",
+                    twitter: "",
+                    linkedin: "https://www.linkedin.com/in/deena-abbas-kalathil-2a09bb314",
+                    instagram: "https://www.instagram.com/deena_abbas_?igsh=MXZ6NnowYWE3Z2U4Nw=="
+                }
             },
             {
                 name: "Habeeb Rahman",
                 role: "IPR & Research Lead",
-                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=HR",
-                instagramUrl: "https://www.instagram.com/h.abe.eb?igsh=ZTU5cGlrZGdoOWhv",
-                linkedinUrl: ""
+                imageUrl: "https://placehold.co/500x500/E9ECEF/6C757D?text=HR",
+                socials: {
+                    facebook: "",
+                    twitter: "",
+                    linkedin: "", // No LinkedIn
+                    instagram: "https://www.instagram.com/h.abe.eb?igsh=ZTU5cGlrZGdoOWhv"
+                }
             },
             {
                 name: "Abhijith S Menon",
                 role: "Finance Lead",
-                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=ASM",
-                instagramUrl: "https://www.instagram.com/.abhijithmenon._?igsh=NmVvYm5xdm53YnBk",
-                linkedinUrl: ""
+                imageUrl: "https://placehold.co/500x500/E9ECEF/6C757D?text=ASM",
+                socials: {
+                    facebook: "",
+                    twitter: "",
+                    linkedin: "",
+                    instagram: "https://www.instagram.com/.abhijithmenon._?igsh=NmVvYm5xdm53YnBk"
+                }
             },
             {
                 name: "Arshina Arsal",
                 role: "Quality & Operation Lead",
-                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=AA",
-                instagramUrl: "https://www.instagram.com/ar_7_.sh_?igsh=MWExdmk2amZuMmJ4Ng==",
-                linkedinUrl: "https://www.linkedin.com/in/arshina-arsal-8931a5339"
+                imageUrl: "https://placehold.co/500x500/E9ECEF/6C757D?text=AA",
+                socials: {
+                    facebook: "",
+                    twitter: "",
+                    linkedin: "https://www.linkedin.com/in/arshina-arsal-8931a5339",
+                    instagram: "https://www.instagram.com/ar_7_.sh_?igsh=MWExdmk2amZuMmJ4Ng=="
+                }
             },
             {
                 name: "Abhinav V S",
                 role: "Branding & Marketing Lead",
-                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=AVS",
-                instagramUrl: "https://www.instagram.com/abhinav__v_s_/?utm_source=ig_web_button_share_sheet",
-                linkedinUrl: ""
+                imageUrl: "https://placehold.co/500x500/E9ECEF/6C757D?text=AVS",
+                socials: {
+                    facebook: "",
+                    twitter: "",
+                    linkedin: "",
+                    instagram: "https://www.instagram.com/abhinav__v_s_/?utm_source=ig_web_button_share_sheet"
+                }
             },
             {
                 name: "Christy Antony",
                 role: "Technology Lead",
-                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=CA",
-                instagramUrl: "https://www.instagram.com/iamkrizte?igsh=MXFhMG5rYmV1YWRxcg==",
-                linkedinUrl: "https://www.linkedin.com/in/christy-antony-b96725331?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app "
+                imageUrl: "https://placehold.co/500x500/E9ECEF/6C757D?text=CA",
+                socials: {
+                    facebook: "",
+                    twitter: "",
+                    linkedin: "https://www.linkedin.com/in/christy-antony-b96725331?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app ",
+                    instagram: "https://www.instagram.com/iamkrizte?igsh=MXFhMG5rYmV1YWRxcg=="
+                }
             },
             {
                 name: "Muhammed Shahil",
                 role: "Community Lead",
-                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=MS",
-                instagramUrl: "https://www.instagram.com/_zhahil_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
-                linkedinUrl: ""
+                imageUrl: "https://placehold.co/500x500/E9ECEF/6C757D?text=MS",
+                socials: {
+                    facebook: "",
+                    twitter: "",
+                    linkedin: "",
+                    instagram: "https://www.instagram.com/_zhahil_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                }
             },
             {
                 name: "Ajina Mathew",
                 role: "Creative & Innovation Lead",
-                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=AM",
-                instagramUrl: "",
-                linkedinUrl: ""
+                imageUrl: "https://placehold.co/500x500/E9ECEF/6C757D?text=AM",
+                socials: {
+                    facebook: "",
+                    twitter: "",
+                    linkedin: "",
+                    instagram: ""
+                }
             },
             {
                 name: "Ann Treesa Saji",
                 role: "Women's Innovation Lead",
-                imageUrl: "https://placehold.co/80x80/6C757D/FFFFFF?text=ATS",
-                instagramUrl: "https://www.instagram.com/__ann_treesa_saji___/?utm_source=ig_web_button_share_sheet",
-                linkedinUrl: "https://www.linkedin.com/in/ann-treesa-saji-286603340?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app "
+                imageUrl: "https://placehold.co/500x500/E9ECEF/6C757D?text=ATS",
+                socials: {
+                    facebook: "",
+                    twitter: "",
+                    linkedin: "https://www.linkedin.com/in/ann-treesa-saji-286603340?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app ",
+                    instagram: "https://www.instagram.com/__ann_treesa_saji___/?utm_source=ig_web_button_share_sheet"
+                }
             }
         ];
 
-        let currentFeaturedMemberIndex = 0; // Start with the Nodal Officer
-
+        // Function to display team members
         function displayTeamMembers() {
-            const featuredMember = teamMembers[currentFeaturedMemberIndex];
-            const otherMembers = teamMembers.filter((_, index) => index !== currentFeaturedMemberIndex);
+            const container = document.getElementById('team-members-container');
+            container.innerHTML = ''; // Clear loading message
 
-            // Populate Featured Member Card
-            document.getElementById('featured-member-img').src = featuredMember.imageUrl.replace('80x80', '160x160'); // Ensure larger image
-            document.getElementById('featured-member-img').alt = featuredMember.name;
-            document.getElementById('featured-member-name').textContent = featuredMember.name;
-            document.getElementById('featured-member-role').textContent = featuredMember.role;
-            // You might want to add a 'bio' field to your teamMembers data
-            document.getElementById('featured-member-bio').textContent = featuredMember.bio || "Leading the charge in innovation and entrepreneurship, guiding our team to new heights.";
-
-            const featuredSocialsContainer = document.getElementById('featured-member-socials');
-            featuredSocialsContainer.innerHTML = '';
-            if (featuredMember.instagramUrl) {
-                featuredSocialsContainer.innerHTML += `<a href="${featuredMember.instagramUrl}" target="_blank"><i data-lucide="instagram" class="w-6 h-6"></i></a>`;
+            if (teamMembers.length === 0) {
+                container.innerHTML = '<p class="text-center col-span-full text-sub-text">No team members to display yet.</p>';
+                return;
             }
-            if (featuredMember.linkedinUrl) {
-                featuredSocialsContainer.innerHTML += `<a href="${featuredMember.linkedinUrl}" target="_blank"><i data-lucide="linkedin" class="w-6 h-6"></i></a>`;
-            }
-            lucide.createIcons(); // Re-create icons for featured member
 
-            // Populate Other Members Scroll Container
-            const otherMembersContainer = document.getElementById('other-members-scroll-container');
-            otherMembersContainer.innerHTML = '';
-            otherMembers.forEach((member, index) => {
-                const avatarDiv = document.createElement('div');
-                avatarDiv.classList.add('other-member-avatar');
-                avatarDiv.innerHTML = `<img src="${member.imageUrl}" alt="${member.name}" class="w-full h-full object-cover rounded-full">`;
-                avatarDiv.title = member.name; // Tooltip for name
-                avatarDiv.addEventListener('click', () => {
-                    // Find the index of the clicked member in the original teamMembers array
-                    const originalIndex = teamMembers.findIndex(tm => tm.name === member.name);
-                    if (originalIndex !== -1) {
-                        currentFeaturedMemberIndex = originalIndex;
-                        displayTeamMembers(); // Re-render with new featured member
-                    }
-                });
-                otherMembersContainer.appendChild(avatarDiv);
+            teamMembers.forEach((member, index) => {
+                let cardHtml = `
+                    <div class="team-member-card ${index === 0 ? 'highlighted' : ''}"> <!-- Highlight Nodal Officer -->
+                        <div class="team-member-image-wrapper">
+                            <img src="${member.imageUrl}" alt="${member.name}" onerror="this.src='https://placehold.co/250x250/CCCCCC/FFFFFF?text=No+Image'; this.onerror=null;">
+                        </div>
+                        <div class="social-links-container">
+                            ${member.socials.facebook ? `<a href="${member.socials.facebook}" target="_blank" class="social-link facebook-link">
+                                <i data-lucide="facebook" class="lucide"></i><span class="social-text">Facebook/user</span>
+                            </a>` : ''}
+                            ${member.socials.twitter ? `<a href="${member.socials.twitter}" target="_blank" class="social-link twitter-link">
+                                <i data-lucide="twitter" class="lucide"></i><span class="social-text">Twitter/user</span>
+                            </a>` : ''}
+                            ${member.socials.linkedin ? `<a href="${member.socials.linkedin}" target="_blank" class="social-link linkedin-link">
+                                <i data-lucide="linkedin" class="lucide"></i><span class="social-text">LinkedIn/user</span>
+                            </a>` : ''}
+                            ${member.socials.instagram ? `<a href="${member.socials.instagram}" target="_blank" class="social-link instagram-link">
+                                <i data-lucide="instagram" class="lucide"></i><span class="social-text">Instagram/user</span>
+                            </a>` : ''}
+                        </div>
+                        <div class="member-details">
+                            <h3 class="member-name">${member.name}</h3>
+                            <p class="member-role">${member.role}</p>
+                            <div class="view-profile-arrow">
+                                <i data-lucide="arrow-right" class="lucide"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
             });
+            // Re-create Lucide icons after new HTML is added
+            lucide.createIcons();
         }
 
-        // --- Horizontal Scroll Navigation ---
-        const scrollContainer = document.getElementById('other-members-scroll-container');
-        const scrollLeftBtn = document.getElementById('scroll-left-btn');
-        const scrollRightBtn = document.getElementById('scroll-right-btn');
-
-        if (scrollContainer && scrollLeftBtn && scrollRightBtn) {
-            scrollLeftBtn.addEventListener('click', () => {
-                scrollContainer.scrollBy({
-                    left: -200, // Scroll left by 200px
-                    behavior: 'smooth'
-                });
-            });
-
-            scrollRightBtn.addEventListener('click', () => {
-                scrollContainer.scrollBy({
-                    left: 200, // Scroll right by 200px
-                    behavior: 'smooth'
-                });
-            });
-        }
-
-        // Initial display on page load
+        // Call the function to display team members when the page loads
         document.addEventListener('DOMContentLoaded', displayTeamMembers);
     </script>
 </body>
