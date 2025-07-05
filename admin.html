@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons for file management -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Define a consistent color palette */
+        :root {
+            --color-primary: #007BFF;
+            --color-accent: #28A745;
+            --color-light-bg: #F8F9FA;
+            --color-dark-text: #343A40;
+            --color-muted-text: #6C757D;
+            --color-white: #FFFFFF;
+            --color-border: #E0E0E0;
+            --color-shadow: rgba(0, 0, 0, 0.1);
+            --color-blue-700: #1D4ED8;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-light-bg);
+            color: var(--color-dark-text);
+            line-height: 1.6;
+        }
+
+        /* General container styling */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Section specific styles */
+        #folder-section {
+            padding: 4rem 0;
+            background-color: var(--color-white);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px var(--color-shadow);
+            margin: 2rem auto;
+            max-width: 900px; /* Constrain width for better appearance */
+        }
+
+        .folder-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .folder-header h2 {
+            font-size: 2.25rem; /* text-3xl */
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .folder-header p {
+            font-size: 1rem;
+            color: var(--color-muted-text);
+        }
+
+        /* Password Protection Form */
+        .password-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 2rem;
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: var(--color-light-bg);
+        }
+
+        .password-form input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .password-form input[type="password"]:focus {
+            border-color: var(--color-primary);
+        }
+
+        .password-form button {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .password-form button:hover {
+            background-color: var(--color-blue-700);
+        }
+
+        .password-message {
+            color: red;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        /* File Management Area */
+        .file-management-area {
+            display: none; /* Hidden by default */
+            padding: 2rem;
+        }
+
+        /* Initial Large Upload Box */
+        .initial-upload-box {
+            border: 2px dashed var(--color-border);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background-color 0.2s;
+            margin-bottom: 2rem;
+            position: relative; /* For file input overlay */
+            background-color: var(--color-light-bg);
+        }
+
+        .initial-upload-box:hover {
+            border-color: var(--color-primary);
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+
+        .initial-upload-box input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .initial-upload-box .lucide {
+            width: 3rem;
+            height: 3rem;
+            color: var(--color-muted-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .initial-upload-box p {
+            color: var(--color-muted-text);
+            font-size: 1rem;
+        }
+
+        /* Compact Upload Button */
+        .compact-upload-btn-container {
+            display: none; /* Hidden by default */
+            margin-bottom: 2rem;
+            text-align: right; /* Align button to the right */
+        }
+
+        .compact-upload-btn-container button {
+            background-color: var(--color-accent);
+            color: var(--color-white);
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            border: none;
+            display: inline-flex; /* For icon and text */
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .compact-upload-btn-container button:hover {
+            background-color: var(--color-green-700);
+        }
+
+        .compact-upload-btn-container .lucide {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        /* File List/Folder View Container */
+        .file-list-container {
+            margin-top: 2rem;
+            border-top: 1px solid var(--color-border);
+            padding-top: 2rem;
+        }
+
+        .file-list-container h3 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600;
+            color: var(--color-dark-text);
+            margin-bottom: 1.5rem;
+        }
+
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Smaller items for folders/files */
+            gap: 1.5rem;
+        }
+
+        /* File Item (for both files and folders) */
+        .file-item {
+            background-color: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            padding: 1rem 0.5rem; /* Reduced horizontal padding */
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer; /* Make all items clickable */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Push name to bottom */
+            align-items: center;
+            min-height: 140px; /* Ensure consistent height for items */
+        }
+
+        .file-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-item img {
+            max-width: 100%;
+            height: 80px; /* Fixed height for image thumbnails */
+            object-fit: contain; /* Use contain to show full image */
+            border-radius: 0.25rem;
+            margin-bottom: 0.75rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .file-item .lucide {
+            width: 3rem;
+            height: 3rem;
+            color: var(--color-primary); /* Default icon color */
+            margin-bottom: 0.75rem;
+        }
+
+        .file-item.folder .lucide {
+            color: #FFD700; /* Gold color for folder icon */
+        }
+        
+        .file-item p {
+            font-size: 0.9rem;
+            color: var(--color-dark-text);
+            word-break: break-all; /* Break long file names */
+            flex-grow: 1; /* Allow text to take space */
+            display: flex;
+            align-items: flex-end; /* Align text to bottom */
+            justify-content: center;
+            line-height: 1.2;
+        }
+
+        .file-item .download-link {
+            display: inline-block;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: text-decoration 0.2s;
+        }
+
+        .file-item .download-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Breadcrumbs and Folder Actions */
+        .folder-actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--color-muted-text);
+            flex-wrap: wrap; /* Allow breadcrumbs to wrap */
+        }
+
+        .breadcrumbs a {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumbs .separator {
+            color: var(--color-muted-text);
+        }
+
+        .folder-action-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .folder-action-buttons button {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .folder-action-buttons button:hover {
+            background-color: var(--color-blue-700);
+        }
+
+        .folder-action-buttons .lucide {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        /* Hide the default file input button */
+        #fileInputHidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Your existing header, navigation, and other sections would go here -->
+
+    <main>
+        <section id="folder-section" class="container">
+            <div class="folder-header">
+                <h2>Secure Folder Access</h2>
+                <p>Enter the password to access your private files.</p>
+            </div>
+
+            <div id="passwordForm" class="password-form">
+                <input type="password" id="folderPassword" placeholder="Enter password">
+                <button id="unlockButton">Unlock Folder</button>
+                <p id="passwordMessage" class="password-message hidden">Incorrect password. Please try again.</p>
+                <p class="text-sm text-muted-text">
+                    <strong style="color: red;">Note:</strong> This is a client-side simulation. For real security, a backend is required.
+                </p>
+            </div>
+
+            <div id="fileManagementArea" class="file-management-area">
+                <div class="folder-header">
+                    <h2>Your Private Files</h2>
+                    <p>Manage your files and folders securely.</p>
+                </div>
+
+                <!-- Folder Actions and Breadcrumbs -->
+                <div class="folder-actions-bar">
+                    <div class="breadcrumbs" id="breadcrumbs">
+                        <!-- Breadcrumbs will be dynamically loaded here -->
+                    </div>
+                    <div class="folder-action-buttons">
+                        <button id="backButton" class="hidden">
+                            <i data-lucide="arrow-left"></i> Back
+                        </button>
+                        <button id="createFolderButton">
+                            <i data-lucide="folder-plus"></i> New Folder
+                        </button>
+                        <!-- Hidden file input for compact upload button -->
+                        <input type="file" id="fileInputHidden" multiple accept="image/*, .pdf, .doc, .docx, .xls, .xlsx, .txt">
+                        <button id="compactUploadButton" class="hidden">
+                            <i data-lucide="upload-cloud"></i> Upload File
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Initial Large Upload Box (shown only if no files/folders exist in current directory) -->
+                <div class="initial-upload-box" id="initialUploadBox">
+                    <input type="file" id="fileInputInitial" multiple accept="image/*, .pdf, .doc, .docx, .xls, .xlsx, .txt">
+                    <i data-lucide="upload-cloud"></i>
+                    <p>Drag & drop files here, or click to browse</p>
+                    <p class="text-xs text-muted-text mt-2">
+                        <strong style="color: red;">Disclaimer:</strong> Files are processed in your browser only and are NOT persistently stored or securely uploaded without a backend.
+                    </p>
+                </div>
+
+                <!-- File/Folder Grid -->
+                <div class="file-list-container">
+                    <div id="fileGrid" class="file-grid">
+                        <p class="text-muted-text col-span-full" id="noFilesMessage">This folder is empty.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Your existing footer would go here -->
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // --- Password Protection Logic ---
+        const correctPassword = "your_secret_password"; // IMPORTANT: Replace with a strong password for demo, but NEVER use hardcoded passwords in production!
+        const passwordInput = document.getElementById('folderPassword');
+        const unlockButton = document.getElementById('unlockButton');
+        const passwordMessage = document.getElementById('passwordMessage');
+        const passwordForm = document.getElementById('passwordForm');
+        const fileManagementArea = document.getElementById('fileManagementArea');
+
+        unlockButton.addEventListener('click', () => {
+            if (passwordInput.value === correctPassword) {
+                passwordForm.classList.add('hidden');
+                fileManagementArea.style.display = 'block'; // Show the file management area
+                passwordMessage.classList.add('hidden');
+                renderCurrentFolder(); // Render initial folder contents
+                // In a real app, you'd send the password to a server for authentication
+            } else {
+                passwordMessage.textContent = "Incorrect password. Please try again.";
+                passwordMessage.classList.remove('hidden');
+            }
+            passwordInput.value = ''; // Clear password input
+        });
+
+        // Allow pressing Enter to unlock
+        passwordInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                unlockButton.click();
+            }
+        });
+
+        // --- File System Simulation Logic (Client-side) ---
+        // Root of our simulated file system
+        let fileSystem = {
+            id: 'root',
+            name: 'Root',
+            type: 'folder',
+            children: []
+        };
+        let currentFolder = fileSystem; // Points to the currently viewed folder object
+        let pathHistory = [fileSystem]; // Stack to keep track of folder path for breadcrumbs and back button
+
+        // DOM Elements
+        const initialUploadBox = document.getElementById('initialUploadBox');
+        const fileInputInitial = document.getElementById('fileInputInitial');
+        const fileInputHidden = document.getElementById('fileInputHidden'); // Hidden input for compact button
+        const compactUploadButton = document.getElementById('compactUploadButton');
+        const fileGrid = document.getElementById('fileGrid');
+        const noFilesMessage = document.getElementById('noFilesMessage');
+        const breadcrumbsContainer = document.getElementById('breadcrumbs');
+        const backButton = document.getElementById('backButton');
+        const createFolderButton = document.getElementById('createFolderButton');
+
+        // --- Event Listeners ---
+        fileInputInitial.addEventListener('change', (event) => handleFiles(event.target.files));
+        fileInputHidden.addEventListener('change', (event) => handleFiles(event.target.files));
+
+        initialUploadBox.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            initialUploadBox.style.borderColor = 'var(--color-primary)';
+            initialUploadBox.style.backgroundColor = 'rgba(0, 123, 255, 0.05)';
+        });
+        initialUploadBox.addEventListener('dragleave', () => {
+            initialUploadBox.style.borderColor = 'var(--color-border)';
+            initialUploadBox.style.backgroundColor = 'var(--color-light-bg)';
+        });
+        initialUploadBox.addEventListener('drop', (event) => {
+            event.preventDefault();
+            initialUploadBox.style.borderColor = 'var(--color-border)';
+            initialUploadBox.style.backgroundColor = 'var(--color-light-bg)';
+            handleFiles(event.dataTransfer.files);
+        });
+
+        compactUploadButton.addEventListener('click', () => {
+            fileInputHidden.click(); // Trigger click on the hidden file input
+        });
+
+        backButton.addEventListener('click', goBack);
+        createFolderButton.addEventListener('click', createFolder);
+
+        // --- File System Functions ---
+
+        function generateUniqueId() {
+            return 'id-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function renderCurrentFolder() {
+            fileGrid.innerHTML = ''; // Clear current display
+            noFilesMessage.classList.add('hidden'); // Assume content will be rendered
+
+            if (currentFolder.children.length === 0) {
+                noFilesMessage.classList.remove('hidden');
+            }
+
+            // Sort children: folders first, then files, both alphabetically
+            const sortedChildren = [...currentFolder.children].sort((a, b) => {
+                if (a.type === 'folder' && b.type !== 'folder') return -1;
+                if (a.type !== 'folder' && b.type === 'folder') return 1;
+                return a.name.localeCompare(b.name);
+            });
+
+            sortedChildren.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('file-item');
+                itemElement.dataset.itemId = item.id;
+
+                if (item.type === 'folder') {
+                    itemElement.classList.add('folder');
+                    itemElement.innerHTML = `
+                        <i data-lucide="folder"></i>
+                        <p>${item.name}</p>
+                    `;
+                    itemElement.addEventListener('click', () => navigateToFolder(item.id));
+                } else { // type === 'file'
+                    let iconHtml = '';
+                    if (item.mimeType.startsWith('image/')) {
+                        iconHtml = `<img src="${item.url}" alt="${item.name}">`;
+                    } else {
+                        let iconName = 'file';
+                        if (item.mimeType.includes('pdf')) iconName = 'file-text';
+                        else if (item.mimeType.includes('word')) iconName = 'file-text'; // Lucide doesn't have specific word/excel
+                        else if (item.mimeType.includes('excel') || item.mimeType.includes('spreadsheet')) iconName = 'file-spreadsheet';
+                        else if (item.mimeType.includes('text')) iconName = 'file-text';
+                        iconHtml = `<i data-lucide="${iconName}"></i>`;
+                    }
+                    itemElement.innerHTML = `
+                        ${iconHtml}
+                        <p>${item.name}</p>
+                        <a href="${item.url}" download="${item.name}" class="download-link" onclick="event.stopPropagation()">Download</a>
+                    `;
+                    // For files, clicking the item itself can trigger download or preview
+                    // For this simulation, the download link is explicit.
+                }
+                fileGrid.appendChild(itemElement);
+            });
+
+            lucide.createIcons(); // Re-create icons after updating HTML
+            updateUploadUI();
+            updateBreadcrumbs();
+            updateBackButtonVisibility();
+        }
+
+        function handleFiles(files) {
+            if (files.length === 0) return;
+
+            for (const file of files) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const newFile = {
+                        id: generateUniqueId(),
+                        name: file.name,
+                        type: 'file',
+                        url: e.target.result, // Data URL for display
+                        mimeType: file.type
+                    };
+                    currentFolder.children.push(newFile);
+                    renderCurrentFolder(); // Re-render the folder content
+                };
+                reader.readAsDataURL(file); // Read file as Data URL
+            }
+
+            // In a real application, you would send these files to a backend server:
+            // const formData = new FormData();
+            // for (const file of files) {
+            //     formData.append('files', file);
+            // }
+            // fetch('/upload-endpoint', {
+            //     method: 'POST',
+            //     body: formData
+            // }).then(response => response.json())
+            //   .then(data => console.log('Upload success:', data))
+            //   .catch(error => console.error('Upload error:', error));
+        }
+
+        function createFolder() {
+            const folderName = prompt("Enter new folder name:");
+            if (folderName && folderName.trim() !== '') {
+                const newFolder = {
+                    id: generateUniqueId(),
+                    name: folderName.trim(),
+                    type: 'folder',
+                    children: []
+                };
+                currentFolder.children.push(newFolder);
+                renderCurrentFolder(); // Re-render the folder content
+            }
+        }
+
+        function navigateToFolder(folderId) {
+            const nextFolder = currentFolder.children.find(item => item.id === folderId && item.type === 'folder');
+            if (nextFolder) {
+                currentFolder = nextFolder;
+                pathHistory.push(currentFolder);
+                renderCurrentFolder();
+            }
+        }
+
+        function goBack() {
+            if (pathHistory.length > 1) { // Cannot go back from root
+                pathHistory.pop(); // Remove current folder from history
+                currentFolder = pathHistory[pathHistory.length - 1]; // Set to previous folder
+                renderCurrentFolder();
+            }
+        }
+
+        function updateUploadUI() {
+            if (currentFolder.children.length > 0) {
+                initialUploadBox.style.display = 'none';
+                compactUploadButton.parentElement.style.display = 'flex'; // Show compact container
+            } else {
+                initialUploadBox.style.display = 'block';
+                compactUploadButton.parentElement.style.display = 'none'; // Hide compact container
+            }
+        }
+
+        function updateBreadcrumbs() {
+            breadcrumbsContainer.innerHTML = '';
+            pathHistory.forEach((folder, index) => {
+                const span = document.createElement('span');
+                if (index === pathHistory.length - 1) {
+                    span.textContent = folder.name; // Current folder, not a link
+                } else {
+                    const link = document.createElement('a');
+                    link.href = "#"; // Prevent page reload
+                    link.textContent = folder.name;
+                    link.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        // Navigate directly to this historical point
+                        pathHistory = pathHistory.slice(0, index + 1);
+                        currentFolder = pathHistory[pathHistory.length - 1];
+                        renderCurrentFolder();
+                    });
+                    span.appendChild(link);
+                }
+                breadcrumbsContainer.appendChild(span);
+                if (index < pathHistory.length - 1) {
+                    const separator = document.createElement('span');
+                    separator.classList.add('separator');
+                    separator.innerHTML = '&nbsp;/&nbsp;'; // Slash separator
+                    breadcrumbsContainer.appendChild(separator);
+                }
+            });
+        }
+
+        function updateBackButtonVisibility() {
+            if (pathHistory.length > 1) {
+                backButton.classList.remove('hidden');
+            } else {
+                backButton.classList.add('hidden');
+            }
+        }
+
+        // Initial render (after password unlock)
+        // document.addEventListener('DOMContentLoaded', () => { // Removed, as renderCurrentFolder is called after unlock
+        //     renderCurrentFolder();
+        // });
+    </script>
+</body>
+</html>
