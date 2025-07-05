@@ -3,281 +3,486 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>My Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Lucide Icons for file management -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        /* Define a consistent color palette */
+    <script src="https://unpkg.com/lucide@latest"></script> <style>
+        /* Base Colors (inspired by your dashboard images) */
         :root {
-            --color-primary: #007BFF;
-            --color-accent: #28A745;
-            --color-light-bg: #F8F9FA;
-            --color-dark-text: #343A40;
-            --color-muted-text: #6C757D;
-            --color-white: #FFFFFF;
-            --color-border: #E0E0E0;
-            --color-shadow: rgba(0, 0, 0, 0.1);
-            --color-blue-700: #1D4ED8;
+            --color-primary-blue: #6A67D0; /* Main accent blue/purple */
+            --color-secondary-blue: #9693F3; /* Lighter accent */
+            --color-background-light: #F4F7FB; /* Light gray background */
+            --color-card-background: #FFFFFF; /* White cards */
+            --color-text-dark: #333333; /* Dark text */
+            --color-text-muted: #6B7280; /* Muted text */
+            --color-border: #E5E7EB; /* Light border */
+            --color-shadow: rgba(0, 0, 0, 0.08); /* Card shadow */
+
+            /* Password Interface Specific Colors */
+            --color-pw-bg-overlay: rgba(0, 0, 0, 0.4);
+            --color-pw-form-bg: rgba(255, 255, 255, 0.2);
+            --color-pw-input-bg: rgba(255, 255, 255, 0.7);
+            --color-pw-input-border: rgba(255, 255, 255, 0.5);
+            --color-pw-button-bg: #FFFFFF;
+            --color-pw-button-text: #333333;
+            --color-pw-button-hover-bg: #F0F0F0;
+            --color-pw-text-on-overlay: #FFFFFF;
+            --color-pw-error-text: #FF6347;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--color-light-bg);
-            color: var(--color-dark-text);
-            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent body scroll, content areas will scroll */
+            background-color: var(--color-background-light);
+            color: var(--color-text-dark);
         }
 
-        /* General container styling */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        /* Section specific styles */
-        #folder-section {
-            padding: 4rem 0;
-            background-color: var(--color-white);
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 12px var(--color-shadow);
-            margin: 2rem auto;
-            max-width: 900px; /* Constrain width for better appearance */
-        }
-
-        .folder-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .folder-header h2 {
-            font-size: 2.25rem; /* text-3xl */
-            font-weight: 700;
-            color: var(--color-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .folder-header p {
-            font-size: 1rem;
-            color: var(--color-muted-text);
-        }
-
-        /* Password Protection Form */
-        .password-form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            padding: 2rem;
-            border: 1px solid var(--color-border);
-            border-radius: 0.5rem;
-            max-width: 400px;
-            margin: 0 auto;
-            background-color: var(--color-light-bg);
-        }
-
-        .password-form input[type="password"] {
+        /* --- Password Interface Styling (Full Screen) --- */
+        .password-interface-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--color-border);
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.2s;
+            height: 100%;
+            background-image: url('https://placehold.co/1920x1080/000000/FFFFFF?text=Your+Background+Image'); /* REPLACE WITH YOUR IMAGE */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease-in-out;
         }
-
-        .password-form input[type="password"]:focus {
-            border-color: var(--color-primary);
+        .password-interface-wrapper.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
-
-        .password-form button {
-            background-color: var(--color-primary);
-            color: var(--color-white);
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            transition: background-color 0.2s;
-            cursor: pointer;
-            border: none;
-        }
-
-        .password-form button:hover {
-            background-color: var(--color-blue-700);
-        }
-
-        .password-message {
-            color: red;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-        }
-
-        /* File Management Area */
-        .file-management-area {
-            display: none; /* Hidden by default */
-            padding: 2rem;
-        }
-
-        /* Initial Large Upload Box */
-        .initial-upload-box {
-            border: 2px dashed var(--color-border);
-            border-radius: 0.75rem;
-            padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.2s, background-color 0.2s;
-            margin-bottom: 2rem;
-            position: relative; /* For file input overlay */
-            background-color: var(--color-light-bg);
-        }
-
-        .initial-upload-box:hover {
-            border-color: var(--color-primary);
-            background-color: rgba(0, 123, 255, 0.05);
-        }
-
-        .initial-upload-box input[type="file"] {
+        .background-blur {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0;
-            cursor: pointer;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background-color: var(--color-pw-bg-overlay);
+            z-index: 1;
         }
-
-        .initial-upload-box .lucide {
-            width: 3rem;
-            height: 3rem;
-            color: var(--color-muted-text);
+        .password-form-container {
+            position: relative;
+            z-index: 2;
+            background-color: var(--color-pw-form-bg);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .password-form-container .logo {
+            margin-bottom: 1.5rem;
+        }
+        .password-form-container .logo img {
+            max-width: 150px; /* Adjust logo size */
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .password-form-container h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--color-pw-text-on-overlay);
             margin-bottom: 0.5rem;
         }
-
-        .initial-upload-box p {
-            color: var(--color-muted-text);
+        .password-form-container p {
             font-size: 1rem;
+            color: var(--color-pw-text-on-overlay);
+            margin-bottom: 1rem;
         }
-
-        /* Compact Upload Button */
-        .compact-upload-btn-container {
-            display: none; /* Hidden by default */
-            margin-bottom: 2rem;
-            text-align: right; /* Align button to the right */
+        .password-form-container input[type="password"] {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--color-pw-input-border);
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            background-color: var(--color-pw-input-bg);
+            color: var(--color-text-dark);
+            outline: none;
+            transition: border-color 0.2s, background-color 0.2s;
         }
-
-        .compact-upload-btn-container button {
-            background-color: var(--color-accent);
-            color: var(--color-white);
-            padding: 0.6rem 1.2rem;
-            border-radius: 0.5rem;
+        .password-form-container input[type="password"]::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+        }
+        .password-form-container input[type="password"]:focus {
+            border-color: var(--color-primary-blue);
+            background-color: var(--color-pw-button-bg);
+        }
+        .password-form-container button {
+            background-color: var(--color-pw-button-bg);
+            color: var(--color-pw-button-text);
+            padding: 1rem 2rem;
+            border-radius: 2rem;
             font-weight: 600;
-            transition: background-color 0.2s;
+            font-size: 1.125rem;
+            transition: background-color 0.2s, color 0.2s;
             cursor: pointer;
             border: none;
-            display: inline-flex; /* For icon and text */
+            width: 100%;
+        }
+        .password-form-container button:hover {
+            background-color: var(--color-pw-button-hover-bg);
+            color: var(--color-text-dark);
+        }
+        .password-message {
+            color: var(--color-pw-error-text);
+            font-size: 0.95rem;
+            margin-top: -0.5rem;
+            font-weight: 500;
+        }
+
+        /* --- Main Dashboard Layout --- */
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--color-background-light);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px; /* Fixed width */
+            background-color: var(--color-card-background);
+            box-shadow: 2px 0 10px var(--color-shadow);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            z-index: 100;
+        }
+        .sidebar-logo {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .sidebar-logo img {
+            max-width: 120px; /* Adjust sidebar logo size */
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            color: var(--color-text-muted);
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .sidebar-nav a:hover {
+            background-color: rgba(106, 103, 208, 0.1);
+            color: var(--color-primary-blue);
+        }
+        .sidebar-nav a.active {
+            background-color: var(--color-primary-blue);
+            color: var(--color-card-background);
+            box-shadow: 0 4px 8px rgba(106, 103, 208, 0.2);
+        }
+        .sidebar-nav a.active .lucide {
+            color: var(--color-card-background);
+        }
+        .sidebar-nav .lucide {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: var(--color-text-muted);
+            transition: color 0.2s;
+        }
+        .sidebar-nav a.active .lucide {
+             color: var(--color-card-background); /* Active icon color */
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+            overflow-y: auto; /* Enable vertical scrolling for main content */
+            max-height: 100vh; /* Ensure it takes full viewport height */
+        }
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--color-card-background);
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 8px var(--color-shadow);
+            margin-bottom: 2rem;
+        }
+        .dashboard-header .search-bar {
+            position: relative;
+            flex-grow: 1;
+            max-width: 400px;
+            margin-right: 1.5rem;
+        }
+        .dashboard-header .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            outline: none;
+            background-color: var(--color-background-light);
+            transition: border-color 0.2s;
+        }
+        .dashboard-header .search-bar input:focus {
+            border-color: var(--color-primary-blue);
+        }
+        .dashboard-header .search-bar .lucide {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-text-muted);
+            width: 1.1rem;
+            height: 1.1rem;
+        }
+        .dashboard-header .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .dashboard-header .header-actions .btn-upload {
+            background-color: var(--color-primary-blue);
+            color: var(--color-card-background);
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .dashboard-header .header-actions .btn-upload:hover {
+            background-color: var(--color-secondary-blue);
+        }
+        .dashboard-header .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        .dashboard-header .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--color-primary-blue);
+        }
+        .dashboard-header .user-profile span {
+            font-weight: 600;
+            color: var(--color-text-dark);
+        }
+
+        /* Dynamic Content Area */
+        .content-section {
+            background-color: var(--color-card-background);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 8px var(--color-shadow);
+            display: none; /* All content sections hidden by default */
+        }
+        .content-section.active {
+            display: block; /* Only active section is shown */
+        }
+
+        /* --- Dashboard Overview Section (image_d8060b.png inspired) --- */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* Main content and sidebar content */
+            gap: 2rem;
+        }
+        .overview-main {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .overview-card {
+            background-color: var(--color-card-background);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 8px var(--color-shadow);
+        }
+        .storage-card {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .storage-chart {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(var(--color-primary-blue) 65%, var(--color-background-light) 0%); /* Example 65% */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text-dark);
+        }
+        .storage-chart span {
+            background-color: var(--color-card-background);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            line-height: 1.2;
+        }
+        .storage-chart span small {
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+        }
+        .storage-info h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .storage-info p {
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+        }
+        .file-category-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .file-category-card {
+            background-color: var(--color-card-background);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 4px var(--color-shadow);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
             align-items: center;
             gap: 0.5rem;
         }
-
-        .compact-upload-btn-container button:hover {
-            background-color: var(--color-green-700);
-        }
-
-        .compact-upload-btn-container .lucide {
-            width: 1.25rem;
-            height: 1.25rem;
-        }
-
-        /* File List/Folder View Container */
-        .file-list-container {
-            margin-top: 2rem;
-            border-top: 1px solid var(--color-border);
-            padding-top: 2rem;
-        }
-
-        .file-list-container h3 {
-            font-size: 1.5rem; /* text-2xl */
-            font-weight: 600;
-            color: var(--color-dark-text);
-            margin-bottom: 1.5rem;
-        }
-
-        .file-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Smaller items for folders/files */
-            gap: 1.5rem;
-        }
-
-        /* File Item (for both files and folders) */
-        .file-item {
-            background-color: var(--color-white);
-            border: 1px solid var(--color-border);
-            border-radius: 0.5rem;
-            padding: 1rem 0.5rem; /* Reduced horizontal padding */
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer; /* Make all items clickable */
+        .file-category-card .icon-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
-            flex-direction: column;
-            justify-content: space-between; /* Push name to bottom */
+            justify-content: center;
             align-items: center;
-            min-height: 140px; /* Ensure consistent height for items */
+            margin-bottom: 0.5rem;
         }
-
-        .file-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .file-category-card .icon-circle .lucide {
+            color: var(--color-card-background);
+            width: 1.5rem;
+            height: 1.5rem;
         }
+        .file-category-card.docs .icon-circle { background-color: #EF4444; } /* Red */
+        .file-category-card.images .icon-circle { background-color: #6366F1; } /* Indigo */
+        .file-category-card.video-audio .icon-circle { background-color: #059669; } /* Emerald */
+        .file-category-card.others .icon-circle { background-color: #EAB308; } /* Yellow */
 
-        .file-item img {
-            max-width: 100%;
-            height: 80px; /* Fixed height for image thumbnails */
-            object-fit: contain; /* Use contain to show full image */
-            border-radius: 0.25rem;
-            margin-bottom: 0.75rem;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+        .file-category-card h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
         }
-
-        .file-item .lucide {
-            width: 3rem;
-            height: 3rem;
-            color: var(--color-primary); /* Default icon color */
-            margin-bottom: 0.75rem;
-        }
-
-        .file-item.folder .lucide {
-            color: #FFD700; /* Gold color for folder icon */
+        .file-category-card p {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            margin: 0;
         }
         
-        .file-item p {
-            font-size: 0.9rem;
-            color: var(--color-dark-text);
-            word-break: break-all; /* Break long file names */
-            flex-grow: 1; /* Allow text to take space */
+        .overview-sidebar {
             display: flex;
-            align-items: flex-end; /* Align text to bottom */
-            justify-content: center;
-            line-height: 1.2;
+            flex-direction: column;
+            gap: 1.5rem;
         }
-
-        .file-item .download-link {
-            display: inline-block;
-            margin-top: 0.5rem;
+        .contact-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .contact-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .contact-list li:last-child {
+            border-bottom: none;
+        }
+        .contact-list img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .contact-list p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        .contact-list p strong {
+            display: block;
+            font-weight: 600;
+            color: var(--color-text-dark);
+        }
+        .contact-list p span {
+            color: var(--color-text-muted);
             font-size: 0.8rem;
-            color: var(--color-primary);
-            text-decoration: none;
-            transition: text-decoration 0.2s;
+        }
+        .invite-card {
+            text-align: center;
+        }
+        .invite-card input {
+            width: calc(100% - 70px);
+            padding: 0.6rem 0.8rem;
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            outline: none;
+            margin-right: 0.5rem;
+        }
+        .invite-card button {
+            background-color: var(--color-primary-blue);
+            color: var(--color-card-background);
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .invite-card button:hover {
+            background-color: var(--color-secondary-blue);
         }
 
-        .file-item .download-link:hover {
-            text-decoration: underline;
-        }
 
-        /* Breadcrumbs and Folder Actions */
-        .folder-actions-bar {
+        /* --- Folder/Documents Section (image_d80a69.png inspired) --- */
+        .folder-manager-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -285,38 +490,32 @@
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--color-border);
         }
-
-        .breadcrumbs {
+        .folder-manager-header .breadcrumbs {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             font-size: 0.9rem;
-            color: var(--color-muted-text);
-            flex-wrap: wrap; /* Allow breadcrumbs to wrap */
+            color: var(--color-text-muted);
+            flex-wrap: wrap;
         }
-
-        .breadcrumbs a {
-            color: var(--color-primary);
+        .folder-manager-header .breadcrumbs a {
+            color: var(--color-primary-blue);
             text-decoration: none;
             font-weight: 500;
         }
-
-        .breadcrumbs a:hover {
+        .folder-manager-header .breadcrumbs a:hover {
             text-decoration: underline;
         }
-
-        .breadcrumbs .separator {
-            color: var(--color-muted-text);
+        .folder-manager-header .breadcrumbs .separator {
+            color: var(--color-text-muted);
         }
-
         .folder-action-buttons {
             display: flex;
             gap: 0.75rem;
         }
-
         .folder-action-buttons button {
-            background-color: var(--color-primary);
-            color: var(--color-white);
+            background-color: var(--color-primary-blue);
+            color: var(--color-card-background);
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
             font-weight: 500;
@@ -327,12 +526,231 @@
             align-items: center;
             gap: 0.25rem;
         }
-
         .folder-action-buttons button:hover {
-            background-color: var(--color-blue-700);
+            background-color: var(--color-secondary-blue);
+        }
+        .folder-action-buttons .lucide {
+            width: 1rem;
+            height: 1rem;
         }
 
-        .folder-action-buttons .lucide {
+        .folder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1.25rem;
+        }
+        .file-folder-card {
+            background-color: var(--color-background-light);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 4px var(--color-shadow);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 150px;
+            justify-content: center; /* Center content vertically */
+        }
+        .file-folder-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+        }
+        .file-folder-card .icon-placeholder {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            background-color: rgba(106, 103, 208, 0.1); /* Light blue for icons */
+        }
+        .file-folder-card img {
+            max-width: 100%;
+            max-height: 60px; /* Limit image size for thumbnails */
+            object-fit: contain;
+            border-radius: 0.25rem;
+        }
+        .file-folder-card .lucide {
+            width: 2.5rem;
+            height: 2.5rem;
+            color: var(--color-primary-blue);
+        }
+        .file-folder-card.folder .lucide {
+            color: #FFD700; /* Gold for folders */
+        }
+        .file-folder-card h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-text-dark);
+            word-break: break-all;
+            margin: 0;
+        }
+        .file-folder-card p {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            margin: 0;
+        }
+        .file-folder-card .download-link {
+            font-size: 0.75rem;
+            color: var(--color-primary-blue);
+            text-decoration: none;
+            margin-top: 0.5rem;
+        }
+        .file-folder-card .download-link:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Account Settings Section (image_d805ad.png inspired) --- */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .settings-field {
+            margin-bottom: 1rem;
+        }
+        .settings-field label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--color-text-muted);
+            margin-bottom: 0.5rem;
+        }
+        .settings-field input[type="text"],
+        .settings-field input[type="email"],
+        .settings-field input[type="tel"],
+        .settings-field select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            background-color: var(--color-background-light);
+            outline: none;
+            font-size: 0.95rem;
+            color: var(--color-text-dark);
+        }
+        .settings-field .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+        .settings-field .radio-group input {
+            margin-right: 0.5rem;
+        }
+        .settings-actions {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+        .settings-actions button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .settings-actions .btn-update {
+            background-color: var(--color-primary-blue);
+            color: var(--color-card-background);
+        }
+        .settings-actions .btn-update:hover {
+            background-color: var(--color-secondary-blue);
+        }
+        .settings-actions .btn-cancel {
+            background-color: var(--color-border);
+            color: var(--color-text-dark);
+        }
+        .settings-actions .btn-cancel:hover {
+            background-color: var(--color-text-muted);
+            color: var(--color-card-background);
+        }
+
+        /* --- Announcements Section (Screenshot 2025-06-29 151614.png inspired) --- */
+        .announcement-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .announcement-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .announcement-item:last-child {
+            border-bottom: none;
+        }
+        .announcement-item .date {
+            min-width: 80px; /* Fixed width for date */
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            font-weight: 500;
+            text-align: right;
+        }
+        .announcement-item .content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-text-dark);
+        }
+        .announcement-item .content p {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            line-height: 1.4;
+        }
+
+        /* --- Events Section (image_6f4d45.png inspired) --- */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .event-card {
+            background-color: var(--color-card-background);
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 8px var(--color-shadow);
+            overflow: hidden;
+        }
+        .event-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .event-card-content {
+            padding: 1rem 1.25rem;
+        }
+        .event-card-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-text-dark);
+        }
+        .event-card-content p {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+        .event-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+        .event-card-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .event-card-meta .lucide {
             width: 1rem;
             height: 1rem;
         }
@@ -344,91 +762,360 @@
     </style>
 </head>
 <body>
-    <!-- Your existing header, navigation, and other sections would go here -->
+    <div id="passwordInterfaceWrapper" class="password-interface-wrapper">
+        <div class="background-blur"></div>
+        <div class="password-form-container">
+            <div class="logo">
+                <img src="https://placehold.co/150x50/000000/FFFFFF?text=Your+Logo" alt="Your Company Logo"> </div>
+            <h2>Secure Access</h2>
+            <p>Enter your password to unlock the dashboard.</p>
+            <input type="password" id="folderPassword" placeholder="Password">
+            <button id="unlockButton">Unlock Dashboard</button>
+            <p id="passwordMessage" class="password-message hidden">Incorrect password. Please try again.</p>
+            <p class="text-sm" style="color: rgba(255,255,255,0.7);">
+                <strong style="color: var(--color-pw-error-text);">Disclaimer:</strong> This is a client-side simulation.
+            </p>
+        </div>
+    </div>
 
-    <main>
-        <section id="folder-section" class="container">
-            <div class="folder-header">
-                <h2>Secure  Access</h2>
-                <p>Enter the password to access your private files.</p>
-            </div>
+    <div id="dashboardLayout" class="dashboard-layout hidden">
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-logo">
+                <img src="https://placehold.co/120x40/000000/FFFFFF?text=Your+Logo" alt="Your Company Logo"> </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" data-section="dashboardOverview" class="active"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+                    <li><a href="#" data-section="documentsFolder"><i data-lucide="folder"></i> Documents</a></li>
+                    <li><a href="#" data-section="imagesFolder"><i data-lucide="image"></i> Images</a></li>
+                    <li><a href="#" data-section="accountSettings"><i data-lucide="settings"></i> Account Settings</a></li>
+                    <li><a href="#" data-section="announcements"><i data-lucide="megaphone"></i> Announcements</a></li>
+                    <li><a href="#" data-section="events"><i data-lucide="calendar"></i> Upcoming Events</a></li>
+                </ul>
+            </nav>
+            </aside>
 
-            <div id="passwordForm" class="password-form">
-                <input type="password" id="folderPassword" placeholder="Enter password">
-                <button id="unlockButton">Login</button>
-                <p id="passwordMessage" class="password-message hidden">Incorrect password. Please try again.</p>
-                <p class="text-sm text-muted-text">
-                    <strong style="color: red;">Note:</strong> This section is restricted to authorized IEDC Admins only.Unauthorized access is strictly prohibited. For security purposes, all activity is monitored.
-                </p>
-            </div>
-
-            <div id="fileManagementArea" class="file-management-area">
-                <div class="folder-header">
-                    <h2>Your Private Files</h2>
-                    <p>Manage your files and folders securely.</p>
+        <div id="mainContent" class="main-content">
+            <header class="dashboard-header">
+                <div class="search-bar">
+                    <i data-lucide="search"></i>
+                    <input type="text" placeholder="Search...">
                 </div>
-
-                <!-- Folder Actions and Breadcrumbs -->
-                <div class="folder-actions-bar">
-                    <div class="breadcrumbs" id="breadcrumbs">
-                        <!-- Breadcrumbs will be dynamically loaded here -->
+                <div class="header-actions">
+                    <button class="btn-upload"><i data-lucide="upload-cloud"></i> Upload</button>
+                    <div class="user-profile">
+                        <img src="https://placehold.co/40x40/random/white?text=A" alt="User Avatar">
+                        <span>Mitchel</span>
                     </div>
-                    <div class="folder-action-buttons">
-                        <button id="backButton" class="hidden">
-                            <i data-lucide="arrow-left"></i> Back
-                        </button>
-                        <button id="createFolderButton">
-                            <i data-lucide="folder-plus"></i> New Folder
-                        </button>
-                        <!-- Hidden file input for compact upload button -->
-                        <input type="file" id="fileInputHidden" multiple accept="image/*, .pdf, .doc, .docx, .xls, .xlsx, .txt">
-                        <button id="compactUploadButton" class="hidden">
-                            <i data-lucide="upload-cloud"></i> Upload File
-                        </button>
+                </div>
+            </header>
+
+            <div id="dynamicContent" class="dynamic-content">
+
+                <div id="dashboardOverviewSection" class="content-section active">
+                    <h3 class="text-2xl font-semibold mb-4">Dashboard Overview</h3>
+                    <div class="overview-grid">
+                        <div class="overview-main">
+                            <div class="overview-card storage-card">
+                                <div class="storage-chart">
+                                    <span>65% <small>Space used</small></span>
+                                </div>
+                                <div class="storage-info">
+                                    <h3>Available Storage</h3>
+                                    <p>82GB / 128GB</p>
+                                </div>
+                            </div>
+                            <div class="file-category-cards">
+                                <div class="file-category-card docs">
+                                    <div class="icon-circle"><i data-lucide="file-text"></i></div>
+                                    <h4>12 GB</h4>
+                                    <p>Documents</p>
+                                    <p class="text-xs">Last update: 10:15am, 10 Oct</p>
+                                </div>
+                                <div class="file-category-card images">
+                                    <div class="icon-circle"><i data-lucide="image"></i></div>
+                                    <h4>20 GB</h4>
+                                    <p>Images</p>
+                                    <p class="text-xs">Last update: 10:15am, 10 Oct</p>
+                                </div>
+                                <div class="file-category-card video-audio">
+                                    <div class="icon-circle"><i data-lucide="film"></i></div>
+                                    <h4>20 GB</h4>
+                                    <p>Video, Audio</p>
+                                    <p class="text-xs">Last update: 10:15am, 10 Oct</p>
+                                </div>
+                                <div class="file-category-card others">
+                                    <div class="icon-circle"><i data-lucide="folder-open"></i></div>
+                                    <h4>38 GB</h4>
+                                    <p>Others</p>
+                                    <p class="text-xs">Last update: 10:15am, 10 Oct</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="overview-sidebar">
+                            <div class="overview-card contact-list">
+                                <h4 class="text-lg font-semibold mb-3">Contact</h4>
+                                <ul>
+                                    <li><img src="https://placehold.co/40x40/random/white?text=A" alt="Contact"><p><strong>Alice Emma</strong><span>aliceemma@gmail.com</span></p></li>
+                                    <li><img src="https://placehold.co/40x40/random/white?text=B" alt="Contact"><p><strong>Anne Jennifer</strong><span>annejennifer@gmail.com</span></p></li>
+                                    <li><img src="https://placehold.co/40x40/random/white?text=C" alt="Contact"><p><strong>Bush Matthew</strong><span>bushmatthew@gmail.com</span></p></li>
+                                    <li><img src="https://placehold.co/40x40/random/white?text=D" alt="Contact"><p><strong>Henry Rebecca</strong><span>henryrebecca@gmail.com</span></p></li>
+                                </ul>
+                            </div>
+                            <div class="overview-card invite-card">
+                                <h4 class="text-lg font-semibold mb-3">Invite A Friend</h4>
+                                <input type="text" value="HXPO58@AJDSTH12" readonly>
+                                <button>Copy</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Initial Large Upload Box (shown only if no files/folders exist in current directory) -->
-                <div class="initial-upload-box" id="initialUploadBox">
-                    <input type="file" id="fileInputInitial" multiple accept="image/*, .pdf, .doc, .docx, .xls, .xlsx, .txt">
-                    <i data-lucide="upload-cloud"></i>
-                    <p>Drag & drop files here, or click to browse</p>
-                    <p class="text-xs text-muted-text mt-2">
-                        <strong style="color: red;">Disclaimer:</strong> Files are processed in your browser only and are NOT persistently stored or securely uploaded without a backend.
-                    </p>
-                </div>
+                <div id="documentsFolderSection" class="content-section hidden">
+                    <h3 class="text-2xl font-semibold mb-4">Documents</h3>
+                    <div class="folder-manager-header">
+                        <div class="breadcrumbs" id="breadcrumbs">
+                            </div>
+                        <div class="folder-action-buttons">
+                            <button id="backButton" class="hidden">
+                                <i data-lucide="arrow-left"></i> Back
+                            </button>
+                            <button id="createFolderButton">
+                                <i data-lucide="folder-plus"></i> New Folder
+                            </button>
+                            <input type="file" id="fileInputHidden" multiple accept="image/*, .pdf, .doc, .docx, .xls, .xlsx, .txt">
+                            <button id="compactUploadButton" class="hidden">
+                                <i data-lucide="upload-cloud"></i> Upload File
+                            </button>
+                        </div>
+                    </div>
 
-                <!-- File/Folder Grid -->
-                <div class="file-list-container">
-                    <div id="fileGrid" class="file-grid">
+                    <div class="initial-upload-box" id="initialUploadBox">
+                        <input type="file" id="fileInputInitial" multiple accept="image/*, .pdf, .doc, .docx, .xls, .xlsx, .txt">
+                        <i data-lucide="upload-cloud"></i>
+                        <p>Drag & drop files here, or click to browse</p>
+                        <p class="text-xs text-muted-text mt-2">
+                            <strong style="color: red;">Disclaimer:</strong> Files are processed in your browser only and are NOT persistently stored or securely uploaded without a backend.
+                        </p>
+                    </div>
+
+                    <div id="fileGrid" class="folder-grid">
                         <p class="text-muted-text col-span-full" id="noFilesMessage">This folder is empty.</p>
                     </div>
                 </div>
-            </div>
-        </section>
-    </main>
 
-    <!-- Your existing footer would go here -->
+                <div id="imagesFolderSection" class="content-section hidden">
+                    <h3 class="text-2xl font-semibold mb-4">Images</h3>
+                    <div class="folder-manager-header">
+                        <div class="breadcrumbs" id="imagesBreadcrumbs">
+                            </div>
+                        <div class="folder-action-buttons">
+                            <button id="imagesBackButton" class="hidden">
+                                <i data-lucide="arrow-left"></i> Back
+                            </button>
+                            <button id="imagesCreateFolderButton">
+                                <i data-lucide="folder-plus"></i> New Folder
+                            </button>
+                            <input type="file" id="imagesFileInputHidden" multiple accept="image/*"> <button id="imagesCompactUploadButton" class="hidden">
+                                <i data-lucide="upload-cloud"></i> Upload Image
+                            </button>
+                        </div>
+                    </div>
 
-    <script>
+                    <div class="initial-upload-box" id="imagesInitialUploadBox">
+                        <input type="file" id="imagesFileInputInitial" multiple accept="image/*">
+                        <i data-lucide="upload-cloud"></i>
+                        <p>Drag & drop images here, or click to browse</p>
+                        <p class="text-xs text-muted-text mt-2">
+                            <strong style="color: red;">Disclaimer:</strong> Files are processed in your browser only and are NOT persistently stored or securely uploaded without a backend.
+                        </p>
+                    </div>
+
+                    <div id="imagesFileGrid" class="folder-grid">
+                        <p class="text-muted-text col-span-full" id="imagesNoFilesMessage">This folder is empty.</p>
+                    </div>
+                </div>
+
+
+                <div id="accountSettingsSection" class="content-section hidden">
+                    <h3 class="text-2xl font-semibold mb-4">Account Settings</h3>
+                    <div class="settings-grid">
+                        <div class="settings-field">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" value="Mitchel Lensink">
+                        </div>
+                        <div class="settings-field">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" value="mitchellensink@gmail.com">
+                        </div>
+                        <div class="settings-field">
+                            <label for="phoneNumber">Phone number</label>
+                            <input type="tel" id="phoneNumber" value="0901805000">
+                        </div>
+                        <div class="settings-field">
+                            <label>Sex</label>
+                            <div class="radio-group">
+                                <input type="radio" id="male" name="sex" value="male" checked>
+                                <label for="male">Male</label>
+                                <input type="radio" id="female" name="sex" value="female">
+                                <label for="female">Female</label>
+                            </div>
+                        </div>
+                        <div class="settings-field">
+                            <label for="location">Location</label>
+                            <select id="location">
+                                <option>Vietnam</option>
+                                <option>India</option>
+                                <option>USA</option>
+                            </select>
+                        </div>
+                        <div class="settings-field">
+                            <label for="city">City</label>
+                            <input type="text" id="city" value="Ho Chi Minh City">
+                        </div>
+                    </div>
+                    <div class="settings-actions">
+                        <button class="btn-update">Update</button>
+                        <button class="btn-cancel">Cancel</button>
+                    </div>
+                </div>
+
+                <div id="announcementsSection" class="content-section hidden">
+                    <h3 class="text-2xl font-semibold mb-4">Announcements</h3>
+                    <ul class="announcement-list">
+                        <li class="announcement-item">
+                            <span class="date">Today<br>03:00</span>
+                            <div class="content">
+                                <h4>Welcome to the Era of Zero!</h4>
+                                <p>Dear Phemex Traders, The day has finally come! Today, we have officially launched our Membership Spot Trading services. Phemex is...</p>
+                            </div>
+                        </li>
+                        <li class="announcement-item">
+                            <span class="date">Jun 03<br>2020</span>
+                            <div class="content">
+                                <h4>The Era of Zero is Coming!</h4>
+                                <p>Dear Phemex Traders, The day has finally come! Today, we have officially launched our Membership Spot Trading services. Phemex is...</p>
+                            </div>
+                        </li>
+                        <li class="announcement-item">
+                            <span class="date">Jun 02<br>2020</span>
+                            <div class="content">
+                                <h4>Trading Ethereum Derivatives</h4>
+                                <p>Dear Phemex Traders, The day has finally come! Today, we have officially launched our Membership Spot Trading services. Phemex is...</p>
+                            </div>
+                        </li>
+                        <li class="announcement-item">
+                            <span class="date">Jun 01<br>2020</span>
+                            <div class="content">
+                                <h4>How do I Add Margin to a Position?</h4>
+                                <p>Dear Phemex Traders, The day has finally come! Today, we have officially launched our Membership Spot Trading services. Phemex is...</p>
+                            </div>
+                        </li>
+                        <li class="announcement-item">
+                            <span class="date">May 29<br>2020</span>
+                            <div class="content">
+                                <h4>What are Conditional Orders?</h4>
+                                <p>Dear Phemex Traders, The day has finally come! Today, we have officially launched our Membership Spot Trading services. Phemex is...</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="eventsSection" class="content-section hidden">
+                    <h3 class="text-2xl font-semibold mb-4">Upcoming Events</h3>
+                    <div class="events-grid">
+                        <div class="event-card">
+                            <img src="https://via.placeholder.com/300x180?text=Event+1" alt="Event Image">
+                            <div class="event-card-content">
+                                <h4>Mixone 2IT Meeting</h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis.</p>
+                                <div class="event-card-meta">
+                                    <span><i data-lucide="calendar"></i> November 10, 2020</span>
+                                    <span><i data-lucide="map-pin"></i> Milan</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-card">
+                            <img src="https://via.placeholder.com/300x180?text=Event+2" alt="Event Image">
+                            <div class="event-card-content">
+                                <h4>Gaming X2021 Fair</h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis.</p>
+                                <div class="event-card-meta">
+                                    <span><i data-lucide="calendar"></i> March 1, 2021</span>
+                                    <span><i data-lucide="map-pin"></i> Istanbul</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-card">
+                            <img src="https://via.placeholder.com/300x180?text=Event+3" alt="Event Image">
+                            <div class="event-card-content">
+                                <h4>Evenwharp Conference</h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis.</p>
+                                <div class="event-card-meta">
+                                    <span><i data-lucide="calendar"></i> March 2, 2021</span>
+                                    <span><i data-lucide="map-pin"></i> Jordan</span>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="event-card">
+                            <img src="https://via.placeholder.com/300x180?text=Event+4" alt="Event Image">
+                            <div class="event-card-content">
+                                <h4>Future of Currencies Talk</h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis.</p>
+                                <div class="event-card-meta">
+                                    <span><i data-lucide="calendar"></i> April 15, 2021</span>
+                                    <span><i data-lucide="map-pin"></i> Online</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-card">
+                            <img src="https://via.placeholder.com/300x180?text=Event+5" alt="Event Image">
+                            <div class="event-card-content">
+                                <h4>Wedding of James & Helen</h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis.</p>
+                                <div class="event-card-meta">
+                                    <span><i data-lucide="calendar"></i> June 1, 2021</span>
+                                    <span><i data-lucide="map-pin"></i> New York</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-card">
+                            <img src="https://via.placeholder.com/300x180?text=Event+6" alt="Event Image">
+                            <div class="event-card-content">
+                                <h4>Fashion Carnival 2021</h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis.</p>
+                                <div class="event-card-meta">
+                                    <span><i data-lucide="calendar"></i> July 20, 2021</span>
+                                    <span><i data-lucide="map-pin"></i> Paris</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> </div> </div> <script>
         // Initialize Lucide icons
         lucide.createIcons();
 
         // --- Password Protection Logic ---
-        const correctPassword = "MetsIedc@Admin_2025"; // IMPORTANT: Replace with a strong password for demo, but NEVER use hardcoded passwords in production!
+        const correctPassword = "your_secret_password"; // IMPORTANT: Replace with a strong password for demo, but NEVER use hardcoded passwords in production!
         const passwordInput = document.getElementById('folderPassword');
         const unlockButton = document.getElementById('unlockButton');
         const passwordMessage = document.getElementById('passwordMessage');
-        const passwordForm = document.getElementById('passwordForm');
-        const fileManagementArea = document.getElementById('fileManagementArea');
+        const passwordInterfaceWrapper = document.getElementById('passwordInterfaceWrapper');
+        const dashboardLayout = document.getElementById('dashboardLayout'); // The main dashboard layout
 
         unlockButton.addEventListener('click', () => {
             if (passwordInput.value === correctPassword) {
-                passwordForm.classList.add('hidden');
-                fileManagementArea.style.display = 'block'; // Show the file management area
+                passwordInterfaceWrapper.classList.add('hidden'); // Fade out the password wrapper
+                // After transition, remove it from flow and display the dashboard
+                passwordInterfaceWrapper.addEventListener('transitionend', () => {
+                    passwordInterfaceWrapper.style.display = 'none';
+                    dashboardLayout.classList.remove('hidden'); // Show the main dashboard layout
+                    renderCurrentFolder(fileSystemDocuments, 'documentsFolderSection'); // Initial render for Documents
+                    renderCurrentFolder(fileSystemImages, 'imagesFolderSection', true); // Initial render for Images, indicating images only
+                }, { once: true }); // Ensure this listener runs only once
+
                 passwordMessage.classList.add('hidden');
-                renderCurrentFolder(); // Render initial folder contents
-                // In a real app, you'd send the password to a server for authentication
             } else {
                 passwordMessage.textContent = "Incorrect password. Please try again.";
                 passwordMessage.classList.remove('hidden');
@@ -443,88 +1130,94 @@
             }
         });
 
+        // --- Sidebar Navigation Logic ---
+        const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+
+                // Remove active from all links and sections
+                sidebarLinks.forEach(l => l.classList.remove('active'));
+                contentSections.forEach(s => s.classList.add('hidden'));
+
+                // Add active to clicked link
+                link.classList.add('active');
+
+                // Show corresponding content section
+                const targetSectionId = link.dataset.section + 'Section';
+                const targetSection = document.getElementById(targetSectionId);
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                    targetSection.classList.add('active'); // Keep active for visibility management
+
+                    // Special handling for folder sections to re-render them
+                    if (targetSectionId === 'documentsFolderSection') {
+                         renderCurrentFolder(currentFolderDocuments, targetSectionId);
+                    } else if (targetSectionId === 'imagesFolderSection') {
+                         renderCurrentFolder(currentFolderImages, targetSectionId, true); // True for image-only rendering
+                    }
+                }
+            });
+        });
+
         // --- File System Simulation Logic (Client-side) ---
-        // Root of our simulated file system
-        let fileSystem = {
-            id: 'root',
-            name: 'Root',
-            type: 'folder',
-            children: []
-        };
-        let currentFolder = fileSystem; // Points to the currently viewed folder object
-        let pathHistory = [fileSystem]; // Stack to keep track of folder path for breadcrumbs and back button
+        // Two separate file systems for Documents and Images, though they share common logic
+        let fileSystemDocuments = { id: 'root-docs', name: 'Root', type: 'folder', children: [] };
+        let currentFolderDocuments = fileSystemDocuments;
+        let pathHistoryDocuments = [fileSystemDocuments];
 
-        // DOM Elements
-        const initialUploadBox = document.getElementById('initialUploadBox');
-        const fileInputInitial = document.getElementById('fileInputInitial');
-        const fileInputHidden = document.getElementById('fileInputHidden'); // Hidden input for compact button
-        const compactUploadButton = document.getElementById('compactUploadButton');
-        const fileGrid = document.getElementById('fileGrid');
-        const noFilesMessage = document.getElementById('noFilesMessage');
-        const breadcrumbsContainer = document.getElementById('breadcrumbs');
-        const backButton = document.getElementById('backButton');
-        const createFolderButton = document.getElementById('createFolderButton');
-
-        // --- Event Listeners ---
-        fileInputInitial.addEventListener('change', (event) => handleFiles(event.target.files));
-        fileInputHidden.addEventListener('change', (event) => handleFiles(event.target.files));
-
-        initialUploadBox.addEventListener('dragover', (event) => {
-            event.preventDefault();
-            initialUploadBox.style.borderColor = 'var(--color-primary)';
-            initialUploadBox.style.backgroundColor = 'rgba(0, 123, 255, 0.05)';
-        });
-        initialUploadBox.addEventListener('dragleave', () => {
-            initialUploadBox.style.borderColor = 'var(--color-border)';
-            initialUploadBox.style.backgroundColor = 'var(--color-light-bg)';
-        });
-        initialUploadBox.addEventListener('drop', (event) => {
-            event.preventDefault();
-            initialUploadBox.style.borderColor = 'var(--color-border)';
-            initialUploadBox.style.backgroundColor = 'var(--color-light-bg)';
-            handleFiles(event.dataTransfer.files);
-        });
-
-        compactUploadButton.addEventListener('click', () => {
-            fileInputHidden.click(); // Trigger click on the hidden file input
-        });
-
-        backButton.addEventListener('click', goBack);
-        createFolderButton.addEventListener('click', createFolder);
-
-        // --- File System Functions ---
+        let fileSystemImages = { id: 'root-images', name: 'Root', type: 'folder', children: [] };
+        let currentFolderImages = fileSystemImages;
+        let pathHistoryImages = [fileSystemImages];
 
         function generateUniqueId() {
             return 'id-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
         }
 
-        function renderCurrentFolder() {
-            fileGrid.innerHTML = ''; // Clear current display
-            noFilesMessage.classList.add('hidden'); // Assume content will be rendered
+        // --- Generic File/Folder Rendering Function ---
+        function renderCurrentFolder(folderToRender, sectionId, imagesOnly = false) {
+            const fileGrid = document.querySelector(`#${sectionId} #fileGrid`) || document.querySelector(`#${sectionId} #imagesFileGrid`);
+            const noFilesMessage = document.querySelector(`#${sectionId} #noFilesMessage`) || document.querySelector(`#${sectionId} #imagesNoFilesMessage`);
+            const breadcrumbsContainer = document.querySelector(`#${sectionId} #breadcrumbs`) || document.querySelector(`#${sectionId} #imagesBreadcrumbs`);
+            const backButton = document.querySelector(`#${sectionId} #backButton`) || document.querySelector(`#${sectionId} #imagesBackButton`);
+            const initialUploadBox = document.querySelector(`#${sectionId} #initialUploadBox`) || document.querySelector(`#${sectionId} #imagesInitialUploadBox`);
+            const compactUploadButton = document.querySelector(`#${sectionId} #compactUploadButton`) || document.querySelector(`#${sectionId} #imagesCompactUploadButton`);
 
-            if (currentFolder.children.length === 0) {
+            if (!fileGrid) return; // Exit if elements not found (e.g., if rendering non-folder section)
+
+            fileGrid.innerHTML = ''; // Clear current display
+            noFilesMessage.classList.add('hidden');
+
+            if (folderToRender.children.length === 0) {
                 noFilesMessage.classList.remove('hidden');
             }
 
-            // Sort children: folders first, then files, both alphabetically
-            const sortedChildren = [...currentFolder.children].sort((a, b) => {
+            const sortedChildren = [...folderToRender.children].sort((a, b) => {
                 if (a.type === 'folder' && b.type !== 'folder') return -1;
                 if (a.type !== 'folder' && b.type === 'folder') return 1;
                 return a.name.localeCompare(b.name);
+            }).filter(item => { // Filter for imagesOnly
+                if (imagesOnly && item.type === 'file') {
+                    return item.mimeType.startsWith('image/');
+                }
+                return true; // Include folders and non-image files if not imagesOnly
             });
 
             sortedChildren.forEach(item => {
                 const itemElement = document.createElement('div');
-                itemElement.classList.add('file-item');
+                itemElement.classList.add('file-folder-card');
                 itemElement.dataset.itemId = item.id;
 
                 if (item.type === 'folder') {
                     itemElement.classList.add('folder');
                     itemElement.innerHTML = `
-                        <i data-lucide="folder"></i>
-                        <p>${item.name}</p>
+                        <div class="icon-placeholder"><i data-lucide="folder"></i></div>
+                        <h4>${item.name}</h4>
+                        <p class="text-xs">${item.children.length} items</p>
                     `;
-                    itemElement.addEventListener('click', () => navigateToFolder(item.id));
+                    itemElement.addEventListener('click', () => navigateToFolder(item.id, sectionId, imagesOnly));
                 } else { // type === 'file'
                     let iconHtml = '';
                     if (item.mimeType.startsWith('image/')) {
@@ -532,142 +1225,205 @@
                     } else {
                         let iconName = 'file';
                         if (item.mimeType.includes('pdf')) iconName = 'file-text';
-                        else if (item.mimeType.includes('word')) iconName = 'file-text'; // Lucide doesn't have specific word/excel
+                        else if (item.mimeType.includes('word')) iconName = 'file-text';
                         else if (item.mimeType.includes('excel') || item.mimeType.includes('spreadsheet')) iconName = 'file-spreadsheet';
                         else if (item.mimeType.includes('text')) iconName = 'file-text';
                         iconHtml = `<i data-lucide="${iconName}"></i>`;
                     }
                     itemElement.innerHTML = `
-                        ${iconHtml}
-                        <p>${item.name}</p>
-                        <a href="${item.url}" download="${item.name}" class="download-link" onclick="event.stopPropagation()">Download</a>
+                        <div class="icon-placeholder">${iconHtml}</div>
+                        <h4>${item.name}</h4>
+                        <p>${(file.size / 1024 / 1024).toFixed(2)} MB</p> <a href="${item.url}" download="${item.name}" class="download-link" onclick="event.stopPropagation()">Download</a>
                     `;
-                    // For files, clicking the item itself can trigger download or preview
-                    // For this simulation, the download link is explicit.
                 }
                 fileGrid.appendChild(itemElement);
             });
 
-            lucide.createIcons(); // Re-create icons after updating HTML
-            updateUploadUI();
-            updateBreadcrumbs();
-            updateBackButtonVisibility();
+            lucide.createIcons();
+            updateFolderUI(folderToRender, initialUploadBox, compactUploadButton);
+            updateBreadcrumbs(folderToRender, pathHistoryDocuments, pathHistoryImages, breadcrumbsContainer, sectionId, imagesOnly);
+            updateBackButtonVisibility(pathHistoryDocuments, pathHistoryImages, backButton, sectionId);
         }
 
-        function handleFiles(files) {
+        // --- File Upload Logic ---
+        function handleFiles(files, sectionId, imagesOnly = false) {
             if (files.length === 0) return;
 
+            const targetFolder = (sectionId === 'documentsFolderSection') ? currentFolderDocuments : currentFolderImages;
+
             for (const file of files) {
+                // Skip non-image files if imagesOnly is true
+                if (imagesOnly && !file.type.startsWith('image/')) {
+                    console.warn(`Skipping non-image file in Images section: ${file.name}`);
+                    continue;
+                }
+
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const newFile = {
                         id: generateUniqueId(),
                         name: file.name,
                         type: 'file',
-                        url: e.target.result, // Data URL for display
-                        mimeType: file.type
+                        url: e.target.result,
+                        mimeType: file.type,
+                        size: file.size // Store file size
                     };
-                    currentFolder.children.push(newFile);
-                    renderCurrentFolder(); // Re-render the folder content
+                    targetFolder.children.push(newFile);
+                    renderCurrentFolder(targetFolder, sectionId, imagesOnly);
                 };
-                reader.readAsDataURL(file); // Read file as Data URL
+                reader.readAsDataURL(file);
             }
-
-            // In a real application, you would send these files to a backend server:
-            // const formData = new FormData();
-            // for (const file of files) {
-            //     formData.append('files', file);
-            // }
-            // fetch('/upload-endpoint', {
-            //     method: 'POST',
-            //     body: formData
-            // }).then(response => response.json())
-            //   .then(data => console.log('Upload success:', data))
-            //   .catch(error => console.error('Upload error:', error));
         }
 
-        function createFolder() {
+        // --- Folder Management ---
+        function createFolder(sectionId, imagesOnly = false) {
             const folderName = prompt("Enter new folder name:");
             if (folderName && folderName.trim() !== '') {
+                const targetFolder = (sectionId === 'documentsFolderSection') ? currentFolderDocuments : currentFolderImages;
                 const newFolder = {
                     id: generateUniqueId(),
                     name: folderName.trim(),
                     type: 'folder',
                     children: []
                 };
-                currentFolder.children.push(newFolder);
-                renderCurrentFolder(); // Re-render the folder content
+                targetFolder.children.push(newFolder);
+                renderCurrentFolder(targetFolder, sectionId, imagesOnly);
             }
         }
 
-        function navigateToFolder(folderId) {
-            const nextFolder = currentFolder.children.find(item => item.id === folderId && item.type === 'folder');
+        function navigateToFolder(folderId, sectionId, imagesOnly = false) {
+            let targetFolderSystem, targetCurrentFolder, targetPathHistory;
+            if (sectionId === 'documentsFolderSection') {
+                targetFolderSystem = fileSystemDocuments;
+                targetCurrentFolder = currentFolderDocuments;
+                targetPathHistory = pathHistoryDocuments;
+            } else {
+                targetFolderSystem = fileSystemImages;
+                targetCurrentFolder = currentFolderImages;
+                targetPathHistory = pathHistoryImages;
+            }
+
+            const nextFolder = targetCurrentFolder.children.find(item => item.id === folderId && item.type === 'folder');
             if (nextFolder) {
-                currentFolder = nextFolder;
-                pathHistory.push(currentFolder);
-                renderCurrentFolder();
+                if (sectionId === 'documentsFolderSection') {
+                    currentFolderDocuments = nextFolder;
+                    pathHistoryDocuments.push(currentFolderDocuments);
+                } else {
+                    currentFolderImages = nextFolder;
+                    pathHistoryImages.push(currentFolderImages);
+                }
+                renderCurrentFolder(nextFolder, sectionId, imagesOnly);
             }
         }
 
-        function goBack() {
-            if (pathHistory.length > 1) { // Cannot go back from root
-                pathHistory.pop(); // Remove current folder from history
-                currentFolder = pathHistory[pathHistory.length - 1]; // Set to previous folder
-                renderCurrentFolder();
+        function goBack(sectionId, imagesOnly = false) {
+            let targetPathHistory, targetCurrentFolder;
+            if (sectionId === 'documentsFolderSection') {
+                targetPathHistory = pathHistoryDocuments;
+                targetCurrentFolder = currentFolderDocuments;
+            } else {
+                targetPathHistory = pathHistoryImages;
+                targetCurrentFolder = currentFolderImages;
+            }
+
+            if (targetPathHistory.length > 1) {
+                targetPathHistory.pop();
+                const newCurrentFolder = targetPathHistory[targetPathHistory.length - 1];
+                if (sectionId === 'documentsFolderSection') {
+                    currentFolderDocuments = newCurrentFolder;
+                } else {
+                    currentFolderImages = newCurrentFolder;
+                }
+                renderCurrentFolder(newCurrentFolder, sectionId, imagesOnly);
             }
         }
 
-        function updateUploadUI() {
-            if (currentFolder.children.length > 0) {
+        // --- UI Update Functions ---
+        function updateFolderUI(folderToRender, initialUploadBox, compactUploadButton) {
+            // Count actual files/folders, not just initial children for images section
+            const visibleItemsCount = folderToRender.children.filter(item => {
+                const sectionId = initialUploadBox.closest('.content-section').id;
+                if (sectionId === 'imagesFolderSection' && item.type === 'file') {
+                    return item.mimeType.startsWith('image/');
+                }
+                return true;
+            }).length;
+
+            if (visibleItemsCount > 0) {
                 initialUploadBox.style.display = 'none';
-                compactUploadButton.parentElement.style.display = 'flex'; // Show compact container
+                compactUploadButton.parentElement.style.display = 'flex';
             } else {
                 initialUploadBox.style.display = 'block';
-                compactUploadButton.parentElement.style.display = 'none'; // Hide compact container
+                compactUploadButton.parentElement.style.display = 'none';
             }
         }
 
-        function updateBreadcrumbs() {
+        function updateBreadcrumbs(folderToRender, pathHistoryDocs, pathHistoryImgs, breadcrumbsContainer, sectionId, imagesOnly = false) {
             breadcrumbsContainer.innerHTML = '';
-            pathHistory.forEach((folder, index) => {
+            const currentPathHistory = (sectionId === 'documentsFolderSection') ? pathHistoryDocs : pathHistoryImgs;
+
+            currentPathHistory.forEach((folder, index) => {
                 const span = document.createElement('span');
-                if (index === pathHistory.length - 1) {
-                    span.textContent = folder.name; // Current folder, not a link
+                if (index === currentPathHistory.length - 1) {
+                    span.textContent = folder.name;
                 } else {
                     const link = document.createElement('a');
-                    link.href = "#"; // Prevent page reload
+                    link.href = "#";
                     link.textContent = folder.name;
                     link.addEventListener('click', (event) => {
                         event.preventDefault();
-                        // Navigate directly to this historical point
-                        pathHistory = pathHistory.slice(0, index + 1);
-                        currentFolder = pathHistory[pathHistory.length - 1];
-                        renderCurrentFolder();
+                        const newPathHistory = currentPathHistory.slice(0, index + 1);
+                        if (sectionId === 'documentsFolderSection') {
+                            pathHistoryDocuments = newPathHistory;
+                            currentFolderDocuments = newPathHistory[newPathHistory.length - 1];
+                        } else {
+                            pathHistoryImages = newPathHistory;
+                            currentFolderImages = newPathHistory[newPathHistory.length - 1];
+                        }
+                        renderCurrentFolder(newPathHistory[newPathHistory.length - 1], sectionId, imagesOnly);
                     });
                     span.appendChild(link);
                 }
                 breadcrumbsContainer.appendChild(span);
-                if (index < pathHistory.length - 1) {
+                if (index < currentPathHistory.length - 1) {
                     const separator = document.createElement('span');
                     separator.classList.add('separator');
-                    separator.innerHTML = '&nbsp;/&nbsp;'; // Slash separator
+                    separator.innerHTML = '&nbsp;/&nbsp;';
                     breadcrumbsContainer.appendChild(separator);
                 }
             });
         }
 
-        function updateBackButtonVisibility() {
-            if (pathHistory.length > 1) {
+        function updateBackButtonVisibility(pathHistoryDocs, pathHistoryImgs, backButton, sectionId) {
+            const currentPathHistory = (sectionId === 'documentsFolderSection') ? pathHistoryDocs : pathHistoryImgs;
+            if (currentPathHistory.length > 1) {
                 backButton.classList.remove('hidden');
             } else {
                 backButton.classList.add('hidden');
             }
         }
 
-        // Initial render (after password unlock)
-        // document.addEventListener('DOMContentLoaded', () => { // Removed, as renderCurrentFolder is called after unlock
-        //     renderCurrentFolder();
-        // });
+        // --- Hook up Events for Documents Section ---
+        document.getElementById('fileInputInitial').addEventListener('change', (event) => handleFiles(event.target.files, 'documentsFolderSection'));
+        document.getElementById('fileInputHidden').addEventListener('change', (event) => handleFiles(event.target.files, 'documentsFolderSection'));
+        document.getElementById('createFolderButton').addEventListener('click', () => createFolder('documentsFolderSection'));
+        document.getElementById('backButton').addEventListener('click', () => goBack('documentsFolderSection'));
+        // Event listener for the compact upload button for documents
+        document.getElementById('compactUploadButton').addEventListener('click', () => {
+            document.getElementById('fileInputHidden').click();
+        });
+
+
+        // --- Hook up Events for Images Section ---
+        document.getElementById('imagesFileInputInitial').addEventListener('change', (event) => handleFiles(event.target.files, 'imagesFolderSection', true));
+        document.getElementById('imagesFileInputHidden').addEventListener('change', (event) => handleFiles(event.target.files, 'imagesFolderSection', true));
+        document.getElementById('imagesCreateFolderButton').addEventListener('click', () => createFolder('imagesFolderSection', true));
+        document.getElementById('imagesBackButton').addEventListener('click', () => goBack('imagesFolderSection', true));
+        // Event listener for the compact upload button for images
+        document.getElementById('imagesCompactUploadButton').addEventListener('click', () => {
+            document.getElementById('imagesFileInputHidden').click();
+        });
+
     </script>
 </body>
 </html>
