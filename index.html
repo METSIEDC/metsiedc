@@ -37,6 +37,113 @@
         }
     </script>
     <style>
+    /* Add to your existing :root block */
+    :root {
+        /* ... (your existing color variables) ... */
+
+        /* New colors for Partners & WhatsApp section */
+        --color-partners-bg: #F8F9FA; /* Light background for partners section */
+        --color-whatsapp-green: #25D366; /* WhatsApp brand green */
+        --color-whatsapp-green-dark: #1DA851; /* Darker green for hover */
+    }
+
+    /* Styles for the Partners Section */
+    #partners {
+        background-color: var(--color-partners-bg);
+        padding: 4rem 1.5rem;
+        text-align: center;
+    }
+
+    #partners .section-title {
+        font-size: 2.5rem; /* text-4xl */
+        font-weight: 700; /* font-bold */
+        color: var(--color-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    #partners .section-description {
+        font-size: 1rem;
+        color: var(--color-secondary);
+        margin-bottom: 3rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .partners-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Responsive grid for logos */
+        gap: 2rem; /* Gap between logos */
+        justify-items: center; /* Center logos in their grid cells */
+        align-items: center; /* Center logos vertically */
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .partner-logo {
+        width: 100%; /* Ensure logo takes full width of its grid cell */
+        max-width: 150px; /* Max width for individual logos */
+        height: auto; /* Maintain aspect ratio */
+        opacity: 0.7; /* Slightly muted as in the image */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .partner-logo:hover {
+        opacity: 1; /* Full opacity on hover */
+    }
+
+    /* Styles for the WhatsApp Channel Button */
+    .whatsapp-channel-btn-container {
+        position: fixed; /* Fixed position relative to viewport */
+        bottom: 2rem; /* 2rem from bottom */
+        right: 2rem; /* 2rem from right */
+        z-index: 99; /* Ensure it's above most content but below modals */
+    }
+
+    .whatsapp-channel-btn {
+        background-color: var(--color-whatsapp-green);
+        color: var(--color-white);
+        padding: 0.8rem 1.5rem;
+        border-radius: 2rem; /* Highly rounded, pill shape */
+        font-size: 1rem;
+        font-weight: 600;
+        display: inline-flex; /* For icon and text alignment */
+        align-items: center;
+        gap: 0.75rem; /* Space between icon and text */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        text-decoration: none; /* Remove underline for link */
+    }
+
+    .whatsapp-channel-btn:hover {
+        background-color: var(--color-whatsapp-green-dark);
+        transform: translateY(-3px); /* Slight lift effect */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .whatsapp-channel-btn .lucide {
+        width: 1.25rem; /* Icon size */
+        height: 1.25rem;
+    }
+
+    /* Responsive adjustments for WhatsApp button */
+    @media (max-width: 768px) {
+        .whatsapp-channel-btn-container {
+            bottom: 1rem;
+            right: 1rem;
+        }
+        .whatsapp-channel-btn {
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+            gap: 0.5rem;
+        }
+        .whatsapp-channel-btn .lucide {
+            width: 1rem;
+            height: 1rem;
+        }
+    }
+</style>
+    <style>
         /* Basic smooth scroll */
         html {
             scroll-behavior: smooth;
@@ -1059,6 +1166,58 @@ Make sure to check it before you submit!</p>
                 </div>
             </div>
     </main>
+<!-- New Section: Our Partners -->
+<section id="partners" class="py-16 md:py-24">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="section-title">Our Partners</h2>
+            <p class="section-description">
+                We collaborate with leading organizations to foster innovation and entrepreneurship.
+            </p>
+        </div>
+
+        <div class="partners-grid">
+            <!-- Partner Logo 1 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=DPIIT" alt="DPIIT Startup India" class="partner-logo">
+            <!-- Partner Logo 2 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=FABLAB" alt="Fablab Kerala" class="partner-logo">
+            <!-- Partner Logo 3 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=Maker+Village" alt="Maker Village" class="partner-logo">
+            <!-- Partner Logo 4 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=HEADSTART" alt="Headstart" class="partner-logo">
+            <!-- Partner Logo 5 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=Kerala+IT" alt="Kerala IT Mission" class="partner-logo">
+            <!-- Partner Logo 6 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=SAIK" alt="SAIK" class="partner-logo">
+            <!-- Partner Logo 7 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=CITI+2.0" alt="CITI 2.0" class="partner-logo">
+            <!-- Partner Logo 8 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=Social+PR" alt="Social PR" class="partner-logo">
+            <!-- Partner Logo 9 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=Wadhwani" alt="Wadhwani Foundation" class="partner-logo">
+            <!-- Partner Logo 10 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=ASAP" alt="ASAP Kerala" class="partner-logo">
+            <!-- Partner Logo 11 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=K-DISC" alt="K-DISC" class="partner-logo">
+            <!-- Partner Logo 12 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=W" alt="W" class="partner-logo">
+            <!-- Partner Logo 13 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=IGEM" alt="IGEM" class="partner-logo">
+            <!-- Partner Logo 14 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=KBA" alt="KBA" class="partner-logo">
+            <!-- Partner Logo 15 -->
+            <img src="https://placehold.co/150x50/F0F0F0/333333?text=Anita+B" alt="Anita B.org" class="partner-logo">
+        </div>
+    </div>
+</section>
+
+<!-- WhatsApp Channel Button (Fixed Position) -->
+<div class="whatsapp-channel-btn-container">
+    <a href="YOUR_WHATSAPP_CHANNEL_LINK_HERE" target="_blank" class="whatsapp-channel-btn">
+        <i data-lucide="message-circle" class="lucide"></i>
+        <span>Join the WhatsApp Channel</span>
+    </a>
+</div>
 
     <footer class="bg-dark text-light py-12">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -1515,6 +1674,5 @@ Make sure to check it before you submit!</p>
             <img src="Blue and Yellow Minimalist Congratulation Best Employee Of The Month Poster (1).jpg" alt="Announcement Pop-up">
         </div>
     </div>
-
 </body>
 </html>
