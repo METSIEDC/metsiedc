@@ -6,7 +6,8 @@
     <title>My Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script> <style>
+    <script src="https://unpkg.com/lucide@latest"></script> <!-- Lucide Icons -->
+    <style>
         /* Base Colors (inspired by your dashboard images) */
         :root {
             --color-primary-blue: #6A67D0; /* Main accent blue/purple */
@@ -28,6 +29,10 @@
             --color-pw-button-hover-bg: #F0F0F0;
             --color-pw-text-on-overlay: #FFFFFF;
             --color-pw-error-text: #FF6347;
+
+            /* Specific colors for folder icons */
+            --color-folder-icon: #FFD700; /* Gold for folders */
+            --color-file-icon: var(--color-primary-blue); /* Default file icon color */
         }
 
         body {
@@ -53,12 +58,17 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            opacity: 1; /* Ensure it starts visible */
             transition: opacity 0.5s ease-in-out;
         }
-        .password-interface-wrapper.hidden {
+        .password-interface-wrapper.hidden-fade { /* Use a distinct class for fading out */
             opacity: 0;
-            pointer-events: none;
+            pointer-events: none; /* Disable interactions while fading */
         }
+        .password-interface-wrapper.hidden-display { /* Use for complete hiding after fade */
+            display: none;
+        }
+
         .background-blur {
             position: absolute;
             top: 0;
@@ -149,11 +159,11 @@
 
         /* --- Main Dashboard Layout --- */
         .dashboard-layout {
-            display: flex;
+            display: none; /* Hidden by default, will be set to flex by JS */
             min-height: 100vh;
             background-color: var(--color-background-light);
         }
-
+        
         /* Sidebar */
         .sidebar {
             width: 250px; /* Fixed width */
@@ -277,6 +287,7 @@
             align-items: center;
             gap: 0.5rem;
             cursor: pointer;
+            border: none; /* Ensure no default button border */
             transition: background-color 0.2s;
         }
         .dashboard-header .header-actions .btn-upload:hover {
@@ -577,10 +588,10 @@
         .file-folder-card .lucide {
             width: 2.5rem;
             height: 2.5rem;
-            color: var(--color-primary-blue);
+            color: var(--color-file-icon);
         }
         .file-folder-card.folder .lucide {
-            color: #FFD700; /* Gold for folders */
+            color: var(--color-folder-icon); /* Gold for folders */
         }
         .file-folder-card h4 {
             font-size: 0.95rem;
@@ -602,6 +613,73 @@
         }
         .file-folder-card .download-link:hover {
             text-decoration: underline;
+        }
+
+        /* Initial Large Upload Box */
+        .initial-upload-box {
+            border: 2px dashed var(--color-border);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background-color 0.2s;
+            margin-bottom: 2rem;
+            position: relative; /* For file input overlay */
+            background-color: var(--color-background-light); /* Use light background */
+        }
+        .initial-upload-box:hover {
+            border-color: var(--color-primary-blue);
+            background-color: rgba(106, 103, 208, 0.05);
+        }
+        .initial-upload-box input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .initial-upload-box .lucide {
+            width: 3rem;
+            height: 3rem;
+            color: var(--color-text-muted);
+            margin-bottom: 0.5rem;
+        }
+        .initial-upload-box p {
+            color: var(--color-text-muted);
+            font-size: 1rem;
+        }
+
+        /* Compact Upload Button */
+        .compact-upload-btn-container {
+            display: none; /* Hidden by default */
+            margin-bottom: 2rem;
+            text-align: right; /* Align button to the right */
+        }
+        .compact-upload-btn-container button {
+            background-color: var(--color-accent); /* Use accent green */
+            color: var(--color-white);
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            border: none;
+            display: inline-flex; /* For icon and text */
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .compact-upload-btn-container button:hover {
+            background-color: #059669; /* Darker green */
+        }
+        .compact-upload-btn-container .lucide {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+        /* Hide the default file input button */
+        #documentsFileInputHidden, #imagesFileInputHidden {
+            display: none;
         }
 
         /* --- Account Settings Section (image_d805ad.png inspired) --- */
@@ -755,18 +833,16 @@
             height: 1rem;
         }
 
-        /* Hide the default file input button */
-        #fileInputHidden {
-            display: none;
-        }
     </style>
 </head>
 <body>
+    <!-- Password Interface Wrapper (Full Screen Overlay) -->
     <div id="passwordInterfaceWrapper" class="password-interface-wrapper">
         <div class="background-blur"></div>
         <div class="password-form-container">
             <div class="logo">
-                <img src="METS IEDC LOGO.jpg" alt="Your Company Logo"> </div>
+                <img src="https://placehold.co/150x50/000000/FFFFFF?text=Your+Logo" alt="Your Company Logo"> <!-- REPLACE WITH YOUR LOGO URL -->
+            </div>
             <h2>Secure Access</h2>
             <p>Enter your password to unlock the dashboard.</p>
             <input type="password" id="folderPassword" placeholder="Password">
@@ -778,10 +854,13 @@
         </div>
     </div>
 
-    <div id="dashboardLayout" class="dashboard-layout hidden">
+    <!-- Main Dashboard Layout (Hidden initially, revealed after password unlock) -->
+    <div id="dashboardLayout" class="dashboard-layout">
+        <!-- Sidebar -->
         <aside id="sidebar" class="sidebar">
             <div class="sidebar-logo">
-                <img src="https://placehold.co/120x40/000000/FFFFFF?text=Your+Logo" alt="Your Company Logo"> </div>
+                <img src="https://placehold.co/120x40/000000/FFFFFF?text=Your+Logo" alt="Your Company Logo"> <!-- REPLACE WITH YOUR LOGO URL -->
+            </div>
             <nav class="sidebar-nav">
                 <ul>
                     <li><a href="#" data-section="dashboardOverview" class="active"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
@@ -792,16 +871,19 @@
                     <li><a href="#" data-section="events"><i data-lucide="calendar"></i> Upcoming Events</a></li>
                 </ul>
             </nav>
-            </aside>
+            <!-- Could add logout, version info here -->
+        </aside>
 
+        <!-- Main Content Area -->
         <div id="mainContent" class="main-content">
+            <!-- Header -->
             <header class="dashboard-header">
                 <div class="search-bar">
                     <i data-lucide="search"></i>
                     <input type="text" placeholder="Search...">
                 </div>
                 <div class="header-actions">
-                    <button class="btn-upload"><i data-lucide="upload-cloud"></i> Upload</button>
+                    <button class="btn-upload" id="globalUploadButton"><i data-lucide="upload-cloud"></i> Upload</button>
                     <div class="user-profile">
                         <img src="https://placehold.co/40x40/random/white?text=A" alt="User Avatar">
                         <span>Mitchel</span>
@@ -809,8 +891,10 @@
                 </div>
             </header>
 
+            <!-- Dynamic Content Area -->
             <div id="dynamicContent" class="dynamic-content">
 
+                <!-- 1. Dashboard Overview Section (image_d8060b.png inspired) -->
                 <div id="dashboardOverviewSection" class="content-section active">
                     <h3 class="text-2xl font-semibold mb-4">Dashboard Overview</h3>
                     <div class="overview-grid">
@@ -870,27 +954,30 @@
                     </div>
                 </div>
 
-                <div id="documentsFolderSection" class="content-section hidden">
+                <!-- 2. Documents Folder Section (image_d80a69.png inspired) -->
+                <div id="documentsFolderSection" class="content-section">
                     <h3 class="text-2xl font-semibold mb-4">Documents</h3>
                     <div class="folder-manager-header">
-                        <div class="breadcrumbs" id="breadcrumbs">
-                            </div>
+                        <div class="breadcrumbs" id="documentsBreadcrumbs">
+                            <!-- Breadcrumbs will be dynamically loaded here -->
+                        </div>
                         <div class="folder-action-buttons">
-                            <button id="backButton" class="hidden">
+                            <button id="documentsBackButton" class="hidden">
                                 <i data-lucide="arrow-left"></i> Back
                             </button>
-                            <button id="createFolderButton">
+                            <button id="documentsCreateFolderButton">
                                 <i data-lucide="folder-plus"></i> New Folder
                             </button>
-                            <input type="file" id="fileInputHidden" multiple accept="image/*, .pdf, .doc, .docx, .xls, .xlsx, .txt">
-                            <button id="compactUploadButton" class="hidden">
+                            <input type="file" id="documentsFileInputHidden" multiple accept="image/*, .pdf, .doc, .docx, .xls, .xlsx, .txt">
+                            <button id="documentsCompactUploadButton" class="hidden">
                                 <i data-lucide="upload-cloud"></i> Upload File
                             </button>
                         </div>
                     </div>
 
-                    <div class="initial-upload-box" id="initialUploadBox">
-                        <input type="file" id="fileInputInitial" multiple accept="image/*, .pdf, .doc, .docx, .xls, .xlsx, .txt">
+                    <!-- Initial Large Upload Box (shown only if no files/folders exist in current directory) -->
+                    <div class="initial-upload-box" id="documentsInitialUploadBox">
+                        <input type="file" id="documentsFileInputInitial" multiple accept="image/*, .pdf, .doc, .docx, .xls, .xlsx, .txt">
                         <i data-lucide="upload-cloud"></i>
                         <p>Drag & drop files here, or click to browse</p>
                         <p class="text-xs text-muted-text mt-2">
@@ -898,16 +985,18 @@
                         </p>
                     </div>
 
-                    <div id="fileGrid" class="folder-grid">
-                        <p class="text-muted-text col-span-full" id="noFilesMessage">This folder is empty.</p>
+                    <div id="documentsFileGrid" class="folder-grid">
+                        <p class="text-muted-text col-span-full" id="documentsNoFilesMessage">This folder is empty.</p>
                     </div>
                 </div>
 
-                <div id="imagesFolderSection" class="content-section hidden">
+                <!-- 3. Images Folder Section (re-uses folder logic, could add filtering) -->
+                <div id="imagesFolderSection" class="content-section">
                     <h3 class="text-2xl font-semibold mb-4">Images</h3>
                     <div class="folder-manager-header">
                         <div class="breadcrumbs" id="imagesBreadcrumbs">
-                            </div>
+                            <!-- Breadcrumbs will be dynamically loaded here -->
+                        </div>
                         <div class="folder-action-buttons">
                             <button id="imagesBackButton" class="hidden">
                                 <i data-lucide="arrow-left"></i> Back
@@ -915,7 +1004,8 @@
                             <button id="imagesCreateFolderButton">
                                 <i data-lucide="folder-plus"></i> New Folder
                             </button>
-                            <input type="file" id="imagesFileInputHidden" multiple accept="image/*"> <button id="imagesCompactUploadButton" class="hidden">
+                            <input type="file" id="imagesFileInputHidden" multiple accept="image/*"> <!-- Only images -->
+                            <button id="imagesCompactUploadButton" class="hidden">
                                 <i data-lucide="upload-cloud"></i> Upload Image
                             </button>
                         </div>
@@ -936,7 +1026,8 @@
                 </div>
 
 
-                <div id="accountSettingsSection" class="content-section hidden">
+                <!-- 4. Account Settings Section (image_d805ad.png inspired) -->
+                <div id="accountSettingsSection" class="content-section">
                     <h3 class="text-2xl font-semibold mb-4">Account Settings</h3>
                     <div class="settings-grid">
                         <div class="settings-field">
@@ -979,7 +1070,8 @@
                     </div>
                 </div>
 
-                <div id="announcementsSection" class="content-section hidden">
+                <!-- 5. Announcements Section (Screenshot 2025-06-29 151614.png inspired) -->
+                <div id="announcementsSection" class="content-section">
                     <h3 class="text-2xl font-semibold mb-4">Announcements</h3>
                     <ul class="announcement-list">
                         <li class="announcement-item">
@@ -1020,7 +1112,8 @@
                     </ul>
                 </div>
 
-                <div id="eventsSection" class="content-section hidden">
+                <!-- 6. Upcoming Events Section (image_6f4d45.png inspired) -->
+                <div id="eventsSection" class="content-section">
                     <h3 class="text-2xl font-semibold mb-4">Upcoming Events</h3>
                     <div class="events-grid">
                         <div class="event-card">
@@ -1092,7 +1185,12 @@
                     </div>
                 </div>
 
-            </div> </div> </div> <script>
+            </div> <!-- /#dynamicContent -->
+        </div> <!-- /#mainContent -->
+    </div> <!-- /#dashboardLayout -->
+
+    <!-- Global Scripts -->
+    <script>
         // Initialize Lucide icons
         lucide.createIcons();
 
@@ -1106,13 +1204,12 @@
 
         unlockButton.addEventListener('click', () => {
             if (passwordInput.value === correctPassword) {
-                passwordInterfaceWrapper.classList.add('hidden'); // Fade out the password wrapper
-                // After transition, remove it from flow and display the dashboard
+                passwordInterfaceWrapper.classList.add('hidden-fade'); // Start fade out
+                dashboardLayout.style.display = 'flex'; // Immediately show the dashboard layout (flex)
+
+                // After transition, completely remove the password wrapper from flow
                 passwordInterfaceWrapper.addEventListener('transitionend', () => {
-                    passwordInterfaceWrapper.style.display = 'none';
-                    dashboardLayout.classList.remove('hidden'); // Show the main dashboard layout
-                    renderCurrentFolder(fileSystemDocuments, 'documentsFolderSection'); // Initial render for Documents
-                    renderCurrentFolder(fileSystemImages, 'imagesFolderSection', true); // Initial render for Images, indicating images only
+                    passwordInterfaceWrapper.classList.add('hidden-display'); // Apply display: none
                 }, { once: true }); // Ensure this listener runs only once
 
                 passwordMessage.classList.add('hidden');
@@ -1134,36 +1231,43 @@
         const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
         const contentSections = document.querySelectorAll('.content-section');
 
+        // Function to show a specific section
+        function showSection(sectionId) {
+            // Hide all content sections
+            contentSections.forEach(s => s.classList.remove('active'));
+            contentSections.forEach(s => s.style.display = 'none'); // Explicitly hide
+
+            // Show the target section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                targetSection.style.display = 'block'; // Explicitly show
+
+                // Special handling for folder sections to render their content
+                if (sectionId === 'documentsFolderSection') {
+                     renderCurrentFolder(currentFolderDocuments, sectionId);
+                } else if (sectionId === 'imagesFolderSection') {
+                     renderCurrentFolder(currentFolderImages, sectionId, true); // True for image-only rendering
+                }
+            }
+        }
+
         sidebarLinks.forEach(link => {
             link.addEventListener('click', (event) => {
                 event.preventDefault();
 
-                // Remove active from all links and sections
+                // Remove active from all sidebar links
                 sidebarLinks.forEach(l => l.classList.remove('active'));
-                contentSections.forEach(s => s.classList.add('hidden'));
-
                 // Add active to clicked link
                 link.classList.add('active');
 
-                // Show corresponding content section
                 const targetSectionId = link.dataset.section + 'Section';
-                const targetSection = document.getElementById(targetSectionId);
-                if (targetSection) {
-                    targetSection.classList.remove('hidden');
-                    targetSection.classList.add('active'); // Keep active for visibility management
-
-                    // Special handling for folder sections to re-render them
-                    if (targetSectionId === 'documentsFolderSection') {
-                         renderCurrentFolder(currentFolderDocuments, targetSectionId);
-                    } else if (targetSectionId === 'imagesFolderSection') {
-                         renderCurrentFolder(currentFolderImages, targetSectionId, true); // True for image-only rendering
-                    }
-                }
+                showSection(targetSectionId);
             });
         });
 
         // --- File System Simulation Logic (Client-side) ---
-        // Two separate file systems for Documents and Images, though they share common logic
+        // Two separate file systems for Documents and Images
         let fileSystemDocuments = { id: 'root-docs', name: 'Root', type: 'folder', children: [] };
         let currentFolderDocuments = fileSystemDocuments;
         let pathHistoryDocuments = [fileSystemDocuments];
@@ -1178,31 +1282,39 @@
 
         // --- Generic File/Folder Rendering Function ---
         function renderCurrentFolder(folderToRender, sectionId, imagesOnly = false) {
-            const fileGrid = document.querySelector(`#${sectionId} #fileGrid`) || document.querySelector(`#${sectionId} #imagesFileGrid`);
-            const noFilesMessage = document.querySelector(`#${sectionId} #noFilesMessage`) || document.querySelector(`#${sectionId} #imagesNoFilesMessage`);
-            const breadcrumbsContainer = document.querySelector(`#${sectionId} #breadcrumbs`) || document.querySelector(`#${sectionId} #imagesBreadcrumbs`);
-            const backButton = document.querySelector(`#${sectionId} #backButton`) || document.querySelector(`#${sectionId} #imagesBackButton`);
-            const initialUploadBox = document.querySelector(`#${sectionId} #initialUploadBox`) || document.querySelector(`#${sectionId} #imagesInitialUploadBox`);
-            const compactUploadButton = document.querySelector(`#${sectionId} #compactUploadButton`) || document.querySelector(`#${sectionId} #imagesCompactUploadButton`);
+            const fileGrid = document.querySelector(`#${sectionId} .folder-grid`);
+            const noFilesMessage = document.querySelector(`#${sectionId} p[id$="NoFilesMessage"]`); // Selects by ID ending with NoFilesMessage
+            const breadcrumbsContainer = document.querySelector(`#${sectionId} .breadcrumbs`);
+            const backButton = document.querySelector(`#${sectionId} button[id$="BackButton"]`);
+            const createFolderButton = document.querySelector(`#${sectionId} button[id$="CreateFolderButton"]`);
+            const initialUploadBox = document.querySelector(`#${sectionId} .initial-upload-box`);
+            const compactUploadButton = document.querySelector(`#${sectionId} button[id$="CompactUploadButton"]`);
+            // fileInputInitial and fileInputHidden are for event listeners, not direct DOM manipulation here
 
-            if (!fileGrid) return; // Exit if elements not found (e.g., if rendering non-folder section)
+            if (!fileGrid || !noFilesMessage || !breadcrumbsContainer || !backButton || !createFolderButton || !initialUploadBox || !compactUploadButton) {
+                console.error(`Missing elements for section: ${sectionId}. Cannot render folder.`);
+                return;
+            }
 
             fileGrid.innerHTML = ''; // Clear current display
             noFilesMessage.classList.add('hidden');
 
-            if (folderToRender.children.length === 0) {
-                noFilesMessage.classList.remove('hidden');
-            }
-
-            const sortedChildren = [...folderToRender.children].sort((a, b) => {
-                if (a.type === 'folder' && b.type !== 'folder') return -1;
-                if (a.type !== 'folder' && b.type === 'folder') return 1;
-                return a.name.localeCompare(b.name);
-            }).filter(item => { // Filter for imagesOnly
+            const filteredChildren = folderToRender.children.filter(item => {
                 if (imagesOnly && item.type === 'file') {
                     return item.mimeType.startsWith('image/');
                 }
                 return true; // Include folders and non-image files if not imagesOnly
+            });
+
+            if (filteredChildren.length === 0) {
+                noFilesMessage.classList.remove('hidden');
+            }
+
+            // Sort children: folders first, then files, both alphabetically
+            const sortedChildren = [...filteredChildren].sort((a, b) => {
+                if (a.type === 'folder' && b.type !== 'folder') return -1;
+                if (a.type !== 'folder' && b.type === 'folder') return 1;
+                return a.name.localeCompare(b.name);
             });
 
             sortedChildren.forEach(item => {
@@ -1233,16 +1345,17 @@
                     itemElement.innerHTML = `
                         <div class="icon-placeholder">${iconHtml}</div>
                         <h4>${item.name}</h4>
-                        <p>${(file.size / 1024 / 1024).toFixed(2)} MB</p> <a href="${item.url}" download="${item.name}" class="download-link" onclick="event.stopPropagation()">Download</a>
+                        <p>${(item.size / 1024 / 1024).toFixed(2)} MB</p>
+                        <a href="${item.url}" download="${item.name}" class="download-link" onclick="event.stopPropagation()">Download</a>
                     `;
                 }
                 fileGrid.appendChild(itemElement);
             });
 
             lucide.createIcons();
-            updateFolderUI(folderToRender, initialUploadBox, compactUploadButton);
-            updateBreadcrumbs(folderToRender, pathHistoryDocuments, pathHistoryImages, breadcrumbsContainer, sectionId, imagesOnly);
-            updateBackButtonVisibility(pathHistoryDocuments, pathHistoryImages, backButton, sectionId);
+            updateFolderUI(folderToRender, initialUploadBox, compactUploadButton, filteredChildren.length);
+            updateBreadcrumbs(sectionId, breadcrumbsContainer);
+            updateBackButtonVisibility(sectionId, backButton);
         }
 
         // --- File Upload Logic ---
@@ -1252,7 +1365,6 @@
             const targetFolder = (sectionId === 'documentsFolderSection') ? currentFolderDocuments : currentFolderImages;
 
             for (const file of files) {
-                // Skip non-image files if imagesOnly is true
                 if (imagesOnly && !file.type.startsWith('image/')) {
                     console.warn(`Skipping non-image file in Images section: ${file.name}`);
                     continue;
@@ -1266,7 +1378,7 @@
                         type: 'file',
                         url: e.target.result,
                         mimeType: file.type,
-                        size: file.size // Store file size
+                        size: file.size
                     };
                     targetFolder.children.push(newFile);
                     renderCurrentFolder(targetFolder, sectionId, imagesOnly);
@@ -1275,7 +1387,7 @@
             }
         }
 
-        // --- Folder Management ---
+        // --- Folder Management Actions ---
         function createFolder(sectionId, imagesOnly = false) {
             const folderName = prompt("Enter new folder name:");
             if (folderName && folderName.trim() !== '') {
@@ -1292,13 +1404,11 @@
         }
 
         function navigateToFolder(folderId, sectionId, imagesOnly = false) {
-            let targetFolderSystem, targetCurrentFolder, targetPathHistory;
+            let targetCurrentFolder, targetPathHistory;
             if (sectionId === 'documentsFolderSection') {
-                targetFolderSystem = fileSystemDocuments;
                 targetCurrentFolder = currentFolderDocuments;
                 targetPathHistory = pathHistoryDocuments;
             } else {
-                targetFolderSystem = fileSystemImages;
                 targetCurrentFolder = currentFolderImages;
                 targetPathHistory = pathHistoryImages;
             }
@@ -1317,7 +1427,9 @@
         }
 
         function goBack(sectionId, imagesOnly = false) {
-            let targetPathHistory, targetCurrentFolder;
+            let targetPathHistory;
+            let targetCurrentFolder;
+
             if (sectionId === 'documentsFolderSection') {
                 targetPathHistory = pathHistoryDocuments;
                 targetCurrentFolder = currentFolderDocuments;
@@ -1339,16 +1451,7 @@
         }
 
         // --- UI Update Functions ---
-        function updateFolderUI(folderToRender, initialUploadBox, compactUploadButton) {
-            // Count actual files/folders, not just initial children for images section
-            const visibleItemsCount = folderToRender.children.filter(item => {
-                const sectionId = initialUploadBox.closest('.content-section').id;
-                if (sectionId === 'imagesFolderSection' && item.type === 'file') {
-                    return item.mimeType.startsWith('image/');
-                }
-                return true;
-            }).length;
-
+        function updateFolderUI(folderToRender, initialUploadBox, compactUploadButton, visibleItemsCount) {
             if (visibleItemsCount > 0) {
                 initialUploadBox.style.display = 'none';
                 compactUploadButton.parentElement.style.display = 'flex';
@@ -1358,9 +1461,9 @@
             }
         }
 
-        function updateBreadcrumbs(folderToRender, pathHistoryDocs, pathHistoryImgs, breadcrumbsContainer, sectionId, imagesOnly = false) {
+        function updateBreadcrumbs(sectionId, breadcrumbsContainer) {
             breadcrumbsContainer.innerHTML = '';
-            const currentPathHistory = (sectionId === 'documentsFolderSection') ? pathHistoryDocs : pathHistoryImgs;
+            const currentPathHistory = (sectionId === 'documentsFolderSection') ? pathHistoryDocuments : pathHistoryImages;
 
             currentPathHistory.forEach((folder, index) => {
                 const span = document.createElement('span');
@@ -1380,7 +1483,7 @@
                             pathHistoryImages = newPathHistory;
                             currentFolderImages = newPathHistory[newPathHistory.length - 1];
                         }
-                        renderCurrentFolder(newPathHistory[newPathHistory.length - 1], sectionId, imagesOnly);
+                        renderCurrentFolder(newPathHistory[newPathHistory.length - 1], sectionId, (sectionId === 'imagesFolderSection'));
                     });
                     span.appendChild(link);
                 }
@@ -1394,8 +1497,8 @@
             });
         }
 
-        function updateBackButtonVisibility(pathHistoryDocs, pathHistoryImgs, backButton, sectionId) {
-            const currentPathHistory = (sectionId === 'documentsFolderSection') ? pathHistoryDocs : pathHistoryImgs;
+        function updateBackButtonVisibility(sectionId, backButton) {
+            const currentPathHistory = (sectionId === 'documentsFolderSection') ? pathHistoryDocuments : pathHistoryImages;
             if (currentPathHistory.length > 1) {
                 backButton.classList.remove('hidden');
             } else {
@@ -1404,26 +1507,78 @@
         }
 
         // --- Hook up Events for Documents Section ---
-        document.getElementById('fileInputInitial').addEventListener('change', (event) => handleFiles(event.target.files, 'documentsFolderSection'));
-        document.getElementById('fileInputHidden').addEventListener('change', (event) => handleFiles(event.target.files, 'documentsFolderSection'));
-        document.getElementById('createFolderButton').addEventListener('click', () => createFolder('documentsFolderSection'));
-        document.getElementById('backButton').addEventListener('click', () => goBack('documentsFolderSection'));
-        // Event listener for the compact upload button for documents
-        document.getElementById('compactUploadButton').addEventListener('click', () => {
-            document.getElementById('fileInputHidden').click();
+        document.getElementById('documentsFileInputInitial').addEventListener('change', (event) => handleFiles(event.target.files, 'documentsFolderSection'));
+        document.getElementById('documentsFileInputInitial').closest('.initial-upload-box').addEventListener('dragover', (event) => {
+            event.preventDefault();
+            document.getElementById('documentsInitialUploadBox').style.borderColor = 'var(--color-primary-blue)';
+            document.getElementById('documentsInitialUploadBox').style.backgroundColor = 'rgba(106, 103, 208, 0.05)';
+        });
+        document.getElementById('documentsFileInputInitial').closest('.initial-upload-box').addEventListener('dragleave', () => {
+            document.getElementById('documentsInitialUploadBox').style.borderColor = 'var(--color-border)';
+            document.getElementById('documentsInitialUploadBox').style.backgroundColor = 'var(--color-background-light)';
+        });
+        document.getElementById('documentsFileInputInitial').closest('.initial-upload-box').addEventListener('drop', (event) => {
+            event.preventDefault();
+            document.getElementById('documentsInitialUploadBox').style.borderColor = 'var(--color-border)';
+            document.getElementById('documentsInitialUploadBox').style.backgroundColor = 'var(--color-background-light)';
+            handleFiles(event.dataTransfer.files, 'documentsFolderSection');
+        });
+
+        document.getElementById('documentsFileInputHidden').addEventListener('change', (event) => handleFiles(event.target.files, 'documentsFolderSection'));
+        document.getElementById('documentsCreateFolderButton').addEventListener('click', () => createFolder('documentsFolderSection'));
+        document.getElementById('documentsBackButton').addEventListener('click', () => goBack('documentsFolderSection'));
+        document.getElementById('documentsCompactUploadButton').addEventListener('click', () => {
+            document.getElementById('documentsFileInputHidden').click();
         });
 
 
-        // --- Hook up Events for Images Section ---
+        // --- Event Listeners for Images Section ---
         document.getElementById('imagesFileInputInitial').addEventListener('change', (event) => handleFiles(event.target.files, 'imagesFolderSection', true));
+        document.getElementById('imagesFileInputInitial').closest('.initial-upload-box').addEventListener('dragover', (event) => {
+            event.preventDefault();
+            document.getElementById('imagesInitialUploadBox').style.borderColor = 'var(--color-primary-blue)';
+            document.getElementById('imagesInitialUploadBox').style.backgroundColor = 'rgba(106, 103, 208, 0.05)';
+        });
+        document.getElementById('imagesFileInputInitial').closest('.initial-upload-box').addEventListener('dragleave', () => {
+            document.getElementById('imagesInitialUploadBox').style.borderColor = 'var(--color-border)';
+            document.getElementById('imagesInitialUploadBox').style.backgroundColor = 'var(--color-background-light)';
+        });
+        document.getElementById('imagesFileInputInitial').closest('.initial-upload-box').addEventListener('drop', (event) => {
+            event.preventDefault();
+            document.getElementById('imagesInitialUploadBox').style.borderColor = 'var(--color-border)';
+            document.getElementById('imagesInitialUploadBox').style.backgroundColor = 'var(--color-background-light)';
+            handleFiles(event.dataTransfer.files, 'imagesFolderSection', true);
+        });
+
         document.getElementById('imagesFileInputHidden').addEventListener('change', (event) => handleFiles(event.target.files, 'imagesFolderSection', true));
         document.getElementById('imagesCreateFolderButton').addEventListener('click', () => createFolder('imagesFolderSection', true));
         document.getElementById('imagesBackButton').addEventListener('click', () => goBack('imagesFolderSection', true));
-        // Event listener for the compact upload button for images
         document.getElementById('imagesCompactUploadButton').addEventListener('click', () => {
             document.getElementById('imagesFileInputHidden').click();
         });
 
+        // --- Global Upload Button (in header) ---
+        document.getElementById('globalUploadButton').addEventListener('click', () => {
+            // Determine which section is currently active to decide where to upload
+            const activeSection = document.querySelector('.content-section.active');
+            if (activeSection) {
+                const sectionId = activeSection.id;
+                if (sectionId === 'documentsFolderSection') {
+                    document.getElementById('documentsFileInputHidden').click();
+                } else if (sectionId === 'imagesFolderSection') {
+                    document.getElementById('imagesFileInputHidden').click();
+                } else {
+                    // Fallback or message if upload is not supported in current section
+                    alert('Please navigate to Documents or Images section to upload files.');
+                }
+            }
+        });
+
+        // --- Initial setup on page load ---
+        // Ensure dashboard is hidden until unlocked
+        dashboardLayout.style.display = 'none';
+
     </script>
 </body>
 </html>
+
