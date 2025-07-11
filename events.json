@@ -1,0 +1,31 @@
+[
+  {
+    "title": "IEDC ORIENTATION DAY",
+    "date": "JULY 11, 2025",
+    "venue": "Seminar Hall",
+    "description": "IEDC Orientation Day in connection with changes and restructuring of previous IEDC specifically for 2nd year to 4th year",
+    "image": "EVENTS/Orientation_11_07_2025.jpg",
+    "link": "",
+    "buttonText": "Read More",
+    "buttonDisabled": true
+  },{
+    "title": "POSTER-MAKING COMPETITION",
+    "date": "JULY 01, 2025",
+    "venue": "Online",
+    "description": "In celebration of National Doctors’ Day – July 1st, METS IEDC invites you to showcase your creativity...",
+    "image": "EVENTS/Poster maiking competion.jpg",
+    "link": "https://forms.gle/Z8t37rfhjAXTwnzg7",
+    "buttonText": "Upload Now",
+    "buttonDisabled": false
+  },
+  {
+    "title": "Investor Connect & Pitch Day",
+    "date": "September 10, 2025",
+    "venue": "KSUM Innovation Hub, Kochi",
+    "description": "An exclusive event for selected IEDC startups to pitch their ventures...",
+    "image": "METS IEDC LOGO.jpg",
+    "link": "#",
+    "buttonText": "Applications Closed",
+    "buttonDisabled": true
+  }
+]
