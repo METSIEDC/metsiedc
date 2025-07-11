@@ -70,3 +70,23 @@ fetch('events.json')
 function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
+fetch('news.json')
+  .then(res => res.json())
+  .then(newsItems => {
+    const container = document.getElementById('latestNewsContainer');
+
+    newsItems.forEach(news => {
+      const article = `
+        <article class="flex bg-light p-6 rounded-lg shadow-md">
+          <img src="${news.image}" alt="${news.title}" class="w-1/3 h-auto object-cover rounded-md mr-6">
+          <div>
+            <h3 class="text-xl font-semibold text-primary mb-2">${news.title}</h3>
+            <p class="text-sm text-secondary mb-1">${news.date}</p>
+            <p class="text-secondary text-sm mb-3">${news.description}</p>
+            <a href="${news.readMoreLink}" class="text-accent hover:underline font-medium page-link">Read More</a>
+          </div>
+        </article>
+      `;
+      container.innerHTML += article;
+    });
+  });
