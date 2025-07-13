@@ -1,7 +1,6 @@
 <html>
-    <head>
-        <!-- Lucide icon support -->
-<script src="https://unpkg.com/lucide@latest"></script>
+    <html lang="en">
+<head>
     <meta name="title" content="METS IEDC">
 <meta name="description" content="Official website of METS IEDC - Innovation, Entrepreneurship and Projects.">
 <meta name="keywords" content="METS, METS IEDC, Engineering, IEDC Kerala, Student Startup, METS College">
@@ -347,10 +346,6 @@
         --color-event-orange: #FFC107; /* The distinct orange/yellow color for tags and buttons */
         --color-event-orange-text: #333333; /* Dark text on orange background */
         --color-event-card-shadow: rgba(0, 0, 0, 0.1);
-        --color-linkedin-blue: #0A66C2;
-        --color-instagram-pink: #E1306C;
-        --color-facebook-blue: #1877F2;
-        --color-twitter-blue: #1DA1F2;
     }
 
     /* Events Section specific styles */
@@ -539,152 +534,6 @@
             font-size: 1rem;
         }
     }
-#team-members-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    justify-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-}
-
-#team-page {
-    padding: 4rem 1.5rem;
-    text-align: center;
-    background-color: var(--color-page-bg);
-}
-#team-page h1 {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--color-main-text);
-    margin-bottom: 0.5rem;
-}
-#team-page .section-description {
-    font-size: 1.125rem;
-    color: var(--color-sub-text);
-    margin-bottom: 3rem;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.6;
-}
-.team-member-card {
-    background-color: var(--color-card-bg);
-    border-radius: 0.75rem;
-    overflow: hidden;
-    box-shadow: 0 4px 12px var(--color-shadow);
-    transition: all 0.3s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-.team-member-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-.team-member-image-wrapper {
-    width: 100%;
-    height: 250px;
-    overflow: hidden;
-    position: relative;
-}
-.team-member-image-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.social-links-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    border-top: 1px solid var(--color-border-light);
-}
-.social-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 0.5rem;
-    font-size: 0.875rem;
-    color: var(--color-white);
-    background-color: var(--color-sub-text);
-    text-decoration: none;
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-    gap: 0.25rem;
-}
-.social-link .lucide {
-    width: 18px;
-    height: 18px;
-}
-.social-link.linkedin-link { background-color: var(--color-linkedin-blue); }
-.social-link.instagram-link { background-color: var(--color-instagram-pink); }
-.social-link.facebook-link { background-color: var(--color-facebook-blue); }
-.social-link.twitter-link { background-color: var(--color-twitter-blue); }
-.team-member-card.highlighted {
-    box-shadow: 0 0 0 3px var(--color-linkedin-blue);
-}
-.team-member-card.highlighted .social-links-container .social-link.linkedin-link {
-    grid-column: span 2;
-}
-.team-member-card.highlighted .social-links-container .social-link:not(.linkedin-link) {
-    display: none;
-}
-.member-details {
-    padding: 1.5rem;
-    text-align: left;
-    position: relative;
-}
-.member-name {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--color-main-text);
-    margin-bottom: 0.25rem;
-}
-.member-role {
-    font-size: 0.95rem;
-    color: var(--color-sub-text);
-}
-.view-profile-arrow {
-    position: absolute;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    border-radius: 50%;
-    transition: background-color 0.3s ease-in-out;
-    cursor: pointer;
-}
-.view-profile-arrow:hover {
-    background-color: #0056b3;
-}
-.view-profile-arrow .lucide {
-    width: 18px;
-    height: 18px;
-}
-@media (max-width: 768px) {
-    #team-page {
-        padding: 3rem 1rem;
-    }
-    #team-page h1 {
-        font-size: 2rem;
-    }
-    .team-member-image-wrapper {
-        height: 200px;
-    }
-    #team-members-container {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-}
-
-
-
-
     </style>
 </head>
 <body class="font-inter bg-light text-dark">
@@ -698,14 +547,14 @@
                 </a>
 
                 <nav class="hidden xl:flex space-x-4 lg:space-x-6 items-center">
-                    <a href="#home" class="nav-link page-link ">Home</a>
+                    <a href="index.html" class="nav-link page-link ">Home</a>
                     <a href="about.html" class="nav-link page-link">About Us</a>
-                    <a href="team.html" class="nav-link nav-link-active">Our Ex-Com</a>
+                    <a href="team.html" class="nav-link">Our Ex-Com</a>
                     <a href="events.html" class="nav-link page-link">Events</a>
                     <a href="announcement.html" class="nav-link">Announcements</a>
                     <a href="initiatives.html" class="nav-link page-link">Initiatives</a>
                     <a href="news.html" class="nav-link page-link">News</a>
-                    <a href="contact.html" class="nav-link page-link">Contact</a>
+                    <a href="contact.html" class="nav-link page-link nav-link-active">Contact</a>
                    <a href="login.html" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-700 transition duration-300">Login</a>
                 </nav>
 
@@ -719,10 +568,10 @@
 
         <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-white z-40 pt-20 p-4 md:hidden">
             <nav class="flex flex-col space-y-4">
-                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Home</a>
+                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Home</a>
                 <a href="about.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">About Us</a>
-                <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Our Ex-Com</a>
-                <a href="core team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Our Core Team</a>
+                 <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Our Ex-Com</a>
+                <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Our Core Team</a>
                 <a href="events.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Events</a>
                 <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Announcements</a>
                 <a href="initiatives.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Initiatives</a>
@@ -733,232 +582,93 @@
         </div>
     </header>
 
-    <main>
-        <section id="team-page">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
-                    <h1>Our Executive Committee</h1>
-                    <p class="section-description">
-                        The individuals driving innovation and entrepreneurship at MET'S IEDC.
-                        
-                    </p>
-                </div>
+    <section id="contact" class="page active py-16 md:py-24 bg-white">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-primary">Get In Touch</h1>
+      <p class="text-xl text-secondary mt-4 max-w-2xl mx-auto">
+        We'd love to hear from you! Whether you're a student, faculty, industry partner, or just curious.
+      </p>
+    </div>
 
-                <div id="team-members-container">
-                    <!-- Team members will be dynamically loaded here -->
-                    <p class="text-center col-span-full text-sub-text">Loading team members...</p>
-                </div>
+    <div class="grid md:grid-cols-2 gap-10">
+      <!-- Form Column -->
+      <div class="bg-light p-8 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold text-dark mb-6">Send us a Message</h2>
+        <form action="#" method="POST">
+          <div class="mb-4">
+            <label for="name" class="block text-sm font-medium text-secondary">Full Name</label>
+            <input type="text" name="name" id="name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+          </div>
+          <div class="mb-4">
+            <label for="email" class="block text-sm font-medium text-secondary">Email Address</label>
+            <input type="email" name="email" id="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+          </div>
+          <div class="mb-4">
+            <label for="subject" class="block text-sm font-medium text-secondary">Subject</label>
+            <input type="text" name="subject" id="subject" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+          </div>
+          <div class="mb-6">
+            <label for="message" class="block text-sm font-medium text-secondary">Message</label>
+            <textarea name="message" id="message" rows="4" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"></textarea>
+          </div>
+          <div>
+            <button type="submit" class="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold">Send Message</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Contact Info Column -->
+      <div class="space-y-8">
+        <div>
+          <h2 class="text-2xl font-semibold text-dark mb-4">Contact Information</h2>
+          <div class="space-y-4">
+            <!-- Address -->
+            <div class="flex items-start">
+              <svg class="flex-shrink-0 h-6 w-6 text-primary mr-3 mt-1" ...></svg>
+              <div>
+                <h3 class="text-lg font-medium text-dark">Our Address</h3>
+                <p class="text-secondary">MET'S SCHOOL OF ENGINEERING, IEDC Cell</p>
+                <p class="text-secondary">P.O. Mala, Thrissur, Kerala, 680553</p>
+              </div>
             </div>
-        </section>
-    </main>
-    <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
+            <!-- Email -->
+            <div class="flex items-start">
+              <svg class="flex-shrink-0 h-6 w-6 text-primary mr-3 mt-1" ...></svg>
+              <div>
+                <h3 class="text-lg font-medium text-dark">Email Us</h3>
+                <p class="text-secondary">metsenggiedc@gmail.com</p>
+                <p class="text-secondary">metsengg.ac.in</p>
+              </div>
+            </div>
+            <!-- Phone -->
+            <div class="flex items-start">
+              <svg class="flex-shrink-0 h-6 w-6 text-primary mr-3 mt-1" ...></svg>
+              <div>
+                <h3 class="text-lg font-medium text-dark">Call Us</h3>
+                <p class="text-secondary">Office: +91 7306226875</p>
+                <p class="text-secondary">Nodal Officer: +91 9947273434</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        // --- Mobile Menu Logic ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileMenuCloseButton = document.getElementById('mobile-menu-close-button');
+        <!-- Google Maps -->
+        <div>
+          <h2 class="text-2xl font-semibold text-dark mb-4">Find Us on Map</h2>
+          <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-md">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d766.3366817510574!2d76.27484703300533!3d10.224251517313252!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0804b27133a8f1%3A0x5f5dce1563c096f9!2sMET&#39;s%20School%20of%20Engineering!5e0!3m2!1sen!2sin!4v1752394219844!5m2!1sen!2sin" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+      </div>
 
-        if (mobileMenuButton && mobileMenu && mobileMenuCloseButton) {
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.add('open');
-                document.body.style.overflow = 'hidden'; // Prevent scrolling
-            });
+    </div>
+  </div> 
+</section>
 
-            mobileMenuCloseButton.addEventListener('click', () => {
-                mobileMenu.classList.remove('open');
-                document.body.style.overflow = ''; // Restore scrolling
-            });
-
-            mobileMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.remove('open');
-                    document.body.style.overflow = '';
-                });
-            });
-        }
-
-        // --- Team Members Data ---
-        const teamMembers = [
-            {
-                name: "Mrs.Rekha M",
-                role: "IEDC Nodal Officer",
-                imageUrl: "assets/images/team/NODAL OFFICER.jpg", // Placeholder with text color to simulate B&W feel
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "https://www.linkedin.com/in/rekhamatthew/",
-                    instagram: "https://www.instagram.com/rekhamatthew/"
-                }
-            },
-            {
-                name: "Chris Babu",
-                role: "IEDC Student Lead I",
-                imageUrl: "assets/images/team/CHRISS.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "https://www.linkedin.com/in/chris-babu/",
-                    instagram: "https://www.instagram.com/chris_babu_?igsh=MXVpOG8zbXBrMzloMA=="
-                }
-            },
-            {
-                name: "Deena Abbas Kalathil",
-                role: "Student Lead II",
-                imageUrl: "assets/images/team/DEENA.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "https://www.linkedin.com/in/deena-abbas-kalathil-2a09bb314",
-                    instagram: "https://www.instagram.com/deena_abbas_?igsh=MXZ6NnowYWE3Z2U4Nw=="
-                }
-            },
-            {
-                name: "Habeeb Rahman",
-                role: "IPR & Research Lead",
-                imageUrl: "assets/images/team/HABEEB.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "", // No LinkedIn
-                    instagram: "https://www.instagram.com/h.abe.eb?igsh=ZTU5cGlrZGdoOWhv"
-                }
-            },
-            {
-                name: "Abhijith S Menon",
-                role: "Finance Lead",
-                imageUrl: "assets/images/team/Abhijith S.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "",
-                    instagram: "https://www.instagram.com/.abhijithmenon._?igsh=NmVvYm5xdm53YnBk"
-                }
-            },
-            {
-                name: "Arshina Arsal",
-                role: "Quality & Operation Lead",
-                imageUrl: "assets/images/team/ARSHINA.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "https://www.linkedin.com/in/arshina-arsal-8931a5339",
-                    instagram: "https://www.instagram.com/ar_7_.sh_?igsh=MWExdmk2amZuMmJ4Ng=="
-                }
-            },
-            {
-                name: "Abhinav V S",
-                role: "Branding & Marketing Lead",
-                imageUrl: "assets/images/team/ABHINAV.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "",
-                    instagram: "https://www.instagram.com/abhinav__v_s_/?utm_source=ig_web_button_share_sheet"
-                }
-            },
-            {
-                name: "Christy Antony",
-                role: "Technology Lead",
-                imageUrl: "assets/images/team/CHRISTY.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "https://www.linkedin.com/in/christy-antony-b96725331?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app ",
-                    instagram: "https://www.instagram.com/iamkrizte?igsh=MXFhMG5rYmV1YWRxcg=="
-                }
-            },
-            {
-                name: "Muhammed Shahil",
-                role: "Community Lead",
-                imageUrl: "assets/images/team/shahil.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "",
-                    instagram: "https://www.instagram.com/_zhahil_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
-                }
-            },
-            {
-                name: "Ajina Mathew",
-                role: "Creative & Innovation Lead",
-                imageUrl: "assets/images/team/Ajina.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "",
-                    instagram: ""
-                }
-            },
-            {
-                name: "Ann Treesa Saji",
-                role: "Women's Innovation Lead",
-                imageUrl: "assets/images/team/ANN.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "https://www.linkedin.com/in/ann-treesa-saji-286603340?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app ",
-                    instagram: "https://www.instagram.com/__ann_treesa_saji___/?utm_source=ig_web_button_share_sheet"
-                }
-            }
-        ];
-
-        // Function to display team members
-        function displayTeamMembers() {
-            const container = document.getElementById('team-members-container');
-            container.innerHTML = ''; // Clear loading message
-
-            if (teamMembers.length === 0) {
-                container.innerHTML = '<p class="text-center col-span-full text-sub-text">No team members to display yet.</p>';
-                return;
-            }
-
-            teamMembers.forEach((member, index) => {
-                let cardHtml = `
-                    <div class="team-member-card ${index === 0 ? 'highlighted' : ''}"> <!-- Highlight Nodal Officer -->
-                        <div class="team-member-image-wrapper">
-                            <img src="${member.imageUrl}" alt="${member.name}" onerror="this.src='https://placehold.co/250x250/CCCCCC/FFFFFF?text=No+Image'; this.onerror=null;">
-                        </div>
-                        <div class="social-links-container">
-                            ${member.socials.facebook ? `<a href="${member.socials.facebook}" target="_blank" class="social-link facebook-link">
-                                <i data-lucide="facebook" class="lucide"></i><span class="social-text">Facebook/user</span>
-                            </a>` : ''}
-                            ${member.socials.twitter ? `<a href="${member.socials.twitter}" target="_blank" class="social-link twitter-link">
-                                <i data-lucide="twitter" class="lucide"></i><span class="social-text">Twitter/user</span>
-                            </a>` : ''}
-                            ${member.socials.linkedin ? `<a href="${member.socials.linkedin}" target="_blank" class="social-link linkedin-link">
-                                <i data-lucide="linkedin" class="lucide"></i><span class="social-text">LinkedIn/user</span>
-                            </a>` : ''}
-                            ${member.socials.instagram ? `<a href="${member.socials.instagram}" target="_blank" class="social-link instagram-link">
-                                <i data-lucide="instagram" class="lucide"></i><span class="social-text">Instagram/user</span>
-                            </a>` : ''}
-                        </div>
-                        <div class="member-details">
-                            <h3 class="member-name">${member.name}</h3>
-                            <p class="member-role">${member.role}</p>
-                            <div class="view-profile-arrow">
-                                <i data-lucide="arrow-right" class="lucide"></i>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += cardHtml;
-            });
-            // Re-create Lucide icons after new HTML is added
-            lucide.createIcons();
-        }
-
-        // Call the function to display team members when the page loads
-        document.addEventListener('DOMContentLoaded', displayTeamMembers);
-    </script>
-    <script src="https://unpkg.com/lucide@latest"> </script>
-
-
-</body>
-    
-    
-    <footer class="bg-dark text-light py-12">
+        
+        
+        <footer class="bg-dark text-light py-12">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                 <div>
@@ -976,7 +686,7 @@
                         <li><a href="events.html" class="text-gray-400 hover:text-primary transition page-link">Events</a></li>
                         <li><a href="initiatives.html" class="text-gray-400 hover:text-primary transition page-link">Initiatives</a></li>
                         <li><a href="news.html" class="text-gray-400 hover:text-primary transition page-link">News & Blog</a></li>
-                        <li><a href="contact.html" class="text-gray-400 hover:text-primary transition page-link">Contact Us</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-primary transition  page-link">Contact Us</a></li>
                          <li><a href="https://startupmission.kerala.gov.in/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition">Kerala Startup Mission</a></li>
                     </ul>
                 </div>
@@ -1000,4 +710,6 @@
             </div>
         </div>
     </footer>
+
+    </body>
 </html>

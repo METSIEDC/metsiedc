@@ -3,7 +3,7 @@
     "title": "IEDC ORIENTATION DAY",
     "date": "JULY 11, 2025",
     "venue": "Seminar Hall",
-    "image": "EVENTS/Orientation_11_07_2025.jpg",
+    "image": "assets/images/events/Orientation_11_07_2025.jpg",
     "tags": ["MET'S IEDC", "Upcoming"],
     "description": "IEDC Orientation Day in connection with changes and restructuring of previous IEDC specifically for 2nd year to 4th year",
     "readMoreLink": "#upevent-details-1"
@@ -11,7 +11,7 @@
     "title": "POSTER-MAKING COMPETITION",
     "date": "JULY 01, 2025",
     "venue": "Online",
-    "image": "EVENTS/Poster maiking competion.jpg",
+    "image": "assets/images/events/Poster maiking competion.jpg",
     "tags": ["MET'S IEDC", "Upcoming"],
     "prizes": {
       "first": "Rs500",
@@ -26,7 +26,7 @@
     "title": "NA",
     "date": "NA",
     "venue": "NA",
-    "image": "METS IEDC LOGO.jpg",
+    "image": "assets/images/logos/METS IEDC LOGO.jpg",
     "tags": ["NA", "NA"],
     "prizes": {},
     "description": "NA",

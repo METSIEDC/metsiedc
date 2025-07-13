@@ -1,7 +1,6 @@
-<html>
-    <head>
-        <!-- Lucide icon support -->
-<script src="https://unpkg.com/lucide@latest"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta name="title" content="METS IEDC">
 <meta name="description" content="Official website of METS IEDC - Innovation, Entrepreneurship and Projects.">
 <meta name="keywords" content="METS, METS IEDC, Engineering, IEDC Kerala, Student Startup, METS College">
@@ -347,10 +346,6 @@
         --color-event-orange: #FFC107; /* The distinct orange/yellow color for tags and buttons */
         --color-event-orange-text: #333333; /* Dark text on orange background */
         --color-event-card-shadow: rgba(0, 0, 0, 0.1);
-        --color-linkedin-blue: #0A66C2;
-        --color-instagram-pink: #E1306C;
-        --color-facebook-blue: #1877F2;
-        --color-twitter-blue: #1DA1F2;
     }
 
     /* Events Section specific styles */
@@ -539,152 +534,6 @@
             font-size: 1rem;
         }
     }
-#team-members-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    justify-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-}
-
-#team-page {
-    padding: 4rem 1.5rem;
-    text-align: center;
-    background-color: var(--color-page-bg);
-}
-#team-page h1 {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--color-main-text);
-    margin-bottom: 0.5rem;
-}
-#team-page .section-description {
-    font-size: 1.125rem;
-    color: var(--color-sub-text);
-    margin-bottom: 3rem;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.6;
-}
-.team-member-card {
-    background-color: var(--color-card-bg);
-    border-radius: 0.75rem;
-    overflow: hidden;
-    box-shadow: 0 4px 12px var(--color-shadow);
-    transition: all 0.3s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-.team-member-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-.team-member-image-wrapper {
-    width: 100%;
-    height: 250px;
-    overflow: hidden;
-    position: relative;
-}
-.team-member-image-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.social-links-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    border-top: 1px solid var(--color-border-light);
-}
-.social-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 0.5rem;
-    font-size: 0.875rem;
-    color: var(--color-white);
-    background-color: var(--color-sub-text);
-    text-decoration: none;
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-    gap: 0.25rem;
-}
-.social-link .lucide {
-    width: 18px;
-    height: 18px;
-}
-.social-link.linkedin-link { background-color: var(--color-linkedin-blue); }
-.social-link.instagram-link { background-color: var(--color-instagram-pink); }
-.social-link.facebook-link { background-color: var(--color-facebook-blue); }
-.social-link.twitter-link { background-color: var(--color-twitter-blue); }
-.team-member-card.highlighted {
-    box-shadow: 0 0 0 3px var(--color-linkedin-blue);
-}
-.team-member-card.highlighted .social-links-container .social-link.linkedin-link {
-    grid-column: span 2;
-}
-.team-member-card.highlighted .social-links-container .social-link:not(.linkedin-link) {
-    display: none;
-}
-.member-details {
-    padding: 1.5rem;
-    text-align: left;
-    position: relative;
-}
-.member-name {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--color-main-text);
-    margin-bottom: 0.25rem;
-}
-.member-role {
-    font-size: 0.95rem;
-    color: var(--color-sub-text);
-}
-.view-profile-arrow {
-    position: absolute;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    border-radius: 50%;
-    transition: background-color 0.3s ease-in-out;
-    cursor: pointer;
-}
-.view-profile-arrow:hover {
-    background-color: #0056b3;
-}
-.view-profile-arrow .lucide {
-    width: 18px;
-    height: 18px;
-}
-@media (max-width: 768px) {
-    #team-page {
-        padding: 3rem 1rem;
-    }
-    #team-page h1 {
-        font-size: 2rem;
-    }
-    .team-member-image-wrapper {
-        height: 200px;
-    }
-    #team-members-container {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-}
-
-
-
-
     </style>
 </head>
 <body class="font-inter bg-light text-dark">
@@ -698,12 +547,12 @@
                 </a>
 
                 <nav class="hidden xl:flex space-x-4 lg:space-x-6 items-center">
-                    <a href="#home" class="nav-link page-link ">Home</a>
+                    <a href="#home" class="nav-link page-link">Home</a>
                     <a href="about.html" class="nav-link page-link">About Us</a>
-                    <a href="team.html" class="nav-link nav-link-active">Our Ex-Com</a>
+                    <a href="team.html" class="nav-link">Our Ex-Com</a>
                     <a href="events.html" class="nav-link page-link">Events</a>
                     <a href="announcement.html" class="nav-link">Announcements</a>
-                    <a href="initiatives.html" class="nav-link page-link">Initiatives</a>
+                    <a href="initiatives.html" class="nav-link page-link nav-link-active">Initiatives</a>
                     <a href="news.html" class="nav-link page-link">News</a>
                     <a href="contact.html" class="nav-link page-link">Contact</a>
                    <a href="login.html" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-700 transition duration-300">Login</a>
@@ -733,232 +582,71 @@
         </div>
     </header>
 
-    <main>
-        <section id="team-page">
+
+    <section id="initiatives" class="page py-16 md:py-24 bg-white active">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
-                    <h1>Our Executive Committee</h1>
-                    <p class="section-description">
-                        The individuals driving innovation and entrepreneurship at MET'S IEDC.
-                        
-                    </p>
+                    <h1 class="text-4xl font-bold text-primary">Our Initiatives</h1>
+                    <p class="text-xl text-secondary mt-4 max-w-2xl mx-auto">Programs and support systems designed to nurture student innovation.</p>
                 </div>
-
-                <div id="team-members-container">
-                    <!-- Team members will be dynamically loaded here -->
-                    <p class="text-center col-span-full text-sub-text">Loading team members...</p>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-light p-8 rounded-lg shadow-lg card-hover transition-all duration-300">
+                        <div class="flex items-center justify-center w-16 h-16 bg-primary text-white rounded-full mb-6 mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-dark text-center mb-3">Idea Incubation</h3>
+                        <p class="text-secondary text-center">We provide mentorship, resources, and seed funding opportunities to transform promising ideas into viable startup projects.</p>
+                    </div>
+                    <div class="bg-light p-8 rounded-lg shadow-lg card-hover transition-all duration-300">
+                        <div class="flex items-center justify-center w-16 h-16 bg-accent text-white rounded-full mb-6 mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-dark text-center mb-3">Skill Development Workshops</h3>
+                        <p class="text-secondary text-center">Regular workshops on cutting-edge technologies, business management, marketing, and intellectual property rights.</p>
+                    </div>
+                    <div class="bg-light p-8 rounded-lg shadow-lg card-hover transition-all duration-300">
+                         <div class="flex items-center justify-center w-16 h-16 bg-yellow-500 text-white rounded-full mb-6 mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-dark text-center mb-3">Mentor Connect Program</h3>
+                        <p class="text-secondary text-center">Connecting student entrepreneurs with experienced industry mentors, successful founders, and subject matter experts.</p>
+                    </div>
+                     <div class="bg-light p-8 rounded-lg shadow-lg card-hover transition-all duration-300">
+                         <div class="flex items-center justify-center w-16 h-16 bg-purple-600 text-white rounded-full mb-6 mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-dark text-center mb-3">Industry Linkages</h3>
+                        <p class="text-secondary text-center">Facilitating collaborations with industry partners for internships, projects, and technology transfer opportunities.</p>
+                    </div>
+                     <div class="bg-light p-8 rounded-lg shadow-lg card-hover transition-all duration-300">
+                         <div class="flex items-center justify-center w-16 h-16 bg-teal-500 text-white rounded-full mb-6 mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-dark text-center mb-3">Pitching Platforms</h3>
+                        <p class="text-secondary text-center">Organizing internal and participating in external pitching competitions to help students refine their ideas and gain exposure.</p>
+                    </div>
+                     <div class="bg-light p-8 rounded-lg shadow-lg card-hover transition-all duration-300">
+                         <div class="flex items-center justify-center w-16 h-16 bg-pink-500 text-white rounded-full mb-6 mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.87 12.87 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-dark text-center mb-3">Pre-Incubation Support</h3>
+                        <p class="text-secondary text-center">Providing early-stage support for student ventures, helping them develop prototypes and business models.</p>
+                    </div>
                 </div>
             </div>
         </section>
-    </main>
-    <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
-
-        // --- Mobile Menu Logic ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileMenuCloseButton = document.getElementById('mobile-menu-close-button');
-
-        if (mobileMenuButton && mobileMenu && mobileMenuCloseButton) {
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.add('open');
-                document.body.style.overflow = 'hidden'; // Prevent scrolling
-            });
-
-            mobileMenuCloseButton.addEventListener('click', () => {
-                mobileMenu.classList.remove('open');
-                document.body.style.overflow = ''; // Restore scrolling
-            });
-
-            mobileMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.remove('open');
-                    document.body.style.overflow = '';
-                });
-            });
-        }
-
-        // --- Team Members Data ---
-        const teamMembers = [
-            {
-                name: "Mrs.Rekha M",
-                role: "IEDC Nodal Officer",
-                imageUrl: "assets/images/team/NODAL OFFICER.jpg", // Placeholder with text color to simulate B&W feel
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "https://www.linkedin.com/in/rekhamatthew/",
-                    instagram: "https://www.instagram.com/rekhamatthew/"
-                }
-            },
-            {
-                name: "Chris Babu",
-                role: "IEDC Student Lead I",
-                imageUrl: "assets/images/team/CHRISS.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "https://www.linkedin.com/in/chris-babu/",
-                    instagram: "https://www.instagram.com/chris_babu_?igsh=MXVpOG8zbXBrMzloMA=="
-                }
-            },
-            {
-                name: "Deena Abbas Kalathil",
-                role: "Student Lead II",
-                imageUrl: "assets/images/team/DEENA.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "https://www.linkedin.com/in/deena-abbas-kalathil-2a09bb314",
-                    instagram: "https://www.instagram.com/deena_abbas_?igsh=MXZ6NnowYWE3Z2U4Nw=="
-                }
-            },
-            {
-                name: "Habeeb Rahman",
-                role: "IPR & Research Lead",
-                imageUrl: "assets/images/team/HABEEB.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "", // No LinkedIn
-                    instagram: "https://www.instagram.com/h.abe.eb?igsh=ZTU5cGlrZGdoOWhv"
-                }
-            },
-            {
-                name: "Abhijith S Menon",
-                role: "Finance Lead",
-                imageUrl: "assets/images/team/Abhijith S.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "",
-                    instagram: "https://www.instagram.com/.abhijithmenon._?igsh=NmVvYm5xdm53YnBk"
-                }
-            },
-            {
-                name: "Arshina Arsal",
-                role: "Quality & Operation Lead",
-                imageUrl: "assets/images/team/ARSHINA.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "https://www.linkedin.com/in/arshina-arsal-8931a5339",
-                    instagram: "https://www.instagram.com/ar_7_.sh_?igsh=MWExdmk2amZuMmJ4Ng=="
-                }
-            },
-            {
-                name: "Abhinav V S",
-                role: "Branding & Marketing Lead",
-                imageUrl: "assets/images/team/ABHINAV.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "",
-                    instagram: "https://www.instagram.com/abhinav__v_s_/?utm_source=ig_web_button_share_sheet"
-                }
-            },
-            {
-                name: "Christy Antony",
-                role: "Technology Lead",
-                imageUrl: "assets/images/team/CHRISTY.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "https://www.linkedin.com/in/christy-antony-b96725331?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app ",
-                    instagram: "https://www.instagram.com/iamkrizte?igsh=MXFhMG5rYmV1YWRxcg=="
-                }
-            },
-            {
-                name: "Muhammed Shahil",
-                role: "Community Lead",
-                imageUrl: "assets/images/team/shahil.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "",
-                    instagram: "https://www.instagram.com/_zhahil_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
-                }
-            },
-            {
-                name: "Ajina Mathew",
-                role: "Creative & Innovation Lead",
-                imageUrl: "assets/images/team/Ajina.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "",
-                    instagram: ""
-                }
-            },
-            {
-                name: "Ann Treesa Saji",
-                role: "Women's Innovation Lead",
-                imageUrl: "assets/images/team/ANN.jpg",
-                socials: {
-                    facebook: "",
-                    twitter: "",
-                    linkedin: "https://www.linkedin.com/in/ann-treesa-saji-286603340?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app ",
-                    instagram: "https://www.instagram.com/__ann_treesa_saji___/?utm_source=ig_web_button_share_sheet"
-                }
-            }
-        ];
-
-        // Function to display team members
-        function displayTeamMembers() {
-            const container = document.getElementById('team-members-container');
-            container.innerHTML = ''; // Clear loading message
-
-            if (teamMembers.length === 0) {
-                container.innerHTML = '<p class="text-center col-span-full text-sub-text">No team members to display yet.</p>';
-                return;
-            }
-
-            teamMembers.forEach((member, index) => {
-                let cardHtml = `
-                    <div class="team-member-card ${index === 0 ? 'highlighted' : ''}"> <!-- Highlight Nodal Officer -->
-                        <div class="team-member-image-wrapper">
-                            <img src="${member.imageUrl}" alt="${member.name}" onerror="this.src='https://placehold.co/250x250/CCCCCC/FFFFFF?text=No+Image'; this.onerror=null;">
-                        </div>
-                        <div class="social-links-container">
-                            ${member.socials.facebook ? `<a href="${member.socials.facebook}" target="_blank" class="social-link facebook-link">
-                                <i data-lucide="facebook" class="lucide"></i><span class="social-text">Facebook/user</span>
-                            </a>` : ''}
-                            ${member.socials.twitter ? `<a href="${member.socials.twitter}" target="_blank" class="social-link twitter-link">
-                                <i data-lucide="twitter" class="lucide"></i><span class="social-text">Twitter/user</span>
-                            </a>` : ''}
-                            ${member.socials.linkedin ? `<a href="${member.socials.linkedin}" target="_blank" class="social-link linkedin-link">
-                                <i data-lucide="linkedin" class="lucide"></i><span class="social-text">LinkedIn/user</span>
-                            </a>` : ''}
-                            ${member.socials.instagram ? `<a href="${member.socials.instagram}" target="_blank" class="social-link instagram-link">
-                                <i data-lucide="instagram" class="lucide"></i><span class="social-text">Instagram/user</span>
-                            </a>` : ''}
-                        </div>
-                        <div class="member-details">
-                            <h3 class="member-name">${member.name}</h3>
-                            <p class="member-role">${member.role}</p>
-                            <div class="view-profile-arrow">
-                                <i data-lucide="arrow-right" class="lucide"></i>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += cardHtml;
-            });
-            // Re-create Lucide icons after new HTML is added
-            lucide.createIcons();
-        }
-
-        // Call the function to display team members when the page loads
-        document.addEventListener('DOMContentLoaded', displayTeamMembers);
-    </script>
-    <script src="https://unpkg.com/lucide@latest"> </script>
 
 
+
+<div class="whatsapp-channel-btn-container">
+    <a href="https://whatsapp.com/channel/0029Vb5RvKWI1rchteX7pu3A " target="_blank" class="whatsapp-channel-btn">
+        <i data-lucide="message-circle" class="lucide"></i>
+        <span>Join the WhatsApp Channel</span>
+    </a>
+</div>
+<script src="assets/js/script.js"></script>
 </body>
-    
-    
-    <footer class="bg-dark text-light py-12">
+<footer class="bg-dark text-light py-12">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                 <div>
