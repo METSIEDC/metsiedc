@@ -149,3 +149,23 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .catch(err => console.error('Error loading news:', err));
 });
+// script.js
+
+// Function to show the pop-up
+function showPopup() {
+    const popup = document.getElementById('welcome-popup'); // Target the new ID
+    if (popup) {
+        popup.classList.add('active'); // Add 'active' class to show it
+    }
+}
+
+// Function to hide the pop-up
+function hidePopup() {
+    const popup = document.getElementById('welcome-popup'); // Target the new ID
+    if (popup) {
+        popup.classList.remove('active'); // Remove 'active' class to hide it
+    }
+}
+
+// Show the pop-up when the page loads
+window.addEventListener('load', showPopup);
