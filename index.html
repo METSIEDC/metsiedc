@@ -395,6 +395,150 @@
         transform: scale(1);
     }
 }
+        /* General Body Styles (adjust as needed for your site) */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f4; /* Light background for the section */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Featured Events Section */
+.featured-events {
+    padding: 60px 0;
+    text-align: center;
+    background: linear-gradient(to bottom, #f0e6fa, #ffffff); /* Subtle gradient background */
+}
+
+.section-title {
+    font-size: 1.2em;
+    color: #888;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+
+.section-subtitle {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    justify-content: center;
+}
+
+.event-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    transition: transform 0.3s ease-in-out;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+}
+
+.event-image {
+    width: 100%;
+    height: 200px; /* Fixed height for consistent images */
+    object-fit: cover; /* Ensures images cover the area without distortion */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.event-content {
+    padding: 20px;
+    flex-grow: 1; /* Allows content to expand and fill space */
+    display: flex;
+    flex-direction: column;
+}
+
+.event-title {
+    font-size: 1.3em;
+    color: #333;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    font-weight: 600;
+}
+
+.event-date {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.event-date i {
+    margin-right: 5px;
+    color: #555;
+}
+
+.event-organizer {
+    margin-top: auto; /* Pushes the organizer and button to the bottom */
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.85em;
+    color: #777;
+}
+
+.vendor-link {
+    color: #ff5722; /* Orange color for the link */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.vendor-link:hover {
+    color: #e64a19;
+}
+
+.buy-now-btn {
+    background-color: #673ab7; /* Purple button */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Make button full width */
+}
+
+.buy-now-btn:hover {
+    background-color: #512da8;
+}
+
+/* Font Awesome for Icons (add this to your HTML <head>) */
+/* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> */
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .section-subtitle {
+        font-size: 2em;
+    }
+
+    .events-grid {
+        grid-template-columns: 1fr; /* Stack cards on smaller screens */
+    }
+}
     </style>
 </head>
 <body class="font-sans antialiased text-gray-900">
@@ -552,31 +696,92 @@
         });
     });
 </script>
+        <section class="featured-events">
+    <div class="container">
+        <h2 class="section-title">Upcoming Event</h2>
+        <h3 class="section-subtitle">Featured Events</h3>
 
+        <div class="events-grid">
+            <div class="event-card">
+                <img src="https://via.placeholder.com/300x200/9C27B0/FFFFFF?text=Event+Image" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h4 class="event-title">Entomology International Congress of Vancouver</h4>
+                    <p class="event-date"><i class="far fa-calendar-alt"></i> Fri, 15 Sep 2023</p>
+                    <div class="event-organizer">
+                        <p>Organized By</p>
+                        <a href="#" class="vendor-link">Set Your Vendor</a>
+                    </div>
+                    <button class="buy-now-btn">BUY NOW</button>
+                </div>
+            </div>
 
- <section class="py-16" id="events">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="section-title">Upcoming Events</h2>
-        </div>
-        <div class="event-filters">
-            <button class="event-filter-button">All</button>
-            <button class="event-filter-button">Past</button>
-            <button class="event-filter-button">Ongoing</button>
-            <button class="event-filter-button">UpComing</button>
-            <button class="event-filter-button">Festival</button>
-            <button class="event-filter-button">Coded</button>
-            <button class="event-filter-button">Sports</button>
-            <button class="event-filter-button">Music</button>
-        </div>
-        <div class="events-grid" id="eventGridContainer"></div>
+            <div class="event-card">
+                <img src="https://via.placeholder.com/300x200/4CAF50/FFFFFF?text=Event+Image" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h4 class="event-title">Success Free Career & Meditation Classes</h4>
+                    <p class="event-date"><i class="far fa-calendar-alt"></i> Fri, 10 Nov 2023</p>
+                    <div class="event-organizer">
+                        <p>Organized By</p>
+                        <a href="#" class="vendor-link">Set Your Vendor</a>
+                    </div>
+                    <button class="buy-now-btn">BUY NOW</button>
+                </div>
+            </div>
 
-        <div class="text-center">
-            <a href="events.html" class="view-all-events-btn">View All Events</a>
+            <div class="event-card">
+                <img src="https://via.placeholder.com/300x200/2196F3/FFFFFF?text=Event+Image" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h4 class="event-title">Career Fair: Exclusive Hiring Event-New</h4>
+                    <p class="event-date"><i class="far fa-calendar-alt"></i> Thu, 28 Oct 2023</p>
+                    <div class="event-organizer">
+                        <p>Organized By</p>
+                        <a href="#" class="vendor-link">Set Your Vendor</a>
+                    </div>
+                    <button class="buy-now-btn">BUY NOW</button>
+                </div>
+            </div>
+
+            <div class="event-card">
+                <img src="https://via.placeholder.com/300x200/FFC107/FFFFFF?text=Event+Image" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h4 class="event-title">Symposiums Chemotherapy Foundation Symposiums</h4>
+                    <p class="event-date"><i class="far fa-calendar-alt"></i> Mon, 02 Dec 2024</p>
+                    <div class="event-organizer">
+                        <p>Organized By</p>
+                        <a href="#" class="vendor-link">Set Your Vendor</a>
+                    </div>
+                    <button class="buy-now-btn">BUY NOW</button>
+                </div>
+            </div>
+
+            <div class="event-card">
+                <img src="https://via.placeholder.com/300x200/9E9E9E/FFFFFF?text=Event+Image" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h4 class="event-title">Vancouver International Congress of Entomology</h4>
+                    <p class="event-date"><i class="far fa-calendar-alt"></i> Fri, 27 Oct 2023</p>
+                    <div class="event-organizer">
+                        <p>Organized By</p>
+                        <a href="#" class="vendor-link">Set Your Vendor</a>
+                    </div>
+                    <button class="buy-now-btn">BUY NOW</button>
+                </div>
+            </div>
+
+            <div class="event-card">
+                <img src="https://via.placeholder.com/300x200/795548/FFFFFF?text=Event+Image" alt="Event Image" class="event-image">
+                <div class="event-content">
+                    <h4 class="event-title">Modern Marketing Expo in for the Business Owner</h4>
+                    <p class="event-date"><i class="far fa-calendar-alt"></i> Fri, 15 Sep 2023</p>
+                    <div class="event-organizer">
+                        <p>Organized By</p>
+                        <a href="#" class="vendor-link">Set Your Vendor</a>
+                    </div>
+                    <button class="buy-now-btn">BUY NOW</button>
+                </div>
+            </div>
         </div>
     </div>
 </section>
-
     <!-- Video Demo Section -->
     <div class="bg-white py-16 sm:py-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
