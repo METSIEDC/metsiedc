@@ -150,41 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(err => console.error('Error loading news:', err));
 });
 // script.js
-
-// Function to show the pop-up
-function showPopup() {
-    const popup = document.getElementById('welcome-popup'); // Target the new ID
-    if (popup) {
-        popup.classList.add('active'); // Add 'active' class to show it
-    }
-}
-
-// Function to hide the pop-up
-function hidePopup() {
-    const popup = document.getElementById('welcome-popup'); // Target the new ID
-    if (popup) {
-        popup.classList.remove('active'); // Remove 'active' class to hide it
-    }
-}
-
-// Show the pop-up when the page loads
-window.addEventListener('load', showPopup);
-      // Simple Single Page App (SPA) like navigation
-        const pages = document.querySelectorAll('.page');
-        const navLinks = document.querySelectorAll('.page-link');
-        const mobileNavLinks = document.querySelectorAll('.page-link-mobile');
-        const desktopNavLinks = document.querySelectorAll('header nav.hidden a.nav-link, header nav.hidden a[href="#student-login"], header nav.hidden a[href="#admin-login"]'); // Updated to include login buttons
-
-        function showPage(pageId) {
-            pages.forEach(page => {
-                if (page.id === pageId) {
-                    page.classList.add('active');
-                } else {
-                    page.classList.remove('active');
-                }
-            });
-            window.scrollTo(0, 0); // Scroll to top on page change
-
             // Update active state for desktop nav links (only for main page links, not buttons)
             desktopNavLinks.forEach(link => {
                 if (link.classList.contains('nav-link')) { // Apply active style only to actual nav-links
