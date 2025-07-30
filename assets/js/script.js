@@ -169,3 +169,82 @@ function hidePopup() {
 
 // Show the pop-up when the page loads
 window.addEventListener('load', showPopup);
+      // Simple Single Page App (SPA) like navigation
+        const pages = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('.page-link');
+        const mobileNavLinks = document.querySelectorAll('.page-link-mobile');
+        const desktopNavLinks = document.querySelectorAll('header nav.hidden a.nav-link, header nav.hidden a[href="#student-login"], header nav.hidden a[href="#admin-login"]'); // Updated to include login buttons
+
+        function showPage(pageId) {
+            pages.forEach(page => {
+                if (page.id === pageId) {
+                    page.classList.add('active');
+                } else {
+                    page.classList.remove('active');
+                }
+            });
+            window.scrollTo(0, 0); // Scroll to top on page change
+
+            // Update active state for desktop nav links (only for main page links, not buttons)
+            desktopNavLinks.forEach(link => {
+                if (link.classList.contains('nav-link')) { // Apply active style only to actual nav-links
+                    if (link.getAttribute('href') === `#${pageId}`) {
+                        link.classList.add('nav-link-active');
+                    } else {
+                        link.classList.remove('nav-link-active');
+                    }
+                }
+            });
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('href').substring(1);
+                showPage(pageId);
+                // Update URL hash
+                history.pushState(null, null, `#${pageId}`);
+            });
+        });
+        
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('href').substring(1);
+                showPage(pageId);
+                // Close mobile menu
+                document.getElementById('mobile-menu').classList.remove('open');
+                // Update URL hash
+                history.pushState(null, null, `#${pageId}`);
+            });
+        });
+
+
+        // Handle initial page load based on URL hash
+        function handlePageNavigation() {
+            const initialPageId = window.location.hash ? window.location.hash.substring(1) : 'home';
+            // Ensure a valid page ID is shown, default to home if not found
+            const validPage = document.getElementById(initialPageId);
+            if (validPage && validPage.classList.contains('page')) {
+                 showPage(initialPageId);
+            } else {
+                 showPage('home');
+                 history.replaceState(null, null, '#home'); // Correct the hash if invalid
+            }
+        }
+
+        // Listen to hash changes for browser back/forward buttons
+        window.addEventListener('popstate', handlePageNavigation);
+
+        // Initial page load
+        document.addEventListener('DOMContentLoaded', () => {
+            handlePageNavigation();
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+            });
+        });
