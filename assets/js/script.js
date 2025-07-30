@@ -1,14 +1,55 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // --- Core Navigation and Menu Elements ---
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
+    const navLinks = document.querySelectorAll('.page-link'); // For smooth scrolling (desktop and mobile)
+    const mobileMenuLinks = mobileMenu ? mobileMenu.querySelectorAll('.page-link-mobile') : []; // Links specific to mobile menu
+    const desktopNavLinks = document.querySelectorAll('.nav-link'); // For active state styling
+    const allPages = document.querySelectorAll('.page'); // Assuming your main content sections have class 'page'
 
+    // --- Dynamic Content Containers ---
+    const eventGridContainer = document.getElementById('eventGridContainer');
+    const eventFilterButtons = document.querySelectorAll('.event-filter-button');
+    const latestNewsContainer = document.getElementById('latestNewsContainer'); // For news on homepage
+    const newsGridContainer = document.getElementById('newsGridContainer'); // For dedicated news page (if applicable)
+    const eventsListContainer = document.getElementById('eventsContainer'); // For the other event section (long list)
+
+    // --- Helper Function: Capitalize ---
+    // Moved inside DOMContentLoaded or can be global if truly needed elsewhere
+    function capitalize(word) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+
+    // --- Page Navigation Function ---
+    // This function will handle showing/hiding different content sections based on URL hash
+    function showPage(pageId) {
+        allPages.forEach(page => {
+            if (page.id === pageId) {
+                page.classList.remove('hidden'); // Show the target page
+            } else {
+                page.classList.add('hidden'); // Hide other pages
+            }
+        });
+
+        // Update active state for desktop nav links
+        desktopNavLinks.forEach(link => {
+            if (link.classList.contains('nav-link')) {
+                if (link.getAttribute('href') === `#${pageId}`) {
+                    link.classList.add('nav-link-active');
+                } else {
+                    link.classList.remove('nav-link-active');
+                }
+            }
+        });
+    }
+
+    // --- Mobile Menu Toggle ---
     if (mobileMenuButton && mobileMenu) {
         mobileMenuButton.addEventListener('click', function() {
             mobileMenu.classList.toggle('open');
         });
 
-        // Optional: Close the mobile menu when a link inside it is clicked
-        const mobileMenuLinks = mobileMenu.querySelectorAll('.page-link-mobile');
+        // Close the mobile menu when a link inside it is clicked
         mobileMenuLinks.forEach(link => {
             link.addEventListener('click', function() {
                 mobileMenu.classList.remove('open');
@@ -16,20 +57,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('.page-link').forEach(anchor => {
+    // --- Smooth Scrolling for Navigation Links (both desktop and mobile) ---
+    navLinks.forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
-            // Check if the href is an internal anchor link (starts with # and is not just '#')
             if (href.startsWith('#') && href.length > 1) {
-                e.preventDefault();
-                document.querySelector(href).scrollIntoView({
-                    behavior: 'smooth'
-                });
-                // If it's a mobile menu link, close the menu
-                if (mobileMenu && mobileMenu.classList.contains('open')) {
+                e.preventDefault(); // Prevent default anchor link behavior
+
+                const targetElement = document.querySelector(href);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+
+                // If it's a mobile menu link, close the menu after clicking
+                if (mobileMenu && mobileMenu.classList.contains('open') && this.classList.contains('page-link-mobile')) {
                     mobileMenu.classList.remove('open');
                 }
+                // Update URL hash for consistent navigation
+                history.pushState(null, null, href);
             } else if (!href.startsWith('#') && href !== 'javascript:void(0);') {
                 // For external links or full page reloads, let default behavior
                 // but if it's a mobile menu link, close the menu before navigating
@@ -40,46 +87,37 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Handle active navigation link styling
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
+    // --- Handle initial page load based on URL hash ---
+    function handlePageNavigation() {
+        const initialPageId = window.location.hash ? window.location.hash.substring(1) : 'home';
+        const validPage = document.getElementById(initialPageId);
 
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.7 // Adjust this value as needed. Higher means more of the section must be visible.
-    };
+        if (validPage && validPage.classList.contains('page')) {
+            showPage(initialPageId);
+        } else {
+            showPage('home'); // Default to home if hash is invalid or missing
+            history.replaceState(null, null, '#home'); // Correct the URL hash
+        }
+    }
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const currentSectionId = entry.target.id;
-                navLinks.forEach(link => {
-                    link.classList.remove('nav-link-active');
-                    if (link.getAttribute('href').includes(currentSectionId)) {
-                        link.classList.add('nav-link-active');
-                    }
-                });
-            }
-        });
-    }, observerOptions);
+    // Listen to hash changes for browser back/forward buttons
+    window.addEventListener('popstate', handlePageNavigation);
 
-    sections.forEach(section => {
-        observer.observe(section);
-    });
+    // Initial page load call
+    handlePageNavigation();
 
-    // Set current year in footer
+
+    // --- Set current year in footer ---
     const currentYearSpan = document.getElementById('currentYear');
     if (currentYearSpan) {
         currentYearSpan.textContent = new Date().getFullYear();
     }
 
-    // Event handling for the "Upcoming Events" section
-    const eventGridContainer = document.getElementById('eventGridContainer');
-    const eventFilterButtons = document.querySelectorAll('.event-filter-button');
-
-    // Dummy event data (replace with actual data fetched from a backend if applicable)
+    // --- Event handling for "Upcoming Events" section (using dummy data from previous logic) ---
+    // Note: This block uses the *hardcoded* eventsData. If you fully rely on JSON,
+    // you can remove this dummy data and the renderEvents function below.
     const eventsData = [
+        // Your existing dummy event data here...
         {
             id: 'event1',
             type: 'Ongoing',
@@ -167,10 +205,9 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     function renderEvents(filter = 'All') {
+        if (!eventGridContainer) return; // Exit if container not found
         eventGridContainer.innerHTML = ''; // Clear existing events
-        const filteredEvents = filter === 'All'
-            ? eventsData
-            : eventsData.filter(event => event.type === filter);
+        const filteredEvents = filter === 'All' ? eventsData : eventsData.filter(event => event.type === filter);
 
         filteredEvents.forEach(event => {
             const eventCard = `
@@ -196,26 +233,30 @@ document.addEventListener('DOMContentLoaded', function() {
             eventGridContainer.insertAdjacentHTML('beforeend', eventCard);
         });
         // After rendering, re-initialize lucide icons for newly added elements
-        lucide.createIcons();
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
     }
 
-    // Initial render of all events
-    renderEvents('All');
+    // Initial render of all events if the container exists
+    if (eventGridContainer) {
+        renderEvents('All');
+    }
 
     // Add event listeners to filter buttons
     eventFilterButtons.forEach(button => {
         button.addEventListener('click', function() {
-            // Remove active class from all buttons
             eventFilterButtons.forEach(btn => btn.classList.remove('active'));
-            // Add active class to the clicked button
             this.classList.add('active');
             renderEvents(this.textContent);
         });
     });
 
-    // News section dynamic content loading
-    const latestNewsContainer = document.getElementById('latestNewsContainer');
+    // --- News section dynamic content loading (using dummy data from previous logic) ---
+    // Note: This block uses the *hardcoded* newsData. If you fully rely on JSON,
+    // you can remove this dummy data and the renderNews function below.
     const newsData = [
+        // Your existing dummy news data here...
         {
             id: 'news1',
             image: 'https://placehold.co/600x400/007BFF/FFFFFF?text=News+1',
@@ -251,6 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     function renderNews(container, newsItems) {
+        if (!container) return; // Exit if container not found
         container.innerHTML = ''; // Clear existing news
         newsItems.forEach(news => {
             const newsCard = `
@@ -267,231 +309,5 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             container.insertAdjacentHTML('beforeend', newsCard);
         });
-    }
-
-    // Render the latest 2 news items on the homepage
-    if (latestNewsContainer) {
-        renderNews(latestNewsContainer, newsData.slice(0, 2));
-    }
-
-    // Lucide Icons (ensure this is at the end or after elements using lucide icons are rendered)
-    // Make sure you have included the Lucide JS library in your HTML <head>
-    // <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
-});
-document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('read-more-btn')) {
-    const targetId = e.target.getAttribute('data-target');
-    const content = document.getElementById(targetId);
-
-    if (content.classList.contains('hidden')) {
-      content.classList.remove('hidden');
-      e.target.textContent = 'Show Less ↑';
-    } else {
-      content.classList.add('hidden');
-      e.target.textContent = 'Read More →';
-    }
-  }
-});
-
-
-
-
-fetch('assets/data/events.json')
-  .then(res => res.json())
-  .then(events => {
-    const container = document.getElementById('eventsContainer');
-
-    events.forEach(event => {
-      const buttonClass = event.buttonDisabled 
-        ? 'bg-gray-400 cursor-not-allowed' 
-        : 'bg-accent hover:bg-green-600';
-      const buttonAttrs = event.buttonDisabled 
-        ? 'title="Applications Closed"' 
-        : '';
-
-      const card = `
-        <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-start card-hover transition-all duration-300">
-          <img src="${event.image}" alt="Event" class="w-full md:w-1/3 h-48 object-cover rounded-md mb-4 md:mb-0 md:mr-6">
-          <div class="flex-1">
-            <h3 class="text-xl font-bold text-primary mb-2">${event.title}</h3>
-            <p class="text-sm text-secondary mb-1"><span class="font-semibold">Date:</span> ${event.date}</p>
-            <p class="text-sm text-secondary mb-3"><span class="font-semibold">Venue:</span> ${event.venue}</p>
-            <p class="text-secondary text-sm mb-4">${event.description}</p>
-            <a href="${event.link}" class="inline-block text-white py-2 px-4 rounded-lg transition duration-300 ${buttonClass}" ${buttonAttrs}>
-              ${event.buttonText}
-            </a>
-          </div>
-        </div>
-      `;
-
-      container.innerHTML += card;
-    });
-  })
-  .catch(error => console.error('Error loading events:', error));
-
-  fetch('assets/data/grid-events.json')
-  .then(res => res.json())
-  .then(events => {
-    const container = document.getElementById('eventGridContainer');
-
-    events.forEach(event => {
-      const tagsHTML = event.tags.map(tag => `<span class="event-tag">${tag}</span>`).join('');
-
-      const prizeLines = event.prizes
-        ? Object.entries(event.prizes)
-            .map(([key, value]) => `<p class="event-card-meta"><span>${capitalize(key)}:</span> ${value}</p>`)
-            .join('')
-        : '';
-
-      const card = `
-        <div class="event-card">
-          <img src="${event.image}" alt="${event.title}" class="event-card-image">
-          <div class="event-card-content">
-            <div class="event-card-tags">${tagsHTML}</div>
-            <h3 class="event-card-title">${event.title}</h3>
-            <p class="event-card-meta"><span>Date:</span> ${event.date} | <span>Venue:</span> ${event.venue}</p>
-            ${prizeLines}
-            <p class="event-card-description">
-              ${event.description}
-              <a href="${event.readMoreLink}" class="event-card-link">
-                Read More <i data-lucide="arrow-right"></i>
-              </a>
-            </p>
-          </div>
-        </div>
-      `;
-
-      container.innerHTML += card;
-    });
-  });
-
-function capitalize(word) {
-  return word.charAt(0).toUpperCase() + word.slice(1);
-}
-document.addEventListener('DOMContentLoaded', () => {
-  fetch('assets/data/news.json')
-    .then(res => res.json())
-    .then(newsItems => {
-      const container = document.getElementById('latestNewsContainer');
-
-      if (!container) {
-        console.warn('News container not found.');
-        return;
-      }
-
-      newsItems.forEach(news => {
-        const article = `
-          <article class="flex bg-light p-6 rounded-lg shadow-md">
-            <img src="${news.image}" alt="${news.title}" class="w-1/3 h-auto object-cover rounded-md mr-6">
-            <div>
-              <h3 class="text-xl font-semibold text-primary mb-2">${news.title}</h3>
-              <p class="text-sm text-secondary mb-1">${news.date}</p>
-              <p class="text-secondary text-sm mb-3">${news.description}</p>
-              <a href="${news.readMoreLink}" class="text-accent hover:underline font-medium page-link">Read More</a>
-            </div>
-          </article>
-        `;
-        container.innerHTML += article;
-      });
-    })
-    .catch(error => console.error('Error loading news:', error));
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('newsGridContainer');
-
-  if (!container) return;
-
-  fetch('assets/data/news.json')
-    .then(res => res.json())
-    .then(newsItems => {
-      newsItems.forEach((news, index) => {
-        const card = `
-          <article class="bg-white rounded-lg shadow-md flex flex-col overflow-hidden transition hover:shadow-lg">
-            <img src="${news.image}" alt="${news.title}" class="w-full h-56 object-cover">
-            <div class="p-6 flex flex-col flex-grow">
-              <p class="text-sm text-secondary mb-1">${news.date}</p>
-              <h3 class="text-lg font-bold text-dark mb-2">${news.title}</h3>
-              <p class="text-sm text-secondary mb-4">${news.description}</p>
-
-              <!-- Hidden Full Text -->
-              <div id="full-${index}" class="hidden text-sm text-secondary mb-4">${news.fullText}</div>
-
-              <!-- Toggle Button -->
-              <button class="text-accent font-semibold hover:underline mt-auto read-more-btn" data-target="full-${index}">
-                Read More →
-              </button>
-            </div>
-          </article>
-        `;
-        container.innerHTML += card;
-      });
-    })
-    .catch(err => console.error('Error loading news:', err));
-});
-// script.js
-            // Update active state for desktop nav links (only for main page links, not buttons)
-            desktopNavLinks.forEach(link => {
-                if (link.classList.contains('nav-link')) { // Apply active style only to actual nav-links
-                    if (link.getAttribute('href') === `#${pageId}`) {
-                        link.classList.add('nav-link-active');
-                    } else {
-                        link.classList.remove('nav-link-active');
-                    }
-                }
-            });
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const pageId = link.getAttribute('href').substring(1);
-                showPage(pageId);
-                // Update URL hash
-                history.pushState(null, null, `#${pageId}`);
-            });
-        });
-        
-        mobileNavLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const pageId = link.getAttribute('href').substring(1);
-                showPage(pageId);
-                // Close mobile menu
-                document.getElementById('mobile-menu').classList.remove('open');
-                // Update URL hash
-                history.pushState(null, null, `#${pageId}`);
-            });
-        });
-
-
-        // Handle initial page load based on URL hash
-        function handlePageNavigation() {
-            const initialPageId = window.location.hash ? window.location.hash.substring(1) : 'home';
-            // Ensure a valid page ID is shown, default to home if not found
-            const validPage = document.getElementById(initialPageId);
-            if (validPage && validPage.classList.contains('page')) {
-                 showPage(initialPageId);
-            } else {
-                 showPage('home');
-                 history.replaceState(null, null, '#home'); // Correct the hash if invalid
-            }
-        }
-
-        // Listen to hash changes for browser back/forward buttons
-        window.addEventListener('popstate', handlePageNavigation);
-
-        // Initial page load
-        document.addEventListener('DOMContentLoaded', () => {
-            handlePageNavigation();
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-            // Mobile menu toggle
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('open');
-            });
-        });
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons(); // Re-create
