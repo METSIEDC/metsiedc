@@ -173,6 +173,228 @@
         .mobile-menu.open {
             transform: translateX(0);
         }
+          /* Events Section specific styles */
+    #events {
+        background-color: var(--color-event-background);
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+    #events .section-title {
+        font-size: 2.5rem; /* Equivalent to text-4xl from example */
+        font-weight: 700; /* font-bold */
+        color: var(--color-dark);
+        margin-bottom: 0.5rem;
+    }
+    #events .section-description {
+        font-size: 1rem; /* Smaller description text */
+        color: var(--color-secondary);
+        margin-bottom: 3rem; /* Space below description */
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Event Category Filters */
+    .event-filters {
+        display: flex;
+        flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        justify-content: center;
+        gap: 0.75rem; /* Space between buttons */
+        margin-bottom: 3rem; /* Space below filters */
+    }
+    .event-filter-button {
+        background-color: var(--color-event-orange);
+        color: var(--color-event-orange-text);
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem; /* Rounded corners for buttons */
+        font-size: 0.875rem; /* text-sm */
+        font-weight: 600; /* font-semibold */
+        transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+        cursor: pointer;
+        border: none; /* Remove default button border */
+    }
+    .event-filter-button:hover {
+        background-color: #e6b000; /* Slightly darker orange on hover */
+        transform: translateY(-2px);
+    }
+
+    /* Event Card Styling */
+    .event-card {
+        background-color: var(--color-white);
+        border-radius: 0.75rem; /* Rounded corners for the card */
+        box-shadow: 0 4px 10px var(--color-event-card-shadow);
+        overflow: hidden; /* Ensures image respects border-radius */
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    .event-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .event-card-image {
+        width: 100%;
+        height: 200px; /* Fixed height for event images */
+        object-fit: cover;
+        display: block; /* Remove extra space below image */
+    }
+
+    .event-card-content {
+        padding: 1.5rem; /* Padding inside the content area */
+        flex-grow: 1; /* Allows content to push footer down */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event-card-tags {
+        display: flex;
+        gap: 0.5rem; /* Space between tags */
+        margin-bottom: 0.75rem;
+    }
+    .event-tag {
+        background-color: var(--color-event-orange);
+        color: var(--color-event-orange-text);
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.5rem;
+        font-size: 0.75rem; /* text-xs */
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .event-card-title {
+        font-size: 1.25rem; /* text-xl */
+        font-weight: 700;
+        color: var(--color-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .event-card-meta {
+        font-size: 0.875rem; /* text-sm */
+        color: var(--color-secondary);
+        margin-bottom: 1rem;
+    }
+    .event-card-meta span {
+        font-weight: 500; /* Medium font weight for labels */
+    }
+
+    .event-card-description {
+        font-size: 0.95rem;
+        color: var(--color-secondary);
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+        flex-grow: 1; /* Allows description to take available space */
+    }
+
+    .event-card-link {
+        color: var(--color-primary); /* Primary blue for the link */
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex; /* For icon alignment */
+        align-items: center;
+        gap: 0.25rem;
+        transition: color 0.2s ease-in-out;
+    }
+    .event-card-link:hover {
+        color: #0056b3; /* Darker blue on hover */
+        text-decoration: underline;
+    }
+    .event-card-link .lucide {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    /* View All Events Button */
+    .view-all-events-btn {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        font-weight: 600;
+        padding: 0.75rem 2rem;
+        border-radius: 0.5rem;
+        font-size: 1.125rem; /* text-lg */
+        transition: background-color 0.3s ease-in-out;
+        display: inline-block; /* For centering */
+        margin-top: 3rem; /* Space above button */
+    }
+    .view-all-events-btn:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+
+    /* Responsive grid for events */
+    .events-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive columns */
+        gap: 2rem; /* Gap between cards */
+        justify-items: center; /* Center cards in their grid cells */
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* General responsive adjustments */
+    @media (max-width: 768px) {
+        #events {
+            padding: 3rem 1rem;
+        }
+        #events .section-title {
+            font-size: 2rem;
+        }
+        .event-filter-button {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+        .event-card-image {
+            height: 180px;
+        }
+        .event-card-content {
+            padding: 1rem;
+        }
+        .event-card-title {
+            font-size: 1.125rem;
+        }
+        .event-card-meta, .event-card-description {
+            font-size: 0.875rem;
+        }
+        .view-all-events-btn {
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
+        }
+    }
+        /* style.css */
+
+
+
+/* Keyframe animation for bounce-in effect */
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+/* style.css */
+
+
+
+/* Keyframe animation for bounce-in effect */
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
     </style>
 </head>
 <body class="font-sans antialiased text-gray-900">
