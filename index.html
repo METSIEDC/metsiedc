@@ -585,13 +585,35 @@ body {
                 <div class="hidden md:ml-6 md:flex md:items-center">
                     <a href="login.html" class="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">Log in</a>
                 </div>
-                <div class="-mr-2 flex items-center md:hidden">
-                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                        <span class="sr-only">Open main menu</span>
-                        <i class="fas fa-bars"></i>
-                    </button>
                 </div>
             </div>
+        </div>
+          <!-- Mobile menu button -->
+                <button id="mobile-menu-button" class="md:hidden text-dark-heading focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-card-background z-40 p-4 md:hidden">
+            <div class="flex justify-end pr-4 pt-2"> <!-- Added padding for close button position -->
+                <button id="close-mobile-menu" class="text-dark-heading focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <nav class="flex flex-col space-y-4 mt-8">
+                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Home</a>
+                <a href="index.html#about" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">About Us</a>
+                <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Our Team</a>
+                <a href="index.html#events" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Events</a>
+                <a href="index.html#initiatives" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Initiatives</a>
+                <a href="index.html#news" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">News</a>
+                <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-primary-blue hover:bg-gray-100">Announcements</a>
+                <a href="event.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Event Gallery</a>
+                <a href="index.html#contact" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Contact</a>
+                <a href="login.html" class="mt-4 block w-full text-center px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-primary-blue-dark transition duration-300 shadow">Student Login</a>
+                <a href="dashboard.html" class="mt-2 block w-full text-center px-4 py-2 bg-muted-text text-white rounded-lg hover:bg-dark-text transition duration-300 shadow">Admin Login</a>
+            </nav>
         </div>
     </nav>
 
