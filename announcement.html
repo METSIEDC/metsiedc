@@ -8,7 +8,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Lucide Icons for a clean, modern look -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+         .gradient-text {
+            background: linear-gradient(90deg, #FF7262 0%, #FF7262 20%, #FF4F81 40%, #A162E8 60%, #5E5BFF 80%, #00C4FF 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero-gradient {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
+        }
         /* NEW Color Palette based on provided image */
         :root {
             --color-light-background: #F8F8FA; /* Very light background for body */
@@ -353,24 +364,20 @@
         <div class="container flex items-center justify-between h-16 sm:h-20">
             <a href="index.html" class="flex items-center space-x-2">
                 <img src="assets/images/logos/iedc logo.jpg" alt="IEDC Logo" class="h-8 w-8 sm:h-10 sm:w-10 rounded-full shadow-sm">
-                <span class="text-xl sm:text-2xl font-extrabold text-dark-heading">MET'S IEDC</span>
+               <span class="text-2xl font-bold gradient-text">MET'S IEDC</span>
             </a>
 
             <div class="flex items-center space-x-4">
                 <nav class="hidden md:flex items-center space-x-4">
-                    <a href="#" class="header-link">Help center</a>
-                    <a href="#" class="header-link flex items-center">
-                        Products <i data-lucide="chevron-down" class="w-4 h-4 ml-1"></i>
+                    <a href="https://metsiedc.github.io/metsiedc/" class="header-link">Home</a>
+                    <a href="about.html" class="header-link flex items-center">
+                        About Us <i data-lucide="chevron-down" class="w-4 h-4 ml-1"></i>
                     </a>
+                  <a href="team.html" class="header-link">Our Ex-Com</a>
+                                        <a href="initiatives.html" class="header-link">Initiatives</a>
+                                        <a href="news.html" class="header-link">News</a>
+                                        <a href="contact.html" class="header-link">Contact Us</a>
                 </nav>
-
-                <div class="hidden sm:flex items-center header-border">
-                    <a href="index.html" class="header-link mr-4">Go back to homepage</a>
-                    <a href="#" class="header-link flex items-center">
-                        <img src="https://flagcdn.com/w20/in.png" alt="India Flag" class="w-5 h-auto mr-1"> English <i data-lucide="chevron-down" class="w-4 h-4 ml-1"></i>
-                    </a>
-                </div>
-
                 <!-- Mobile menu button -->
                 <button id="mobile-menu-button" class="md:hidden text-dark-heading focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
