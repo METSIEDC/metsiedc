@@ -780,4 +780,33 @@ body {
             </div>
         </div>
     </footer>
+    <script>
+      // Initialize Lucide icons on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+
+        // --- Mobile Menu Logic ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling background
+        });
+
+        closeMobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+            document.body.style.overflow = ''; // Restore scrolling
+        });
+
+        // Close mobile menu when a link is clicked inside it
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                document.body.style.overflow = '';
+            });
+        });
+</script>
 </html>
