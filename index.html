@@ -539,6 +539,27 @@ body {
         grid-template-columns: 1fr; /* Stack cards on smaller screens */
     }
 }
+             /* Mobile menu specific styles */
+            .mobile-menu {
+                transform: translateX(-100%); /* Hidden by default */
+                transition: transform 0.3s ease-in-out;
+                position: fixed; /* Ensures it overlays correctly */
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: var(--color-card-background); /* Use white for mobile menu background */
+                z-index: 999; /* Higher z-index to cover everything */
+                padding-top: 1rem; /* Adjust padding for close button */
+                padding-left: 1rem;
+                padding-right: 1rem;
+                overflow-y: auto; /* Allow scrolling if menu content is long */
+                box-shadow: 0 0 20px rgba(0,0,0,0.2); /* Add shadow to menu */
+            }
+            .mobile-menu.open {
+                transform: translateX(0); /* Slides in when open */
+            }
+        }
     </style>
 </head>
 <body class="font-sans antialiased text-gray-900">
@@ -548,6 +569,8 @@ body {
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <div class="flex-shrink-0 flex items-center">
+                         <a href="index.html" class="flex items-center space-x-2">
+                        <img src="assets/images/logos/iedc logo.jpg" alt="IEDC Logo" class="h-8 w-8 sm:h-10 sm:w-10 rounded-full shadow-sm">
                         <span class="text-2xl font-bold gradient-text">MET'S IEDC</span>
                     </div>
                     <div class="hidden md:ml-8 md:flex md:space-x-8">
