@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treasure Hunt Validator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #1e1e1e;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 1rem;
+      color: #00e676;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 0.5rem 0;
+      border: none;
+      border-radius: 8px;
+    }
+    input[type="file"] {
+      background: #2a2a2a;
+      color: #fff;
+      cursor: pointer;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #00e676;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    button:hover {
+      background: #00c853;
+    }
+    .message {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    .success { color: #00e676; }
+    .error { color: #ff1744; }
+    .warning { color: #ff9100; }
+    img.preview {
+      margin-top: 1rem;
+      max-width: 100%;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Treasure Hunt</h1>
+    <input type="text" id="player" placeholder="Enter your name" required />
+    <input type="text" id="code" placeholder="Enter location code" required />
+    <input type="file" id="image" accept="image/*" required />
+    <img id="preview" class="preview" style="display:none;" />
+    <button onclick="submitCode()">Submit</button>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    // Replace with your Apps Script deployed URL (ending in /exec)
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4FH52mly_PxvGgBAGUt-0FIdOpY2Ktrv08006lmtNkA_M2HP2I2COyVXaCzipJBZh/exec";
+
+    // Show preview when image is selected
+    document.getElementById("image").addEventListener("change", function() {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById("preview");
+          preview.src = e.target.result;
+          preview.style.display = "block";
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Replace submitCode function with this:
+    async function submitCode() {
+      const player = document.getElementById("player").value.trim();
+      const code = document.getElementById("code").value.trim();
+      const file = document.getElementById("image").files[0];
+      const messageBox = document.getElementById("message");
+
+      if (!player || !code || !file) {
+        messageBox.textContent = "Please fill in all fields and select an image!";
+        messageBox.className = "message error";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const base64Image = e.target.result;
+        try {
+          const response = await fetch(SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              player,
+              code,
+              image: base64Image
+            })
+          });
+          const result = await response.text();
+          messageBox.textContent = result;
+          messageBox.className = result.includes("✅") 
+            ? "message success" 
+            : result.includes("⚠️") 
+              ? "message warning" 
+              : "message error";
+        } catch (err) {
+          messageBox.textContent = "⚠️ Error submitting code. Try again.";
+          messageBox.className = "message error";
+          console.error(err);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+</body>
+</html>
