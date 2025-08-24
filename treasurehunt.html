@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treasure Hunt Adventure - MET'S IEDC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .treasure-gradient {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 25%, #ffa726 50%, #ffcc02 75%, #4ecdc4 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.9) 0%, rgba(238, 90, 36, 0.9) 50%, rgba(76, 201, 196, 0.9) 100%),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="20" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="40" cy="40" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="60" cy="60" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="20" cy="80" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="80" cy="80" r="1.5" fill="rgba(255,255,255,0.08)"/></svg>') repeat;
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulseGlow {
+            from { box-shadow: 0 0 20px rgba(255, 107, 107, 0.5); }
+            to { box-shadow: 0 0 40px rgba(238, 90, 36, 0.8), 0 0 60px rgba(255, 107, 107, 0.3); }
+        }
+        
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+        
+        .card-3d:hover {
+            transform: rotateY(5deg) rotateX(5deg) translateZ(20px);
+        }
+        
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .treasure-icon {
+            background: linear-gradient(135deg, #ffd700, #ffb347);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .steps-timeline {
+            position: relative;
+        }
+        
+        .steps-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #ff6b6b, #ee5a24, #4ecdc4);
+            transform: translateX(-50%);
+        }
+        
+        @media (max-width: 768px) {
+            .steps-timeline::before {
+                left: 20px;
+            }
+        }
+        
+        .step-card {
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .animate-bounce-slow {
+            animation: bounce 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white overflow-x-hidden">
+    <!-- Navigation -->
+    <nav class="bg-black/50 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-3">
+                        <img src="assets/images/logos/iedc logo.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full">
+                        <span class="text-xl font-bold treasure-gradient">MET'S IEDC</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-200">
+                        <i class="fas fa-home mr-2"></i>Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-black/20"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center">
+                <div class="floating mb-8">
+                    <i class="fas fa-map-marked-alt text-8xl treasure-icon"></i>
+                </div>
+                <h1 class="text-6xl md:text-8xl font-bold mb-6 treasure-gradient">
+                    🏴‍☠️ TREASURE HUNT
+                </h1>
+                <p class="text-2xl md:text-3xl mb-8 text-white/90">
+                    An Epic Adventure Awaits You!
+                </p>
+                
+                <!-- Countdown Timer -->
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <div class="countdown-item rounded-2xl p-6 text-center">
+                        <div class="text-3xl font-bold text-yellow-400" id="days">00</div>
+                        <div class="text-sm text-white/80">DAYS</div>
+                    </div>
+                    <div class="countdown-item rounded-2xl p-6 text-center">
+                        <div class="text-3xl font-bold text-yellow-400" id="hours">00</div>
+                        <div class="text-sm text-white/80">HOURS</div>
+                    </div>
+                    <div class="countdown-item rounded-2xl p-6 text-center">
+                        <div class="text-3xl font-bold text-yellow-400" id="minutes">00</div>
+                        <div class="text-sm text-white/80">MINUTES</div>
+                    </div>
+                    <div class="countdown-item rounded-2xl p-6 text-center">
+                        <div class="text-3xl font-bold text-yellow-400" id="seconds">00</div>
+                        <div class="text-sm text-white/80">SECONDS</div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+    <a href="https://forms.gle/Abhbp5Y4zP7VdaXs8">
+        <button class="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold py-4 px-8 rounded-full text-xl pulse-glow transform hover:scale-105 transition-all duration-300">
+            <i class="fas fa-user-plus mr-2"></i>
+            Register Now - FREE! 
+        </button>
+    </a>
+    <div class="text-yellow-400 font-semibold">
+        <i class="fas fa-calendar-alt mr-2"></i>
+        August 25, 2025 | 10:00 AM onwards
+    </div>
+</div>
+
+            </div>
+        </div>
+        
+        <!-- Floating elements -->
+        <div class="absolute top-20 left-10 text-4xl opacity-20 floating" style="animation-delay: 0.5s;">💎</div>
+        <div class="absolute top-40 right-20 text-3xl opacity-20 floating" style="animation-delay: 1s;">🗝️</div>
+        <div class="absolute bottom-40 left-20 text-5xl opacity-20 floating" style="animation-delay: 1.5s;">🏆</div>
+        <div class="absolute bottom-20 right-10 text-4xl opacity-20 floating" style="animation-delay: 2s;">⚡</div>
+    </section>
+
+    <!-- Event Details -->
+    <section class="py-20 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold mb-6">
+                    <span class="treasure-gradient">What Awaits You?</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Prepare yourself for an immersive treasure hunting experience filled with mind-bending puzzles, 
+                    exciting challenges, and incredible rewards!
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card-3d bg-gradient-to-br from-red-500/20 to-orange-500/20 p-8 rounded-3xl backdrop-blur-sm border border-white/10">
+                    <div class="text-5xl mb-4">🧩</div>
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">Mind-Bending Puzzles</h3>
+                    <p class="text-gray-300">Test your wit and creativity with challenging puzzles that will push your problem-solving skills to the limit.</p>
+                </div>
+                
+                <div class="card-3d bg-gradient-to-br from-blue-500/20 to-teal-500/20 p-8 rounded-3xl backdrop-blur-sm border border-white/10">
+                    <div class="text-5xl mb-4">👥</div>
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">Team Collaboration</h3>
+                    <p class="text-gray-300">Form teams of 3-4 members and work together to uncover clues and solve mysteries as a united force.</p>
+                </div>
+                
+                <div class="card-3d bg-gradient-to-br from-purple-500/20 to-pink-500/20 p-8 rounded-3xl backdrop-blur-sm border border-white/10">
+                    <div class="text-5xl mb-4">🎁</div>
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">Amazing Prizes</h3>
+                    <p class="text-gray-300">Win exciting prizes, certificates, and recognition for your team's outstanding performance in the hunt.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-20 bg-gray-900 relative">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold mb-6">
+                    <span class="treasure-gradient">How the Hunt Works</span>
+                </h2>
+                <p class="text-xl text-gray-300">Follow these simple steps to join the adventure</p>
+            </div>
+            
+            <div class="steps-timeline max-w-4xl mx-auto">
+                <div class="grid gap-12">
+                    <!-- Step 1 -->
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="md:w-1/2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+            <div class="text-center mt-12">
+                <div class="bg-gradient-to-r from-green-500/20 to-teal-500/20 p-6 rounded-2xl border border-green-500/30 inline-block">
+                    <h3 class="text-xl font-bold mb-2 text-green-400">
+                        <i class="fas fa-gift mr-2"></i>Participation Prizes
+                    </h3>
+                    <p class="text-gray-300">All participants receive certificates and surprise goodies!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rules & Guidelines -->
+    <section class="py-20 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold mb-6">
+                    <span class="treasure-gradient">Rules & Guidelines</span>
+                </h2>
+                <p class="text-xl text-gray-300">Please read carefully before participating</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gradient-to-br from-blue-500/10 to-teal-500/10 p-8 rounded-2xl backdrop-blur-sm border border-white/10">
+                        <h3 class="text-2xl font-bold mb-6 text-blue-400">
+                            <i class="fas fa-users mr-3"></i>Team Rules
+                        </h3>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i>
+                                <span>Teams must have 4-6 members</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i>
+                                <span>All team members must be MET's students</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i>
+                                <span>Mixed department teams are encouraged</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i>
+                                <span>Team leader must register the entire team</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-purple-500/10 to-pink-500/10 p-8 rounded-2xl backdrop-blur-sm border border-white/10">
+                        <h3 class="text-2xl font-bold mb-6 text-purple-400">
+                            <i class="fas fa-exclamation-triangle mr-3"></i>Important Guidelines
+                        </h3>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start">
+                                <i class="fas fa-clock text-yellow-400 mr-3 mt-1"></i>
+                                <span>Event duration: 1 day</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-mobile-alt text-blue-400 mr-3 mt-1"></i>
+                                <span>Smartphones allowed for clues only</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-walking text-green-400 mr-3 mt-1"></i>
+                                <span>Physical fitness required (lots of walking)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-handshake text-purple-400 mr-3 mt-1"></i>
+                                <span>Fair play and sportsmanship mandatory</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-8 bg-gradient-to-r from-red-500/10 to-orange-500/10 p-6 rounded-2xl border border-red-500/20">
+                    <h4 class="text-xl font-bold mb-4 text-red-400">
+                        <i class="fas fa-ban mr-2"></i>Prohibited Actions
+                    </h4>
+                    <div class="grid md:grid-cols-2 gap-4 text-gray-300">
+                        <ul class="space-y-2">
+                            <li>❌ No external help from non-participants</li>
+                            <li>❌ No damaging college property</li>
+                            <li>❌ No cheating or unfair means</li>
+                        </ul>
+                        <ul class="space-y-2">
+                            <li>❌ No entering restricted areas</li>
+                            <li>❌ No interference with other teams</li>
+                            <li>❌ No sharing clues with other teams</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Section -->
+    <section class="py-20 bg-gradient-to-br from-gray-900 to-black relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-red-500/5 to-orange-500/5"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center">
+                <h2 class="text-5xl font-bold mb-6">
+                    <span class="treasure-gradient">Ready for the Adventure?</span>
+                </h2>
+                <p class="text-2xl text-gray-300 mb-12">
+                    Don't miss out on this epic treasure hunt experience!
+                </p>
+                
+                <div class="max-w-2xl mx-auto bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 rounded-3xl backdrop-blur-sm border border-white/10">
+                    <div class="text-6xl mb-6 floating">🎯</div>
+                    <h3 class="text-3xl font-bold mb-6 text-yellow-400">Limited Spots Available!</h3>
+                    <p class="text-lg text-gray-300 mb-8">
+                        Only <span class="text-yellow-400 font-bold">50 teams</span> can participate. 
+                        Registration closes on <span class="text-red-400 font-bold">August 25, 2025 at 9.00 AM</span>.
+                    </p>
+                    
+                    <div class="space-y-4">
+    <a href="https://forms.gle/Abhbp5Y4zP7VdaXs8" class="w-full">
+        <button class="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold py-4 px-8 rounded-full text-xl pulse-glow transform hover:scale-105 transition-all duration-300">
+            <i class="fas fa-rocket mr-2"></i>
+            REGISTER YOUR TEAM NOW
+        </button>
+    </a>
+                        
+                        <div class="text-gray-400">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Registration is completely FREE!
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-12 grid md:grid-cols-3 gap-6 text-center">
+                    <div class="bg-gradient-to-br from-green-500/10 to-teal-500/10 p-6 rounded-2xl border border-green-500/20">
+                        <i class="fas fa-users text-3xl text-green-400 mb-3"></i>
+                        <div class="text-2xl font-bold text-white">50+</div>
+                        <div class="text-gray-300">Teams Expected</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-yellow-500/10 to-orange-500/10 p-6 rounded-2xl border border-yellow-500/20">
+                        <i class="fas fa-trophy text-3xl text-yellow-400 mb-3"></i>
+                        <div class="text-2xl font-bold text-white">Wall of fame</div>
+                        <div class="text-gray-300">Prize</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-500/10 to-purple-500/10 p-6 rounded-2xl border border-blue-500/20">
+                        <i class="fas fa-clock text-3xl text-blue-400 mb-3"></i>
+                        <div class="text-2xl font-bold text-white">1 day</div>
+                        <div class="text-gray-300">Adventure Duration</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating decorative elements -->
+        <div class="absolute top-20 left-10 text-3xl opacity-10 floating">🗝️</div>
+        <div class="absolute top-40 right-20 text-4xl opacity-10 floating" style="animation-delay: 1s;">💰</div>
+        <div class="absolute bottom-20 left-20 text-3xl opacity-10 floating" style="animation-delay: 2s;">🎁</div>
+    </section>
+
+    <!-- Contact & Support -->
+    <section class="py-16 bg-black">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-6 treasure-gradient">Need Help?</h2>
+                <p class="text-xl text-gray-300">Contact our organizing team for any queries</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-gradient-to-br from-blue-500/10 to-teal-500/10 p-6 rounded-2xl border border-blue-500/20 text-center">
+                    <i class="fas fa-phone text-3xl text-blue-400 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2 text-white">Call Us</h3>
+                    <p class="text-gray-300">+91 7306226875</p>
+                    <p class="text-sm text-gray-400 mt-2">Available 9 AM - 6 PM</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-green-500/10 to-teal-500/10 p-6 rounded-2xl border border-green-500/20 text-center">
+                    <i class="fas fa-envelope text-3xl text-green-400 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2 text-white">Email Us</h3>
+                    <p class="text-gray-300">metsenggiedc@gmail.com</p>
+                    <p class="text-sm text-gray-400 mt-2">We'll respond within 24 hours</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-800 py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left mb-4 md:mb-0">
+                    <span class="text-2xl font-bold treasure-gradient">MET'S IEDC</span>
+                    <p class="text-gray-400 mt-2">Innovation • Entrepreneurship • Development</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="https://www.instagram.com/metsiedc/" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="https://x.com/MetsIedc" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="mailto:metsenggiedc@gmail.com" class="text-gray-400 hover:text-white transition-colors duration-200">
+                        <i class="fas fa-envelope text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-6 text-center">
+                <p class="text-gray-400">
+                    © 2025 IEDC MET'S SCHOOL OF ENGINEERING. All Rights Reserved.
+                </p>
+                <p class="text-gray-500 text-sm mt-2">
+                    Made with ❤️ for Adventure Seekers
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Countdown Timer
+        function updateCountdown() {
+            const eventDate = new Date('August 25, 2025 10:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+            
+            if (distance > 0) {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            } else {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+            }
+        }
+        
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        
+        // Initial call
+        updateCountdown();
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Apply animations to elements
+        document.querySelectorAll('.card-3d, .step-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>w-1/2 md:text-right">
+                            <div class="step-card bg-gradient-to-r from-red-500/10 to-orange-500/10 p-6 rounded-2xl">
+                                <h3 class="text-2xl font-bold mb-3 text-yellow-400">
+                                    <span class="bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-full w-8 h-8 inline-flex items-center justify-center mr-3">1</span>
+                                    Register Your Team
+                                </h3>
+                                <p class="text-gray-300">Form a team of 3-4 members and register online. Early registration gets you special perks!</p>
+                            </div>
+                        </div>
+                        <div class="hidden md:block w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-full border-4 border-gray-900 z-10"></div>
+                        <div class="md:w-1/2"></div>
+                    </div>
+                    
+                    <!-- Step 2 -->
+                    <div class="flex flex-col md:flex-row-reverse items-center gap-8">
+                        <div class="md:w-1/2 md:text-left">
+                            <div class="step-card bg-gradient-to-r from-blue-500/10 to-teal-500/10 p-6 rounded-2xl">
+                                <h3 class="text-2xl font-bold mb-3 text-yellow-400">
+                                    <span class="bg-gradient-to-r from-blue-500 to-teal-500 text-white rounded-full w-8 h-8 inline-flex items-center justify-center mr-3">2</span>
+                                    Get Your Clue Pack
+                                </h3>
+                                <p class="text-gray-300">Receive your initial set of clues, maps, and tools needed to start your treasure hunting journey.</p>
+                            </div>
+                        </div>
+                        <div class="hidden md:block w-8 h-8 bg-gradient-to-r from-blue-500 to-teal-500 rounded-full border-4 border-gray-900 z-10"></div>
+                        <div class="md:w-1/2"></div>
+                    </div>
+                    
+                    <!-- Step 3 -->
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="md:w-1/2 md:text-right">
+                            <div class="step-card bg-gradient-to-r from-purple-500/10 to-pink-500/10 p-6 rounded-2xl">
+                                <h3 class="text-2xl font-bold mb-3 text-yellow-400">
+                                    <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full w-8 h-8 inline-flex items-center justify-center mr-3">3</span>
+                                    Solve & Hunt
+                                </h3>
+                                <p class="text-gray-300">Work together to decode clues, solve puzzles, and navigate through various checkpoints around the campus.</p>
+                            </div>
+                        </div>
+                        <div class="hidden md:block w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full border-4 border-gray-900 z-10"></div>
+                        <div class="md:w-1/2"></div>
+                    </div>
+                    
+                    <!-- Step 4 -->
+                    <div class="flex flex-col md:flex-row-reverse items-center gap-8">
+                        <div class="md:w-1/2 md:text-left">
+                            <div class="step-card bg-gradient-to-r from-yellow-500/10 to-green-500/10 p-6 rounded-2xl">
+                                <h3 class="text-2xl font-bold mb-3 text-yellow-400">
+                                    <span class="bg-gradient-to-r from-yellow-500 to-green-500 text-white rounded-full w-8 h-8 inline-flex items-center justify-center mr-3">4</span>
+                                    Claim Your Treasure
+                                </h3>
+                                <p class="text-gray-300">Reach the final destination, solve the ultimate puzzle, and claim your well-deserved treasure and prizes!</p>
+                            </div>
+                        </div>
+                        <div class="hidden md:block w-8 h-8 bg-gradient-to-r from-yellow-500 to-green-500 rounded-full border-4 border-gray-900 z-10"></div>
+                        <div class="md:
