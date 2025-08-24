@@ -13,631 +13,467 @@
             background-clip: text;
             color: transparent;
         }
+        
         .hero-gradient {
             background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
         }
-        .tool-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        
+        .card-hover {
+            transition: all 0.3s ease;
         }
-        .video-container {
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Fixed Mobile Menu Styles */
+.mobile-menu {
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    /* Add will-change for better performance */
+    will-change: transform;
+}
+
+.mobile-menu.open {
+    transform: translateX(0);
+}
+.mobile-menu nav {
+    /* Prevent any transform inheritance issues */
+    transform: none !important;
+}
+
+.mobile-menu a {
+    /* Prevent any transform inheritance issues */
+    transform: none !important;
+}
+
+        /* Improved carousel styles */
+        .swiper-slide {
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .swiper-slide img {
+            width: 100% !important;
+            height: 400px !important;
+            object-fit: cover !important;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Enhanced upcoming event section */
+        .event-spotlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
             overflow: hidden;
         }
-        .video-container iframe {
+        
+        .event-spotlight::before {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="25" cy="25" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="25" cy="75" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="75" cy="25" r="1" fill="rgba(255,255,255,0.05)"/></svg>') repeat;
+            animation: float 20s ease-in-out infinite;
         }
-              /* Basic smooth scroll */
-        html {
-            scroll-behavior: smooth;
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
         }
-        /* Active Nav Link Style */
-        .nav-link-active {
-            color: config('theme.colors.primary');
-            font-weight: 600;
-            border-bottom: 2px solid config('theme.colors.primary');
+        
+        .event-card-enhanced {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .nav-link {
-            padding-bottom: 0.25rem; /* For the border to sit nicely */
-            border-bottom: 2px solid transparent; /* Make space for active border */
-            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+
+        /* Improved section spacing */
+        .section-padding {
+            padding: 5rem 0;
         }
-        .nav-link:hover {
-            color: config('theme.colors.primary');
+
+        /* Better responsive design */
+        @media (max-width: 768px) {
+            .swiper-slide img {
+                height: 280px !important;
+            }
+            
+            .section-padding {
+                padding: 3rem 0;
+            }
         }
-        .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/343A40/FFFFFF?text=IEDC+Innovation+Hub') no-repeat center center;
-            background-size: cover;
+
+        /* Enhanced animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
         }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        /* Page transition placeholder - can be expanded with JS */
-        .page {
-            display: none; /* Hidden by default */
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        .page.active {
-            display: block; /* Shown when active */
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .mobile-menu {
-            transform: translateX(100%);
-            transition: transform 0.3s ease-in-out;
-        }
-        .mobile-menu.open {
-            transform: translateX(0);
-        }
-            /* Styles for the WhatsApp Channel Button */
-    .whatsapp-channel-btn-container {
-        position: fixed; /* Fixed position relative to viewport */
-        bottom: 2rem; /* 2rem from bottom */
-        right: 2rem; /* 2rem from right */
-        z-index: 99; /* Ensure it's above most content but below modals */
-    }
 
-    .whatsapp-channel-btn {
-        background-color: var(--color-whatsapp-green);
-        color: var(--color-white);
-        padding: 0.8rem 1.5rem;
-        border-radius: 2rem; /* Highly rounded, pill shape */
-        font-size: 1rem;
-        font-weight: 600;
-        display: inline-flex; /* For icon and text alignment */
-        align-items: center;
-        gap: 0.75rem; /* Space between icon and text */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        text-decoration: none; /* Remove underline for link */
-    }
-
-    .whatsapp-channel-btn:hover {
-        background-color: var(--color-whatsapp-green-dark);
-        transform: translateY(-3px); /* Slight lift effect */
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .whatsapp-channel-btn .lucide {
-        width: 1.25rem; /* Icon size */
-        height: 1.25rem;
-    }
-
-    /* Responsive adjustments for WhatsApp button */
-    @media (max-width: 768px) {
-        .whatsapp-channel-btn-container {
-            bottom: 1rem;
-            right: 1rem;
-        }
-        .whatsapp-channel-btn {
-            padding: 0.6rem 1rem;
-            font-size: 0.9rem;
-            gap: 0.5rem;
-        }
-        .whatsapp-channel-btn .lucide {
-            width: 1rem;
-            height: 1rem;
-        }
-    }
-              /* Basic smooth scroll */
-        html {
-            scroll-behavior: smooth;
-        }
-        /* Active Nav Link Style */
-        .nav-link-active {
-            color: config('theme.colors.primary');
-            font-weight: 600;
-            border-bottom: 2px solid config('theme.colors.primary');
-        }
-        .nav-link {
-            padding-bottom: 0.25rem; /* For the border to sit nicely */
-            border-bottom: 2px solid transparent; /* Make space for active border */
-            transition: color 0.3s ease, border-bottom-color 0.3s ease;
-        }
-        .nav-link:hover {
-            color: config('theme.colors.primary');
-        }
-        .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/343A40/FFFFFF?text=IEDC+Innovation+Hub') no-repeat center center;
-            background-size: cover;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        /* Page transition placeholder - can be expanded with JS */
-        .page {
-            display: none; /* Hidden by default */
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        .page.active {
-            display: block; /* Shown when active */
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .mobile-menu {
-            transform: translateX(100%);
-            transition: transform 0.3s ease-in-out;
-        }
-        .mobile-menu.open {
-            transform: translateX(0);
-        }
-          /* Events Section specific styles */
-    #events {
-        background-color: var(--color-event-background);
-        padding-top: 4rem;
-        padding-bottom: 4rem;
-    }
-    #events .section-title {
-        font-size: 2.5rem; /* Equivalent to text-4xl from example */
-        font-weight: 700; /* font-bold */
-        color: var(--color-dark);
-        margin-bottom: 0.5rem;
-    }
-    #events .section-description {
-        font-size: 1rem; /* Smaller description text */
-        color: var(--color-secondary);
-        margin-bottom: 3rem; /* Space below description */
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    /* Event Category Filters */
-    .event-filters {
-        display: flex;
-        flex-wrap: wrap; /* Allow wrapping on smaller screens */
-        justify-content: center;
-        gap: 0.75rem; /* Space between buttons */
-        margin-bottom: 3rem; /* Space below filters */
-    }
-    .event-filter-button {
-        background-color: var(--color-event-orange);
-        color: var(--color-event-orange-text);
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem; /* Rounded corners for buttons */
-        font-size: 0.875rem; /* text-sm */
-        font-weight: 600; /* font-semibold */
-        transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
-        cursor: pointer;
-        border: none; /* Remove default button border */
-    }
-    .event-filter-button:hover {
-        background-color: #e6b000; /* Slightly darker orange on hover */
-        transform: translateY(-2px);
-    }
-
-    /* Event Card Styling */
-    .event-card {
-        background-color: var(--color-white);
-        border-radius: 0.75rem; /* Rounded corners for the card */
-        box-shadow: 0 4px 10px var(--color-event-card-shadow);
-        overflow: hidden; /* Ensures image respects border-radius */
-        display: flex;
-        flex-direction: column;
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    }
-    .event-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-    }
-
-    .event-card-image {
-        width: 100%;
-        height: 200px; /* Fixed height for event images */
-        object-fit: cover;
-        display: block; /* Remove extra space below image */
-    }
-
-    .event-card-content {
-        padding: 1.5rem; /* Padding inside the content area */
-        flex-grow: 1; /* Allows content to push footer down */
-        display: flex;
-        flex-direction: column;
-    }
-
-    .event-card-tags {
-        display: flex;
-        gap: 0.5rem; /* Space between tags */
-        margin-bottom: 0.75rem;
-    }
-    .event-tag {
-        background-color: var(--color-event-orange);
-        color: var(--color-event-orange-text);
-        padding: 0.25rem 0.75rem;
-        border-radius: 0.5rem;
-        font-size: 0.75rem; /* text-xs */
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-
-    .event-card-title {
-        font-size: 1.25rem; /* text-xl */
-        font-weight: 700;
-        color: var(--color-dark);
-        margin-bottom: 0.5rem;
-    }
-
-    .event-card-meta {
-        font-size: 0.875rem; /* text-sm */
-        color: var(--color-secondary);
-        margin-bottom: 1rem;
-    }
-    .event-card-meta span {
-        font-weight: 500; /* Medium font weight for labels */
-    }
-
-    .event-card-description {
-        font-size: 0.95rem;
-        color: var(--color-secondary);
-        line-height: 1.5;
-        margin-bottom: 1.5rem;
-        flex-grow: 1; /* Allows description to take available space */
-    }
-
-    .event-card-link {
-        color: var(--color-primary); /* Primary blue for the link */
-        font-weight: 600;
-        text-decoration: none;
-        display: inline-flex; /* For icon alignment */
-        align-items: center;
-        gap: 0.25rem;
-        transition: color 0.2s ease-in-out;
-    }
-    .event-card-link:hover {
-        color: #0056b3; /* Darker blue on hover */
-        text-decoration: underline;
-    }
-    .event-card-link .lucide {
-        width: 1rem;
-        height: 1rem;
-    }
-
-    /* View All Events Button */
-    .view-all-events-btn {
-        background-color: var(--color-primary);
-        color: var(--color-white);
-        font-weight: 600;
-        padding: 0.75rem 2rem;
-        border-radius: 0.5rem;
-        font-size: 1.125rem; /* text-lg */
-        transition: background-color 0.3s ease-in-out;
-        display: inline-block; /* For centering */
-        margin-top: 3rem; /* Space above button */
-    }
-    .view-all-events-btn:hover {
-        background-color: #0056b3; /* Darker blue on hover */
-    }
-
-    /* Responsive grid for events */
-    .events-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive columns */
-        gap: 2rem; /* Gap between cards */
-        justify-items: center; /* Center cards in their grid cells */
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    /* General responsive adjustments */
-    @media (max-width: 768px) {
-        #events {
-            padding: 3rem 1rem;
-        }
-        #events .section-title {
-            font-size: 2rem;
-        }
-        .event-filter-button {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.8rem;
-        }
-        .event-card-image {
-            height: 180px;
-        }
-        .event-card-content {
-            padding: 1rem;
-        }
-        .event-card-title {
-            font-size: 1.125rem;
-        }
-        .event-card-meta, .event-card-description {
-            font-size: 0.875rem;
-        }
-        .view-all-events-btn {
-            padding: 0.6rem 1.5rem;
-            font-size: 1rem;
-        }
-    }
-        /* style.css */
-
-
-
-/* Keyframe animation for bounce-in effect */
-@keyframes bounceIn {
-    0% {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    60% {
-        transform: scale(1.05);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-/* style.css */
-
-
-
-/* Keyframe animation for bounce-in effect */
-@keyframes bounceIn {
-    0% {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    60% {
-        transform: scale(1.05);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-        /* General Body Styles (adjust as needed for your site) */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    background-color: #f4f4f4; /* Light background for the section */
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Featured Events Section */
-.featured-events {
-    padding: 60px 0;
-    text-align: center;
-    background: linear-gradient(to bottom, #f0e6fa, #ffffff); /* Subtle gradient background */
-}
-
-.section-title {
-    font-size: 1.2em;
-    color: #888;
-    margin-bottom: 10px;
-    font-weight: normal;
-}
-
-.section-subtitle {
-    font-size: 2.5em;
-    color: #333;
-    margin-bottom: 40px;
-    font-weight: bold;
-}
-
-.events-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    justify-content: center;
-}
-
-.event-card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    transition: transform 0.3s ease-in-out;
-}
-
-.event-card:hover {
-    transform: translateY(-5px);
-}
-
-.event-image {
-    width: 100%;
-    height: 200px; /* Fixed height for consistent images */
-    object-fit: cover; /* Ensures images cover the area without distortion */
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-
-.event-content {
-    padding: 20px;
-    flex-grow: 1; /* Allows content to expand and fill space */
-    display: flex;
-    flex-direction: column;
-}
-
-.event-title {
-    font-size: 1.3em;
-    color: #333;
-    margin-bottom: 10px;
-    line-height: 1.4;
-    font-weight: 600;
-}
-
-.event-date {
-    font-size: 0.9em;
-    color: #666;
-    margin-bottom: 15px;
-}
-
-.event-date i {
-    margin-right: 5px;
-    color: #555;
-}
-
-.event-organizer {
-    margin-top: auto; /* Pushes the organizer and button to the bottom */
-    margin-bottom: 15px;
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        /*treasure start */
+        /* Treasure Hunt Popup Styles */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-size: 0.85em;
-    color: #777;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
 }
 
-.vendor-link {
-    color: #ff5722; /* Orange color for the link */
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
+.popup-overlay.show {
+    opacity: 1;
+    visibility: visible;
 }
 
-.vendor-link:hover {
-    color: #e64a19;
+.popup-content {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+    transform: scale(0.8) translateY(20px);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-.buy-now-btn {
-    background-color: #673ab7; /* Purple button */
-    color: white;
-    padding: 12px 25px;
+.popup-overlay.show .popup-content {
+    transform: scale(1) translateY(0);
+}
+
+.popup-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.2);
     border: none;
-    border-radius: 5px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    color: white;
+    font-size: 18px;
     cursor: pointer;
-    font-size: 1em;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.popup-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.popup-video-container {
+    width: 100%;
+    height: 250px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    position: relative;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.popup-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.popup-video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.popup-video-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.play-button {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    color: #667eea;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.play-button:hover {
+    background: white;
+    transform: scale(1.1);
+}
+
+.popup-text {
+    text-align: center;
+    color: white;
+}
+
+.popup-title {
+    font-size: 2rem;
     font-weight: bold;
-    text-transform: uppercase;
-    transition: background-color 0.3s ease;
-    width: 100%; /* Make button full width */
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.buy-now-btn:hover {
-    background-color: #512da8;
+.popup-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    opacity: 0.9;
 }
 
-/* Font Awesome for Icons (add this to your HTML <head>) */
-/* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> */
+.popup-date {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    backdrop-filter: blur(10px);
+}
 
-/* Responsive Adjustments */
+.popup-date-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.popup-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+}
+
+.popup-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.popup-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.popup-btn-primary {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    box-shadow: 0 4px 15px rgba(238, 90, 36, 0.4);
+}
+
+.popup-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(238, 90, 36, 0.6);
+}
+
+.popup-btn-secondary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.popup-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.popup-sparkle {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.6);
+    animation: sparkle 2s infinite;
+    pointer-events: none;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+}
+
+.popup-sparkle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+.popup-sparkle:nth-child(2) { top: 30%; right: 15%; animation-delay: 0.7s; }
+.popup-sparkle:nth-child(3) { bottom: 25%; left: 20%; animation-delay: 1.4s; }
+.popup-sparkle:nth-child(4) { bottom: 35%; right: 25%; animation-delay: 0.3s; }
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
-    .section-subtitle {
-        font-size: 2em;
+    .popup-content {
+        padding: 1.5rem;
+        margin: 1rem;
     }
-
-    .events-grid {
-        grid-template-columns: 1fr; /* Stack cards on smaller screens */
+    
+    .popup-title {
+        font-size: 1.5rem;
+    }
+    
+    .popup-video-container {
+        height: 200px;
+    }
+    
+    .popup-buttons {
+        flex-direction: column;
+    }
+    
+    .popup-btn {
+        min-width: auto;
     }
 }
-             /* Mobile menu specific styles */
-            .mobile-menu {
-                transform: translateX(100%); /* Hidden by default */
-                transition: transform 0.3s ease-in-out;
-                position: fixed; /* Ensures it overlays correctly */
-                top: 0;
-                right: 0;
-                left: auto;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(255, 255, 255, 0.95); /* Use white for mobile menu background */
-                backdrop-filter: blur(8px);
-                z-index: 999; /* Higher z-index to cover everything */
-                padding-top: 1rem; /* Adjust padding for close button */
-                padding-left: 1rem;
-                padding-right: 1rem;
-                overflow-y: auto; /* Allow scrolling if menu content is long */
-                box-shadow: 0 0 20px rgba(0,0,0,0.2); /* Add shadow to menu */
-            }
-            .mobile-menu.open {
-                transform: translateX(0); /* Slides in when open */
-            }
-        }
+
+/* Don't show popup initially */
+.popup-overlay {
+    display: none;
+}
+
+.popup-overlay.show {
+    display: flex;
+}
+
+
+
+
+        /*treasure hunt end */
     </style>
 </head>
-<body class="font-sans antialiased text-gray-900">
+<body class="font-sans antialiased text-gray-900 bg-white">
     <!-- Navigation -->
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <nav class="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <div class="flex-shrink-0 flex items-center">
-                         <a href="index.html" class="flex items-center space-x-2">
-                        <img src="assets/images/logos/iedc logo.jpg" alt="IEDC Logo" class="h-8 w-8 sm:h-10 sm:w-10 rounded-full shadow-sm">
-                        <span class="text-2xl font-bold gradient-text">MET'S IEDC</span>
+                        <a href="index.html" class="flex items-center space-x-3">
+                            <img src="assets/images/logos/iedc logo.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
+                            <span class="text-2xl font-bold gradient-text">MET'S IEDC</span>
+                        </a>
                     </div>
-                    <div class="hidden md:ml-8 md:flex md:space-x-8">
-                        <a href="about.html" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">About Us</a>
-                        <a href="team.html" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Our Ex-Com</a>
-                        <a href="announcement.html" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Announcements</a>
-                        <a href="initiatives.html" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Initiatives</a>
-                        <a href="news.html" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">News</a>
-                        <a href="contact.html" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Contact US</a>
+                    <div class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="about.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">About Us</a>
+                        <a href="team.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Our Ex-Com</a>
+                        <a href="announcement.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Announcements</a>
+                        <a href="initiatives.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Initiatives</a>
+                        <a href="news.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">News</a>
+                        <a href="contact.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Contact US</a>
                     </div>
                 </div>
                 <div class="hidden md:ml-6 md:flex md:items-center">
-                    <a href="login.html" class="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">Log in</a>
+                    <a href="login.html" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">Log in</a>
                 </div>
-                </div>
-            </div>
-        </div>
-          <!-- Mobile menu button -->
-                <button id="mobile-menu-button" class="md:hidden text-dark-heading focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
         </div>
-        <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-card-background z-40 p-4 md:hidden">
-            <div class="flex justify-end pr-4 pt-2"> <!-- Added padding for close button position -->
-                <button id="close-mobile-menu" class="text-dark-heading focus:outline-none">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu">
+            <div class="flex justify-end p-4">
+                <button id="close-mobile-menu" class="text-gray-700 focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <nav class="flex flex-col space-y-4 mt-8">
-                <a href="about.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">About Us</a>
-                <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Our Team</a>
-                <a href="initiatives.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Initiatives</a>
-                <a href="news.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">News</a>
-                <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-primary-blue hover:bg-gray-100">Announcements</a>
-                <a href="events.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Event Gallery</a>
-                <a href="contact.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Contact</a>
-                <a href="login.html" class="mt-4 block w-full text-center px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-primary-blue-dark transition duration-300 shadow">Student Login</a>
+            <nav class="flex flex-col space-y-4 px-6">
+                <a href="about.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">About Us</a>
+                <a href="team.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Our Team</a>
+                <a href="initiatives.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Initiatives</a>
+                <a href="news.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">News</a>
+                <a href="announcement.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Announcements</a>
+                <a href="events.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Event Gallery</a>
+                <a href="contact.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Contact</a>
+                <a href="login.html" class="mt-6 block w-full text-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-medium hover:from-indigo-700 hover:to-purple-700 transition shadow-lg">Student Login</a>
             </nav>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <div class="relative bg-white overflow-hidden">
+    <div class="relative bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-hidden">
         <div class="max-w-7xl mx-auto">
-            <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+            <div class="relative z-10 pb-8 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
                 <div class="pt-10 mx-auto max-w-7xl px-4 sm:pt-12 sm:px-6 md:pt-16 lg:pt-20 lg:px-8 xl:pt-28">
                     <div class="sm:text-center lg:text-left">
-                        <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                        <h1 class="text-5xl tracking-tight font-extrabold text-gray-900 sm:text-6xl md:text-7xl fade-in-up">
                             <span class="block">Innovate together</span>
                             <span class="block gradient-text">with bold ideas</span>
                         </h1>
-                        <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                           MET’S IEDC empowers students to build, test, and launch impactful innovations — from concept to reality.
+                        <p class="mt-6 text-xl text-gray-600 sm:mt-8 sm:text-2xl sm:max-w-xl sm:mx-auto md:mt-8 lg:mx-0 fade-in-up stagger-1">
+                           MET'S IEDC empowers students to build, test, and launch impactful innovations — from concept to reality.
                         </p>
-                        <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                            <div class="rounded-md shadow">
-                                <a href="events.html" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
+                        <div class="mt-8 sm:mt-10 sm:flex sm:justify-center lg:justify-start fade-in-up stagger-2">
+                            <div class="rounded-full shadow-lg">
+                                <a href="events.html" class="w-full flex items-center justify-center px-10 py-4 border border-transparent text-lg font-medium rounded-full text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-xl">
                                     Event Gallery
                                 </a>
                             </div>
-                            <div class="mt-3 sm:mt-0 sm:ml-3">
-                                <a href="https://iedc.startupmission.in/" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10">
-                                    IEDC
+                            <div class="mt-4 sm:mt-0 sm:ml-4">
+                                <a href="https://iedc.startupmission.in/" class="w-full flex items-center justify-center px-10 py-4 border-2 border-indigo-600 text-lg font-medium rounded-full text-indigo-700 bg-white hover:bg-indigo-50 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                                    IEDC Portal
                                 </a>
                             </div>
                         </div>
@@ -645,262 +481,540 @@ body {
                 </div>
             </div>
         </div>
-          <!-- Carousel -->
-          <a href="events.html">
-    <section class="py-8 bg-white"> <!-- Changed background to white for consistency with other light theme elements -->
+        
+        <!-- Decorative elements -->
+        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
+            <div class="h-56 w-full sm:h-72 md:h-96 lg:w-full lg:h-full bg-gradient-to-br from-indigo-400 to-purple-600 flex items-center justify-center">
+                <div class="text-white text-6xl opacity-20">
+                    <i class="fas fa-rocket"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Carousel Section -->
+    <section class="section-padding bg-gray-50">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Swiper Container - Adjusted shadow for a modern look -->
-            <div class="swiper mySwiper rounded-lg shadow-xl overflow-hidden" style="--swiper-navigation-color: #8C6CEF; --swiper-pagination-color: #8C6CEF;">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Journey in Pictures</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Explore the moments that define our innovation journey, from ideation to implementation.</p>
+            </div>
+            
+            <div class="swiper mySwiper rounded-2xl shadow-2xl overflow-hidden" style="--swiper-navigation-color: #667eea; --swiper-pagination-color: #667eea;">
                 <div class="swiper-wrapper">
-                    <!-- Swiper Slides -->
-                     <div class="swiper-slide">
-                        <img src="assets/images/events/1.jpg" class="w-full h-96 object-cover rounded-lg" alt="Kerala Innovation Festival 2025">
-                    </div>
-                     <div class="swiper-slide">
-                        <img src="assets/images/events/2.jpg" class="w-full h-96 object-cover rounded-lg" alt="Kerala Innovation Festival 2025">
-                    </div>
-                     <div class="swiper-slide">
-                        <img src="assets/images/events/3.jpg" class="w-full h-96 object-cover rounded-lg" alt="Kerala Innovation Festival 2025">
-                    </div>
-                     <div class="swiper-slide">
-                        <img src="assets/images/events/4.jpg" class="w-full h-96 object-cover rounded-lg" alt="Kerala Innovation Festival 2025">
-                    </div>
-                     <div class="swiper-slide">
-                        <img src="assets/images/events/5.jpg" class="w-full h-96 object-cover rounded-lg" alt="Kerala Innovation Festival 2025">
-                    </div>
-                     <div class="swiper-slide">
-                        <img src="assets/images/events/6.jpg" class="w-full h-96 object-cover rounded-lg" alt="Kerala Innovation Festival 2025">
-                    </div>
-                     <div class="swiper-slide">
-                        <img src="assets/images/events/7.jpg" class="w-full h-96 object-cover rounded-lg" alt="Kerala Innovation Festival 2025">
-                    </div>
-                     <div class="swiper-slide">
-                        <img src="assets/images/events/8.jpg" class="w-full h-96 object-cover rounded-lg" alt="Kerala Innovation Festival 2025">
-                    </div>
-                     <div class="swiper-slide">
-                        <img src="assets/images/events/9.jpg" class="w-full h-96 object-cover rounded-lg" alt="Kerala Innovation Festival 2025">
-                    </div>
-                     <div class="swiper-slide">
-                        <img src="assets/images/events/10.jpg" class="w-full h-96 object-cover rounded-lg" alt="Kerala Innovation Festival 2025">
-                    </div>
-                     <div class="swiper-slide">
-                        <img src="assets/images/events/CEO.jpg" class="w-full h-96 object-cover rounded-lg" alt="Kerala Innovation Festival 2025">
-                    </div>
-                      <div class="swiper-slide">
-                        <img src="assets/images/events/Sitting.jpg" class="w-full h-96 object-cover rounded-lg" alt="Kerala Innovation Festival 2025">
-                    </div>
-                     <div class="swiper-slide">
-                        <img src="assets/images/events/KIF 2025.jpg" class="w-full h-96 object-cover rounded-lg" alt="Kerala Innovation Festival 2025">
+                    <div class="swiper-slide">
+                        <img src="assets/images/events/1.jpg" alt="Event 1">
                     </div>
                     <div class="swiper-slide">
-                        <img src="assets/images/events/PRIZE ON.jpg" class="w-full h-96 object-cover rounded-lg" alt="ARYSE Kerala - Quiz Competition">
+                        <img src="assets/images/events/2.jpg" alt="Event 2">
                     </div>
                     <div class="swiper-slide">
-                        <img src="assets/images/events/Idea Pitching Competion in Pravaah.jpg" class="w-full h-96 object-cover rounded-lg" alt="Idea Pitching Competition">
+                        <img src="assets/images/events/3.jpg" alt="Event 3">
                     </div>
                     <div class="swiper-slide">
-                        <img src="assets/images/events/CHRISS AT CLUSTER.jpg" class="w-full h-96 object-cover rounded-lg" alt="CHRIS AT CLUSTER">
+                        <img src="assets/images/events/4.jpg" alt="Event 4">
                     </div>
                     <div class="swiper-slide">
-                        <img src="assets/images/events/EVENT 1.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
+                        <img src="assets/images/events/5.jpg" alt="Event 5">
                     </div>
                     <div class="swiper-slide">
-                        <img src="assets/images/events/EVENT 2.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
+                        <img src="assets/images/events/6.jpg" alt="Event 6">
                     </div>
                     <div class="swiper-slide">
-                        <img src="assets/images/events/IEDC CCE METS.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
+                        <img src="assets/images/events/7.jpg" alt="Event 7">
                     </div>
                     <div class="swiper-slide">
-                        <img src="assets/images/events/IEDC CCE.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
+                        <img src="assets/images/events/8.jpg" alt="Event 8">
                     </div>
                     <div class="swiper-slide">
-                        <img src="assets/images/events/KTU IDEA PITCHING.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
+                        <img src="assets/images/events/9.jpg" alt="Event 9">
                     </div>
                     <div class="swiper-slide">
-                        <img src="assets/images/events/no file.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/images/events/PRIZE.jpg" class="w-full h-96 object-cover rounded-lg" alt="Event 1">
+                        <img src="assets/images/events/10.jpg" alt="Event 10">
                     </div>
                 </div>
-                <!-- Add Pagination -->
                 <div class="swiper-pagination"></div>
-                <!-- Add Navigation (Next/Prev buttons) -->
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
             </div>
         </div>
     </section>
-</a>
 
-<!-- Required Swiper CSS and JS -->
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        new Swiper('.mySwiper', {
-            effect: 'coverflow', // Enables the 3D coverflow effect
-            grabCursor: true,   // Changes cursor to grabbing hand
-            centeredSlides: true, // Centers the active slide
-            slidesPerView: 'auto', // Adjusts slides per view based on container
-            coverflowEffect: {
-                rotate: 50,     // Slide rotation in degrees
-                stretch: 0,     // Space between slides in px
-                depth: 100,     // Depth offset of the slides (z-axis)
-                modifier: 1,    // Effect multiplier
-                slideShadows: true, // Enables shadows on slides
-            },
-            loop: true,         // Loop through slides
-            autoplay: {
-                delay: 3000,      // Autoplay delay in ms (3 seconds)
-                disableOnInteraction: false, // Continue autoplay after user interaction
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            // Responsive breakpoints - adjust slidesPerView for smaller screens
-            breakpoints: {
-                640: { // Tailwind's 'sm' breakpoint
-                    slidesPerView: 1,
-                },
-                768: { // Tailwind's 'md' breakpoint
-                    slidesPerView: 2, // Show 2 slides on medium screens
-                },
-                1024: { // Tailwind's 'lg' breakpoint
-                    slidesPerView: 3, // Show 3 slides on large screens (main effect)
-                },
-            },
-        });
-    });
-</script>
-        <section class="featured-events">
-    <div class="container">
-        <h2 class="section-title">Upcoming Event</h2>
-        <div class="events-grid">
-            <div class="event-card">
-                <img src="assets/images/events/EAWWW.jpg" alt="Event Image" class="event-image">
-                <div class="event-content">
-                    <h4 class="event-title">Entrepreneurship Awarness Workshop </h4>
-                    <p class="event-date"><i class="far fa-calendar-alt"></i> Fri, 22 August 2025</p>
-                    <div class="event-organizer">
-                        <p>Organized By Ministry of MSME, Govt of India in association with IEDC MET'S SCHOOL OF ENGINEERING, MALA</p>
+    <!-- Enhanced Upcoming Event Section -->
+    <section class="event-spotlight section-padding relative">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium mb-4">Don't Miss Out</span>
+                <h2 class="text-5xl font-bold text-white mb-6">Upcoming Event Spotlight</h2>
+                <p class="text-xl text-white/90 max-w-2xl mx-auto">Join us for our next exciting event that promises to inspire and educate the next generation of entrepreneurs.</p>
             </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <!-- Treasure Hunt Event Card -->
+                <div class="event-card-enhanced rounded-3xl p-8 md:p-12 card-hover">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div class="order-2 md:order-1">
+                            <div class="inline-block px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-600 text-white rounded-full text-sm font-semibold mb-4">
+                                Special Event
+                            </div>
+                            <h3 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                                🏴‍☠️ Treasure Hunt Adventure
+                            </h3>
+                            <div class="flex items-center space-x-6 text-gray-600 mb-6">
+                                <div class="flex items-center">
+                                    <i class="far fa-calendar-alt text-yellow-600 mr-2"></i>
+                                    <span class="font-medium">Mon, 25 August 2025</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="far fa-clock text-yellow-600 mr-2"></i>
+                                    <span class="font-medium">10:00 AM</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 text-lg leading-relaxed mb-8">
+                                Join IEDC MET'S for an exciting treasure hunt filled with challenges, puzzles, and amazing prizes. Test your wit, teamwork, and problem-solving skills in this thrilling adventure!
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <a href="treasurehunt.html" class="px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-full font-semibold hover:from-yellow-600 hover:to-orange-600 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                                    Join the Hunt
+                                </a>
+                                <a href="treasurehunt.html" class="px-8 py-4 border-2 border-yellow-500 text-yellow-700 rounded-full font-semibold hover:bg-yellow-50 transform hover:scale-105 transition-all duration-200">
+                                    Learn More
+                                </a>
+                            </div>
+                        </div>
+                        <div class="order-1 md:order-2">
+                            <div class="relative">
+                                <a href="treasurehunt.html">
+                                    <img src="assets/images/events/treasurehunt-thumb.jpg" alt="Treasure Hunt Thumbnail" class="w-full h-80 object-cover rounded-2xl shadow-2xl" style="object-fit:cover;" onerror="this.src='assets/images/events/EAWWW.jpg'">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl flex items-center justify-center">
+                                        <button class="play-button" onclick="showTreasureHuntPopup(); event.preventDefault();">
+                                            <i class="fas fa-play"></i>
+                                        </button>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                </div>
-    </div>
-</section>
-    <!-- Testimonials -->
-    <div class="bg-indigo-50 py-16 sm:py-24">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="lg:text-center">
-                <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">We are collabrating with</h2>
-                <div class="mt-6 grid grid-cols-2 gap-8 md:grid-cols-6">
-                    <div class="col-span-1 flex justify-center">
-                        <img class="h-12" src="assets/images/logos/APJ_Abdul_Kalam_Technological_University_logo.png" alt="Microsoft">
-                    </div>
-                    <div class="col-span-1 flex justify-center">
-                        <img class="h-12" src="assets/images/logos/IIC.png" alt="Spotify">
-                    </div>
-                    <div class="col-span-1 flex justify-center">
-                        <img class="h-12" src="assets/images/logos/KERALA IEDC.png" alt="Facebook">
-                    </div>
-                    <div class="col-span-1 flex justify-center">
-                        <img class="h-12" src="assets/images/logos/IPL_LOGO-removebg-preview.png" alt="Google">
-                    </div>
-                    <div class="col-span-1 flex justify-center">
-                        <img class="h-12" src="assets/images/logos/METS IEDC LOGO.jpg" alt="Amazon">
-                    </div>
-                    <div class="col-span-1 flex justify-center">
-                        <img class="h-12" src="assets/images/logos/ksum.png" alt="Uber">
-                    </div>
-                      <div class="col-span-1 flex justify-center">
-                        <img class="h-12" src="assets/images/logos/mets_logo.png" alt="Uber">
+                <div class="event-card-enhanced rounded-3xl p-8 md:p-12 card-hover">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div class="order-2 md:order-1">
+                            <div class="inline-block px-4 py-2 bg-gradient-to-r from-orange-400 to-orange-600 text-white rounded-full text-sm font-semibold mb-4">
+                                Featured Event
+                            </div>
+                            <h3 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                                Entrepreneurship Awareness Workshop
+                            </h3>
+                            <div class="flex items-center space-x-6 text-gray-600 mb-6">
+                                <div class="flex items-center">
+                                    <i class="far fa-calendar-alt text-indigo-600 mr-2"></i>
+                                    <span class="font-medium">Fri, 22 August 2025</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="far fa-clock text-indigo-600 mr-2"></i>
+                                    <span class="font-medium">9:00 AM</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 text-lg leading-relaxed mb-8">
+                                Organized by Ministry of MSME, Govt of India in association with IEDC MET'S SCHOOL OF ENGINEERING, MALA. This workshop will provide insights into the entrepreneurial ecosystem and startup opportunities.
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <button class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-semibold hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                                    Register Now
+                                </button>
+                                <button class="px-8 py-4 border-2 border-indigo-600 text-indigo-600 rounded-full font-semibold hover:bg-indigo-50 transform hover:scale-105 transition-all duration-200">
+                                    Learn More
+                                </button>
+                            </div>
+                        </div>
+                        <div class="order-1 md:order-2">
+                            <div class="relative">
+                                <img src="assets/images/events/EAWWW.jpg" alt="Entrepreneurship Awareness Workshop" class="w-full h-80 object-cover rounded-2xl shadow-2xl">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-        <div clas="whatsapp-channel-btn-container">
-    <a href="https://whatsapp.com/channel/0029Vb5RvKWI1rchteX7pu3A " target="_blank" class="whatsapp-channel-btn">
-        <i data-lucide="message-circle" class="lucide"></i>
-        <span>Join the WhatsApp Channel</span>
-    </a>
-</div>
-</body>
-        <footer class="bg-gray-800">
-        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
-                <div class="col-span-2">
-                    <span class="text-2xl font-bold gradient-text">MET'S IEDC</span>
-                    <p class="text-gray-400 mb-4">Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.</p>
-                    <img src="data:image/png;base64,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" style="width:50%; max-width:300px;">
+    </section>
 
+    <!-- Partners Section -->
+    <div class="section-padding bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Collaboration Partners</h2>
+                <p class="text-xl text-gray-600">Working together to build India's innovation ecosystem</p>
+            </div>
+            <div class="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-7 items-center justify-items-center">
+                <div class="col-span-1 flex justify-center p-4 hover:scale-110 transition-transform duration-200">
+                    <img class="h-16 w-auto grayscale hover:grayscale-0 transition-all duration-200" src="assets/images/logos/APJ_Abdul_Kalam_Technological_University_logo.png" alt="KTU">
+                </div>
+                <div class="col-span-1 flex justify-center p-4 hover:scale-110 transition-transform duration-200">
+                    <img class="h-16 w-auto grayscale hover:grayscale-0 transition-all duration-200" src="assets/images/logos/IIC.png" alt="IIC">
+                </div>
+                <div class="col-span-1 flex justify-center p-4 hover:scale-110 transition-transform duration-200">
+                    <img class="h-16 w-auto grayscale hover:grayscale-0 transition-all duration-200" src="assets/images/logos/KERALA IEDC.png" alt="Kerala IEDC">
+                </div>
+                <div class="col-span-1 flex justify-center p-4 hover:scale-110 transition-transform duration-200">
+                    <img class="h-16 w-auto grayscale hover:grayscale-0 transition-all duration-200" src="assets/images/logos/IPL_LOGO-removebg-preview.png" alt="IPL">
+                </div>
+                <div class="col-span-1 flex justify-center p-4 hover:scale-110 transition-transform duration-200">
+                    <img class="h-16 w-auto grayscale hover:grayscale-0 transition-all duration-200" src="assets/images/logos/METS IEDC LOGO.jpg" alt="METS IEDC">
+                </div>
+                <div class="col-span-1 flex justify-center p-4 hover:scale-110 transition-transform duration-200">
+                    <img class="h-16 w-auto grayscale hover:grayscale-0 transition-all duration-200" src="assets/images/logos/ksum.png" alt="KSUM">
+                </div>
+                <div class="col-span-1 flex justify-center p-4 hover:scale-110 transition-transform duration-200">
+                    <img class="h-16 w-auto grayscale hover:grayscale-0 transition-all duration-200" src="assets/images/logos/mets_logo.png" alt="METS">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Channel Button -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <a href="https://whatsapp.com/channel/0029Vb5RvKWI1rchteX7pu3A" target="_blank" class="flex items-center space-x-3 bg-green-500 hover:bg-green-600 text-white px-6 py-4 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-200 font-medium">
+            <i class="fab fa-whatsapp text-xl"></i>
+            <span class="hidden sm:inline">Join WhatsApp Channel</span>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="lg:col-span-2">
+                    <span class="text-3xl font-bold gradient-text">MET'S IEDC</span>
+                    <p class="text-gray-400 mt-4 text-lg leading-relaxed max-w-md">Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.</p>
+                    <div class="mt-8">
+                        <img src="https://via.placeholder.com/250x100/667eea/ffffff?text=Kerala+Startup+Mission" alt="Kerala Startup Mission" class="w-64 h-auto opacity-80">
+                    </div>
                 </div>
 
                 <div>
-                    <h3 class="text-xl font-semibold mb-4 text-white">Quick Links</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#home" class="text-gray-400 hover:text-primary transition page-link">Home</a></li>
-                        <li><a href="about.html" class="text-gray-400 hover:text-primary transition page-link">About Us</a></li>
-                        <li><a href="events.html" class="text-gray-400 hover:text-primary transition page-link">Events</a></li>
-                        <li><a href="initiatives.html" class="text-gray-400 hover:text-primary transition page-link">Initiatives</a></li>
-                        <li><a href="news.html" class="text-gray-400 hover:text-primary transition page-link">News & Blog</a></li>
-                        <li><a href="contact.html" class="text-gray-400 hover:text-primary transition page-link">Contact Us</a></li>
-                         <li><a href="https://startupmission.kerala.gov.in/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition">Kerala Startup Mission</a></li>
+                    <h3 class="text-xl font-semibold mb-6 text-white">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-gray-300 hover:text-white transition-colors duration-200 flex items-center"><i class="fas fa-home mr-2"></i>Home</a></li>
+                        <li><a href="about.html" class="text-gray-300 hover:text-white transition-colors duration-200 flex items-center"><i class="fas fa-info-circle mr-2"></i>About Us</a></li>
+                        <li><a href="events.html" class="text-gray-300 hover:text-white transition-colors duration-200 flex items-center"><i class="fas fa-calendar-alt mr-2"></i>Events</a></li>
+                        <li><a href="initiatives.html" class="text-gray-300 hover:text-white transition-colors duration-200 flex items-center"><i class="fas fa-lightbulb mr-2"></i>Initiatives</a></li>
+                        <li><a href="news.html" class="text-gray-300 hover:text-white transition-colors duration-200 flex items-center"><i class="fas fa-newspaper mr-2"></i>News & Blog</a></li>
+                        <li><a href="contact.html" class="text-gray-300 hover:text-white transition-colors duration-200 flex items-center"><i class="fas fa-envelope mr-2"></i>Contact Us</a></li>
+                        <li><a href="https://startupmission.kerala.gov.in/" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-white transition-colors duration-200 flex items-center"><i class="fas fa-external-link-alt mr-2"></i>Kerala Startup Mission</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="text-xl font-semibold mb-4 text-white">Connect With Us</h3>
-                    <p class="text-gray-400 mb-2">Email: metsenggiedc@gmail.com</p>
-                    <p class="text-gray-400 mb-4">Phone: +91 7306226875</p>
+                    <h3 class="text-xl font-semibold mb-6 text-white">Connect With Us</h3>
+                    <div class="space-y-4 mb-6">
+                        <p class="text-gray-300 flex items-center"><i class="fas fa-envelope mr-3 text-indigo-400"></i>metsenggiedc@gmail.com</p>
+                        <p class="text-gray-300 flex items-center"><i class="fas fa-phone mr-3 text-indigo-400"></i>+91 7306226875</p>
+                        <p class="text-gray-300 flex items-center"><i class="fas fa-map-marker-alt mr-3 text-indigo-400"></i>Mala, Thrissur, Kerala</p>
+                    </div>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-primary transition" aria-label="Facebook"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a>
-                        <a href="https://x.com/MetsIedc" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="X (formerly Twitter)"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 1200 1227" xmlns="http://www.w3.org/2000/svg"><path d="M714.219 555.53 1166.19 0h-106.42L666.33 460.69 307.31 0H0l483.06 652.63 0 574.4h233.25v-574.4Zm-70.92 89.48 0 388.16H554.86v-388.16L159.13 81.53h109.89l354.4 481.13 374.51-481.13h104.88L643.3 645.01Z"/></svg></a>
-                        <a href="#" class="text-gray-400 hover:text-primary transition" aria-label="LinkedIn"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.594-11.018-3.714v-2.155z"/></svg></a>
-                        <a href="https://www.instagram.com/metsiedc/" class="text-gray-400 hover:text-primary transition" aria-label="Instagram"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200 transform hover:scale-110" aria-label="Facebook">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+                        </a>
+                        <a href="https://x.com/MetsIedc" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors duration-200 transform hover:scale-110" aria-label="X (formerly Twitter)">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200 transform hover:scale-110" aria-label="LinkedIn">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.594-11.018-3.714v-2.155z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/metsiedc/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors duration-200 transform hover:scale-110" aria-label="Instagram">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="mt-8 border-t border-gray-700 pt-8 text-center">
-                <p class="text-gray-500">© <span id="currentYear"></span> IEDC MET'S SCHOOL OF ENGINEERING. All Rights Reserved.</p>
+            <div class="mt-12 border-t border-gray-700 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-lg">© <span id="currentYear">2025</span> IEDC MET'S SCHOOL OF ENGINEERING. All Rights Reserved.</p>
+                    <p class="text-gray-500 mt-2 md:mt-0">Made with ❤️ for Innovation</p>
+                </div>
             </div>
         </div>
     </footer>
-    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Required Swiper CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
     <script>
-      // Initialize Lucide icons on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
+        document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Swiper
+    new Swiper('.mySwiper', {
+        effect: 'coverflow',
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        coverflowEffect: {
+            rotate: 30,
+            stretch: 0,
+            depth: 100,
+            modifier: 2,
+            slideShadows: true,
+        },
+        loop: true,
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            dynamicBullets: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 1.2,
+            },
+            768: {
+                slidesPerView: 1.5,
+            },
+            1024: {
+                slidesPerView: 2,
+            },
+            1280: {
+                slidesPerView: 2.5,
+            },
+        },
+    });
+
+    // Mobile Menu Logic - FIXED VERSION
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+
+    // Function to open mobile menu
+    function openMobileMenu() {
+        mobileMenu.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Function to close mobile menu
+    function closeMobileMenu() {
+        mobileMenu.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // Open menu button
+    if (mobileMenuButton) {
+        mobileMenuButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openMobileMenu();
         });
+    }
 
-        // --- Mobile Menu Logic ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
-
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.add('open');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling background
+    // Close menu button
+    if (closeMobileMenuButton) {
+        closeMobileMenuButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeMobileMenu();
         });
+    }
 
-        closeMobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            document.body.style.overflow = ''; // Restore scrolling
-        });
-
-        // Close mobile menu when a link is clicked inside it
+    // Close mobile menu when clicking links
+    if (mobileMenu) {
         mobileMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
-                mobileMenu.classList.remove('open');
-                document.body.style.overflow = '';
+                closeMobileMenu();
             });
         });
-</script>
+
+        // Close menu when clicking on the backdrop (but not on the menu content)
+        mobileMenu.addEventListener('click', (e) => {
+            // Only close if clicking on the mobile-menu itself, not its children
+            if (e.target === mobileMenu) {
+                closeMobileMenu();
+            }
+        });
+    }
+
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+            closeMobileMenu();
+        }
+    });
+
+    // Animation on scroll - FIXED VERSION
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Only apply transform if it's not a mobile menu element
+                if (!entry.target.id || entry.target.id !== 'mobile-menu') {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Observe all fade-in-up elements, but exclude mobile menu
+    document.querySelectorAll('.fade-in-up').forEach(el => {
+        if (el.id !== 'mobile-menu') {
+            observer.observe(el);
+        }
+    });
+
+    // Update current year
+    const currentYearElement = document.getElementById('currentYear');
+    if (currentYearElement) {
+        currentYearElement.textContent = new Date().getFullYear();
+    }
+});
+
+
+
+
+// Treasure Hunt Popup JavaScript
+function showTreasureHuntPopup() {
+    const popup = document.getElementById('treasureHuntPopup');
+    const video = document.getElementById('treasureHuntVideo');
+    const overlay = document.getElementById('videoOverlay');
+    popup.style.display = 'flex';
+    setTimeout(() => {
+        popup.classList.add('show');
+        if (video && overlay) {
+            video.play();
+            overlay.classList.add('hidden');
+        }
+    }, 10);
+    document.body.style.overflow = 'hidden';
+}
+
+function closeTreasureHuntPopup() {
+    const popup = document.getElementById('treasureHuntPopup');
+    const video = document.getElementById('treasureHuntVideo');
+    const overlay = document.getElementById('videoOverlay');
+    popup.classList.remove('show');
+    setTimeout(() => {
+        popup.style.display = 'none';
+    }, 300);
+    
+    // Reset video
+    if (video && overlay) {
+        video.pause();
+        video.currentTime = 0;
+        overlay.classList.remove('hidden');
+    }
+    document.body.style.overflow = '';
+    // Set reminder cookie for 24 hours
+    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000).toUTCString();
+    document.cookie = `treasureHuntReminder=true; expires=${expires}; path=/`;
+}
+
+function playVideo() {
+    const video = document.getElementById('treasureHuntVideo');
+    const overlay = document.getElementById('videoOverlay');
+    if (video && overlay) {
+        video.play();
+        overlay.classList.add('hidden');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Always show popup after 2 seconds
+    setTimeout(() => {
+        showTreasureHuntPopup();
+    }, 2000);
+
+    // Attach video ended event
+    const treasureVideo = document.getElementById('treasureHuntVideo');
+    const videoOverlay = document.getElementById('videoOverlay');
+    const treasurePopup = document.getElementById('treasureHuntPopup');
+
+    if (treasureVideo && videoOverlay) {
+        treasureVideo.addEventListener('ended', function() {
+            videoOverlay.classList.remove('hidden');
+        });
+    }
+
+    // Close popup when clicking outside
+    if (treasurePopup) {
+        treasurePopup.addEventListener('click', function(e) {
+            if (e.target === treasurePopup) {
+                closeTreasureHuntPopup();
+            }
+        });
+    }
+});
+
+// Close popup on escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeTreasureHuntPopup();
+    }
+});
+
+
+
+    </script>
+    <!-- Treasure Hunt Popup -->
+<div id="treasureHuntPopup" class="popup-overlay">
+    <div class="popup-content">
+        <!-- Decorative sparkles -->
+        <div class="popup-sparkle">✨</div>
+        <div class="popup-sparkle">🎯</div>
+        <div class="popup-sparkle">💎</div>
+        <div class="popup-sparkle">🏆</div>
+        
+        <button class="popup-close" onclick="closeTreasureHuntPopup()">
+            <i class="fas fa-times"></i>
+        </button>
+        
+        <div class="popup-video-container">
+            <video id="treasureHuntVideo" class="popup-video" muted>
+                <source src="./treasureHuntVideo.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+                autoplay playsinline
+            </video>
+            <div id="videoOverlay" class="popup-video-overlay" onclick="playVideo()">
+                <button class="play-button">
+                    <i class="fas fa-play"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="popup-text">
+            <h2 class="popup-title">🏴‍☠️ Treasure Hunt Adventure</h2>
+            <p class="popup-subtitle">Get ready for an epic quest!</p>
+            
+            <div class="popup-date">
+                <div class="popup-date-text">📅 August 25, 2025</div>
+                <a href="treasurehunt.html">
+                <div style="font-size: 0.9rem; opacity: 0.8;">Mark your calendars!</div>
+                </a>
+            </div>
+            
+            <p class="popup-description">
+                Join IEDC MET'S for an exciting treasure hunt filled with challenges, puzzles, and amazing prizes. 
+                Test your wit, teamwork, and problem-solving skills in this thrilling adventure!
+            </p>
+            
+            <div class="popup-buttons">
+                <a href="treasurehunt.html" class="popup-btn popup-btn-primary">
+                    <i class="fas fa-map-marked-alt"></i>
+                    Join the Hunt
+                </a>
+                <button class="popup-btn popup-btn-secondary" onclick="closeTreasureHuntPopup()">
+                    <i class="fas fa-clock"></i>
+                    Remind Me Later
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
 </html>
