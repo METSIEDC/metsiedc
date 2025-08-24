@@ -2,143 +2,333 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Treasure Hunt Validator</title>
+  <title>Treasure Hunt Checkpoint</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #2c66d3;
+      --success-color: #16a34a;
+      --error-color: #dc2626;
+      --background-color: #f8fafc;
+      --card-background: #ffffff;
+      --text-color: #334155;
+      --border-color: #e2e8f0;
+      --input-background: #f1f5f9;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #121212;
-      color: #fff;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(135deg, #e0f2fe, #f0e7f7);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text-color);
+    }
+
+    .card {
+      background: var(--card-background);
+      padding: 2.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .card-header {
+      margin-bottom: 2rem;
+    }
+    
+    .card-header h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
       margin: 0;
     }
-    .container {
-      background: #1e1e1e;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
-    h1 {
-      margin-bottom: 1rem;
-      color: #00e676;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 0.5rem 0;
-      border: none;
-      border-radius: 8px;
-    }
-    input[type="file"] {
-      background: #2a2a2a;
-      color: #fff;
-      cursor: pointer;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background: #00e676;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
+    
+    .card-header p {
+      color: #64748b;
       margin-top: 0.5rem;
     }
-    button:hover {
-      background: #00c853;
+
+    .input-group {
+      position: relative;
+      margin-bottom: 1.25rem;
     }
-    .message {
-      margin-top: 1rem;
-      font-size: 1.1rem;
-      font-weight: bold;
+    
+    .input-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        pointer-events: none;
     }
-    .success { color: #00e676; }
-    .error { color: #ff1744; }
-    .warning { color: #ff9100; }
-    img.preview {
-      margin-top: 1rem;
-      max-width: 100%;
-      border-radius: 8px;
+
+    input[type="text"], input[type="file"] {
+      width: 100%;
+      padding: 14px 14px 14px 48px; /* Left padding for icon */
+      border-radius: 0.5rem;
+      border: 1px solid var(--border-color);
+      background: var(--input-background);
+      font-size: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+    }
+    
+    input[type="text"]:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(44, 102, 211, 0.2);
+    }
+    
+    /* Custom File Input */
+    input[type="file"] {
+        display: none;
+    }
+    .file-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 14px;
+        border-radius: 0.5rem;
+        border: 2px dashed var(--border-color);
+        font-size: 1rem;
+        font-weight: 500;
+        color: #64748b;
+        cursor: pointer;
+        transition: background-color 0.2s, border-color 0.2s;
+        box-sizing: border-box;
+    }
+    .file-label:hover {
+        background-color: #f9fafb;
+        border-color: var(--primary-color);
+    }
+    .file-name {
+        margin-left: 0.5rem;
+        font-style: italic;
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 0.5rem;
+      border: none;
+      background: var(--primary-color);
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .submit-btn:hover:not(:disabled) {
+      background: #2558b3;
+      transform: translateY(-2px);
+    }
+    
+    .submit-btn:disabled {
+        background-color: #94a3b8;
+        cursor: not-allowed;
+    }
+
+    #status {
+      margin-top: 1.5rem;
+      font-weight: 500;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      display: none; /* Hidden by default */
+      text-align: left;
+    }
+
+    .status-error {
+      background-color: #fee2e2;
+      color: var(--error-color);
+      display: block;
+    }
+    .status-success {
+      background-color: #dcfce7;
+      color: var(--success-color);
+      display: block;
+    }
+    
+    .status-success a {
+        color: var(--success-color);
+        font-weight: 700;
+        text-decoration: none;
+    }
+    .status-success a:hover {
+        text-decoration: underline;
+    }
+
+    /* Inline Loader for Button */
+    .loader-inline {
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Treasure Hunt</h1>
-    <input type="text" id="player" placeholder="Enter your name" required />
-    <input type="text" id="code" placeholder="Enter location code" required />
-    <input type="file" id="image" accept="image/*" required />
-    <img id="preview" class="preview" style="display:none;" />
-    <button onclick="submitCode()">Submit</button>
-    <div class="message" id="message"></div>
+  <div class="card">
+    <div class="card-header">
+      <h2>Checkpoint Reached</h2>
+      <p>Upload your findings to continue.</p>
+    </div>
+    <form id="huntForm">
+      <div class="input-group">
+        <span class="input-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </span>
+        <input type="text" id="name" placeholder="Team Name" required>
+      </div>
+
+      <div class="input-group">
+        <span class="input-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+        </span>
+        <input type="text" id="code" placeholder="Clue Code" required>
+      </div>
+      
+       <div class="input-group">
+        <span class="input-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+        </span>
+        <input type="text" id="goal" placeholder="Goal Achieved" required>
+      </div>
+
+      <div class="input-group">
+        <input type="file" id="file" accept="image/*" required>
+        <label for="file" class="file-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span id="file-name-display">Choose an image...</span>
+        </label>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <span id="btn-text">Submit Findings</span>
+        <div id="btn-loader" style="display: none;"></div>
+      </button>
+    </form>
+    <div id="status"></div>
   </div>
 
-  <script>
-    // Replace with your Apps Script deployed URL (ending in /exec)
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4FH52mly_PxvGgBAGUt-0FIdOpY2Ktrv08006lmtNkA_M2HP2I2COyVXaCzipJBZh/exec";
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // --- 1. Supabase Setup ---
+  const SUPABASE_URL = "https://pzuusjjajrupdujkmimo.supabase.co"; // replace with your values
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB6dXVzamphanJ1cGR1amttaW1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwNDEwNTYsImV4cCI6MjA3MTYxNzA1Nn0.nnTJrm0GnoUMhdlbT2IjveU-dkJFd4dypf31yFQgD0k";
+  const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Show preview when image is selected
-    document.getElementById("image").addEventListener("change", function() {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const preview = document.getElementById("preview");
-          preview.src = e.target.result;
-          preview.style.display = "block";
-        }
-        reader.readAsDataURL(file);
-      }
-    });
+  // --- 2. Element Selectors ---
+  const form = document.getElementById("huntForm");
+  const statusDiv = document.getElementById("status");
+  const submitBtn = document.getElementById("submitBtn");
+  const btnText = document.getElementById("btn-text");
+  const btnLoader = document.getElementById("btn-loader");
+  const fileInput = document.getElementById("file");
+  const fileNameDisplay = document.getElementById("file-name-display");
 
-    // Replace submitCode function with this:
-    async function submitCode() {
-      const player = document.getElementById("player").value.trim();
-      const code = document.getElementById("code").value.trim();
-      const file = document.getElementById("image").files[0];
-      const messageBox = document.getElementById("message");
-
-      if (!player || !code || !file) {
-        messageBox.textContent = "Please fill in all fields and select an image!";
-        messageBox.className = "message error";
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = async function(e) {
-        const base64Image = e.target.result;
-        try {
-          const response = await fetch(SCRIPT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              player,
-              code,
-              image: base64Image
-            })
-          });
-          const result = await response.text();
-          messageBox.textContent = result;
-          messageBox.className = result.includes("✅") 
-            ? "message success" 
-            : result.includes("⚠️") 
-              ? "message warning" 
-              : "message error";
-        } catch (err) {
-          messageBox.textContent = "⚠️ Error submitting code. Try again.";
-          messageBox.className = "message error";
-          console.error(err);
-        }
-      };
-      reader.readAsDataURL(file);
+  // --- 3. Event Listeners ---
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length > 0) {
+      fileNameDisplay.textContent = fileInput.files[0].name;
+    } else {
+      fileNameDisplay.textContent = 'Choose an image...';
     }
-  </script>
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    setLoadingState(true);
+
+    const team = document.getElementById("name").value.trim();
+    const code = document.getElementById("code").value.trim();
+    const goal = document.getElementById("goal").value.trim();
+    const file = fileInput.files[0];
+
+    try {
+      // Step A: Validate code and get the next puzzle filename
+      const { data: puzzleFilename, error: rpcError } = await client.rpc('validate_treasure_code', {
+        code_to_check: code
+      });
+      if (rpcError) throw rpcError;
+      
+      // If the function returns null (or nothing), the code was invalid
+      if (!puzzleFilename) {
+          throw new Error("Invalid Code! Please check and try again.");
+      }
+
+      // Step B: Upload the file
+      const filePath = `${team}_${goal}_${Date.now()}_${file.name}`;
+      const { error: uploadError } = await client.storage.from("treasurehunt").upload(filePath, file);
+      if (uploadError) throw uploadError;
+
+      // Step C: Construct the public URL for the puzzle file
+      const { data: puzzleURL } = client.storage.from('puzzles').getPublicUrl(puzzleFilename);
+      
+      const response = await fetch(puzzleURL.publicUrl);
+      if (!response.ok) throw new Error("Could not load the next puzzle.");
+      const puzzleText = await response.text();
+      
+      // Display success message and the new puzzle
+      const successMessage = `✅ Success! Your finding has been uploaded.<br><br>
+                              <strong>Your Next Clue:</strong>
+                              <pre style="background:#f1f5f9; padding:1rem; border-radius:8px; white-space:pre-wrap; text-align:left;">${puzzleText}</pre>`;
+      showStatus(successMessage, "success");
+      form.reset();
+      fileNameDisplay.textContent = 'Choose an image...';
+
+    } catch (err) {
+      showStatus(`❌ Operation failed: ${err.message}`, "error");
+    } finally {
+      setLoadingState(false);
+    }
+  });
+
+  // --- 4. Helper Functions ---
+  // (Your showStatus and setLoadingState functions remain the same)
+  function showStatus(message, type) {
+    statusDiv.innerHTML = message;
+    statusDiv.className = type === 'error' ? 'status-error' : 'status-success';
+    statusDiv.style.display = "block";
+  }
+
+  function setLoadingState(isLoading) {
+    if (isLoading) {
+      statusDiv.style.display = "none";
+      submitBtn.disabled = true;
+      btnText.textContent = "Uploading...";
+      btnLoader.className = "loader-inline";
+      btnLoader.style.display = "block";
+    } else {
+      submitBtn.disabled = false;
+      btnText.textContent = "Submit Findings";
+      btnLoader.style.display = "none";
+    }
+  }
+</script>
+
 </body>
 </html>
