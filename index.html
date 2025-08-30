@@ -558,7 +558,7 @@
                                 </div>
                                 <div class="flex items-center">
                                     <i class="far fa-clock text-yellow-600 mr-2"></i>
-                                    <span class="font-medium">10:00 AM</span>
+                                    <span class="font-medium">12:00 PM</span>
                                 </div>
                             </div>
                             <p class="text-gray-700 text-lg leading-relaxed mb-8">
@@ -603,7 +603,7 @@
                                 </div>
                                 <div class="flex items-center">
                                     <i class="far fa-clock text-indigo-600 mr-2"></i>
-                                    <span class="font-medium">9:00 AM</span>
+                                    <span class="font-medium">09:00 AM</span>
                                 </div>
                             </div>
                             <p class="text-gray-700 text-lg leading-relaxed mb-8">
@@ -952,60 +952,5 @@ document.addEventListener('keydown', function(e) {
 
 
     </script>
-    <!-- Treasure Hunt Popup -->
-<div id="treasureHuntPopup" class="popup-overlay">
-    <div class="popup-content">
-        <!-- Decorative sparkles -->
-        <div class="popup-sparkle">✨</div>
-        <div class="popup-sparkle">🎯</div>
-        <div class="popup-sparkle">💎</div>
-        <div class="popup-sparkle">🏆</div>
-        
-        <button class="popup-close" onclick="closeTreasureHuntPopup()">
-            <i class="fas fa-times"></i>
-        </button>
-        
-        <div class="popup-video-container">
-            <video id="treasureHuntVideo" class="popup-video" muted>
-                <source src="./treasureHuntVideo.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-                autoplay playsinline
-            </video>
-            <div id="videoOverlay" class="popup-video-overlay" onclick="playVideo()">
-                <button class="play-button">
-                    <i class="fas fa-play"></i>
-                </button>
-            </div>
-        </div>
-        
-        <div class="popup-text">
-            <h2 class="popup-title">🏴‍☠️ Treasure Hunt Adventure</h2>
-            <p class="popup-subtitle">Get ready for an epic quest!</p>
-            
-            <div class="popup-date">
-                <div class="popup-date-text">📅 August 25, 2025</div>
-                <a href="treasurehunt.html">
-                <div style="font-size: 0.9rem; opacity: 0.8;">Mark your calendars!</div>
-                </a>
-            </div>
-            
-            <p class="popup-description">
-                Join IEDC MET'S for an exciting treasure hunt filled with challenges, puzzles, and amazing prizes. 
-                Test your wit, teamwork, and problem-solving skills in this thrilling adventure!
-            </p>
-            
-            <div class="popup-buttons">
-                <a href="treasurehunt.html" class="popup-btn popup-btn-primary">
-                    <i class="fas fa-map-marked-alt"></i>
-                    Join the Hunt
-                </a>
-                <button class="popup-btn popup-btn-secondary" onclick="closeTreasureHuntPopup()">
-                    <i class="fas fa-clock"></i>
-                    Remind Me Later
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 </body>
 </html>
