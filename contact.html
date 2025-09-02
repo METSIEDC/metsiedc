@@ -1,715 +1,331 @@
-<html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta name="title" content="METS IEDC">
-<meta name="description" content="Official website of METS IEDC - Innovation, Entrepreneurship and Projects.">
-<meta name="keywords" content="METS, METS IEDC, Engineering, IEDC Kerala, Student Startup, METS College">
-<meta name="robots" content="index, follow">
-<meta name="author" content="IEDC METS">
-<link rel="canonical" href="https://metsiedc.github.io/metsiedc/">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MET'S IEDC</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Swiper CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        inter: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: '#007BFF', // KSUM-like Blue
-                        secondary: '#6C757D',
-                        accent: '#28A745', // Green for success/innovation
-                        light: '#F8F9FA',
-                        dark: '#343A40',
-                    }
-                }
-            }
+    <title>Contact Us - Your Company</title>
+     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="contact-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<style>
+     .gradient-text {
+            background: linear-gradient(90deg, #FF7262 0%, #FF7262 20%, #FF4F81 40%, #A162E8 60%, #5E5BFF 80%, #00C4FF 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-    </script>
-    <style>
-    /* Add to your existing :root block */
-    :root {
-        /* ... (your existing color variables) ... */
-
-        /* New colors for Partners & WhatsApp section */
-        --color-partners-bg: #F8F9FA; /* Light background for partners section */
-        --color-whatsapp-green: #25D366; /* WhatsApp brand green */
-        --color-whatsapp-green-dark: #1DA851; /* Darker green for hover */
-    }
-
-    /* Styles for the Partners Section */
-    #partners {
-        background-color: var(--color-partners-bg);
-        padding: 4rem 1.5rem;
-        text-align: center;
-    }
-
-    #partners .section-title {
-        font-size: 2.5rem; /* text-4xl */
-        font-weight: 700; /* font-bold */
-        color: var(--color-dark);
-        margin-bottom: 0.5rem;
-    }
-
-    #partners .section-description {
-        font-size: 1rem;
-        color: var(--color-secondary);
-        margin-bottom: 3rem;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .partners-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Responsive grid for logos */
-        gap: 2rem; /* Gap between logos */
-        justify-items: center; /* Center logos in their grid cells */
-        align-items: center; /* Center logos vertically */
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    .partner-logo {
-        width: 100%; /* Ensure logo takes full width of its grid cell */
-        max-width: 150px; /* Max width for individual logos */
-        height: auto; /* Maintain aspect ratio */
-        opacity: 0.7; /* Slightly muted as in the image */
-        transition: opacity 0.2s ease-in-out;
-    }
-
-    .partner-logo:hover {
-        opacity: 1; /* Full opacity on hover */
-    }
-
-    /* Styles for the WhatsApp Channel Button */
-    .whatsapp-channel-btn-container {
-        position: fixed; /* Fixed position relative to viewport */
-        bottom: 2rem; /* 2rem from bottom */
-        right: 2rem; /* 2rem from right */
-        z-index: 99; /* Ensure it's above most content but below modals */
-    }
-
-    .whatsapp-channel-btn {
-        background-color: var(--color-whatsapp-green);
-        color: var(--color-white);
-        padding: 0.8rem 1.5rem;
-        border-radius: 2rem; /* Highly rounded, pill shape */
-        font-size: 1rem;
-        font-weight: 600;
-        display: inline-flex; /* For icon and text alignment */
-        align-items: center;
-        gap: 0.75rem; /* Space between icon and text */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        text-decoration: none; /* Remove underline for link */
-    }
-
-    .whatsapp-channel-btn:hover {
-        background-color: var(--color-whatsapp-green-dark);
-        transform: translateY(-3px); /* Slight lift effect */
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .whatsapp-channel-btn .lucide {
-        width: 1.25rem; /* Icon size */
-        height: 1.25rem;
-    }
-
-    /* Responsive adjustments for WhatsApp button */
-    @media (max-width: 768px) {
-        .whatsapp-channel-btn-container {
-            bottom: 1rem;
-            right: 1rem;
+        
+        .hero-gradient {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
         }
-        .whatsapp-channel-btn {
-            padding: 0.6rem 1rem;
-            font-size: 0.9rem;
-            gap: 0.5rem;
+        
+        .card-hover {
+            transition: all 0.3s ease;
         }
-        .whatsapp-channel-btn .lucide {
-            width: 1rem;
-            height: 1rem;
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
-    }
-</style>
-    <style>
-        /* Basic smooth scroll */
+        
         html {
             scroll-behavior: smooth;
         }
-        /* Active Nav Link Style */
-        .nav-link-active {
-            color: config('theme.colors.primary');
-            font-weight: 600;
-            border-bottom: 2px solid config('theme.colors.primary');
-        }
-        .nav-link {
-            padding-bottom: 0.25rem; /* For the border to sit nicely */
-            border-bottom: 2px solid transparent; /* Make space for active border */
-            transition: color 0.3s ease, border-bottom-color 0.3s ease;
-        }
-        .nav-link:hover {
-            color: config('theme.colors.primary');
-        }
-        .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/343A40/FFFFFF?text=IEDC+Innovation+Hub') no-repeat center center;
-            background-size: cover;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        /* Page transition placeholder - can be expanded with JS */
-        .page {
-            display: none; /* Hidden by default */
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        .page.active {
-            display: block; /* Shown when active */
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .mobile-menu {
-            transform: translateX(-100%);
-            transition: transform 0.3s ease-in-out;
-        }
-        .mobile-menu.open {
-            transform: translateX(0);
-        }
-        /* Ensure body has some padding if using sticky header */
-         body {
-             padding-top: 0; /* Removed padding-top from body, handled by page sections */
-         }
-         .announcement-item {
-             background-color: #f8fafc;
-             border: 1px solid #e2e8f0;
-             border-radius: 0.75rem;
-             padding: 1rem;
-             transition: all 0.2s ease-in-out;
-         }
-         .announcement-item:hover {
-             background-color: #e2e8f0;
-             transform: translateY(-2px);
-             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-         }
-         .loading-spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: #007BFF; /* Primary color */
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-                /* Modal specific styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000; /* High z-index to cover everything */
-        }
-        .modal-content {
-            background-color: white;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            max-width: 90vw; /* Max width relative to viewport */
-            max-height: 90vh; /* Max height relative to viewport */
-            overflow: hidden; /* Ensure image fits */
-            position: relative;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .modal-content img {
-            max-width: 100%;
-            max-height: 80vh; /* Limit image height within modal */
-            height: auto;
-            border-radius: 0.5rem; /* Rounded corners for the image */
-            display: block; /* Remove extra space below image */
-        }
-        .modal-close-button {
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background-color: rgba(255, 255, 255, 0.8);
-            border: none;
-            border-radius: 50%;
-            width: 2.5rem;
-            height: 2.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #333;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.2s, color 0.2s;
-        }
-        .modal-close-button:hover {
-            background-color: rgba(255, 255, 255, 1);
-            color: #000;
-        }
-
-    /* Basic smooth scroll */
-    html {
-        scroll-behavior: smooth;
-    }
-    /* Active Nav Link Style */
-    .nav-link-active {
-        color: var(--color-primary); /* Using CSS variable */
-        font-weight: 600;
-        border-bottom: 2px solid var(--color-primary); /* Using CSS variable */
-    }
-    .nav-link {
-        padding-bottom: 0.25rem; /* For the border to sit nicely */
-        border-bottom: 2px solid transparent; /* Make space for active border */
-        transition: color 0.3s ease, border-bottom-color 0.3s ease;
-    }
-    .nav-link:hover {
-        color: var(--color-primary); /* Using CSS variable */
-    }
-    .hero-section {
-        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/343A40/FFFFFF?text=IEDC+Innovation+Hub') no-repeat center center;
-        background-size: cover;
-    }
-    .card-hover:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    }
-    /* Page transition placeholder - can be expanded with JS */
-    .page {
-        display: none; /* Hidden by default */
-        animation: fadeIn 0.5s ease-in-out;
-    }
-    .page.active {
-        display: block; /* Shown when active */
-    }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    .mobile-menu {
-        transform: translateX(-100%);
-        transition: transform 0.3s ease-in-out;
-    }
-    .mobile-menu.open {
-        transform: translateX(0);
-    }
-    /* Ensure body has some padding if using sticky header */
-    body {
-        padding-top: 0; /* Removed padding-top from body, handled by page sections */
-    }
-    /* Removed old announcement-item specific styles */
-    /* Removed old loading-spinner styles */
-    /* Removed old modal specific styles */
-
-    /* Define a consistent color palette */
+        
     :root {
-        --color-primary: #007BFF; /* A vibrant blue for primary elements */
-        --color-accent: #28A745; /* A strong green for accent elements */
-        --color-light: #F8F9FA; /* Very light background for body */
-        --color-dark: #343A40; /* Dark text/background */
-        --color-secondary: #6C757D; /* Muted text/icons */
-        --color-white: #FFFFFF;
-        --color-gray-100: #F3F4F6;
-        --color-gray-600: #4B5563;
-        --color-gray-700: #374151;
-        --color-blue-700: #1D4ED8;
-        --color-green-700: #059669;
-        --color-pink-500: #EC4899; /* For Instagram hover */
+    --primary-orange: #ff6633; /* A vibrant orange for highlights */
+    --text-dark: #333;
+    --text-light: #666;
+    --bg-light: #f8f8f8;
+    --bg-white: #fff;
+    --hero-text-color: #fce77a; /* Using the yellow from your previous 'About Us' example */
+    --hero-overlay-color: rgba(60, 70, 80, 0.7); /* Dark semi-transparent overlay */
+    --font-family: 'Poppins', sans-serif;
+}
 
-        /* NEW: Colors for the Events Section from the image */
-        --color-event-background: #F8F9FA; /* Very light background of the section */
-        --color-event-orange: #FFC107; /* The distinct orange/yellow color for tags and buttons */
-        --color-event-orange-text: #333333; /* Dark text on orange background */
-        --color-event-card-shadow: rgba(0, 0, 0, 0.1);
-    }
+body {
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+}
 
-    /* Events Section specific styles */
-    #events {
-        background-color: var(--color-event-background);
-        padding-top: 4rem;
-        padding-bottom: 4rem;
-    }
-    #events .section-title {
-        font-size: 2.5rem; /* Equivalent to text-4xl from example */
-        font-weight: 700; /* font-bold */
-        color: var(--color-dark);
-        margin-bottom: 0.5rem;
-    }
-    #events .section-description {
-        font-size: 1rem; /* Smaller description text */
-        color: var(--color-secondary);
-        margin-bottom: 3rem; /* Space below description */
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-    }
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
 
-    /* Event Category Filters */
-    .event-filters {
-        display: flex;
-        flex-wrap: wrap; /* Allow wrapping on smaller screens */
-        justify-content: center;
-        gap: 0.75rem; /* Space between buttons */
-        margin-bottom: 3rem; /* Space below filters */
-    }
-    .event-filter-button {
-        background-color: var(--color-event-orange);
-        color: var(--color-event-orange-text);
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem; /* Rounded corners for buttons */
-        font-size: 0.875rem; /* text-sm */
-        font-weight: 600; /* font-semibold */
-        transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
-        cursor: pointer;
-        border: none; /* Remove default button border */
-    }
-    .event-filter-button:hover {
-        background-color: #e6b000; /* Slightly darker orange on hover */
-        transform: translateY(-2px);
-    }
+/* Hero Contact Section */
+.hero-contact-section {
+    background-image: url('your-cityscape-background.jpg'); /* Replace with your image */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    height: 450px; /* Adjust height as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--hero-text-color); /* Matches the yellow from the image */
+    padding: 2rem 0;
+}
 
-    /* Event Card Styling */
-    .event-card {
-        background-color: var(--color-white);
-        border-radius: 0.75rem; /* Rounded corners for the card */
-        box-shadow: 0 4px 10px var(--color-event-card-shadow);
-        overflow: hidden; /* Ensures image respects border-radius */
-        display: flex;
-        flex-direction: column;
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    }
-    .event-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-    }
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--hero-overlay-color);
+    z-index: 1;
+}
 
-    .event-card-image {
-        width: 100%;
-        height: 200px; /* Fixed height for event images */
-        object-fit: cover;
-        display: block; /* Remove extra space below image */
-    }
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
 
-    .event-card-content {
-        padding: 1.5rem; /* Padding inside the content area */
-        flex-grow: 1; /* Allows content to push footer down */
-        display: flex;
-        flex-direction: column;
-    }
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+    color: var(--primary-orange); /* Orange for "CONTACT US" */
+    letter-spacing: 2px;
+}
 
-    .event-card-tags {
-        display: flex;
-        gap: 0.5rem; /* Space between tags */
-        margin-bottom: 0.75rem;
-    }
-    .event-tag {
-        background-color: var(--color-event-orange);
-        color: var(--color-event-orange-text);
-        padding: 0.25rem 0.75rem;
-        border-radius: 0.5rem;
-        font-size: 0.75rem; /* text-xs */
-        font-weight: 600;
-        text-transform: uppercase;
-    }
+.hero-content .separator {
+    width: 60px;
+    height: 4px;
+    background-color: var(--primary-orange);
+    margin: 0.5rem auto 1.5rem;
+}
 
-    .event-card-title {
-        font-size: 1.25rem; /* text-xl */
-        font-weight: 700;
-        color: var(--color-dark);
-        margin-bottom: 0.5rem;
-    }
+.hero-content p {
+    font-size: 1.1rem;
+    margin: 0;
+    color: var(--bg-white); /* Lighter text for the description */
+}
 
-    .event-card-meta {
-        font-size: 0.875rem; /* text-sm */
-        color: var(--color-secondary);
-        margin-bottom: 1rem;
-    }
-    .event-card-meta span {
-        font-weight: 500; /* Medium font weight for labels */
-    }
+/* Contact Info Cards Section */
+.contact-info-cards {
+    padding: 5rem 0;
+    background-color: var(--bg-white); /* White background for the cards section */
+    position: relative;
+    z-index: 3; /* To appear above the hero section if overlap is desired */
+    margin-top: -100px; /* Adjust this value to create overlap with the hero section */
+}
 
-    .event-card-description {
-        font-size: 0.95rem;
-        color: var(--color-secondary);
-        line-height: 1.5;
-        margin-bottom: 1.5rem;
-        flex-grow: 1; /* Allows description to take available space */
-    }
+.contact-info-cards .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
 
-    .event-card-link {
-        color: var(--color-primary); /* Primary blue for the link */
-        font-weight: 600;
-        text-decoration: none;
-        display: inline-flex; /* For icon alignment */
-        align-items: center;
-        gap: 0.25rem;
-        transition: color 0.2s ease-in-out;
-    }
-    .event-card-link:hover {
-        color: #0056b3; /* Darker blue on hover */
-        text-decoration: underline;
-    }
-    .event-card-link .lucide {
-        width: 1rem;
-        height: 1rem;
-    }
+.card {
+    background-color: var(--bg-white);
+    padding: 2.5rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-    /* View All Events Button */
-    .view-all-events-btn {
-        background-color: var(--color-primary);
-        color: var(--color-white);
-        font-weight: 600;
-        padding: 0.75rem 2rem;
-        border-radius: 0.5rem;
-        font-size: 1.125rem; /* text-lg */
-        transition: background-color 0.3s ease-in-out;
-        display: inline-block; /* For centering */
-        margin-top: 3rem; /* Space above button */
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.card .icon-wrapper {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(255, 102, 51, 0.1); /* Light orange background for icons */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 1.5rem;
+}
+
+.card .icon-wrapper i {
+    font-size: 2.5rem;
+    color: var(--primary-orange);
+}
+
+.card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.8rem;
+    color: var(--text-dark);
+}
+
+.card p {
+    color: var(--text-light);
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+}
+
+.card .visit-site-link {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 1.5rem;
+    color: var(--primary-orange);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.card .visit-site-link:hover {
+    color: var(--text-dark);
+}
+
+.card .visit-site-link i {
+    margin-right: 8px;
+    font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5rem;
     }
-    .view-all-events-btn:hover {
-        background-color: #0056b3; /* Darker blue on hover */
+    .hero-content p {
+        font-size: 1rem;
     }
 
-    /* Responsive grid for events */
-    .events-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive columns */
-        gap: 2rem; /* Gap between cards */
-        justify-items: center; /* Center cards in their grid cells */
-        max-width: 1200px;
-        margin: 0 auto;
+    .contact-info-cards {
+        margin-top: -50px; /* Less overlap on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    .hero-content p {
+        font-size: 0.9rem;
     }
 
-    /* General responsive adjustments */
-    @media (max-width: 768px) {
-        #events {
-            padding: 3rem 1rem;
-        }
-        #events .section-title {
-            font-size: 2rem;
-        }
-        .event-filter-button {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.8rem;
-        }
-        .event-card-image {
-            height: 180px;
-        }
-        .event-card-content {
-            padding: 1rem;
-        }
-        .event-card-title {
-            font-size: 1.125rem;
-        }
-        .event-card-meta, .event-card-description {
-            font-size: 0.875rem;
-        }
-        .view-all-events-btn {
-            padding: 0.6rem 1.5rem;
-            font-size: 1rem;
-        }
+    .contact-info-cards .container {
+        grid-template-columns: 1fr;
     }
-    </style>
-</head>
-<body class="font-inter bg-light text-dark">
 
-    <header class="bg-white shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <a href="#home" class="flex items-center space-x-2 page-link">
-                    <img src="data:image/png;base64,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" alt="IEDC Logo" class="h-10 w-10 rounded-full">
-                    <span class="text-2xl font-bold text-primary">MET'S IEDC</span>
-                </a>
-
-                <nav class="hidden xl:flex space-x-4 lg:space-x-6 items-center">
-                    <a href="index.html" class="nav-link page-link ">Home</a>
-                    <a href="about.html" class="nav-link page-link">About Us</a>
-                    <a href="team.html" class="nav-link">Our Ex-Com</a>
-                    <a href="events.html" class="nav-link page-link">Events</a>
-                    <a href="announcement.html" class="nav-link">Announcements</a>
-                    <a href="initiatives.html" class="nav-link page-link">Initiatives</a>
-                    <a href="news.html" class="nav-link page-link">News</a>
-                    <a href="contact.html" class="nav-link page-link nav-link-active">Contact</a>
-                   <a href="login.html" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-700 transition duration-300">Login</a>
-                </nav>
-
-                <div class="xl:hidden">
-                    <button id="mobile-menu-button" class="text-dark focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                    </button>
+    .card {
+        padding: 2rem 1.5rem;
+    }
+}
+</style>
+<body class="font-sans antialiased text-gray-900 bg-white">
+    <!-- Navigation -->
+    <nav class="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="index.html" class="flex items-center space-x-3">
+                            <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
+                            <span class="text-2xl font-bold gradient-text">MET'S IEDC</span>
+                        </a>
+                    </div>
+                    <div class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="about.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">About Us</a>
+                        <a href="team.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Our Ex-Com</a>
+                        <a href="announcement.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Announcements</a>
+                        <a href="initiatives.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Initiatives</a>
+                        <a href="news.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">News</a>
+                        <a href="contact.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Contact US</a>
+                    </div>
                 </div>
+                <div class="hidden md:ml-6 md:flex md:items-center">
+                    <a href="login.html" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">Log in</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
             </div>
         </div>
-
-        <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-white z-40 pt-20 p-4 md:hidden">
-            <nav class="flex flex-col space-y-4">
-                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Home</a>
-                <a href="about.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">About Us</a>
-                 <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Our Ex-Com</a>
-                <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Our Core Team</a>
-                <a href="events.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Events</a>
-                <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Announcements</a>
-                <a href="initiatives.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Initiatives</a>
-                <a href="news.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">News</a>
-                <a href="contact.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Contact</a>
-                <a href="login.html" class="mt-4 block w-full text-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-700 transition duration-300">Login</a>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu">
+            <div class="flex justify-end p-4">
+                <button id="close-mobile-menu" class="text-gray-700 focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <nav class="flex flex-col space-y-4 px-6">
+                <a href="about.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">About Us</a>
+                <a href="team.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Our Team</a>
+                <a href="initiatives.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Initiatives</a>
+                <a href="news.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">News</a>
+                <a href="announcement.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Announcements</a>
+                <a href="events.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Event Gallery</a>
+                <a href="contact.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Contact</a>
+                <a href="login.html" class="mt-6 block w-full text-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-medium hover:from-indigo-700 hover:to-purple-700 transition shadow-lg">Student Login</a>
             </nav>
+        </div>
+    </nav>
+    <header class="hero-contact-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>CONTACT US</h1>
+            <div class="separator"></div>
+            <p>Need assistance or want to collaborate? You are most welcome to share your contact details, and our team will get in touch with you shortly.</p>
         </div>
     </header>
 
-    <section id="contact" class="page active py-16 md:py-24 bg-white">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-12">
-      <h1 class="text-4xl font-bold text-primary">Get In Touch</h1>
-      <p class="text-xl text-secondary mt-4 max-w-2xl mx-auto">
-        We'd love to hear from you! Whether you're a student, faculty, industry partner, or just curious.
-      </p>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-10">
-      <!-- Form Column -->
-      <div class="bg-light p-8 rounded-lg shadow-lg">
-        <h2 class="text-2xl font-semibold text-dark mb-6">Send us a Message</h2>
-        <form action="#" method="POST">
-          <div class="mb-4">
-            <label for="name" class="block text-sm font-medium text-secondary">Full Name</label>
-            <input type="text" name="name" id="name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
-          </div>
-          <div class="mb-4">
-            <label for="email" class="block text-sm font-medium text-secondary">Email Address</label>
-            <input type="email" name="email" id="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
-          </div>
-          <div class="mb-4">
-            <label for="subject" class="block text-sm font-medium text-secondary">Subject</label>
-            <input type="text" name="subject" id="subject" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
-          </div>
-          <div class="mb-6">
-            <label for="message" class="block text-sm font-medium text-secondary">Message</label>
-            <textarea name="message" id="message" rows="4" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"></textarea>
-          </div>
-          <div>
-            <button type="submit" class="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold">Send Message</button>
-          </div>
-        </form>
-      </div>
-
-      <!-- Contact Info Column -->
-      <div class="space-y-8">
-        <div>
-          <h2 class="text-2xl font-semibold text-dark mb-4">Contact Information</h2>
-          <div class="space-y-4">
-            <!-- Address -->
-            <div class="flex items-start">
-              <svg class="flex-shrink-0 h-6 w-6 text-primary mr-3 mt-1" ...></svg>
-              <div>
-                <h3 class="text-lg font-medium text-dark">Our Address</h3>
-                <p class="text-secondary">MET'S SCHOOL OF ENGINEERING, IEDC Cell</p>
-                <p class="text-secondary">P.O. Mala, Thrissur, Kerala, 680553</p>
-              </div>
-            </div>
-            <!-- Email -->
-            <div class="flex items-start">
-              <svg class="flex-shrink-0 h-6 w-6 text-primary mr-3 mt-1" ...></svg>
-              <div>
-                <h3 class="text-lg font-medium text-dark">Email Us</h3>
-                <p class="text-secondary">metsenggiedc@gmail.com</p>
-                <p class="text-secondary">metsengg.ac.in</p>
-              </div>
-            </div>
-            <!-- Phone -->
-            <div class="flex items-start">
-              <svg class="flex-shrink-0 h-6 w-6 text-primary mr-3 mt-1" ...></svg>
-              <div>
-                <h3 class="text-lg font-medium text-dark">Call Us</h3>
-                <p class="text-secondary">Office: +91 7306226875</p>
-                <p class="text-secondary">Nodal Officer: +91 9947273434</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Google Maps -->
-        <div>
-          <h2 class="text-2xl font-semibold text-dark mb-4">Find Us on Map</h2>
-          <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-md">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d766.3366817510574!2d76.27484703300533!3d10.224251517313252!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0804b27133a8f1%3A0x5f5dce1563c096f9!2sMET&#39;s%20School%20of%20Engineering!5e0!3m2!1sen!2sin!4v1752394219844!5m2!1sen!2sin" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div> 
-</section>
-
-        
-        
-        <footer class="bg-dark text-light py-12">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                <div>
-                    <h3 class="text-xl font-semibold mb-4 text-white">MET'S IEDC</h3>
-                    <p class="text-gray-400 mb-4">Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.</p>
-                    <img src="data:image/png;base64,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" style="width:50%; max-width:300px;">
-
+    <section class="contact-info-cards">
+        <div class="container">
+            <div class="card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-home"></i>
                 </div>
-
-                <div>
-                    <h3 class="text-xl font-semibold mb-4 text-white">Quick Links</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#home" class="text-gray-400 hover:text-primary transition page-link">Home</a></li>
-                        <li><a href="about.html" class="text-gray-400 hover:text-primary transition page-link">About Us</a></li>
-                        <li><a href="events.html" class="text-gray-400 hover:text-primary transition page-link">Events</a></li>
-                        <li><a href="initiatives.html" class="text-gray-400 hover:text-primary transition page-link">Initiatives</a></li>
-                        <li><a href="news.html" class="text-gray-400 hover:text-primary transition page-link">News & Blog</a></li>
-                        <li><a href="contact.html" class="text-gray-400 hover:text-primary transition  page-link">Contact Us</a></li>
-                         <li><a href="https://startupmission.kerala.gov.in/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition">Kerala Startup Mission</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 class="text-xl font-semibold mb-4 text-white">Connect With Us</h3>
-                    <p class="text-gray-400 mb-2">Email: metsenggiedc@gmail.com</p>
-                    <p class="text-gray-400 mb-4">Phone: +91 7306226875</p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-primary transition" aria-label="Facebook"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a>
-                        <a href="https://x.com/MetsIedc" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="X (formerly Twitter)"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 1200 1227" xmlns="http://www.w3.org/2000/svg"><path d="M714.219 555.53 1166.19 0h-106.42L666.33 460.69 307.31 0H0l483.06 652.63 0 574.4h233.25v-574.4Zm-70.92 89.48 0 388.16H554.86v-388.16L159.13 81.53h109.89l354.4 481.13 374.51-481.13h104.88L643.3 645.01Z"/></svg></a>
-                        <a href="#" class="text-gray-400 hover:text-primary transition" aria-label="LinkedIn"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.594-11.018-3.714v-2.155z"/></svg></a>
-                        <a href="https://www.instagram.com/metsiedc/" class="text-gray-400 hover:text-primary transition" aria-label="Instagram"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-                    </div>
-                </div>
+                <h3>VISIT US</h3>
+                <p>Innovation & Entrepreneurship Development Centre (IEDC)</p>
+                <p>MET’S School of Engineering, Mala, Thrissur, Kerala – 680731</p>
+                <a href="https://maps.app.goo.gl/9jbRFuJVuECnxXYP9" class="visit-site-link">
+                    <i class="fas fa-location"></i> Visit Us
+                </a>
             </div>
-            <div class="mt-8 border-t border-gray-700 pt-8 text-center">
-                <p class="text-gray-500">© <span id="currentYear"></span> IEDC MET'S SCHOOL OF ENGINEERING. All Rights Reserved.</p>
-                <p class="text-xs text-gray-600 mt-1">Website Template by AI. Backend integration required for full functionality.</p>
-                 <p class="text-xs text-gray-600 mt-1">Team</p>
+
+            <div class="card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <h3>CALL US</h3>
+                <p>For queries related to events, projects & initiatives:</p>
+                <p>+91 73062 26875</p>
+            </div>
+
+            <div class="card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3>CONTACT US</h3>
+                <p>For official communication & collaboration:</p>
+                <p>metsenggiedc@gmail.com</p>
             </div>
         </div>
-    </footer>
+    </section>
 
     </body>
+      <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const menuButton = document.getElementById("mobile-menu-button");
+    const closeButton = document.getElementById("close-mobile-menu");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    // Hide mobile menu by default
+    mobileMenu.style.display = "none";
+
+    menuButton.addEventListener("click", () => {
+        mobileMenu.style.display = "block";
+    });
+
+    closeButton.addEventListener("click", () => {
+        mobileMenu.style.display = "none";
+    });
+});
+</script>
 </html>
