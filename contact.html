@@ -216,6 +216,30 @@ body {
         padding: 2rem 1.5rem;
     }
 }
+    .hero-contact-section {
+    position: relative;
+    height: 60vh; /* adjust height */
+    background: url('assets/images/logos/contact us.jpg') no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5); /* dark overlay */
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
 </style>
 <body class="font-sans antialiased text-gray-900 bg-white">
     <!-- Navigation -->
@@ -266,15 +290,14 @@ body {
             </nav>
         </div>
     </nav>
-    <header class="hero-contact-section">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1>CONTACT US</h1>
-            <div class="separator"></div>
-            <p>Need assistance or want to collaborate? You are most welcome to share your contact details, and our team will get in touch with you shortly.</p>
-        </div>
-    </header>
-
+  <header class="hero-contact-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>CONTACT US</h1>
+        <div class="separator"></div>
+        <p>Need assistance or want to collaborate? You are most welcome to share your contact details, and our team will get in touch with you shortly.</p>
+    </div>
+</header>
     <section class="contact-info-cards">
         <div class="container">
             <div class="card">
