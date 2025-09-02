@@ -4,9 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - METSIEDC</title>
+      <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
+     .gradient-text {
+            background: linear-gradient(90deg, #FF7262 0%, #FF7262 20%, #FF4F81 40%, #A162E8 60%, #5E5BFF 80%, #00C4FF 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
 :root {
     --primary-color: #8a76cc; /* Yellow from the image */
     --text-dark: #000000;
@@ -418,27 +443,69 @@ blockquote {
   color: #555;
   font-style: italic;
 }
+.mobile-menu {
+    display: none; /* default hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+}
 
 </style>
 </head>
-<body>
-
-    <header class="header">
-        <nav class="navbar">
-            <div class="logo">MET'SIEDC</div>
-            <ul class="nav-links">
-                <li><a href="https://metsiedc.github.io/metsiedc/">Home</a></li>
-                <li><a href="team.html" class="active">Our Team</a></li>
-                <li class="dropdown">
-                    <a href="events.html">Gallery</a>
-                    </li>
-                <li><a href="announcement.html">Announcement</a></li>
-                <li class="dropdown">
-                    <a href="contact.html">Contact US</a>
-                    </li>
-            </ul>
-        </nav>
-    </header>
+<body class="font-sans antialiased text-gray-900 bg-white">
+    <!-- Navigation -->
+    <nav class="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="index.html" class="flex items-center space-x-3">
+                            <img src="MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
+                            <span class="text-2xl font-bold gradient-text">MET'S IEDC</span>
+                        </a>
+                    </div>
+                    <div class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="about.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">About Us</a>
+                        <a href="team.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Our Ex-Com</a>
+                        <a href="announcement.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Announcements</a>
+                        <a href="initiatives.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Initiatives</a>
+                        <a href="news.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">News</a>
+                        <a href="contact.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Contact US</a>
+                    </div>
+                </div>
+                <div class="hidden md:ml-6 md:flex md:items-center">
+                    <a href="login.html" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">Log in</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu">
+            <div class="flex justify-end p-4">
+                <button id="close-mobile-menu" class="text-gray-700 focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <nav class="flex flex-col space-y-4 px-6">
+                <a href="about.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">About Us</a>
+                <a href="team.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Our Team</a>
+                <a href="initiatives.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Initiatives</a>
+                <a href="news.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">News</a>
+                <a href="announcement.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Announcements</a>
+                <a href="events.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Event Gallery</a>
+                <a href="contact.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Contact</a>
+                <a href="login.html" class="mt-6 block w-full text-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-medium hover:from-indigo-700 hover:to-purple-700 transition shadow-lg">Student Login</a>
+            </nav>
+        </div>
+    </nav>
 
     <section class="hero-section">
         <div class="hero-content">
@@ -449,7 +516,7 @@ blockquote {
 
     <section class="team-images-section">
         <div class="image-container">
-            <img src="assets/images/team/NODAL OFFICER.jpg" alt="Prof. [Name], Nodal Officer">
+           <img src="assets/images/team/NODAL-OFFICER.jpg" alt="Prof. [Name], Nodal Officer">
 <img src="assets/images/team/CHRISS.jpg" alt="Chriss [Full Name], Ex-Com">
 <img src="assets/images/team/DEENA.jpg" alt="Deena [Full Name], Ex-Com">
 <img src="assets/images/team/HABEEB.jpg" alt="Habeeb [Full Name], Ex-Com">
@@ -485,7 +552,7 @@ blockquote {
     <!-- Quote -->
     <div class="founder-quote">
       “Making an impact, together” 
-      <span>- METSIEDC </span>
+      <span>- METSIEDC Founder</span>
     </div>
   </div>
 
@@ -561,5 +628,24 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
     </script>
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const menuButton = document.getElementById("mobile-menu-button");
+    const closeButton = document.getElementById("close-mobile-menu");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    // Hide mobile menu by default
+    mobileMenu.style.display = "none";
+
+    menuButton.addEventListener("click", () => {
+        mobileMenu.style.display = "block";
+    });
+
+    closeButton.addEventListener("click", () => {
+        mobileMenu.style.display = "none";
+    });
+});
+</script>
+
 </body>
 </html>
