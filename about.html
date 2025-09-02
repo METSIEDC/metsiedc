@@ -1,269 +1,564 @@
-<html>
-    <head>
-    <meta name="title" content="METS IEDC">
-<meta name="description" content="Official website of METS IEDC - Innovation, Entrepreneurship and Projects.">
-<meta name="keywords" content="METS, METS IEDC, Engineering, IEDC Kerala, Student Startup, METS College">
-<meta name="robots" content="index, follow">
-<meta name="author" content="IEDC METS">
-<link rel="canonical" href="https://metsiedc.github.io/metsiedc/">
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MET'S IEDC</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Swiper CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <title>About Us - METSIEDC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+:root {
+    --primary-color: #8a76cc; /* Yellow from the image */
+    --text-dark: #000000;
+    --text-light: #000000;
+    --bg-light: #f5f5f5;
+    --bg-white: #fff;
+    --border-color: #ddd;
+    --font-family: 'Poppins', sans-serif;
+}
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        inter: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: '#007BFF', // KSUM-like Blue
-                        secondary: '#6C757D',
-                        accent: '#28A745', // Green for success/innovation
-                        light: '#F8F9FA',
-                        dark: '#343A40',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-         .gradient-text {
-            background: linear-gradient(90deg, #FF7262 0%, #FF7262 20%, #FF4F81 40%, #A162E8 60%, #5E5BFF 80%, #00C4FF 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .hero-gradient {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
-        }
-    /* Add to your existing :root block */
-    :root {
-        /* ... (your existing color variables) ... */
+body {
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+}
 
-        /* New colors for Partners & WhatsApp section */
-        --color-partners-bg: #F8F9FA; /* Light background for partners section */
-        --color-whatsapp-green: #25D366; /* WhatsApp brand green */
-        --color-whatsapp-green-dark: #1DA851; /* Darker green for hover */
+/* General Layout */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.container-grid {
+    display: grid;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    gap: 30px;
+}
+
+h1, h2, h3, h4 {
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+p {
+    color: var(--text-light);
+}
+
+/* Header/Navbar */
+.header {
+    background-color: var(--bg-white);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--primary-color);
+}
+
+.contact-btn {
+    background-color: var(--primary-color);
+    padding: 10px 20px;
+    text-decoration: none;
+    color: var(--text-dark);
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.contact-btn:hover {
+    background-color: #ff0000;
+}
+
+/* Hero Section */
+.hero-section {
+    background-color: var(--primary-color);
+    text-align: center;
+    padding: 5rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+}
+
+.hero-section p {
+    max-width: 600px;
+    margin: 0.5rem auto 0;
+}
+
+/* Team Images Section */
+.team-images-section {
+    background-color: var(--bg-white);
+    padding: 1rem 0;
+    text-align: center;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    transform: translateY(-50px); /* Lifts the images over the yellow section */
+    position: relative;
+    z-index: 2;
+}
+
+.image-container img {
+    width: 250px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Core Philosophy Section */
+.core-philosophy-section {
+    padding: 3rem 0;
+    text-align: center;
+}
+
+.core-philosophy-section h2 {
+    font-size: 2.5rem;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+}
+
+.philosophy-content {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    text-align: left;
+}
+
+.left-content, .right-content {
+    flex: 1;
+    max-width: 500px;
+}
+
+/* Mission and Vision Section */
+.mission-vision-section {
+    background-color: var(--bg-white);
+    padding: 5rem 0;
+}
+
+.mission-vision-section .container-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 50px;
+}
+
+.video-container {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.video-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.play-button:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.play-button i {
+    color: var(--primary-color);
+    font-size: 2rem;
+}
+
+.founder-info {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: var(--bg-white);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    font-size: 1.1rem;
+}
+
+.founder-info span {
+    display: block;
+    font-size: 0.9rem;
+    color: #eee;
+}
+
+.text-content h3 {
+    font-size: 2rem;
+}
+
+.text-content blockquote {
+    border-left: 3px solid var(--primary-color);
+    padding-left: 20px;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--text-light);
+}
+
+/* Call to Action Section */
+.cta-section {
+    padding: 3rem 0;
+    text-align: center;
+}
+
+.cta-section h3 {
+    font-size: 2.5rem;
+    max-width: 800px;
+    margin: 0 auto 1rem;
+}
+
+/* Feature Icons Section */
+.features-section {
+    padding: 3rem 0 5rem;
+}
+
+.features-section .container-grid {
+    grid-template-columns: repeat(3, 1fr);
+    text-align: center;
+}
+
+.feature-item {
+    padding: 2rem;
+    background-color: var(--bg-white);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+}
+
+.feature-item:hover {
+    transform: translateY(-10px);
+}
+
+.icon-circle {
+    width: 70px;
+    height: 70px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 1rem;
+    font-size: 2rem;
+    color: var(--text-dark);
+}
+
+.visit-site-box {
+    background-color: var(--bg-white);
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--text-dark);
+    font-size: 1.2rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.visit-site-box:hover {
+    background-color: var(--primary-color);
+    color: var(--text-dark);
+}
+
+.icon-wrapper {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.visit-site-box:hover .icon-wrapper {
+    color: var(--text-dark);
+}
+
+.icon-wrapper i {
+    font-size: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .navbar {
+        flex-direction: column;
+        text-align: center;
     }
-    /* Styles for the WhatsApp Channel Button */
-    .whatsapp-channel-btn-container {
-        position: fixed; /* Fixed position relative to viewport */
-        bottom: 2rem; /* 2rem from bottom */
-        right: 2rem; /* 2rem from right */
-        z-index: 99; /* Ensure it's above most content but below modals */
+    .nav-links {
+        padding: 1rem 0;
+        gap: 1.5rem;
+    }
+    .contact-btn {
+        margin-top: 1rem;
     }
 
-    .whatsapp-channel-btn {
-        background-color: var(--color-whatsapp-green);
-        color: var(--color-white);
-        padding: 0.8rem 1.5rem;
-        border-radius: 2rem; /* Highly rounded, pill shape */
-        font-size: 1rem;
-        font-weight: 600;
-        display: inline-flex; /* For icon and text alignment */
-        align-items: center;
-        gap: 0.75rem; /* Space between icon and text */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        text-decoration: none; /* Remove underline for link */
+    .team-images-section .image-container {
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
-    .whatsapp-channel-btn:hover {
-        background-color: var(--color-whatsapp-green-dark);
-        transform: translateY(-3px); /* Slight lift effect */
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    .philosophy-content {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
     }
 
-    .whatsapp-channel-btn .lucide {
-        width: 1.25rem; /* Icon size */
-        height: 1.25rem;
+    .mission-vision-section .container-grid {
+        grid-template-columns: 1fr;
     }
 
-    /* Responsive adjustments for WhatsApp button */
-    @media (max-width: 768px) {
-        .whatsapp-channel-btn-container {
-            bottom: 1rem;
-            right: 1rem;
-        }
-        .whatsapp-channel-btn {
-            padding: 0.6rem 1rem;
-            font-size: 0.9rem;
-            gap: 0.5rem;
-        }
-        .whatsapp-channel-btn .lucide {
-            width: 1rem;
-            height: 1rem;
-        }
+    .features-section .container-grid {
+        grid-template-columns: 1fr;
     }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 3rem 1rem;
+    }
+
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+
+    .core-philosophy-section h2,
+    .cta-section h3 {
+        font-size: 1.8rem;
+    }
+}
+.mission-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  margin: 40px 0;
+}
+
+.mission-left {
+  flex: 1;
+}
+
+.mission-right {
+  flex: 1.2;
+}
+
+.founder-quote {
+  background: #f9f9f9;
+  padding: 15px 20px;
+  margin-top: 15px;
+  border-left: 4px solid #6c63ff; /* accent color */
+  border-radius: 6px;
+  font-style: italic;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.founder-quote span {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #777;
+}
+
+blockquote {
+  margin-top: 20px;
+  padding-left: 15px;
+  border-left: 3px solid #6c63ff;
+  color: #555;
+  font-style: italic;
+}
+
 </style>
-<body class="font-sans antialiased text-gray-900">
-    <!-- Navigation -->
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <span class="text-2xl font-bold gradient-text">MET'S IEDC</span>
-                    </div>
-                    <div class="hidden md:ml-8 md:flex md:space-x-8">
-                        <a href="https://metsiedc.github.io/metsiedc/" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Home</a>
-                        <a href="team.html" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Our Ex-Com</a>
-                        <a href="announcement.html" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Announcements</a>
-                        <a href="initiatives.html" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Initiatives</a>
-                        <a href="news.html" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">News</a>
-                        <a href="contact.html" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Contact US</a>
-                    </div>
+</head>
+<body>
+
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">METSIEDC</div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#" class="active">About</a></li>
+                <li class="dropdown">
+                    <a href="#">Services</a>
+                    </li>
+                <li><a href="#">Case Study</a></li>
+                <li class="dropdown">
+                    <a href="#">Pages</a>
+                    </li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>About us</h1>
+            <p>At MET’S IEDC, we nurture student ideas with mentorship, resources, and real-world opportunities — transforming creativity into impactful startups and solutions.</p>
+        </div>
+    </section>
+
+    <section class="team-images-section">
+        <div class="image-container">
+            <img src="assets/images/team/NODAL OFFICER.jpg" alt="Team member 1">
+            <img src="assets/images/team/CHRISS.jpg" alt="Team member 2">
+            <img src="assets/images/team/DEENA.jpg" alt="Team member 3">
+            <img src="assets/images/team/HABEEB.jpg" alt="Team member 4">
+        </div>
+    </section>
+
+    <section class="core-philosophy-section">
+        <div class="container">
+            <h2>We make sure your ideas & innovations are nurtured properly</h2>
+            <div class="philosophy-content">
+                <div class="left-content">
+                    <p>At MET’S IEDC, we foster creativity, innovation, and entrepreneurship among students. Our mission is to build a vibrant ecosystem where ideas turn into impactful projects and startups. Through mentorship, workshops, and real-world experiences, we empower innovators to explore their potential and shape the future.</p>
                 </div>
-                <div class="hidden md:ml-6 md:flex md:items-center">
-                    <a href="login.html" class="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">Log in</a>
+                <div class="right-content">
+                    <p>Every idea matters. We provide the right environment, mentorship, and resources to transform student creativity into impactful projects. From concept to execution, we ensure that innovations are guided with care, collaboration, and a strong support system.</p>
                 </div>
             </div>
         </div>
-        <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-white z-40 pt-20 p-4 md:hidden">
-            <nav class="flex flex-col space-y-4">
-                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Home</a>
-                <a href="about.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">About Us</a>
-                 <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Our Ex-Com</a>
-                <a href="events.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Events</a>
-                <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100">Announcements</a>
-                <a href="initiatives.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Initiatives</a>
-                <a href="news.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">News</a>
-                <a href="contact.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark hover:bg-gray-100 page-link-mobile">Contact</a>
-                <a href="login.html" class="mt-4 block w-full text-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-green-700 transition duration-300">Login</a>
+    </section>
+
+<div class="mission-section">
+  <div class="mission-left">
+    <!-- Video Embed -->
+   <iframe width="100%" height="280"
+  src="https://www.youtube.com/embed/D0dDqpdMMn4"
+  title="METS IEDC Mission Video"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen>
+</iframe>
+
+    <!-- Quote -->
+    <div class="founder-quote">
+      “Making an impact, together” 
+      <span>- METSIEDC Founder</span>
+    </div>
+  </div>
+
+  <div class="mission-right">
+    <h2>We empower student innovators & entrepreneurs</h2>
+    <p>
+      Our mission is to inspire and empower students to think beyond academics. 
+      By fostering entrepreneurial skills, encouraging innovation, and providing 
+      real-world exposure, MET’S IEDC helps future leaders create solutions that 
+      make a difference.
+    </p>
+    <blockquote>
+      <em>“Innovation is not just about ideas, it’s about making them happen — and at MET’S IEDC, we help you do exactly that.”</em>
+    </blockquote>
+  </div>
+</div>
+
+
+
+    <section class="cta-section">
+        <div class="container">
+            <h3>We help innovators to grow faster and stronger</h3>
+            <p>We believe in creating an ecosystem where student entrepreneurs and innovators can accelerate their growth and bring positive change. Our programs, workshops, and competitions are designed to push boundaries and shape visionaries of tomorrow.</p>
         </div>
-          </nav>
+    </section>
 
-        <section id="about" class="page py-16 md:py-24 bg-white active">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
-                    <h1 class="text-4xl font-bold text-primary">About MET'S IEDC</h1>
-                    <p class="text-xl text-secondary mt-4 max-w-2xl mx-auto">Fostering a culture of innovation and entrepreneurship, guided by Kerala Startup Mission.</p>
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
-                    <div>
-                        <h2 class="text-2xl font-semibold text-dark mb-4">Our Mission</h2>
-                        <p class="text-lg text-secondary mb-4">To create an entrepreneurial culture in our institution and to foster growth of innovation and entrepreneurship amongst the students, faculty, and staff. We aim to provide a platform for the students to pursue entrepreneurial activities and to translate their innovative ideas into commercially viable products or services.</p>
-                        <h2 class="text-2xl font-semibold text-dark mb-4 mt-8">Our Vision</h2>
-                        <p class="text-lg text-secondary">To be a leading center for innovation and entrepreneurship development, nurturing successful startups that contribute to economic growth and societal impact, in line with the objectives of Kerala Startup Mission.</p>
-                    </div>
-                    <div>
-                        <img src="assets/images/logos/METS IEDC LOGO.jpg" alt="IEDC Vision" class="rounded-lg shadow-xl">
-                    </div>
-                </div>
-
-                <div class="mb-16">
-                    <h2 class="text-3xl font-bold text-dark text-center mb-10">Meet the Team</h2>
-                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="bg-light p-6 rounded-lg shadow-lg text-center card-hover transition-all duration-300">
-                            <img src="assets/images/team/NODAL OFFICER.jpg" alt="Team Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-primary">
-                            <h3 class="text-xl font-semibold text-primary">Mrs.Rekha</h3>
-                            <p class="text-secondary">IEDC Nodal Officer</p>
-                            <p class="text-sm text-dark mt-2">"Guiding students to unlock their innovative potential."</p>
-                        </div>
-                        <div class="bg-light p-6 rounded-lg shadow-lg text-center card-hover transition-all duration-300">
-                            <img src="assets/images/team/CHRISS.jpg" alt="Team Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-accent">
-                            <h3 class="text-xl font-semibold text-primary">Chris Babu</h3>
-                            <p class="text-secondary">IEDC Student Lead I</p>
-                            <p class="text-sm text-dark mt-2">"Passionate about building a vibrant startup ecosystem on campus."</p>
-                        </div>
-                        <div class="bg-light p-6 rounded-lg shadow-lg text-center card-hover transition-all duration-300">
-                            <img src="assets/images/team/DEENA.jpg" alt="Team Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-yellow-500">
-                            <h3 class="text-xl font-semibold text-primary">Deena Abbas</h3>
-                            <p class="text-secondary">Student Lead II</p>
-                            <p class="text-sm text-dark mt-2">"Passionate about building a vibrant startup ecosystem on campus."</p>
-                        </div>
-                        </div>
-                </div>
-
-                 <div>
-                    <h2 class="text-3xl font-bold text-dark text-center mb-10">Our Association with Kerala Startup Mission</h2>
-                    <div class="flex flex-col md:flex-row items-center bg-blue-50 p-8 rounded-lg shadow-md">
-                        <img src="https://w7.pngwing.com/pngs/976/490/png-transparent-logo-organization-kerala-brand-maker-faire-entrepreneur-poster-design-text-poster-logo.png" alt="Kerala Startup Mission Logo" class="h-24 md:h-32 mb-6 md:mb-0 md:mr-8" onerror="this.src='https://placehold.co/200x80/CCCCCC/FFFFFF?text=KSUM+Logo'; this.onerror=null;">
-                        <p class="text-lg text-secondary">Our IEDC operates under the guidance and support of the Kerala Startup Mission (KSUM), the central agency of the Government of Kerala for entrepreneurship development and incubation activities in Kerala. KSUM's initiatives are aimed at transforming Kerala into a vibrant startup hub. We actively participate in KSUM programs, leverage their network, and align our activities with their strategic goals for fostering innovation in the state.</p>
-                    </div>
-                </div>
+    <section class="features-section">
+        <div class="container-grid">
+            <div class="feature-item">
+                <div class="icon-circle"><i class="fas fa-search-location"></i></div>
+                <h4>Target Oriented</h4>
+                <p>We guide students with a clear vision and strategic approach to innovation and entrepreneurship.</p>
             </div>
-        </section>
-    <footer class="bg-gray-800">
-        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
-                <div class="col-span-2">
-                    <span class="text-2xl font-bold gradient-text">MET'S IEDC</span>
-                    <p class="text-gray-400 mb-4">Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.</p>
-                    <img src="data:image/png;base64,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" style="width:50%; max-width:300px;">
-
-                </div>
-
-                <div>
-                    <h3 class="text-xl font-semibold mb-4 text-white">Quick Links</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#home" class="text-gray-400 hover:text-primary transition page-link">Home</a></li>
-                        <li><a href="about.html" class="text-gray-400 hover:text-primary transition page-link">About Us</a></li>
-                        <li><a href="events.html" class="text-gray-400 hover:text-primary transition page-link">Events</a></li>
-                        <li><a href="initiatives.html" class="text-gray-400 hover:text-primary transition page-link">Initiatives</a></li>
-                        <li><a href="news.html" class="text-gray-400 hover:text-primary transition page-link">News & Blog</a></li>
-                        <li><a href="contact.html" class="text-gray-400 hover:text-primary transition page-link">Contact Us</a></li>
-                         <li><a href="https://startupmission.kerala.gov.in/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition">Kerala Startup Mission</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 class="text-xl font-semibold mb-4 text-white">Connect With Us</h3>
-                    <p class="text-gray-400 mb-2">Email: metsenggiedc@gmail.com</p>
-                    <p class="text-gray-400 mb-4">Phone: +91 7306226875</p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-primary transition" aria-label="Facebook"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a>
-                        <a href="https://x.com/MetsIedc" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-primary transition" aria-label="X (formerly Twitter)"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 1200 1227" xmlns="http://www.w3.org/2000/svg"><path d="M714.219 555.53 1166.19 0h-106.42L666.33 460.69 307.31 0H0l483.06 652.63 0 574.4h233.25v-574.4Zm-70.92 89.48 0 388.16H554.86v-388.16L159.13 81.53h109.89l354.4 481.13 374.51-481.13h104.88L643.3 645.01Z"/></svg></a>
-                        <a href="#" class="text-gray-400 hover:text-primary transition" aria-label="LinkedIn"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.594-11.018-3.714v-2.155z"/></svg></a>
-                        <a href="https://www.instagram.com/metsiedc/" class="text-gray-400 hover:text-primary transition" aria-label="Instagram"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-                    </div>
-                </div>
+            <div class="feature-item">
+                <div class="icon-circle"><i class="fas fa-award"></i></div>
+                <h4>Success Driven</h4>
+                <p>With structured mentorship and institutional support, we ensure projects have a strong path toward success.</p>
             </div>
-            <div class="mt-8 border-t border-gray-700 pt-8 text-center">
-                <p class="text-gray-500">© <span id="currentYear"></span> IEDC MET'S SCHOOL OF ENGINEERING. All Rights Reserved.</p>
-                <p class="text-xs text-gray-600 mt-1">Website Template by AI. Backend integration required for full functionality.</p>
-                 <p class="text-xs text-gray-600 mt-1">Team</p>
+            <div class="feature-item">
+                <div class="icon-circle"><i class="fas fa-network-wired"></i></div>
+                <h4>Connected ecosystem</h4>
+                <p>MET’S IEDC links students with mentors, industry experts, and opportunities that help ideas grow into impactful solutions.</p>
             </div>
         </div>
-    </footer>
+    </section>
+
     <script>
-     // Initialize Lucide icons on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-        });
+        // This file is currently empty, but you can add functionality here.
 
-        // --- Mobile Menu Logic ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
-
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.add('open');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling background
+// Example: A simple function for a smooth scroll if you add anchor links.
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
         });
+    });
+});
 
-        closeMobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            document.body.style.overflow = ''; // Restore scrolling
-        });
+document.addEventListener('DOMContentLoaded', () => {
+    const videoContainer = document.querySelector('.video-container');
+    const video = videoContainer.querySelector('video');
+    const playButton = videoContainer.querySelector('.play-button');
 
-        // Close mobile menu when a link is clicked inside it
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('open');
-                document.body.style.overflow = '';
-            });
-        });
+    playButton.addEventListener('click', () => {
+        video.play();
+        videoContainer.classList.add('playing');
+    });
+
+    video.addEventListener('ended', () => {
+        videoContainer.classList.remove('playing');
+    });
+});
+
     </script>
-    </body>
+</body>
 </html>
