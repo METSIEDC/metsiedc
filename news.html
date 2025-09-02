@@ -212,6 +212,33 @@ body {
     }
 }
 </style>
+    <style>
+.page-header {
+    position: relative;
+    height: 50vh; /* adjust height */
+    background: url('assets/images/logos/news.jpeg') no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.page-header::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4); /* dark overlay for readability */
+}
+
+.page-header .container {
+    position: relative;
+    z-index: 1;
+}
+</style>
 <body class="font-sans antialiased text-gray-900 bg-white">
     <!-- Navigation -->
     <nav class="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -261,12 +288,12 @@ body {
             </nav>
         </div>
     </nav>
-    <header class="page-header">
-        <div class="container">
-            <h1>Our Newsroom</h1>
-            <p>Stay up to date with our latest news and insights.</p>
-        </div>
-    </header>
+   <header class="page-header">
+    <div class="container">
+        <h1>Our Newsroom</h1>
+        <p>Stay up to date with our latest news and insights.</p>
+    </div>
+</header>
 
     <section class="news-and-articles">
         <div class="container">
