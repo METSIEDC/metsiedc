@@ -137,269 +137,7 @@
         .stagger-1 { animation-delay: 0.1s; }
         .stagger-2 { animation-delay: 0.2s; }
         .stagger-3 { animation-delay: 0.3s; }
-        /*treasure start */
-        /* Treasure Hunt Popup Styles */
-.popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(8px);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-
-.popup-overlay.show {
-    opacity: 1;
-    visibility: visible;
-}
-
-.popup-content {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 20px;
-    padding: 2rem;
-    max-width: 90vw;
-    max-height: 90vh;
-    width: 100%;
-    max-width: 600px;
-    position: relative;
-    transform: scale(0.8) translateY(20px);
-    transition: transform 0.3s ease;
-    overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-}
-
-.popup-overlay.show .popup-content {
-    transform: scale(1) translateY(0);
-}
-
-.popup-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(10px);
-}
-
-.popup-close:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
-}
-
-.popup-video-container {
-    width: 100%;
-    height: 250px;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 1.5rem;
-    position: relative;
-    background: rgba(0, 0, 0, 0.3);
-}
-
-.popup-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 12px;
-}
-
-.popup-video-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-}
-
-.popup-video-overlay.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.play-button {
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    border-radius: 50%;
-    width: 70px;
-    height: 70px;
-    color: #667eea;
-    font-size: 24px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-}
-
-.play-button:hover {
-    background: white;
-    transform: scale(1.1);
-}
-
-.popup-text {
-    text-align: center;
-    color: white;
-}
-
-.popup-title {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.popup-subtitle {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    opacity: 0.9;
-}
-
-.popup-date {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    padding: 1rem;
-    margin: 1.5rem 0;
-    backdrop-filter: blur(10px);
-}
-
-.popup-date-text {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.popup-description {
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-    opacity: 0.95;
-}
-
-.popup-buttons {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.popup-btn {
-    flex: 1;
-    min-width: 140px;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.popup-btn-primary {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-    color: white;
-    box-shadow: 0 4px 15px rgba(238, 90, 36, 0.4);
-}
-
-.popup-btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(238, 90, 36, 0.6);
-}
-
-.popup-btn-secondary {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
-}
-
-.popup-btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-}
-
-.popup-sparkle {
-    position: absolute;
-    color: rgba(255, 255, 255, 0.6);
-    animation: sparkle 2s infinite;
-    pointer-events: none;
-}
-
-@keyframes sparkle {
-    0%, 100% { opacity: 0; transform: scale(0); }
-    50% { opacity: 1; transform: scale(1); }
-}
-
-.popup-sparkle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
-.popup-sparkle:nth-child(2) { top: 30%; right: 15%; animation-delay: 0.7s; }
-.popup-sparkle:nth-child(3) { bottom: 25%; left: 20%; animation-delay: 1.4s; }
-.popup-sparkle:nth-child(4) { bottom: 35%; right: 25%; animation-delay: 0.3s; }
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-    .popup-content {
-        padding: 1.5rem;
-        margin: 1rem;
-    }
-    
-    .popup-title {
-        font-size: 1.5rem;
-    }
-    
-    .popup-video-container {
-        height: 200px;
-    }
-    
-    .popup-buttons {
-        flex-direction: column;
-    }
-    
-    .popup-btn {
-        min-width: auto;
-    }
-}
-
-/* Don't show popup initially */
-.popup-overlay {
-    display: none;
-}
-
-.popup-overlay.show {
-    display: flex;
-}
-
-
-
-
-        /*treasure hunt end */
+       
     </style>
 </head>
 <body class="font-sans antialiased text-gray-900 bg-white">
@@ -501,33 +239,43 @@
             </div>
             
             <div class="swiper mySwiper rounded-2xl shadow-2xl overflow-hidden" style="--swiper-navigation-color: #667eea; --swiper-pagination-color: #667eea;">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="assets/images/events/1.1.jpg" alt="Event 1">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/images/events/2.1.jpg" alt="Event 2">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/images/events/4.jpg" alt="Event 4">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/images/events/6.jpg" alt="Event 6">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/images/events/8.jpg" alt="Event 8">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/images/events/9.jpg" alt="Event 9">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/images/events/10.jpg" alt="Event 10">
-                    </div>
-                </div>
-                <div class="swiper-pagination"></div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
+    <div class="swiper-wrapper">
+        
+        <div class="swiper-slide">
+            <img src="assets/images/events/IMG-20251112-WA0014.jpg" alt="Event 1">
+        </div>
+
+        <div class="swiper-slide">
+            <img src="assets/images/events/IMG-20251112-WA0013.jpg" alt="Event 2">
+        </div>
+
+        <div class="swiper-slide">
+            <img src="assets/images/events/1.1.jpg" alt="Event 3">
+        </div>
+        
+        <div class="swiper-slide">
+            <img src="assets/images/events/2.1.jpg" alt="Event 4">
+        </div>
+        
+        <div class="swiper-slide">
+            <img src="assets/images/events/4.jpg" alt="Event 5">
+        </div>
+        
+        <div class="swiper-slide">
+            <img src="assets/images/events/6.jpg" alt="Event 6">
+        </div>
+        
+        <div class="swiper-slide">
+            <img src="assets/images/events/8.jpg" alt="Event 7">
+        </div>
+
+    </div>
+
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+
+</div>
         </div>
     </section>
 
@@ -565,9 +313,9 @@
                                 Join IEDC MET'S for an exciting treasure hunt filled with challenges, puzzles, and amazing prizes. Test your wit, teamwork, and problem-solving skills in this thrilling adventure!
                             </p>
                             <div class="flex flex-col sm:flex-row gap-4">
-                                <a href="treasurehunt.html" class="px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-full font-semibold hover:from-yellow-600 hover:to-orange-600 transform hover:scale-105 transition-all duration-200 shadow-lg">
-                                    Join the Hunt
-                                </a>
+                                <a class="px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-full font-semibold transition-all duration-200 shadow-lg opacity-50 cursor-not-allowed pointer-events-none">
+    Join the Hunt
+</a>
                                 <a href="treasurehunt.html" class="px-8 py-4 border-2 border-yellow-500 text-yellow-700 rounded-full font-semibold hover:bg-yellow-50 transform hover:scale-105 transition-all duration-200">
                                     Learn More
                                 </a>
@@ -610,9 +358,9 @@
                                 Organized by Ministry of MSME, Govt of India in association with IEDC MET'S SCHOOL OF ENGINEERING, MALA. This workshop will provide insights into the entrepreneurial ecosystem and startup opportunities.
                             </p>
                             <div class="flex flex-col sm:flex-row gap-4">
-                                <button class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-semibold hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
-                                    Register Now
-                                </button>
+                                <button class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-semibold transform transition-all duration-200 shadow-lg opacity-50 cursor-not-allowed" disabled>
+    Register Now
+</button>
                                 <button class="px-8 py-4 border-2 border-indigo-600 text-indigo-600 rounded-full font-semibold hover:bg-indigo-50 transform hover:scale-105 transition-all duration-200">
                                     Learn More
                                 </button>
@@ -867,91 +615,6 @@
         currentYearElement.textContent = new Date().getFullYear();
     }
 });
-
-
-
-
-// Treasure Hunt Popup JavaScript
-function showTreasureHuntPopup() {
-    const popup = document.getElementById('treasureHuntPopup');
-    const video = document.getElementById('treasureHuntVideo');
-    const overlay = document.getElementById('videoOverlay');
-    popup.style.display = 'flex';
-    setTimeout(() => {
-        popup.classList.add('show');
-        if (video && overlay) {
-            video.play();
-            overlay.classList.add('hidden');
-        }
-    }, 10);
-    document.body.style.overflow = 'hidden';
-}
-
-function closeTreasureHuntPopup() {
-    const popup = document.getElementById('treasureHuntPopup');
-    const video = document.getElementById('treasureHuntVideo');
-    const overlay = document.getElementById('videoOverlay');
-    popup.classList.remove('show');
-    setTimeout(() => {
-        popup.style.display = 'none';
-    }, 300);
-    
-    // Reset video
-    if (video && overlay) {
-        video.pause();
-        video.currentTime = 0;
-        overlay.classList.remove('hidden');
-    }
-    document.body.style.overflow = '';
-    // Set reminder cookie for 24 hours
-    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000).toUTCString();
-    document.cookie = `treasureHuntReminder=true; expires=${expires}; path=/`;
-}
-
-function playVideo() {
-    const video = document.getElementById('treasureHuntVideo');
-    const overlay = document.getElementById('videoOverlay');
-    if (video && overlay) {
-        video.play();
-        overlay.classList.add('hidden');
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Always show popup after 2 seconds
-    setTimeout(() => {
-        showTreasureHuntPopup();
-    }, 2000);
-
-    // Attach video ended event
-    const treasureVideo = document.getElementById('treasureHuntVideo');
-    const videoOverlay = document.getElementById('videoOverlay');
-    const treasurePopup = document.getElementById('treasureHuntPopup');
-
-    if (treasureVideo && videoOverlay) {
-        treasureVideo.addEventListener('ended', function() {
-            videoOverlay.classList.remove('hidden');
-        });
-    }
-
-    // Close popup when clicking outside
-    if (treasurePopup) {
-        treasurePopup.addEventListener('click', function(e) {
-            if (e.target === treasurePopup) {
-                closeTreasureHuntPopup();
-            }
-        });
-    }
-});
-
-// Close popup on escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeTreasureHuntPopup();
-    }
-});
-
-
 
     </script>
 </body>
