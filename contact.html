@@ -1,354 +1,276 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - MET'S IEDC</title>
-     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="contact-style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<style>
-     .gradient-text {
-            background: linear-gradient(90deg, #FF7262 0%, #FF7262 20%, #FF4F81 40%, #A162E8 60%, #5E5BFF 80%, #00C4FF 100%);
+    <title>Contact Us | MET'S IEDC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-hover:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.15);
+            transform: translateY(-8px);
+        }
+
+        .gradient-accent {
+            background: linear-gradient(90deg, #4f46e5 0%, #9333ea 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        
-        .hero-gradient {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
+
+        /* Background Blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: blob-bounce 10s infinite ease;
+        }
+        .blob-1 { top: 0%; left: -10%; width: 500px; height: 500px; background: #4f46e5; }
+        .blob-2 { top: 30%; right: -10%; width: 400px; height: 400px; background: #9333ea; }
+        .blob-3 { bottom: 0%; left: 20%; width: 600px; height: 600px; background: #2563eb; }
+
+        @keyframes blob-bounce {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.1); }
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
         }
         
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
-    :root {
-    --primary-orange: #ff6633; /* A vibrant orange for highlights */
-    --text-dark: #333;
-    --text-light: #666;
-    --bg-light: #f8f8f8;
-    --bg-white: #fff;
-    --hero-text-color: #fce77a; /* Using the yellow from your previous 'About Us' example */
-    --hero-overlay-color: rgba(60, 70, 80, 0.7); /* Dark semi-transparent overlay */
-    --font-family: 'Poppins', sans-serif;
-}
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+    </style>
+</head>
+<body class="font-sans antialiased relative selection:bg-indigo-500 selection:text-white">
 
-body {
-    font-family: var(--font-family);
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
-    color: var(--text-dark);
-    background-color: var(--bg-light);
-}
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
 
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* Hero Contact Section */
-.hero-contact-section {
-    background-image: url('your-cityscape-background.jpg'); /* Replace with your image */
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    height: 450px; /* Adjust height as needed */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: var(--hero-text-color); /* Matches the yellow from the image */
-    padding: 2rem 0;
-}
-
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--hero-overlay-color);
-    z-index: 1;
-}
-
-.hero-content {
-    position: relative;
-    z-index: 2;
-}
-
-.hero-content h1 {
-    font-size: 3.5rem;
-    margin-bottom: 10px;
-    color: var(--primary-orange); /* Orange for "CONTACT US" */
-    letter-spacing: 2px;
-}
-
-.hero-content .separator {
-    width: 60px;
-    height: 4px;
-    background-color: var(--primary-orange);
-    margin: 0.5rem auto 1.5rem;
-}
-
-.hero-content p {
-    font-size: 1.1rem;
-    margin: 0;
-    color: var(--bg-white); /* Lighter text for the description */
-}
-
-/* Contact Info Cards Section */
-.contact-info-cards {
-    padding: 5rem 0;
-    background-color: var(--bg-white); /* White background for the cards section */
-    position: relative;
-    z-index: 3; /* To appear above the hero section if overlap is desired */
-    margin-top: -100px; /* Adjust this value to create overlap with the hero section */
-}
-
-.contact-info-cards .container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-}
-
-.card {
-    background-color: var(--bg-white);
-    padding: 2.5rem 2rem;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-}
-
-.card .icon-wrapper {
-    width: 80px;
-    height: 80px;
-    background-color: rgba(255, 102, 51, 0.1); /* Light orange background for icons */
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto 1.5rem;
-}
-
-.card .icon-wrapper i {
-    font-size: 2.5rem;
-    color: var(--primary-orange);
-}
-
-.card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.8rem;
-    color: var(--text-dark);
-}
-
-.card p {
-    color: var(--text-light);
-    margin: 0.5rem 0;
-    font-size: 0.95rem;
-}
-
-.card .visit-site-link {
-    display: inline-flex;
-    align-items: center;
-    margin-top: 1.5rem;
-    color: var(--primary-orange);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
-}
-
-.card .visit-site-link:hover {
-    color: var(--text-dark);
-}
-
-.card .visit-site-link i {
-    margin-right: 8px;
-    font-size: 1rem;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .hero-content h1 {
-        font-size: 2.5rem;
-    }
-    .hero-content p {
-        font-size: 1rem;
-    }
-
-    .contact-info-cards {
-        margin-top: -50px; /* Less overlap on smaller screens */
-    }
-}
-
-@media (max-width: 480px) {
-    .hero-content h1 {
-        font-size: 2rem;
-    }
-    .hero-content p {
-        font-size: 0.9rem;
-    }
-
-    .contact-info-cards .container {
-        grid-template-columns: 1fr;
-    }
-
-    .card {
-        padding: 2rem 1.5rem;
-    }
-}
-    .hero-contact-section {
-    position: relative;
-    height: 60vh; /* adjust height */
-    background: url('assets/images/logos/contact us.jpg') no-repeat center center/cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-align: center;
-}
-
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.5); /* dark overlay */
-}
-
-.hero-content {
-    position: relative;
-    z-index: 1;
-}
-</style>
-<body class="font-sans antialiased text-gray-900 bg-white">
-    <!-- Navigation -->
-    <nav class="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between h-20 items-center">
                 <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <a href="index.html" class="flex items-center space-x-3">
-                            <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
-                            <span class="text-2xl font-bold gradient-text">MET'S IEDC</span>
-                        </a>
-                    </div>
-                    <div class="hidden md:ml-10 md:flex md:space-x-8">
-                        <a href="index.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Home</a>
-                        <a href="about.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">About Us</a>
-                        <a href="team.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Our Ex-Com</a>
-                        <a href="announcement.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Announcements</a>
-                        <a href="events.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Gallery</a>
-                        <a href="initiatives.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Initiatives</a>
-                        <a href="news.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">News</a>
-                        <a href="contact.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Contact US</a>
+                    <a href="index.html" class="flex items-center space-x-3 group">
+                        <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
+                        <span class="text-2xl font-bold tracking-tight text-white">MET'S <span class="text-indigo-400">IEDC</span></span>
+                    </a>
+                    <div class="hidden md:ml-12 md:flex md:space-x-8">
+                        <a href="about.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">About</a>
+                        <a href="team.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Ex-Com</a>
+                        <a href="initiatives.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Initiatives</a>
+                        <a href="news.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">News</a>
+                        <a href="contact.html" class="text-white px-3 py-2 text-sm font-medium border-b-2 border-indigo-500">Contact</a>
                     </div>
                 </div>
-                <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                <div class="hidden md:flex items-center">
+                    <a href="login.html" class="glass-card glass-hover text-white px-6 py-2.5 rounded-full text-sm font-medium border border-white/10">
+                        Log in
+                    </a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-white p-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
         </div>
         
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="mobile-menu">
-            <div class="flex justify-end p-4">
-                <button id="close-mobile-menu" class="text-gray-700 focus:outline-none">
+        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-xl z-50">
+            <div class="flex justify-end p-6">
+                <button id="close-mobile-menu" class="text-white p-2">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <nav class="flex flex-col space-y-4 px-6">
-                 <a href="index.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Home</a>
-                <a href="about.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">About Us</a>
-                <a href="team.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Our Team</a>
-                <a href="initiatives.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Initiatives</a>
-                <a href="news.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">News</a>
-                <a href="announcement.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Announcements</a>
-                <a href="events.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200"> Gallery</a>
-                <a href="contact.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Contact</a>
-                
+            <nav class="flex flex-col space-y-6 px-8 mt-10 text-center">
+                <a href="about.html" class="text-2xl font-light text-white hover:text-indigo-400">About Us</a>
+                <a href="team.html" class="text-2xl font-light text-white hover:text-indigo-400">Our Team</a>
+                <a href="initiatives.html" class="text-2xl font-light text-white hover:text-indigo-400">Initiatives</a>
+                <a href="events.html" class="text-2xl font-light text-white hover:text-indigo-400">Gallery</a>
+                <a href="login.html" class="mt-8 py-4 bg-indigo-600 rounded-full text-white font-medium">Student Login</a>
             </nav>
         </div>
     </nav>
-  <header class="hero-contact-section">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-        <h1>CONTACT US</h1>
-        <div class="separator"></div>
-        <p>Need assistance or want to collaborate? You are most welcome to share your contact details, and our team will get in touch with you shortly.</p>
+
+    <div class="pt-32 pb-16 lg:pt-48 lg:pb-24 text-center px-4 relative z-10">
+        <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6">
+            Get in <span class="gradient-accent">Touch</span>
+        </h1>
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            Need assistance or want to collaborate? You are most welcome to share your contact details, and our team will get in touch shortly.
+        </p>
     </div>
-</header>
-    <section class="contact-info-cards">
-        <div class="container">
-            <div class="card">
-                <div class="icon-wrapper">
-                    <i class="fas fa-home"></i>
-                </div>
-                <h3>VISIT US</h3>
-                <p>Innovation & Entrepreneurship Development Centre (IEDC)</p>
-                <p>MET’S School of Engineering, Mala, Thrissur, Kerala – 680731</p>
-                <a href="https://maps.app.goo.gl/9jbRFuJVuECnxXYP9" class="visit-site-link">
-                    <i class="fas fa-location"></i> Visit Us
-                </a>
-            </div>
 
-            <div class="card">
-                <div class="icon-wrapper">
-                    <i class="fas fa-phone-alt"></i>
-                </div>
-                <h3>CALL US</h3>
-                <p>For queries related to events, projects & initiatives:</p>
-                <p>+91 73062 26875</p>
-            </div>
+    <section class="pb-32 px-4 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-            <div class="card">
-                <div class="icon-wrapper">
-                    <i class="fas fa-envelope"></i>
+                <div class="glass-card rounded-3xl p-10 glass-hover group text-center flex flex-col items-center">
+                    <div class="w-20 h-20 rounded-full bg-orange-500/10 flex items-center justify-center text-orange-400 mb-6 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
+                        <i class="fas fa-map-marker-alt text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Visit Us</h3>
+                    <p class="text-indigo-400 text-sm font-semibold mb-6 tracking-wide uppercase">IEDC Centre</p>
+                    <p class="text-gray-400 leading-relaxed mb-8">
+                        MET’S School of Engineering,<br>
+                        Mala, Thrissur,<br>
+                        Kerala – 680731
+                    </p>
+                    <a href="https://goo.gl/maps/YOUR_MAP_LINK" target="_blank" class="mt-auto px-8 py-3 rounded-full border border-white/20 hover:bg-white/10 text-white font-medium transition-colors">
+                        Get Directions
+                    </a>
                 </div>
-                <h3>CONTACT US</h3>
-                <p>For official communication & collaboration:</p>
-                <p>metsenggiedc@gmail.com</p>
+
+                <div class="glass-card rounded-3xl p-10 glass-hover group text-center flex flex-col items-center">
+                    <div class="w-20 h-20 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
+                        <i class="fas fa-phone-alt text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Call Us</h3>
+                    <p class="text-indigo-400 text-sm font-semibold mb-6 tracking-wide uppercase">Mon-Fri from 9am to 5pm</p>
+                    <p class="text-gray-400 leading-relaxed mb-8">
+                        For queries related to events, projects & initiatives, feel free to give us a call.
+                    </p>
+                    <a href="tel:+917306226875" class="mt-auto text-2xl font-bold text-white hover:text-indigo-400 transition-colors">
+                        +91 73062 26875
+                    </a>
+                </div>
+
+                <div class="glass-card rounded-3xl p-10 glass-hover group text-center flex flex-col items-center">
+                    <div class="w-20 h-20 rounded-full bg-pink-500/10 flex items-center justify-center text-pink-400 mb-6 group-hover:bg-pink-500 group-hover:text-white transition-all duration-300">
+                        <i class="fas fa-envelope text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Email Us</h3>
+                    <p class="text-indigo-400 text-sm font-semibold mb-6 tracking-wide uppercase">Official Collaboration</p>
+                    <p class="text-gray-400 leading-relaxed mb-8">
+                        For official communication, partnerships, and general inquiries, drop us a mail.
+                    </p>
+                    <a href="mailto:metsenggiedc@gmail.com" class="mt-auto text-lg font-bold text-white hover:text-pink-400 transition-colors break-all">
+                        metsenggiedc@gmail.com
+                    </a>
+                </div>
+
             </div>
         </div>
     </section>
 
-    </body>
-      <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const menuButton = document.getElementById("mobile-menu-button");
-    const closeButton = document.getElementById("close-mobile-menu");
-    const mobileMenu = document.getElementById("mobile-menu");
+    <footer class="border-t border-white/5 bg-[#020202] pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div class="lg:col-span-2">
+                    <span class="text-2xl font-bold text-white">MET'S IEDC</span>
+                    <p class="text-gray-500 mt-4 text-sm leading-relaxed max-w-md">
+                        Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.
+                    </p>
+                </div>
 
-    // Hide mobile menu by default
-    mobileMenu.style.display = "none";
+                <div>
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h3>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="index.html" class="hover:text-indigo-400 transition-colors">Home</a></li>
+                        <li><a href="about.html" class="hover:text-indigo-400 transition-colors">About Us</a></li>
+                        <li><a href="events.html" class="hover:text-indigo-400 transition-colors">Events</a></li>
+                        <li><a href="news.html" class="hover:text-indigo-400 transition-colors">News</a></li>
+                    </ul>
+                </div>
 
-    menuButton.addEventListener("click", () => {
-        mobileMenu.style.display = "block";
-    });
+                <div>
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contact</h3>
+                    <div class="space-y-3 text-sm text-gray-500">
+                        <p class="flex items-center"><i class="fas fa-envelope mr-3 text-indigo-500"></i>metsenggiedc@gmail.com</p>
+                        <p class="flex items-center"><i class="fas fa-phone mr-3 text-indigo-500"></i>+91 7306226875</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
+                <p>© 2025 IEDC MET'S SCHOOL OF ENGINEERING.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-white transition-colors"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com/MetsIedc" class="hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/metsiedc/" class="hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-white transition-colors"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-    closeButton.addEventListener("click", () => {
-        mobileMenu.style.display = "none";
-    });
-});
-</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Logic
+            const btn = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+            const closeBtn = document.getElementById('close-mobile-menu');
+
+            function toggleMenu() {
+                menu.classList.toggle('open');
+                document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+            }
+
+            btn.addEventListener('click', toggleMenu);
+            closeBtn.addEventListener('click', toggleMenu);
+            
+            // Navbar Scroll Effect
+            window.addEventListener('scroll', () => {
+                const nav = document.querySelector('nav');
+                if (window.scrollY > 20) {
+                    nav.classList.add('shadow-lg');
+                    nav.style.background = 'rgba(5, 5, 5, 0.9)';
+                } else {
+                    nav.classList.remove('shadow-lg');
+                    nav.style.background = 'rgba(5, 5, 5, 0.7)';
+                }
+            });
+        });
+    </script>
+</body>
 </html>
