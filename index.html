@@ -1,621 +1,425 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MET'S IEDC</title>
+    <title>MET'S IEDC | Innovation Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        glass: {
+                            100: 'rgba(255, 255, 255, 0.05)',
+                            200: 'rgba(255, 255, 255, 0.1)',
+                            border: 'rgba(255, 255, 255, 0.1)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* The Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Glossy Highlight on Hover */
+        .glass-hover {
+            transition: all 0.3s ease;
+        }
+        .glass-hover:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Gradient Text */
         .gradient-text {
-            background: linear-gradient(90deg, #FF7262 0%, #FF7262 20%, #FF4F81 40%, #A162E8 60%, #5E5BFF 80%, #00C4FF 100%);
+            background: linear-gradient(90deg, #fff 0%, #a5a5a5 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
         
-        .hero-gradient {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
-        }
-        
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* Fixed Mobile Menu Styles */
-.mobile-menu {
-    transform: translateX(100%);
-    transition: transform 0.3s ease-in-out;
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    z-index: 1000;
-    /* Add will-change for better performance */
-    will-change: transform;
-}
-
-.mobile-menu.open {
-    transform: translateX(0);
-}
-.mobile-menu nav {
-    /* Prevent any transform inheritance issues */
-    transform: none !important;
-}
-
-.mobile-menu a {
-    /* Prevent any transform inheritance issues */
-    transform: none !important;
-}
-
-        /* Improved carousel styles */
-        .swiper-slide {
-            display: flex !important;
-            justify-content: center;
-            align-items: center;
+        .gradient-accent {
+            background: linear-gradient(90deg, #4f46e5 0%, #9333ea 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        .swiper-slide img {
-            width: 100% !important;
-            height: 400px !important;
-            object-fit: cover !important;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Enhanced upcoming event section */
-        .event-spotlight {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .event-spotlight::before {
-            content: '';
+        /* Ambient Background Blobs (To show off the glass effect) */
+        .blob {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="25" cy="25" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="25" cy="75" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="75" cy="25" r="1" fill="rgba(255,255,255,0.05)"/></svg>') repeat;
-            animation: float 20s ease-in-out infinite;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: blob-bounce 10s infinite ease;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #4f46e5; }
+        .blob-2 { top: 20%; right: -10%; width: 400px; height: 400px; background: #9333ea; }
+        .blob-3 { bottom: -10%; left: 20%; width: 600px; height: 600px; background: #2563eb; }
+
+        @keyframes blob-bounce {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.1); }
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
+
+        /* Partner Logos White Filter */
+        .partner-logo {
+            filter: grayscale(100%) brightness(0) invert(1) opacity(0.6);
+            transition: all 0.3s;
+        }
+        .partner-logo:hover {
+            filter: grayscale(0%) brightness(1) invert(0) opacity(1);
         }
         
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+        .swiper-slide {
+            filter: grayscale(20%);
+            transition: 0.3s;
         }
-        
-        .event-card-enhanced {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .swiper-slide-active {
+            filter: grayscale(0%);
+            transform: scale(1.05);
         }
-
-        /* Improved section spacing */
-        .section-padding {
-            padding: 5rem 0;
+        .swiper-slide img {
+             border-radius: 16px;
+             border: 1px solid rgba(255,255,255,0.1);
         }
-
-        /* Better responsive design */
-        @media (max-width: 768px) {
-            .swiper-slide img {
-                height: 280px !important;
-            }
-            
-            .section-padding {
-                padding: 3rem 0;
-            }
-        }
-
-        /* Enhanced animations */
-        .fade-in-up {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.8s ease forwards;
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .stagger-1 { animation-delay: 0.1s; }
-        .stagger-2 { animation-delay: 0.2s; }
-        .stagger-3 { animation-delay: 0.3s; }
-       
     </style>
 </head>
-<body class="font-sans antialiased text-gray-900 bg-white">
-    <!-- Navigation -->
-    <nav class="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+<body class="font-sans antialiased selection:bg-indigo-500 selection:text-white relative">
+
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between h-20 items-center">
                 <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <a href="index.html" class="flex items-center space-x-3">
-                            <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
-                            <span class="text-2xl font-bold gradient-text">MET'S IEDC</span>
-                        </a>
-                    </div>
-                    <div class="hidden md:ml-10 md:flex md:space-x-8">
-                        <a href="about.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">About Us</a>
-                        <a href="team.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Our Ex-Com</a>
-                        <a href="announcement.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Announcements</a>
-                        <a href="initiatives.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Initiatives</a>
-                        <a href="news.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">News</a>
-                        <a href="contact.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Contact US</a>
+                    <a href="index.html" class="flex items-center space-x-3 group">
+                        <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
+                        <span class="text-2xl font-bold tracking-tight text-white">MET'S <span class="text-indigo-400">IEDC</span></span>
+                    </a>
+                    <div class="hidden md:ml-12 md:flex md:space-x-8">
+                        <a href="about.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">About</a>
+                        <a href="team.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Ex-Com</a>
+                        <a href="initiatives.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Initiatives</a>
+                        <a href="news.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">News</a>
+                        <a href="contact.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Contact</a>
                     </div>
                 </div>
-                <div class="hidden md:ml-6 md:flex md:items-center">
-                    <a href="login.html" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">Log in</a>
+                <div class="hidden md:flex items-center">
+                    <a href="login.html" class="glass-card glass-hover text-white px-6 py-2.5 rounded-full text-sm font-medium border border-white/10">
+                        Log in
+                    </a>
                 </div>
-                <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                <button id="mobile-menu-button" class="md:hidden text-white p-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
         </div>
         
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="mobile-menu">
-            <div class="flex justify-end p-4">
-                <button id="close-mobile-menu" class="text-gray-700 focus:outline-none">
+        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-xl z-50">
+            <div class="flex justify-end p-6">
+                <button id="close-mobile-menu" class="text-white p-2">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <nav class="flex flex-col space-y-4 px-6">
-                <a href="about.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">About Us</a>
-                <a href="team.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Our Team</a>
-                <a href="initiatives.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Initiatives</a>
-                <a href="news.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">News</a>
-                <a href="announcement.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Announcements</a>
-                <a href="events.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Event Gallery</a>
-                <a href="contact.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Contact</a>
-                <a href="login.html" class="mt-6 block w-full text-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-medium hover:from-indigo-700 hover:to-purple-700 transition shadow-lg">Student Login</a>
+            <nav class="flex flex-col space-y-6 px-8 mt-10 text-center">
+                <a href="about.html" class="text-2xl font-light text-white hover:text-indigo-400">About Us</a>
+                <a href="team.html" class="text-2xl font-light text-white hover:text-indigo-400">Our Team</a>
+                <a href="initiatives.html" class="text-2xl font-light text-white hover:text-indigo-400">Initiatives</a>
+                <a href="events.html" class="text-2xl font-light text-white hover:text-indigo-400">Gallery</a>
+                <a href="login.html" class="mt-8 py-4 bg-indigo-600 rounded-full text-white font-medium">Student Login</a>
             </nav>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <div class="relative bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-hidden">
-        <div class="max-w-7xl mx-auto">
-            <div class="relative z-10 pb-8 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-                <div class="pt-10 mx-auto max-w-7xl px-4 sm:pt-12 sm:px-6 md:pt-16 lg:pt-20 lg:px-8 xl:pt-28">
-                    <div class="sm:text-center lg:text-left">
-                        <h1 class="text-5xl tracking-tight font-extrabold text-gray-900 sm:text-6xl md:text-7xl fade-in-up">
-                            <span class="block">Innovate together</span>
-                            <span class="block gradient-text">with bold ideas</span>
-                        </h1>
-                        <p class="mt-6 text-xl text-gray-600 sm:mt-8 sm:text-2xl sm:max-w-xl sm:mx-auto md:mt-8 lg:mx-0 fade-in-up stagger-1">
-                           MET'S IEDC empowers students to build, test, and launch impactful innovations — from concept to reality.
-                        </p>
-                        <div class="mt-8 sm:mt-10 sm:flex sm:justify-center lg:justify-start fade-in-up stagger-2">
-                            <div class="rounded-full shadow-lg">
-                                <a href="events.html" class="w-full flex items-center justify-center px-10 py-4 border border-transparent text-lg font-medium rounded-full text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-xl">
-                                    Event Gallery
-                                </a>
-                            </div>
-                            <div class="mt-4 sm:mt-0 sm:ml-4">
-                                <a href="https://iedc.startupmission.in/" class="w-full flex items-center justify-center px-10 py-4 border-2 border-indigo-600 text-lg font-medium rounded-full text-indigo-700 bg-white hover:bg-indigo-50 transform hover:scale-105 transition-all duration-200 shadow-lg">
-                                    IEDC Portal
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Decorative elements -->
-        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-            <div class="h-56 w-full sm:h-72 md:h-96 lg:w-full lg:h-full bg-gradient-to-br from-indigo-400 to-purple-600 flex items-center justify-center">
-                <div class="text-white text-6xl opacity-20">
-                    <i class="fas fa-rocket"></i>
-                </div>
+    <div class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-8">
+                <span class="block text-white mb-2">Innovate together</span>
+                <span class="block gradient-accent">with bold ideas</span>
+            </h1>
+            <p class="mt-6 text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                MET'S IEDC empowers students to build, test, and launch impactful innovations within a futuristic ecosystem.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="events.html" class="glass-card glass-hover px-8 py-4 rounded-full text-white font-semibold flex items-center justify-center gap-2 group">
+                    <span>Explore Events</span>
+                    <i class="fas fa-arrow-right text-sm transform group-hover:translate-x-1 transition-transform"></i>
+                </a>
+                <a href="https://iedc.startupmission.in/" class="px-8 py-4 rounded-full text-white font-semibold border border-white/20 hover:bg-white/5 transition-colors">
+                    IEDC Portal
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Image Carousel Section -->
-    <section class="section-padding bg-gray-50">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Journey in Pictures</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Explore the moments that define our innovation journey, from ideation to implementation.</p>
+    <section class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Our Journey</h2>
+                <div class="h-1 w-20 bg-indigo-500 mx-auto rounded-full"></div>
             </div>
             
-            <div class="swiper mySwiper rounded-2xl shadow-2xl overflow-hidden" style="--swiper-navigation-color: #667eea; --swiper-pagination-color: #667eea;">
-    <div class="swiper-wrapper">
-        
-        <div class="swiper-slide">
-            <img src="assets/images/events/IMG-20251112-WA0014.jpg" alt="Event 1">
-        </div>
-
-        <div class="swiper-slide">
-            <img src="assets/images/events/IMG-20251112-WA0013.jpg" alt="Event 2">
-        </div>
-
-        <div class="swiper-slide">
-            <img src="assets/images/events/1.1.jpg" alt="Event 3">
-        </div>
-        
-        <div class="swiper-slide">
-            <img src="assets/images/events/2.1.jpg" alt="Event 4">
-        </div>
-        
-        <div class="swiper-slide">
-            <img src="assets/images/events/4.jpg" alt="Event 5">
-        </div>
-        
-        <div class="swiper-slide">
-            <img src="assets/images/events/6.jpg" alt="Event 6">
-        </div>
-        
-        <div class="swiper-slide">
-            <img src="assets/images/events/8.jpg" alt="Event 7">
-        </div>
-
-    </div>
-
-    <div class="swiper-pagination"></div>
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
-
-</div>
+            <div class="swiper mySwiper !pb-12">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="assets/images/events/IMG-20251112-WA0014.jpg" class="w-full h-64 md:h-96 object-cover"></div>
+                    <div class="swiper-slide"><img src="assets/images/events/IMG-20251112-WA0013.jpg" class="w-full h-64 md:h-96 object-cover"></div>
+                    <div class="swiper-slide"><img src="assets/images/events/1.1.jpg" class="w-full h-64 md:h-96 object-cover"></div>
+                    <div class="swiper-slide"><img src="assets/images/events/2.1.jpg" class="w-full h-64 md:h-96 object-cover"></div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
         </div>
     </section>
 
-    <!-- Enhanced Upcoming Event Section -->
-    <section class="event-spotlight section-padding relative">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section class="py-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <span class="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium mb-4">Don't Miss Out</span>
-                <h2 class="text-5xl font-bold text-white mb-6">Upcoming Event Spotlight</h2>
-                <p class="text-xl text-white/90 max-w-2xl mx-auto">Join us for our next exciting event that promises to inspire and educate the next generation of entrepreneurs.</p>
+                <span class="text-indigo-400 font-semibold tracking-wider text-sm uppercase mb-2 block">Mark Your Calendar</span>
+                <h2 class="text-4xl font-bold text-white">Upcoming Events</h2>
             </div>
-           
-            <div class="max-w-4xl mx-auto">
-                <!-- Treasure Hunt Event Card -->
-                <div class="event-card-enhanced rounded-3xl p-8 md:p-12 card-hover">
-                    <div class="grid md:grid-cols-2 gap-8 items-center">
-                        <div class="order-2 md:order-1">
-                            <div class="inline-block px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-600 text-white rounded-full text-sm font-semibold mb-4">
-                                Special Event
-                            </div>
-                            <h3 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                                🏴‍☠️ Treasure Hunt Adventure
-                            </h3>
-                            <div class="flex items-center space-x-6 text-gray-600 mb-6">
-                                <div class="flex items-center">
-                                    <i class="far fa-calendar-alt text-yellow-600 mr-2"></i>
-                                    <span class="font-medium">Mon, 25 August 2025</span>
+            
+            <div class="max-w-5xl mx-auto space-y-8">
+                
+                <div class="glass-card rounded-3xl p-1 overflow-hidden group">
+                    <div class="bg-[#0a0a0a]/50 rounded-[22px] p-6 md:p-10">
+                        <div class="grid md:grid-cols-2 gap-8 items-center">
+                            <div class="order-2 md:order-1">
+                                <div class="inline-flex items-center px-3 py-1 rounded-full border border-yellow-500/30 bg-yellow-500/10 text-yellow-500 text-xs font-medium mb-4">
+                                    <span class="w-2 h-2 rounded-full bg-yellow-500 mr-2 animate-pulse"></span> Flagship Event
                                 </div>
-                                <div class="flex items-center">
-                                    <i class="far fa-clock text-yellow-600 mr-2"></i>
-                                    <span class="font-medium">12:00 PM</span>
+                                <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">Treasure Hunt Adventure</h3>
+                                
+                                <div class="flex flex-wrap gap-4 text-gray-400 text-sm mb-6">
+                                    <div class="flex items-center"><i class="far fa-calendar-alt mr-2 text-indigo-400"></i> Aug 25, 2025</div>
+                                    <div class="flex items-center"><i class="far fa-clock mr-2 text-indigo-400"></i> 12:00 PM</div>
+                                </div>
+                                
+                                <p class="text-gray-400 mb-8 leading-relaxed">
+                                    Join IEDC MET'S for an exciting treasure hunt filled with challenges, puzzles, and amazing prizes.
+                                </p>
+                                
+                                <div class="flex gap-4">
+                                    <button class="px-6 py-3 bg-white/10 text-white/50 rounded-xl text-sm font-medium cursor-not-allowed border border-white/5">Registration Closed</button>
+                                    <a href="treasurehunt.html" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition-colors shadow-[0_0_20px_rgba(79,70,229,0.3)]">View Details</a>
                                 </div>
                             </div>
-                            <p class="text-gray-700 text-lg leading-relaxed mb-8">
-                                Join IEDC MET'S for an exciting treasure hunt filled with challenges, puzzles, and amazing prizes. Test your wit, teamwork, and problem-solving skills in this thrilling adventure!
-                            </p>
-                            <div class="flex flex-col sm:flex-row gap-4">
-                                <a class="px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-full font-semibold transition-all duration-200 shadow-lg opacity-50 cursor-not-allowed pointer-events-none">
-    Join the Hunt
-</a>
-                                <a href="treasurehunt.html" class="px-8 py-4 border-2 border-yellow-500 text-yellow-700 rounded-full font-semibold hover:bg-yellow-50 transform hover:scale-105 transition-all duration-200">
-                                    Learn More
-                                </a>
-                            </div>
-                        </div>
-                        <div class="order-1 md:order-2">
-                            <div class="relative">
-                                <a href="treasurehunt.html">
-                                    <img src="assets/images/events/treasurehunt-thumb.jpg" alt="Treasure Hunt Thumbnail" class="w-full h-80 object-cover rounded-2xl shadow-2xl" style="object-fit:cover;" onerror="this.src='assets/images/events/EAWWW.jpg'">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl flex items-center justify-center">
-                                        <button class="play-button" onclick="showTreasureHuntPopup(); event.preventDefault();">
-                                            <i class="fas fa-play"></i>
-                                        </button>
-                                    </div>
-                                </a>
+                            <div class="order-1 md:order-2">
+                                <div class="relative rounded-2xl overflow-hidden aspect-video border border-white/10 group-hover:border-white/20 transition-all">
+                                    <img src="assets/images/events/treasurehunt-thumb.jpg" alt="Event" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" onerror="this.src='https://images.unsplash.com/photo-1614726365723-49fb6d0d9326?q=80&w=2000'">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="event-card-enhanced rounded-3xl p-8 md:p-12 card-hover">
-                    <div class="grid md:grid-cols-2 gap-8 items-center">
-                        <div class="order-2 md:order-1">
-                            <div class="inline-block px-4 py-2 bg-gradient-to-r from-orange-400 to-orange-600 text-white rounded-full text-sm font-semibold mb-4">
-                                Featured Event
-                            </div>
-                            <h3 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                                Entrepreneurship Awareness Workshop
-                            </h3>
-                            <div class="flex items-center space-x-6 text-gray-600 mb-6">
-                                <div class="flex items-center">
-                                    <i class="far fa-calendar-alt text-indigo-600 mr-2"></i>
-                                    <span class="font-medium">Fri, 22 August 2025</span>
+
+                <div class="glass-card rounded-3xl p-1 overflow-hidden group">
+                    <div class="bg-[#0a0a0a]/50 rounded-[22px] p-6 md:p-10">
+                        <div class="grid md:grid-cols-2 gap-8 items-center">
+                            <div class="order-2 md:order-1">
+                                <div class="inline-flex items-center px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-xs font-medium mb-4">
+                                    Workshop
                                 </div>
-                                <div class="flex items-center">
-                                    <i class="far fa-clock text-indigo-600 mr-2"></i>
-                                    <span class="font-medium">09:00 AM</span>
+                                <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">Entrepreneurship Workshop</h3>
+                                
+                                <div class="flex flex-wrap gap-4 text-gray-400 text-sm mb-6">
+                                    <div class="flex items-center"><i class="far fa-calendar-alt mr-2 text-indigo-400"></i> Aug 22, 2025</div>
+                                    <div class="flex items-center"><i class="far fa-clock mr-2 text-indigo-400"></i> 09:00 AM</div>
+                                </div>
+                                
+                                <p class="text-gray-400 mb-8 leading-relaxed">
+                                    Organized by Ministry of MSME, Govt of India in association with IEDC MET'S. Insights into the startup ecosystem.
+                                </p>
+                                
+                                <div class="flex gap-4">
+                                    <a href="#" class="px-6 py-3 border border-white/20 hover:bg-white/10 text-white rounded-xl text-sm font-medium transition-colors">Learn More</a>
                                 </div>
                             </div>
-                            <p class="text-gray-700 text-lg leading-relaxed mb-8">
-                                Organized by Ministry of MSME, Govt of India in association with IEDC MET'S SCHOOL OF ENGINEERING, MALA. This workshop will provide insights into the entrepreneurial ecosystem and startup opportunities.
-                            </p>
-                            <div class="flex flex-col sm:flex-row gap-4">
-                                <button class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-semibold transform transition-all duration-200 shadow-lg opacity-50 cursor-not-allowed" disabled>
-    Register Now
-</button>
-                                <button class="px-8 py-4 border-2 border-indigo-600 text-indigo-600 rounded-full font-semibold hover:bg-indigo-50 transform hover:scale-105 transition-all duration-200">
-                                    Learn More
-                                </button>
-                            </div>
-                        </div>
-                        <div class="order-1 md:order-2">
-                            <div class="relative">
-                                <img src="assets/images/events/EAWWW.jpg" alt="Entrepreneurship Awareness Workshop" class="w-full h-80 object-cover rounded-2xl shadow-2xl">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+                            <div class="order-1 md:order-2">
+                                <div class="relative rounded-2xl overflow-hidden aspect-video border border-white/10">
+                                    <img src="assets/images/events/EAWWW.jpg" alt="Event" class="w-full h-full object-cover opacity-80" onerror="this.src='https://images.unsplash.com/photo-1544531586-fde5298cdd40?q=80&w=2000'">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
-                </div>
-            </div>
     </section>
 
-    <!-- Partners Section -->
-    <div class="section-padding bg-white">
+    <div class="py-20 border-t border-white/5 bg-black/40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Collaboration Partners</h2>
-                <p class="text-xl text-gray-600">Working together to build India's innovation ecosystem</p>
-            </div>
-            <div class="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-7 items-center justify-items-center">
-                <div class="col-span-1 flex justify-center p-4 hover:scale-110 transition-transform duration-200">
-                    <img class="h-16 w-auto grayscale hover:grayscale-0 transition-all duration-200" src="assets/images/logos/APJ_Abdul_Kalam_Technological_University_logo.png" alt="KTU">
-                </div>
-                <div class="col-span-1 flex justify-center p-4 hover:scale-110 transition-transform duration-200">
-                    <img class="h-16 w-auto grayscale hover:grayscale-0 transition-all duration-200" src="assets/images/logos/IIC.png" alt="IIC">
-                </div>
-                <div class="col-span-1 flex justify-center p-4 hover:scale-110 transition-transform duration-200">
-                    <img class="h-16 w-auto grayscale hover:grayscale-0 transition-all duration-200" src="assets/images/logos/KERALA IEDC.png" alt="Kerala IEDC">
-                </div>
-                <div class="col-span-1 flex justify-center p-4 hover:scale-110 transition-transform duration-200">
-                    <img class="h-16 w-auto grayscale hover:grayscale-0 transition-all duration-200" src="assets/images/logos/IPL_LOGO-removebg-preview.png" alt="IPL">
-                </div>
-                <div class="col-span-1 flex justify-center p-4 hover:scale-110 transition-transform duration-200">
-                    <img class="h-16 w-auto grayscale hover:grayscale-0 transition-all duration-200" src="assets/images/logos/METS IEDC LOGO.jpg" alt="METS IEDC">
-                </div>
-                <div class="col-span-1 flex justify-center p-4 hover:scale-110 transition-transform duration-200">
-                    <img class="h-16 w-auto grayscale hover:grayscale-0 transition-all duration-200" src="assets/images/logos/ksum.png" alt="KSUM">
-                </div>
-                <div class="col-span-1 flex justify-center p-4 hover:scale-110 transition-transform duration-200">
-                    <img class="h-16 w-auto grayscale hover:grayscale-0 transition-all duration-200" src="assets/images/logos/mets_logo.png" alt="METS">
-                </div>
+            <p class="text-center text-gray-500 text-sm uppercase tracking-widest mb-12">In Collaboration With</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-8 items-center justify-items-center opacity-70">
+                <img class="h-12 w-auto partner-logo" src="assets/images/logos/APJ_Abdul_Kalam_Technological_University_logo.png" alt="KTU">
+                <img class="h-12 w-auto partner-logo" src="assets/images/logos/IIC.png" alt="IIC">
+                <img class="h-12 w-auto partner-logo" src="assets/images/logos/KERALA IEDC.png" alt="Kerala IEDC">
+                <img class="h-12 w-auto partner-logo" src="assets/images/logos/IPL_LOGO-removebg-preview.png" alt="IPL">
+                <img class="h-12 w-auto partner-logo" src="assets/images/logos/METS IEDC LOGO.jpg" alt="METS IEDC">
+                <img class="h-12 w-auto partner-logo" src="assets/images/logos/ksum.png" alt="KSUM">
+                <img class="h-12 w-auto partner-logo" src="assets/images/logos/mets_logo.png" alt="METS">
             </div>
         </div>
     </div>
 
-    <!-- WhatsApp Channel Button -->
-    <div class="fixed bottom-6 right-6 z-50">
-        <a href="https://whatsapp.com/channel/0029Vb5RvKWI1rchteX7pu3A" target="_blank" class="flex items-center space-x-3 bg-green-500 hover:bg-green-600 text-white px-6 py-4 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-200 font-medium">
-            <i class="fab fa-whatsapp text-xl"></i>
-            <span class="hidden sm:inline">Join WhatsApp Channel</span>
+    <div class="fixed bottom-6 right-6 z-40">
+        <a href="https://whatsapp.com/channel/0029Vb5RvKWI1rchteX7pu3A" target="_blank" class="flex items-center justify-center w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all transform hover:scale-110">
+            <i class="fab fa-whatsapp text-2xl text-white"></i>
         </a>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white">
-        <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <footer class="border-t border-white/5 bg-[#020202] pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
                 <div class="lg:col-span-2">
-                    <span class="text-3xl font-bold gradient-text">MET'S IEDC</span>
-                    <p class="text-gray-400 mt-4 text-lg leading-relaxed max-w-md">Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.</p>
-                    <div class="mt-8">
-                        <img src="https://via.placeholder.com/250x100/667eea/ffffff?text=Kerala+Startup+Mission" alt="Kerala Startup Mission" class="w-64 h-auto opacity-80">
-                    </div>
+                    <span class="text-2xl font-bold text-white">MET'S IEDC</span>
+                    <p class="text-gray-500 mt-4 text-sm leading-relaxed max-w-md">
+                        Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission. We are building the future, one idea at a time.
+                    </p>
                 </div>
 
                 <div>
-                    <h3 class="text-xl font-semibold mb-6 text-white">Quick Links</h3>
-                    <ul class="space-y-3">
-                        <li><a href="#home" class="text-gray-300 hover:text-white transition-colors duration-200 flex items-center"><i class="fas fa-home mr-2"></i>Home</a></li>
-                        <li><a href="about.html" class="text-gray-300 hover:text-white transition-colors duration-200 flex items-center"><i class="fas fa-info-circle mr-2"></i>About Us</a></li>
-                        <li><a href="events.html" class="text-gray-300 hover:text-white transition-colors duration-200 flex items-center"><i class="fas fa-calendar-alt mr-2"></i>Events</a></li>
-                        <li><a href="initiatives.html" class="text-gray-300 hover:text-white transition-colors duration-200 flex items-center"><i class="fas fa-lightbulb mr-2"></i>Initiatives</a></li>
-                        <li><a href="news.html" class="text-gray-300 hover:text-white transition-colors duration-200 flex items-center"><i class="fas fa-newspaper mr-2"></i>News & Blog</a></li>
-                        <li><a href="contact.html" class="text-gray-300 hover:text-white transition-colors duration-200 flex items-center"><i class="fas fa-envelope mr-2"></i>Contact Us</a></li>
-                        <li><a href="https://startupmission.kerala.gov.in/" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-white transition-colors duration-200 flex items-center"><i class="fas fa-external-link-alt mr-2"></i>Kerala Startup Mission</a></li>
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h3>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Home</a></li>
+                        <li><a href="about.html" class="hover:text-indigo-400 transition-colors">About Us</a></li>
+                        <li><a href="events.html" class="hover:text-indigo-400 transition-colors">Events</a></li>
+                        <li><a href="news.html" class="hover:text-indigo-400 transition-colors">News</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="text-xl font-semibold mb-6 text-white">Connect With Us</h3>
-                    <div class="space-y-4 mb-6">
-                        <p class="text-gray-300 flex items-center"><i class="fas fa-envelope mr-3 text-indigo-400"></i>metsenggiedc@gmail.com</p>
-                        <p class="text-gray-300 flex items-center"><i class="fas fa-phone mr-3 text-indigo-400"></i>+91 7306226875</p>
-                        <p class="text-gray-300 flex items-center"><i class="fas fa-map-marker-alt mr-3 text-indigo-400"></i>Mala, Thrissur, Kerala</p>
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contact</h3>
+                    <div class="space-y-3 text-sm text-gray-500">
+                        <p class="flex items-center"><i class="fas fa-envelope mr-3 text-indigo-500"></i>metsenggiedc@gmail.com</p>
+                        <p class="flex items-center"><i class="fas fa-phone mr-3 text-indigo-500"></i>+91 7306226875</p>
+                        <p class="flex items-center"><i class="fas fa-map-marker-alt mr-3 text-indigo-500"></i>Mala, Thrissur, Kerala</p>
                     </div>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200 transform hover:scale-110" aria-label="Facebook">
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
-                        </a>
-                        <a href="https://x.com/MetsIedc" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors duration-200 transform hover:scale-110" aria-label="X (formerly Twitter)">
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200 transform hover:scale-110" aria-label="LinkedIn">
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.594-11.018-3.714v-2.155z"/></svg>
-                        </a>
-                        <a href="https://www.instagram.com/metsiedc/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors duration-200 transform hover:scale-110" aria-label="Instagram">
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                        </a>
+                    <div class="flex space-x-4 mt-6">
+                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
                     </div>
                 </div>
             </div>
-            <div class="mt-12 border-t border-gray-700 pt-8">
-                <div class="flex flex-col md:flex-row justify-between items-center">
-                    <p class="text-gray-400 text-lg">© <span id="currentYear">2025</span> IEDC MET'S SCHOOL OF ENGINEERING. All Rights Reserved.</p>
-                    <p class="text-gray-500 mt-2 md:mt-0">Made with ❤️ for Innovation</p>
-                </div>
+            
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
+                <p>© 2025 IEDC MET'S SCHOOL OF ENGINEERING.</p>
+                <p>Designed for Innovation</p>
             </div>
         </div>
     </footer>
 
-    <!-- Required Swiper CSS and JS -->
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Swiper
-    new Swiper('.mySwiper', {
-        effect: 'coverflow',
-        grabCursor: true,
-        centeredSlides: true,
-        slidesPerView: 'auto',
-        coverflowEffect: {
-            rotate: 30,
-            stretch: 0,
-            depth: 100,
-            modifier: 2,
-            slideShadows: true,
-        },
-        loop: true,
-        autoplay: {
-            delay: 4000,
-            disableOnInteraction: false,
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-            dynamicBullets: true,
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        breakpoints: {
-            640: {
-                slidesPerView: 1.2,
-            },
-            768: {
-                slidesPerView: 1.5,
-            },
-            1024: {
-                slidesPerView: 2,
-            },
-            1280: {
-                slidesPerView: 2.5,
-            },
-        },
-    });
+            // Swiper Config
+            new Swiper('.mySwiper', {
+                effect: 'coverflow',
+                grabCursor: true,
+                centeredSlides: true,
+                slidesPerView: 'auto',
+                coverflowEffect: {
+                    rotate: 20,
+                    stretch: 0,
+                    depth: 200,
+                    modifier: 1,
+                    slideShadows: true,
+                },
+                loop: true,
+                autoplay: { delay: 3000, disableOnInteraction: false },
+                pagination: { el: '.swiper-pagination', clickable: true },
+            });
 
-    // Mobile Menu Logic - FIXED VERSION
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+            // Mobile Menu Logic
+            const btn = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+            const closeBtn = document.getElementById('close-mobile-menu');
 
-    // Function to open mobile menu
-    function openMobileMenu() {
-        mobileMenu.classList.add('open');
-        document.body.style.overflow = 'hidden';
-    }
+            function toggleMenu() {
+                menu.classList.toggle('open');
+                document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+            }
 
-    // Function to close mobile menu
-    function closeMobileMenu() {
-        mobileMenu.classList.remove('open');
-        document.body.style.overflow = '';
-    }
-
-    // Open menu button
-    if (mobileMenuButton) {
-        mobileMenuButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openMobileMenu();
-        });
-    }
-
-    // Close menu button
-    if (closeMobileMenuButton) {
-        closeMobileMenuButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            closeMobileMenu();
-        });
-    }
-
-    // Close mobile menu when clicking links
-    if (mobileMenu) {
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                closeMobileMenu();
+            btn.addEventListener('click', toggleMenu);
+            closeBtn.addEventListener('click', toggleMenu);
+            
+            // Navbar Scroll Effect
+            window.addEventListener('scroll', () => {
+                const nav = document.querySelector('nav');
+                if (window.scrollY > 20) {
+                    nav.classList.add('shadow-lg');
+                    nav.style.background = 'rgba(5, 5, 5, 0.9)';
+                } else {
+                    nav.classList.remove('shadow-lg');
+                    nav.style.background = 'rgba(5, 5, 5, 0.7)';
+                }
             });
         });
-
-        // Close menu when clicking on the backdrop (but not on the menu content)
-        mobileMenu.addEventListener('click', (e) => {
-            // Only close if clicking on the mobile-menu itself, not its children
-            if (e.target === mobileMenu) {
-                closeMobileMenu();
-            }
-        });
-    }
-
-    // Close menu on escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
-            closeMobileMenu();
-        }
-    });
-
-    // Animation on scroll - FIXED VERSION
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Only apply transform if it's not a mobile menu element
-                if (!entry.target.id || entry.target.id !== 'mobile-menu') {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            }
-        });
-    }, observerOptions);
-
-    // Observe all fade-in-up elements, but exclude mobile menu
-    document.querySelectorAll('.fade-in-up').forEach(el => {
-        if (el.id !== 'mobile-menu') {
-            observer.observe(el);
-        }
-    });
-
-    // Update current year
-    const currentYearElement = document.getElementById('currentYear');
-    if (currentYearElement) {
-        currentYearElement.textContent = new Date().getFullYear();
-    }
-});
-
     </script>
 </body>
 </html>
