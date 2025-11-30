@@ -1,420 +1,337 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> News & Updates-MET'S IEDC</title>
-     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="news-style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<style>
-    .gradient-text {
-            background: linear-gradient(90deg, #FF7262 0%, #FF7262 20%, #FF4F81 40%, #A162E8 60%, #5E5BFF 80%, #00C4FF 100%);
+    <title>News & Updates | MET'S IEDC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-hover:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.15);
+            transform: translateY(-8px);
+        }
+
+        .gradient-accent {
+            background: linear-gradient(90deg, #4f46e5 0%, #9333ea 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        
-        .hero-gradient {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
+
+        /* Background Blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: blob-bounce 10s infinite ease;
+        }
+        .blob-1 { top: 0%; left: -10%; width: 500px; height: 500px; background: #4f46e5; }
+        .blob-2 { top: 30%; right: -10%; width: 400px; height: 400px; background: #9333ea; }
+        .blob-3 { bottom: 0%; left: 20%; width: 600px; height: 600px; background: #2563eb; }
+
+        @keyframes blob-bounce {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.1); }
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
         }
         
-        .card-hover {
-            transition: all 0.3s ease;
-        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
         
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        /* Line Clamp for News Excerpts */
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
-:root {
-    --text-dark: #333;
-    --text-light: #666;
-    --bg-light: #f5f5f5;
-    --bg-white: #fff;
-    --primary-yellow: #fce77a;
-    --primary-pink: #e91e63;
-    --font-family: 'Poppins', sans-serif;
-}
+    </style>
+</head>
+<body class="font-sans antialiased relative selection:bg-indigo-500 selection:text-white">
 
-body {
-    font-family: var(--font-family);
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
-    background-color: var(--bg-white);
-}
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
 
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* Page Header */
-.page-header {
-    background-color: var(--bg-light);
-    padding: 4rem 0 2rem;
-    text-align: center;
-}
-
-.page-header h1 {
-    font-size: 3rem;
-    margin-bottom: 0.5rem;
-}
-
-.page-header p {
-    font-size: 1.1rem;
-    color: var(--text-light);
-}
-
-/* Section Header */
-.section-header {
-    text-align: center;
-    margin-bottom: 3rem;
-    padding-top: 5rem;
-}
-
-.section-header h2 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.section-header p {
-    font-size: 1rem;
-    color: var(--text-light);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-/* Article Grid Layout */
-.article-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-}
-
-/* Individual Article Card */
-.article-card {
-    background-color: var(--bg-white);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-}
-
-.article-card:hover {
-    transform: translateY(-10px);
-}
-
-.card-image {
-    position: relative;
-    width: 100%;
-    height: 200px;
-    overflow: hidden;
-}
-
-.card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.category-tag {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    background-color: var(--primary-pink);
-    color: var(--bg-white);
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 5px 10px;
-    border-radius: 5px;
-    text-transform: uppercase;
-}
-
-.card-content {
-    padding: 1.5rem;
-}
-
-.card-content h4 {
-    font-size: 1.1rem;
-    margin-top: 0;
-    margin-bottom: 0.8rem;
-    font-weight: 600;
-}
-
-.card-content p {
-    font-size: 0.9rem;
-    color: var(--text-light);
-}
-
-.card-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    color: var(--text-light);
-    margin-top: 1rem;
-}
-
-.card-meta span i {
-    margin-right: 5px;
-}
-
-/* View All Button */
-.view-all-button {
-    text-align: center;
-    margin-top: 3rem;
-    margin-bottom: 5rem;
-}
-
-.view-all-button a {
-    background-color: var(--primary-pink);
-    color: var(--bg-white);
-    text-decoration: none;
-    padding: 15px 30px;
-    border-radius: 5px;
-    font-weight: 600;
-    text-transform: uppercase;
-    transition: background-color 0.3s ease;
-}
-
-.view-all-button a:hover {
-    background-color: #c2185b;
-}
-
-/* Page Footer */
-.page-footer {
-    background-color: var(--text-dark);
-    color: var(--bg-white);
-    text-align: center;
-    padding: 2rem 0;
-}
-
-/* Responsive Design */
-@media (max-width: 992px) {
-    .article-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .article-grid {
-        grid-template-columns: 1fr;
-    }
-}
-</style>
-    <style>
-.page-header {
-    position: relative;
-    height: 50vh; /* adjust height */
-    background: url('assets/images/logos/news.jpeg') no-repeat center center/cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
-}
-
-.page-header::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.4); /* dark overlay for readability */
-}
-
-.page-header .container {
-    position: relative;
-    z-index: 1;
-}
-</style>
-<body class="font-sans antialiased text-gray-900 bg-white">
-    <!-- Navigation -->
-    <nav class="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between h-20 items-center">
                 <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <a href="index.html" class="flex items-center space-x-3">
-                            <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
-                            <span class="text-2xl font-bold gradient-text">MET'S IEDC</span>
-                        </a>
-                    </div>
-                    <div class="hidden md:ml-10 md:flex md:space-x-8">
-                        <a href="index.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Home</a>
-                        <a href="about.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">About Us</a>
-                        <a href="team.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Our Ex-Com</a>
-                        <a href="announcement.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Announcements</a>
-                        <a href="events.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Gallery</a>
-                        <a href="initiatives.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Initiatives</a>
-                        <a href="news.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">News</a>
-                        <a href="contact.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Contact US</a>
+                    <a href="index.html" class="flex items-center space-x-3 group">
+                        <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
+                        <span class="text-2xl font-bold tracking-tight text-white">MET'S <span class="text-indigo-400">IEDC</span></span>
+                    </a>
+                    <div class="hidden md:ml-12 md:flex md:space-x-8">
+                        <a href="about.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">About</a>
+                        <a href="team.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Ex-Com</a>
+                        <a href="initiatives.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Initiatives</a>
+                        <a href="news.html" class="text-white px-3 py-2 text-sm font-medium border-b-2 border-indigo-500">News</a>
+                        <a href="contact.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Contact</a>
                     </div>
                 </div>
-                <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                <div class="hidden md:flex items-center">
+                    <a href="login.html" class="glass-card glass-hover text-white px-6 py-2.5 rounded-full text-sm font-medium border border-white/10">
+                        Log in
+                    </a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-white p-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
         </div>
         
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="mobile-menu">
-            <div class="flex justify-end p-4">
-                <button id="close-mobile-menu" class="text-gray-700 focus:outline-none">
+        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-xl z-50">
+            <div class="flex justify-end p-6">
+                <button id="close-mobile-menu" class="text-white p-2">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <nav class="flex flex-col space-y-4 px-6">
-                 <a href="index.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Home</a>
-                <a href="about.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">About Us</a>
-                <a href="team.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Our Team</a>
-                <a href="initiatives.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Initiatives</a>
-                <a href="news.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">News</a>
-                <a href="announcement.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Announcements</a>
-                <a href="events.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200"> Gallery</a>
-                <a href="contact.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Contact</a>
-                
+            <nav class="flex flex-col space-y-6 px-8 mt-10 text-center">
+                <a href="about.html" class="text-2xl font-light text-white hover:text-indigo-400">About Us</a>
+                <a href="team.html" class="text-2xl font-light text-white hover:text-indigo-400">Our Team</a>
+                <a href="initiatives.html" class="text-2xl font-light text-white hover:text-indigo-400">Initiatives</a>
+                <a href="events.html" class="text-2xl font-light text-white hover:text-indigo-400">Gallery</a>
+                <a href="login.html" class="mt-8 py-4 bg-indigo-600 rounded-full text-white font-medium">Student Login</a>
             </nav>
         </div>
     </nav>
-   <header class="page-header">
-    <div class="container">
-        <h1>Our Newsroom</h1>
-        <p>Stay up to date with our latest news and insights.</p>
+
+    <div class="pt-32 pb-16 lg:pt-48 lg:pb-24 text-center px-4 relative z-10">
+        <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6">
+            News & <span class="gradient-accent">Updates</span>
+        </h1>
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            Stay informed with the latest happenings, success stories, and announcements from our innovation ecosystem.
+        </p>
     </div>
-</header>
 
-    <section class="news-and-articles">
-        <div class="container">
-            <div class="section-header">
-                <h2>Latest News & Updates</h2>
-                <p>Archives</p>
+    <section class="pb-16 px-4 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="glass-card rounded-3xl overflow-hidden glass-hover group">
+                <div class="grid md:grid-cols-2 gap-0">
+                    <div class="relative h-64 md:h-auto overflow-hidden">
+                        <img src="assets/images/events/IMG-20251112-WA0014.jpg" alt="Featured News" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent md:hidden"></div>
+                    </div>
+                    <div class="p-8 md:p-12 flex flex-col justify-center">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Highlight</span>
+                            <span class="text-gray-400 text-sm"><i class="far fa-calendar-alt mr-2"></i>Nov 12, 2025</span>
+                        </div>
+                        <h2 class="text-3xl font-bold text-white mb-4 group-hover:text-indigo-300 transition-colors">IEDC Summit 2025: Breaking Barriers</h2>
+                        <p class="text-gray-400 mb-6 leading-relaxed">
+                            MET'S IEDC students showcased their innovative projects at the state-level summit, winning accolades for their sustainable energy solution prototype. Read more about their journey to the top.
+                        </p>
+                        <a href="#" class="inline-flex items-center text-white font-semibold hover:text-indigo-400 transition-colors">
+                            Read Full Story <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
-
-            <div class="article-grid">
-                <div class="article-card">
-                    <div class="card-image">
-                        <img src="assets/images/events/1.1.jpg" alt="Article Thumbnail 1">
-                        <span class="category-tag">ENTERTAINMENT</span>
-                    </div>
-                    <div class="card-content">
-                        <h4>Treasure Hunt: The S1 B.Tech Team Wins!</h4>
-                        <p> The IEDC METS School of Engineering hosted an exhilarating treasure hunt that saw a remarkable turnout from both METS School of Engineering and METS College of Advanced Studies. After a thrilling and competitive event, the team from S1 B.Tech emerged as the deserving winners. The event highlighted the spirit of teamwork and problem-solving among all participants.</p>
-                        <div class="card-meta">
-                            <span><i class="fas fa-calendar-alt"></i> August 25, 2025</span>
-                            <span><i class="fas fa-comment"></i> 10 Comments</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="article-card">
-                    <div class="card-image">
-                        <img src="assets/images/events/CEO.jpg" alt="Article Thumbnail 2">
-                        <span class="category-tag">ENTREPRENEURSHIP</span>
-                    </div>
-                    <div class="card-content">
-                        <h4>Entrepreneurship Awareness Workshop: A Collaborative Success</h4>
-                        <p>On August 22, 2025, the IEDC METS School of Engineering, in collaboration with the Ministry of MSME, Govt. of India, successfully hosted an Entrepreneurship Awareness Workshop at the college's Seminar Hall. The event was attended by 127 participants and featured addresses from key figures from both the college and the ministry, providing aspiring student innovators with valuable insights into the world of entrepreneurship.</p>
-                        <div class="card-meta">
-                            <span><i class="fas fa-calendar-alt"></i> August 22, 2025</span>
-                            <span><i class="fas fa-comment"></i> 10 Comments</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="article-card">
-                    <div class="card-image">
-                        <img src="assets/images/events/1.11.jpg" alt="Article Thumbnail 3">
-                        <span class="category-tag">INNOVATION</span>
-                    </div>
-                    <div class="card-content">
-                        <h4>IEDC Orientation for B.Tech Students</h4>
-                        <p>The Innovation and Entrepreneurship Development Centre (IEDC) recently conducted an orientation session for B.Tech students from the second, third, and fourth years. The session was aimed at introducing the students to the various initiatives and opportunities offered by IEDC, with a focus on fostering an entrepreneurial mindset. The event provided a platform for students to learn how they can transform their innovative ideas into viable projects and startups with the support of the IEDC.</p>
-                        <div class="card-meta">
-                            <span><i class="fas fa-calendar-alt"></i> July 11, 2025</span>
-                            <span><i class="fas fa-comment"></i> 18 Comments</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="article-card">
-                     <div class="card-image">
-                        <img src="assets/images/events/PRIZE ON.jpg" alt="Article Thumbnail 4">
-                        <span class="category-tag">ENTREPRENEURSHIP</span>
-                    </div>
-                    <div class="card-content">
-                        <h4>Students Win Second Prize in ARYSE Kerala Quiz</h4>
-                        <p>Congratulations to Abhinav V.S. (S3 CSE) and Sulthana M.B. (S3 CSE) for winning the second prize in the ARYSE Kerala - Quiz Competition. The competition was held as part of the MSME Awareness Program for students and young entrepreneurs. Their achievement highlights the strong entrepreneurial spirit and knowledge base of the students at METS.</p>
-                        <div class="card-meta">
-                            <span><i class="fas fa-calendar-alt"></i> June 24, 2025</span>
-                            <span><i class="fas fa-comment"></i> 20 Comments</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="article-card">
-                       <div class="card-image">
-                        <img src="" alt="Article Thumbnail 5">
-                        <span class="category-tag">INNOVATION</span>
-                    </div>
-                    <div class="card-content">
-                     <h4>Idea Pitching Competition</h4>
-                        <p>An idea pitching competition was held at MET'S School of Engineering, Mala, under the auspices of APJ Abdul Kalam Technological University. The competition showcased the innovative ideas of student teams. The winners are:
-
-First Prize: Team Spectro, represented by Arshina Arsal (S2 AD) and Areeb Rahman (S2 AD).
-
-Second Prize: Team Meat CRAFT, consisting of Muhammed Shahil (S2 BTE), Ann Treesa Saji (S2 BTE), Gokul K.K. (S2 BTE), and Joyal Thomas (S2 AD).</p>
-                        <div class="card-meta">
-                            <span><i class="fas fa-calendar-alt"></i> March 20, 2025</span>
-                            <span><i class="fas fa-comment"></i> 10 Comments</span>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="article-card">...</div>
-                <div class="article-card">...</div>
-                <div class="article-card">...</div>
-                <div class="article-card">...</div>
-
-            </div>
-            
         </div>
     </section>
 
-    <footer class="page-footer">
-        <div class="container">
-            <p>&copy;  2025 IEDC MET'S SCHOOL OF ENGINEERING. All Rights Reserved.</p>
+    <section class="pb-32 px-4 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <article class="glass-card rounded-3xl overflow-hidden glass-hover group flex flex-col h-full">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="News Image" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-xs font-medium text-white">
+                            Workshop
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <span class="text-gray-500 text-xs mb-3 block">Oct 28, 2025</span>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-indigo-300 transition-colors">AI & Robotics Workshop</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
+                            A hands-on session where students built their first autonomous robots. The event saw participation from over 50 aspiring engineers.
+                        </p>
+                        <a href="#" class="text-indigo-400 text-sm font-semibold hover:text-white transition-colors flex items-center">
+                            Read More <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="glass-card rounded-3xl overflow-hidden glass-hover group flex flex-col h-full">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1559136555-9303dff16302?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="News Image" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-xs font-medium text-white">
+                            Achievement
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <span class="text-gray-500 text-xs mb-3 block">Oct 15, 2025</span>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-indigo-300 transition-colors">Idea Fest Top 100</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
+                            Three teams from MET'S Engineering have been selected for the final round of Idea Fest 2025, securing a grant of ₹50,000 each.
+                        </p>
+                        <a href="#" class="text-indigo-400 text-sm font-semibold hover:text-white transition-colors flex items-center">
+                            Read More <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="glass-card rounded-3xl overflow-hidden glass-hover group flex flex-col h-full">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="News Image" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-xs font-medium text-white">
+                            Community
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <span class="text-gray-500 text-xs mb-3 block">Sep 05, 2025</span>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-indigo-300 transition-colors">Orientation Day 2025</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
+                            Welcoming the new batch of innovators! The orientation session introduced freshers to the world of startups and entrepreneurship.
+                        </p>
+                        <a href="#" class="text-indigo-400 text-sm font-semibold hover:text-white transition-colors flex items-center">
+                            Read More <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                        </a>
+                    </div>
+                </article>
+
+            </div>
+
+            <div class="flex justify-center mt-16">
+                <div class="flex space-x-2">
+                    <button class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-500/50">1</button>
+                    <button class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors">2</button>
+                    <button class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors">3</button>
+                    <button class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-white/5 bg-[#020202] pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div class="lg:col-span-2">
+                    <span class="text-2xl font-bold text-white">MET'S IEDC</span>
+                    <p class="text-gray-500 mt-4 text-sm leading-relaxed max-w-md">
+                        Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h3>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="index.html" class="hover:text-indigo-400 transition-colors">Home</a></li>
+                        <li><a href="about.html" class="hover:text-indigo-400 transition-colors">About Us</a></li>
+                        <li><a href="events.html" class="hover:text-indigo-400 transition-colors">Events</a></li>
+                        <li><a href="news.html" class="hover:text-indigo-400 transition-colors">News</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contact</h3>
+                    <div class="space-y-3 text-sm text-gray-500">
+                        <p class="flex items-center"><i class="fas fa-envelope mr-3 text-indigo-500"></i>metsenggiedc@gmail.com</p>
+                        <p class="flex items-center"><i class="fas fa-phone mr-3 text-indigo-500"></i>+91 7306226875</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
+                <p>© 2025 IEDC MET'S SCHOOL OF ENGINEERING.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-white transition-colors"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com/MetsIedc" class="hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/metsiedc/" class="hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-white transition-colors"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
         </div>
     </footer>
 
-</body>
     <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const menuButton = document.getElementById("mobile-menu-button");
-    const closeButton = document.getElementById("close-mobile-menu");
-    const mobileMenu = document.getElementById("mobile-menu");
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Logic
+            const btn = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+            const closeBtn = document.getElementById('close-mobile-menu');
 
-    // Hide mobile menu by default
-    mobileMenu.style.display = "none";
+            function toggleMenu() {
+                menu.classList.toggle('open');
+                document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+            }
 
-    menuButton.addEventListener("click", () => {
-        mobileMenu.style.display = "block";
-    });
-
-    closeButton.addEventListener("click", () => {
-        mobileMenu.style.display = "none";
-    });
-});
-</script>
+            btn.addEventListener('click', toggleMenu);
+            closeBtn.addEventListener('click', toggleMenu);
+            
+            // Navbar Scroll Effect
+            window.addEventListener('scroll', () => {
+                const nav = document.querySelector('nav');
+                if (window.scrollY > 20) {
+                    nav.classList.add('shadow-lg');
+                    nav.style.background = 'rgba(5, 5, 5, 0.9)';
+                } else {
+                    nav.classList.remove('shadow-lg');
+                    nav.style.background = 'rgba(5, 5, 5, 0.7)';
+                }
+            });
+        });
+    </script>
+</body>
 </html>
