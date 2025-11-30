@@ -1,651 +1,360 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - METSIEDC</title>
-      <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<style>
-     .gradient-text {
-            background: linear-gradient(90deg, #FF7262 0%, #FF7262 20%, #FF4F81 40%, #A162E8 60%, #5E5BFF 80%, #00C4FF 100%);
+    <title>About Us | MET'S IEDC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Classes (Same as Home Page) */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-hover {
+            transition: all 0.3s ease;
+        }
+        .glass-hover:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .gradient-accent {
+            background: linear-gradient(90deg, #4f46e5 0%, #9333ea 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        
-        .hero-gradient {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
+
+        /* Background Blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: blob-bounce 10s infinite ease;
+        }
+        .blob-1 { top: 10%; left: -10%; width: 500px; height: 500px; background: #4f46e5; }
+        .blob-2 { top: 40%; right: -10%; width: 400px; height: 400px; background: #9333ea; }
+        .blob-3 { bottom: 10%; left: 20%; width: 600px; height: 600px; background: #2563eb; }
+
+        @keyframes blob-bounce {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.1); }
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
         }
         
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
-:root {
-    --primary-color: #8a76cc; /* Yellow from the image */
-    --text-dark: #000000;
-    --text-light: #000000;
-    --bg-light: #f5f5f5;
-    --bg-white: #fff;
-    --border-color: #ddd;
-    --font-family: 'Poppins', sans-serif;
-}
-
-body {
-    font-family: var(--font-family);
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
-    color: var(--text-dark);
-    background-color: var(--bg-light);
-}
-
-/* General Layout */
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.container-grid {
-    display: grid;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
-    gap: 30px;
-}
-
-h1, h2, h3, h4 {
-    font-weight: 600;
-    line-height: 1.2;
-}
-
-p {
-    color: var(--text-light);
-}
-
-/* Header/Navbar */
-.header {
-    background-color: var(--bg-white);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem 2rem;
-}
-
-.logo {
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 2rem;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: var(--text-dark);
-    font-weight: 500;
-    transition: color 0.3s;
-}
-
-.nav-links a:hover,
-.nav-links a.active {
-    color: var(--primary-color);
-}
-
-.contact-btn {
-    background-color: var(--primary-color);
-    padding: 10px 20px;
-    text-decoration: none;
-    color: var(--text-dark);
-    border-radius: 5px;
-    font-weight: 600;
-    transition: background-color 0.3s;
-}
-
-.contact-btn:hover {
-    background-color: #ff0000;
-}
-
-/* Hero Section */
-.hero-section {
-    background-color: var(--primary-color);
-    text-align: center;
-    padding: 5rem 2rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero-section h1 {
-    font-size: 3rem;
-}
-
-.hero-section p {
-    max-width: 600px;
-    margin: 0.5rem auto 0;
-}
-
-/* Team Images Section */
-.team-images-section {
-    background-color: var(--bg-white);
-    padding: 1rem 0;
-    text-align: center;
-}
-
-.image-container {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    transform: translateY(-50px); /* Lifts the images over the yellow section */
-    position: relative;
-    z-index: 2;
-}
-
-.image-container img {
-    width: 250px;
-    height: 180px;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-}
-
-/* Core Philosophy Section */
-.core-philosophy-section {
-    padding: 3rem 0;
-    text-align: center;
-}
-
-.core-philosophy-section h2 {
-    font-size: 2.5rem;
-    max-width: 800px;
-    margin: 0 auto 2rem;
-}
-
-.philosophy-content {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    text-align: left;
-}
-
-.left-content, .right-content {
-    flex: 1;
-    max-width: 500px;
-}
-
-/* Mission and Vision Section */
-.mission-vision-section {
-    background-color: var(--bg-white);
-    padding: 5rem 0;
-}
-
-.mission-vision-section .container-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    gap: 50px;
-}
-
-.video-container {
-    position: relative;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-}
-
-.video-container img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-.play-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.play-button:hover {
-    background-color: rgba(255, 255, 255, 1);
-}
-
-.play-button i {
-    color: var(--primary-color);
-    font-size: 2rem;
-}
-
-.founder-info {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    color: var(--bg-white);
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    font-size: 1.1rem;
-}
-
-.founder-info span {
-    display: block;
-    font-size: 0.9rem;
-    color: #eee;
-}
-
-.text-content h3 {
-    font-size: 2rem;
-}
-
-.text-content blockquote {
-    border-left: 3px solid var(--primary-color);
-    padding-left: 20px;
-    margin: 2rem 0;
-    font-style: italic;
-    color: var(--text-light);
-}
-
-/* Call to Action Section */
-.cta-section {
-    padding: 3rem 0;
-    text-align: center;
-}
-
-.cta-section h3 {
-    font-size: 2.5rem;
-    max-width: 800px;
-    margin: 0 auto 1rem;
-}
-
-/* Feature Icons Section */
-.features-section {
-    padding: 3rem 0 5rem;
-}
-
-.features-section .container-grid {
-    grid-template-columns: repeat(3, 1fr);
-    text-align: center;
-}
-
-.feature-item {
-    padding: 2rem;
-    background-color: var(--bg-white);
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    transition: transform 0.3s;
-}
-
-.feature-item:hover {
-    transform: translateY(-10px);
-}
-
-.icon-circle {
-    width: 70px;
-    height: 70px;
-    background-color: var(--primary-color);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto 1rem;
-    font-size: 2rem;
-    color: var(--text-dark);
-}
-
-.visit-site-box {
-    background-color: var(--bg-white);
-    border: 2px solid var(--primary-color);
-    border-radius: 10px;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: var(--text-dark);
-    font-size: 1.2rem;
-    font-weight: 600;
-    transition: all 0.3s;
-}
-
-.visit-site-box:hover {
-    background-color: var(--primary-color);
-    color: var(--text-dark);
-}
-
-.icon-wrapper {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-    color: var(--primary-color);
-}
-
-.visit-site-box:hover .icon-wrapper {
-    color: var(--text-dark);
-}
-
-.icon-wrapper i {
-    font-size: 2rem;
-}
-
-/* Responsive Design */
-@media (max-width: 992px) {
-    .navbar {
-        flex-direction: column;
-        text-align: center;
-    }
-    .nav-links {
-        padding: 1rem 0;
-        gap: 1.5rem;
-    }
-    .contact-btn {
-        margin-top: 1rem;
-    }
-
-    .team-images-section .image-container {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .philosophy-content {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
-    }
-
-    .mission-vision-section .container-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .features-section .container-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .hero-section {
-        padding: 3rem 1rem;
-    }
-
-    .hero-section h1 {
-        font-size: 2rem;
-    }
-
-    .core-philosophy-section h2,
-    .cta-section h3 {
-        font-size: 1.8rem;
-    }
-}
-.mission-section {
-  display: flex;
-  align-items: flex-start;
-  gap: 40px;
-  margin: 40px 0;
-}
-
-.mission-left {
-  flex: 1;
-}
-
-.mission-right {
-  flex: 1.2;
-}
-
-.founder-quote {
-  background: #f9f9f9;
-  padding: 15px 20px;
-  margin-top: 15px;
-  border-left: 4px solid #6c63ff; /* accent color */
-  border-radius: 6px;
-  font-style: italic;
-  color: #333;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.founder-quote span {
-  display: block;
-  margin-top: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #777;
-}
-
-blockquote {
-  margin-top: 20px;
-  padding-left: 15px;
-  border-left: 3px solid #6c63ff;
-  color: #555;
-  font-style: italic;
-}
-.mobile-menu {
-    display: none; /* default hidden */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: white;
-    z-index: 1000;
-    transition: transform 0.3s ease-in-out;
-}
-
-</style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+    </style>
 </head>
-<body class="font-sans antialiased text-gray-900 bg-white">
-    <!-- Navigation -->
-    <nav class="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+<body class="font-sans antialiased relative selection:bg-indigo-500 selection:text-white">
+
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between h-20 items-center">
                 <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <a href="index.html" class="flex items-center space-x-3">
-                            <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
-                            <span class="text-2xl font-bold gradient-text">MET'S IEDC</span>
-                        </a>
-                    </div>
-                    <div class="hidden md:ml-10 md:flex md:space-x-8">
-                        <a href="about.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">About Us</a>
-                        <a href="team.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Our Ex-Com</a>
-                        <a href="announcement.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Announcements</a>
-                        <a href="initiatives.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Initiatives</a>
-                        <a href="news.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">News</a>
-                        <a href="contact.html" class="text-gray-600 hover:text-indigo-600 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200">Contact US</a>
+                    <a href="index.html" class="flex items-center space-x-3 group">
+                        <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
+                        <span class="text-2xl font-bold tracking-tight text-white">MET'S <span class="text-indigo-400">IEDC</span></span>
+                    </a>
+                    <div class="hidden md:ml-12 md:flex md:space-x-8">
+                        <a href="about.html" class="text-white px-3 py-2 text-sm font-medium border-b-2 border-indigo-500">About</a>
+                        <a href="team.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Ex-Com</a>
+                        <a href="initiatives.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Initiatives</a>
+                        <a href="news.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">News</a>
+                        <a href="contact.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Contact</a>
                     </div>
                 </div>
-                <div class="hidden md:ml-6 md:flex md:items-center">
-                    <a href="login.html" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">Log in</a>
+                <div class="hidden md:flex items-center">
+                    <a href="login.html" class="glass-card glass-hover text-white px-6 py-2.5 rounded-full text-sm font-medium border border-white/10">
+                        Log in
+                    </a>
                 </div>
-                <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                <button id="mobile-menu-button" class="md:hidden text-white p-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
         </div>
         
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="mobile-menu">
-            <div class="flex justify-end p-4">
-                <button id="close-mobile-menu" class="text-gray-700 focus:outline-none">
+        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-xl z-50">
+            <div class="flex justify-end p-6">
+                <button id="close-mobile-menu" class="text-white p-2">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <nav class="flex flex-col space-y-4 px-6">
-                <a href="about.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">About Us</a>
-                <a href="team.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Our Team</a>
-                <a href="initiatives.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Initiatives</a>
-                <a href="news.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">News</a>
-                <a href="announcement.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Announcements</a>
-                <a href="events.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Event Gallery</a>
-                <a href="contact.html" class="block py-3 text-lg font-medium text-gray-700 hover:text-indigo-600 border-b border-gray-200">Contact</a>
-                <a href="login.html" class="mt-6 block w-full text-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-medium hover:from-indigo-700 hover:to-purple-700 transition shadow-lg">Student Login</a>
+            <nav class="flex flex-col space-y-6 px-8 mt-10 text-center">
+                <a href="about.html" class="text-2xl font-light text-white hover:text-indigo-400">About Us</a>
+                <a href="team.html" class="text-2xl font-light text-white hover:text-indigo-400">Our Team</a>
+                <a href="initiatives.html" class="text-2xl font-light text-white hover:text-indigo-400">Initiatives</a>
+                <a href="events.html" class="text-2xl font-light text-white hover:text-indigo-400">Gallery</a>
+                <a href="login.html" class="mt-8 py-4 bg-indigo-600 rounded-full text-white font-medium">Student Login</a>
             </nav>
         </div>
     </nav>
 
-    <section class="hero-section">
-        <div class="hero-content">
-            <h1>About us</h1>
-            <p>At MET’S IEDC, we nurture student ideas with mentorship, resources, and real-world opportunities — transforming creativity into impactful startups and solutions.</p>
-        </div>
-    </section>
-
-    <section class="team-images-section">
-        <div class="image-container">
-           <img src="assets/images/team/NODAL OFFICER.jpg" alt="Prof. [Name], Nodal Officer">
-<img src="assets/images/team/CHRISS.jpg" alt="Chriss [Full Name], Ex-Com">
-<img src="assets/images/team/DEENA.jpg" alt="Deena [Full Name], Ex-Com">
-<img src="assets/images/team/HABEEB.jpg" alt="Habeeb [Full Name], Ex-Com">
-
-        </div>
-    </section>
-
-    <section class="core-philosophy-section">
-        <div class="container">
-            <h2>We make sure your ideas & innovations are nurtured properly</h2>
-            <div class="philosophy-content">
-                <div class="left-content">
-                    <p>At MET’S IEDC, we foster creativity, innovation, and entrepreneurship among students. Our mission is to build a vibrant ecosystem where ideas turn into impactful projects and startups. Through mentorship, workshops, and real-world experiences, we empower innovators to explore their potential and shape the future.</p>
-                </div>
-                <div class="right-content">
-                    <p>Every idea matters. We provide the right environment, mentorship, and resources to transform student creativity into impactful projects. From concept to execution, we ensure that innovations are guided with care, collaboration, and a strong support system.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-<div class="mission-section">
-  <div class="mission-left">
-    <!-- Video Embed -->
-   <iframe width="100%" height="280"
-  src="https://www.youtube.com/embed/D0dDqpdMMn4"
-  title="METS IEDC Mission Video"
-  frameborder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowfullscreen>
-</iframe>
-
-    <!-- Quote -->
-    <div class="founder-quote">
-      “Making an impact, together” 
-      <span>- METSIEDC Founder</span>
+    <div class="pt-32 pb-16 lg:pt-48 lg:pb-24 text-center px-4">
+        <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6">
+            About <span class="gradient-accent">Us</span>
+        </h1>
+        <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+            At MET’S IEDC, we nurture student ideas with mentorship, resources, and real-world opportunities — transforming creativity into impactful startups and solutions.
+        </p>
     </div>
-  </div>
 
-  <div class="mission-right">
-    <h2>We empower student innovators & entrepreneurs</h2>
-    <p>
-      Our mission is to inspire and empower students to think beyond academics. 
-      By fostering entrepreneurial skills, encouraging innovation, and providing 
-      real-world exposure, MET’S IEDC helps future leaders create solutions that 
-      make a difference.
-    </p>
-    <blockquote>
-      <em>“Innovation is not just about ideas, it’s about making them happen — and at MET’S IEDC, we help you do exactly that.”</em>
-    </blockquote>
-  </div>
-</div>
+    <div class="pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="glass-card p-2 rounded-2xl glass-hover group">
+                    <div class="aspect-[4/5] rounded-xl overflow-hidden relative">
+                        <img src="assets/images/team/NODAL OFFICER.jpg" alt="Nodal Officer" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
+                            <span class="text-sm font-semibold text-white">Nodal Officer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-2 rounded-2xl glass-hover group">
+                    <div class="aspect-[4/5] rounded-xl overflow-hidden relative">
+                        <img src="assets/images/team/CHRISS.jpg" alt="Chriss" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
+                            <span class="text-sm font-semibold text-white">Chriss</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-2 rounded-2xl glass-hover group">
+                    <div class="aspect-[4/5] rounded-xl overflow-hidden relative">
+                        <img src="assets/images/team/DEENA.jpg" alt="Deena" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
+                            <span class="text-sm font-semibold text-white">Deena</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-2 rounded-2xl glass-hover group">
+                    <div class="aspect-[4/5] rounded-xl overflow-hidden relative">
+                        <img src="assets/images/team/HABEEB.jpg" alt="Habeeb" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
+                            <span class="text-sm font-semibold text-white">Habeeb</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-
-
-    <section class="cta-section">
-        <div class="container">
-            <h3>We help innovators to grow faster and stronger</h3>
-            <p>We believe in creating an ecosystem where student entrepreneurs and innovators can accelerate their growth and bring positive change. Our programs, workshops, and competitions are designed to push boundaries and shape visionaries of tomorrow.</p>
+    <section class="py-20 bg-white/5 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
+                We make sure your ideas & <br>
+                <span class="text-indigo-400">innovations are nurtured properly</span>
+            </h2>
+            
+            <div class="glass-card rounded-3xl p-8 md:p-12">
+                <div class="grid md:grid-cols-2 gap-12 text-gray-300 text-lg leading-relaxed">
+                    <div>
+                        <p class="mb-6">
+                            At MET’S IEDC, we foster creativity, innovation, and entrepreneurship among students. Our mission is to build a vibrant ecosystem where ideas turn into impactful projects and startups.
+                        </p>
+                        <p>
+                            Through mentorship, workshops, and real-world experiences, we empower innovators to explore their potential and shape the future.
+                        </p>
+                    </div>
+                    <div class="border-l border-white/10 pl-0 md:pl-12">
+                        <p>
+                            Every idea matters. We provide the right environment, mentorship, and resources to transform student creativity into impactful projects.
+                        </p>
+                        <p class="mt-6">
+                            From concept to execution, we ensure that innovations are guided with care, collaboration, and a strong support system.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section class="features-section">
-        <div class="container-grid">
-            <div class="feature-item">
-                <div class="icon-circle"><i class="fas fa-search-location"></i></div>
-                <h4>Target Oriented</h4>
-                <p>We guide students with a clear vision and strategic approach to innovation and entrepreneurship.</p>
-            </div>
-            <div class="feature-item">
-                <div class="icon-circle"><i class="fas fa-award"></i></div>
-                <h4>Success Driven</h4>
-                <p>With structured mentorship and institutional support, we ensure projects have a strong path toward success.</p>
-            </div>
-            <div class="feature-item">
-                <div class="icon-circle"><i class="fas fa-network-wired"></i></div>
-                <h4>Connected ecosystem</h4>
-                <p>MET’S IEDC links students with mentors, industry experts, and opportunities that help ideas grow into impactful solutions.</p>
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <div class="glass-card p-2 rounded-2xl mb-8">
+                        <div class="rounded-xl overflow-hidden shadow-2xl">
+                            <iframe class="w-full aspect-video" 
+                                src="https://www.youtube.com/embed/D0dDqpdMMn4" 
+                                title="METS IEDC Mission Video" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl border-l-4 border-l-indigo-500">
+                        <p class="text-lg italic text-gray-300">"Making an impact, together"</p>
+                        <span class="block mt-2 text-sm font-semibold text-indigo-400">- METSIEDC Founder</span>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">We empower student innovators & entrepreneurs</h2>
+                    <p class="text-gray-400 text-lg mb-8 leading-relaxed">
+                        Our mission is to inspire and empower students to think beyond academics. By fostering entrepreneurial skills, encouraging innovation, and providing real-world exposure, MET’S IEDC helps future leaders create solutions that make a difference.
+                    </p>
+                    <blockquote class="text-xl text-white font-light border-l-2 border-indigo-500 pl-6 py-2">
+                        “Innovation is not just about ideas, it’s about making them happen — and at MET’S IEDC, we help you do exactly that.”
+                    </blockquote>
+                </div>
             </div>
         </div>
     </section>
+
+    <section class="py-20 pb-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center mb-16">
+                <h3 class="text-3xl font-bold text-white mb-4">We help innovators grow</h3>
+                <p class="text-gray-400 max-w-2xl mx-auto">Creating an ecosystem where student entrepreneurs accelerate their growth.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-3xl glass-hover text-center group">
+                    <div class="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 mx-auto group-hover:bg-indigo-500 group-hover:text-white transition-all">
+                        <i class="fas fa-search-location text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-4">Target Oriented</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">We guide students with a clear vision and strategic approach to innovation and entrepreneurship.</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl glass-hover text-center group">
+                    <div class="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 mx-auto group-hover:bg-indigo-500 group-hover:text-white transition-all">
+                        <i class="fas fa-award text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-4">Success Driven</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">With structured mentorship and institutional support, we ensure projects have a strong path toward success.</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl glass-hover text-center group">
+                    <div class="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 mx-auto group-hover:bg-indigo-500 group-hover:text-white transition-all">
+                        <i class="fas fa-network-wired text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-4">Connected Ecosystem</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">MET’S IEDC links students with mentors, industry experts, and opportunities that help ideas grow.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-white/5 bg-[#020202] pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div class="lg:col-span-2">
+                    <span class="text-2xl font-bold text-white">MET'S IEDC</span>
+                    <p class="text-gray-500 mt-4 text-sm leading-relaxed max-w-md">
+                        Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h3>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="index.html" class="hover:text-indigo-400 transition-colors">Home</a></li>
+                        <li><a href="about.html" class="hover:text-indigo-400 transition-colors">About Us</a></li>
+                        <li><a href="events.html" class="hover:text-indigo-400 transition-colors">Events</a></li>
+                        <li><a href="news.html" class="hover:text-indigo-400 transition-colors">News</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contact</h3>
+                    <div class="space-y-3 text-sm text-gray-500">
+                        <p class="flex items-center"><i class="fas fa-envelope mr-3 text-indigo-500"></i>metsenggiedc@gmail.com</p>
+                        <p class="flex items-center"><i class="fas fa-phone mr-3 text-indigo-500"></i>+91 7306226875</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
+                <p>© 2025 IEDC MET'S SCHOOL OF ENGINEERING.</p>
+                <p>Designed for Innovation</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // This file is currently empty, but you can add functionality here.
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Logic
+            const btn = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+            const closeBtn = document.getElementById('close-mobile-menu');
 
-// Example: A simple function for a smooth scroll if you add anchor links.
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
+            function toggleMenu() {
+                menu.classList.toggle('open');
+                document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+            }
+
+            btn.addEventListener('click', toggleMenu);
+            closeBtn.addEventListener('click', toggleMenu);
+            
+            // Navbar Scroll Effect
+            window.addEventListener('scroll', () => {
+                const nav = document.querySelector('nav');
+                if (window.scrollY > 20) {
+                    nav.classList.add('shadow-lg');
+                    nav.style.background = 'rgba(5, 5, 5, 0.9)';
+                } else {
+                    nav.classList.remove('shadow-lg');
+                    nav.style.background = 'rgba(5, 5, 5, 0.7)';
+                }
+            });
         });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const videoContainer = document.querySelector('.video-container');
-    const video = videoContainer.querySelector('video');
-    const playButton = videoContainer.querySelector('.play-button');
-
-    playButton.addEventListener('click', () => {
-        video.play();
-        videoContainer.classList.add('playing');
-    });
-
-    video.addEventListener('ended', () => {
-        videoContainer.classList.remove('playing');
-    });
-});
-
     </script>
-    <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const menuButton = document.getElementById("mobile-menu-button");
-    const closeButton = document.getElementById("close-mobile-menu");
-    const mobileMenu = document.getElementById("mobile-menu");
-
-    // Hide mobile menu by default
-    mobileMenu.style.display = "none";
-
-    menuButton.addEventListener("click", () => {
-        mobileMenu.style.display = "block";
-    });
-
-    closeButton.addEventListener("click", () => {
-        mobileMenu.style.display = "none";
-    });
-});
-</script>
-
 </body>
 </html>
