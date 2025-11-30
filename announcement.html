@@ -1,484 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Announcements - MET'S IEDC</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Lucide Icons for a clean, modern look -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Announcements | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
     <style>
-         .gradient-text {
-            background: linear-gradient(90deg, #FF7262 0%, #FF7262 20%, #FF4F81 40%, #A162E8 60%, #5E5BFF 80%, #00C4FF 100%);
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-hover:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #6366f1;
+            outline: none;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .gradient-accent {
+            background: linear-gradient(90deg, #4f46e5 0%, #9333ea 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        .hero-gradient {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
-        }
-        /* NEW Color Palette based on provided image */
-        :root {
-            --color-light-background: #F8F8FA; /* Very light background for body */
-            --color-card-background: #FFFFFF; /* Pure white for main content areas */
-            --color-dark-text: #333333; /* Dark gray for headings and main text */
-            --color-muted-text: #7A7A80; /* Muted gray for secondary text/labels */
-            --color-primary-blue: #00BFFF; /* Vibrant Sky Blue - Main accent color from image */
-            --color-primary-blue-light: #E0F7FA; /* Very light blue for subtle accents/backgrounds */
-            --color-primary-blue-dark: #008DCC; /* Darker blue for hover */
-            --color-border-light: #E0E0E0; /* Light gray for subtle borders */
-            --color-border-subtle-dark: #D4D4D8; /* Slightly darker light border */
-            --color-shadow-light: rgba(0, 0, 0, 0.05); /* Light shadow for cards */
-            --color-shadow-medium: rgba(0, 0, 0, 0.1); /* Medium shadow for hover/header */
-            --color-placeholder-text: #B0B0B0; /* Placeholder text color */
-        }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--color-light-background);
-            color: var(--color-dark-text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Utility classes using custom colors */
-        .text-primary-blue { color: var(--color-primary-blue); }
-        .bg-primary-blue { background-color: var(--color-primary-blue); }
-        .hover\:bg-primary-blue-dark:hover { background-color: var(--color-primary-blue-dark); }
-        .text-dark-heading { color: var(--color-dark-text); }
-        .text-muted { color: var(--color-muted-text); }
-        .bg-card-background { background-color: var(--color-card-background); }
-        .bg-page-background { background-color: var(--color-light-background); }
-
-        /* General Container and Spacing */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        /* Header Specific Styles */
-        header {
-            background-color: var(--color-card-background);
-            box-shadow: 0 2px 8px var(--color-shadow-light);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-        .header-link {
-            color: var(--color-muted-text);
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-        .header-link:hover {
-            color: var(--color-dark-text);
-        }
-        .header-accent-link {
-             color: var(--color-primary-blue);
-             font-weight: 600;
-        }
-        .header-border {
-            border-left: 1px solid var(--color-border-light);
-            padding-left: 1rem;
-            margin-left: 1rem;
-        }
-
-        /* Announcements Hero Section */
-        .hero-section {
-            background-color: var(--color-card-background);
-            padding: 4rem 0; /* More vertical padding */
-            border-bottom: 1px solid var(--color-border-light);
-            position: relative; /* For the background shapes */
-            overflow: hidden;
-        }
-        .hero-section::before,
-        .hero-section::after {
-            content: '';
-            position: absolute;
-            background-color: var(--color-primary-blue-light);
-            border-radius: 50%;
-            opacity: 0.7;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .hero-section::before {
-            width: 250px;
-            height: 250px;
-            top: -100px;
-            left: -100px;
-        }
-        .hero-section::after {
-            width: 300px;
-            height: 300px;
-            bottom: -150px;
-            right: -150px;
-        }
-        .hero-content {
-            position: relative; /* Bring content above pseudo-elements */
-            z-index: 1;
-        }
-        .megaphone-icon {
-            color: var(--color-primary-blue);
-            width: 80px;
-            height: 80px;
-        }
-        .search-input {
-            border: 1px solid var(--color-border-subtle-dark);
-            border-radius: 0.5rem;
-            padding: 0.8rem 1rem;
-            color: var(--color-dark-text);
-            transition: all 0.2s ease-in-out;
-            font-size: 1rem;
-        }
-        .search-input::placeholder {
-            color: var(--color-placeholder-text);
-        }
-        .search-input:focus {
-            border-color: var(--color-primary-blue);
-            box-shadow: 0 0 0 3px rgba(0, 191, 255, 0.2); /* Blue focus ring */
-            outline: none;
-        }
-
-        /* Tabs Navigation */
-        .tabs-nav {
-            background-color: var(--color-card-background);
-            border-bottom: 1px solid var(--color-border-light);
-            padding-top: 1rem; /* Space from search bar */
-            padding-left: 1.5rem; /* Match container padding */
-            padding-right: 1.5rem;
-        }
-        .tabs-nav .container {
-            border-bottom: 2px solid transparent; /* This creates the underline for tabs */
-        }
+        /* Tabs styling */
         .tab-button {
-            padding: 0.75rem 0; /* Adjust padding */
-            font-weight: 500;
-            color: var(--color-muted-text);
-            border-bottom: 3px solid transparent; /* Individual tab underline */
-            transition: all 0.2s ease-in-out;
-            cursor: pointer;
-            margin-right: 1.5rem; /* Space between tab buttons */
+            border-bottom: 2px solid transparent;
+            color: #9ca3af;
+            transition: all 0.3s ease;
         }
-        .tab-button:last-child {
-            margin-right: 0;
+        .tab-button:hover {
+            color: white;
         }
         .tab-button.active {
-            color: var(--color-primary-blue);
-            font-weight: 600;
-            border-bottom-color: var(--color-primary-blue);
-        }
-        .tab-button:hover:not(.active) {
-            color: var(--color-dark-text);
+            color: #818cf8; /* Indigo-400 */
+            border-bottom-color: #818cf8;
         }
 
-        /* Announcement List Section */
-        .announcement-list-container {
-            padding: 3rem 0; /* Vertical padding */
+        /* Background Blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: blob-bounce 10s infinite ease;
         }
-        .announcement-item {
-            display: flex;
-            background-color: var(--color-card-background);
-            border-radius: 0.75rem;
-            box-shadow: 0 2px 8px var(--color-shadow-light);
-            padding: 1.5rem 2rem;
-            transition: all 0.2s ease-in-out;
-            cursor: pointer;
-        }
-        .announcement-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px var(--color-shadow-medium);
-        }
-        .announcement-date-col {
-            flex-shrink: 0;
-            width: 100px; /* Fixed width for date column */
-            text-align: right;
-            padding-right: 1.5rem;
-            border-right: 1px solid var(--color-border-light);
-        }
-        .announcement-date-col .month-day {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--color-dark-text);
-        }
-        .announcement-date-col .year {
-            font-size: 0.9rem;
-            color: var(--color-muted-text);
-        }
-        .announcement-content-col {
-            flex-grow: 1;
-            padding-left: 1.5rem;
-        }
-        .announcement-content-col h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--color-dark-text);
-            margin-bottom: 0.5rem;
-        }
-        .announcement-content-col p {
-            font-size: 0.95rem;
-            color: var(--color-muted-text);
-        }
-        .download-link {
-            display: inline-flex;
-            align-items: center;
-            color: var(--color-primary-blue);
-            font-weight: 500;
-            margin-top: 0.5rem;
-            transition: color 0.2s ease;
-        }
-        .download-link:hover {
-            color: var(--color-primary-blue-dark);
+        .blob-1 { top: 0%; left: -10%; width: 500px; height: 500px; background: #4f46e5; }
+        .blob-2 { top: 30%; right: -10%; width: 400px; height: 400px; background: #9333ea; }
+        .blob-3 { bottom: 0%; left: 20%; width: 600px; height: 600px; background: #2563eb; }
+
+        @keyframes blob-bounce {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.1); }
         }
 
-        /* Footer */
-        footer {
-            background-color: var(--color-card-background); /* Footer matches card background */
-            border-top: 1px solid var(--color-border-light);
-            color: var(--color-muted-text);
-            padding: 2.5rem 0;
-            text-align: center;
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        /* Responsive Adjustments */
-        @media (max-width: 767px) {
-            .hero-section {
-                padding: 2rem 0; /* Slightly less vertical padding for mobile */
-            }
-            .hero-section::before,
-            .hero-section::after {
-                display: none; /* Hide complex shapes on mobile */
-            }
-            .megaphone-icon {
-                width: 50px; /* Slightly smaller megaphone icon */
-                height: 50px;
-            }
-            .hero-section h1 {
-                font-size: 2.25rem; /* Adjusted font size for smaller screens */
-                margin-top: 0.75rem;
-                line-height: 1.2; /* Tighter line height for titles */
-            }
-            .hero-section p {
-                font-size: 0.9rem; /* Smaller description text */
-                padding: 0 0.5rem; /* Add horizontal padding to prevent text touching edges */
-            }
-            .search-input {
-                padding: 0.6rem 0.8rem; /* Slightly smaller padding */
-                font-size: 0.875rem; /* Smaller font size for search */
-            }
-            .search-input + .lucide { /* Adjust icon position for smaller input */
-                left: 0.8rem;
-                width: 1.1rem;
-                height: 1.1rem;
-            }
-
-            .tabs-nav {
-                padding-top: 0.75rem; /* Adjust padding */
-                padding-left: 0.5rem; /* Reduce horizontal padding */
-                padding-right: 0.5rem;
-            }
-            .tabs-nav > div {
-                justify-content: space-around; /* Distribute tabs evenly */
-                padding: 0 0.5rem; /* Ensure tabs themselves don't hug edges */
-            }
-            .tab-button {
-                font-size: 0.875rem; /* Slightly smaller font size for tabs */
-                padding: 0.5rem 0.25rem; /* Reduced padding for tabs */
-                margin-right: 0.25rem; /* Reduced space between tab buttons */
-            }
-            .tab-button:last-child {
-                margin-right: 0;
-            }
-
-            .announcement-list-container {
-                padding: 1.5rem 0; /* Reduced vertical padding */
-            }
-            .announcement-item {
-                flex-direction: column; /* Stack date and content on mobile */
-                padding: 1.25rem 1.25rem; /* Consistent padding */
-                gap: 0.6rem; /* Reduced gap */
-            }
-            .announcement-date-col {
-                width: 100%;
-                text-align: left;
-                padding-right: 0;
-                border-right: none;
-                border-bottom: 1px dashed var(--color-border-light); /* Dashed separator */
-                padding-bottom: 0.5rem;
-                margin-bottom: 0.5rem; /* Space below dashed line */
-            }
-            .announcement-date-col .month-day {
-                font-size: 1rem; /* Smaller date text */
-                line-height: 1.2;
-            }
-            .announcement-date-col .year {
-                font-size: 0.8rem; /* Smaller year text */
-            }
-            .announcement-content-col {
-                padding-left: 0;
-            }
-            .announcement-content-col h3 {
-                font-size: 1rem; /* Smaller heading text */
-                line-height: 1.3;
-            }
-            .announcement-content-col p {
-                font-size: 0.8rem; /* Smaller description text */
-                line-height: 1.4;
-            }
-            .download-link {
-                font-size: 0.85rem; /* Smaller download link text */
-            }
-            footer {
-                padding: 2rem 1rem; /* Adjust footer padding */
-            }
-
-            /* Mobile menu specific styles */
-            .mobile-menu {
-                transform: translateX(-100%); /* Hidden by default */
-                transition: transform 0.3s ease-in-out;
-                position: fixed; /* Ensures it overlays correctly */
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: var(--color-card-background); /* Use white for mobile menu background */
-                z-index: 999; /* Higher z-index to cover everything */
-                padding-top: 1rem; /* Adjust padding for close button */
-                padding-left: 1rem;
-                padding-right: 1rem;
-                overflow-y: auto; /* Allow scrolling if menu content is long */
-                box-shadow: 0 0 20px rgba(0,0,0,0.2); /* Add shadow to menu */
-            }
-            .mobile-menu.open {
-                transform: translateX(0); /* Slides in when open */
-            }
+        .mobile-menu.open {
+            transform: translateX(0);
         }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
     </style>
 </head>
-<body class="bg-page-background">
+<body class="font-sans antialiased relative selection:bg-indigo-500 selection:text-white">
 
-    <header>
-        <div class="container flex items-center justify-between h-16 sm:h-20">
-            <a href="index.html" class="flex items-center space-x-2">
-                <img src="assets/images/logos/iedc logo.jpg" alt="IEDC Logo" class="h-8 w-8 sm:h-10 sm:w-10 rounded-full shadow-sm">
-               <span class="text-2xl font-bold gradient-text">MET'S IEDC</span>
-            </a>
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
 
-            <div class="flex items-center space-x-4">
-                <nav class="hidden md:flex items-center space-x-4">
-                    <a href="https://metsiedc.github.io/metsiedc/" class="header-link">Home</a>
-                    <a href="about.html" class="header-link flex items-center">
-                        About Us <i data-lucide="chevron-down" class="w-4 h-4 ml-1"></i>
+    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-3 group">
+                        <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
+                        <span class="text-2xl font-bold tracking-tight text-white">MET'S <span class="text-indigo-400">IEDC</span></span>
                     </a>
-                  <a href="team.html" class="header-link">Our Ex-Com</a>
-                                        <a href="initiatives.html" class="header-link">Initiatives</a>
-                                        <a href="news.html" class="header-link">News</a>
-                                        <a href="contact.html" class="header-link">Contact Us</a>
-                </nav>
-                <!-- Mobile menu button -->
-                <button id="mobile-menu-button" class="md:hidden text-dark-heading focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    <div class="hidden md:ml-12 md:flex md:space-x-8">
+                        <a href="about.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">About</a>
+                        <a href="team.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Ex-Com</a>
+                        <a href="initiatives.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Initiatives</a>
+                        <a href="news.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">News</a>
+                        <a href="announcement.html" class="text-white px-3 py-2 text-sm font-medium border-b-2 border-indigo-500">Announcements</a>
+                        <a href="contact.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Contact</a>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center">
+                    <a href="login.html" class="glass-card glass-hover text-white px-6 py-2.5 rounded-full text-sm font-medium border border-white/10">
+                        Log in
+                    </a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-white p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
         </div>
-        <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-card-background z-40 p-4 md:hidden">
-            <div class="flex justify-end pr-4 pt-2"> <!-- Added padding for close button position -->
-                <button id="close-mobile-menu" class="text-dark-heading focus:outline-none">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        
+        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-xl z-50">
+            <div class="flex justify-end p-6">
+                <button id="close-mobile-menu" class="text-white p-2">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <nav class="flex flex-col space-y-4 mt-8">
-                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Home</a>
-                <a href="index.html#about" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">About Us</a>
-                <a href="team.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Our Team</a>
-                <a href="index.html#events" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Events</a>
-                <a href="index.html#initiatives" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Initiatives</a>
-                <a href="index.html#news" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">News</a>
-                <a href="announcement.html" class="block px-3 py-2 rounded-md text-base font-medium text-primary-blue hover:bg-gray-100">Announcements</a>
-                <a href="event.html" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Event Gallery</a>
-                <a href="index.html#contact" class="block px-3 py-2 rounded-md text-base font-medium text-dark-heading hover:bg-gray-100">Contact</a>
-                <a href="login.html" class="mt-4 block w-full text-center px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-primary-blue-dark transition duration-300 shadow">Student Login</a>
-                <a href="dashboard.html" class="mt-2 block w-full text-center px-4 py-2 bg-muted-text text-white rounded-lg hover:bg-dark-text transition duration-300 shadow">Admin Login</a>
+            <nav class="flex flex-col space-y-6 px-8 mt-10 text-center">
+                <a href="about.html" class="text-2xl font-light text-white hover:text-indigo-400">About Us</a>
+                <a href="team.html" class="text-2xl font-light text-white hover:text-indigo-400">Our Team</a>
+                <a href="initiatives.html" class="text-2xl font-light text-white hover:text-indigo-400">Initiatives</a>
+                <a href="announcement.html" class="text-2xl font-light text-white hover:text-indigo-400">Announcements</a>
+                <a href="contact.html" class="text-2xl font-light text-white hover:text-indigo-400">Contact</a>
+                <a href="login.html" class="mt-8 py-4 bg-indigo-600 rounded-full text-white font-medium">Student Login</a>
             </nav>
         </div>
-    </header>
+    </nav>
 
-    <main>
-        <!-- Hero Section: Title and Search -->
-        <section class="hero-section">
-            <div class="container hero-content text-center">
-                <div class="flex flex-col items-center mb-6">
-                    <i data-lucide="megaphone" class="megaphone-icon mb-4"></i>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-dark-heading leading-tight mb-4">Announcements</h1>
-                    <div class="relative w-full max-w-lg mx-auto">
-                        <input type="text" id="searchInput" class="w-full search-input pl-12 pr-4 py-3" placeholder="Search articles">
-                        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted"></i>
+    <div class="pt-32 pb-8 lg:pt-48 lg:pb-12 text-center px-4 relative z-10">
+        <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6">
+            Official <span class="gradient-accent">Announcements</span>
+        </h1>
+        <div class="max-w-xl mx-auto mt-8">
+            <div class="relative">
+                <input type="text" id="searchInput" placeholder="Search notices..." class="w-full glass-input rounded-full py-4 pl-12 pr-6 text-white placeholder-gray-400">
+                <i class="fas fa-search absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 mb-12 relative z-10">
+        <div class="flex justify-center space-x-8 border-b border-white/10 max-w-md mx-auto">
+            <button class="tab-button active px-4 py-2 font-medium" onclick="filterAnnouncements('all')">All</button>
+            <button class="tab-button px-4 py-2 font-medium" onclick="filterAnnouncements('news')">News</button>
+            <button class="tab-button px-4 py-2 font-medium" onclick="filterAnnouncements('activities')">Activities</button>
+        </div>
+    </div>
+
+    <section class="pb-32 px-4 relative z-10">
+        <div class="max-w-4xl mx-auto">
+            <div id="announcements-list" class="space-y-6">
+                </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-white/5 bg-[#020202] pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div class="lg:col-span-2">
+                    <span class="text-2xl font-bold text-white">MET'S IEDC</span>
+                    <p class="text-gray-500 mt-4 text-sm leading-relaxed max-w-md">
+                        Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h3>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="index.html" class="hover:text-indigo-400 transition-colors">Home</a></li>
+                        <li><a href="events.html" class="hover:text-indigo-400 transition-colors">Events</a></li>
+                        <li><a href="contact.html" class="hover:text-indigo-400 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contact</h3>
+                    <div class="space-y-3 text-sm text-gray-500">
+                        <p class="flex items-center"><i class="fas fa-envelope mr-3 text-indigo-500"></i>metsenggiedc@gmail.com</p>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <!-- Tabs Navigation -->
-        <nav class="tabs-nav sticky top-16 sm:top-20 z-40">
-            <div class="container flex space-x-6 sm:space-x-8 lg:space-x-12">
-                <button class="tab-button active" onclick="filterAnnouncements('all')">All</button>
-                <button class="tab-button" onclick="filterAnnouncements('news')">News</button>
-                <button class="tab-button" onclick="filterAnnouncements('activities')">Activities</button>
-            </div>
-        </nav>
-
-        <!-- Announcement List -->
-        <section class="announcement-list-container">
-            <div class="container">
-                <div id="announcements-list" class="flex flex-col gap-4">
-                    <!-- Announcements will be loaded here by JavaScript -->
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
+                <p>© 2025 IEDC MET'S SCHOOL OF ENGINEERING.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-white transition-colors"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container text-muted">
-            <p>&copy; 2025 IEDC MET'S SCHOOL OF ENGINEERING. All Rights Reserved.</p>
-            <p class="mt-2">Innovate. Educate. Empower. Developed by Team METS IEDC</p>
         </div>
     </footer>
 
     <script>
-        // Initialize Lucide icons on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-        });
-
-        // --- Mobile Menu Logic ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
-
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.add('open');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling background
-        });
-
-        closeMobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            document.body.style.overflow = ''; // Restore scrolling
-        });
-
-        // Close mobile menu when a link is clicked inside it
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('open');
-                document.body.style.overflow = '';
-            });
-        });
-
-        // --- Announcements Data (Hardcoded directly in JS) ---
-        // This is the data that will be displayed on the page.
+        // --- Data from your previous code ---
         const allAnnouncementsData = [
             {
                 title: "The Official Interview Instructions and Final Shortlist",
@@ -486,42 +241,38 @@
                 category: "news",
                 date: "Jun 23",
                 year: "2025",
-                fileUrl: "docs/IEDC METS 2025 07.pdf", // Example URL
+                fileUrl: "docs/IEDC METS 2025 07.pdf",
                 fileName: "_IEDC_METS_2025_07.pdf",
-                uploadedBy: "Admin",
-                timestamp: 1719200000000 // Example timestamp for sorting (ms since epoch)
+                timestamp: 1719200000000
             },
             {
                 title: "Core Team Recruitment 2025",
-                description: "All students who applied for the METS IEDC Core Team are informed that the recruitment process has moved to the next round. The interview will be conducted online on June 25, 2025, from 10:00 AM to 12:30 PM via Google Meet. Please check your registered email for details.",
+                description: "All students who applied for the METS IEDC Core Team are informed that the recruitment process has moved to the next round. The interview will be conducted online.",
                 category: "news",
                 date: "Jun 16",
                 year: "2025",
-                fileUrl: "docs/IEDC METS 2025 04.pdf", // Example URL
+                fileUrl: "docs/IEDC METS 2025 04.pdf",
                 fileName: "IEDC_METS_2025_04.pdf",
-                uploadedBy: "Admin",
                 timestamp: 1718600000000
             },
             {
                 title: "IEDC Member Eligibility Criteria Released",
-                description: "All interested students are encouraged to review the updated eligibility criteria for becoming a member of MET'S IEDC. The document outlines participation requirements, preferred skill sets, selection process, and code of conduct for the upcoming academic year.",
+                description: "All interested students are encouraged to review the updated eligibility criteria for becoming a member of MET'S IEDC.",
                 category: "activities",
                 date: "May 23",
                 year: "2025",
-                fileUrl: "docs/IEDC Member Eligibility Criteria.pdf", // Example URL
-                fileName: "IEDC_Member_Eligibility_Criteria.pdf",
-                uploadedBy: "Admin",
+                fileUrl: "docs/IEDC Member Eligibility Criteria.pdf",
+                fileName: "IEDC_Criteria.pdf",
                 timestamp: 1716300000000
             },
             {
                 title: "Mandatory Presence and Leave Approval for Execcom Members",
-                description: "All Execcom members are hereby reminded that attendance in Execcom meetings is mandatory. While participation in other IEDC events is not compulsory, presence is highly encouraged. Leave requests must be informed in advance and approved by the Nodal Officer. Strict adherence is expected, except in cases of medical emergencies.",
+                description: "All Execcom members are hereby reminded that attendance in Execcom meetings is mandatory.",
                 category: "activities",
                 date: "Jun 03",
                 year: "2025",
-                fileUrl: "docs/Mandatory Presence & Leave Approval.jpg", // Example URL
-                fileName: "Mandatory_Presence_Leave_Approval.pdf",
-                uploadedBy: "Admin",
+                fileUrl: "docs/Mandatory Presence & Leave Approval.jpg",
+                fileName: "Leave_Approval.pdf",
                 timestamp: 1717400000000
             },
             {
@@ -530,41 +281,36 @@
                 category: "news",
                 date: "June 29",
                 year: "2025",
-                fileUrl: "docs/IEDC 2025 CORE TEAM.pdf", //  file for this one
+                fileUrl: "docs/IEDC 2025 CORE TEAM.pdf",
                 fileName: "IEDC CORE TEAM RESULT.pdf",
-                uploadedBy: "Admin",
                 timestamp: 1720600000000
             },
             {
                 title: "Poster Making Competition: Evaluation Criteria Released!",
-                description: "Get ready to showcase your creativity! The official evaluation criteria for the National Doctors’ Day poster competition have been published. Make sure your design is original, relevant to the theme of medical innovation, and visually appealing. Avoid AI tools—manual creativity is key! Check the METS IEDC website for complete guidelines.",
+                description: "The official evaluation criteria for the National Doctors’ Day poster competition have been published.",
                 category: "activities",
                 date: "June 30",
                 year: "2025",
-                fileUrl: "docs/IEDC_METS_2025_08 (1).pdf", // file for this one
-                fileName: "IEDC_METS_2025_08 (1).pdf",
-                uploadedBy: "Admin",
+                fileUrl: "docs/IEDC_METS_2025_08 (1).pdf",
+                fileName: "IEDC_METS_2025_08.pdf",
                 timestamp: 1722500000000
             },
              {
                 title: "Poster Making Contest Results Out!",
-                description: "Winners of the Innovations in Medicine poster contest have been announced. Prize distribution details coming soon.",
+                description: "Winners of the Innovations in Medicine poster contest have been announced.",
                 category: "activities",
                 date: "July 03",
                 year: "2025",
-                fileUrl: "docs/IEDC METS 2025 10.pdf", // file for this one
+                fileUrl: "docs/IEDC METS 2025 10.pdf",
                 fileName: "IEDC METS 2025 10.pdf",
-                uploadedBy: "Admin",
                 timestamp: 1732500000000
             }
-        ].sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp descending (newest first)
+        ].sort((a, b) => b.timestamp - a.timestamp);
 
-
-        let currentFilter = 'all'; // Default filter
+        let currentFilter = 'all';
         const announcementsList = document.getElementById('announcements-list');
         const searchInput = document.getElementById('searchInput');
 
-        // Function to render announcements based on filter and search query
         function renderAnnouncements() {
             const searchQuery = searchInput.value.toLowerCase();
             const filteredAnnouncements = allAnnouncementsData.filter(announcement => {
@@ -574,64 +320,90 @@
                 return matchesCategory && matchesSearch;
             });
 
-            announcementsList.innerHTML = ''; // Clear previous content
+            announcementsList.innerHTML = '';
 
             if (filteredAnnouncements.length === 0) {
                 announcementsList.innerHTML = `
-                    <p class="text-center text-muted py-10 w-full">No announcements found matching your criteria.</p>
+                    <div class="text-center py-10">
+                        <i class="fas fa-folder-open text-4xl text-white/20 mb-4"></i>
+                        <p class="text-gray-500">No announcements found matching your criteria.</p>
+                    </div>
                 `;
                 return;
             }
 
             filteredAnnouncements.forEach(announcement => {
-                const downloadLinkHtml = announcement.fileUrl && announcement.fileName ? `
-                    <a href="${announcement.fileUrl}" target="_blank" class="download-link text-primary-blue hover:text-primary-blue-dark">
-                        <i data-lucide="download" class="w-4 h-4 mr-1"></i> Download ${announcement.fileName}
+                const downloadLinkHtml = announcement.fileUrl ? `
+                    <a href="${announcement.fileUrl}" target="_blank" class="inline-flex items-center gap-2 text-sm font-medium text-indigo-400 hover:text-white transition-colors mt-4 bg-white/5 px-4 py-2 rounded-lg border border-white/5 hover:bg-white/10 hover:border-white/20">
+                        <i class="fas fa-download"></i> Download PDF
                     </a>
                 ` : '';
 
                 const itemHtml = `
-                    <div class="announcement-item gap-4">
-                        <div class="announcement-date-col">
-                            <div class="month-day">${announcement.date}</div>
-                            <div class="year">${announcement.year}</div>
+                    <div class="glass-card rounded-2xl p-6 md:p-8 glass-hover flex flex-col md:flex-row gap-6 md:gap-8 items-start">
+                        <div class="flex-shrink-0 w-full md:w-auto flex md:flex-col items-center justify-center md:justify-start gap-2 bg-white/5 rounded-xl p-4 border border-white/5 min-w-[100px]">
+                            <span class="text-xl md:text-2xl font-bold text-white">${announcement.date.split(' ')[1]}</span>
+                            <span class="text-xs uppercase tracking-wider text-indigo-400 font-semibold">${announcement.date.split(' ')[0]}</span>
+                            <span class="text-xs text-gray-500">${announcement.year}</span>
                         </div>
-                        <div class="announcement-content-col">
-                            <h3>${announcement.title}</h3>
-                            <p>${announcement.description}</p>
+                        <div class="flex-grow">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="px-2 py-1 rounded text-[10px] uppercase font-bold tracking-wider ${announcement.category === 'news' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'bg-green-500/20 text-green-300 border border-green-500/30'}">
+                                    ${announcement.category}
+                                </span>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">${announcement.title}</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">${announcement.description}</p>
                             ${downloadLinkHtml}
                         </div>
                     </div>
                 `;
                 announcementsList.innerHTML += itemHtml;
             });
-
-            // Re-create Lucide icons for newly added elements
-            lucide.createIcons();
         }
 
-        // Function to handle tab clicks
         function filterAnnouncements(category) {
             currentFilter = category;
             document.querySelectorAll('.tab-button').forEach(button => {
-                // Use textContent for comparison as it directly reflects the button text
                 if (button.textContent.toLowerCase().trim() === category.toLowerCase().trim()) {
                     button.classList.add('active');
                 } else {
                     button.classList.remove('active');
                 }
             });
-            // Clear search input on tab change (common UI pattern)
             searchInput.value = ''; 
-            renderAnnouncements(); // Re-render with new filter and cleared search
+            renderAnnouncements();
         }
 
-        // Event listener for search input
         searchInput.addEventListener('input', renderAnnouncements);
 
-        // Initial render on page load
         document.addEventListener('DOMContentLoaded', () => {
-            renderAnnouncements(); // Populate announcements on page load
+            renderAnnouncements();
+            
+            // Mobile Menu Logic
+            const btn = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+            const closeBtn = document.getElementById('close-mobile-menu');
+
+            function toggleMenu() {
+                menu.classList.toggle('open');
+                document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+            }
+
+            btn.addEventListener('click', toggleMenu);
+            closeBtn.addEventListener('click', toggleMenu);
+            
+            // Navbar Scroll
+            window.addEventListener('scroll', () => {
+                const nav = document.querySelector('nav');
+                if (window.scrollY > 20) {
+                    nav.classList.add('shadow-lg');
+                    nav.style.background = 'rgba(5, 5, 5, 0.9)';
+                } else {
+                    nav.classList.remove('shadow-lg');
+                    nav.style.background = 'rgba(5, 5, 5, 0.7)';
+                }
+            });
         });
     </script>
 </body>
