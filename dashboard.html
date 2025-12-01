@@ -1,947 +1,455 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard - MET'S IEDC</title>
+    <title>Dashboard | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Lucide Icons for a clean, modern look -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
     <style>
-        /* NEW Color Palette based on provided image */
-        :root {
-            --color-light-background: #F8F8FA; /* Very light background for body/main content */
-            --color-sidebar-background: #FFFFFF; /* Pure white for sidebar and cards */
-            --color-dark-text: #333333; /* Dark gray for headings and main text */
-            --color-muted-text: #7A7A80; /* Muted gray for secondary text/labels */
-            --color-accent-purple: #8C6CEF; /* Vibrant purple from the image */
-            --color-accent-purple-light: #F0EDFD; /* Very light purple for banner background */
-            --color-accent-purple-dark: #6E53CC; /* Darker purple for hover */
-            --color-accent-yellow: #FFC107; /* Yellow for specific highlight cards */
-            --color-accent-blue: #60BEEF; /* Light blue for specific highlight cards */
-            --color-border-light: #E0E0E0; /* Light gray for subtle borders */
-            --color-border-subtle-dark: #D4D4D8; /* Slightly darker light border */
-            --color-shadow-light: rgba(0, 0, 0, 0.05); /* Light shadow for cards */
-            --color-shadow-medium: rgba(0, 0, 0, 0.1); /* Medium shadow for hover/header */
-            --color-red-error: #EF4444; /* Standard Red */
-            --color-green-success: #22C55E; /* Standard Green */
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--color-light-background);
-            color: var(--color-dark-text);
-            min-height: 100vh;
-            display: flex; /* Flex container for sidebar and main wrapper */
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
         }
 
-        /* Dashboard Wrapper for Sidebar and Main Content */
-        .dashboard-wrapper {
-            display: flex;
-            min-height: 100vh;
-            width: 100%;
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
-        /* Sidebar specific styles */
-        .sidebar {
-            width: 250px; /* Fixed width for desktop sidebar */
-            background-color: var(--color-sidebar-background);
-            box-shadow: 2px 0 10px var(--color-shadow-light); /* Shadow on the right */
-            padding: 2rem 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex-shrink: 0; /* Prevent sidebar from shrinking */
-            position: sticky; /* Make sidebar sticky */
-            top: 0;
-            height: 100vh; /* Make sidebar take full viewport height */
-            overflow-y: auto; /* Enable scrolling for long content */
-            z-index: 100; /* Ensure it stays on top */
+        .glass-sidebar {
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .sidebar-nav-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.8rem 1.2rem;
-            border-radius: 0.5rem;
-            color: var(--color-muted-text);
-            font-weight: 500;
-            transition: all 0.2s ease-in-out;
-            width: 100%;
-            cursor: pointer;
+        .glass-header {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .sidebar-nav-item.active {
-            background-color: var(--color-accent-purple-light); /* Light purple background for active */
-            color: var(--color-accent-purple); /* Vibrant purple text for active */
-            font-weight: 600;
-        }
-
-        .sidebar-nav-item:hover:not(.active) {
-            background-color: #F3F3F5; /* Subtle hover background */
-            color: var(--color-dark-text);
-        }
-
-        .sidebar-bottom-item {
-            margin-top: auto; /* Pushes item to the bottom */
-            border-top: 1px solid var(--color-border-light);
-            padding-top: 1.5rem;
-            width: 100%;
-            text-align: center;
-        }
-
-        /* Main content area styles */
-        .dashboard-main-wrapper {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column; /* Stack header, main, footer vertically */
-            overflow-y: auto; /* Enable scrolling for main content */
-        }
-
-        /* Header in main content */
-        .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2.5rem 3rem; /* Generous padding */
-            border-bottom: 1px solid var(--color-border-light);
-            background-color: var(--color-light-background); /* Header background */
-            position: sticky; /* Sticky header within main content wrapper */
-            top: 0;
-            z-index: 50; /* Below sidebar */
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--color-accent-purple);
+        /* Form Inputs */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            margin-left: 1rem; /* Space from name */
+            transition: all 0.3s ease;
         }
-        .header-icons .lucide {
-            color: var(--color-muted-text);
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        .header-icons .lucide:hover {
-            color: var(--color-dark-text);
-        }
-
-        /* Dashboard Banner */
-        .dashboard-banner {
-            background-color: var(--color-accent-purple-light); /* Light purple background */
-            border-radius: 1rem;
-            padding: 2.5rem;
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
-            overflow: hidden; /* For the illustration */
-            position: relative;
-        }
-        .dashboard-banner h2 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--color-dark-text);
-            margin-bottom: 0.5rem;
-        }
-        .dashboard-banner p {
-            color: var(--color-muted-text);
-            font-size: 1.1rem;
-        }
-        .dashboard-banner-illustration {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            width: 250px; /* Adjust size of illustration */
-            height: 250px;
-            opacity: 0.7; /* Make it subtle */
-            pointer-events: none; /* Ensure it doesn't block clicks */
-        }
-        /* Dashboard Overview Cards */
-        .overview-card {
-            background-color: var(--color-sidebar-background);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 10px var(--color-shadow-light);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            gap: 0.5rem;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            cursor: pointer;
-        }
-        .overview-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 15px var(--color-shadow-medium);
-        }
-        .overview-card .icon-circle {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 0.75rem;
-            font-size: 1.5rem;
-        }
-        .overview-card.yellow .icon-circle { background-color: var(--color-accent-yellow); color: white; }
-        .overview-card.purple .icon-circle { background-color: var(--color-accent-purple); color: white; }
-        .overview-card.blue .icon-circle { background-color: var(--color-accent-blue); color: white; }
-        .overview-card .value {
-            font-size: 2.25rem; /* text-4xl equivalent */
-            font-weight: 800; /* font-extrabold equivalent */
-            color: var(--color-dark-text);
-            line-height: 1; /* Tighten line height */
-        }
-        .overview-card .label {
-            font-size: 0.95rem;
-            color: var(--color-muted-text);
-            font-weight: 500;
-        }
-
-        /* General Tab Content Styling */
-        .tab-content {
-            background-color: var(--color-sidebar-background);
-            border-radius: 1rem;
-            padding: 2.5rem;
-            box-shadow: 0 4px 10px var(--color-shadow-light);
-            margin-top: 2rem; /* Space between overview/previous tab and current tab */
-            margin-left: 3rem; /* Aligned with main content padding */
-            margin-right: 3rem;
-            margin-bottom: 2rem; /* Space before footer */
-        }
-
-        /* Form input styling */
-        input[type="text"],
-        input[type="tel"],
-        input[type="date"],
-        input[type="number"],
-        input[type="url"],
-        textarea,
-        select {
-            background-color: var(--color-light-background); /* Lighter background for inputs */
-            border: 1px solid var(--color-border-subtle-dark);
-            border-radius: 0.5rem; /* Slightly less rounded */
-            padding: 0.8rem 1rem;
-            color: var(--color-dark-text);
-            transition: all 0.2s ease-in-out;
-            font-size: 0.95rem;
-        }
-        input[type="text"]::placeholder,
-        textarea::placeholder {
-            color: var(--color-muted-text);
-        }
-        input[type="text"]:focus,
-        input[type="tel"]:focus,
-        input[type="date"]:focus,
-        input[type="number"]:focus,
-        input[type="url"]:focus,
-        textarea:focus,
-        select:focus {
-            border-color: var(--color-accent-purple);
-            box-shadow: 0 0 0 3px rgba(140, 108, 239, 0.2); /* Purple focus ring */
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #6366f1;
             outline: none;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+        .glass-input::placeholder { color: rgba(255, 255, 255, 0.3); }
+        
+        select.glass-input option {
+            background-color: #1a1a1a;
+            color: white;
         }
 
-        /* Button styling */
-        .action-button,
-        button[type="submit"] {
-            padding: 0.8rem 1.8rem;
-            font-weight: 600;
-            border-radius: 0.5rem;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 2px 5px var(--color-shadow-light);
-            text-transform: capitalize; /* More natural capitalization */
-            letter-spacing: normal;
+        /* Sidebar Links */
+        .sidebar-link {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
         }
-        .action-button:hover,
-        button[type="submit"]:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px var(--color-shadow-medium);
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
         }
-        /* Specific button colors */
-        .bg-primary-action { background-color: var(--color-accent-purple); color: white; }
-        .hover\:bg-primary-action-dark:hover { background-color: var(--color-accent-purple-dark); }
-        .bg-red-action { background-color: var(--color-red-error); color: white; }
-        .hover\:bg-red-action-dark:hover { background-color: var(--color-accent-purple-dark); /* Using dark purple for consistency */ }
-
-        /* Status Message Styling */
-        .status-message {
-            padding: 1rem 1.25rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        .status-message.error {
-            background-color: #FEE2E2; /* Red-100 */
-            color: var(--color-red-error);
-            border: 1px solid var(--color-red-error);
-        }
-        .status-message.success {
-            background-color: #DCFCE7; /* Green-100 */
-            color: var(--color-green-success);
-            border: 1px solid var(--color-green-success);
+        .sidebar-link.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: #818cf8;
+            border-left-color: #818cf8;
         }
 
-        /* Profile Info specific styling */
-        .profile-info-item {
-            display: flex;
-            align-items: flex-start; /* Align items to start for multi-line text */
-            gap: 0.75rem;
-            padding: 0.75rem 0;
-            border-bottom: 1px dashed var(--color-border-light);
-            color: var(--color-dark-text); /* Ensure text is dark for readability */
+        /* Background Blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: blob-bounce 10s infinite ease;
         }
-        .profile-info-item:last-child {
-            border-bottom: none;
-        }
-        .profile-info-item svg {
-            color: var(--color-accent-purple); /* Icon color */
-            flex-shrink: 0;
-            margin-top: 0.2rem; /* Slight adjustment for icon alignment */
-        }
-        .profile-info-item .label {
-            font-weight: 600; /* Bolder label */
-            color: var(--color-dark-text);
-            flex-shrink: 0;
-            width: 100px; /* Fixed width for labels for alignment */
-        }
-        .profile-info-item .value {
-            color: var(--color-muted-text);
-            flex-grow: 1; /* Value takes remaining space */
-        }
-        .profile-image-placeholder {
-            width: 100px; /* Smaller, cleaner profile image */
-            height: 100px;
-            background-color: var(--color-accent-purple-light); /* Light purple background */
-            border: 3px solid var(--color-accent-purple); /* Purple border */
-            box-shadow: 0 2px 8px var(--color-shadow-medium);
-            font-size: 3rem; /* Smaller icon inside */
-            color: var(--color-accent-purple);
+        .blob-1 { top: 0%; left: 0%; width: 600px; height: 600px; background: #4f46e5; }
+        .blob-2 { bottom: 0%; right: 0%; width: 500px; height: 500px; background: #9333ea; }
+
+        @keyframes blob-bounce {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.1); }
         }
 
-        /* Responsive adjustments for sidebar and layout */
-        @media (max-width: 768px) {
-            .dashboard-wrapper {
-                flex-direction: column; /* Stack sidebar and main content on small screens */
-            }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
 
-            /* Mobile Sidebar styles - now a slide-down overlay */
-            .sidebar {
-                width: 100%; /* Full width */
-                height: 100vh; /* Full height to overlay */
-                position: fixed; /* Fixed position for overlay */
-                top: 0;
-                left: 0;
-                transform: translateY(-100%); /* Initially hidden off-screen (up) */
-                transition: transform 0.3s ease-in-out; /* Smooth transition */
-                z-index: 200; /* Higher than header */
-                padding: 1.5rem; /* Consistent padding */
-                display: flex; /* Keep flex for content layout */
-                flex-direction: column;
-                align-items: center;
-                justify-content: flex-start; /* Align content to top */
-                background-color: var(--color-sidebar-background); /* Ensure background is solid */
-                box-shadow: 0 4px 20px rgba(0,0,0,0.2); /* Stronger shadow for overlay */
-            }
-
-            .sidebar.open {
-                transform: translateY(0); /* Slide down into view */
-            }
-
-            .sidebar-logo-section {
-                width: 100%; /* Ensure logo section spans full width */
-                display: flex; /* Make it a flex container */
-                justify-content: space-between; /* To push close button to end */
-                align-items: center; /* Vertically align items */
-                margin-bottom: 2rem;
-            }
-
-            .sidebar-logo-section .close-mobile-menu {
-                display: block; /* Show close button on mobile */
-                cursor: pointer;
-                color: var(--color-dark-text); /* Match text color */
-            }
-
-            .sidebar-nav-container {
-                flex-direction: column; /* Stack nav items vertically */
-                overflow-x: visible; /* No horizontal scroll */
-                flex-grow: 1; /* Allow nav items to take space */
-                align-items: center; /* Center nav items */
-                text-align: center;
-                width: 100%; /* Ensure container takes full width */
-            }
-
-            .sidebar-nav-item {
-                width: 80%; /* Make nav items wider for better click area */
-                justify-content: center; /* Center text and icon */
-                margin-bottom: 0.75rem; /* Space between items */
-            }
-            
-            .sidebar-bottom-item { /* Get Help button */
-                display: block; /* Make visible again if needed in overlay */
-                margin-top: 1.5rem; /* Adjust spacing */
-            }
-
-            /* Main Header adjustments */
-            .main-header {
-                flex-direction: row; /* Keep header horizontal on mobile */
-                align-items: center;
-                justify-content: space-between; /* Space out items */
-                gap: 0; /* Remove gap */
-                padding: 1.5rem 1rem; /* Reduced padding on mobile */
-                position: sticky; /* Keep sticky on mobile header */
-                top: 0;
-            }
-            .main-header .user-info {
-                display: flex; /* Ensure user info is always flex */
-                align-items: center;
-                width: auto; /* Auto width, not 100% */
-                justify-content: flex-end; /* Align to right */
-            }
-            .main-header .userEmailHeader {
-                display: none !important; /* Hide email on mobile header */
-            }
-
-            /* Show mobile menu toggle button in header */
-            .main-header .mobile-menu-toggle {
-                display: block; /* Show hamburger icon */
-                margin-right: 1rem; /* Space from user avatar */
-                cursor: pointer;
-                color: var(--color-dark-text);
-            }
-
-            /* Hide logout button in header on mobile */
-            .main-header .logoutBtnHeader {
-                display: none !important; /* Ensure header logout is hidden on mobile */
-            }
-            /* Show logout button in sidebar on mobile */
-            .sidebar #logoutBtnSidebar {
-                display: flex; /* Ensure it's visible in the overlay */
-                margin-top: auto; /* Push to bottom of the menu */
-                width: 80%; /* Make it wide within the menu */
-                justify-content: center; /* Center button content */
-            }
-
-            /* Other general mobile adjustments */
-            .dashboard-main-wrapper {
-                padding: 0; /* Remove overall padding, content sections will add their own */
-            }
-            .dashboard-banner {
-                padding: 1.5rem;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-                margin-bottom: 1.5rem;
-            }
-            .dashboard-banner h2 {
-                font-size: 1.8rem;
-            }
-            .dashboard-banner p {
-                font-size: 1rem;
-            }
-            .dashboard-banner-illustration {
-                position: static; /* Place illustration inline */
-                width: 150px;
-                height: 150px;
-                margin-top: 1rem;
-                align-self: center;
-            }
-            .overview-cards-grid {
-                grid-template-columns: 1fr; /* Stack cards on mobile */
-                gap: 1rem;
-            }
-            .overview-card {
-                padding: 1rem;
-            }
-            .overview-card .value {
-                font-size: 1.8rem;
-            }
-            .tab-content {
-                padding: 1.5rem;
-                margin-left: 1rem; /* Adjust margins for mobile */
-                margin-right: 1rem;
-                margin-bottom: 1rem;
-            }
-            .profile-info-item .label {
-                width: 80px; /* Adjust label width for smaller screens */
-            }
-            footer {
-                padding: 1.5rem 1rem;
-            }
+        /* Profile Info Item */
+        .profile-item {
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            padding: 12px 0;
         }
+        .profile-item:last-child { border-bottom: none; }
     </style>
 </head>
-<body>
+<body class="font-sans antialiased relative selection:bg-indigo-500 selection:text-white flex h-screen overflow-hidden">
 
-    <div class="dashboard-wrapper">
-        <!-- Sidebar Navigation -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-logo-section">
-                <div class="flex items-center space-x-2">
-                    <img src="iedc logo.jpg" alt="MET'S IEDC Logo" class="h-10 w-10 rounded-full shadow-md">
-                    <span class="text-2xl font-extrabold text-dark-text">MET'S IEDC</span>
-                </div>
-                <!-- Close button for mobile menu -->
-                <button id="close-mobile-sidebar" class="close-mobile-menu hidden md:hidden">
-                    <i data-lucide="x" class="w-8 h-8"></i>
-                </button>
-            </div>
-
-            <nav class="sidebar-nav-container flex flex-col gap-2 w-full">
-                <!-- Removed onclick attributes and added data-tab-id for JS listener -->
-                <a id="dashboardOverviewTabBtn" class="sidebar-nav-item active" data-tab-id="dashboardOverview">
-                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a id="profileTabBtn" class="sidebar-nav-item" data-tab-id="profile">
-                    <i data-lucide="user" class="w-5 h-5"></i>
-                    <span>My Profile</span>
-                </a>
-                 <a id="submitProjectTabBtn" class="sidebar-nav-item" href="admin.html">
-                    <i data-lucide="folder-plus" class="w-5 h-5"></i>
-                    <span>Admin</span>
-                </a>
-                 <a id="submitProjectTabBtn" class="sidebar-nav-item" href="https://iedc.startupmission.in/report/">
-                    <i data-lucide="folder-plus" class="w-5 h-5"></i>
-                    <span>Submit Report</span>
-                </a>
-                 <a id="submitProjectTabBtn" class="sidebar-nav-item" data-tab-id="submitProject">
-                    <i data-lucide="folder-plus" class="w-5 h-5"></i>
-                    <span>Submit Project</span>
-                </a>
-                <a id="submitIdeaTabBtn" class="sidebar-nav-item" data-tab-id="submitIdea">
-                    <i data-lucide="lightbulb" class="w-5 h-5"></i>
-                    <span>Submit Idea</span>
-                </a>
-                <a id="submitEventTabBtn" class="sidebar-nav-item" data-tab-id="submitEvent">
-                    <i data-lucide="calendar-check" class="w-5 h-5"></i>
-                    <span>Propose Event</span>
-                </a>
-                <!-- Logout in sidebar - visible on mobile -->
-                <button id="logoutBtnSidebar" class="sidebar-nav-item mt-4 bg-red-action text-white hover:bg-red-action-dark">
-                    <i data-lucide="log-out" class="w-5 h-5"></i>
-                    <span>Logout</span>
-                </button>
-            </nav>
-
-            <div class="sidebar-bottom-item">
-                <button class="action-button px-4 py-2 bg-accent-purple text-white hover:bg-accent-purple-dark rounded-md text-sm">
-                    <i data-lucide="help-circle" class="w-4 h-4 mr-2 inline-block"></i>
-                    Get Help
-                </button>
-            </div>
-        </div>
-
-        <!-- Main Content Area -->
-        <div class="dashboard-main-wrapper">
-            <!-- Main Content Header -->
-            <div class="main-header">
-                <div class="flex items-center">
-                    <!-- Mobile menu toggle button (hamburger icon) -->
-                    <button id="mobile-menu-toggle" class="mobile-menu-toggle hidden md:hidden mr-4">
-                        <i data-lucide="menu" class="w-8 h-8"></i>
-                    </button>
-                    <div class="flex flex-col">
-                        <h1 class="text-3xl font-extrabold text-dark-text">Dashboard</h1>
-                        <p class="text-md text-muted">Monday, 22 March 2025</p>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <div class="header-icons flex gap-4 mr-4">
-                        <i data-lucide="bell" class="w-6 h-6"></i>
-                        <i data-lucide="settings" class="w-6 h-6"></i>
-                    </div>
-                    <div class="flex items-center cursor-pointer user-info">
-                        <span class="text-dark-text font-semibold mr-2 hidden sm:block" id="userEmailHeader">user@example.com</span>
-                        <div class="user-avatar" id="userAvatarHeader">U</div>
-                    </div>
-                    <!-- Logout in header - hidden on mobile -->
-                    <button id="logoutBtnHeader" class="action-button px-4 py-2 bg-red-action text-white rounded-md ml-4 hidden sm:block hover:bg-red-action-dark">Logout</button>
-                </div>
-            </div>
-
-            <!-- Dashboard Overview Section (New Tab Content) -->
-            <div id="dashboardOverviewSection" class="tab-content">
-                <!-- Hi, Alyssa Banner -->
-                <div class="dashboard-banner flex-col sm:flex-row items-start sm:items-center">
-                    <div>
-                        <h2 class="font-extrabold">Hi, <span id="displayNameBanner">User</span></h2>
-                        <p>Ready to start your day with some exciting innovations?</p>
-                    </div>
-                    <!-- Simple placeholder illustration matching the image style -->
-                    <svg class="dashboard-banner-illustration" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="0" y="50" width="300" height="180" rx="20" fill="#E0E7ED"/>
-                        <rect x="50" y="0" width="200" height="150" rx="15" fill="#C4B4E3"/>
-                        <circle cx="280" cy="80" r="40" fill="#A088E0"/>
-                        <path d="M220 180 C200 250, 300 250, 280 180 L220 180 Z" fill="#8C6CEF"/>
-                        <circle cx="250" cy="190" r="30" fill="#F0EDFD"/>
-                        <path d="M180 120 L220 120 L220 140 L180 140 Z" fill="#FFFFFF"/>
-                        <path d="M190 150 Q200 160, 210 150 L200 130 Z" fill="#FFC107"/>
-                    </svg>
-                </div>
-
-                <!-- Overview Cards -->
-                <h3 class="text-xl font-bold text-dark-text mb-4">Overview</h3>
-                <div class="overview-cards-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div class="overview-card yellow">
-                        <div class="icon-circle">
-                            <i data-lucide="trending-up" class="w-6 h-6"></i>
-                        </div>
-                        <div class="value">--%</div>
-                        <div class="label">Completion Rate</div>
-                    </div>
-                    <div class="overview-card purple">
-                        <div class="icon-circle">
-                            <i data-lucide="check-circle" class="w-6 h-6"></i>
-                        </div>
-                        <div class="value">--</div>
-                        <div class="label">Tasks Complete</div>
-                    </div>
-                    <div class="overview-card blue">
-                        <div class="icon-circle">
-                            <i data-lucide="lightbulb" class="w-6 h-6"></i>
-                        </div>
-                        <div class="value">--</div>
-                        <div class="label">Unique Ideas</div>
-                    </div>
-                    <div class="overview-card">
-                        <div class="icon-circle" style="background-color: var(--color-muted-text);"><i data-lucide="eye" class="w-6 h-6"></i></div>
-                        <div class="value">--</div>
-                        <div class="label">Total Views</div>
-                    </div>
-                </div>
-
-                <!-- Placeholder for Project List - similar to image -->
-                <h3 class="text-xl font-bold text-dark-text mb-4">Recent Submissions</h3>
-                <div class="grid grid-cols-1 gap-4">
-                    <div class="bg-sidebar-background rounded-lg shadow-md p-5 flex items-center gap-4 border border-border-light">
-                        <div class="w-20 h-20 bg-accent-purple-light rounded-md flex-shrink-0 flex items-center justify-center">
-                            <!-- Placeholder for small image/icon -->
-                            <img src="https://placehold.co/80x80/8C6CEF/FFFFFF?text=Project" alt="Project Thumbnail" class="rounded-md object-cover w-full h-full">
-                        </div>
-                        <div class="flex-grow">
-                            <h4 class="text-lg font-semibold text-dark-text">No Recent Project</h4>
-                            <p class="text-sm text-muted mb-1">No description available.</p>
-                            <span class="text-xs text-muted">0 Slides • <span class="font-semibold" style="color: var(--color-muted-text);">N/A</span></span>
-                        </div>
-                        <!-- Status indicator -->
-                        <div class="bg-muted-text w-3 h-3 rounded-full flex-shrink-0"></div>
-                    </div>
-                    <div class="bg-sidebar-background rounded-lg shadow-md p-5 flex items-center gap-4 border border-border-light">
-                        <div class="w-20 h-20 bg-accent-purple-light rounded-md flex-shrink-0 flex items-center justify-center">
-                            <img src="https://placehold.co/80x80/8C6CEF/FFFFFF?text=Idea" alt="Idea Thumbnail" class="rounded-md object-cover w-full h-full">
-                        </div>
-                        <div class="flex-grow">
-                            <h4 class="text-lg font-semibold text-dark-text">No Recent Idea</h4>
-                            <p class="text-sm text-muted mb-1">No description available.</p>
-                            <span class="text-xs text-muted">0 Submissions • <span class="font-semibold" style="color: var(--color-muted-text);">N/A</span></span>
-                        </div>
-                        <!-- Status indicator -->
-                        <div class="bg-muted-text w-3 h-3 rounded-full flex-shrink-0"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- My Profile Section -->
-            <div id="profileSection" class="tab-content hidden">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div class="p-8 bg-light-background rounded-xl border border-border-light shadow-inner flex flex-col items-center">
-                        <h3 class="text-2xl font-bold text-dark-text mb-6 border-b pb-4 border-border-subtle-dark w-full text-center">Your Profile Information</h3>
-
-                        <div class="profile-image-placeholder rounded-full flex items-center justify-center font-bold mb-8">
-                            <i data-lucide="user" class="w-16 h-16"></i>
-                        </div>
-
-                        <div class="space-y-3 w-full">
-                            <div class="profile-info-item">
-                                <i data-lucide="user" class="w-5 h-5"></i>
-                                <span class="label">Name:</span> <span class="value" id="displayNameOutput">Not set</span>
-                            </div>
-                            <div class="profile-info-item">
-                                <i data-lucide="book-open" class="w-5 h-5"></i>
-                                <span class="label">Bio:</span> <span class="value" id="bioOutput">Not set</span>
-                            </div>
-                            <div class="profile-info-item">
-                                <i data-lucide="phone" class="w-5 h-5"></i>
-                                <span class="label">Contact:</span> <span class="value" id="contactNumberOutput">Not set</span>
-                            </div>
-                            <div class="profile-info-item">
-                                <i data-lucide="users-2" class="w-5 h-5"></i>
-                                <span class="label">Gender:</span> <span class="value" id="genderOutput">Not set</span>
-                            </div>
-                            <div class="profile-info-item">
-                                <i data-lucide="calendar" class="w-5 h-5"></i>
-                                <span class="label">Date of Birth:</span> <span class="value" id="dobOutput">Not set</span>
-                            </div>
-                            <div class="profile-info-item">
-                                <i data-lucide="map-pin" class="w-5 h-5"></i>
-                                <span class="label">Address:</span> <span class="value" id="addressOutput">Not set</span>
-                            </div>
-                            <div class="profile-info-item">
-                                <i data-lucide="map" class="w-5 h-5"></i>
-                                <span class="label">City:</span> <span class="value" id="cityOutput">Not set</span>
-                            </div>
-                            <div class="profile-info-item">
-                                <i data-lucide="map-pin" class="w-5 h-5"></i>
-                                <span class="label">State:</span> <span class="value" id="stateOutput">Not set</span>
-                            </div>
-                            <div class="profile-info-item">
-                                <i data-lucide="mail-open" class="w-5 h-5"></i>
-                                <span class="label">Pincode:</span> <span class="value" id="pincodeOutput">Not set</span>
-                            </div>
-                            <div class="profile-info-item">
-                                <i data-lucide="graduation-cap" class="w-5 h-5"></i>
-                                <span class="label">Qualification:</span> <span class="value" id="qualificationOutput">Not set</span>
-                            </div>
-                            <div class="profile-info-item">
-                                <i data-lucide="wrench" class="w-5 h-5"></i>
-                                <span class="label">Skills:</span> <span class="value" id="skillsOutput">Not set</span>
-                            </div>
-                            <div class="profile-info-item">
-                                <i data-lucide="linkedin" class="w-5 h-5"></i>
-                                <span class="label">LinkedIn:</span> <span class="value" id="linkedinOutput">Not set</span>
-                            </div>
-                            <div class="profile-info-item">
-                                <i data-lucide="instagram" class="w-5 h-5"></i>
-                                <span class="label">Instagram:</span> <span class="value" id="instagramOutput">Not set</span>
-                            </div>
-                            <div class="profile-info-item">
-                                <i data-lucide="message-square" class="w-5 h-5"></i>
-                                <span class="label">Comm. Pref:</span> <span class="value" id="communicationOutput">Not set</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="text-left p-8 bg-sidebar-background rounded-xl shadow-md border border-border-light">
-                        <div id="profileFormContainer">
-                            <h2 class="text-2xl font-bold text-dark-text mb-6">Update Your Profile</h2>
-                            <div id="profileStatusMessage" class="status-message hidden"></div>
-
-                            <form id="profileForm" class="space-y-5">
-                                <div>
-                                    <label for="profileName" class="block text-dark-text text-sm font-bold mb-2">Name:</label>
-                                    <input type="text" id="profileName" class="w-full" placeholder="Your Full Name">
-                                </div>
-
-                                <div>
-                                    <label for="profileBio" class="block text-dark-text text-sm font-bold mb-2">Bio:</label>
-                                    <textarea id="profileBio" rows="3" class="w-full" placeholder="Tell us about yourself..."></textarea>
-                                </div>
-
-                                <div>
-                                    <label for="profileContact" class="block text-dark-text text-sm font-bold mb-2">Contact Number:</label>
-                                    <input type="tel" id="profileContact" class="w-full" placeholder="e.g., +91 9876543210">
-                                </div>
-
-                                <div>
-                                    <label for="profileGender" class="block text-dark-text text-sm font-bold mb-2">Gender:</label>
-                                    <select id="profileGender" class="w-full">
-                                        <option value="">Select Gender</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Other">Other</option>
-                                        <option value="Prefer not to say">Prefer not to say</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label for="profileDob" class="block text-dark-text text-sm font-bold mb-2">Date of Birth:</label>
-                                    <input type="date" id="profileDob" class="w-full">
-                                </div>
-
-                                <div>
-                                    <label for="profileAddress" class="block text-dark-text text-sm font-bold mb-2">Address:</label>
-                                    <textarea id="profileAddress" rows="2" class="w-full" placeholder="Street, Locality"></textarea>
-                                </div>
-
-                                <div>
-                                    <label for="profileCity" class="block text-dark-text text-sm font-bold mb-2">City:</label>
-                                    <input type="text" id="profileCity" class="w-full" placeholder="Your City">
-                                </div>
-
-                                <div>
-                                    <label for="profileState" class="block text-dark-text text-sm font-bold mb-2">State:</label>
-                                    <input type="text" id="profileState" class="w-full" placeholder="Your State">
-                                </div>
-
-                                <div>
-                                    <label for="profilePincode" class="block text-dark-text text-sm font-bold mb-2">Pincode:</label>
-                                    <input type="number" id="profilePincode" class="w-full" placeholder="e.g., 680001">
-                                </div>
-
-                                <div>
-                                    <label for="profileQualification" class="block text-dark-text text-sm font-bold mb-2">Educational Qualification:</label>
-                                    <select id="profileQualification" class="w-full">
-                                        <option value="">Select Qualification</option>
-                                        <option value="High School">High School</option>
-                                        <option value="Diploma">Diploma</option>
-                                        <option value="Bachelor's Degree">Bachelor's Degree</option>
-                                        <option value="Master's Degree">Master's Degree</option>
-                                        <option value="PhD">PhD</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label for="profileSkills" class="block text-dark-text text-sm font-bold mb-2">Skills (comma-separated):</label>
-                                    <input type="text" id="profileSkills" class="w-full" placeholder="e.g., JavaScript, Python, UI/UX Design">
-                                </div>
-
-                                <hr class="border-border-light my-4">
-
-                                <h3 class="text-lg font-bold text-dark-text mb-2">Social & Web Links</h3>
-                                <div>
-                                    <label for="profileLinkedIn" class="block text-dark-text text-sm font-bold mb-2">LinkedIn Profile URL:</label>
-                                    <input type="url" id="profileLinkedIn" class="w-full" placeholder="https://linkedin.com/in/yourprofile">
-                                </div>
-                                <div>
-                                    <label for="profileInstagram" class="block text-dark-text text-sm font-bold mb-2">Instagram Profile URL:</label>
-                                    <input type="url" id="profileInstagram" class="w-full" placeholder="https://instagram.com/yourhandle">
-                                </div>
-
-                                <hr class="border-border-light my-4">
-
-                                <h3 class="text-lg font-bold text-dark-text mb-2">Communication Preferences</h3>
-                                <div>
-                                    <label for="profileCommunicationMethod" class="block text-dark-text text-sm font-bold mb-2">Preferred Communication Method:</label>
-                                    <select id="profileCommunicationMethod" class="w-full">
-                                        <option value="">Select Method</option>
-                                        <option value="Email">Email</option>
-                                        <option value="Phone">Phone</option>
-                                        <option value="WhatsApp">WhatsApp</option>
-                                        <option value="Telegram">Telegram</option>
-                                    </select>
-                                </div>
-
-                                <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Save Profile</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Submit Project Section -->
-            <div id="submitProjectSection" class="tab-content hidden">
-                <h2 class="text-2xl font-bold text-dark-text mb-6">Submit a New Project</h2>
-                <div id="projectStatusMessage" class="status-message hidden"></div>
-                <form id="projectForm" class="space-y-5">
-                    <div>
-                        <label for="projectName" class="block text-dark-text text-sm font-bold mb-2">Project Name:</label>
-                        <input type="text" id="projectName" class="w-full" placeholder="e.g., Smart Waste Management System">
-                    </div>
-                    <div>
-                        <label for="projectDescription" class="block text-dark-text text-sm font-bold mb-2">Project Description:</label>
-                        <textarea id="projectDescription" rows="5" class="w-full" placeholder="Provide a detailed description of your project, its purpose, and key features."></textarea>
-                    </div>
-                    <div>
-                        <label for="projectTeamMembers" class="block text-dark-text text-sm font-bold mb-2">Team Members (comma-separated names/emails):</label>
-                        <input type="text" id="projectTeamMembers" class="w-full" placeholder="e.g., Alice, Bob, Charlie">
-                    </div>
-                    <div>
-                        <label for="projectTechnologyStack" class="block text-dark-text text-sm font-bold mb-2">Technology Stack (comma-separated):</label>
-                        <input type="text" id="projectTechnologyStack" class="w-full" placeholder="e.g., Python, Arduino, Machine Learning">
-                    </div>
-                    <div>
-                        <label for="projectLink" class="block text-dark-text text-sm font-bold mb-2">Project Link (GitHub, Demo, etc.):</label>
-                        <input type="url" id="projectLink" class="w-full" placeholder="https://github.com/yourproject">
-                    </div>
-                    <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Submit Project</button>
-                </form>
-            </div>
-
-            <!-- Submit Idea Section -->
-            <div id="submitIdeaSection" class="tab-content hidden">
-                <h2 class="text-2xl font-bold text-dark-text mb-6">Submit a New Idea</h2>
-                <div id="ideaStatusMessage" class="status-message hidden"></div>
-                <form id="ideaForm" class="space-y-5">
-                    <div>
-                        <label for="ideaName" class="block text-dark-text text-sm font-bold mb-2">Idea Title:</label>
-                        <input type="text" id="ideaName" class="w-full" placeholder="e.g., AI-Powered Study Buddy">
-                    </div>
-                    <div>
-                        <label for="ideaDescription" class="block text-dark-text text-sm font-bold mb-2">Idea Description:</label>
-                        <textarea id="ideaDescription" rows="5" class="w-full" placeholder="Describe your innovative idea, the problem it solves, and its potential impact."></textarea>
-                    </div>
-                    <div>
-                        <label for="ideaCategory" class="block text-dark-text text-sm font-bold mb-2">Category:</label>
-                        <select id="ideaCategory" class="w-full">
-                            <option value="">Select Category</option>
-                            <option value="Healthcare">Healthcare</option>
-                            <option value="Education">Education</option>
-                            <option value="Environment">Environment</option>
-                            <option value="Agriculture">Agriculture</option>
-                            <option value="FinTech">FinTech</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Submit Idea</button>
-                </form>
-            </div>
-
-            <!-- Propose Event Section -->
-            <div id="submitEventSection" class="tab-content hidden">
-                <h2 class="text-2xl font-bold text-dark-text mb-6">Propose a New Event</h2>
-                <div id="eventStatusMessage" class="status-message hidden"></div>
-                <form id="eventForm" class="space-y-5">
-                    <div>
-                        <label for="eventName" class="block text-dark-text text-sm font-bold mb-2">Event Title:</label>
-                        <input type="text" id="eventName" class="w-full" placeholder="e.g., Workshop on Robotics">
-                    </div>
-                    <div>
-                        <label for="eventDescription" class="block text-dark-text text-sm font-bold mb-2">Event Description:</label>
-                        <textarea id="eventDescription" rows="5" class="w-full" placeholder="Describe the event, its objectives, and target audience."></textarea>
-                    </div>
-                    <div>
-                        <label for="eventDate" class="block text-dark-text text-sm font-bold mb-2">Date:</label>
-                        <input type="date" id="eventDate" class="w-full">
-                    </div>
-                    <div>
-                        <label for="eventTime" class="block text-dark-text text-sm font-bold mb-2">Time:</label>
-                        <input type="text" id="eventTime" class="w-full" placeholder="e.g., 10:00 AM - 1:00 PM">
-                    </div>
-                    <div>
-                        <label for="eventVenue" class="block text-dark-text text-sm font-bold mb-2">Venue:</label>
-                        <input type="text" id="eventVenue" class="w-full" placeholder="e.g., IEDC Innovation Lab">
-                    </div>
-                    <button type="submit" class="w-full bg-primary-action text-white hover:bg-primary-action-dark">Propose Event</button>
-                </form>
-            </div>
-
-            <!-- Footer - Now correctly placed within the main content flow -->
-            <footer>
-                <div class="container py-8"> <!-- Added padding here as main-content overall padding is reduced -->
-                    <p>&copy; 2025 MET'S IEDC. All Rights Reserved.</p>
-                </div>
-            </footer>
-        </div>
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
     </div>
 
-    <!-- Firebase SDK Imports -->
+    <aside class="glass-sidebar w-64 flex-shrink-0 hidden md:flex flex-col h-full z-20">
+        <div class="p-6 flex items-center gap-3">
+            <img src="assets/images/logos/MSEM.jpg" alt="Logo" class="w-10 h-10 rounded-full border border-white/20">
+            <span class="text-xl font-bold text-white">MET'S IEDC</span>
+        </div>
+
+        <nav class="flex-grow px-4 py-4 space-y-2 overflow-y-auto">
+            <button onclick="showTab('dashboardOverview')" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+            </button>
+            <button onclick="showTab('profile')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="user" class="w-5 h-5"></i> My Profile
+            </button>
+            <a href="admin.html" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="shield" class="w-5 h-5"></i> Admin
+            </a>
+            <a href="https://iedc.startupmission.in/report/" target="_blank" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="file-text" class="w-5 h-5"></i> Submit Report
+            </a>
+            <button onclick="showTab('submitProject')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="folder-plus" class="w-5 h-5"></i> Submit Project
+            </button>
+            <button onclick="showTab('submitIdea')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="lightbulb" class="w-5 h-5"></i> Submit Idea
+            </button>
+            <button onclick="showTab('submitEvent')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="calendar-plus" class="w-5 h-5"></i> Propose Event
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-white/5">
+            <button id="logoutBtnSidebar" class="w-full flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 py-2.5 rounded-lg transition-colors text-sm font-medium border border-red-500/20">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10">
+        
+        <header class="glass-header h-20 flex items-center justify-between px-6 md:px-10 shrink-0">
+            <div class="flex items-center gap-4">
+                <button id="mobile-menu-toggle" class="md:hidden text-white p-2">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <div>
+                    <h1 class="text-xl font-bold text-white">Dashboard</h1>
+                    <p class="text-xs text-gray-400 hidden sm:block">Welcome back to your workspace</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <div class="hidden sm:flex gap-4 text-gray-400">
+                    <button class="hover:text-white transition-colors"><i data-lucide="bell" class="w-5 h-5"></i></button>
+                    <button class="hover:text-white transition-colors"><i data-lucide="settings" class="w-5 h-5"></i></button>
+                </div>
+                <div class="flex items-center gap-3 pl-6 border-l border-white/10">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-medium text-white" id="userEmailHeader">user@example.com</p>
+                        <p class="text-xs text-gray-500">Student</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg shadow-lg" id="userAvatarHeader">
+                        U
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow overflow-y-auto p-6 md:p-10 scroll-smooth">
+            
+            <div id="dashboardOverviewSection" class="tab-content space-y-8 max-w-7xl mx-auto">
+                <div class="glass-card rounded-3xl p-8 md:p-10 relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h2 class="text-3xl font-bold text-white mb-2">Hello, <span id="displayNameBanner" class="text-indigo-400">User</span>! 👋</h2>
+                        <p class="text-gray-400 max-w-xl">Ready to turn your innovative ideas into reality? Start by submitting a new project or checking your progress.</p>
+                    </div>
+                    <div class="absolute right-0 bottom-0 opacity-20 pointer-events-none">
+                        <i data-lucide="rocket" class="w-48 h-48 text-indigo-500 transform translate-x-10 translate-y-10"></i>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass-card p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/5 transition-colors cursor-pointer group">
+                        <div class="w-12 h-12 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="trending-up" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-1">0%</h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider">Completion</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/5 transition-colors cursor-pointer group">
+                        <div class="w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="check-circle" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-1">0</h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider">Tasks Done</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/5 transition-colors cursor-pointer group">
+                        <div class="w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="lightbulb" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-1">0</h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider">Ideas</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/5 transition-colors cursor-pointer group">
+                        <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="eye" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-1">0</h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider">Views</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-4">Recent Activity</h3>
+                    <div class="glass-card rounded-2xl p-8 text-center border-dashed border-2 border-white/10">
+                        <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-500">
+                            <i data-lucide="inbox" class="w-8 h-8"></i>
+                        </div>
+                        <p class="text-gray-400">No recent submissions or activity found.</p>
+                        <button onclick="showTab('submitIdea')" class="mt-4 text-indigo-400 text-sm hover:text-indigo-300 font-medium">Submit your first idea &rarr;</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="profileSection" class="tab-content hidden max-w-5xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="glass-card rounded-3xl p-8 text-center h-fit">
+                        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 mx-auto flex items-center justify-center text-3xl font-bold text-white mb-6 shadow-lg shadow-indigo-500/30">
+                            <i data-lucide="user"></i>
+                        </div>
+                        <h2 class="text-xl font-bold text-white mb-1" id="displayNameOutput">Not set</h2>
+                        <p class="text-sm text-gray-400 mb-6" id="bioOutput">No bio available</p>
+                        
+                        <div class="space-y-4 text-left">
+                            <div class="profile-item flex items-center gap-3 text-sm">
+                                <i data-lucide="mail" class="w-4 h-4 text-indigo-400"></i>
+                                <span class="text-gray-300 truncate" id="emailOutput">user@example.com</span>
+                            </div>
+                            <div class="profile-item flex items-center gap-3 text-sm">
+                                <i data-lucide="phone" class="w-4 h-4 text-indigo-400"></i>
+                                <span class="text-gray-300" id="contactNumberOutput">Not set</span>
+                            </div>
+                            <div class="profile-item flex items-center gap-3 text-sm">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-indigo-400"></i>
+                                <span class="text-gray-300" id="locationOutput">Not set</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-3xl p-8 lg:col-span-2">
+                        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                            <i data-lucide="edit-3" class="w-5 h-5 text-indigo-400"></i> Edit Profile
+                        </h3>
+                        <div id="profileStatusMessage" class="hidden mb-4 p-3 rounded-lg text-sm"></div>
+                        
+                        <form id="profileForm" class="space-y-5">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Full Name</label>
+                                    <input type="text" id="profileName" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm" placeholder="John Doe">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Contact Number</label>
+                                    <input type="tel" id="profileContact" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm" placeholder="+91 9876543210">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Bio</label>
+                                <textarea id="profileBio" rows="3" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm" placeholder="Tell us a bit about yourself..."></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">City</label>
+                                    <input type="text" id="profileCity" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">State</label>
+                                    <input type="text" id="profileState" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">LinkedIn URL</label>
+                                    <input type="url" id="profileLinkedIn" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm" placeholder="https://linkedin.com/in/...">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Instagram URL</label>
+                                    <input type="url" id="profileInstagram" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm" placeholder="https://instagram.com/...">
+                                </div>
+                            </div>
+
+                            <div class="pt-4">
+                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-lg shadow-indigo-500/30 flex items-center gap-2">
+                                    <i data-lucide="save" class="w-4 h-4"></i> Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div id="submitProjectSection" class="tab-content hidden max-w-3xl mx-auto">
+                <div class="glass-card rounded-3xl p-8 md:p-10">
+                    <h2 class="text-2xl font-bold text-white mb-2">Submit Project</h2>
+                    <p class="text-gray-400 text-sm mb-8">Share your innovative project details with us.</p>
+                    <div id="projectStatusMessage" class="hidden mb-4 p-3 rounded-lg text-sm bg-green-500/10 border border-green-500/20 text-green-400"></div>
+
+                    <form id="projectForm" class="space-y-6">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Project Name</label>
+                            <input type="text" id="projectName" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Description</label>
+                            <textarea id="projectDescription" rows="5" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Technology Stack</label>
+                            <input type="text" id="projectStack" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="e.g. React, Node.js, Python">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Project Link (GitHub/Drive)</label>
+                            <input type="url" id="projectLink" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-indigo-500/30">
+                            Submit Project
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="submitIdeaSection" class="tab-content hidden max-w-3xl mx-auto">
+                <div class="glass-card rounded-3xl p-8 md:p-10">
+                    <h2 class="text-2xl font-bold text-white mb-2">Submit Idea</h2>
+                    <p class="text-gray-400 text-sm mb-8">Got a spark? Pitch your idea for evaluation.</p>
+                    <div id="ideaStatusMessage" class="hidden mb-4 p-3 rounded-lg text-sm bg-green-500/10 border border-green-500/20 text-green-400"></div>
+
+                    <form id="ideaForm" class="space-y-6">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Idea Title</label>
+                            <input type="text" id="ideaName" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Problem Statement</label>
+                            <textarea id="ideaProblem" rows="3" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Proposed Solution</label>
+                            <textarea id="ideaSolution" rows="5" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Category</label>
+                            <select id="ideaCategory" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
+                                <option value="">Select Category</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Education">Education</option>
+                                <option value="Fintech">Fintech</option>
+                                <option value="Agriculture">Agriculture</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-purple-500/30">
+                            Submit Idea
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="submitEventSection" class="tab-content hidden max-w-3xl mx-auto">
+                <div class="glass-card rounded-3xl p-8 md:p-10">
+                    <h2 class="text-2xl font-bold text-white mb-2">Propose Event</h2>
+                    <p class="text-gray-400 text-sm mb-8">Suggest workshops or seminars for the community.</p>
+                    <div id="eventStatusMessage" class="hidden mb-4 p-3 rounded-lg text-sm bg-green-500/10 border border-green-500/20 text-green-400"></div>
+
+                    <form id="eventForm" class="space-y-6">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Event Title</label>
+                            <input type="text" id="eventName" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Date</label>
+                                <input type="date" id="eventDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Expected Time</label>
+                                <input type="text" id="eventTime" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="10:00 AM">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Description & Objectives</label>
+                            <textarea id="eventDescription" rows="5" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-emerald-500/30">
+                            Propose Event
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-30 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
+    
+    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-64 glass-sidebar z-40 transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col">
+        <div class="p-6 flex items-center justify-between border-b border-white/10">
+            <span class="text-xl font-bold text-white">Menu</span>
+            <button onclick="toggleMobileSidebar()" class="text-white"><i data-lucide="x"></i></button>
+        </div>
+        <nav class="flex-grow px-4 py-4 space-y-2 overflow-y-auto">
+            <button onclick="showTab('dashboardOverview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Dashboard</button>
+            <button onclick="showTab('profile'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">My Profile</button>
+            <a href="admin.html" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Admin</a>
+            <button onclick="showTab('submitProject'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Submit Project</button>
+            <button id="logoutBtnMobile" class="w-full mt-4 bg-red-500/20 text-red-400 py-3 rounded-lg text-sm font-bold">Logout</button>
+        </nav>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Initialize Lucide icons
         lucide.createIcons();
 
-        // YOUR FIREBASE CONFIGURATION (Provided by user)
         const firebaseConfig = {
             apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
             authDomain: "metsiedc-3010e.firebaseapp.com",
@@ -953,313 +461,133 @@
             measurementId: "G-6E7EK0D7JG"
         };
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id'; // Keep appId from Canvas if available
+        let app, auth, db, currentUserId;
 
-        let app;
-        let auth;
-        let db;
-        let currentUserId = null;
-
-        // Firebase Initialization
         try {
             app = initializeApp(firebaseConfig);
             auth = getAuth(app);
-            db = getFirestore(app); // Get Firestore instance
-            console.log("Firebase app and Firestore initialized successfully.");
-        } catch (error) {
-            console.error("Firebase initialization failed:", error);
-            // In a production app, you might show a user-friendly error message here
-        }
+            db = getFirestore(app);
+        } catch (error) { console.error("Firebase Init Error", error); }
 
-        // Authentication State Change Listener - **Crucial for login/logout flow**
+        // Auth State Listener
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUserId = user.uid;
-                console.log("User is logged in:", currentUserId, "Email:", user.email);
-                // Update UI elements with user info
-                document.getElementById('userEmailHeader').textContent = user.email || 'Welcome User';
-                document.getElementById('userAvatarHeader').textContent = user.email ? user.email.charAt(0).toUpperCase() : 'U';
-                document.getElementById('displayNameBanner').textContent = user.email ? user.email.split('@')[0] : 'User';
-                
-                // Fetch profile data only if the database is initialized
-                if (db) {
-                    fetchProfileData(currentUserId);
-                } else {
-                    console.warn("Firestore DB not available, cannot fetch profile data on auth state change.");
-                }
-                showTab('dashboardOverview'); // Ensure dashboard tab is shown after successful login
-
+                document.getElementById('userEmailHeader').textContent = user.email;
+                document.getElementById('userAvatarHeader').textContent = user.email.charAt(0).toUpperCase();
+                document.getElementById('displayNameBanner').textContent = user.email.split('@')[0];
+                if (db) fetchProfileData(currentUserId);
             } else {
-                currentUserId = null;
-                console.log("User is logged out or not authenticated.");
-                // Redirect to login IF NOT ALREADY ON LOGIN PAGE
-                if (window.location.pathname.endsWith('/login.html')) {
-                    console.log("Already on login page. No redirection needed.");
-                } else {
-                    console.log("Redirecting to login page...");
-                    window.location.href = 'login.html';
-                }
+                window.location.href = 'login.html';
             }
         });
 
-        // --- Logout Functionality ---
-        async function handleLogout() {
-            if (auth) {
-                try {
-                    await signOut(auth);
-                    console.log("User signed out successfully.");
-                    // The onAuthStateChanged listener above will handle the redirect.
-                } catch (error) {
-                    console.error("Error signing out:", error);
-                    // Use a custom message box instead of alert() if possible
-                    alert("Logout failed: " + error.message); 
-                }
-            } else {
-                console.warn("Firebase Auth not initialized. Cannot perform logout.");
-                alert("Application error: Firebase not ready for logout.");
-            }
-        }
-
-        // Attach logout listeners
-        document.getElementById('logoutBtnHeader').addEventListener('click', handleLogout);
-        document.getElementById('logoutBtnSidebar').addEventListener('click', handleLogout);
-
-
-        // --- Profile Data Management with Firestore ---
+        // Fetch Profile
         async function fetchProfileData(userId) {
-            if (!db) {
-                console.error("Firestore DB is not initialized. Cannot fetch profile data.");
-                return;
-            }
-            // Private data path for profile
-            const userProfileRef = doc(db, `artifacts/${appId}/users/${userId}/profile`, 'userProfile');
+            const docRef = doc(db, `users/${userId}/profile`, 'userProfile'); // Adjusted path for simplicity
             try {
-                const docSnap = await getDoc(userProfileRef);
+                const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    console.log("Profile data fetched:", data);
-                    // Update display fields
-                    document.getElementById('displayNameOutput').textContent = data.profileName || 'Not set';
-                    document.getElementById('bioOutput').textContent = data.profileBio || 'Not set';
-                    document.getElementById('contactNumberOutput').textContent = data.profileContact || 'Not set';
-                    document.getElementById('genderOutput').textContent = data.profileGender || 'Not set';
-                    document.getElementById('dobOutput').textContent = data.profileDob || 'Not set';
-                    document.getElementById('addressOutput').textContent = data.profileAddress || 'Not set';
-                    document.getElementById('cityOutput').textContent = data.profileCity || 'Not set';
-                    document.getElementById('stateOutput').textContent = data.profileState || 'Not set';
-                    document.getElementById('pincodeOutput').textContent = data.profilePincode || 'Not set';
-                    document.getElementById('qualificationOutput').textContent = data.profileQualification || 'Not set';
-                    document.getElementById('skillsOutput').textContent = data.profileSkills || 'Not set';
-                    // For links, ensure they are rendered as actual links
-                    document.getElementById('linkedinOutput').innerHTML = data.profileLinkedIn ? `<a href="${data.profileLinkedIn}" target="_blank" class="text-accent-purple hover:underline">${data.profileLinkedIn}</a>` : 'Not set';
-                    document.getElementById('instagramOutput').innerHTML = data.profileInstagram ? `<a href="${data.profileInstagram}" target="_blank" class="text-accent-purple hover:underline">${data.profileInstagram}</a>` : 'Not set';
-                    document.getElementById('communicationOutput').textContent = data.profileCommunicationMethod || 'Not set';
-
-                    // Update form fields for editing
-                    document.getElementById('profileName').value = data.profileName || '';
-                    document.getElementById('profileBio').value = data.profileBio || '';
-                    document.getElementById('profileContact').value = data.profileContact || '';
-                    document.getElementById('profileGender').value = data.profileGender || '';
-                    document.getElementById('profileDob').value = data.profileDob || '';
-                    document.getElementById('profileAddress').value = data.profileAddress || '';
-                    document.getElementById('profileCity').value = data.profileCity || '';
-                    document.getElementById('profileState').value = data.profileState || '';
-                    document.getElementById('profilePincode').value = data.profilePincode || '';
-                    document.getElementById('profileQualification').value = data.profileQualification || '';
-                    document.getElementById('profileSkills').value = data.profileSkills || '';
-                    document.getElementById('profileLinkedIn').value = data.profileLinkedIn || '';
-                    document.getElementById('profileInstagram').value = data.profileInstagram || '';
-                    document.getElementById('profileCommunicationMethod').value = data.profileCommunicationMethod || '';
-                } else {
-                    console.log("No profile data found for user:", userId);
-                    resetDisplayedProfileInfo(); // Reset to default "Not set" if no data
+                    // Update View
+                    document.getElementById('displayNameOutput').textContent = data.name || 'Not set';
+                    document.getElementById('bioOutput').textContent = data.bio || 'No bio available';
+                    document.getElementById('emailOutput').textContent = auth.currentUser.email;
+                    document.getElementById('contactNumberOutput').textContent = data.contact || 'Not set';
+                    document.getElementById('locationOutput').textContent = data.city ? `${data.city}, ${data.state}` : 'Not set';
+                    
+                    // Update Form
+                    document.getElementById('profileName').value = data.name || '';
+                    document.getElementById('profileContact').value = data.contact || '';
+                    document.getElementById('profileBio').value = data.bio || '';
+                    document.getElementById('profileCity').value = data.city || '';
+                    document.getElementById('profileState').value = data.state || '';
+                    document.getElementById('profileLinkedIn').value = data.linkedin || '';
+                    document.getElementById('profileInstagram').value = data.instagram || '';
                 }
-            } catch (e) {
-                console.error("Error fetching profile document:", e);
-                displayStatusMessage(document.getElementById('profileStatusMessage'), 'Error loading profile. ' + e.message, 'error');
-                resetDisplayedProfileInfo();
-            }
+            } catch (e) { console.error("Profile fetch error", e); }
         }
 
-        async function saveProfileData(profileData) {
-            if (!db || !currentUserId) {
-                displayStatusMessage(document.getElementById('profileStatusMessage'), 'Error: Not authenticated or database not ready.', 'error');
-                console.error("Not authenticated or Firestore DB not initialized. Cannot save profile.");
-                return;
-            }
-
-            const userProfileRef = doc(db, `artifacts/${appId}/users/${currentUserId}/profile`, 'userProfile');
-            try {
-                await setDoc(userProfileRef, profileData, { merge: true }); // Use merge: true to update fields
-                displayStatusMessage(document.getElementById('profileStatusMessage'), 'Profile updated successfully!', 'success');
-                console.log("Profile saved:", profileData);
-                fetchProfileData(currentUserId); // Re-fetch to update displayed info and form
-            }
-            catch (e) {
-                displayStatusMessage(document.getElementById('profileStatusMessage'), 'Error saving profile: ' + e.message, 'error');
-                console.error("Error saving profile document:", e);
-            }
-        }
-
-        // --- Tab Switching Logic ---
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tabContent => {
-                tabContent.classList.add('hidden');
-            });
-            document.querySelectorAll('.sidebar-nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-
-            const targetSection = document.getElementById(tabId + 'Section');
-            if (targetSection) {
-                targetSection.classList.remove('hidden');
-            } else {
-                console.error("Target section not found:", tabId + 'Section');
-            }
-
-            const targetButton = document.getElementById(tabId + 'TabBtn');
-            if (targetButton) {
-                targetButton.classList.add('active');
-            } else {
-                console.error("Target button not found:", tabId + 'TabBtn');
-            }
-
-            // Close mobile sidebar if open after clicking a tab
-            const sidebar = document.getElementById('sidebar');
-            if (sidebar && sidebar.classList.contains('open')) { // Added check for sidebar
-                sidebar.classList.remove('open');
-                document.body.style.overflow = ''; // Restore body scroll
-            }
-        }
-
-        // --- Form Handling & Status Messages ---
-        function displayStatusMessage(element, message, type) {
-            if (!element) return; // Guard against null element
-            element.classList.remove('hidden', 'error', 'success');
-            element.classList.add(type);
-            element.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${type === 'success' ? 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' : 'M10 14l2-2m0 0l2-2m-2 2L8 8m2 2l-2 2m9-2a9 9 0 11-18 0 9 9 0 0118 0z'}"></path></svg>${message}`;
-            setTimeout(() => {
-                element.classList.add('hidden');
-            }, 5000);
-        }
-
-        function resetDisplayedProfileInfo() {
-            const userEmailHeader = document.getElementById('userEmailHeader');
-            if (userEmailHeader) userEmailHeader.textContent = 'user@example.com';
+        // Save Profile
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Saving...';
             
-            const userAvatarHeader = document.getElementById('userAvatarHeader');
-            if (userAvatarHeader) userAvatarHeader.textContent = 'U';
-
-            const displayNameBanner = document.getElementById('displayNameBanner');
-            if (displayNameBanner) displayNameBanner.textContent = 'User';
-
-            const profileOutputElements = [
-                'displayNameOutput', 'bioOutput', 'contactNumberOutput', 'genderOutput', 'dobOutput',
-                'addressOutput', 'cityOutput', 'stateOutput', 'pincodeOutput', 'qualificationOutput',
-                'skillsOutput', 'linkedinOutput', 'instagramOutput', 'communicationOutput'
-            ];
-            profileOutputElements.forEach(id => {
-                const element = document.getElementById(id);
-                if (element) {
-                     // For link elements, set innerHTML to plain text "Not set"
-                    if (id === 'linkedinOutput' || id === 'instagramOutput') {
-                        element.innerHTML = 'Not set';
-                    } else {
-                        element.textContent = 'Not set';
-                    }
-                }
-            });
-            const profileForm = document.getElementById('profileForm');
-            if (profileForm) {
-                profileForm.reset();
-            }
-        }
-
-        // Handle Profile Form Submission
-        document.getElementById('profileForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const profileData = {
-                profileName: document.getElementById('profileName').value,
-                profileBio: document.getElementById('profileBio').value,
-                profileContact: document.getElementById('profileContact').value,
-                profileGender: document.getElementById('profileGender').value,
-                profileDob: document.getElementById('profileDob').value,
-                profileAddress: document.getElementById('profileAddress').value,
-                profileCity: document.getElementById('profileCity').value,
-                profileState: document.getElementById('profileState').value,
-                profilePincode: document.getElementById('profilePincode').value,
-                profileQualification: document.getElementById('profileQualification').value,
-                profileSkills: document.getElementById('profileSkills').value,
-                profileLinkedIn: document.getElementById('profileLinkedIn').value,
-                profileInstagram: document.getElementById('profileInstagram').value,
-                profileCommunicationMethod: document.getElementById('profileCommunicationMethod').value
+            const data = {
+                name: document.getElementById('profileName').value,
+                contact: document.getElementById('profileContact').value,
+                bio: document.getElementById('profileBio').value,
+                city: document.getElementById('profileCity').value,
+                state: document.getElementById('profileState').value,
+                linkedin: document.getElementById('profileLinkedIn').value,
+                instagram: document.getElementById('profileInstagram').value
             };
-            await saveProfileData(profileData);
+
+            try {
+                await setDoc(doc(db, `users/${currentUserId}/profile`, 'userProfile'), data, { merge: true });
+                fetchProfileData(currentUserId);
+                showStatus('profileStatusMessage', 'Profile updated!', 'success');
+            } catch (e) {
+                showStatus('profileStatusMessage', 'Error updating profile.', 'error');
+            } finally {
+                btn.innerHTML = originalText;
+            }
         });
 
-        // Handle Project Form Submission (Mock - no Firestore)
-        document.getElementById('projectForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            displayStatusMessage(document.getElementById('projectStatusMessage'), 'Project submission simulated (no data stored).', 'success');
-            this.reset();
-        });
-
-        // Handle Idea Form Submission (Mock - no Firestore)
-        document.getElementById('ideaForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            displayStatusMessage(document.getElementById('ideaStatusMessage'), 'Idea submission simulated (no data stored).', 'success');
-            this.reset();
-        });
-
-        // Handle Event Form Submission (Mock - no Firestore)
-        document.getElementById('eventForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            displayStatusMessage(document.getElementById('eventStatusMessage'), 'Event proposal simulated (no data stored).', 'success');
-            this.reset();
-        });
-
-        // --- Mobile Sidebar Toggle Logic ---
-        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-        const sidebar = document.getElementById('sidebar');
-        const closeMobileSidebarBtn = document.getElementById('close-mobile-sidebar');
-
-        if (mobileMenuToggle && sidebar && closeMobileSidebarBtn) {
-            mobileMenuToggle.addEventListener('click', () => {
-                sidebar.classList.add('open');
-                document.body.style.overflow = 'hidden'; // Prevent scrolling main content
+        // Mock Submissions
+        ['projectForm', 'ideaForm', 'eventForm'].forEach(formId => {
+            document.getElementById(formId).addEventListener('submit', (e) => {
+                e.preventDefault();
+                const type = formId.replace('Form', '');
+                showStatus(`${type}StatusMessage`, 'Submission simulated successfully (Demo).', 'success');
+                e.target.reset();
             });
+        });
 
-            closeMobileSidebarBtn.addEventListener('click', () => {
-                sidebar.classList.remove('open');
-                document.body.style.overflow = ''; // Restore body scroll
-            });
+        // Utils
+        window.showTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId + 'Section').classList.remove('hidden');
+            
+            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
+            // Simple active state logic for demo
+            event.currentTarget.classList.add('active');
+        };
 
-            // Add event listeners to sidebar navigation items to close the menu
-            document.querySelectorAll('.sidebar-nav-item').forEach(item => {
-                // Ensure we don't add listener to the logout button twice, as it has its own handler
-                if (item.id !== 'logoutBtnSidebar') {
-                    item.addEventListener('click', function() {
-                        const tabId = this.dataset.tabId; // Get the data-tab-id
-                        if (tabId) {
-                            showTab(tabId); // Call showTab
-                        }
-                    });
-                }
-            });
-
-        } else {
-            console.error("Mobile menu toggle, sidebar, or close button not found. Mobile menu might not function.");
+        function showStatus(elementId, msg, type) {
+            const el = document.getElementById(elementId);
+            el.textContent = msg;
+            el.className = `mb-4 p-3 rounded-lg text-sm ${type === 'success' ? 'bg-green-500/10 border border-green-500/20 text-green-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'}`;
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 3000);
         }
 
+        // Mobile Menu
+        window.toggleMobileSidebar = function() {
+            const sidebar = document.getElementById('mobile-sidebar');
+            const overlay = document.getElementById('mobile-sidebar-overlay');
+            const isOpen = !sidebar.classList.contains('-translate-x-full');
+            
+            if(isOpen) {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            } else {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            }
+        };
 
-        // Initial load: show dashboard overview
-        document.addEventListener('DOMContentLoaded', () => {
-            // The onAuthStateChanged listener handles showing the initial tab
-            // once authentication is confirmed.
-            // If the user is already authenticated when the page loads,
-            // onAuthStateChanged will handle showing the dashboardOverview.
-            // Otherwise, it will redirect to login.
-        });
+        document.getElementById('mobile-menu-toggle').addEventListener('click', toggleMobileSidebar);
+
+        // Logout
+        const logout = async () => {
+            try { await signOut(auth); } catch(e) { alert(e.message); }
+        };
+        document.getElementById('logoutBtnSidebar').addEventListener('click', logout);
+        document.getElementById('logoutBtnMobile').addEventListener('click', logout);
+
     </script>
 </body>
 </html>
