@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | MET'S IEDC</title>
+    <title>Student Dashboard | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -13,106 +13,28 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
                 }
             }
         }
     </script>
 
     <style>
-        body {
-            background-color: #050505;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
-
-        /* Glassmorphism Classes */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .glass-sidebar {
-            background: rgba(5, 5, 5, 0.8);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .glass-header {
-            background: rgba(5, 5, 5, 0.7);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* Form Inputs */
-        .glass-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            transition: all 0.3s ease;
-        }
-        .glass-input:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: #6366f1;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
-        }
-        .glass-input::placeholder { color: rgba(255, 255, 255, 0.3); }
-        
-        select.glass-input option {
-            background-color: #1a1a1a;
-            color: white;
-        }
-
-        /* Sidebar Links */
-        .sidebar-link {
-            transition: all 0.3s ease;
-            border-left: 3px solid transparent;
-        }
-        .sidebar-link:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-        }
-        .sidebar-link.active {
-            background: rgba(99, 102, 241, 0.1);
-            color: #818cf8;
-            border-left-color: #818cf8;
-        }
-
-        /* Background Blobs */
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.4;
-            animation: blob-bounce 10s infinite ease;
-        }
+        body { background-color: #050505; color: #ffffff; overflow-x: hidden; }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); }
+        .glass-sidebar { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-header { background: rgba(5, 5, 5, 0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-input { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
+        .glass-input:focus { background: rgba(255, 255, 255, 0.08); border-color: #6366f1; outline: none; }
+        select.glass-input option { background-color: #1a1a1a; color: white; }
+        .sidebar-link { transition: all 0.3s ease; border-left: 3px solid transparent; }
+        .sidebar-link:hover { background: rgba(255, 255, 255, 0.05); color: white; }
+        .sidebar-link.active { background: rgba(99, 102, 241, 0.1); color: #818cf8; border-left-color: #818cf8; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.4; animation: blob-bounce 10s infinite ease; }
         .blob-1 { top: 0%; left: 0%; width: 600px; height: 600px; background: #4f46e5; }
         .blob-2 { bottom: 0%; right: 0%; width: 500px; height: 500px; background: #9333ea; }
-
-        @keyframes blob-bounce {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(20px, -20px) scale(1.1); }
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
-
-        /* Profile Info Item */
-        .profile-item {
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
-            padding: 12px 0;
-        }
-        .profile-item:last-child { border-bottom: none; }
+        @keyframes blob-bounce { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(20px, -20px) scale(1.1); } }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #050505; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
     </style>
 </head>
 <body class="font-sans antialiased relative selection:bg-indigo-500 selection:text-white flex h-screen overflow-hidden">
@@ -135,22 +57,26 @@
             <button onclick="showTab('profile')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="user" class="w-5 h-5"></i> My Profile
             </button>
-            <a href="https://iedc.startupmission.in/report/" target="_blank" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="file-text" class="w-5 h-5"></i> Submit Report
-            </a>
-            <button onclick="showTab('submitProject')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="folder-plus" class="w-5 h-5"></i> Submit Project
+            <button onclick="showTab('trackStatus')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="activity" class="w-5 h-5"></i> Track Status
             </button>
-            <button onclick="showTab('submitIdea')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="lightbulb" class="w-5 h-5"></i> Submit Idea
-            </button>
-            <button onclick="showTab('submitEvent')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="calendar-plus" class="w-5 h-5"></i> Propose Event
-            </button>
+            
+            <div class="pt-4 pb-2">
+                <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Actions</p>
+                <button onclick="showTab('submitProject')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                    <i data-lucide="folder-plus" class="w-5 h-5"></i> Submit Project
+                </button>
+                <button onclick="showTab('submitIdea')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                    <i data-lucide="lightbulb" class="w-5 h-5"></i> Submit Idea
+                </button>
+                <button onclick="showTab('submitEvent')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                    <i data-lucide="calendar-plus" class="w-5 h-5"></i> Propose Event
+                </button>
+            </div>
         </nav>
 
         <div class="p-4 border-t border-white/5">
-            <button id="logoutBtnSidebar" class="w-full flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 py-2.5 rounded-lg transition-colors text-sm font-medium border border-red-500/20">
+            <button id="logoutBtn" class="w-full flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 py-2.5 rounded-lg transition-colors text-sm font-medium border border-red-500/20">
                 <i data-lucide="log-out" class="w-4 h-4"></i> Logout
             </button>
         </div>
@@ -163,159 +89,97 @@
                 <button id="mobile-menu-toggle" class="md:hidden text-white p-2">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
-                <div>
-                    <h1 class="text-xl font-bold text-white">Dashboard</h1>
-                    <p class="text-xs text-gray-400 hidden sm:block">Welcome back to your workspace</p>
-                </div>
+                <h1 class="text-xl font-bold text-white">Student Dashboard</h1>
             </div>
-            
-            <div class="flex items-center gap-6">
-                <div class="hidden sm:flex gap-4 text-gray-400">
-                    <button class="hover:text-white transition-colors"><i data-lucide="bell" class="w-5 h-5"></i></button>
-                    <button class="hover:text-white transition-colors"><i data-lucide="settings" class="w-5 h-5"></i></button>
+            <div class="flex items-center gap-3">
+                <div class="text-right hidden sm:block">
+                    <p class="text-sm font-medium text-white" id="userEmailHeader">Loading...</p>
+                    <p class="text-xs text-gray-500">Student</p>
                 </div>
-                <div class="flex items-center gap-3 pl-6 border-l border-white/10">
-                    <div class="text-right hidden sm:block">
-                        <p class="text-sm font-medium text-white" id="userEmailHeader">user@example.com</p>
-                        <p class="text-xs text-gray-500">Student</p>
-                    </div>
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg shadow-lg" id="userAvatarHeader">
-                        U
-                    </div>
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold shadow-lg overflow-hidden" id="userAvatarHeader">
+                    S
                 </div>
             </div>
         </header>
 
-        <main class="flex-grow overflow-y-auto p-6 md:p-10 scroll-smooth">
+        <main class="flex-grow overflow-y-auto p-6 md:p-10">
             
             <div id="dashboardOverviewSection" class="tab-content space-y-8 max-w-7xl mx-auto">
-                <div class="glass-card rounded-3xl p-8 md:p-10 relative overflow-hidden">
-                    <div class="relative z-10">
-                        <h2 class="text-3xl font-bold text-white mb-2">Hello, <span id="displayNameBanner" class="text-indigo-400">User</span>! 👋</h2>
-                        <p class="text-gray-400 max-w-xl">Ready to turn your innovative ideas into reality? Start by submitting a new project or checking your progress.</p>
-                    </div>
-                    <div class="absolute right-0 bottom-0 opacity-20 pointer-events-none">
-                        <i data-lucide="rocket" class="w-48 h-48 text-indigo-500 transform translate-x-10 translate-y-10"></i>
-                    </div>
+                <div class="glass-card rounded-3xl p-8 md:p-10">
+                    <h2 class="text-3xl font-bold text-white mb-2">Hello, <span id="displayNameBanner" class="text-indigo-400">Student</span>! 👋</h2>
+                    <p class="text-gray-400">Welcome to your innovation workspace.</p>
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="glass-card p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/5 transition-colors cursor-pointer group">
-                        <div class="w-12 h-12 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <i data-lucide="trending-up" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-1">0%</h3>
-                        <p class="text-xs text-gray-500 uppercase tracking-wider">Completion</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div onclick="showTab('trackStatus')" class="glass-card p-6 rounded-2xl cursor-pointer hover:bg-white/5 transition">
+                        <i data-lucide="clock" class="w-8 h-8 text-yellow-400 mb-4"></i>
+                        <h3 class="text-xl font-bold text-white">Check Status</h3>
+                        <p class="text-gray-400 text-sm">View approval status of your submissions.</p>
                     </div>
-                    <div class="glass-card p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/5 transition-colors cursor-pointer group">
-                        <div class="w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <i data-lucide="check-circle" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-1">0</h3>
-                        <p class="text-xs text-gray-500 uppercase tracking-wider">Tasks Done</p>
+                    <div onclick="showTab('submitProject')" class="glass-card p-6 rounded-2xl cursor-pointer hover:bg-white/5 transition">
+                        <i data-lucide="folder-plus" class="w-8 h-8 text-blue-400 mb-4"></i>
+                        <h3 class="text-xl font-bold text-white">Submit Project</h3>
+                        <p class="text-gray-400 text-sm">Submit your project details for review.</p>
                     </div>
-                    <div class="glass-card p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/5 transition-colors cursor-pointer group">
-                        <div class="w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <i data-lucide="lightbulb" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-1">0</h3>
-                        <p class="text-xs text-gray-500 uppercase tracking-wider">Ideas</p>
-                    </div>
-                    <div class="glass-card p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-white/5 transition-colors cursor-pointer group">
-                        <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <i data-lucide="eye" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-1">0</h3>
-                        <p class="text-xs text-gray-500 uppercase tracking-wider">Views</p>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="text-xl font-bold text-white mb-4">Recent Activity</h3>
-                    <div class="glass-card rounded-2xl p-8 text-center border-dashed border-2 border-white/10">
-                        <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-500">
-                            <i data-lucide="inbox" class="w-8 h-8"></i>
-                        </div>
-                        <p class="text-gray-400">No recent submissions or activity found.</p>
-                        <button onclick="showTab('submitIdea')" class="mt-4 text-indigo-400 text-sm hover:text-indigo-300 font-medium">Submit your first idea &rarr;</button>
+                    <div onclick="showTab('submitIdea')" class="glass-card p-6 rounded-2xl cursor-pointer hover:bg-white/5 transition">
+                        <i data-lucide="lightbulb" class="w-8 h-8 text-purple-400 mb-4"></i>
+                        <h3 class="text-xl font-bold text-white">Pitch Idea</h3>
+                        <p class="text-gray-400 text-sm">Got an idea? Share it with us.</p>
                     </div>
                 </div>
             </div>
 
+            <div id="trackStatusSection" class="tab-content hidden max-w-4xl mx-auto">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-white">My Submissions</h2>
+                    <button onclick="fetchMySubmissions()" class="text-xs bg-white/10 px-3 py-2 rounded hover:bg-white/20 transition flex items-center gap-2">
+                        <i data-lucide="refresh-cw" class="w-3 h-3"></i> Refresh
+                    </button>
+                </div>
+                <div id="mySubmissionsGrid" class="grid grid-cols-1 gap-4">
+                    <p class="text-gray-500 text-center py-8">Loading your history...</p>
+                </div>
+            </div>
+
             <div id="profileSection" class="tab-content hidden max-w-5xl mx-auto">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="glass-card rounded-3xl p-8 text-center h-fit">
-                        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 mx-auto flex items-center justify-center text-3xl font-bold text-white mb-6 shadow-lg shadow-indigo-500/30">
-                            <i data-lucide="user"></i>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="glass-card rounded-3xl p-8 flex flex-col items-center text-center h-fit">
+                        <div class="relative group cursor-pointer mb-6" onclick="document.getElementById('profileImageInput').click()">
+                            <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-indigo-500/30 shadow-lg shadow-indigo-500/20 relative">
+                                <img id="profileImagePreview" src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff" alt="Profile" class="w-full h-full object-cover">
+                            </div>
+                            <div class="absolute inset-0 rounded-full bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <i data-lucide="camera" class="w-8 h-8 text-white"></i>
+                            </div>
+                            <input type="file" id="profileImageInput" class="hidden" accept="image/*" onchange="handleImageUpload(event)">
                         </div>
-                        <h2 class="text-xl font-bold text-white mb-1" id="displayNameOutput">Not set</h2>
-                        <p class="text-sm text-gray-400 mb-6" id="bioOutput">No bio available</p>
-                        
-                        <div class="space-y-4 text-left">
-                            <div class="profile-item flex items-center gap-3 text-sm">
-                                <i data-lucide="mail" class="w-4 h-4 text-indigo-400"></i>
-                                <span class="text-gray-300 truncate" id="emailOutput">user@example.com</span>
+                        <h2 class="text-2xl font-bold text-white mb-1" id="profileCardName">Student Name</h2>
+                        <p class="text-indigo-400 text-sm font-medium mb-6">Student Innovator</p>
+                        <div class="w-full space-y-4 text-left">
+                            <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                                <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">Contact</p>
+                                <p class="text-gray-200 text-sm flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-indigo-400"></i> <span id="profileCardContact">--</span></p>
                             </div>
-                            <div class="profile-item flex items-center gap-3 text-sm">
-                                <i data-lucide="phone" class="w-4 h-4 text-indigo-400"></i>
-                                <span class="text-gray-300" id="contactNumberOutput">Not set</span>
-                            </div>
-                            <div class="profile-item flex items-center gap-3 text-sm">
-                                <i data-lucide="map-pin" class="w-4 h-4 text-indigo-400"></i>
-                                <span class="text-gray-300" id="locationOutput">Not set</span>
+                            <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                                <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">Email</p>
+                                <p class="text-gray-200 text-sm flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-indigo-400"></i> <span id="profileCardEmail">--</span></p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="glass-card rounded-3xl p-8 lg:col-span-2">
-                        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                            <i data-lucide="edit-3" class="w-5 h-5 text-indigo-400"></i> Edit Profile
-                        </h3>
-                        <div id="profileStatusMessage" class="hidden mb-4 p-3 rounded-lg text-sm"></div>
-                        
-                        <form id="profileForm" class="space-y-5">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <div>
-                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Full Name</label>
-                                    <input type="text" id="profileName" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm" placeholder="John Doe">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Contact Number</label>
-                                    <input type="tel" id="profileContact" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm" placeholder="+91 9876543210">
-                                </div>
+                    <div class="glass-card rounded-3xl p-8 md:col-span-2">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-bold text-white">Edit Profile Details</h2>
+                            <div id="profileStatusMessage" class="hidden text-xs px-3 py-1 rounded bg-green-500/20 text-green-400"></div>
+                        </div>
+                        <form id="profileForm" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Full Name</label><input type="text" id="profileName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="John Doe"></div>
+                                <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Contact Number</label><input type="tel" id="profileContact" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="+91 9876543210"></div>
                             </div>
-
-                            <div>
-                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Bio</label>
-                                <textarea id="profileBio" rows="3" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm" placeholder="Tell us a bit about yourself..."></textarea>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <div>
-                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">City</label>
-                                    <input type="text" id="profileCity" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">State</label>
-                                    <input type="text" id="profileState" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <div>
-                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">LinkedIn URL</label>
-                                    <input type="url" id="profileLinkedIn" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm" placeholder="https://linkedin.com/in/...">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Instagram URL</label>
-                                    <input type="url" id="profileInstagram" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm" placeholder="https://instagram.com/...">
-                                </div>
-                            </div>
-
-                            <div class="pt-4">
-                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-lg shadow-indigo-500/30 flex items-center gap-2">
-                                    <i data-lucide="save" class="w-4 h-4"></i> Save Changes
-                                </button>
+                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Bio / About Me</label><textarea id="profileBio" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Tell us about your interests and skills..."></textarea></div>
+                            <div class="pt-4 border-t border-white/5 flex justify-end">
+                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-indigo-500/20 transition-all transform hover:scale-[1.02]">Save Changes</button>
                             </div>
                         </form>
                     </div>
@@ -323,100 +187,50 @@
             </div>
 
             <div id="submitProjectSection" class="tab-content hidden max-w-3xl mx-auto">
-                <div class="glass-card rounded-3xl p-8 md:p-10">
-                    <h2 class="text-2xl font-bold text-white mb-2">Submit Project</h2>
-                    <p class="text-gray-400 text-sm mb-8">Share your innovative project details with us.</p>
-                    <div id="projectStatusMessage" class="hidden mb-4 p-3 rounded-lg text-sm bg-green-500/10 border border-green-500/20 text-green-400"></div>
-
+                <div class="glass-card rounded-3xl p-8">
+                    <h2 class="text-2xl font-bold text-white mb-6">Submit Project</h2>
+                    <div id="projectStatusMessage" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
                     <form id="projectForm" class="space-y-6">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Project Name</label>
-                            <input type="text" id="projectName" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Description</label>
-                            <textarea id="projectDescription" rows="5" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Technology Stack</label>
-                            <input type="text" id="projectStack" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="e.g. React, Node.js, Python">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Project Link (GitHub/Drive)</label>
-                            <input type="url" id="projectLink" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                        </div>
-                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-indigo-500/30">
-                            Submit Project
-                        </button>
+                        <input type="text" id="projectName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Project Name">
+                        <textarea id="projectDescription" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Detailed Description..."></textarea>
+                        <input type="text" id="projectTeamMembers" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Team Members (Names/Emails)">
+                        <input type="text" id="projectTechnologyStack" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Tech Stack (e.g. React, Python)">
+                        <input type="url" id="projectLink" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Link (GitHub/Drive)">
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl w-full">Submit for Review</button>
                     </form>
                 </div>
             </div>
 
             <div id="submitIdeaSection" class="tab-content hidden max-w-3xl mx-auto">
-                <div class="glass-card rounded-3xl p-8 md:p-10">
-                    <h2 class="text-2xl font-bold text-white mb-2">Submit Idea</h2>
-                    <p class="text-gray-400 text-sm mb-8">Got a spark? Pitch your idea for evaluation.</p>
-                    <div id="ideaStatusMessage" class="hidden mb-4 p-3 rounded-lg text-sm bg-green-500/10 border border-green-500/20 text-green-400"></div>
-
+                <div class="glass-card rounded-3xl p-8">
+                    <h2 class="text-2xl font-bold text-white mb-6">Submit Idea</h2>
+                    <div id="ideaStatusMessage" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
                     <form id="ideaForm" class="space-y-6">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Idea Title</label>
-                            <input type="text" id="ideaName" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Problem Statement</label>
-                            <textarea id="ideaProblem" rows="3" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Proposed Solution</label>
-                            <textarea id="ideaSolution" rows="5" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Category</label>
-                            <select id="ideaCategory" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                                <option value="">Select Category</option>
-                                <option value="Healthcare">Healthcare</option>
-                                <option value="Education">Education</option>
-                                <option value="Fintech">Fintech</option>
-                                <option value="Agriculture">Agriculture</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-purple-500/30">
-                            Submit Idea
-                        </button>
+                        <input type="text" id="ideaName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Idea Title">
+                        <textarea id="ideaDescription" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Problem & Solution..."></textarea>
+                        <select id="ideaCategory" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Education">Education</option>
+                            <option value="Fintech">Fintech</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white font-bold py-3.5 rounded-xl w-full">Submit Idea</button>
                     </form>
                 </div>
             </div>
 
             <div id="submitEventSection" class="tab-content hidden max-w-3xl mx-auto">
-                <div class="glass-card rounded-3xl p-8 md:p-10">
-                    <h2 class="text-2xl font-bold text-white mb-2">Propose Event</h2>
-                    <p class="text-gray-400 text-sm mb-8">Suggest workshops or seminars for the community.</p>
-                    <div id="eventStatusMessage" class="hidden mb-4 p-3 rounded-lg text-sm bg-green-500/10 border border-green-500/20 text-green-400"></div>
-
+                <div class="glass-card rounded-3xl p-8">
+                    <h2 class="text-2xl font-bold text-white mb-6">Propose Event</h2>
+                    <div id="eventStatusMessage" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
                     <form id="eventForm" class="space-y-6">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Event Title</label>
-                            <input type="text" id="eventName" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                        </div>
+                        <input type="text" id="eventName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Event Title">
                         <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Date</label>
-                                <input type="date" id="eventDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Expected Time</label>
-                                <input type="text" id="eventTime" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="10:00 AM">
-                            </div>
+                            <input type="date" id="eventDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
+                            <input type="text" id="eventTime" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Time">
                         </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Description & Objectives</label>
-                            <textarea id="eventDescription" rows="5" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-emerald-500/30">
-                            Propose Event
-                        </button>
+                        <textarea id="eventDescription" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Description..."></textarea>
+                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl w-full">Propose Event</button>
                     </form>
                 </div>
             </div>
@@ -424,9 +238,9 @@
         </main>
     </div>
 
-    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-30 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
+    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
     
-    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-64 glass-sidebar z-40 transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col">
+    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-64 bg-[#0a0a0a] border-r border-white/10 z-50 transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col">
         <div class="p-6 flex items-center justify-between border-b border-white/10">
             <span class="text-xl font-bold text-white">Menu</span>
             <button onclick="toggleMobileSidebar()" class="text-white"><i data-lucide="x"></i></button>
@@ -434,157 +248,236 @@
         <nav class="flex-grow px-4 py-4 space-y-2 overflow-y-auto">
             <button onclick="showTab('dashboardOverview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Dashboard</button>
             <button onclick="showTab('profile'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">My Profile</button>
-            <a href="admin.html" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Admin</a>
+            <button onclick="showTab('trackStatus'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Track Status</button>
+            <div class="h-px bg-white/10 my-2"></div>
             <button onclick="showTab('submitProject'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Submit Project</button>
-            <button id="logoutBtnMobile" class="w-full mt-4 bg-red-500/20 text-red-400 py-3 rounded-lg text-sm font-bold">Logout</button>
+            <button onclick="showTab('submitIdea'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Submit Idea</button>
+            <button onclick="showTab('submitEvent'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Propose Event</button>
+            <button id="logoutBtnMobile" class="w-full mt-4 bg-red-500/20 text-red-400 py-3 rounded-lg text-sm font-bold border border-red-500/20">Logout</button>
         </nav>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
 
+        // --- PASTE YOUR FIREBASE CONFIG HERE ---
         const firebaseConfig = {
-            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
-            authDomain: "metsiedc-3010e.firebaseapp.com",
-            databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
-            projectId: "metsiedc-3010e",
-            storageBucket: "metsiedc-3010e.firebasestorage.app",
-            messagingSenderId: "954403413150",
-            appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
-            measurementId: "G-6E7EK0D7JG"
-        };
+  apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+  authDomain: "metsiedc-3010e.firebaseapp.com",
+  databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+  projectId: "metsiedc-3010e",
+  storageBucket: "metsiedc-3010e.firebasestorage.app",
+  messagingSenderId: "954403413150",
+  appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+  measurementId: "G-6E7EK0D7JG"
+};
+        // ---------------------------------------
 
-        let app, auth, db, currentUserId;
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        let currentUserId;
+        let currentProfileImageBase64 = "";
 
-        try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-        } catch (error) { console.error("Firebase Init Error", error); }
-
-        // Auth State Listener
+        // 1. Auth & Data Loading
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUserId = user.uid;
                 document.getElementById('userEmailHeader').textContent = user.email;
-                document.getElementById('userAvatarHeader').textContent = user.email.charAt(0).toUpperCase();
-                document.getElementById('displayNameBanner').textContent = user.email.split('@')[0];
-                if (db) fetchProfileData(currentUserId);
+                document.getElementById('profileCardEmail').textContent = user.email;
+                
+                try {
+                    const docSnap = await getDoc(doc(db, "users", user.uid, "profile", "userProfile"));
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        // Profile Form
+                        document.getElementById('profileName').value = data.name || '';
+                        document.getElementById('profileContact').value = data.contact || '';
+                        document.getElementById('profileBio').value = data.bio || '';
+                        
+                        // Profile Card
+                        document.getElementById('profileCardName').textContent = data.name || 'Student';
+                        document.getElementById('profileCardContact').textContent = data.contact || '--';
+                        document.getElementById('displayNameBanner').textContent = (data.name || user.email).split(' ')[0];
+
+                        // Images
+                        if (data.profileImage) {
+                            document.getElementById('profileImagePreview').src = data.profileImage;
+                            document.getElementById('userAvatarHeader').innerHTML = `<img src="${data.profileImage}" class="w-full h-full rounded-full object-cover">`;
+                        } else {
+                            document.getElementById('profileImagePreview').src = `https://ui-avatars.com/api/?name=${data.name || 'User'}&background=6366f1&color=fff`;
+                        }
+                    }
+                } catch(e) {}
+                fetchMySubmissions();
             } else {
                 window.location.href = 'login.html';
             }
         });
 
-        // Fetch Profile
-        async function fetchProfileData(userId) {
-            const docRef = doc(db, `users/${userId}/profile`, 'userProfile'); // Adjusted path for simplicity
-            try {
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    // Update View
-                    document.getElementById('displayNameOutput').textContent = data.name || 'Not set';
-                    document.getElementById('bioOutput').textContent = data.bio || 'No bio available';
-                    document.getElementById('emailOutput').textContent = auth.currentUser.email;
-                    document.getElementById('contactNumberOutput').textContent = data.contact || 'Not set';
-                    document.getElementById('locationOutput').textContent = data.city ? `${data.city}, ${data.state}` : 'Not set';
-                    
-                    // Update Form
-                    document.getElementById('profileName').value = data.name || '';
-                    document.getElementById('profileContact').value = data.contact || '';
-                    document.getElementById('profileBio').value = data.bio || '';
-                    document.getElementById('profileCity').value = data.city || '';
-                    document.getElementById('profileState').value = data.state || '';
-                    document.getElementById('profileLinkedIn').value = data.linkedin || '';
-                    document.getElementById('profileInstagram').value = data.instagram || '';
-                }
-            } catch (e) { console.error("Profile fetch error", e); }
-        }
+        // 2. Image Handler
+        window.handleImageUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 500 * 1024) { alert("Image too large (Max 500KB)"); return; }
 
-        // Save Profile
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const scaleSize = 300 / img.width;
+                    canvas.width = 300; canvas.height = img.height * scaleSize;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    currentProfileImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                    document.getElementById('profileImagePreview').src = currentProfileImageBase64;
+                };
+            };
+            reader.readAsDataURL(file);
+        };
+
+        // 3. Save Profile
         document.getElementById('profileForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = 'Saving...';
+            const status = document.getElementById('profileStatusMessage');
+            btn.innerText = "Saving..."; btn.disabled = true;
             
-            const data = {
-                name: document.getElementById('profileName').value,
-                contact: document.getElementById('profileContact').value,
-                bio: document.getElementById('profileBio').value,
-                city: document.getElementById('profileCity').value,
-                state: document.getElementById('profileState').value,
-                linkedin: document.getElementById('profileLinkedIn').value,
-                instagram: document.getElementById('profileInstagram').value
+            try {
+                const profileData = {
+                    name: document.getElementById('profileName').value,
+                    contact: document.getElementById('profileContact').value,
+                    bio: document.getElementById('profileBio').value
+                };
+                if (currentProfileImageBase64) profileData.profileImage = currentProfileImageBase64;
+
+                await setDoc(doc(db, "users", currentUserId, "profile", "userProfile"), profileData, { merge: true });
+                
+                // Update UI immediately
+                document.getElementById('profileCardName').textContent = profileData.name;
+                document.getElementById('profileCardContact').textContent = profileData.contact;
+                document.getElementById('displayNameBanner').textContent = profileData.name.split(' ')[0];
+                if(profileData.profileImage) document.getElementById('userAvatarHeader').innerHTML = `<img src="${profileData.profileImage}" class="w-full h-full rounded-full object-cover">`;
+
+                status.textContent = "Saved!"; status.classList.remove('hidden');
+                setTimeout(() => status.classList.add('hidden'), 3000);
+            } catch(e) { alert("Error: " + e.message); }
+            btn.innerText = "Save Changes"; btn.disabled = false;
+        });
+
+        // 4. Fetch Submissions (Track Status)
+        window.fetchMySubmissions = async function() {
+            const grid = document.getElementById('mySubmissionsGrid');
+            try {
+                const q = query(collection(db, "submissions"), where("userId", "==", auth.currentUser.uid), orderBy("timestamp", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                if (querySnapshot.empty) { grid.innerHTML = '<div class="glass-card p-8 rounded-2xl text-center"><p class="text-gray-400">No submissions yet.</p></div>'; return; }
+
+                let html = '';
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    let statusColor = "text-yellow-400 bg-yellow-400/10 border-yellow-400/20";
+                    let statusIcon = "clock";
+                    
+                    if (data.status === 'approved') { statusColor = "text-green-400 bg-green-400/10 border-green-400/20"; statusIcon = "check-circle"; }
+                    else if (data.status === 'rejected') { statusColor = "text-red-400 bg-red-400/10 border-red-400/20"; statusIcon = "x-circle"; }
+
+                    html += `<div class="glass-card p-5 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:bg-white/5 transition"><div class="flex-grow"><div class="flex items-center gap-3 mb-1"><span class="text-xs font-bold uppercase tracking-wider text-indigo-400 bg-indigo-400/10 px-2 py-0.5 rounded border border-indigo-400/20">${(data.type||'').replace('_', ' ')}</span><span class="text-xs text-gray-500">${new Date(data.timestamp).toLocaleDateString()}</span></div><h3 class="text-lg font-bold text-white">${data.title}</h3><p class="text-sm text-gray-400 line-clamp-1">${data.description}</p></div><div class="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg border ${statusColor}"><i data-lucide="${statusIcon}" class="w-4 h-4"></i><span class="text-sm font-bold uppercase tracking-wide">${data.status || 'Pending'}</span></div></div>`;
+                });
+                grid.innerHTML = html; lucide.createIcons();
+            } catch (e) { 
+                if (e.message.includes("index")) grid.innerHTML = `<p class="text-yellow-400 text-center text-sm">Database Index Building... try again in 5 mins.</p>`;
+                else console.error(e);
+            }
+        };
+
+        // 5. Submit Project (REAL)
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const status = document.getElementById('projectStatusMessage');
+            btn.innerText = "Submitting..."; btn.disabled = true;
+
+            const projectData = {
+                title: document.getElementById('projectName').value,
+                description: document.getElementById('projectDescription').value,
+                teamMembers: document.getElementById('projectTeamMembers').value,
+                stack: document.getElementById('projectTechnologyStack').value,
+                link: document.getElementById('projectLink').value,
+                type: 'project',
+                status: 'pending',
+                userId: auth.currentUser.uid,
+                userEmail: auth.currentUser.email,
+                userName: document.getElementById('profileName').value || 'Student',
+                timestamp: Date.now()
             };
 
             try {
-                await setDoc(doc(db, `users/${currentUserId}/profile`, 'userProfile'), data, { merge: true });
-                fetchProfileData(currentUserId);
-                showStatus('profileStatusMessage', 'Profile updated!', 'success');
-            } catch (e) {
-                showStatus('profileStatusMessage', 'Error updating profile.', 'error');
-            } finally {
-                btn.innerHTML = originalText;
-            }
+                await addDoc(collection(db, "submissions"), projectData);
+                status.textContent = "Submitted successfully! Check 'Track Status' tab.";
+                status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400 block";
+                e.target.reset(); fetchMySubmissions();
+            } catch (e) { status.textContent = "Error: " + e.message; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; }
+            finally { btn.innerText = "Submit for Review"; btn.disabled = false; }
         });
 
-        // Mock Submissions
-        ['projectForm', 'ideaForm', 'eventForm'].forEach(formId => {
-            document.getElementById(formId).addEventListener('submit', (e) => {
+        // Other Forms (Idea/Event)
+        const submitGeneric = async (formId, type, statusId) => {
+            document.getElementById(formId).addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const type = formId.replace('Form', '');
-                showStatus(`${type}StatusMessage`, 'Submission simulated successfully (Demo).', 'success');
-                e.target.reset();
+                const btn = e.target.querySelector('button');
+                btn.innerText = "Submitting..."; btn.disabled = true;
+                const inputs = e.target.querySelectorAll('input, textarea, select');
+                const data = { type: type, status: 'pending', userId: auth.currentUser.uid, userEmail: auth.currentUser.email, userName: document.getElementById('profileName').value || 'Student', timestamp: Date.now() };
+                inputs.forEach(i => data[i.id.replace(type, '').toLowerCase()] = i.value); 
+                
+                // Manual overrides for specific IDs
+                data.title = document.getElementById(type + 'Name').value;
+                data.description = document.getElementById(type + 'Description').value;
+                if(type==='idea') data.category = document.getElementById('ideaCategory').value;
+
+                try {
+                    await addDoc(collection(db, "submissions"), data);
+                    alert("Submitted successfully!"); e.target.reset(); fetchMySubmissions();
+                } catch(e) { alert(e.message); }
+                finally { btn.innerText = "Submit"; btn.disabled = false; }
             });
-        });
-
-        // Utils
-        window.showTab = function(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(tabId + 'Section').classList.remove('hidden');
-            
-            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
-            // Simple active state logic for demo
-            event.currentTarget.classList.add('active');
         };
-
-        function showStatus(elementId, msg, type) {
-            const el = document.getElementById(elementId);
-            el.textContent = msg;
-            el.className = `mb-4 p-3 rounded-lg text-sm ${type === 'success' ? 'bg-green-500/10 border border-green-500/20 text-green-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'}`;
-            el.classList.remove('hidden');
-            setTimeout(() => el.classList.add('hidden'), 3000);
-        }
+        submitGeneric('ideaForm', 'idea', 'ideaStatusMessage');
+        submitGeneric('eventForm', 'event', 'eventStatusMessage');
 
         // Mobile Menu
         window.toggleMobileSidebar = function() {
             const sidebar = document.getElementById('mobile-sidebar');
             const overlay = document.getElementById('mobile-sidebar-overlay');
-            const isOpen = !sidebar.classList.contains('-translate-x-full');
-            
-            if(isOpen) {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-            } else {
+            if (sidebar.classList.contains('-translate-x-full')) {
                 sidebar.classList.remove('-translate-x-full');
                 overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
             }
         };
-
         document.getElementById('mobile-menu-toggle').addEventListener('click', toggleMobileSidebar);
 
-        // Logout
-        const logout = async () => {
-            try { await signOut(auth); } catch(e) { alert(e.message); }
-        };
-        document.getElementById('logoutBtnSidebar').addEventListener('click', logout);
-        document.getElementById('logoutBtnMobile').addEventListener('click', logout);
+        document.getElementById('logoutBtn').addEventListener('click', async () => { await signOut(auth); window.location.href = 'login.html'; });
+        document.getElementById('logoutBtnMobile').addEventListener('click', async () => { await signOut(auth); window.location.href = 'login.html'; });
 
+        // Tabs
+        window.showTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId + 'Section').classList.remove('hidden');
+            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            if (tabId === 'trackStatus') fetchMySubmissions();
+        };
     </script>
 </body>
-</html>
+</html> 
