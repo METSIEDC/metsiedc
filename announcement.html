@@ -75,6 +75,7 @@
             border-bottom: 2px solid transparent;
             color: #9ca3af;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         .tab-button:hover {
             color: white;
@@ -116,6 +117,18 @@
         ::-webkit-scrollbar-track { background: #050505; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #555; }
+        
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #6366f1;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 50px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="font-sans antialiased relative selection:bg-indigo-500 selection:text-white">
@@ -194,7 +207,8 @@
     <section class="pb-32 px-4 relative z-10">
         <div class="max-w-4xl mx-auto">
             <div id="announcements-list" class="space-y-6">
-                </div>
+                <div class="spinner"></div>
+            </div>
         </div>
     </section>
 
@@ -232,128 +246,112 @@
         </div>
     </footer>
 
-    <script>
-        // --- Data from your previous code ---
-        const allAnnouncementsData = [
-            {
-                title: "The Official Interview Instructions and Final Shortlist",
-                description: "The final shortlist for IEDC METS Core Team interviews is out — with names, departments, interview time slots, and Zoom guidelines included. Check the official circular for full details.",
-                category: "news",
-                date: "Jun 23",
-                year: "2025",
-                fileUrl: "docs/IEDC METS 2025 07.pdf",
-                fileName: "_IEDC_METS_2025_07.pdf",
-                timestamp: 1719200000000
-            },
-            {
-                title: "Core Team Recruitment 2025",
-                description: "All students who applied for the METS IEDC Core Team are informed that the recruitment process has moved to the next round. The interview will be conducted online.",
-                category: "news",
-                date: "Jun 16",
-                year: "2025",
-                fileUrl: "docs/IEDC METS 2025 04.pdf",
-                fileName: "IEDC_METS_2025_04.pdf",
-                timestamp: 1718600000000
-            },
-            {
-                title: "IEDC Member Eligibility Criteria Released",
-                description: "All interested students are encouraged to review the updated eligibility criteria for becoming a member of MET'S IEDC.",
-                category: "activities",
-                date: "May 23",
-                year: "2025",
-                fileUrl: "docs/IEDC Member Eligibility Criteria.pdf",
-                fileName: "IEDC_Criteria.pdf",
-                timestamp: 1716300000000
-            },
-            {
-                title: "Mandatory Presence and Leave Approval for Execcom Members",
-                description: "All Execcom members are hereby reminded that attendance in Execcom meetings is mandatory.",
-                category: "activities",
-                date: "Jun 03",
-                year: "2025",
-                fileUrl: "docs/Mandatory Presence & Leave Approval.jpg",
-                fileName: "Leave_Approval.pdf",
-                timestamp: 1717400000000
-            },
-            {
-                title: "IEDC METS Core Team Recruitment 2025 Results Published",
-                description: "The results of the final interview round for the IEDC METS Core Team Recruitment 2025 have been officially published",
-                category: "news",
-                date: "June 29",
-                year: "2025",
-                fileUrl: "docs/IEDC 2025 CORE TEAM.pdf",
-                fileName: "IEDC CORE TEAM RESULT.pdf",
-                timestamp: 1720600000000
-            },
-            {
-                title: "Poster Making Competition: Evaluation Criteria Released!",
-                description: "The official evaluation criteria for the National Doctors’ Day poster competition have been published.",
-                category: "activities",
-                date: "June 30",
-                year: "2025",
-                fileUrl: "docs/IEDC_METS_2025_08 (1).pdf",
-                fileName: "IEDC_METS_2025_08.pdf",
-                timestamp: 1722500000000
-            },
-             {
-                title: "Poster Making Contest Results Out!",
-                description: "Winners of the Innovations in Medicine poster contest have been announced.",
-                category: "activities",
-                date: "July 03",
-                year: "2025",
-                fileUrl: "docs/IEDC METS 2025 10.pdf",
-                fileName: "IEDC METS 2025 10.pdf",
-                timestamp: 1732500000000
-            }
-        ].sort((a, b) => b.timestamp - a.timestamp);
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // --- PASTE YOUR FIREBASE CONFIG HERE ---
+        const firebaseConfig = {
+  apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+  authDomain: "metsiedc-3010e.firebaseapp.com",
+  databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+  projectId: "metsiedc-3010e",
+  storageBucket: "metsiedc-3010e.firebasestorage.app",
+  messagingSenderId: "954403413150",
+  appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+  measurementId: "G-6E7EK0D7JG"
+};
+
+        // ---------------------------------------
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let allAnnouncements = [];
         let currentFilter = 'all';
+
         const announcementsList = document.getElementById('announcements-list');
         const searchInput = document.getElementById('searchInput');
 
+        // Fetch Data from Firestore
+        async function fetchAnnouncements() {
+            try {
+                // Query: Get 'announcements' collection, order by 'timestamp' (newest first)
+                const q = query(collection(db, "announcements"), orderBy("timestamp", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                allAnnouncements = []; // Clear list
+                querySnapshot.forEach((doc) => {
+                    allAnnouncements.push({ id: doc.id, ...doc.data() });
+                });
+
+                renderAnnouncements(); // Initial render
+
+            } catch (error) {
+                console.error("Error fetching announcements:", error);
+                announcementsList.innerHTML = `<div class="text-center py-10"><p class="text-red-400">Failed to load announcements. Please refresh.</p></div>`;
+            }
+        }
+
+        // Render Function
         function renderAnnouncements() {
             const searchQuery = searchInput.value.toLowerCase();
-            const filteredAnnouncements = allAnnouncementsData.filter(announcement => {
-                const matchesCategory = currentFilter === 'all' || announcement.category === currentFilter;
-                const matchesSearch = announcement.title.toLowerCase().includes(searchQuery) ||
-                                      announcement.description.toLowerCase().includes(searchQuery);
+            const filtered = allAnnouncements.filter(ann => {
+                const matchesCategory = currentFilter === 'all' || ann.category === currentFilter;
+                const matchesSearch = (ann.title || "").toLowerCase().includes(searchQuery) ||
+                                      (ann.description || "").toLowerCase().includes(searchQuery);
                 return matchesCategory && matchesSearch;
             });
 
             announcementsList.innerHTML = '';
 
-            if (filteredAnnouncements.length === 0) {
+            if (filtered.length === 0) {
                 announcementsList.innerHTML = `
                     <div class="text-center py-10">
                         <i class="fas fa-folder-open text-4xl text-white/20 mb-4"></i>
-                        <p class="text-gray-500">No announcements found matching your criteria.</p>
+                        <p class="text-gray-500">No announcements found.</p>
                     </div>
                 `;
                 return;
             }
 
-            filteredAnnouncements.forEach(announcement => {
-                const downloadLinkHtml = announcement.fileUrl ? `
-                    <a href="${announcement.fileUrl}" target="_blank" class="inline-flex items-center gap-2 text-sm font-medium text-indigo-400 hover:text-white transition-colors mt-4 bg-white/5 px-4 py-2 rounded-lg border border-white/5 hover:bg-white/10 hover:border-white/20">
-                        <i class="fas fa-download"></i> Download PDF
+            filtered.forEach(ann => {
+                // If there's a link/PDF, show button
+                const downloadLinkHtml = ann.fileUrl ? `
+                    <a href="${ann.fileUrl}" target="_blank" class="inline-flex items-center gap-2 text-sm font-medium text-indigo-400 hover:text-white transition-colors mt-4 bg-white/5 px-4 py-2 rounded-lg border border-white/5 hover:bg-white/10 hover:border-white/20">
+                        <i class="fas fa-download"></i> View / Download
                     </a>
                 ` : '';
+
+                // Handle date display
+                // If date is saved like "Oct 25", we try to split. If it fails, fallback to raw string.
+                let dateDay = "Today";
+                let dateMonth = "";
+                let dateYear = ann.year || new Date().getFullYear();
+
+                if (ann.date && ann.date.includes(" ")) {
+                    const parts = ann.date.split(" ");
+                    dateMonth = parts[0];
+                    dateDay = parts[1];
+                } else if (ann.date) {
+                    dateDay = ann.date;
+                }
 
                 const itemHtml = `
                     <div class="glass-card rounded-2xl p-6 md:p-8 glass-hover flex flex-col md:flex-row gap-6 md:gap-8 items-start">
                         <div class="flex-shrink-0 w-full md:w-auto flex md:flex-col items-center justify-center md:justify-start gap-2 bg-white/5 rounded-xl p-4 border border-white/5 min-w-[100px]">
-                            <span class="text-xl md:text-2xl font-bold text-white">${announcement.date.split(' ')[1]}</span>
-                            <span class="text-xs uppercase tracking-wider text-indigo-400 font-semibold">${announcement.date.split(' ')[0]}</span>
-                            <span class="text-xs text-gray-500">${announcement.year}</span>
+                            <span class="text-xl md:text-2xl font-bold text-white">${dateDay}</span>
+                            <span class="text-xs uppercase tracking-wider text-indigo-400 font-semibold">${dateMonth}</span>
+                            <span class="text-xs text-gray-500">${dateYear}</span>
                         </div>
                         <div class="flex-grow">
                             <div class="flex items-center gap-3 mb-2">
-                                <span class="px-2 py-1 rounded text-[10px] uppercase font-bold tracking-wider ${announcement.category === 'news' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'bg-green-500/20 text-green-300 border border-green-500/30'}">
-                                    ${announcement.category}
+                                <span class="px-2 py-1 rounded text-[10px] uppercase font-bold tracking-wider ${ann.category === 'news' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'bg-green-500/20 text-green-300 border border-green-500/30'}">
+                                    ${ann.category || 'Update'}
                                 </span>
                             </div>
-                            <h3 class="text-xl font-bold text-white mb-2">${announcement.title}</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed">${announcement.description}</p>
+                            <h3 class="text-xl font-bold text-white mb-2">${ann.title}</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">${ann.description}</p>
                             ${downloadLinkHtml}
                         </div>
                     </div>
@@ -362,25 +360,27 @@
             });
         }
 
-        function filterAnnouncements(category) {
+        // Filter Logic
+        window.filterAnnouncements = function(category) {
             currentFilter = category;
-            document.querySelectorAll('.tab-button').forEach(button => {
-                if (button.textContent.toLowerCase().trim() === category.toLowerCase().trim()) {
-                    button.classList.add('active');
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                if (btn.textContent.toLowerCase().trim() === category.toLowerCase().trim()) {
+                    btn.classList.add('active');
                 } else {
-                    button.classList.remove('active');
+                    btn.classList.remove('active');
                 }
             });
-            searchInput.value = ''; 
+            searchInput.value = '';
             renderAnnouncements();
         }
 
         searchInput.addEventListener('input', renderAnnouncements);
 
+        // Load data on start
+        fetchAnnouncements();
+
+        // UI Listeners (Mobile Menu & Scroll)
         document.addEventListener('DOMContentLoaded', () => {
-            renderAnnouncements();
-            
-            // Mobile Menu Logic
             const btn = document.getElementById('mobile-menu-button');
             const menu = document.getElementById('mobile-menu');
             const closeBtn = document.getElementById('close-mobile-menu');
@@ -393,7 +393,6 @@
             btn.addEventListener('click', toggleMenu);
             closeBtn.addEventListener('click', toggleMenu);
             
-            // Navbar Scroll
             window.addEventListener('scroll', () => {
                 const nav = document.querySelector('nav');
                 if (window.scrollY > 20) {
