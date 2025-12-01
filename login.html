@@ -1,404 +1,240 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MET'S IEDC - Login</title>
+    <title>Login | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            margin: 0;
-            color: #1f2937;
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
         }
 
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
-        .login-container {
-            background: rgba(255, 255, 255, 0.95);
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.7);
             backdrop-filter: blur(20px);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 500px;
-            margin: 2rem auto;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .header-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 1rem 2rem;
-            margin-bottom: 2rem;
-            border-radius: 0 0 20px 20px;
-        }
-
-        .text-brand-primary {
-            color: #2563eb;
-        }
-
-        .bg-brand-primary {
-            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-        }
-
-        .hover\:bg-brand-primary-dark:hover {
-            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
-            transform: translateY(-2px);
-        }
-
-        .tab-button {
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            font-weight: 600;
-            color: #64748b;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tab-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: left 0.5s;
-        }
-
-        .tab-button:hover::before {
-            left: 100%;
-        }
-
-        .tab-button.active {
-            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+        /* Input Styling */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
-        }
-
-        .tab-button:hover:not(.active) {
-            color: #3b82f6;
-            background: rgba(59, 130, 246, 0.1);
-        }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 1rem 1.2rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        .input-field:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-            outline: none;
-            background: rgba(255, 255, 255, 1);
-        }
-
-        .input-field::placeholder {
-            color: #94a3b8;
             transition: all 0.3s ease;
         }
-
-        .input-field:focus::placeholder {
-            opacity: 0.7;
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #6366f1;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
         }
 
-        .btn-primary {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            font-weight: 600;
-            border-radius: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-            color: white;
-            border: none;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+        /* Gradient Accent */
+        .gradient-text {
+            background: linear-gradient(90deg, #4f46e5 0%, #9333ea 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-        }
-
-        .btn-success:hover {
-            background: linear-gradient(135deg, #047857 0%, #059669 100%);
-            box-shadow: 0 10px 30px rgba(5, 150, 105, 0.4);
-        }
-
-        .loading-spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-left-color: #ffffff;
+        /* Background Blobs */
+        .blob {
+            position: absolute;
             border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: blob-bounce 10s infinite ease;
+        }
+        .blob-1 { top: 10%; left: 20%; width: 400px; height: 400px; background: #4f46e5; }
+        .blob-2 { bottom: 10%; right: 20%; width: 400px; height: 400px; background: #9333ea; }
+
+        @keyframes blob-bounce {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.1); }
+        }
+
+        /* Tabs */
+        .tab-btn {
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            background: #4f46e5;
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        .tab-btn:not(.active) {
+            color: #9ca3af;
+        }
+        .tab-btn:not(.active):hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
             width: 20px;
             height: 20px;
             animation: spin 1s linear infinite;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .status-message {
-            padding: 1rem 1.2rem;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-            font-weight: 500;
-            border: 1px solid;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .status-message.error {
-            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-            color: #dc2626;
-            border-color: #f87171;
-        }
-
-        .status-message.success {
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-            color: #059669;
-            border-color: #6ee7b7;
-        }
-
-        .forgot-password-link {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-
-        .forgot-password-link:hover {
-            color: #1d4ed8;
-            transform: translateY(-1px);
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .logo-container:hover {
-            transform: translateY(-2px);
-        }
-
-        .logo {
-            width: 3rem;
-            height: 3rem;
-            border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
-        }
-
-        .logo:hover {
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .floating-shapes {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .shape {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .shape:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            left: 10%;
-            top: 20%;
-            animation-delay: 0s;
-        }
-
-        .shape:nth-child(2) {
-            width: 120px;
-            height: 120px;
-            right: 10%;
-            top: 60%;
-            animation-delay: 2s;
-        }
-
-        .shape:nth-child(3) {
-            width: 60px;
-            height: 60px;
-            left: 60%;
-            top: 10%;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @media (max-width: 640px) {
-            .login-container {
-                margin: 1rem;
-                padding: 2rem;
-            }
-            
-            .header-container {
-                padding: 1rem;
-            }
-            
-            .tab-button {
-                padding: 0.75rem 1.5rem;
-                font-size: 0.9rem;
-            }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body>
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
+<body class="font-sans antialiased relative selection:bg-indigo-500 selection:text-white min-h-screen flex flex-col">
+
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
     </div>
 
-    <div class="header-container">
-        <div class="max-w-6xl mx-auto">
-            <a href="index.html" class="logo-container">
-                <img src="data:image/png;base64,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" alt="IEDC Logo" class="h-10 w-10 rounded-full">
-                <span class="text-3xl font-extrabold text-brand-primary">MET'S IEDC</span>
-            </a>
+    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-3 group">
+                        <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
+                        <span class="text-2xl font-bold tracking-tight text-white">MET'S <span class="text-indigo-400">IEDC</span></span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                    <a href="contact.html" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
         </div>
-    </div>
+        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-xl z-50">
+            <div class="flex justify-end p-6">
+                <button id="close-mobile-menu" class="text-white p-2">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <nav class="flex flex-col space-y-6 px-8 mt-10 text-center">
+                <a href="index.html" class="text-2xl font-light text-white">Home</a>
+                <a href="contact.html" class="text-2xl font-light text-white">Contact</a>
+            </nav>
+        </div>
+    </nav>
 
-    <div class="flex justify-center items-center min-h-screen px-4">
-        <div class="login-container fade-in">
+    <div class="flex-grow flex items-center justify-center px-4 pt-24 pb-12 relative z-10">
+        <div class="glass-card rounded-3xl p-8 w-full max-w-md relative overflow-hidden">
+            
             <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back!</h2>
-                <p class="text-gray-600">Sign in to access your IEDC dashboard</p>
+                <h2 class="text-3xl font-bold text-white mb-2">Welcome Back</h2>
+                <p class="text-gray-400 text-sm">Access your IEDC dashboard</p>
             </div>
 
-            <div class="flex justify-center mb-8 bg-gray-100 rounded-xl p-1">
-                <button id="loginTabBtn" class="tab-button active" onclick="showTab('login')">Login</button>
-                <button id="signupTabBtn" class="tab-button" onclick="showTab('signup')">Sign Up</button>
+            <div class="flex p-1 bg-white/5 rounded-xl mb-8">
+                <button id="loginTabBtn" class="tab-btn active w-1/2 py-2.5 rounded-lg text-sm font-medium" onclick="showTab('login')">Login</button>
+                <button id="signupTabBtn" class="tab-btn w-1/2 py-2.5 rounded-lg text-sm font-medium" onclick="showTab('signup')">Sign Up</button>
             </div>
 
-            <div id="loginForm" class="tab-content">
-                <div id="loginError" class="status-message error hidden"></div>
-                
-                <div class="input-group">
-                    <input type="email" id="loginEmail" placeholder="Email Address" class="input-field">
-                </div>
-                
-                <div class="input-group">
-                    <input type="password" id="loginPassword" placeholder="Password" class="input-field">
-                </div>
-                
-                <button id="loginBtn" class="btn-primary">
-                    <span id="loginBtnText">Login</span>
-                    <div id="loginSpinner" class="loading-spinner ml-2 hidden"></div>
-                </button>
-                
-                <div class="text-center mt-4">
-                    <a href="#" id="forgotPasswordLink" class="forgot-password-link">Forgot Password?</a>
-                </div>
-                  <div class="text-center mt-4">
-                    <a href="#" id="forgotPasswordLink" class="forgot-password-link">Admin</a>
-                </div>
-            </div>
-
-            <div id="signupForm" class="tab-content hidden">
-                <div id="signupError" class="status-message error hidden"></div>
-                
-                <div class="input-group">
-                    <input type="email" id="signupEmail" placeholder="Email Address" class="input-field">
-                </div>
-                
-                <div class="input-group">
-                    <input type="password" id="signupPassword" placeholder="Password (min 6 characters)" class="input-field">
-                </div>
-                
-                <div class="input-group">
-                    <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" class="input-field">
-                </div>
-                
-                <button id="signupBtn" class="btn-primary btn-success">
-                    <span id="signupBtnText">Sign Up</span>
-                    <div id="signupSpinner" class="loading-spinner ml-2 hidden"></div>
-                </button>
-            </div>
-
-            <div id="passwordResetMessage" class="status-message success hidden">
+            <div id="loginError" class="hidden mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center"></div>
+            <div id="signupError" class="hidden mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center"></div>
+            <div id="passwordResetMessage" class="hidden mb-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-xs text-center">
                 Password reset email sent! Check your inbox.
             </div>
+
+            <div id="loginForm" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Email</label>
+                    <div class="relative">
+                        <i class="fas fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" class="glass-input w-full rounded-xl py-3 pl-10 pr-4 text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Password</label>
+                    <div class="relative">
+                        <i class="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                        <input type="password" id="loginPassword" placeholder="••••••••" class="glass-input w-full rounded-xl py-3 pl-10 pr-4 text-sm">
+                    </div>
+                </div>
+                
+                <button id="loginBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 rounded-xl transition-all shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.5)] flex justify-center items-center">
+                    <span id="loginBtnText">Sign In</span>
+                    <div id="loginSpinner" class="spinner ml-2 hidden"></div>
+                </button>
+
+                <div class="flex justify-between items-center text-xs mt-6">
+                    <a href="#" id="forgotPasswordLink" class="text-gray-400 hover:text-indigo-400 transition-colors">Forgot Password?</a>
+                    <a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors">Admin Login</a>
+                </div>
+            </div>
+
+            <div id="signupForm" class="space-y-5 hidden">
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Email</label>
+                    <div class="relative">
+                        <i class="fas fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                        <input type="email" id="signupEmail" placeholder="Enter your email" class="glass-input w-full rounded-xl py-3 pl-10 pr-4 text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Password</label>
+                    <div class="relative">
+                        <i class="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                        <input type="password" id="signupPassword" placeholder="Min 6 characters" class="glass-input w-full rounded-xl py-3 pl-10 pr-4 text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Confirm Password</label>
+                    <div class="relative">
+                        <i class="fas fa-check-circle absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                        <input type="password" id="signupConfirmPassword" placeholder="Confirm password" class="glass-input w-full rounded-xl py-3 pl-10 pr-4 text-sm">
+                    </div>
+                </div>
+                
+                <button id="signupBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3.5 rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] flex justify-center items-center">
+                    <span id="signupBtnText">Create Account</span>
+                    <div id="signupSpinner" class="spinner ml-2 hidden"></div>
+                </button>
+            </div>
+
         </div>
     </div>
 
@@ -464,7 +300,7 @@
             passwordResetMessage.classList.add('hidden');
         }
 
-        // Enhanced input validation
+        // Input validation
         function validateEmail(email) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
@@ -506,16 +342,16 @@
                     case 'auth/user-not-found':
                     case 'auth/wrong-password':
                     case 'auth/invalid-credential':
-                        errorMessage = 'Invalid email or password. Please try again.';
+                        errorMessage = 'Invalid email or password.';
                         break;
                     case 'auth/invalid-email':
                         errorMessage = 'Please enter a valid email address.';
                         break;
                     case 'auth/user-disabled':
-                        errorMessage = 'Your account has been disabled. Please contact support.';
+                        errorMessage = 'Your account has been disabled.';
                         break;
                     case 'auth/too-many-requests':
-                        errorMessage = 'Too many failed attempts. Please try again later.';
+                        errorMessage = 'Too many failed attempts. Try again later.';
                         break;
                     default:
                         errorMessage = error.message;
@@ -550,7 +386,7 @@
             }
 
             if (!validatePassword(password)) {
-                signupErrorDiv.textContent = 'Password must be at least 6 characters long.';
+                signupErrorDiv.textContent = 'Password must be at least 6 characters.';
                 signupErrorDiv.classList.remove('hidden');
                 return;
             }
@@ -569,6 +405,7 @@
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
+                // Create user document in Firestore (Preserved Logic)
                 await setDoc(doc(db, "users", user.uid), {
                     email: user.email,
                     displayName: user.displayName || '',
@@ -593,16 +430,13 @@
                 let errorMessage = 'An error occurred. Please try again.';
                 switch (error.code) {
                     case 'auth/email-already-in-use':
-                        errorMessage = 'This email is already registered. Please use a different email or try logging in.';
+                        errorMessage = 'Email is already registered. Please login.';
                         break;
                     case 'auth/invalid-email':
                         errorMessage = 'Please enter a valid email address.';
                         break;
                     case 'auth/weak-password':
-                        errorMessage = 'Password is too weak. Please choose a stronger password.';
-                        break;
-                    case 'auth/operation-not-allowed':
-                        errorMessage = 'Account creation is currently disabled. Please contact support.';
+                        errorMessage = 'Password is too weak.';
                         break;
                     default:
                         errorMessage = error.message;
@@ -624,13 +458,7 @@
             passwordResetMessage.classList.add('hidden');
 
             if (!email) {
-                loginErrorDiv.textContent = 'Please enter your email address to reset your password.';
-                loginErrorDiv.classList.remove('hidden');
-                return;
-            }
-
-            if (!validateEmail(email)) {
-                loginErrorDiv.textContent = 'Please enter a valid email address.';
+                loginErrorDiv.textContent = 'Enter email address to reset password.';
                 loginErrorDiv.classList.remove('hidden');
                 return;
             }
@@ -640,20 +468,13 @@
 
             try {
                 await sendPasswordResetEmail(auth, email);
-                passwordResetMessage.textContent = 'Password reset email sent! Check your inbox and follow the instructions.';
                 passwordResetMessage.classList.remove('hidden');
                 loginErrorDiv.classList.add('hidden');
             } catch (error) {
-                let errorMessage = 'Could not send password reset email. Please try again.';
+                let errorMessage = 'Could not send reset email.';
                 switch (error.code) {
-                    case 'auth/invalid-email':
-                        errorMessage = 'Please enter a valid email address.';
-                        break;
                     case 'auth/user-not-found':
-                        errorMessage = 'No account found with this email address.';
-                        break;
-                    case 'auth/too-many-requests':
-                        errorMessage = 'Too many requests. Please wait a moment and try again.';
+                        errorMessage = 'No account found with this email.';
                         break;
                     default:
                         errorMessage = error.message;
@@ -666,26 +487,24 @@
             }
         });
 
-        // Handle Enter key press
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                if (!loginForm.classList.contains('hidden')) {
-                    loginBtn.click();
-                } else if (!signupForm.classList.contains('hidden')) {
-                    signupBtn.click();
-                }
-            }
-        });
+        // Mobile Menu Logic
+        const menuBtn = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+        const closeMenuBtn = document.getElementById('close-mobile-menu');
 
-        // Check if user is already logged in
+        function toggleMenu() {
+            menu.classList.toggle('open');
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+
+        // Check auth status
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 window.location.href = 'dashboard.html';
             }
         });
-
-        // Initialize with login tab
-        showTab('login');
     </script>
 </body>
 </html>
