@@ -67,6 +67,9 @@
             <button onclick="showTab('attendance')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="clipboard-check" class="w-5 h-5"></i> Mark Attendance
             </button>
+            <button onclick="showTab('payments')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="indian-rupee" class="w-5 h-5"></i> Payments
+            </button>
             <button onclick="showTab('users')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="users" class="w-5 h-5"></i> Manage Users
             </button>
@@ -140,7 +143,6 @@
                         </button>
                     </div>
                 </div>
-
                 <div class="glass-card rounded-2xl p-6 mb-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -153,7 +155,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="glass-card rounded-2xl overflow-hidden">
                     <div class="p-4 bg-white/5 border-b border-white/5 flex justify-between items-center">
                         <h3 class="font-bold text-white text-sm">Student List</h3>
@@ -180,6 +181,21 @@
                 </div>
             </div>
 
+            <div id="paymentsSection" class="tab-content hidden max-w-2xl mx-auto">
+                <div class="glass-card p-10 rounded-3xl text-center border border-white/10 flex flex-col items-center justify-center min-h-[400px]">
+                    <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-6">
+                        <i data-lucide="rocket" class="w-10 h-10 text-red-400"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white mb-3">Coming Soon</h2>
+                    <p class="text-gray-400 max-w-md mx-auto leading-relaxed">
+                        The Payment Portal management system is currently under development. Soon you will be able to create fee requests and track transactions here.
+                    </p>
+                    <div class="mt-8 px-4 py-2 bg-red-500/10 text-red-400 rounded-full text-xs font-bold uppercase tracking-wider border border-red-500/20">
+                        Feature In Progress
+                    </div>
+                </div>
+            </div>
+
             <div id="usersSection" class="tab-content hidden space-y-6">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-bold text-white">User Management</h2>
@@ -193,16 +209,9 @@
                 <div class="glass-card rounded-2xl overflow-hidden overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-400 glass-table min-w-[600px]">
                         <thead class="text-xs">
-                            <tr>
-                                <th class="px-6 py-4">Name</th>
-                                <th class="px-6 py-4">Email</th>
-                                <th class="px-6 py-4">Role</th>
-                                <th class="px-6 py-4">Actions</th>
-                            </tr>
+                            <tr><th class="px-6 py-4">Name</th><th class="px-6 py-4">Email</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Actions</th></tr>
                         </thead>
-                        <tbody class="divide-y divide-white/5" id="userListBody">
-                            <tr><td colspan="4" class="px-6 py-4 text-center">Loading users...</td></tr>
-                        </tbody>
+                        <tbody class="divide-y divide-white/5" id="userListBody"><tr><td colspan="4" class="px-6 py-4 text-center">Loading users...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -224,8 +233,7 @@
                     <form id="announcementForm" class="space-y-5">
                         <input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Title">
                         <textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Description..."></textarea>
-                        
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <select id="annCategory" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
                                 <option value="news">News</option>
                                 <option value="activities">Activity</option>
@@ -233,12 +241,10 @@
                             </select>
                             <input type="text" id="annDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="e.g. Oct 25">
                         </div>
-
                         <div>
                             <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Link / PDF URL</label>
                             <input type="text" id="annLink" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="https://...">
                         </div>
-                        
                         <button type="submit" id="postBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish</button>
                     </form>
                 </div>
@@ -248,15 +254,12 @@
     </div>
 
     <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
-    
     <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-64 bg-[#0a0a0a] border-r border-white/10 z-50 transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col">
-        <div class="p-6 flex items-center justify-between border-b border-white/10">
-            <span class="text-xl font-bold text-white">Menu</span>
-            <button onclick="toggleMobileSidebar()" class="text-white"><i data-lucide="x"></i></button>
-        </div>
+        <div class="p-6 flex items-center justify-between border-b border-white/10"><span class="text-xl font-bold text-white">Menu</span><button onclick="toggleMobileSidebar()" class="text-white"><i data-lucide="x"></i></button></div>
         <nav class="flex-grow px-4 py-4 space-y-2 overflow-y-auto">
             <button onclick="showTab('overview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Overview</button>
             <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Mark Attendance</button>
+            <button onclick="showTab('payments'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Payments</button>
             <button onclick="showTab('users'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Manage Users</button>
             <button onclick="showTab('submissions'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Submissions</button>
             <button onclick="showTab('announcements'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Post Updates</button>
@@ -290,7 +293,7 @@
                     <div class="p-4 border-b border-white/10 bg-white/5"><h3 class="font-bold text-white" id="reportDetailTitle">Select an event</h3><p class="text-xs text-gray-400" id="reportDetailMeta">--</p></div>
                     <div class="flex-grow overflow-y-auto p-4">
                         <table class="w-full text-sm text-left text-gray-400 glass-table">
-                            <thead class="text-xs sticky top-0 bg-[#050505]"><tr><th class="px-4 py-2">Student Name</th><th class="px-4 py-2">Email</th></tr></thead>
+                            <thead class="text-xs sticky top-0 bg-[#0a0a0a]"><tr><th class="px-4 py-2">Student Name</th><th class="px-4 py-2">Email</th></tr></thead>
                             <tbody class="divide-y divide-white/5" id="reportAttendeesList"><tr><td colspan="2" class="px-4 py-8 text-center text-gray-600">No event selected.</td></tr></tbody>
                         </table>
                     </div>
@@ -308,15 +311,15 @@
 
         // --- PASTE YOUR FIREBASE CONFIG HERE ---
         const firebaseConfig = {
-            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
-            authDomain: "metsiedc-3010e.firebaseapp.com",
-            databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
-            projectId: "metsiedc-3010e",
-            storageBucket: "metsiedc-3010e.firebasestorage.app",
-            messagingSenderId: "954403413150",
-            appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
-            measurementId: "G-6E7EK0D7JG"
-        };
+  apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+  authDomain: "metsiedc-3010e.firebaseapp.com",
+  databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+  projectId: "metsiedc-3010e",
+  storageBucket: "metsiedc-3010e.firebasestorage.app",
+  messagingSenderId: "954403413150",
+  appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+  measurementId: "G-6E7EK0D7JG"
+};
         // ---------------------------------------
 
         const app = initializeApp(firebaseConfig);
@@ -331,34 +334,24 @@
                 if (userDoc.exists() && userDoc.data().role === 'admin') {
                     document.getElementById('adminEmailDisplay').textContent = user.email;
                     loadDashboardData();
-                } else {
-                    alert("Access Denied."); await signOut(auth); window.location.href = 'admin.html';
-                }
-            } else {
-                window.location.href = 'admin.html';
-            }
+                } else { alert("Access Denied."); await signOut(auth); window.location.href = 'admin.html'; }
+            } else { window.location.href = 'admin.html'; }
         });
 
         // 1. Fetch Users
         async function fetchUsers() {
             try {
                 const querySnapshot = await getDocs(collection(db, "users"));
-                allUsers = []; 
-                let userHtml = ''; let attendanceHtml = ''; let count = 0;
-
+                allUsers = []; let userHtml = ''; let attendanceHtml = ''; let count = 0;
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     allUsers.push({ id: doc.id, ...data });
                     count++;
                     const name = data.name || data.displayName || 'Unknown';
                     const role = data.role === 'admin' ? '<span class="text-red-400 font-bold">Admin</span>' : 'Student';
-
                     userHtml += `<tr class="hover:bg-white/5 transition"><td class="px-6 py-4 text-white">${name}</td><td class="px-6 py-4">${data.email}</td><td class="px-6 py-4">${role}</td><td class="px-6 py-4"><button onclick="deleteUser('${doc.id}')" class="text-red-400 hover:text-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
-                    
-                    // Mobile Attendance Layout
                     attendanceHtml += `<tr class="hover:bg-white/5 transition cursor-pointer" onclick="toggleCheckbox('${doc.id}')"><td class="px-4 py-4 text-center"><input type="checkbox" class="custom-checkbox attendance-checkbox" value="${doc.id}" id="check-${doc.id}" onclick="event.stopPropagation()"></td><td class="px-4 py-4 font-medium text-white">${name}</td><td class="px-4 py-4 hidden sm:table-cell">${data.email}</td></tr>`;
                 });
-
                 document.getElementById('userListBody').innerHTML = userHtml;
                 document.getElementById('attendanceListBody').innerHTML = attendanceHtml;
                 document.getElementById('totalUsersCount').textContent = count;
@@ -367,43 +360,26 @@
         }
 
         // 2. Add Student Logic
-        window.toggleAddUserModal = (show) => {
-            document.getElementById('addUserModal').classList.toggle('hidden', !show);
-            if(!show) document.getElementById('adminAddUserForm').reset();
-        };
-
+        window.toggleAddUserModal = (show) => { document.getElementById('addUserModal').classList.toggle('hidden', !show); if(!show) document.getElementById('adminAddUserForm').reset(); };
         document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const status = document.getElementById('addUserStatus');
+            e.preventDefault(); const btn = e.target.querySelector('button'); const status = document.getElementById('addUserStatus');
             btn.disabled = true; status.textContent = "Creating..."; status.className = "text-xs text-center p-2 rounded bg-yellow-500/20 text-yellow-400 block";
-
             try {
                 const secondaryApp = initializeApp(firebaseConfig, "SecondaryApp");
                 const secondaryAuth = getAuth(secondaryApp);
                 const cred = await createUserWithEmailAndPassword(secondaryAuth, document.getElementById('newUserEmail').value, document.getElementById('newUserPassword').value);
-                
-                await setDoc(doc(db, "users", cred.user.uid), {
-                    name: document.getElementById('newUserName').value,
-                    email: cred.user.email,
-                    role: 'student',
-                    createdAt: Date.now()
-                });
-                
+                await setDoc(doc(db, "users", cred.user.uid), { name: document.getElementById('newUserName').value, email: cred.user.email, role: 'student', createdAt: Date.now() });
                 await signOut(secondaryAuth);
                 status.textContent = "Success!"; status.className = "text-xs text-center p-2 rounded bg-green-500/20 text-green-400 block";
                 fetchUsers(); setTimeout(() => toggleAddUserModal(false), 1500);
-            } catch (error) {
-                status.textContent = error.message; status.className = "text-xs text-center p-2 rounded bg-red-500/20 text-red-400 block";
-            } finally { btn.disabled = false; }
+            } catch (error) { status.textContent = error.message; status.className = "text-xs text-center p-2 rounded bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; }
         });
 
         // 3. Attendance Logic
         window.toggleCheckbox = (id) => { const cb = document.getElementById(`check-${id}`); cb.checked = !cb.checked; };
         window.selectAllAttendance = (s) => document.querySelectorAll('.attendance-checkbox').forEach(cb => cb.checked = s);
         window.submitAttendance = async () => {
-            const eventName = document.getElementById('attendanceEventName').value;
-            const date = document.getElementById('attendanceDate').value;
+            const eventName = document.getElementById('attendanceEventName').value; const date = document.getElementById('attendanceDate').value;
             const ids = Array.from(document.querySelectorAll('.attendance-checkbox:checked')).map(cb => cb.value);
             if(!eventName || !date || ids.length === 0) { alert("Invalid inputs."); return; }
             try { await addDoc(collection(db, "attendance"), { eventName, date, attendees: ids, totalPresent: ids.length, timestamp: Date.now() }); alert("Saved!"); selectAllAttendance(false); document.getElementById('attendanceEventName').value = ''; } catch(e) { alert(e.message); }
@@ -412,28 +388,21 @@
         // 4. Report Logic
         window.openReportsModal = async function() {
             document.getElementById('reportsModal').classList.remove('hidden');
-            const list = document.getElementById('reportEventsList');
-            list.innerHTML = 'Loading...';
+            const list = document.getElementById('reportEventsList'); list.innerHTML = 'Loading...';
             try {
-                const q = query(collection(db, "attendance"), orderBy("timestamp", "desc"));
-                const snap = await getDocs(q);
-                list.innerHTML = '';
+                const q = query(collection(db, "attendance"), orderBy("timestamp", "desc")); const snap = await getDocs(q); list.innerHTML = '';
                 snap.forEach(doc => {
                     const d = doc.data();
-                    const div = document.createElement('div');
-                    div.className = "p-3 rounded-lg hover:bg-white/10 cursor-pointer transition border border-transparent hover:border-white/10 group";
+                    const div = document.createElement('div'); div.className = "p-3 rounded-lg hover:bg-white/10 cursor-pointer transition border border-transparent hover:border-white/10 group";
                     div.innerHTML = `<h4 class="text-sm font-bold text-white group-hover:text-red-400 transition">${d.eventName}</h4><div class="flex justify-between items-center mt-1"><span class="text-xs text-gray-500">${d.date}</span><span class="text-xs bg-green-900/30 text-green-400 px-2 py-0.5 rounded-full">${d.totalPresent || 0} Present</span></div>`;
-                    div.onclick = () => showReportDetails(d);
-                    list.appendChild(div);
+                    div.onclick = () => showReportDetails(d); list.appendChild(div);
                 });
             } catch(e) { list.innerHTML = "Error loading."; }
         };
-
         window.showReportDetails = function(data) {
             document.getElementById('reportDetailTitle').textContent = data.eventName;
             document.getElementById('reportDetailMeta').textContent = `Date: ${data.date} • Total: ${data.totalPresent}`;
-            const tbody = document.getElementById('reportAttendeesList');
-            tbody.innerHTML = '';
+            const tbody = document.getElementById('reportAttendeesList'); tbody.innerHTML = '';
             if(!data.attendees || data.attendees.length === 0) { tbody.innerHTML = '<tr><td colspan="2" class="px-4 py-4 text-center text-gray-500">No attendees.</td></tr>'; return; }
             data.attendees.forEach(uid => {
                 const u = allUsers.find(user => user.id === uid) || { name: 'Unknown', email: '--' };
@@ -454,42 +423,22 @@
                     const data = doc.data();
                     html += `<div class="glass-card p-6 rounded-2xl relative overflow-hidden group"><div class="absolute top-0 left-0 w-1 h-full ${data.type === 'project' ? 'bg-yellow-500' : 'bg-blue-500'}"></div><div class="flex justify-between items-start mb-4"><div><span class="text-xs font-bold uppercase tracking-wider mb-1 block ${data.type === 'project' ? 'text-yellow-400' : 'text-blue-400'}">${data.type}</span><h3 class="text-xl font-bold text-white">${data.title}</h3></div></div><p class="text-gray-400 text-sm mb-6 leading-relaxed">${data.description}</p><div class="flex gap-3"><button onclick="updateSubmission('${doc.id}', 'approved')" class="flex-1 bg-green-600 hover:bg-green-500 text-white py-2 rounded-lg text-sm font-bold transition-colors">Approve</button><button onclick="updateSubmission('${doc.id}', 'rejected')" class="flex-1 bg-white/5 hover:bg-white/10 text-white py-2 rounded-lg text-sm font-bold transition-colors">Reject</button></div></div>`;
                 });
-                grid.innerHTML = html;
-                document.getElementById('pendingProjectsCount').textContent = querySnapshot.size;
+                grid.innerHTML = html; document.getElementById('pendingProjectsCount').textContent = querySnapshot.size;
             } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-2 text-center">No submissions yet.</p>'; }
         };
+        window.updateSubmission = async function(id, status) { try { await updateDoc(doc(db, "submissions", id), { status: status }); fetchSubmissions(); } catch(e) { alert(e.message); } };
 
-        window.updateSubmission = async function(id, status) {
-            try { await updateDoc(doc(db, "submissions", id), { status: status }); fetchSubmissions(); } catch(e) { alert(e.message); }
-        };
-
-        // 6. Post Announcement Logic
+        // 6. Announcement Logic
         document.getElementById('announcementForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('postBtn');
-            const status = document.getElementById('announcementStatus');
+            e.preventDefault(); const btn = document.getElementById('postBtn'); const status = document.getElementById('announcementStatus');
             btn.disabled = true; btn.textContent = "Publishing...";
-            try {
-                await addDoc(collection(db, "announcements"), {
-                    title: document.getElementById('annTitle').value,
-                    description: document.getElementById('annContent').value,
-                    date: document.getElementById('annDate').value,
-                    year: new Date().getFullYear().toString(),
-                    category: document.getElementById('annCategory').value,
-                    fileUrl: document.getElementById('annLink').value,
-                    timestamp: Date.now()
-                });
-                status.textContent = "Published!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400 block";
-                document.getElementById('announcementForm').reset(); fetchAnnouncementsCount();
-            } catch (e) { status.textContent = "Error: " + e.message; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; }
-            finally { btn.disabled = false; btn.textContent = "Publish"; }
+            try { await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, description: document.getElementById('annContent').value, date: document.getElementById('annDate').value, year: new Date().getFullYear().toString(), category: document.getElementById('annCategory').value, fileUrl: document.getElementById('annLink').value, timestamp: Date.now() }); status.textContent = "Published!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400 block"; document.getElementById('announcementForm').reset(); fetchAnnouncementsCount(); } catch (e) { status.textContent = "Error: " + e.message; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; btn.textContent = "Publish"; }
         });
-
         async function fetchAnnouncementsCount() { try { const s = await getDocs(collection(db, "announcements")); document.getElementById('totalAnnouncementsCount').textContent = s.size; } catch(e){} }
 
         window.deleteUser = async function(id) { if(confirm("Delete user?")) { await deleteDoc(doc(db, "users", id)); fetchUsers(); } };
         
-        // Logout & Mobile Menu Logic
+        // Logout & Mobile Menu
         const logout = async () => { await signOut(auth); window.location.href = 'admin.html'; };
         document.getElementById('adminLogoutBtn').addEventListener('click', logout);
         document.getElementById('adminLogoutBtnMobile').addEventListener('click', logout);
@@ -497,13 +446,7 @@
         window.toggleMobileSidebar = function() {
             const sidebar = document.getElementById('mobile-sidebar');
             const overlay = document.getElementById('mobile-sidebar-overlay');
-            if (sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
-            } else {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-            }
+            if (sidebar.classList.contains('-translate-x-full')) { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); } else { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); }
         };
         document.getElementById('mobile-menu-toggle').addEventListener('click', toggleMobileSidebar);
 
