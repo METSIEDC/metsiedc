@@ -76,6 +76,11 @@
             <button onclick="showTab('submissions')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="inbox" class="w-5 h-5"></i> Submissions
             </button>
+            
+            <div class="pt-4 pb-2 px-4 text-xs font-semibold text-gray-500 uppercase">Content</div>
+            <button onclick="showTab('gallery')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="image" class="w-5 h-5"></i> Manage Gallery
+            </button>
             <button onclick="showTab('news')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="newspaper" class="w-5 h-5"></i> Post News
             </button>
@@ -113,79 +118,33 @@
 
         <main class="flex-grow overflow-y-auto p-6 md:p-10">
             
-            <div id="overviewSection" class="tab-content space-y-8">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="glass-card p-6 rounded-2xl border-l-4 border-red-500"><p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Total Users</p><h3 class="text-3xl font-bold text-white" id="totalUsersCount">...</h3></div>
-                    <div class="glass-card p-6 rounded-2xl border-l-4 border-orange-500"><p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Pending Projects</p><h3 class="text-3xl font-bold text-white" id="pendingProjectsCount">0</h3></div>
-                    <div class="glass-card p-6 rounded-2xl border-l-4 border-yellow-500"><p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Announcements</p><h3 class="text-3xl font-bold text-white" id="totalAnnouncementsCount">...</h3></div>
-                </div>
-            </div>
+            <div id="overviewSection" class="tab-content space-y-8"><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"><div class="glass-card p-6 rounded-2xl border-l-4 border-red-500"><p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Total Users</p><h3 class="text-3xl font-bold text-white" id="totalUsersCount">...</h3></div><div class="glass-card p-6 rounded-2xl border-l-4 border-orange-500"><p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Pending Projects</p><h3 class="text-3xl font-bold text-white" id="pendingProjectsCount">0</h3></div><div class="glass-card p-6 rounded-2xl border-l-4 border-yellow-500"><p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Announcements</p><h3 class="text-3xl font-bold text-white" id="totalAnnouncementsCount">...</h3></div></div></div>
+            <div id="attendanceSection" class="tab-content hidden space-y-6"><div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4"><div><h2 class="text-2xl font-bold text-white mb-1">Mark Attendance</h2></div><div class="flex gap-3 w-full sm:w-auto"><button onclick="openReportsModal()" class="flex-1 sm:flex-none bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg font-bold transition flex justify-center items-center gap-2">History</button><button onclick="submitAttendance()" class="flex-1 sm:flex-none bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-red-600/20 transition flex justify-center items-center gap-2">Save</button></div></div><div class="glass-card rounded-2xl p-6 mb-6"><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Event Name</label><input type="text" id="attendanceEventName" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></div><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Date</label><input type="date" id="attendanceDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></div></div></div><div class="glass-card rounded-2xl overflow-hidden"><div class="p-4 bg-white/5 border-b border-white/5 flex justify-between items-center"><h3 class="font-bold text-white text-sm">Student List</h3><div class="flex gap-3"><button onclick="selectAllAttendance(true)" class="text-xs text-red-400 hover:text-white">All</button><button onclick="selectAllAttendance(false)" class="text-xs text-gray-400 hover:text-white">None</button></div></div><div class="max-h-[500px] overflow-y-auto"><table class="w-full text-sm text-left text-gray-400 glass-table"><thead class="text-xs sticky top-0 bg-[#0a0a0a] z-10"><tr><th class="px-4 py-4 w-12 text-center">#</th><th class="px-4 py-4">Name</th><th class="px-4 py-4 hidden sm:table-cell">Email</th></tr></thead><tbody class="divide-y divide-white/5" id="attendanceListBody"><tr><td colspan="3" class="px-6 py-8 text-center">Loading...</td></tr></tbody></table></div></div></div>
+            <div id="paymentsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-10 rounded-3xl text-center border border-white/10 flex flex-col items-center justify-center min-h-[400px]"><div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-6"><i data-lucide="rocket" class="w-10 h-10 text-red-400"></i></div><h2 class="text-3xl font-bold text-white mb-3">Coming Soon</h2><p class="text-gray-400 max-w-md mx-auto leading-relaxed">Payment Portal in progress.</p></div></div>
+            <div id="usersSection" class="tab-content hidden space-y-6"><div class="flex justify-between items-center"><h2 class="text-2xl font-bold text-white">User Management</h2><div class="flex gap-2"><button onclick="toggleAddUserModal(true)" class="text-xs bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-500 transition font-bold shadow-lg shadow-red-900/20 flex items-center gap-2">Add</button><button onclick="fetchUsers()" class="text-xs bg-white/10 px-3 py-2 rounded hover:bg-white/20 transition">Refresh</button></div></div><div class="glass-card rounded-2xl overflow-hidden overflow-x-auto"><table class="w-full text-sm text-left text-gray-400 glass-table min-w-[600px]"><thead class="text-xs"><tr><th class="px-6 py-4">Name</th><th class="px-6 py-4">Email</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Actions</th></tr></thead><tbody class="divide-y divide-white/5" id="userListBody"><tr><td colspan="4" class="px-6 py-4 text-center">Loading...</td></tr></tbody></table></div></div>
+            <div id="submissionsSection" class="tab-content hidden space-y-6"><div class="flex justify-between items-center"><h2 class="text-2xl font-bold text-white">Review Submissions</h2><button onclick="fetchSubmissions()" class="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20 transition">Refresh</button></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="submissionsGrid"><p class="text-gray-500 col-span-2 text-center">No pending submissions.</p></div></div>
+            <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl border border-blue-500/20"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center"><i data-lucide="newspaper" class="w-5 h-5 text-blue-400"></i></div><div><h2 class="text-2xl font-bold text-white">Post News</h2><p class="text-xs text-gray-400">Articles & External News.</p></div></div><div id="newsStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="newsForm" class="space-y-5"><input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Headline"><textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Content..."></textarea><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><div class="relative group"><label for="newsImageInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-blue-500/50 transition"><i data-lucide="image" class="w-4 h-4 mr-2"></i> <span id="newsFileName">Upload Image</span></label><input type="file" id="newsImageInput" class="hidden" accept="image/*" onchange="handleNewsImage(event)"></div></div><button type="submit" id="postNewsBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish News</button></form></div></div>
+            <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center"><i data-lucide="bell" class="w-5 h-5 text-red-400"></i></div><div><h2 class="text-2xl font-bold text-white">Post Update</h2><p class="text-xs text-gray-400">Notices & Circulars.</p></div></div><div id="announcementStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="announcementForm" class="space-y-5"><input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Subject"><textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Notice details..."></textarea><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><select id="annCategory" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="update">General Update</option><option value="event">Event Alert</option><option value="circular">Circular</option></select><input type="text" id="annDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Display Date"></div><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Link / PDF URL</label><input type="text" id="annLink" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="https://..."></div><button type="submit" id="postBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish Update</button></form></div></div>
 
-            <div id="attendanceSection" class="tab-content hidden space-y-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4"><div><h2 class="text-2xl font-bold text-white mb-1">Mark Attendance</h2><p class="text-sm text-gray-400">Record student participation.</p></div><div class="flex gap-3 w-full sm:w-auto"><button onclick="openReportsModal()" class="flex-1 sm:flex-none bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg font-bold transition flex justify-center items-center gap-2"><i data-lucide="history" class="w-4 h-4"></i> History</button><button onclick="submitAttendance()" class="flex-1 sm:flex-none bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-red-600/20 transition flex justify-center items-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Save</button></div></div>
-                <div class="glass-card rounded-2xl p-6 mb-6"><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Event Name</label><input type="text" id="attendanceEventName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="e.g. Weekly Meeting"></div><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Date</label><input type="date" id="attendanceDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></div></div></div>
-                <div class="glass-card rounded-2xl overflow-hidden"><div class="p-4 bg-white/5 border-b border-white/5 flex justify-between items-center"><h3 class="font-bold text-white text-sm">Student List</h3><div class="flex gap-3"><button onclick="selectAllAttendance(true)" class="text-xs text-red-400 hover:text-white">All</button><span class="text-gray-600">|</span><button onclick="selectAllAttendance(false)" class="text-xs text-gray-400 hover:text-white">None</button></div></div><div class="max-h-[500px] overflow-y-auto"><table class="w-full text-sm text-left text-gray-400 glass-table"><thead class="text-xs sticky top-0 bg-[#0a0a0a] z-10"><tr><th class="px-4 py-4 w-12 text-center">#</th><th class="px-4 py-4">Name</th><th class="px-4 py-4 hidden sm:table-cell">Email</th></tr></thead><tbody class="divide-y divide-white/5" id="attendanceListBody"><tr><td colspan="3" class="px-6 py-8 text-center">Loading students...</td></tr></tbody></table></div></div>
-            </div>
-
-            <div id="paymentsSection" class="tab-content hidden max-w-2xl mx-auto">
-                <div class="glass-card p-10 rounded-3xl text-center border border-white/10 flex flex-col items-center justify-center min-h-[400px]">
-                    <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-6"><i data-lucide="rocket" class="w-10 h-10 text-red-400"></i></div>
-                    <h2 class="text-3xl font-bold text-white mb-3">Coming Soon</h2>
-                    <p class="text-gray-400 max-w-md mx-auto leading-relaxed">The Payment Portal is currently under development.</p>
-                    <div class="mt-8 px-4 py-2 bg-red-500/10 text-red-400 rounded-full text-xs font-bold uppercase tracking-wider border border-red-500/20">Feature In Progress</div>
-                </div>
-            </div>
-
-            <div id="usersSection" class="tab-content hidden space-y-6">
-                <div class="flex justify-between items-center"><h2 class="text-2xl font-bold text-white">User Management</h2><div class="flex gap-2"><button onclick="toggleAddUserModal(true)" class="text-xs bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-500 transition font-bold shadow-lg shadow-red-900/20 flex items-center gap-2"><i data-lucide="user-plus" class="w-3 h-3"></i> <span class="hidden sm:inline">Add</span></button><button onclick="fetchUsers()" class="text-xs bg-white/10 px-3 py-2 rounded hover:bg-white/20 transition"><i data-lucide="refresh-cw" class="w-3 h-3"></i></button></div></div>
-                <div class="glass-card rounded-2xl overflow-hidden overflow-x-auto"><table class="w-full text-sm text-left text-gray-400 glass-table min-w-[600px]"><thead class="text-xs"><tr><th class="px-6 py-4">Name</th><th class="px-6 py-4">Email</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Actions</th></tr></thead><tbody class="divide-y divide-white/5" id="userListBody"><tr><td colspan="4" class="px-6 py-4 text-center">Loading users...</td></tr></tbody></table></div>
-            </div>
-
-            <div id="submissionsSection" class="tab-content hidden space-y-6">
-                <div class="flex justify-between items-center"><h2 class="text-2xl font-bold text-white">Review Submissions</h2><button onclick="fetchSubmissions()" class="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20 transition">Refresh</button></div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="submissionsGrid"><p class="text-gray-500 col-span-2 text-center">No pending submissions found.</p></div>
-            </div>
-
-            <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto">
-                <div class="glass-card p-8 rounded-3xl border border-blue-500/20">
+            <div id="gallerySection" class="tab-content hidden max-w-2xl mx-auto">
+                <div class="glass-card p-8 rounded-3xl border border-purple-500/20">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center"><i data-lucide="newspaper" class="w-5 h-5 text-blue-400"></i></div>
-                        <div><h2 class="text-2xl font-bold text-white">Post News</h2><p class="text-xs text-gray-400">Share achievements, gallery photos, and external news.</p></div>
+                        <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center"><i data-lucide="image" class="w-5 h-5 text-purple-400"></i></div>
+                        <div><h2 class="text-2xl font-bold text-white">Upload to Gallery</h2><p class="text-xs text-gray-400">Add photos from events.</p></div>
                     </div>
-                    <div id="newsStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
-                    <form id="newsForm" class="space-y-5">
-                        <input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Headline (e.g. IEDC Summit 2025)">
-                        <textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Article content..."></textarea>
+                    <div id="galleryStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
+                    <form id="galleryForm" class="space-y-5">
+                        <input type="text" id="galleryTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Event Name (Caption)">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
+                            <input type="date" id="galleryDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
                             <div class="relative group">
-                                <label for="newsImageInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-blue-500/50 transition">
-                                    <i data-lucide="image" class="w-4 h-4 mr-2"></i> <span id="newsFileName">Upload Image</span>
+                                <label for="galleryImageInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-purple-500/50 transition">
+                                    <i data-lucide="upload-cloud" class="w-4 h-4 mr-2"></i> <span id="galleryFileName">Select Photo</span>
                                 </label>
-                                <input type="file" id="newsImageInput" class="hidden" accept="image/*" onchange="handleNewsImage(event)">
+                                <input type="file" id="galleryImageInput" class="hidden" accept="image/*" onchange="handleGalleryImage(event)">
                             </div>
                         </div>
-                        <button type="submit" id="postNewsBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish News</button>
-                    </form>
-                </div>
-            </div>
-
-            <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto">
-                <div class="glass-card p-8 rounded-3xl">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center"><i data-lucide="bell" class="w-5 h-5 text-red-400"></i></div>
-                        <div><h2 class="text-2xl font-bold text-white">Post Update</h2><p class="text-xs text-gray-400">Internal notices, circulars, and PDF downloads.</p></div>
-                    </div>
-                    <div id="announcementStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
-                    <form id="announcementForm" class="space-y-5">
-                        <input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Subject (e.g. Hackathon Results)">
-                        <textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Notice details..."></textarea>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <select id="annCategory" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="update">General Update</option><option value="event">Event Alert</option><option value="circular">Circular</option></select>
-                            <input type="text" id="annDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Display Date (e.g. Oct 25)">
-                        </div>
-                        <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Link / PDF URL</label><input type="text" id="annLink" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="https://drive.google.com/..."></div>
-                        <button type="submit" id="postBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish Update</button>
+                        <button type="submit" id="postGalleryBtn" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3.5 rounded-xl transition-all">Upload Photo</button>
                     </form>
                 </div>
             </div>
@@ -202,6 +161,7 @@
             <button onclick="showTab('payments'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Payments</button>
             <button onclick="showTab('users'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Manage Users</button>
             <button onclick="showTab('submissions'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Submissions</button>
+            <button onclick="showTab('gallery'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Gallery</button>
             <button onclick="showTab('news'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Post News</button>
             <button onclick="showTab('announcements'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Post Updates</button>
             <button id="adminLogoutBtnMobile" class="w-full mt-4 bg-red-500/20 text-red-400 py-3 rounded-lg text-sm font-bold border border-red-500/20">Logout</button>
@@ -224,17 +184,8 @@
 
     <div id="reportsModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-card w-full max-w-4xl h-[80vh] flex flex-col rounded-3xl relative overflow-hidden">
-            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-black/20">
-                <div><h2 class="text-xl font-bold text-white">Attendance Reports</h2><p class="text-xs text-gray-400">Click event to view details</p></div>
-                <button onclick="document.getElementById('reportsModal').classList.add('hidden')" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
-            </div>
-            <div class="flex flex-grow overflow-hidden">
-                <div class="w-1/3 border-r border-white/10 overflow-y-auto p-4 space-y-2 bg-white/5" id="reportEventsList"></div>
-                <div class="w-2/3 flex flex-col bg-[#050505]">
-                    <div class="p-4 border-b border-white/10 bg-white/5"><h3 class="font-bold text-white" id="reportDetailTitle">Select an event</h3><p class="text-xs text-gray-400" id="reportDetailMeta">--</p></div>
-                    <div class="flex-grow overflow-y-auto p-4"><table class="w-full text-sm text-left text-gray-400 glass-table"><thead class="text-xs sticky top-0 bg-[#0a0a0a]"><tr><th class="px-4 py-2">Student Name</th><th class="px-4 py-2">Email</th></tr></thead><tbody class="divide-y divide-white/5" id="reportAttendeesList"><tr><td colspan="2" class="px-4 py-8 text-center text-gray-600">No event selected.</td></tr></tbody></table></div>
-                </div>
-            </div>
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-black/20"><div><h2 class="text-xl font-bold text-white">Attendance Reports</h2><p class="text-xs text-gray-400">Click event to view details</p></div><button onclick="document.getElementById('reportsModal').classList.add('hidden')" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button></div>
+            <div class="flex flex-grow overflow-hidden"><div class="w-1/3 border-r border-white/10 overflow-y-auto p-4 space-y-2 bg-white/5" id="reportEventsList"></div><div class="w-2/3 flex flex-col bg-[#050505]"><div class="p-4 border-b border-white/10 bg-white/5"><h3 class="font-bold text-white" id="reportDetailTitle">Select an event</h3><p class="text-xs text-gray-400" id="reportDetailMeta">--</p></div><div class="flex-grow overflow-y-auto p-4"><table class="w-full text-sm text-left text-gray-400 glass-table"><thead class="text-xs sticky top-0 bg-[#0a0a0a]"><tr><th class="px-4 py-2">Student Name</th><th class="px-4 py-2">Email</th></tr></thead><tbody class="divide-y divide-white/5" id="reportAttendeesList"><tr><td colspan="2" class="px-4 py-8 text-center text-gray-600">No event selected.</td></tr></tbody></table></div></div></div>
         </div>
     </div>
 
@@ -263,6 +214,7 @@
         const db = getFirestore(app);
         let allUsers = [];
         let newsImageBase64 = "";
+        let galleryImageBase64 = "";
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -295,7 +247,7 @@
             } catch (e) { console.error(e); }
         }
 
-        // 2. Add Student Logic
+        // 2. Add Student
         window.toggleAddUserModal = (show) => { document.getElementById('addUserModal').classList.toggle('hidden', !show); if(!show) document.getElementById('adminAddUserForm').reset(); };
         document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn = e.target.querySelector('button'); const status = document.getElementById('addUserStatus');
@@ -311,7 +263,7 @@
             } catch (error) { status.textContent = error.message; status.className = "text-xs text-center p-2 rounded bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; }
         });
 
-        // 3. Attendance Logic
+        // 3. Attendance
         window.toggleCheckbox = (id) => { const cb = document.getElementById(`check-${id}`); cb.checked = !cb.checked; };
         window.selectAllAttendance = (s) => document.querySelectorAll('.attendance-checkbox').forEach(cb => cb.checked = s);
         window.submitAttendance = async () => {
@@ -320,92 +272,47 @@
             if(!eventName || !date || ids.length === 0) { alert("Invalid inputs."); return; }
             try { await addDoc(collection(db, "attendance"), { eventName, date, attendees: ids, totalPresent: ids.length, timestamp: Date.now() }); alert("Saved!"); selectAllAttendance(false); document.getElementById('attendanceEventName').value = ''; } catch(e) { alert(e.message); }
         };
-
-        // 4. Report Logic
         window.openReportsModal = async function() {
-            document.getElementById('reportsModal').classList.remove('hidden');
-            const list = document.getElementById('reportEventsList'); list.innerHTML = 'Loading...';
-            try {
-                const q = query(collection(db, "attendance"), orderBy("timestamp", "desc")); const snap = await getDocs(q); list.innerHTML = '';
-                snap.forEach(doc => {
-                    const d = doc.data();
-                    const div = document.createElement('div'); div.className = "p-3 rounded-lg hover:bg-white/10 cursor-pointer transition border border-transparent hover:border-white/10 group";
-                    div.innerHTML = `<h4 class="text-sm font-bold text-white group-hover:text-red-400 transition">${d.eventName}</h4><div class="flex justify-between items-center mt-1"><span class="text-xs text-gray-500">${d.date}</span><span class="text-xs bg-green-900/30 text-green-400 px-2 py-0.5 rounded-full">${d.totalPresent || 0} Present</span></div>`;
-                    div.onclick = () => showReportDetails(d); list.appendChild(div);
-                });
-            } catch(e) { list.innerHTML = "Error loading."; }
+            document.getElementById('reportsModal').classList.remove('hidden'); const list = document.getElementById('reportEventsList'); list.innerHTML = 'Loading...';
+            try { const q = query(collection(db, "attendance"), orderBy("timestamp", "desc")); const snap = await getDocs(q); list.innerHTML = ''; snap.forEach(doc => { const d = doc.data(); const div = document.createElement('div'); div.className = "p-3 rounded-lg hover:bg-white/10 cursor-pointer transition border border-transparent hover:border-white/10 group"; div.innerHTML = `<h4 class="text-sm font-bold text-white group-hover:text-red-400 transition">${d.eventName}</h4><div class="flex justify-between items-center mt-1"><span class="text-xs text-gray-500">${d.date}</span><span class="text-xs bg-green-900/30 text-green-400 px-2 py-0.5 rounded-full">${d.totalPresent || 0} Present</span></div>`; div.onclick = () => showReportDetails(d); list.appendChild(div); }); } catch(e) { list.innerHTML = "Error loading."; }
         };
-        window.showReportDetails = function(data) {
-            document.getElementById('reportDetailTitle').textContent = data.eventName;
-            document.getElementById('reportDetailMeta').textContent = `Date: ${data.date} • Total: ${data.totalPresent}`;
-            const tbody = document.getElementById('reportAttendeesList'); tbody.innerHTML = '';
-            if(!data.attendees || data.attendees.length === 0) { tbody.innerHTML = '<tr><td colspan="2" class="px-4 py-4 text-center text-gray-500">No attendees.</td></tr>'; return; }
-            data.attendees.forEach(uid => {
-                const u = allUsers.find(user => user.id === uid) || { name: 'Unknown', email: '--' };
-                tbody.innerHTML += `<tr class="hover:bg-white/5"><td class="px-4 py-3 text-white">${u.name || u.displayName}</td><td class="px-4 py-3 text-gray-400">${u.email}</td></tr>`;
-            });
-        };
+        window.showReportDetails = function(data) { document.getElementById('reportDetailTitle').textContent = data.eventName; document.getElementById('reportDetailMeta').textContent = `Date: ${data.date} • Total: ${data.totalPresent}`; const tbody = document.getElementById('reportAttendeesList'); tbody.innerHTML = ''; if(!data.attendees || data.attendees.length === 0) { tbody.innerHTML = '<tr><td colspan="2" class="px-4 py-4 text-center text-gray-500">No attendees.</td></tr>'; return; } data.attendees.forEach(uid => { const u = allUsers.find(user => user.id === uid) || { name: 'Unknown', email: '--' }; tbody.innerHTML += `<tr class="hover:bg-white/5"><td class="px-4 py-3 text-white">${u.name || u.displayName}</td><td class="px-4 py-3 text-gray-400">${u.email}</td></tr>`; }); };
 
-        // 5. Submission Review Logic
+        // 4. Submission Review
         window.fetchSubmissions = async function() {
-            const grid = document.getElementById('submissionsGrid');
-            grid.innerHTML = '<p class="text-gray-500 col-span-2 text-center">Loading submissions...</p>';
-            try {
-                const q = query(collection(db, "submissions"), where("status", "==", "pending"));
-                const querySnapshot = await getDocs(q);
-                if (querySnapshot.empty) { grid.innerHTML = '<p class="text-gray-500 col-span-2 text-center">No pending submissions found.</p>'; document.getElementById('pendingProjectsCount').textContent = 0; return; }
-                let html = '';
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    html += `<div class="glass-card p-6 rounded-2xl relative overflow-hidden group"><div class="absolute top-0 left-0 w-1 h-full ${data.type === 'project' ? 'bg-yellow-500' : 'bg-blue-500'}"></div><div class="flex justify-between items-start mb-4"><div><span class="text-xs font-bold uppercase tracking-wider mb-1 block ${data.type === 'project' ? 'text-yellow-400' : 'text-blue-400'}">${data.type}</span><h3 class="text-xl font-bold text-white">${data.title}</h3></div></div><p class="text-gray-400 text-sm mb-6 leading-relaxed">${data.description}</p><div class="flex gap-3"><button onclick="updateSubmission('${doc.id}', 'approved')" class="flex-1 bg-green-600 hover:bg-green-500 text-white py-2 rounded-lg text-sm font-bold transition-colors">Approve</button><button onclick="updateSubmission('${doc.id}', 'rejected')" class="flex-1 bg-white/5 hover:bg-white/10 text-white py-2 rounded-lg text-sm font-bold transition-colors">Reject</button></div></div>`;
-                });
-                grid.innerHTML = html; document.getElementById('pendingProjectsCount').textContent = querySnapshot.size;
-            } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-2 text-center">No submissions yet.</p>'; }
+            const grid = document.getElementById('submissionsGrid'); grid.innerHTML = '<p class="text-gray-500 col-span-2 text-center">Loading submissions...</p>';
+            try { const q = query(collection(db, "submissions"), where("status", "==", "pending")); const querySnapshot = await getDocs(q); if (querySnapshot.empty) { grid.innerHTML = '<p class="text-gray-500 col-span-2 text-center">No pending submissions found.</p>'; document.getElementById('pendingProjectsCount').textContent = 0; return; } let html = ''; querySnapshot.forEach((doc) => { const data = doc.data(); html += `<div class="glass-card p-6 rounded-2xl relative overflow-hidden group"><div class="absolute top-0 left-0 w-1 h-full ${data.type === 'project' ? 'bg-yellow-500' : 'bg-blue-500'}"></div><div class="flex justify-between items-start mb-4"><div><span class="text-xs font-bold uppercase tracking-wider mb-1 block ${data.type === 'project' ? 'text-yellow-400' : 'text-blue-400'}">${data.type}</span><h3 class="text-xl font-bold text-white">${data.title}</h3></div></div><p class="text-gray-400 text-sm mb-6 leading-relaxed">${data.description}</p><div class="flex gap-3"><button onclick="updateSubmission('${doc.id}', 'approved')" class="flex-1 bg-green-600 hover:bg-green-500 text-white py-2 rounded-lg text-sm font-bold transition-colors">Approve</button><button onclick="updateSubmission('${doc.id}', 'rejected')" class="flex-1 bg-white/5 hover:bg-white/10 text-white py-2 rounded-lg text-sm font-bold transition-colors">Reject</button></div></div>`; }); grid.innerHTML = html; document.getElementById('pendingProjectsCount').textContent = querySnapshot.size; } catch (e) { grid.innerHTML = '<p class="text-gray-500 col-span-2 text-center">No submissions yet.</p>'; }
         };
         window.updateSubmission = async function(id, status) { try { await updateDoc(doc(db, "submissions", id), { status: status }); fetchSubmissions(); } catch(e) { alert(e.message); } };
 
-        // 6. Post Announcement Logic (Text/PDF)
+        // 5. Announcement Logic
         document.getElementById('announcementForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); const btn = document.getElementById('postBtn'); const status = document.getElementById('announcementStatus');
-            btn.disabled = true; btn.textContent = "Publishing...";
+            e.preventDefault(); const btn = document.getElementById('postBtn'); const status = document.getElementById('announcementStatus'); btn.disabled = true; btn.textContent = "Publishing...";
             try { await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, description: document.getElementById('annContent').value, date: document.getElementById('annDate').value, category: document.getElementById('annCategory').value, fileUrl: document.getElementById('annLink').value, type: 'update', timestamp: Date.now() }); status.textContent = "Published!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400 block"; document.getElementById('announcementForm').reset(); fetchAnnouncementsCount(); } catch (e) { status.textContent = "Error: " + e.message; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; btn.textContent = "Publish"; }
         });
 
-        // 7. Post News Logic (Image/Content)
-        window.handleNewsImage = (event) => {
-            const file = event.target.files[0]; if (!file) return;
-            if (file.size > 500 * 1024) return alert("Image too large (Max 500KB)");
-            const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.src = e.target.result; img.onload = () => { const c = document.createElement('canvas'); const ctx = c.getContext('2d'); const s = 500/img.width; c.width=500; c.height=img.height*s; ctx.drawImage(img,0,0,c.width,c.height); newsImageBase64 = c.toDataURL('image/jpeg',0.7); document.getElementById('newsFileName').textContent = "Image Selected"; }}; reader.readAsDataURL(file);
-        };
-
+        // 6. News Logic
+        window.handleNewsImage = (event) => { const file = event.target.files[0]; if (!file) return; if (file.size > 500 * 1024) return alert("Max 500KB"); const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.src = e.target.result; img.onload = () => { const c = document.createElement('canvas'); const ctx = c.getContext('2d'); const s = 500/img.width; c.width=500; c.height=img.height*s; ctx.drawImage(img,0,0,c.width,c.height); newsImageBase64 = c.toDataURL('image/jpeg',0.7); document.getElementById('newsFileName').textContent = "Image Selected"; }}; reader.readAsDataURL(file); };
         document.getElementById('newsForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); const btn = document.getElementById('postNewsBtn'); const status = document.getElementById('newsStatus');
-            btn.disabled = true; btn.innerText = "Publishing...";
+            e.preventDefault(); const btn = document.getElementById('postNewsBtn'); const status = document.getElementById('newsStatus'); btn.disabled = true; btn.innerText = "Publishing...";
             try { await addDoc(collection(db, "announcements"), { title: document.getElementById('newsTitle').value, description: document.getElementById('newsContent').value, date: document.getElementById('newsDate').value, category: 'news', fileUrl: newsImageBase64, type: 'news', timestamp: Date.now() }); status.textContent = "News Published!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-blue-500/20 text-blue-400 block"; document.getElementById('newsForm').reset(); newsImageBase64=""; document.getElementById('newsFileName').textContent="Upload Image"; fetchAnnouncementsCount(); } catch (e) { status.textContent = "Error"; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; btn.innerText = "Publish News"; }
         });
 
-        async function fetchAnnouncementsCount() { try { const s = await getDocs(collection(db, "announcements")); document.getElementById('totalAnnouncementsCount').textContent = s.size; } catch(e){} }
+        // 7. Gallery Logic
+        window.handleGalleryImage = (event) => { const file = event.target.files[0]; if (!file) return; if (file.size > 500 * 1024) return alert("Max 500KB"); const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.src = e.target.result; img.onload = () => { const c = document.createElement('canvas'); const ctx = c.getContext('2d'); const s = 500/img.width; c.width=500; c.height=img.height*s; ctx.drawImage(img,0,0,c.width,c.height); galleryImageBase64 = c.toDataURL('image/jpeg',0.7); document.getElementById('galleryFileName').textContent = "Photo Selected"; }}; reader.readAsDataURL(file); };
+        document.getElementById('galleryForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); const btn = document.getElementById('postGalleryBtn'); const status = document.getElementById('galleryStatus'); btn.disabled = true; btn.innerText = "Uploading...";
+            try { await addDoc(collection(db, "gallery"), { title: document.getElementById('galleryTitle').value, date: document.getElementById('galleryDate').value, imageUrl: galleryImageBase64, timestamp: Date.now() }); status.textContent = "Photo Uploaded!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-purple-500/20 text-purple-400 block"; document.getElementById('galleryForm').reset(); galleryImageBase64=""; document.getElementById('galleryFileName').textContent="Select Photo"; } catch (e) { status.textContent = "Error"; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; btn.innerText = "Upload Photo"; }
+        });
 
+        async function fetchAnnouncementsCount() { try { const s = await getDocs(collection(db, "announcements")); document.getElementById('totalAnnouncementsCount').textContent = s.size; } catch(e){} }
         window.deleteUser = async function(id) { if(confirm("Delete user?")) { await deleteDoc(doc(db, "users", id)); fetchUsers(); } };
-        
         const logout = async () => { await signOut(auth); window.location.href = 'admin.html'; };
         document.getElementById('adminLogoutBtn').addEventListener('click', logout);
         document.getElementById('adminLogoutBtnMobile').addEventListener('click', logout);
-
-        window.toggleMobileSidebar = function() {
-            const sidebar = document.getElementById('mobile-sidebar');
-            const overlay = document.getElementById('mobile-sidebar-overlay');
-            if (sidebar.classList.contains('-translate-x-full')) { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); } else { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); }
-        };
+        window.toggleMobileSidebar = function() { const sidebar = document.getElementById('mobile-sidebar'); const overlay = document.getElementById('mobile-sidebar-overlay'); if (sidebar.classList.contains('-translate-x-full')) { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); } else { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); } };
         document.getElementById('mobile-menu-toggle').addEventListener('click', toggleMobileSidebar);
-
-        window.showTab = function(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(tabId + 'Section').classList.remove('hidden');
-            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-        };
-
+        window.showTab = function(tabId) { document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); document.getElementById(tabId + 'Section').classList.remove('hidden'); document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active')); event.currentTarget.classList.add('active'); };
         function loadDashboardData() { fetchUsers(); fetchAnnouncementsCount(); fetchSubmissions(); document.getElementById('attendanceDate').valueAsDate = new Date(); }
     </script>
 </body>
