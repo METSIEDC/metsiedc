@@ -120,7 +120,7 @@
             
             <div id="overviewSection" class="tab-content space-y-8"><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"><div class="glass-card p-6 rounded-2xl border-l-4 border-red-500"><p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Total Users</p><h3 class="text-3xl font-bold text-white" id="totalUsersCount">...</h3></div><div class="glass-card p-6 rounded-2xl border-l-4 border-orange-500"><p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Pending Projects</p><h3 class="text-3xl font-bold text-white" id="pendingProjectsCount">0</h3></div><div class="glass-card p-6 rounded-2xl border-l-4 border-yellow-500"><p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Announcements</p><h3 class="text-3xl font-bold text-white" id="totalAnnouncementsCount">...</h3></div></div></div>
             <div id="attendanceSection" class="tab-content hidden space-y-6"><div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4"><div><h2 class="text-2xl font-bold text-white mb-1">Mark Attendance</h2></div><div class="flex gap-3 w-full sm:w-auto"><button onclick="openReportsModal()" class="flex-1 sm:flex-none bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg font-bold transition flex justify-center items-center gap-2">History</button><button onclick="submitAttendance()" class="flex-1 sm:flex-none bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-red-600/20 transition flex justify-center items-center gap-2">Save</button></div></div><div class="glass-card rounded-2xl p-6 mb-6"><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Event Name</label><input type="text" id="attendanceEventName" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></div><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Date</label><input type="date" id="attendanceDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></div></div></div><div class="glass-card rounded-2xl overflow-hidden"><div class="p-4 bg-white/5 border-b border-white/5 flex justify-between items-center"><h3 class="font-bold text-white text-sm">Student List</h3><div class="flex gap-3"><button onclick="selectAllAttendance(true)" class="text-xs text-red-400 hover:text-white">All</button><button onclick="selectAllAttendance(false)" class="text-xs text-gray-400 hover:text-white">None</button></div></div><div class="max-h-[500px] overflow-y-auto"><table class="w-full text-sm text-left text-gray-400 glass-table"><thead class="text-xs sticky top-0 bg-[#0a0a0a] z-10"><tr><th class="px-4 py-4 w-12 text-center">#</th><th class="px-4 py-4">Name</th><th class="px-4 py-4 hidden sm:table-cell">Email</th></tr></thead><tbody class="divide-y divide-white/5" id="attendanceListBody"><tr><td colspan="3" class="px-6 py-8 text-center">Loading...</td></tr></tbody></table></div></div></div>
-            <div id="paymentsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-10 rounded-3xl text-center border border-white/10 flex flex-col items-center justify-center min-h-[400px]"><div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-6"><i data-lucide="rocket" class="w-10 h-10 text-red-400"></i></div><h2 class="text-3xl font-bold text-white mb-3">Coming Soon</h2><p class="text-gray-400 max-w-md mx-auto leading-relaxed">Payment Portal in progress.</p></div></div>
+            <div id="paymentsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-10 rounded-3xl text-center border border-white/10 flex flex-col items-center justify-center min-h-[400px]"><div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-6"><i data-lucide="rocket" class="w-10 h-10 text-red-400"></i></div><h2 class="text-3xl font-bold text-white mb-3">Coming Soon</h2><p class="text-gray-400 max-w-md mx-auto leading-relaxed">Payment Portal in progress.</p><div class="mt-8 px-4 py-2 bg-red-500/10 text-red-400 rounded-full text-xs font-bold uppercase tracking-wider border border-red-500/20">Feature In Progress</div></div></div>
             <div id="usersSection" class="tab-content hidden space-y-6"><div class="flex justify-between items-center"><h2 class="text-2xl font-bold text-white">User Management</h2><div class="flex gap-2"><button onclick="toggleAddUserModal(true)" class="text-xs bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-500 transition font-bold shadow-lg shadow-red-900/20 flex items-center gap-2">Add</button><button onclick="fetchUsers()" class="text-xs bg-white/10 px-3 py-2 rounded hover:bg-white/20 transition">Refresh</button></div></div><div class="glass-card rounded-2xl overflow-hidden overflow-x-auto"><table class="w-full text-sm text-left text-gray-400 glass-table min-w-[600px]"><thead class="text-xs"><tr><th class="px-6 py-4">Name</th><th class="px-6 py-4">Email</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Actions</th></tr></thead><tbody class="divide-y divide-white/5" id="userListBody"><tr><td colspan="4" class="px-6 py-4 text-center">Loading...</td></tr></tbody></table></div></div>
             <div id="submissionsSection" class="tab-content hidden space-y-6"><div class="flex justify-between items-center"><h2 class="text-2xl font-bold text-white">Review Submissions</h2><button onclick="fetchSubmissions()" class="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20 transition">Refresh</button></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="submissionsGrid"><p class="text-gray-500 col-span-2 text-center">No pending submissions.</p></div></div>
             <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl border border-blue-500/20"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center"><i data-lucide="newspaper" class="w-5 h-5 text-blue-400"></i></div><div><h2 class="text-2xl font-bold text-white">Post News</h2><p class="text-xs text-gray-400">Articles & External News.</p></div></div><div id="newsStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="newsForm" class="space-y-5"><input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Headline"><textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Content..."></textarea><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><div class="relative group"><label for="newsImageInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-blue-500/50 transition"><i data-lucide="image" class="w-4 h-4 mr-2"></i> <span id="newsFileName">Upload Image</span></label><input type="file" id="newsImageInput" class="hidden" accept="image/*" onchange="handleNewsImage(event)"></div></div><button type="submit" id="postNewsBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish News</button></form></div></div>
@@ -130,21 +130,33 @@
                 <div class="glass-card p-8 rounded-3xl border border-purple-500/20">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center"><i data-lucide="image" class="w-5 h-5 text-purple-400"></i></div>
-                        <div><h2 class="text-2xl font-bold text-white">Upload to Gallery</h2><p class="text-xs text-gray-400">Add photos from events.</p></div>
+                        <div><h2 class="text-2xl font-bold text-white">Upload to Gallery</h2><p class="text-xs text-gray-400">Batch upload supported.</p></div>
                     </div>
                     <div id="galleryStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
+                    
                     <form id="galleryForm" class="space-y-5">
-                        <input type="text" id="galleryTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Event Name (Caption)">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Event Name / Caption (Optional)</label>
+                            <input type="text" id="galleryTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="e.g. IEDC Summit 2025">
+                        </div>
+
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <input type="date" id="galleryDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Date</label>
+                                <input type="date" id="galleryDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
+                            </div>
+                            
                             <div class="relative group">
+                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Photos</label>
                                 <label for="galleryImageInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-purple-500/50 transition">
-                                    <i data-lucide="upload-cloud" class="w-4 h-4 mr-2"></i> <span id="galleryFileName">Select Photo</span>
+                                    <i data-lucide="upload-cloud" class="w-4 h-4 mr-2"></i> 
+                                    <span id="galleryFileName">Select Photos (Max 5)</span>
                                 </label>
-                                <input type="file" id="galleryImageInput" class="hidden" accept="image/*" onchange="handleGalleryImage(event)">
+                                <input type="file" id="galleryImageInput" class="hidden" accept="image/*" multiple onchange="handleGalleryImages(event)">
                             </div>
                         </div>
-                        <button type="submit" id="postGalleryBtn" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3.5 rounded-xl transition-all">Upload Photo</button>
+
+                        <button type="submit" id="postGalleryBtn" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3.5 rounded-xl transition-all">Upload Photos</button>
                     </form>
                 </div>
             </div>
@@ -197,7 +209,7 @@
         lucide.createIcons();
 
         // --- PASTE YOUR FIREBASE CONFIG HERE ---
-       const firebaseConfig = {
+        const firebaseConfig = {
   apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
   authDomain: "metsiedc-3010e.firebaseapp.com",
   databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
@@ -214,7 +226,7 @@
         const db = getFirestore(app);
         let allUsers = [];
         let newsImageBase64 = "";
-        let galleryImageBase64 = "";
+        let galleryImages = []; // Stores multiple images
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -285,24 +297,93 @@
         };
         window.updateSubmission = async function(id, status) { try { await updateDoc(doc(db, "submissions", id), { status: status }); fetchSubmissions(); } catch(e) { alert(e.message); } };
 
-        // 5. Announcement Logic
+        // 5. Post Announcement (Text/PDF)
         document.getElementById('announcementForm').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn = document.getElementById('postBtn'); const status = document.getElementById('announcementStatus'); btn.disabled = true; btn.textContent = "Publishing...";
             try { await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, description: document.getElementById('annContent').value, date: document.getElementById('annDate').value, category: document.getElementById('annCategory').value, fileUrl: document.getElementById('annLink').value, type: 'update', timestamp: Date.now() }); status.textContent = "Published!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400 block"; document.getElementById('announcementForm').reset(); fetchAnnouncementsCount(); } catch (e) { status.textContent = "Error: " + e.message; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; btn.textContent = "Publish"; }
         });
 
-        // 6. News Logic
+        // 6. Post News (Image)
         window.handleNewsImage = (event) => { const file = event.target.files[0]; if (!file) return; if (file.size > 500 * 1024) return alert("Max 500KB"); const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.src = e.target.result; img.onload = () => { const c = document.createElement('canvas'); const ctx = c.getContext('2d'); const s = 500/img.width; c.width=500; c.height=img.height*s; ctx.drawImage(img,0,0,c.width,c.height); newsImageBase64 = c.toDataURL('image/jpeg',0.7); document.getElementById('newsFileName').textContent = "Image Selected"; }}; reader.readAsDataURL(file); };
         document.getElementById('newsForm').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn = document.getElementById('postNewsBtn'); const status = document.getElementById('newsStatus'); btn.disabled = true; btn.innerText = "Publishing...";
             try { await addDoc(collection(db, "announcements"), { title: document.getElementById('newsTitle').value, description: document.getElementById('newsContent').value, date: document.getElementById('newsDate').value, category: 'news', fileUrl: newsImageBase64, type: 'news', timestamp: Date.now() }); status.textContent = "News Published!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-blue-500/20 text-blue-400 block"; document.getElementById('newsForm').reset(); newsImageBase64=""; document.getElementById('newsFileName').textContent="Upload Image"; fetchAnnouncementsCount(); } catch (e) { status.textContent = "Error"; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; btn.innerText = "Publish News"; }
         });
 
-        // 7. Gallery Logic
-        window.handleGalleryImage = (event) => { const file = event.target.files[0]; if (!file) return; if (file.size > 500 * 1024) return alert("Max 500KB"); const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.src = e.target.result; img.onload = () => { const c = document.createElement('canvas'); const ctx = c.getContext('2d'); const s = 500/img.width; c.width=500; c.height=img.height*s; ctx.drawImage(img,0,0,c.width,c.height); galleryImageBase64 = c.toDataURL('image/jpeg',0.7); document.getElementById('galleryFileName').textContent = "Photo Selected"; }}; reader.readAsDataURL(file); };
+        // 7. NEW: Gallery Upload (Multiple Images)
+        window.handleGalleryImages = (event) => {
+            const files = event.target.files;
+            if (files.length === 0) return;
+            if (files.length > 5) return alert("Max 5 photos at a time.");
+            
+            galleryImages = []; // Reset array
+            let processedCount = 0;
+
+            Array.from(files).forEach(file => {
+                if (file.size > 500 * 1024) { alert(`Skipped ${file.name} (>500KB)`); return; }
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const scaleSize = 500 / img.width;
+                        canvas.width = 500;
+                        canvas.height = img.height * scaleSize;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        galleryImages.push(canvas.toDataURL('image/jpeg', 0.7)); // Add to array
+                        
+                        processedCount++;
+                        if (processedCount === files.length) {
+                            document.getElementById('galleryFileName').textContent = `${galleryImages.length} Photos Ready`;
+                        }
+                    };
+                };
+                reader.readAsDataURL(file);
+            });
+        };
+
         document.getElementById('galleryForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); const btn = document.getElementById('postGalleryBtn'); const status = document.getElementById('galleryStatus'); btn.disabled = true; btn.innerText = "Uploading...";
-            try { await addDoc(collection(db, "gallery"), { title: document.getElementById('galleryTitle').value, date: document.getElementById('galleryDate').value, imageUrl: galleryImageBase64, timestamp: Date.now() }); status.textContent = "Photo Uploaded!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-purple-500/20 text-purple-400 block"; document.getElementById('galleryForm').reset(); galleryImageBase64=""; document.getElementById('galleryFileName').textContent="Select Photo"; } catch (e) { status.textContent = "Error"; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; btn.innerText = "Upload Photo"; }
+            e.preventDefault();
+            const btn = document.getElementById('postGalleryBtn');
+            const status = document.getElementById('galleryStatus');
+            
+            if (galleryImages.length === 0) return alert("Please select photos first.");
+            
+            btn.disabled = true; 
+            btn.innerText = "Uploading...";
+            
+            const title = document.getElementById('galleryTitle').value || "Event Photo"; // Optional title
+            const date = document.getElementById('galleryDate').value || new Date().toISOString().split('T')[0];
+
+            try {
+                // Loop through all images and upload
+                const uploadPromises = galleryImages.map(imgBase64 => {
+                    return addDoc(collection(db, "gallery"), {
+                        title: title,
+                        date: date,
+                        imageUrl: imgBase64,
+                        timestamp: Date.now()
+                    });
+                });
+
+                await Promise.all(uploadPromises); // Wait for all uploads
+
+                status.textContent = "Upload Complete!";
+                status.className = "mb-4 p-3 rounded text-sm text-center bg-purple-500/20 text-purple-400 block";
+                document.getElementById('galleryForm').reset();
+                galleryImages = [];
+                document.getElementById('galleryFileName').textContent = "Select Photos";
+
+            } catch (e) {
+                status.textContent = "Error: " + e.message;
+                status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block";
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Upload Photos";
+            }
         });
 
         async function fetchAnnouncementsCount() { try { const s = await getDocs(collection(db, "announcements")); document.getElementById('totalAnnouncementsCount').textContent = s.size; } catch(e){} }
