@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Gallery | MET'S IEDC</title>
+    <title>Gallery | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    
     <style>
         body { background-color: #050505; color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         
-        /* Glass Nav */
         .glass-nav { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         
         /* Gallery Card */
@@ -28,47 +26,32 @@
             border: 1px solid rgba(255,255,255,0.05);
         }
         
-        /* Image Styling - CRITICAL FIX */
         .photo-card img { 
             width: 100%; 
-            height: auto; 
             display: block; 
             transition: transform 0.5s ease; 
-            object-fit: cover;
-            min-height: 150px; /* Prevents 0px height collapse */
+            min-height: 200px; 
+            object-fit: cover; 
         }
         
         .photo-card:hover img { transform: scale(1.05); }
         
-        /* Overlay Text */
         .photo-overlay { 
-            position: absolute; 
-            bottom: 0; 
-            left: 0; 
-            width: 100%; 
+            position: absolute; bottom: 0; left: 0; width: 100%; 
             background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 100%); 
             padding: 24px 20px 16px; 
-            opacity: 0; 
-            transform: translateY(10px);
+            opacity: 0; transform: translateY(10px); 
             transition: all 0.3s ease; 
         }
         .photo-card:hover .photo-overlay { opacity: 1; transform: translateY(0); }
         
         /* Lightbox */
         .lightbox { 
-            position: fixed; 
-            inset: 0; 
-            background: rgba(0,0,0,0.98); 
-            z-index: 100; 
-            display: none; 
-            align-items: center; 
-            justify-content: center; 
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; 
+            display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
         }
         .lightbox.active { opacity: 1; }
         
-        /* Masonry Grid Layout */
         .masonry { column-count: 1; gap: 24px; }
         @media (min-width: 640px) { .masonry { column-count: 2; } }
         @media (min-width: 1024px) { .masonry { column-count: 3; } }
@@ -88,7 +71,7 @@
 
     <div class="pt-36 pb-12 text-center px-4">
         <h1 class="text-5xl md:text-6xl font-bold mb-4 tracking-tight">Event Gallery</h1>
-        <p class="text-gray-400 max-w-lg mx-auto text-lg">Capturing moments of innovation, collaboration, and success at MET'S IEDC.</p>
+        <p class="text-gray-400 max-w-lg mx-auto text-lg">Capturing moments of innovation, collaboration, and success.</p>
     </div>
 
     <div class="max-w-7xl mx-auto px-4 pb-32">
@@ -112,8 +95,8 @@
         
         lucide.createIcons();
 
-        // --- PASTE YOUR FIREBASE CONFIG HERE ---
-       const firebaseConfig = {
+        // --- PASTE FIREBASE CONFIG HERE ---
+     const firebaseConfig = {
   apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
   authDomain: "metsiedc-3010e.firebaseapp.com",
   databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
@@ -123,84 +106,100 @@
   appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
   measurementId: "G-6E7EK0D7JG"
 };
-        // ---------------------------------------
+        // ----------------------------------
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // --- CRITICAL FIX: Convert Drive Links to Public Image format ---
+        function getOptimizedDriveUrl(url) {
+            if (!url) return null;
+            
+            // Extract File ID from "uc?export=view&id=..." or "/file/d/.../"
+            let fileId = null;
+            if (url.includes('id=')) {
+                fileId = url.split('id=')[1].split('&')[0];
+            } else if (url.includes('/d/')) {
+                fileId = url.split('/d/')[1].split('/')[0];
+            }
+
+            // If we found an ID, return the robust 'lh3' link
+            if (fileId) {
+                return `https://lh3.googleusercontent.com/d/${fileId}`;
+            }
+            return url; // Return original if pattern doesn't match
+        }
+
         async function fetchGallery() {
             try {
-                // Fetch data ordered by newest first
                 const q = query(collection(db, "gallery"), orderBy("timestamp", "desc"));
                 const snap = await getDocs(q);
                 
                 const grid = document.getElementById('galleryGrid');
                 const loader = document.getElementById('loader');
                 
-                // Handle empty state
                 if (snap.empty) {
                     loader.classList.add('hidden');
                     document.getElementById('emptyState').classList.remove('hidden');
                     return;
                 }
                 
-                grid.innerHTML = ""; // Clear existing content
+                grid.innerHTML = "";
+                let hasValidImages = false;
 
                 snap.forEach(doc => {
                     const data = doc.data();
                     
-                    // --- THE FIX ---
-                    // We use the URL exactly as saved. The Admin Dashboard saves it correctly now.
-                    // We just add an onerror handler to catch broken ones.
-                    const imageUrl = data.imageUrl; 
-                    const title = data.title || "Event Photo";
-                    const date = data.date || "";
+                    // SKIP if no URL
+                    if (!data.imageUrl) return;
+
+                    // CONVERT URL
+                    const safeUrl = getOptimizedDriveUrl(data.imageUrl);
 
                     const item = document.createElement('div');
-                    item.className = "photo-card group"; // Added group for hover effects
+                    item.className = "photo-card group";
                     item.innerHTML = `
-                        <img src="${imageUrl}" loading="lazy" alt="${title}" 
-                             onerror="this.onerror=null; this.parentElement.style.display='none';">
+                        <img src="${safeUrl}" loading="lazy" alt="${data.title || 'Photo'}" 
+                             onerror="this.parentElement.style.display='none';">
                         <div class="photo-overlay">
-                            <h3 class="text-white font-bold text-lg">${title}</h3>
-                            <p class="text-sm text-indigo-300 font-medium mt-1">${date}</p>
+                            <h3 class="text-white font-bold text-lg">${data.title || 'Event Photo'}</h3>
+                            <p class="text-sm text-indigo-300 font-medium mt-1">${data.date || ''}</p>
                         </div>
                     `;
                     
-                    // Lightbox Click Event
                     item.onclick = () => {
                         const lb = document.getElementById('lightbox');
-                        const lbImg = document.getElementById('lightboxImg');
-                        const lbCap = document.getElementById('lightboxCaption');
-                        
-                        lbImg.src = imageUrl;
-                        lbCap.textContent = title;
+                        document.getElementById('lightboxImg').src = safeUrl;
+                        document.getElementById('lightboxCaption').textContent = data.title || '';
                         lb.style.display = "flex";
-                        // Small timeout to allow display:flex to apply before adding opacity class
                         setTimeout(() => lb.classList.add('active'), 10);
                     };
 
                     grid.appendChild(item);
+                    hasValidImages = true;
                 });
                 
-                // Hide loader, show grid
                 loader.classList.add('hidden');
-                grid.classList.remove('hidden');
+                
+                if (hasValidImages) {
+                    grid.classList.remove('hidden');
+                } else {
+                    document.getElementById('emptyState').classList.remove('hidden');
+                    document.getElementById('emptyState').innerText = "No valid photos found.";
+                }
 
             } catch(e) {
                 console.error("Gallery Error:", e);
-                document.getElementById('loader').innerHTML = `<p class="text-red-400">Failed to load gallery.<br><span class="text-xs text-gray-500">${e.message}</span></p>`;
+                document.getElementById('loader').innerText = "Error loading gallery.";
             }
         }
 
-        // Lightbox Close Logic
         window.closeLightbox = () => {
             const lb = document.getElementById('lightbox');
             lb.classList.remove('active');
-            setTimeout(() => lb.style.display = "none", 300); // Wait for fade out
+            setTimeout(() => lb.style.display = "none", 300);
         };
 
-        // Start Fetching
         fetchGallery();
     </script>
 </body>
