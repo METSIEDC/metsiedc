@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Gallery | MET'S IEDC</title>
+    <title>Gallery | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -11,10 +11,10 @@
     <style>
         body { background-color: #050505; color: #ffffff; font-family: 'Inter', sans-serif; }
         .glass-nav { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .photo-card { break-inside: avoid; margin-bottom: 24px; position: relative; overflow: hidden; border-radius: 16px; cursor: zoom-in; }
-        .photo-card img { width: 100%; display: block; transition: transform 0.5s ease; }
+        .photo-card { break-inside: avoid; margin-bottom: 24px; position: relative; overflow: hidden; border-radius: 16px; cursor: zoom-in; background: #1a1a1a; }
+        .photo-card img { width: 100%; display: block; transition: transform 0.5s ease; min-height: 200px; object-fit: cover; }
         .photo-card:hover img { transform: scale(1.05); }
-        .photo-overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: 20px; opacity: 0; transition: opacity 0.3s; }
+        .photo-overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 20px; opacity: 0; transition: opacity 0.3s; }
         .photo-card:hover .photo-overlay { opacity: 1; }
         .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; display: none; align-items: center; justify-content: center; }
         .masonry { column-count: 1; gap: 24px; }
@@ -49,21 +49,34 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
+        lucide.createIcons();
+
         // --- PASTE FIREBASE CONFIG HERE ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
-            authDomain: "metsiedc-3010e.firebaseapp.com",
-            databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
-            projectId: "metsiedc-3010e",
-            storageBucket: "metsiedc-3010e.firebasestorage.app",
-            messagingSenderId: "954403413150",
-            appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
-            measurementId: "G-6E7EK0D7JG"
-        };
+      const firebaseConfig = {
+  apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+  authDomain: "metsiedc-3010e.firebaseapp.com",
+  databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+  projectId: "metsiedc-3010e",
+  storageBucket: "metsiedc-3010e.firebasestorage.app",
+  messagingSenderId: "954403413150",
+  appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+  measurementId: "G-6E7EK0D7JG"
+};
         // ----------------------------------
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // Helper: Convert Drive View Link to Direct Image Link
+        function getDirectLink(url) {
+            if (!url) return '';
+            // If it's a google drive export link, keep it (it usually works)
+            if (url.includes('drive.google.com') && url.includes('export=view')) return url;
+            // If it's a 'file/d/' link, convert it
+            const idMatch = url.match(/\/d\/(.+?)\//);
+            if (idMatch) return `https://lh3.googleusercontent.com/d/${idMatch[1]}`;
+            return url;
+        }
 
         async function fetchGallery() {
             try {
@@ -76,17 +89,21 @@
                 grid.innerHTML = "";
                 snap.forEach(doc => {
                     const data = doc.data();
+                    
+                    // Safe Link Conversion
+                    const safeUrl = getDirectLink(data.imageUrl);
+
                     const item = document.createElement('div');
                     item.className = "photo-card";
                     item.innerHTML = `
-                        <img src="${data.imageUrl}" loading="lazy">
+                        <img src="${safeUrl}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Image+Error'">
                         <div class="photo-overlay">
                             <h3 class="text-white font-bold">${data.title}</h3>
                             <p class="text-xs text-gray-300">${data.date || ''}</p>
                         </div>
                     `;
                     item.onclick = () => {
-                        document.getElementById('lightboxImg').src = data.imageUrl;
+                        document.getElementById('lightboxImg').src = safeUrl;
                         document.getElementById('lightbox').style.display = "flex";
                     };
                     grid.appendChild(item);
@@ -95,7 +112,10 @@
                 document.getElementById('loader').classList.add('hidden');
                 grid.classList.remove('hidden');
 
-            } catch(e) { console.error(e); }
+            } catch(e) { 
+                console.error(e);
+                document.getElementById('loader').innerText = "Error loading gallery.";
+            }
         }
         fetchGallery();
     </script>
