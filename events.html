@@ -3,20 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery | MET'S IEDC</title>
+    <title>Event Gallery | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
-        body { background-color: #050505; color: #ffffff; font-family: 'Inter', sans-serif; }
+        body { background-color: #050505; color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        
+        /* Glass Nav */
         .glass-nav { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .photo-card { break-inside: avoid; margin-bottom: 24px; position: relative; overflow: hidden; border-radius: 16px; cursor: zoom-in; background: #1a1a1a; }
-        .photo-card img { width: 100%; display: block; transition: transform 0.5s ease; min-height: 200px; object-fit: cover; }
+        
+        /* Gallery Card */
+        .photo-card { 
+            break-inside: avoid; 
+            margin-bottom: 24px; 
+            position: relative; 
+            overflow: hidden; 
+            border-radius: 16px; 
+            background: #1a1a1a; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            cursor: zoom-in;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        /* Image Styling - CRITICAL FIX */
+        .photo-card img { 
+            width: 100%; 
+            height: auto; 
+            display: block; 
+            transition: transform 0.5s ease; 
+            object-fit: cover;
+            min-height: 150px; /* Prevents 0px height collapse */
+        }
+        
         .photo-card:hover img { transform: scale(1.05); }
-        .photo-overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 20px; opacity: 0; transition: opacity 0.3s; }
-        .photo-card:hover .photo-overlay { opacity: 1; }
-        .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; display: none; align-items: center; justify-content: center; }
+        
+        /* Overlay Text */
+        .photo-overlay { 
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 100%); 
+            padding: 24px 20px 16px; 
+            opacity: 0; 
+            transform: translateY(10px);
+            transition: all 0.3s ease; 
+        }
+        .photo-card:hover .photo-overlay { opacity: 1; transform: translateY(0); }
+        
+        /* Lightbox */
+        .lightbox { 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0,0,0,0.98); 
+            z-index: 100; 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .lightbox.active { opacity: 1; }
+        
+        /* Masonry Grid Layout */
         .masonry { column-count: 1; gap: 24px; }
         @media (min-width: 640px) { .masonry { column-count: 2; } }
         @media (min-width: 1024px) { .masonry { column-count: 3; } }
@@ -26,23 +78,32 @@
 
     <nav class="glass-nav fixed top-0 w-full z-50">
         <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3"><img src="assets/images/logos/MSEM.jpg" class="h-10 w-10 rounded-full"><span class="text-xl font-bold">MET'S <span class="text-purple-500">IEDC</span></span></div>
-            <a href="index.html" class="text-gray-300 hover:text-white text-sm font-bold">Home</a>
+            <div class="flex items-center gap-3">
+                <img src="assets/images/logos/MSEM.jpg" alt="Logo" class="h-10 w-10 rounded-full border border-white/20">
+                <span class="text-xl font-bold tracking-tight">MET'S <span class="text-indigo-500">IEDC</span></span>
+            </div>
+            <a href="index.html" class="text-gray-300 hover:text-white text-sm font-bold transition-colors">Home</a>
         </div>
     </nav>
 
-    <div class="pt-32 pb-12 text-center px-4">
-        <h1 class="text-5xl font-bold mb-4">Event Gallery</h1>
-        <p class="text-gray-400">Capturing moments of innovation and collaboration.</p>
+    <div class="pt-36 pb-12 text-center px-4">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4 tracking-tight">Event Gallery</h1>
+        <p class="text-gray-400 max-w-lg mx-auto text-lg">Capturing moments of innovation, collaboration, and success at MET'S IEDC.</p>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 pb-20">
-        <div id="loader" class="text-center py-20 text-gray-500">Loading photos...</div>
+    <div class="max-w-7xl mx-auto px-4 pb-32">
+        <div id="loader" class="text-center py-20">
+            <i data-lucide="loader-2" class="w-10 h-10 text-indigo-500 animate-spin mx-auto mb-4"></i>
+            <p class="text-gray-500">Loading photos...</p>
+        </div>
         <div id="galleryGrid" class="masonry hidden"></div>
+        <div id="emptyState" class="hidden text-center py-20 text-gray-500">No photos uploaded yet.</div>
     </div>
 
-    <div id="lightbox" class="lightbox" onclick="this.style.display='none'">
-        <img id="lightboxImg" class="max-h-[90vh] max-w-[90vw] object-contain rounded-lg">
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 text-white/50 hover:text-white transition"><i data-lucide="x" class="w-10 h-10"></i></button>
+        <img id="lightboxImg" class="max-h-[85vh] max-w-[90vw] object-contain rounded-lg shadow-2xl border border-white/10">
+        <div id="lightboxCaption" class="absolute bottom-10 text-center w-full text-white/90 font-medium text-lg px-4"></div>
     </div>
 
     <script type="module">
@@ -51,8 +112,8 @@
         
         lucide.createIcons();
 
-        // --- PASTE FIREBASE CONFIG HERE ---
-      const firebaseConfig = {
+        // --- PASTE YOUR FIREBASE CONFIG HERE ---
+       const firebaseConfig = {
   apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
   authDomain: "metsiedc-3010e.firebaseapp.com",
   databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
@@ -62,61 +123,84 @@
   appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
   measurementId: "G-6E7EK0D7JG"
 };
-        // ----------------------------------
+        // ---------------------------------------
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Helper: Convert Drive View Link to Direct Image Link
-        function getDirectLink(url) {
-            if (!url) return '';
-            // If it's a google drive export link, keep it (it usually works)
-            if (url.includes('drive.google.com') && url.includes('export=view')) return url;
-            // If it's a 'file/d/' link, convert it
-            const idMatch = url.match(/\/d\/(.+?)\//);
-            if (idMatch) return `https://lh3.googleusercontent.com/d/${idMatch[1]}`;
-            return url;
-        }
-
         async function fetchGallery() {
             try {
+                // Fetch data ordered by newest first
                 const q = query(collection(db, "gallery"), orderBy("timestamp", "desc"));
                 const snap = await getDocs(q);
+                
                 const grid = document.getElementById('galleryGrid');
+                const loader = document.getElementById('loader');
                 
-                if(snap.empty) { document.getElementById('loader').innerText = "No photos yet."; return; }
+                // Handle empty state
+                if (snap.empty) {
+                    loader.classList.add('hidden');
+                    document.getElementById('emptyState').classList.remove('hidden');
+                    return;
+                }
                 
-                grid.innerHTML = "";
+                grid.innerHTML = ""; // Clear existing content
+
                 snap.forEach(doc => {
                     const data = doc.data();
                     
-                    // Safe Link Conversion
-                    const safeUrl = getDirectLink(data.imageUrl);
+                    // --- THE FIX ---
+                    // We use the URL exactly as saved. The Admin Dashboard saves it correctly now.
+                    // We just add an onerror handler to catch broken ones.
+                    const imageUrl = data.imageUrl; 
+                    const title = data.title || "Event Photo";
+                    const date = data.date || "";
 
                     const item = document.createElement('div');
-                    item.className = "photo-card";
+                    item.className = "photo-card group"; // Added group for hover effects
                     item.innerHTML = `
-                        <img src="${safeUrl}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Image+Error'">
+                        <img src="${imageUrl}" loading="lazy" alt="${title}" 
+                             onerror="this.onerror=null; this.parentElement.style.display='none';">
                         <div class="photo-overlay">
-                            <h3 class="text-white font-bold">${data.title}</h3>
-                            <p class="text-xs text-gray-300">${data.date || ''}</p>
+                            <h3 class="text-white font-bold text-lg">${title}</h3>
+                            <p class="text-sm text-indigo-300 font-medium mt-1">${date}</p>
                         </div>
                     `;
+                    
+                    // Lightbox Click Event
                     item.onclick = () => {
-                        document.getElementById('lightboxImg').src = safeUrl;
-                        document.getElementById('lightbox').style.display = "flex";
+                        const lb = document.getElementById('lightbox');
+                        const lbImg = document.getElementById('lightboxImg');
+                        const lbCap = document.getElementById('lightboxCaption');
+                        
+                        lbImg.src = imageUrl;
+                        lbCap.textContent = title;
+                        lb.style.display = "flex";
+                        // Small timeout to allow display:flex to apply before adding opacity class
+                        setTimeout(() => lb.classList.add('active'), 10);
                     };
+
                     grid.appendChild(item);
                 });
                 
-                document.getElementById('loader').classList.add('hidden');
+                // Hide loader, show grid
+                loader.classList.add('hidden');
                 grid.classList.remove('hidden');
 
-            } catch(e) { 
-                console.error(e);
-                document.getElementById('loader').innerText = "Error loading gallery.";
+            } catch(e) {
+                console.error("Gallery Error:", e);
+                document.getElementById('loader').innerHTML = `<p class="text-red-400">Failed to load gallery.<br><span class="text-xs text-gray-500">${e.message}</span></p>`;
             }
         }
+
+        // Lightbox Close Logic
+        window.closeLightbox = () => {
+            const lb = document.getElementById('lightbox');
+            lb.classList.remove('active');
+            setTimeout(() => lb.style.display = "none", 300); // Wait for fade out
+        };
+
+        // Start Fetching
         fetchGallery();
     </script>
 </body>
