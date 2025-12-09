@@ -82,7 +82,6 @@
             <button onclick="showTab('events')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="calendar" class="w-5 h-5"></i> Manage Events
             </button>
-            
             <button onclick="showTab('gallery')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="image" class="w-5 h-5"></i> Manage Gallery
             </button>
@@ -139,36 +138,28 @@
                     <form id="eventForm" class="space-y-5">
                         <input type="text" id="evTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Event Name">
                         <textarea id="evDesc" rows="3" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Short Description..."></textarea>
+                        
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <input type="text" id="evDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="e.g. Aug 25, 2025">
                             <input type="text" id="evLink" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Registration Link (Optional)">
                         </div>
+
+                        <div class="relative group">
+                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Event Poster (Optional)</label>
+                            <label for="evImageInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-indigo-500/50 transition">
+                                <i data-lucide="image" class="w-4 h-4 mr-2"></i> <span id="evFileName">Select Poster Image</span>
+                            </label>
+                            <input type="file" id="evImageInput" class="hidden" accept="image/*" onchange="handleEventImage(event)">
+                        </div>
+
                         <button type="submit" id="postEventBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish Event</button>
                     </form>
                 </div>
             </div>
 
             <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl border border-blue-500/20"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center"><i data-lucide="newspaper" class="w-5 h-5 text-blue-400"></i></div><div><h2 class="text-2xl font-bold text-white">Post News</h2><p class="text-xs text-gray-400">Articles & External News.</p></div></div><div id="newsStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="newsForm" class="space-y-5"><input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Headline"><textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Content..."></textarea><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><div class="relative group"><label for="newsImageInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-blue-500/50 transition"><i data-lucide="image" class="w-4 h-4 mr-2"></i> <span id="newsFileName">Upload Image</span></label><input type="file" id="newsImageInput" class="hidden" accept="image/*" onchange="handleNewsImage(event)"></div></div><button type="submit" id="postNewsBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish News</button></form></div></div>
-            <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center"><i data-lucide="bell" class="w-5 h-5 text-red-400"></i></div><div><h2 class="text-2xl font-bold text-white">Post Update</h2><p class="text-xs text-gray-400">Notices & Circulars.</p></div></div><div id="announcementStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="announcementForm" class="space-y-5"><input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Subject"><textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Notice details..."></textarea><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><select id="annCategory" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="update">General Update</option><option value="circular">Circular</option></select><input type="text" id="annDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Display Date"></div><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Link / PDF URL</label><input type="text" id="annLink" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="https://..."></div><button type="submit" id="postBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish Update</button></form></div></div>
-            
-            <div id="gallerySection" class="tab-content hidden max-w-2xl mx-auto">
-                <div class="glass-card p-8 rounded-3xl border border-purple-500/20">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center"><i data-lucide="image" class="w-5 h-5 text-purple-400"></i></div>
-                        <div><h2 class="text-2xl font-bold text-white">Upload to Gallery</h2><p class="text-xs text-gray-400">Images saved to Google Drive.</p></div>
-                    </div>
-                    <div id="galleryStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
-                    
-                    <form id="galleryForm" class="space-y-5">
-                        <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Caption (Optional)</label><input type="text" id="galleryTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Event Name"></div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Date</label><input type="date" id="galleryDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></div>
-                            <div class="relative group"><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Photos</label><label for="galleryImageInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-purple-500/50 transition"><i data-lucide="upload-cloud" class="w-4 h-4 mr-2"></i> <span id="galleryFileName">Select Photos (Max 5)</span></label><input type="file" id="galleryImageInput" class="hidden" accept="image/*" multiple onchange="handleGalleryImages(event)"></div>
-                        </div>
-                        <button type="submit" id="postGalleryBtn" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3.5 rounded-xl transition-all">Upload Photos</button>
-                    </form>
-                </div>
-            </div>
+            <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center"><i data-lucide="bell" class="w-5 h-5 text-red-400"></i></div><div><h2 class="text-2xl font-bold text-white">Post Update</h2><p class="text-xs text-gray-400">Notices & Circulars.</p></div></div><div id="announcementStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="announcementForm" class="space-y-5"><input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Subject"><textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Notice details..."></textarea><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><select id="annCategory" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="update">General Update</option><option value="event">Event Alert</option><option value="circular">Circular</option></select><input type="text" id="annDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Display Date"></div><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Link / PDF URL</label><input type="text" id="annLink" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="https://..."></div><button type="submit" id="postBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish Update</button></form></div></div>
+            <div id="gallerySection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl border border-purple-500/20"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center"><i data-lucide="image" class="w-5 h-5 text-purple-400"></i></div><div><h2 class="text-2xl font-bold text-white">Upload to Gallery</h2><p class="text-xs text-gray-400">Images saved to Google Drive.</p></div></div><div id="galleryStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="galleryForm" class="space-y-5"><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Caption (Optional)</label><input type="text" id="galleryTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Event Name"></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Date</label><input type="date" id="galleryDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></div><div class="relative group"><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Photos</label><label for="galleryImageInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-purple-500/50 transition"><i data-lucide="upload-cloud" class="w-4 h-4 mr-2"></i> <span id="galleryFileName">Select Photos (Max 5)</span></label><input type="file" id="galleryImageInput" class="hidden" accept="image/*" multiple onchange="handleGalleryImages(event)"></div></div><button type="submit" id="postGalleryBtn" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3.5 rounded-xl transition-all">Upload Photos</button></form></div></div>
 
         </main>
     </div>
@@ -222,6 +213,7 @@
         let allUsers = [];
         let newsImageFile = null;
         let galleryImages = [];
+        let eventPosterFile = null;
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -300,7 +292,7 @@
             try { await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, description: document.getElementById('annContent').value, date: document.getElementById('annDate').value, category: document.getElementById('annCategory').value, fileUrl: document.getElementById('annLink').value, type: 'update', timestamp: Date.now() }); status.textContent = "Published!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400 block"; document.getElementById('announcementForm').reset(); fetchAnnouncementsCount(); } catch (e) { status.textContent = "Error: " + e.message; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; btn.textContent = "Publish"; }
         });
 
-        // 7. Post News Logic (Image/Content - DRIVE UPLOAD)
+        // --- GOOGLE DRIVE HELPER ---
         async function uploadToDrive(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -312,15 +304,14 @@
                             body: JSON.stringify({ base64: rawBase64, type: file.type, name: file.name })
                         });
                         const result = await response.json();
-                        // FIXED: Check for result.message OR result.error
-                        if(result.url) resolve(result.url); 
-                        else reject(result.message || result.error || "Unknown Upload Error");
+                        if(result.url) resolve(result.url); else reject(result.message || result.error || "Unknown Upload Error");
                     } catch (err) { reject(err); }
                 };
                 reader.readAsDataURL(file);
             });
         }
 
+        // 7. Post News Logic (Image/Content - DRIVE UPLOAD)
         window.handleNewsImage = (event) => { newsImageFile = event.target.files[0]; if(newsImageFile) document.getElementById('newsFileName').textContent = newsImageFile.name; };
         
         document.getElementById('newsForm').addEventListener('submit', async (e) => {
@@ -347,7 +338,6 @@
             try {
                 for(let i=0; i<galleryImages.length; i++) {
                     status.textContent = `Uploading ${i+1}/${galleryImages.length}...`; status.classList.remove('hidden');
-                    if (galleryImages[i].size > 5 * 1024 * 1024) { alert(`Skipped ${galleryImages[i].name} (>5MB)`); continue; }
                     const url = await uploadToDrive(galleryImages[i]);
                     await addDoc(collection(db, "gallery"), { title: title, date: date, imageUrl: url, timestamp: Date.now() });
                 }
@@ -355,24 +345,33 @@
             } catch (e) { status.textContent = "Error: " + e; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; btn.innerText = "Upload Photos"; }
         });
 
-        // 9. NEW: Post Events Logic (For Index.html)
+        // 9. NEW: Post Events Logic (With Poster Upload)
+        window.handleEventImage = (event) => { eventPosterFile = event.target.files[0]; if(eventPosterFile) document.getElementById('evFileName').textContent = eventPosterFile.name; };
+
         document.getElementById('eventForm').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn = document.getElementById('postEventBtn'); const status = document.getElementById('eventStatus');
             btn.disabled = true; btn.innerText = "Publishing...";
             
             try {
+                let posterUrl = "";
+                if(eventPosterFile) {
+                    status.innerText = "Uploading Poster..."; status.classList.remove('hidden'); status.className = "mb-4 p-3 rounded text-sm text-center bg-indigo-500/20 text-indigo-400 block";
+                    posterUrl = await uploadToDrive(eventPosterFile);
+                }
+
                 await addDoc(collection(db, "announcements"), {
                     title: document.getElementById('evTitle').value,
                     description: document.getElementById('evDesc').value,
                     date: document.getElementById('evDate').value,
-                    fileUrl: document.getElementById('evLink').value, // Used as registration link
-                    category: 'event', // Important tag for filtering
+                    fileUrl: document.getElementById('evLink').value, // Registration Link
+                    posterUrl: posterUrl, // New Poster Image URL
+                    category: 'event', 
                     type: 'event',
                     timestamp: Date.now()
                 });
-                status.textContent = "Event Published!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-indigo-500/20 text-indigo-400 block";
-                document.getElementById('eventForm').reset();
-            } catch (e) { status.textContent = "Error: " + e.message; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } 
+                status.textContent = "Event Published!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400 block";
+                document.getElementById('eventForm').reset(); eventPosterFile=null; document.getElementById('evFileName').textContent="Select Poster";
+            } catch (e) { status.textContent = "Error: " + e; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } 
             finally { btn.disabled = false; btn.innerText = "Publish Event"; }
         });
 
