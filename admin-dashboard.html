@@ -76,6 +76,9 @@
             <button onclick="showTab('submissions')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="inbox" class="w-5 h-5"></i> Submissions
             </button>
+            <button onclick="showTab('eventForms')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="file-plus" class="w-5 h-5"></i> Create Forms
+            </button>
             
             <div class="pt-4 pb-2 px-4 text-xs font-semibold text-gray-500 uppercase">Content</div>
             <button onclick="showTab('gallery')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
@@ -124,6 +127,66 @@
             <div id="usersSection" class="tab-content hidden space-y-6"><div class="flex justify-between items-center"><h2 class="text-2xl font-bold text-white">User Management</h2><div class="flex gap-2"><button onclick="toggleAddUserModal(true)" class="text-xs bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-500 transition font-bold shadow-lg shadow-red-900/20 flex items-center gap-2">Add</button><button onclick="fetchUsers()" class="text-xs bg-white/10 px-3 py-2 rounded hover:bg-white/20 transition">Refresh</button></div></div><div class="glass-card rounded-2xl overflow-hidden overflow-x-auto"><table class="w-full text-sm text-left text-gray-400 glass-table min-w-[600px]"><thead class="text-xs"><tr><th class="px-6 py-4">Name</th><th class="px-6 py-4">Email</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Actions</th></tr></thead><tbody class="divide-y divide-white/5" id="userListBody"><tr><td colspan="4" class="px-6 py-4 text-center">Loading...</td></tr></tbody></table></div></div>
             <div id="submissionsSection" class="tab-content hidden space-y-6"><div class="flex justify-between items-center"><h2 class="text-2xl font-bold text-white">Review Submissions</h2><button onclick="fetchSubmissions()" class="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20 transition">Refresh</button></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="submissionsGrid"><p class="text-gray-500 col-span-2 text-center">No pending submissions.</p></div></div>
             
+            <div id="eventFormsSection" class="tab-content hidden max-w-4xl mx-auto space-y-6">
+                <div class="glass-card p-8 rounded-3xl border border-green-500/20">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                            <i data-lucide="file-spreadsheet" class="w-5 h-5 text-green-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">Create Event Form</h2>
+                            <p class="text-xs text-gray-400">Build a registration form & link to Google Sheets.</p>
+                        </div>
+                    </div>
+
+                    <form id="formBuilder" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Event Title</label>
+                                <input type="text" id="formTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="e.g., Hackathon 2025" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Google Script URL (Webhook)</label>
+                                <input type="text" id="formSheetUrl" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Paste Web App URL here">
+                                <p class="text-[10px] text-gray-500 mt-1">Deploy your Google Sheet script as a Web App (Anyone can access) and paste the URL here.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-4">
+                            <h3 class="text-sm font-bold text-white">Add Questions</h3>
+                            <div class="flex flex-col md:flex-row gap-3">
+                                <input type="text" id="newQuestionLabel" class="glass-input flex-grow rounded-xl py-2 px-4 text-sm" placeholder="Question (e.g., WhatsApp Number)">
+                                <select id="newQuestionType" class="glass-input w-full md:w-40 rounded-xl py-2 px-4 text-sm">
+                                    <option value="text">Short Text</option>
+                                    <option value="number">Number</option>
+                                    <option value="email">Email</option>
+                                    <option value="date">Date</option>
+                                    <option value="textarea">Long Answer</option>
+                                </select>
+                                <button type="button" onclick="addQuestionToStage()" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2">
+                                    <i data-lucide="plus" class="w-4 h-4"></i> Add
+                                </button>
+                            </div>
+                            <div id="questionsPreview" class="space-y-2 mt-4">
+                                <p class="text-xs text-gray-500 text-center italic" id="emptyMsg">No questions added yet.</p>
+                            </div>
+                        </div>
+
+                        <div id="formBuilderStatus" class="hidden text-sm text-center p-2 rounded"></div>
+                        <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-900/20">
+                            🚀 Publish Registration Form
+                        </button>
+                    </form>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-lg font-bold text-white mb-4">Active Event Forms</h3>
+                    <div id="activeFormsList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <p class="text-gray-500 text-sm">Loading forms...</p>
+                    </div>
+                </div>
+            </div>
+
             <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl border border-blue-500/20"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center"><i data-lucide="newspaper" class="w-5 h-5 text-blue-400"></i></div><div><h2 class="text-2xl font-bold text-white">Post News</h2><p class="text-xs text-gray-400">Articles & External News.</p></div></div><div id="newsStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="newsForm" class="space-y-5"><input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Headline"><textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Content..."></textarea><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><div class="relative group"><label for="newsImageInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-blue-500/50 transition"><i data-lucide="image" class="w-4 h-4 mr-2"></i> <span id="newsFileName">Upload Image</span></label><input type="file" id="newsImageInput" class="hidden" accept="image/*" onchange="handleNewsImage(event)"></div></div><button type="submit" id="postNewsBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish News</button></form></div></div>
             <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center"><i data-lucide="bell" class="w-5 h-5 text-red-400"></i></div><div><h2 class="text-2xl font-bold text-white">Post Update</h2><p class="text-xs text-gray-400">Notices & Circulars.</p></div></div><div id="announcementStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="announcementForm" class="space-y-5"><input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Subject"><textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Notice details..."></textarea><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><select id="annCategory" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="update">General Update</option><option value="event">Event Alert</option><option value="circular">Circular</option></select><input type="text" id="annDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Display Date"></div><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Link / PDF URL</label><input type="text" id="annLink" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="https://..."></div><button type="submit" id="postBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish Update</button></form></div></div>
 
@@ -158,6 +221,7 @@
             <button onclick="showTab('payments'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Payments</button>
             <button onclick="showTab('users'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Manage Users</button>
             <button onclick="showTab('submissions'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Submissions</button>
+            <button onclick="showTab('eventForms'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Create Forms</button>
             <button onclick="showTab('gallery'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Gallery</button>
             <button onclick="showTab('news'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Post News</button>
             <button onclick="showTab('announcements'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Post Updates</button>
@@ -175,21 +239,18 @@
 
         lucide.createIcons();
 
-        // --- PASTE YOUR GOOGLE SCRIPT URL HERE ---
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHmJ0B9qP2ND2YD0-lQxW2ZgL-m2siOYSHSpSrdgSD6v53i3iD9gGx9_bxrr_Wa6oalQ/exec"; 
 
-        // --- PASTE YOUR FIREBASE CONFIG HERE ---
-      const firebaseConfig = {
-  apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
-  authDomain: "metsiedc-3010e.firebaseapp.com",
-  databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
-  projectId: "metsiedc-3010e",
-  storageBucket: "metsiedc-3010e.firebasestorage.app",
-  messagingSenderId: "954403413150",
-  appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
-  measurementId: "G-6E7EK0D7JG"
-};
-        // ---------------------------------------
+        const firebaseConfig = {
+          apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+          authDomain: "metsiedc-3010e.firebaseapp.com",
+          databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+          projectId: "metsiedc-3010e",
+          storageBucket: "metsiedc-3010e.firebasestorage.app",
+          messagingSenderId: "954403413150",
+          appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+          measurementId: "G-6E7EK0D7JG"
+        };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -197,6 +258,7 @@
         let allUsers = [];
         let newsImageFile = null;
         let galleryImages = [];
+        let currentQuestions = []; // NEW: Array to store form questions
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -208,14 +270,88 @@
             } else { window.location.href = 'admin.html'; }
         });
 
+        // --- NEW: FORM BUILDER LOGIC START ---
+
+        window.addQuestionToStage = function() {
+            const labelInput = document.getElementById('newQuestionLabel');
+            const typeInput = document.getElementById('newQuestionType');
+            const label = labelInput.value.trim();
+            const type = typeInput.value;
+
+            if (!label) return alert("Please enter a question.");
+            currentQuestions.push({ label, type, id: Date.now() });
+            labelInput.value = '';
+            renderQuestionsPreview();
+        };
+
+        window.removeQuestion = function(id) {
+            currentQuestions = currentQuestions.filter(q => q.id !== id);
+            renderQuestionsPreview();
+        };
+
+        function renderQuestionsPreview() {
+            const container = document.getElementById('questionsPreview');
+            const emptyMsg = document.getElementById('emptyMsg');
+
+            if (currentQuestions.length === 0) {
+                container.innerHTML = ''; container.appendChild(emptyMsg); emptyMsg.style.display = 'block'; return;
+            }
+            emptyMsg.style.display = 'none';
+            container.innerHTML = '';
+            currentQuestions.forEach((q, index) => {
+                const div = document.createElement('div');
+                div.className = "flex justify-between items-center bg-[#0a0a0a] border border-white/10 p-3 rounded-lg";
+                div.innerHTML = `<div class="flex items-center gap-3"><span class="text-xs bg-white/10 text-gray-300 w-6 h-6 flex items-center justify-center rounded-full">${index + 1}</span><div><p class="text-sm font-bold text-white">${q.label}</p><p class="text-[10px] text-gray-500 uppercase">${q.type}</p></div></div><button onclick="removeQuestion(${q.id})" class="text-red-400 hover:text-red-300"><i data-lucide="trash" class="w-4 h-4"></i></button>`;
+                container.appendChild(div);
+            });
+            lucide.createIcons();
+        }
+
+        document.getElementById('formBuilder').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('formTitle').value;
+            const sheetUrl = document.getElementById('formSheetUrl').value;
+            const btn = e.target.querySelector('button[type="submit"]');
+            const status = document.getElementById('formBuilderStatus');
+
+            if (currentQuestions.length === 0) return alert("Add at least one question.");
+            
+            btn.disabled = true; btn.textContent = "Creating...";
+            try {
+                await addDoc(collection(db, "eventForms"), { title, sheetUrl, questions: currentQuestions, active: true, createdAt: Date.now() });
+                status.textContent = "Form Created!"; status.className = "text-sm text-center p-2 rounded bg-green-500/20 text-green-400 block";
+                document.getElementById('formBuilder').reset(); currentQuestions = []; renderQuestionsPreview(); fetchActiveForms();
+            } catch (error) {
+                status.textContent = "Error: " + error.message; status.className = "text-sm text-center p-2 rounded bg-red-500/20 text-red-400 block";
+            } finally { btn.disabled = false; btn.textContent = "🚀 Publish Registration Form"; }
+        });
+
+        window.fetchActiveForms = async function() {
+            const list = document.getElementById('activeFormsList');
+            try {
+                const q = query(collection(db, "eventForms"), orderBy("createdAt", "desc"));
+                const snap = await getDocs(q);
+                if (snap.empty) { list.innerHTML = '<p class="text-gray-500 text-sm">No active forms.</p>'; return; }
+                let html = '';
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    html += `<div class="bg-white/5 border border-white/10 p-4 rounded-xl flex justify-between items-center group hover:bg-white/10 transition"><div><h4 class="font-bold text-white text-sm">${data.title}</h4><p class="text-xs text-gray-500">${data.questions.length} Questions • ${new Date(data.createdAt).toLocaleDateString()}</p></div><button onclick="deleteForm('${doc.id}')" class="bg-red-500/10 text-red-400 p-2 rounded-lg hover:bg-red-500 hover:text-white transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`;
+                });
+                list.innerHTML = html; lucide.createIcons();
+            } catch (e) { console.log("Error loading forms", e); }
+        };
+
+        window.deleteForm = async (id) => { if(confirm("Delete this form?")) { await deleteDoc(doc(db, "eventForms", id)); fetchActiveForms(); } };
+
+        // --- NEW: FORM BUILDER LOGIC END ---
+
         async function fetchUsers() {
             try {
                 const querySnapshot = await getDocs(collection(db, "users"));
                 allUsers = []; let userHtml = ''; let attendanceHtml = ''; let count = 0;
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    allUsers.push({ id: doc.id, ...data });
-                    count++;
+                    allUsers.push({ id: doc.id, ...data }); count++;
                     const name = data.name || data.displayName || 'Unknown';
                     const role = data.role === 'admin' ? '<span class="text-red-400 font-bold">Admin</span>' : 'Student';
                     userHtml += `<tr class="hover:bg-white/5 transition"><td class="px-6 py-4 text-white">${name}</td><td class="px-6 py-4">${data.email}</td><td class="px-6 py-4">${role}</td><td class="px-6 py-4"><button onclick="deleteUser('${doc.id}')" class="text-red-400 hover:text-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
@@ -269,21 +405,15 @@
             try { await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, description: document.getElementById('annContent').value, date: document.getElementById('annDate').value, category: document.getElementById('annCategory').value, fileUrl: document.getElementById('annLink').value, type: 'update', timestamp: Date.now() }); status.textContent = "Published!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400 block"; document.getElementById('announcementForm').reset(); fetchAnnouncementsCount(); } catch (e) { status.textContent = "Error: " + e.message; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; btn.textContent = "Publish"; }
         });
 
-        // 7. Post News Logic (Drive Upload Fixed)
         async function uploadToDrive(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                     const rawBase64 = e.target.result.split(',')[1];
                     try {
-                        const response = await fetch(SCRIPT_URL, {
-                            method: "POST",
-                            body: JSON.stringify({ base64: rawBase64, type: file.type, name: file.name })
-                        });
+                        const response = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ base64: rawBase64, type: file.type, name: file.name }) });
                         const result = await response.json();
-                        // FIXED: Check for result.message OR result.error
-                        if(result.url) resolve(result.url); 
-                        else reject(result.message || result.error || "Unknown Upload Error");
+                        if(result.url) resolve(result.url); else reject(result.message || result.error || "Unknown Upload Error");
                     } catch (err) { reject(err); }
                 };
                 reader.readAsDataURL(file);
@@ -302,17 +432,14 @@
             } catch (e) { status.textContent = "Error: " + e; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; btn.innerText = "Publish News"; }
         });
 
-        // 8. Gallery Logic (Multi-Image Drive Upload - FIXED)
         window.handleGalleryImages = (event) => { galleryImages = event.target.files; if(galleryImages.length > 0) document.getElementById('galleryFileName').textContent = `${galleryImages.length} Files Selected`; };
 
         document.getElementById('galleryForm').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn = document.getElementById('postGalleryBtn'); const status = document.getElementById('galleryStatus'); 
             if (galleryImages.length === 0) return alert("Select photos first.");
             btn.disabled = true; btn.innerText = "Uploading...";
-            
             const title = document.getElementById('galleryTitle').value || "Event Photo";
             const date = document.getElementById('galleryDate').value || new Date().toISOString().split('T')[0];
-
             try {
                 for(let i=0; i<galleryImages.length; i++) {
                     status.textContent = `Uploading ${i+1}/${galleryImages.length}...`; status.classList.remove('hidden');
@@ -332,7 +459,14 @@
         window.toggleMobileSidebar = function() { const sidebar = document.getElementById('mobile-sidebar'); const overlay = document.getElementById('mobile-sidebar-overlay'); if (sidebar.classList.contains('-translate-x-full')) { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); } else { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); } };
         document.getElementById('mobile-menu-toggle').addEventListener('click', toggleMobileSidebar);
         window.showTab = function(tabId) { document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); document.getElementById(tabId + 'Section').classList.remove('hidden'); document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active')); event.currentTarget.classList.add('active'); };
-        function loadDashboardData() { fetchUsers(); fetchAnnouncementsCount(); fetchSubmissions(); document.getElementById('attendanceDate').valueAsDate = new Date(); }
+        
+        function loadDashboardData() { 
+            fetchUsers(); 
+            fetchAnnouncementsCount(); 
+            fetchSubmissions(); 
+            fetchActiveForms(); // Added this call to load active forms
+            document.getElementById('attendanceDate').valueAsDate = new Date(); 
+        }
     </script>
 </body>
 </html>
