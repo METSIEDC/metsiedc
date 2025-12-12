@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration | MET'S IEDC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { iedc: { red: '#ef4444', dark: '#991b1b' } }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #050505; color: #ffffff; overflow-x: hidden; }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); }
+        .glass-input { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
+        .glass-input:focus { background: rgba(255, 255, 255, 0.08); border-color: #ef4444; outline: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.3; animation: blob-bounce 10s infinite ease; }
+        .blob-1 { top: 0%; left: 0%; width: 600px; height: 600px; background: #7f1d1d; }
+        .blob-2 { bottom: 0%; right: 0%; width: 500px; height: 500px; background: #c2410c; }
+        @keyframes blob-bounce { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(20px, -20px) scale(1.1); } }
+
+        /* Ticket Styles */
+        .ticket-cut {
+            border-top: 2px dashed rgba(255,255,255,0.2);
+            position: relative;
+        }
+        .ticket-cut::before, .ticket-cut::after {
+            content: ''; position: absolute; top: -10px; width: 20px; height: 20px; background-color: #050505; border-radius: 50%;
+        }
+        .ticket-cut::before { left: -10px; }
+        .ticket-cut::after { right: -10px; }
+
+        @media print {
+            body * { visibility: hidden; }
+            #ticketView, #ticketView * { visibility: visible; }
+            #ticketView { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; background: white; color: black; border: 2px solid black; }
+            .no-print { display: none !important; }
+            .ticket-text-dark { color: black !important; }
+            .ticket-bg-white { background: white !important; }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased relative min-h-screen flex flex-col">
+
+    <div class="fixed inset-0 overflow-hidden pointer-events-none no-print">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <header class="h-20 flex items-center justify-between px-6 md:px-10 border-b border-white/10 bg-black/50 backdrop-blur-md sticky top-0 z-50 no-print">
+        <div class="flex items-center gap-3">
+            <img src="assets/images/logos/MSEM.jpg" alt="Logo" class="w-10 h-10 rounded-full border-2 border-red-500/50">
+            <span class="text-xl font-bold text-white tracking-tight">MET'S <span class="text-red-500">IEDC</span></span>
+        </div>
+        <button onclick="toggleHistoryModal()" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full text-sm font-medium transition border border-white/10">
+            <i data-lucide="ticket" class="w-4 h-4 text-red-400"></i> My Tickets
+        </button>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-10">
+        
+        <div id="eventListView" class="max-w-5xl mx-auto">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">Upcoming Events</h1>
+                <p class="text-gray-400">Register for workshops, hackathons, and seminars.</p>
+            </div>
+            <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="col-span-full text-center py-20 text-gray-500 animate-pulse">Loading active events...</div>
+            </div>
+        </div>
+
+        <div id="formView" class="hidden max-w-2xl mx-auto no-print">
+            <button onclick="goBack()" class="mb-6 flex items-center gap-2 text-gray-400 hover:text-white transition group">
+                <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i> Back to Events
+            </button>
+            <div class="glass-card p-8 md:p-10 rounded-3xl border border-red-500/20 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-orange-600"></div>
+                <div class="mb-8">
+                    <span class="inline-block px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-bold uppercase tracking-wider mb-3">Registration Open</span>
+                    <h2 class="text-3xl font-bold text-white mb-2" id="formTitleDisplay">Event Name</h2>
+                    <p class="text-sm text-gray-400">Please fill in the details below to confirm your spot.</p>
+                </div>
+                <form id="dynamicForm" class="space-y-6">
+                    </form>
+                <div id="submissionStatus" class="hidden mt-6 p-4 rounded-xl text-center text-sm font-medium"></div>
+            </div>
+        </div>
+
+        <div id="ticketView" class="hidden max-w-md mx-auto transform transition-all">
+            <div class="bg-white text-black rounded-3xl overflow-hidden shadow-2xl relative ticket-bg-white">
+                <div class="bg-gradient-to-r from-red-600 to-orange-600 p-6 text-white text-center">
+                    <h2 class="text-2xl font-bold uppercase tracking-wide">Entry Ticket</h2>
+                    <p class="text-xs opacity-80 mt-1">MET'S IEDC OFFICIAL PASS</p>
+                </div>
+                
+                <div class="p-8 text-center ticket-text-dark">
+                    <h1 class="text-2xl font-bold mb-2 leading-tight" id="ticketEventName">Event Name</h1>
+                    <p class="text-sm text-gray-500 mb-6" id="ticketDate">Date: --</p>
+                    
+                    <div class="w-40 h-40 bg-gray-100 mx-auto mb-6 rounded-xl flex items-center justify-center border-4 border-black/5">
+                        <img id="ticketQR" src="" alt="QR Code" class="w-32 h-32 opacity-90">
+                    </div>
+
+                    <div class="space-y-2 mb-6">
+                        <p class="text-xs uppercase text-gray-400 font-bold">Attendee</p>
+                        <p class="text-lg font-bold" id="ticketAttendee">Guest User</p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <p class="text-xs uppercase text-gray-400 font-bold">Ticket ID</p>
+                        <p class="font-mono text-red-600 font-bold tracking-widest bg-red-50 py-2 rounded-lg" id="ticketID">#IEDC-0000</p>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-gray-50 ticket-cut flex justify-between items-center ticket-text-dark">
+                    <span class="text-[10px] text-gray-400">Admit One</span>
+                    <span class="text-[10px] text-gray-400">Non-Transferable</span>
+                </div>
+            </div>
+
+            <div class="mt-6 flex gap-3 no-print">
+                <button onclick="window.print()" class="flex-1 bg-white text-black font-bold py-3 rounded-xl hover:bg-gray-200 transition flex justify-center items-center gap-2">
+                    <i data-lucide="printer" class="w-4 h-4"></i> Print / Save PDF
+                </button>
+                <button onclick="closeTicket()" class="flex-1 bg-white/10 text-white font-bold py-3 rounded-xl hover:bg-white/20 transition">
+                    Close
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="historyModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
+        <div class="glass-card w-full max-w-md p-6 rounded-3xl relative">
+            <button onclick="toggleHistoryModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i data-lucide="x"></i></button>
+            <h2 class="text-xl font-bold text-white mb-6">My Bookings</h2>
+            <div id="historyList" class="space-y-3 max-h-[60vh] overflow-y-auto">
+                <p class="text-center text-gray-500 text-sm py-4">No tickets found on this device.</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        lucide.createIcons();
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+          authDomain: "metsiedc-3010e.firebaseapp.com",
+          databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+          projectId: "metsiedc-3010e",
+          storageBucket: "metsiedc-3010e.firebasestorage.app",
+          messagingSenderId: "954403413150",
+          appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+          measurementId: "G-6E7EK0D7JG"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        let currentEventData = null;
+
+        // 1. Fetch Events
+        async function loadEvents() {
+            const grid = document.getElementById('eventsGrid');
+            try {
+                const q = query(collection(db, "eventForms"), orderBy("createdAt", "desc"));
+                const snap = await getDocs(q);
+
+                if (snap.empty) {
+                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-500">No active events.</div>';
+                    return;
+                }
+
+                grid.innerHTML = '';
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    const card = document.createElement('div');
+                    card.className = "glass-card p-6 rounded-2xl hover:border-red-500/30 transition duration-300 flex flex-col justify-between min-h-[200px]";
+                    card.innerHTML = `<div><div class="flex justify-between items-start mb-4"><div class="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center text-red-400"><i data-lucide="calendar" class="w-5 h-5"></i></div><span class="text-[10px] text-gray-500 bg-white/5 px-2 py-1 rounded">${new Date(data.createdAt).toLocaleDateString()}</span></div><h3 class="text-xl font-bold text-white mb-2">${data.title}</h3><p class="text-sm text-gray-400 line-clamp-2">Register now.</p></div><button class="mt-6 w-full py-3 rounded-xl bg-white/5 hover:bg-red-600 text-white font-bold text-sm transition-all flex items-center justify-center gap-2">Register Now <i data-lucide="arrow-right" class="w-4 h-4"></i></button>`;
+                    card.querySelector('button').onclick = () => openEventForm(data);
+                    grid.appendChild(card);
+                });
+                lucide.createIcons();
+            } catch (e) {
+                console.error(e);
+                grid.innerHTML = '<div class="col-span-full text-center text-red-400">Error loading events.</div>';
+            }
+        }
+
+        // 2. Open Form
+        window.openEventForm = (data) => {
+            currentEventData = data;
+            document.getElementById('eventListView').classList.add('hidden');
+            document.getElementById('formView').classList.remove('hidden');
+            document.getElementById('ticketView').classList.add('hidden');
+            document.getElementById('formTitleDisplay').textContent = data.title;
+            
+            const form = document.getElementById('dynamicForm');
+            form.innerHTML = ''; 
+            data.questions.forEach((q) => {
+                const div = document.createElement('div');
+                const label = document.createElement('label');
+                label.className = "block text-xs font-medium text-gray-400 mb-1.5 uppercase";
+                label.innerText = q.label;
+                let input = document.createElement(q.type === 'textarea' ? 'textarea' : 'input');
+                if(q.type !== 'textarea') input.type = q.type || 'text'; else input.rows = 4;
+                input.className = "glass-input w-full rounded-xl py-3 px-4 text-sm";
+                input.required = true;
+                input.dataset.label = q.label; 
+                div.appendChild(label); div.appendChild(input); form.appendChild(div);
+            });
+
+            const submitBtn = document.createElement('button');
+            submitBtn.type = "submit";
+            submitBtn.className = "w-full bg-red-600 hover:bg-red-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-red-900/20 mt-4 flex items-center justify-center gap-2";
+            submitBtn.innerHTML = `Confirm Registration <i data-lucide="check-circle" class="w-4 h-4"></i>`;
+            form.appendChild(submitBtn);
+            lucide.createIcons();
+        };
+
+        // 3. Handle Submission & Generate Ticket
+        document.getElementById('dynamicForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            
+            if(!currentEventData || !currentEventData.sheetUrl) return alert("Configuration Error: No Sheet URL.");
+
+            const responses = [];
+            let userName = "Guest";
+            const inputs = e.target.querySelectorAll('input, textarea, select');
+            
+            inputs.forEach(input => {
+                if(input.dataset.label) {
+                    responses.push({ label: input.dataset.label, answer: input.value });
+                    // Try to detect name for the ticket
+                    if(input.dataset.label.toLowerCase().includes('name')) userName = input.value;
+                }
+            });
+
+            const ticketID = 'IEDC-' + Math.floor(1000 + Math.random() * 9000);
+            const payload = { eventName: currentEventData.title, userName: userName, userEmail: "Guest", responses: responses, ticketID: ticketID };
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Processing...`;
+
+            try {
+                // Post to Google Sheet
+                await fetch(currentEventData.sheetUrl, { method: 'POST', body: JSON.stringify(payload) });
+                
+                // Save to Local History
+                saveBookingToHistory({
+                    eventName: currentEventData.title,
+                    attendee: userName,
+                    date: new Date().toLocaleDateString(),
+                    ticketID: ticketID
+                });
+
+                // Show Ticket
+                showTicket(currentEventData.title, userName, ticketID, new Date().toLocaleDateString());
+
+            } catch (error) {
+                console.error(error);
+                // Even if network fails response (no-cors), we assume success for user experience if using Web App
+                saveBookingToHistory({ eventName: currentEventData.title, attendee: userName, date: new Date().toLocaleDateString(), ticketID: ticketID });
+                showTicket(currentEventData.title, userName, ticketID, new Date().toLocaleDateString());
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `Confirm Registration <i data-lucide="check-circle" class="w-4 h-4"></i>`;
+            }
+        });
+
+        // 4. Ticket Logic
+        function showTicket(event, name, id, date) {
+            document.getElementById('formView').classList.add('hidden');
+            document.getElementById('ticketView').classList.remove('hidden');
+            
+            document.getElementById('ticketEventName').textContent = event;
+            document.getElementById('ticketAttendee').textContent = name;
+            document.getElementById('ticketID').textContent = `#${id}`;
+            document.getElementById('ticketDate').textContent = `Date: ${date}`;
+            
+            // Generate QR Code (using Google Charts API for simplicity)
+            document.getElementById('ticketQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${id}`;
+        }
+
+        window.closeTicket = () => {
+            document.getElementById('ticketView').classList.add('hidden');
+            document.getElementById('eventListView').classList.remove('hidden');
+            document.getElementById('dynamicForm').reset();
+        };
+
+        window.goBack = () => {
+            document.getElementById('formView').classList.add('hidden');
+            document.getElementById('eventListView').classList.remove('hidden');
+            document.getElementById('dynamicForm').reset();
+        };
+
+        // 5. Local Storage History Logic
+        function saveBookingToHistory(ticketData) {
+            const history = JSON.parse(localStorage.getItem('iedc_bookings') || '[]');
+            history.unshift(ticketData); // Add new to top
+            localStorage.setItem('iedc_bookings', JSON.stringify(history));
+        }
+
+        window.toggleHistoryModal = () => {
+            const modal = document.getElementById('historyModal');
+            const list = document.getElementById('historyList');
+            
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                const history = JSON.parse(localStorage.getItem('iedc_bookings') || '[]');
+                
+                if (history.length === 0) {
+                    list.innerHTML = '<p class="text-center text-gray-500 text-sm py-4">No tickets found on this device.</p>';
+                } else {
+                    list.innerHTML = '';
+                    history.forEach(t => {
+                        const div = document.createElement('div');
+                        div.className = "bg-white/5 border border-white/10 p-3 rounded-xl cursor-pointer hover:bg-white/10 transition flex justify-between items-center";
+                        div.innerHTML = `<div><h4 class="font-bold text-white text-sm">${t.eventName}</h4><p class="text-xs text-gray-500">${t.ticketID} • ${t.date}</p></div><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>`;
+                        div.onclick = () => {
+                            toggleHistoryModal(); // Close modal
+                            showTicket(t.eventName, t.attendee, t.ticketID, t.date); // Open ticket
+                        };
+                        list.appendChild(div);
+                    });
+                    lucide.createIcons();
+                }
+            } else {
+                modal.classList.add('hidden');
+            }
+        };
+
+        loadEvents();
+    </script>
+</body>
+</html>
