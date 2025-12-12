@@ -155,7 +155,7 @@
                         <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-4">
                             <h3 class="text-sm font-bold text-white">Add Questions</h3>
                             <div class="flex flex-col md:flex-row gap-3">
-                                <input type="text" id="newQuestionLabel" class="glass-input flex-grow rounded-xl py-2 px-4 text-sm" placeholder="Question (e.g., WhatsApp Number)">
+                                <input type="text" id="newQuestionLabel" class="glass-input flex-grow rounded-xl py-2 px-4 text-sm" placeholder="Question (e.g., WhatsApp Number)" onkeypress="handleEnter(event)">
                                 <select id="newQuestionType" class="glass-input w-full md:w-40 rounded-xl py-2 px-4 text-sm">
                                     <option value="text">Short Text</option>
                                     <option value="number">Number</option>
@@ -189,7 +189,6 @@
 
             <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl border border-blue-500/20"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center"><i data-lucide="newspaper" class="w-5 h-5 text-blue-400"></i></div><div><h2 class="text-2xl font-bold text-white">Post News</h2><p class="text-xs text-gray-400">Articles & External News.</p></div></div><div id="newsStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="newsForm" class="space-y-5"><input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Headline"><textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Content..."></textarea><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><div class="relative group"><label for="newsImageInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-blue-500/50 transition"><i data-lucide="image" class="w-4 h-4 mr-2"></i> <span id="newsFileName">Upload Image</span></label><input type="file" id="newsImageInput" class="hidden" accept="image/*" onchange="handleNewsImage(event)"></div></div><button type="submit" id="postNewsBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish News</button></form></div></div>
             <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center"><i data-lucide="bell" class="w-5 h-5 text-red-400"></i></div><div><h2 class="text-2xl font-bold text-white">Post Update</h2><p class="text-xs text-gray-400">Notices & Circulars.</p></div></div><div id="announcementStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="announcementForm" class="space-y-5"><input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Subject"><textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Notice details..."></textarea><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><select id="annCategory" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="update">General Update</option><option value="event">Event Alert</option><option value="circular">Circular</option></select><input type="text" id="annDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Display Date"></div><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Link / PDF URL</label><input type="text" id="annLink" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="https://..."></div><button type="submit" id="postBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish Update</button></form></div></div>
-
             <div id="gallerySection" class="tab-content hidden max-w-2xl mx-auto">
                 <div class="glass-card p-8 rounded-3xl border border-purple-500/20">
                     <div class="flex items-center gap-3 mb-6">
@@ -208,7 +207,6 @@
                     </form>
                 </div>
             </div>
-
         </main>
     </div>
 
@@ -239,6 +237,7 @@
 
         lucide.createIcons();
 
+        // THIS URL IS FOR IMAGE UPLOADS ONLY (News/Gallery)
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHmJ0B9qP2ND2YD0-lQxW2ZgL-m2siOYSHSpSrdgSD6v53i3iD9gGx9_bxrr_Wa6oalQ/exec"; 
 
         const firebaseConfig = {
@@ -255,10 +254,11 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        
         let allUsers = [];
         let newsImageFile = null;
         let galleryImages = [];
-        let currentQuestions = []; // NEW: Array to store form questions
+        let currentQuestions = []; // Stores the dynamic questions
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -270,43 +270,77 @@
             } else { window.location.href = 'admin.html'; }
         });
 
-        // --- NEW: FORM BUILDER LOGIC START ---
+        // --- FIXED FORM BUILDER LOGIC ---
 
+        // 1. Prevent 'Enter' key from submitting the form
+        window.handleEnter = function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Stop submission
+                addQuestionToStage();   // Trigger add button instead
+            }
+        };
+
+        // 2. Add Question (Improved Logic)
         window.addQuestionToStage = function() {
             const labelInput = document.getElementById('newQuestionLabel');
             const typeInput = document.getElementById('newQuestionType');
             const label = labelInput.value.trim();
             const type = typeInput.value;
 
-            if (!label) return alert("Please enter a question.");
+            if (!label) {
+                alert("Please enter a question.");
+                return;
+            }
+
+            // Push to array with a unique timestamp ID
             currentQuestions.push({ label, type, id: Date.now() });
+            
+            // Clear input & focus for the next one
             labelInput.value = '';
+            labelInput.focus();
+            
             renderQuestionsPreview();
         };
 
+        // 3. Remove Question (Fixed: Uses Filter)
         window.removeQuestion = function(id) {
             currentQuestions = currentQuestions.filter(q => q.id !== id);
             renderQuestionsPreview();
         };
 
+        // 4. Render List (Fixed: Prevents NULL error & Auto-submit)
         function renderQuestionsPreview() {
             const container = document.getElementById('questionsPreview');
-            const emptyMsg = document.getElementById('emptyMsg');
 
             if (currentQuestions.length === 0) {
-                container.innerHTML = ''; container.appendChild(emptyMsg); emptyMsg.style.display = 'block'; return;
+                container.innerHTML = '<p class="text-xs text-gray-500 text-center italic" id="emptyMsg">No questions added yet.</p>';
+                return;
             }
-            emptyMsg.style.display = 'none';
+
             container.innerHTML = '';
             currentQuestions.forEach((q, index) => {
                 const div = document.createElement('div');
-                div.className = "flex justify-between items-center bg-[#0a0a0a] border border-white/10 p-3 rounded-lg";
-                div.innerHTML = `<div class="flex items-center gap-3"><span class="text-xs bg-white/10 text-gray-300 w-6 h-6 flex items-center justify-center rounded-full">${index + 1}</span><div><p class="text-sm font-bold text-white">${q.label}</p><p class="text-[10px] text-gray-500 uppercase">${q.type}</p></div></div><button onclick="removeQuestion(${q.id})" class="text-red-400 hover:text-red-300"><i data-lucide="trash" class="w-4 h-4"></i></button>`;
+                div.className = "flex justify-between items-center bg-[#0a0a0a] border border-white/10 p-3 rounded-lg mb-2";
+                
+                // IMPORTANT: type="button" added to the delete button
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs bg-white/10 text-gray-300 w-6 h-6 flex items-center justify-center rounded-full">${index + 1}</span>
+                        <div>
+                            <p class="text-sm font-bold text-white">${q.label}</p>
+                            <p class="text-[10px] text-gray-500 uppercase">${q.type}</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="removeQuestion(${q.id})" class="text-red-400 hover:text-red-300 p-2 rounded hover:bg-white/5 transition">
+                        <i data-lucide="trash" class="w-4 h-4"></i>
+                    </button>
+                `;
                 container.appendChild(div);
             });
             lucide.createIcons();
         }
 
+        // 5. Submit the Form Structure to Firebase
         document.getElementById('formBuilder').addEventListener('submit', async (e) => {
             e.preventDefault();
             const title = document.getElementById('formTitle').value;
@@ -317,15 +351,37 @@
             if (currentQuestions.length === 0) return alert("Add at least one question.");
             
             btn.disabled = true; btn.textContent = "Creating...";
+            
             try {
-                await addDoc(collection(db, "eventForms"), { title, sheetUrl, questions: currentQuestions, active: true, createdAt: Date.now() });
-                status.textContent = "Form Created!"; status.className = "text-sm text-center p-2 rounded bg-green-500/20 text-green-400 block";
-                document.getElementById('formBuilder').reset(); currentQuestions = []; renderQuestionsPreview(); fetchActiveForms();
+                // Save to 'eventForms' collection
+                await addDoc(collection(db, "eventForms"), { 
+                    title, 
+                    sheetUrl, 
+                    questions: currentQuestions, 
+                    active: true, 
+                    createdAt: Date.now() 
+                });
+
+                status.textContent = "Form Created Successfully!"; 
+                status.className = "text-sm text-center p-2 rounded bg-green-500/20 text-green-400 block";
+                
+                // Reset everything
+                document.getElementById('formBuilder').reset(); 
+                currentQuestions = []; 
+                renderQuestionsPreview(); 
+                fetchActiveForms();
+
             } catch (error) {
-                status.textContent = "Error: " + error.message; status.className = "text-sm text-center p-2 rounded bg-red-500/20 text-red-400 block";
-            } finally { btn.disabled = false; btn.textContent = "🚀 Publish Registration Form"; }
+                console.error(error);
+                status.textContent = "Error: " + error.message; 
+                status.className = "text-sm text-center p-2 rounded bg-red-500/20 text-red-400 block";
+            } finally { 
+                btn.disabled = false; 
+                btn.textContent = "🚀 Publish Registration Form"; 
+            }
         });
 
+        // 6. Fetch Active Forms
         window.fetchActiveForms = async function() {
             const list = document.getElementById('activeFormsList');
             try {
@@ -343,7 +399,7 @@
 
         window.deleteForm = async (id) => { if(confirm("Delete this form?")) { await deleteDoc(doc(db, "eventForms", id)); fetchActiveForms(); } };
 
-        // --- NEW: FORM BUILDER LOGIC END ---
+        // --- END FORM BUILDER LOGIC ---
 
         async function fetchUsers() {
             try {
@@ -464,7 +520,7 @@
             fetchUsers(); 
             fetchAnnouncementsCount(); 
             fetchSubmissions(); 
-            fetchActiveForms(); // Added this call to load active forms
+            fetchActiveForms(); // Load forms on start
             document.getElementById('attendanceDate').valueAsDate = new Date(); 
         }
     </script>
