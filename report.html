@@ -151,7 +151,7 @@
         <p>&copy; 2025 MET'S IEDC. All rights reserved.</p>
     </footer>
 
-    <script type="module">
+   <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, getDocs, query, orderBy, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
@@ -171,17 +171,30 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // --- NEW: LINK AUTO-CORRECTOR ---
+        function getDirectDriveLink(url) {
+            if (!url) return 'assets/images/events/coming soon.jpg'; // Default fallback
+            
+            // If it's a standard Google Drive Viewer link, convert it
+            if (url.includes('drive.google.com') && url.includes('/file/d/')) {
+                try {
+                    // Extract the ID
+                    const id = url.split('/file/d/')[1].split('/')[0];
+                    // Return the direct export link
+                    return `https://drive.google.com/uc?export=view&id=${id}`;
+                } catch (e) {
+                    console.error("Error converting link:", url);
+                    return url;
+                }
+            }
+            return url;
+        }
+
         // --- FETCH AND RENDER ---
         async function loadPastEvents() {
             const grid = document.getElementById('pastEventsGrid');
             try {
-                // IMPORTANT: Ensure you have a collection named 'past_events' in Firebase
-                // Or you can map this to your existing 'announcements' if they have type='event'
-                // For now, I'm fetching from a hypothetical 'past_events' collection.
-                
-                // If you don't have this collection yet, you can change 'past_events' to 'announcements' 
-                // and filter where type == 'event'
-                
+                // Fetching from 'past_events' collection
                 const q = query(collection(db, "past_events"), orderBy("date", "desc"));
                 const snap = await getDocs(q);
 
@@ -202,12 +215,12 @@
                     card.className = "glass-card rounded-2xl overflow-hidden group cursor-pointer h-full flex flex-col";
                     card.onclick = () => showEventDetails(data);
 
-                    // Fallback image if none provided
-                    const image = data.coverImage || 'assets/images/events/coming soon.jpg'; 
+                    // USE THE FIXER HERE
+                    const image = getDirectDriveLink(data.coverImage);
                     
                     card.innerHTML = `
                         <div class="relative h-48 overflow-hidden">
-                            <img src="${image}" alt="${data.title}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            <img src="${image}" alt="${data.title}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='https://images.unsplash.com/photo-1517245386807-bb43f82c33c4'">
                             <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition"></div>
                             <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold text-white border border-white/10">
                                 ${new Date(data.date).toLocaleDateString()}
@@ -227,15 +240,14 @@
 
             } catch (e) {
                 console.error("Error:", e);
-                // Fallback for demo purposes if DB is empty/error
                 grid.innerHTML = '<div class="col-span-full text-center text-red-400">Error loading events. Check Console.</div>';
             }
         }
 
         // --- DETAIL VIEW LOGIC ---
         window.showEventDetails = (data) => {
-            // Populate Data
-            document.getElementById('detailImage').src = data.coverImage || 'assets/images/events/coming soon.jpg';
+            // USE THE FIXER HERE TOO
+            document.getElementById('detailImage').src = getDirectDriveLink(data.coverImage);
             document.getElementById('detailTitle').textContent = data.title;
             document.getElementById('detailDate').textContent = new Date(data.date).toDateString();
             document.getElementById('detailDescription').textContent = data.description;
@@ -257,10 +269,14 @@
             galleryGrid.innerHTML = '';
             if (data.gallery && data.gallery.length > 0) {
                 data.gallery.forEach(imgUrl => {
+                    // USE THE FIXER FOR GALLERY IMAGES
+                    const fixedUrl = getDirectDriveLink(imgUrl);
+                    
                     const img = document.createElement('img');
-                    img.src = imgUrl;
+                    img.src = fixedUrl;
                     img.className = "w-full h-32 object-cover rounded-xl border border-white/10 hover:opacity-80 transition cursor-pointer";
-                    img.onclick = () => window.open(imgUrl, '_blank');
+                    img.onerror = function() { this.style.display='none'; }; // Hide broken images
+                    img.onclick = () => window.open(fixedUrl, '_blank');
                     galleryGrid.appendChild(img);
                 });
             } else {
