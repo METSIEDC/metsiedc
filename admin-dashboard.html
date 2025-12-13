@@ -81,6 +81,10 @@
             </button>
             
             <div class="pt-4 pb-2 px-4 text-xs font-semibold text-gray-500 uppercase">Content</div>
+            <button onclick="showTab('pastEvents')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="calendar-clock" class="w-5 h-5"></i> Past Events
+            </button>
+            
             <button onclick="showTab('gallery')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="image" class="w-5 h-5"></i> Manage Gallery
             </button>
@@ -187,6 +191,73 @@
                 </div>
             </div>
 
+            <div id="pastEventsSection" class="tab-content hidden max-w-4xl mx-auto space-y-6">
+                <div class="glass-card p-8 rounded-3xl border border-red-500/20">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
+                            <i data-lucide="calendar-clock" class="w-5 h-5 text-red-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">Add Past Event</h2>
+                            <p class="text-xs text-gray-400">Archive completed events for the history page.</p>
+                        </div>
+                    </div>
+
+                    <div id="pastEventStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
+
+                    <form id="pastEventForm" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Title</label>
+                                <input type="text" id="peTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="e.g., Orientation Session" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Date</label>
+                                <input type="date" id="peDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Description</label>
+                            <textarea id="peDesc" rows="3" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Event summary..." required></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="relative group">
+                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Cover Image</label>
+                                <label for="peCoverInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-red-500/50 transition">
+                                    <i data-lucide="image" class="w-4 h-4 mr-2"></i> <span id="peCoverName">Select Image</span>
+                                </label>
+                                <input type="file" id="peCoverInput" class="hidden" accept="image/*" onchange="handlePastEventCover(event)">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Report Link (PDF/Drive)</label>
+                                <input type="text" id="peReport" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="https://drive.google.com/...">
+                            </div>
+                        </div>
+
+                        <div class="relative group">
+                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Event Gallery (Multiple)</label>
+                            <label for="peGalleryInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-red-500/50 transition">
+                                <i data-lucide="images" class="w-4 h-4 mr-2"></i> <span id="peGalleryName">Select Photos (Max 5)</span>
+                            </label>
+                            <input type="file" id="peGalleryInput" class="hidden" accept="image/*" multiple onchange="handlePastEventGallery(event)">
+                        </div>
+
+                        <button type="submit" id="savePastEventBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition-all">
+                            Archive Event
+                        </button>
+                    </form>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-lg font-bold text-white mb-4">Archived Events</h3>
+                    <div id="pastEventsList" class="space-y-3">
+                        <p class="text-gray-500 text-sm">Loading archive...</p>
+                    </div>
+                </div>
+            </div>
+
             <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl border border-blue-500/20"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center"><i data-lucide="newspaper" class="w-5 h-5 text-blue-400"></i></div><div><h2 class="text-2xl font-bold text-white">Post News</h2><p class="text-xs text-gray-400">Articles & External News.</p></div></div><div id="newsStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="newsForm" class="space-y-5"><input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Headline"><textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Content..."></textarea><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><div class="relative group"><label for="newsImageInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-blue-500/50 transition"><i data-lucide="image" class="w-4 h-4 mr-2"></i> <span id="newsFileName">Upload Image</span></label><input type="file" id="newsImageInput" class="hidden" accept="image/*" onchange="handleNewsImage(event)"></div></div><button type="submit" id="postNewsBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish News</button></form></div></div>
             <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center"><i data-lucide="bell" class="w-5 h-5 text-red-400"></i></div><div><h2 class="text-2xl font-bold text-white">Post Update</h2><p class="text-xs text-gray-400">Notices & Circulars.</p></div></div><div id="announcementStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="announcementForm" class="space-y-5"><input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Subject"><textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Notice details..."></textarea><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><select id="annCategory" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="update">General Update</option><option value="event">Event Alert</option><option value="circular">Circular</option></select><input type="text" id="annDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Display Date"></div><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Link / PDF URL</label><input type="text" id="annLink" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="https://..."></div><button type="submit" id="postBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish Update</button></form></div></div>
             <div id="gallerySection" class="tab-content hidden max-w-2xl mx-auto">
@@ -220,6 +291,7 @@
             <button onclick="showTab('users'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Manage Users</button>
             <button onclick="showTab('submissions'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Submissions</button>
             <button onclick="showTab('eventForms'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Create Forms</button>
+            <button onclick="showTab('pastEvents'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Past Events</button>
             <button onclick="showTab('gallery'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Gallery</button>
             <button onclick="showTab('news'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Post News</button>
             <button onclick="showTab('announcements'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Post Updates</button>
@@ -258,7 +330,10 @@
         let allUsers = [];
         let newsImageFile = null;
         let galleryImages = [];
-        let currentQuestions = []; // Stores the dynamic questions
+        let currentQuestions = []; 
+        // NEW VARS FOR PAST EVENTS
+        let pastEventCover = null;
+        let pastEventGallery = [];
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -270,77 +345,156 @@
             } else { window.location.href = 'admin.html'; }
         });
 
-        // --- FIXED FORM BUILDER LOGIC ---
+        // --- PAST EVENTS LOGIC (NEW) ---
+        window.handlePastEventCover = (event) => {
+            pastEventCover = event.target.files[0];
+            if(pastEventCover) document.getElementById('peCoverName').textContent = pastEventCover.name;
+        };
 
-        // 1. Prevent 'Enter' key from submitting the form
+        window.handlePastEventGallery = (event) => {
+            pastEventGallery = event.target.files;
+            if(pastEventGallery.length > 0) document.getElementById('peGalleryName').textContent = `${pastEventGallery.length} Files Selected`;
+        };
+
+        document.getElementById('pastEventForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('savePastEventBtn');
+            const status = document.getElementById('pastEventStatus');
+            btn.disabled = true; btn.textContent = "Uploading...";
+            status.classList.remove('hidden'); status.textContent = "Starting upload...";
+
+            const title = document.getElementById('peTitle').value;
+            const date = document.getElementById('peDate').value;
+            const desc = document.getElementById('peDesc').value;
+            const report = document.getElementById('peReport').value;
+
+            try {
+                let coverUrl = "";
+                // 1. Upload Cover
+                if(pastEventCover) {
+                    status.textContent = "Uploading Cover Image...";
+                    coverUrl = await uploadToDrive(pastEventCover);
+                }
+
+                // 2. Upload Gallery
+                let galleryUrls = [];
+                if(pastEventGallery.length > 0) {
+                    for(let i=0; i<pastEventGallery.length; i++) {
+                        status.textContent = `Uploading Gallery ${i+1}/${pastEventGallery.length}...`;
+                        if(pastEventGallery[i].size > 5 * 1024 * 1024) continue; // Skip large files
+                        const url = await uploadToDrive(pastEventGallery[i]);
+                        galleryUrls.push(url);
+                    }
+                }
+
+                status.textContent = "Saving to Database...";
+                
+                // 3. Save to Firebase
+                await addDoc(collection(db, "past_events"), {
+                    title: title,
+                    date: date,
+                    description: desc,
+                    coverImage: coverUrl,
+                    reportUrl: report,
+                    gallery: galleryUrls,
+                    timestamp: Date.now()
+                });
+
+                status.textContent = "Event Archived Successfully!";
+                status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400 block";
+                
+                // Reset
+                document.getElementById('pastEventForm').reset();
+                pastEventCover = null; pastEventGallery = [];
+                document.getElementById('peCoverName').textContent = "Select Image";
+                document.getElementById('peGalleryName').textContent = "Select Photos";
+                fetchPastEvents();
+
+            } catch (error) {
+                console.error(error);
+                status.textContent = "Error: " + error.message;
+                status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block";
+            } finally {
+                btn.disabled = false; btn.textContent = "Archive Event";
+            }
+        });
+
+        async function fetchPastEvents() {
+            const list = document.getElementById('pastEventsList');
+            try {
+                const q = query(collection(db, "past_events"), orderBy("date", "desc"));
+                const snap = await getDocs(q);
+                if (snap.empty) { list.innerHTML = '<p class="text-gray-500 text-sm">No archived events.</p>'; return; }
+                let html = '';
+                snap.forEach(doc => {
+                    const d = doc.data();
+                    html += `
+                        <div class="bg-white/5 border border-white/10 p-4 rounded-xl flex justify-between items-center group hover:bg-white/10 transition">
+                            <div>
+                                <h4 class="font-bold text-white text-sm">${d.title}</h4>
+                                <p class="text-xs text-gray-500">${d.date}</p>
+                            </div>
+                            <button onclick="deletePastEvent('${doc.id}')" class="bg-red-500/10 text-red-400 p-2 rounded-lg hover:bg-red-500 hover:text-white transition">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>`;
+                });
+                list.innerHTML = html; lucide.createIcons();
+            } catch (e) { console.log(e); }
+        }
+
+        window.deletePastEvent = async (id) => {
+            if(confirm("Delete this event?")) { await deleteDoc(doc(db, "past_events", id)); fetchPastEvents(); }
+        };
+        // --- END PAST EVENTS LOGIC ---
+
+        // --- FORM BUILDER LOGIC ---
         window.handleEnter = function(event) {
             if (event.key === "Enter") {
-                event.preventDefault(); // Stop submission
-                addQuestionToStage();   // Trigger add button instead
+                event.preventDefault(); 
+                addQuestionToStage();   
             }
         };
 
-        // 2. Add Question (Improved Logic)
         window.addQuestionToStage = function() {
             const labelInput = document.getElementById('newQuestionLabel');
             const typeInput = document.getElementById('newQuestionType');
             const label = labelInput.value.trim();
             const type = typeInput.value;
 
-            if (!label) {
-                alert("Please enter a question.");
-                return;
-            }
+            if (!label) { alert("Please enter a question."); return; }
 
-            // Push to array with a unique timestamp ID
             currentQuestions.push({ label, type, id: Date.now() });
-            
-            // Clear input & focus for the next one
-            labelInput.value = '';
-            labelInput.focus();
-            
+            labelInput.value = ''; labelInput.focus();
             renderQuestionsPreview();
         };
 
-        // 3. Remove Question (Fixed: Uses Filter)
         window.removeQuestion = function(id) {
             currentQuestions = currentQuestions.filter(q => q.id !== id);
             renderQuestionsPreview();
         };
 
-        // 4. Render List (Fixed: Prevents NULL error & Auto-submit)
         function renderQuestionsPreview() {
             const container = document.getElementById('questionsPreview');
-
             if (currentQuestions.length === 0) {
-                container.innerHTML = '<p class="text-xs text-gray-500 text-center italic" id="emptyMsg">No questions added yet.</p>';
-                return;
+                container.innerHTML = '<p class="text-xs text-gray-500 text-center italic" id="emptyMsg">No questions added yet.</p>'; return;
             }
-
             container.innerHTML = '';
             currentQuestions.forEach((q, index) => {
                 const div = document.createElement('div');
                 div.className = "flex justify-between items-center bg-[#0a0a0a] border border-white/10 p-3 rounded-lg mb-2";
-                
-                // IMPORTANT: type="button" added to the delete button
                 div.innerHTML = `
                     <div class="flex items-center gap-3">
                         <span class="text-xs bg-white/10 text-gray-300 w-6 h-6 flex items-center justify-center rounded-full">${index + 1}</span>
-                        <div>
-                            <p class="text-sm font-bold text-white">${q.label}</p>
-                            <p class="text-[10px] text-gray-500 uppercase">${q.type}</p>
-                        </div>
+                        <div><p class="text-sm font-bold text-white">${q.label}</p><p class="text-[10px] text-gray-500 uppercase">${q.type}</p></div>
                     </div>
-                    <button type="button" onclick="removeQuestion(${q.id})" class="text-red-400 hover:text-red-300 p-2 rounded hover:bg-white/5 transition">
-                        <i data-lucide="trash" class="w-4 h-4"></i>
-                    </button>
+                    <button type="button" onclick="removeQuestion(${q.id})" class="text-red-400 hover:text-red-300 p-2 rounded hover:bg-white/5 transition"><i data-lucide="trash" class="w-4 h-4"></i></button>
                 `;
                 container.appendChild(div);
             });
             lucide.createIcons();
         }
 
-        // 5. Submit the Form Structure to Firebase
         document.getElementById('formBuilder').addEventListener('submit', async (e) => {
             e.preventDefault();
             const title = document.getElementById('formTitle').value;
@@ -351,37 +505,16 @@
             if (currentQuestions.length === 0) return alert("Add at least one question.");
             
             btn.disabled = true; btn.textContent = "Creating...";
-            
             try {
-                // Save to 'eventForms' collection
-                await addDoc(collection(db, "eventForms"), { 
-                    title, 
-                    sheetUrl, 
-                    questions: currentQuestions, 
-                    active: true, 
-                    createdAt: Date.now() 
-                });
-
+                await addDoc(collection(db, "eventForms"), { title, sheetUrl, questions: currentQuestions, active: true, createdAt: Date.now() });
                 status.textContent = "Form Created Successfully!"; 
                 status.className = "text-sm text-center p-2 rounded bg-green-500/20 text-green-400 block";
-                
-                // Reset everything
-                document.getElementById('formBuilder').reset(); 
-                currentQuestions = []; 
-                renderQuestionsPreview(); 
-                fetchActiveForms();
-
+                document.getElementById('formBuilder').reset(); currentQuestions = []; renderQuestionsPreview(); fetchActiveForms();
             } catch (error) {
-                console.error(error);
-                status.textContent = "Error: " + error.message; 
-                status.className = "text-sm text-center p-2 rounded bg-red-500/20 text-red-400 block";
-            } finally { 
-                btn.disabled = false; 
-                btn.textContent = "🚀 Publish Registration Form"; 
-            }
+                status.textContent = "Error: " + error.message; status.className = "text-sm text-center p-2 rounded bg-red-500/20 text-red-400 block";
+            } finally { btn.disabled = false; btn.textContent = "🚀 Publish Registration Form"; }
         });
 
-        // 6. Fetch Active Forms
         window.fetchActiveForms = async function() {
             const list = document.getElementById('activeFormsList');
             try {
@@ -398,8 +531,6 @@
         };
 
         window.deleteForm = async (id) => { if(confirm("Delete this form?")) { await deleteDoc(doc(db, "eventForms", id)); fetchActiveForms(); } };
-
-        // --- END FORM BUILDER LOGIC ---
 
         async function fetchUsers() {
             try {
@@ -520,9 +651,10 @@
             fetchUsers(); 
             fetchAnnouncementsCount(); 
             fetchSubmissions(); 
-            fetchActiveForms(); // Load forms on start
+            fetchActiveForms(); 
+            fetchPastEvents(); // New function
             document.getElementById('attendanceDate').valueAsDate = new Date(); 
         }
     </script>
 </body>
-</html>
+                    </html>
