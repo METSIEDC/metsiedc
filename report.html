@@ -151,9 +151,9 @@
         <p>&copy; 2025 MET'S IEDC. All rights reserved.</p>
     </footer>
 
-   <script type="module">
+  <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, orderBy, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
 
@@ -171,30 +171,35 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- NEW: LINK AUTO-CORRECTOR ---
+        // --- THE MAGIC FIXER FUNCTION ---
         function getDirectDriveLink(url) {
-            if (!url) return 'assets/images/events/coming soon.jpg'; // Default fallback
+            if (!url) return 'https://images.unsplash.com/photo-1614726365723-49fb6d0d9326?q=80&w=2000'; // Default Fallback
             
-            // If it's a standard Google Drive Viewer link, convert it
-            if (url.includes('drive.google.com') && url.includes('/file/d/')) {
-                try {
-                    // Extract the ID
-                    const id = url.split('/file/d/')[1].split('/')[0];
-                    // Return the direct export link
-                    return `https://drive.google.com/uc?export=view&id=${id}`;
-                } catch (e) {
-                    console.error("Error converting link:", url);
-                    return url;
-                }
+            let fileId = null;
+
+            // Pattern 1: https://drive.google.com/file/d/FILE_ID/view
+            if (url.includes('/file/d/')) {
+                fileId = url.split('/file/d/')[1].split('/')[0];
+            } 
+            // Pattern 2: https://drive.google.com/uc?id=FILE_ID
+            else if (url.includes('id=')) {
+                fileId = url.split('id=')[1].split('&')[0];
             }
+
+            if (fileId) {
+                // Returns the High-Performance Google Image Link (Bypasses Preview Page)
+                return `https://lh3.googleusercontent.com/d/${fileId}`;
+            }
+            
             return url;
         }
 
         // --- FETCH AND RENDER ---
         async function loadPastEvents() {
             const grid = document.getElementById('pastEventsGrid');
+            grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-500 animate-pulse">Loading archive...</div>';
+
             try {
-                // Fetching from 'past_events' collection
                 const q = query(collection(db, "past_events"), orderBy("date", "desc"));
                 const snap = await getDocs(q);
 
@@ -211,16 +216,22 @@
                 grid.innerHTML = '';
                 snap.forEach(doc => {
                     const data = doc.data();
+                    
+                    // 1. Fix the Cover Image Link
+                    const fixedImage = getDirectDriveLink(data.coverImage);
+
                     const card = document.createElement('div');
-                    card.className = "glass-card rounded-2xl overflow-hidden group cursor-pointer h-full flex flex-col";
+                    card.className = "glass-card rounded-2xl overflow-hidden group cursor-pointer h-full flex flex-col bg-[#0a0a0a]";
                     card.onclick = () => showEventDetails(data);
 
-                    // USE THE FIXER HERE
-                    const image = getDirectDriveLink(data.coverImage);
-                    
                     card.innerHTML = `
-                        <div class="relative h-48 overflow-hidden">
-                            <img src="${image}" alt="${data.title}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='https://images.unsplash.com/photo-1517245386807-bb43f82c33c4'">
+                        <div class="relative h-48 overflow-hidden bg-gray-900">
+                            <img src="${fixedImage}" 
+                                 alt="${data.title}" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-500" 
+                                 loading="lazy"
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1517245386807-bb43f82c33c4';">
+                            
                             <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition"></div>
                             <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold text-white border border-white/10">
                                 ${new Date(data.date).toLocaleDateString()}
@@ -240,21 +251,24 @@
 
             } catch (e) {
                 console.error("Error:", e);
-                grid.innerHTML = '<div class="col-span-full text-center text-red-400">Error loading events. Check Console.</div>';
+                grid.innerHTML = `<div class="col-span-full text-center text-red-400">Error loading events: ${e.message}</div>`;
             }
         }
 
         // --- DETAIL VIEW LOGIC ---
         window.showEventDetails = (data) => {
-            // USE THE FIXER HERE TOO
-            document.getElementById('detailImage').src = getDirectDriveLink(data.coverImage);
+            // Fix Cover Image for Detail View
+            const fixedDetailImage = getDirectDriveLink(data.coverImage);
+            document.getElementById('detailImage').src = fixedDetailImage;
+            
+            // Basic Info
             document.getElementById('detailTitle').textContent = data.title;
             document.getElementById('detailDate').textContent = new Date(data.date).toDateString();
             document.getElementById('detailDescription').textContent = data.description;
             
             // Handle Report Button
             const reportBtn = document.getElementById('reportBtn');
-            if (data.reportUrl) {
+            if (data.reportUrl && data.reportUrl.trim() !== "") {
                 reportBtn.href = data.reportUrl;
                 reportBtn.classList.remove('opacity-50', 'pointer-events-none');
                 reportBtn.querySelector('span.text-xs').textContent = "Click to Download";
@@ -264,19 +278,23 @@
                 reportBtn.querySelector('span.text-xs').textContent = "Not Available";
             }
 
-            // Handle Gallery
+            // Handle Gallery Images
             const galleryGrid = document.getElementById('detailGallery');
             galleryGrid.innerHTML = '';
+            
             if (data.gallery && data.gallery.length > 0) {
                 data.gallery.forEach(imgUrl => {
-                    // USE THE FIXER FOR GALLERY IMAGES
-                    const fixedUrl = getDirectDriveLink(imgUrl);
+                    // Fix Gallery Image Links
+                    const fixedGalleryUrl = getDirectDriveLink(imgUrl);
                     
                     const img = document.createElement('img');
-                    img.src = fixedUrl;
-                    img.className = "w-full h-32 object-cover rounded-xl border border-white/10 hover:opacity-80 transition cursor-pointer";
-                    img.onerror = function() { this.style.display='none'; }; // Hide broken images
-                    img.onclick = () => window.open(fixedUrl, '_blank');
+                    img.src = fixedGalleryUrl;
+                    img.className = "w-full h-32 object-cover rounded-xl border border-white/10 hover:opacity-80 transition cursor-pointer bg-gray-900";
+                    img.onclick = () => window.open(fixedGalleryUrl, '_blank');
+                    
+                    // Fallback if gallery image fails
+                    img.onerror = function() { this.style.display = 'none'; }; 
+                    
                     galleryGrid.appendChild(img);
                 });
             } else {
