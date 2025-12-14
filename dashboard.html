@@ -68,6 +68,9 @@
             <button onclick="showTab('trackStatus')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="activity" class="w-5 h-5"></i> Track Status
             </button>
+            <button onclick="showTab('certificates')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="award" class="w-5 h-5"></i> Certificates
+            </button>
             
             <div class="pt-4 pb-2">
                 <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Actions</p>
@@ -126,10 +129,10 @@
                         <h3 class="text-xl font-bold text-white">Submit Project</h3>
                         <p class="text-gray-400 text-sm">Submit your project details for review.</p>
                     </div>
-                    <div onclick="showTab('trackStatus')" class="glass-card p-6 rounded-2xl cursor-pointer hover:bg-white/5 transition">
-                        <i data-lucide="clock" class="w-8 h-8 text-yellow-400 mb-4"></i>
-                        <h3 class="text-xl font-bold text-white">Check Status</h3>
-                        <p class="text-gray-400 text-sm">View approval status.</p>
+                    <div onclick="showTab('certificates')" class="glass-card p-6 rounded-2xl cursor-pointer hover:bg-white/5 transition">
+                        <i data-lucide="award" class="w-8 h-8 text-yellow-400 mb-4"></i>
+                        <h3 class="text-xl font-bold text-white">Certificates</h3>
+                        <p class="text-gray-400 text-sm">Download your event certificates.</p>
                     </div>
                 </div>
             </div>
@@ -150,75 +153,20 @@
                     </div>
                     <form id="joinIedcForm" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Full Name</label>
-                                <input type="text" id="memName" class="glass-input w-full rounded-xl py-3 px-4 text-sm bg-white/5" readonly>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Email</label>
-                                <input type="email" id="memEmail" class="glass-input w-full rounded-xl py-3 px-4 text-sm bg-white/5" readonly>
-                            </div>
+                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Full Name</label><input type="text" id="memName" class="glass-input w-full rounded-xl py-3 px-4 text-sm bg-white/5" readonly></div>
+                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Email</label><input type="email" id="memEmail" class="glass-input w-full rounded-xl py-3 px-4 text-sm bg-white/5" readonly></div>
                         </div>
-
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Phone Number</label>
-                                <input type="tel" id="memPhone" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="+91 9876543210" required>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Gender</label>
-                                <select id="memGender" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
+                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Phone Number</label><input type="tel" id="memPhone" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="+91 9876543210" required></div>
+                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Gender</label><select id="memGender" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
                         </div>
-
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Batch / Year</label>
-                                <select id="memYear" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                                    <option value="1st Year">1st Year</option>
-                                    <option value="2nd Year">2nd Year</option>
-                                    <option value="3rd Year">3rd Year</option>
-                                    <option value="4th Year">4th Year</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Department</label>
-                                <select id="memDept" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                                    <option value="CSE">CSE</option>
-                                    <option value="ECE">ECE</option>
-                                    <option value="EEE">EEE</option>
-                                    <option value="ME">ME</option>
-                                    <option value="CE">CE</option>
-                                    <option value="BT">BT</option>
-                                    <option value="RA">RA</option>
-                                </select>
-                            </div>
+                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Batch / Year</label><select id="memYear" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="1st Year">1st Year</option><option value="2nd Year">2nd Year</option><option value="3rd Year">3rd Year</option><option value="4th Year">4th Year</option></select></div>
+                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Department</label><select id="memDept" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="CSE">CSE</option><option value="ECE">ECE</option><option value="EEE">EEE</option><option value="ME">ME</option><option value="CE">CE</option><option value="BT">BT</option><option value="RA">RA</option></select></div>
                         </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Primary Interest</label>
-                            <select id="memDomain" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                                <option value="Web Development">Web Development</option>
-                                <option value="App Development">App Development</option>
-                                <option value="UI/UX Design">UI/UX Design</option>
-                                <option value="IoT & Robotics">IoT & Robotics</option>
-                                <option value="Marketing & Management">Marketing & Management</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Why do you want to join?</label>
-                            <textarea id="memReason" rows="3" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Tell us what motivates you..."></textarea>
-                        </div>
-
-                        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-500/30 transition-all">
-                            Submit Application
-                        </button>
+                        <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Primary Interest</label><select id="memDomain" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="Web Development">Web Development</option><option value="App Development">App Development</option><option value="UI/UX Design">UI/UX Design</option><option value="IoT & Robotics">IoT & Robotics</option><option value="Marketing & Management">Marketing & Management</option><option value="Other">Other</option></select></div>
+                        <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Why do you want to join?</label><textarea id="memReason" rows="3" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Tell us what motivates you..."></textarea></div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-500/30 transition-all">Submit Application</button>
                     </form>
                 </div>
             </div>
@@ -247,6 +195,17 @@
                 </div>
                 <div id="mySubmissionsGrid" class="grid grid-cols-1 gap-4">
                     <p class="text-gray-500 text-center py-8">Loading your history...</p>
+                </div>
+            </div>
+
+            <div id="certificatesSection" class="tab-content hidden max-w-5xl mx-auto">
+                <div class="glass-card rounded-3xl p-8 mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-2">My Certificates</h2>
+                    <p class="text-gray-400 text-sm">Download certificates for events you have attended.</p>
+                </div>
+                
+                <div id="certificatesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <p class="text-gray-500 col-span-full text-center py-8">Loading certificates...</p>
                 </div>
             </div>
 
@@ -337,6 +296,7 @@
             <button onclick="showTab('joinIedc'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Join IEDC</button>
             <button onclick="showTab('payments'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Payments</button>
             <button onclick="showTab('trackStatus'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Track Status</button>
+            <button onclick="showTab('certificates'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Certificates</button>
             <div class="h-px bg-white/10 my-2"></div>
             <button onclick="showTab('submitProject'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Submit Project</button>
             <button onclick="showTab('submitIdea'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Submit Idea</button>
@@ -356,16 +316,16 @@
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygN6dZebvmijxVTVLcneuCOl9BbQmTuMzId36L4dQw_PfGNvfzFabNgtJOr43nUEzw/exec"; 
 
         // --- PASTE YOUR FIREBASE CONFIG HERE ---
-      const firebaseConfig = {
-  apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
-  authDomain: "metsiedc-3010e.firebaseapp.com",
-  databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
-  projectId: "metsiedc-3010e",
-  storageBucket: "metsiedc-3010e.firebasestorage.app",
-  messagingSenderId: "954403413150",
-  appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
-  measurementId: "G-6E7EK0D7JG"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+            authDomain: "metsiedc-3010e.firebaseapp.com",
+            databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+            projectId: "metsiedc-3010e",
+            storageBucket: "metsiedc-3010e.firebasestorage.app",
+            messagingSenderId: "954403413150",
+            appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+            measurementId: "G-6E7EK0D7JG"
+        };
         // ---------------------------------------
 
         const app = initializeApp(firebaseConfig);
@@ -556,14 +516,118 @@
         };
         document.getElementById('mobile-menu-toggle').addEventListener('click', toggleMobileSidebar);
 
+        // --- NEW CERTIFICATE LOGIC ---
+
+        // Fetch Certificates
+        window.fetchCertificates = async function() {
+            const grid = document.getElementById('certificatesGrid');
+            if(!auth.currentUser) return;
+
+            try {
+                const q = query(collection(db, "certificates"), where("userId", "==", auth.currentUser.uid));
+                const snap = await getDocs(q);
+
+                if (snap.empty) {
+                    grid.innerHTML = `
+                        <div class="col-span-full glass-card p-10 rounded-3xl text-center flex flex-col items-center">
+                            <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4">
+                                <i data-lucide="award" class="w-8 h-8 text-gray-500"></i>
+                            </div>
+                            <p class="text-gray-400">No certificates issued yet.</p>
+                        </div>`;
+                    lucide.createIcons();
+                    return;
+                }
+
+                let html = '';
+                snap.forEach((doc) => {
+                    const data = doc.data();
+                    html += `
+                    <div class="glass-card rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition duration-300 border border-white/5">
+                        <div class="h-32 bg-gradient-to-br from-indigo-900/50 to-purple-900/50 relative overflow-hidden">
+                             <img src="${data.templateUrl}" class="w-full h-full object-cover opacity-50 group-hover:opacity-80 transition" alt="Cert">
+                             <div class="absolute inset-0 flex items-center justify-center">
+                                <i data-lucide="award" class="w-10 h-10 text-white shadow-lg"></i>
+                             </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-bold text-white mb-1">${data.eventName}</h3>
+                            <p class="text-xs text-gray-400 mb-4">Issued: ${new Date(data.date).toLocaleDateString()}</p>
+                            
+                            <button onclick="generateAndDownloadCert('${data.templateUrl}', '${data.userName}', '${data.eventName}')" 
+                                class="w-full bg-white/10 hover:bg-white/20 text-white text-sm font-semibold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all group-hover:bg-indigo-600">
+                                <i data-lucide="download" class="w-4 h-4"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                    `;
+                });
+                grid.innerHTML = html;
+                lucide.createIcons();
+            } catch (e) {
+                console.error(e);
+                grid.innerHTML = `<p class="text-red-400 text-center col-span-full">Error loading certificates.</p>`;
+            }
+        };
+
+        // Generate and Download
+        window.generateAndDownloadCert = function(templateUrl, studentName, eventName) {
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<span class="animate-pulse">Generating...</span>`;
+            btn.disabled = true;
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.crossOrigin = "anonymous"; 
+            img.src = templateUrl;
+
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+
+                // Font Config - Auto-scales based on image width
+                const fontSize = Math.floor(canvas.width / 30); 
+                ctx.font = `bold ${fontSize}px 'Inter', sans-serif`;
+                ctx.fillStyle = "#000000"; // Change this if you need white text
+                ctx.textAlign = "center";
+                
+                // Draw Name in Center
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                ctx.fillText(studentName, centerX, centerY);
+
+                const link = document.createElement('a');
+                link.download = `${eventName}_Certificate_${studentName}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            };
+
+            img.onerror = () => {
+                alert("Could not load certificate template. Check CORS settings or URL.");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            };
+        };
+
         // Tabs
         window.showTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(tabId + 'Section').classList.remove('hidden');
+            
             document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            // Helper to highlight sidebar button
+            const activeLink = Array.from(document.querySelectorAll('.sidebar-link')).find(btn => btn.innerText.toLowerCase().includes(tabId.replace('Section','').toLowerCase().replace('overview','')));
+            if(activeLink) activeLink.classList.add('active');
+
             if (tabId === 'trackStatus') fetchMySubmissions();
+            if (tabId === 'certificates') fetchCertificates();
         };
     </script>
 </body>
-</html>
+    </html>
