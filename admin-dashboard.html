@@ -45,6 +45,11 @@
             #printableArea, #printableArea * { visibility: visible; }
             #printableArea { position: absolute; left: 0; top: 0; width: 100%; background: white; color: black; padding: 20px; }
             .no-print { display: none !important; }
+            /* Force background colors for print */
+            .bg-green-100 { background-color: #dcfce7 !important; }
+            .bg-red-100 { background-color: #fee2e2 !important; }
+            .text-green-800 { color: #166534 !important; }
+            .text-red-800 { color: #991b1b !important; }
         }
     </style>
 </head>
@@ -348,8 +353,8 @@
                         </div>
                         <div class="flex-grow overflow-y-auto p-4">
                             <table class="w-full text-sm text-left text-gray-400 glass-table">
-                                <thead class="text-xs sticky top-0 bg-[#0a0a0a] text-gray-500 uppercase"><tr><th class="px-4 py-2">Student Name</th><th class="px-4 py-2">Email</th></tr></thead>
-                                <tbody class="divide-y divide-white/5" id="reportAttendeesList"><tr><td colspan="2" class="px-4 py-8 text-center text-gray-600">No event selected.</td></tr></tbody>
+                                <thead class="text-xs sticky top-0 bg-[#0a0a0a] text-gray-500 uppercase"><tr><th class="px-4 py-2">Student Name</th><th class="px-4 py-2">Email</th><th class="px-4 py-2">Status</th></tr></thead>
+                                <tbody class="divide-y divide-white/5" id="reportAttendeesList"><tr><td colspan="3" class="px-4 py-8 text-center text-gray-600">No event selected.</td></tr></tbody>
                             </table>
                         </div>
                     </div>
@@ -456,7 +461,7 @@
         window.toggleAttendanceCheckbox = (id) => { const cb = document.getElementById(`att-check-${id}`); cb.checked = !cb.checked; };
         window.selectAllAttendance = (s) => document.querySelectorAll('.attendance-checkbox').forEach(cb => cb.checked = s);
 
-       // 4. Submit Attendance (With Lock Check)
+        // 4. Submit Attendance (Saves Emails for Student Dashboard) WITH ABSENTEE LOGIC
         window.submitAttendance = async () => {
             const btn = document.querySelector('button[onclick="submitAttendance()"]');
             const eventName = document.getElementById('attendanceEventName').value;
@@ -468,8 +473,8 @@
                 return; 
             }
             
-            if(checkboxes.length === 0) {
-                alert("Please select at least one student.");
+            if(attendanceStudents.length === 0) {
+                alert("Roster is empty. Add students first.");
                 return;
             }
 
@@ -483,24 +488,30 @@
 
                 if (!snap.empty) {
                     alert("⚠️ ATTENDANCE LOCKED: Attendance for " + date + " has already been marked and cannot be edited.");
-                    btn.disabled = false;
-                    btn.innerText = "Upload Attendance";
                     return; // Stop execution here
                 }
 
                 // If not locked, proceed to save
                 btn.innerText = "Uploading...";
                 
-                // Extract IDs and Emails
-                const attendeeIds = checkboxes.map(cb => cb.value);
+                // 1. Identify Present Students
+                const presentIds = checkboxes.map(cb => cb.value);
                 const presentEmails = checkboxes.map(cb => cb.getAttribute('data-email'));
+
+                // 2. Identify Absent Students (Everyone in roster NOT in presentIds)
+                const absentStudents = attendanceStudents.filter(s => !presentIds.includes(s.id));
+                const absentIds = absentStudents.map(s => s.id);
+                const absentEmails = absentStudents.map(s => s.email);
 
                 await addDoc(collection(db, "attendance"), {
                     eventName,
                     date,
-                    attendees: attendeeIds,
-                    presentEmails: presentEmails,
-                    totalPresent: attendeeIds.length,
+                    attendees: presentIds,      // Present IDs
+                    absentees: absentIds,       // Absent IDs
+                    presentEmails: presentEmails, // Present Emails
+                    absentEmails: absentEmails,   // Absent Emails
+                    totalPresent: presentIds.length,
+                    totalAbsent: absentIds.length,
                     timestamp: Date.now()
                 });
 
@@ -538,24 +549,45 @@
 
         window.showReportDetails = function(data) {
             document.getElementById('reportDetailTitle').textContent = data.eventName;
-            document.getElementById('reportDetailMeta').textContent = `Date: ${data.date} • Total Present: ${data.totalPresent}`;
+            document.getElementById('reportDetailMeta').textContent = `Date: ${data.date} • Present: ${data.totalPresent} • Absent: ${data.totalAbsent || 0}`;
             const tbody = document.getElementById('reportAttendeesList');
             tbody.innerHTML = '';
             
-            // Since we save 'presentEmails', we match them with 'attendanceStudents' array to get Names
-            // OR if 'attendees' (ids) are saved, we check against attendanceStudents.
+            // We want to show ALL students (Present AND Absent)
+            // Strategy: Iterate through our loaded 'attendanceStudents' (Roster) 
+            // and check their status in this record.
             
-            if(!data.attendees || data.attendees.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="2" class="px-4 py-4 text-center text-gray-500">No attendees recorded.</td></tr>';
+            if (attendanceStudents.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="px-4 py-8 text-center text-gray-500">Roster empty or not loaded.</td></tr>';
                 return;
             }
 
-            // We look up names from the currently loaded roster
-            data.attendees.forEach(id => {
-                const student = attendanceStudents.find(s => s.id === id);
-                const name = student ? student.name : "Unknown Student";
-                const email = student ? student.email : "--";
-                tbody.innerHTML += `<tr><td class="px-4 py-2 text-white border-b border-white/5">${name}</td><td class="px-4 py-2 text-gray-400 border-b border-white/5">${email}</td></tr>`;
+            // Create a map for quick lookup
+            const presentSet = new Set(data.attendees || []);
+            const absentSet = new Set(data.absentees || []);
+
+            // Sort Roster Alphabetically
+            const sortedRoster = [...attendanceStudents].sort((a,b) => a.name.localeCompare(b.name));
+
+            sortedRoster.forEach(student => {
+                let statusBadge = '<span class="text-xs text-gray-500">Unknown</span>';
+                let rowClass = "";
+
+                if (presentSet.has(student.id)) {
+                    statusBadge = '<span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded">PRESENT</span>';
+                } else if (absentSet.has(student.id)) {
+                    statusBadge = '<span class="bg-red-100 text-red-800 text-xs font-bold px-2 py-0.5 rounded">ABSENT</span>';
+                } else {
+                    // Student was not in roster when this attendance was taken
+                    statusBadge = '<span class="text-xs text-gray-500 italic">Not in Roster</span>';
+                }
+
+                tbody.innerHTML += `
+                    <tr class="${rowClass}">
+                        <td class="px-4 py-2 text-white border-b border-white/5">${student.name}</td>
+                        <td class="px-4 py-2 text-gray-400 border-b border-white/5">${student.email}</td>
+                        <td class="px-4 py-2 border-b border-white/5">${statusBadge}</td>
+                    </tr>`;
             });
         };
 
