@@ -223,6 +223,7 @@
                             <div class="p-4 bg-white/5 rounded-xl border border-white/5"><p class="text-xs text-gray-500 uppercase">Email</p><p class="text-gray-200 text-sm flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-indigo-400"></i> <span id="profileCardEmail">--</span></p></div>
                         </div>
                     </div>
+                    
                     <div class="md:col-span-2 space-y-8">
                         <div class="glass-card rounded-3xl p-8">
                             <div class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold text-white">Edit Profile</h2><div id="profileStatusMessage" class="hidden text-xs px-3 py-1 rounded bg-green-500/20 text-green-400"></div></div>
@@ -241,6 +242,10 @@
                                 <i data-lucide="lock" class="w-5 h-5 text-red-400"></i> Change Password
                             </h2>
                             <form id="changePasswordForm" class="space-y-6">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Current Password</label>
+                                    <input type="password" id="currentPassword" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Current Password" required>
+                                </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">New Password</label>
@@ -330,7 +335,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signOut, onAuthStateChanged, updatePassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signOut, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
@@ -487,9 +492,10 @@
             btn.innerText = "Save Changes"; btn.disabled = false;
         });
 
-        // --- PASSWORD RESET LOGIC ---
+        // --- PASSWORD RESET LOGIC (UPDATED WITH RE-AUTH) ---
         document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const currentPass = document.getElementById('currentPassword').value;
             const p1 = document.getElementById('newPassword').value;
             const p2 = document.getElementById('confirmPassword').value;
             const btn = e.target.querySelector('button');
@@ -507,18 +513,28 @@
             }
 
             btn.disabled = true;
-            btn.textContent = "Updating...";
+            btn.textContent = "Verifying...";
 
             try {
-                await updatePassword(auth.currentUser, p1);
+                // 1. Create credential from Current Password
+                const user = auth.currentUser;
+                const credential = EmailAuthProvider.credential(user.email, currentPass);
+                
+                // 2. Re-authenticate
+                await reauthenticateWithCredential(user, credential);
+                
+                // 3. Update Password
+                btn.textContent = "Updating...";
+                await updatePassword(user, p1);
+                
                 status.textContent = "Password updated successfully!";
                 status.className = "text-xs text-green-400";
                 e.target.reset();
             } catch(error) {
                 status.textContent = "Error: " + error.message; 
                 status.className = "text-xs text-red-400";
-                if(error.code === 'auth/requires-recent-login') {
-                    alert("For security, please logout and login again to change your password.");
+                if(error.code === 'auth/wrong-password') {
+                    status.textContent = "Incorrect current password.";
                 }
             } finally {
                 btn.disabled = false;
@@ -692,4 +708,4 @@
         };
     </script>
 </body>
-    </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                               </html>
