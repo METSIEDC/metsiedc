@@ -45,7 +45,6 @@
             #printableArea, #printableArea * { visibility: visible; }
             #printableArea { position: absolute; left: 0; top: 0; width: 100%; background: white; color: black; padding: 20px; }
             .no-print { display: none !important; }
-            /* Force background colors for print */
             .bg-green-100 { background-color: #dcfce7 !important; }
             .bg-red-100 { background-color: #fee2e2 !important; }
             .text-green-800 { color: #166534 !important; }
@@ -231,7 +230,22 @@
             </div>
             
             <div id="paymentsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-10 rounded-3xl text-center border border-white/10 flex flex-col items-center justify-center min-h-[400px]"><div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-6"><i data-lucide="rocket" class="w-10 h-10 text-red-400"></i></div><h2 class="text-3xl font-bold text-white mb-3">Coming Soon</h2><p class="text-gray-400 max-w-md mx-auto leading-relaxed">Payment Portal in progress.</p><div class="mt-8 px-4 py-2 bg-red-500/10 text-red-400 rounded-full text-xs font-bold uppercase tracking-wider border border-red-500/20">Feature In Progress</div></div></div>
-            <div id="usersSection" class="tab-content hidden space-y-6"><div class="flex justify-between items-center"><h2 class="text-2xl font-bold text-white">User Management</h2><div class="flex gap-2"><button onclick="toggleAddUserModal(true)" class="text-xs bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-500 transition font-bold shadow-lg shadow-red-900/20 flex items-center gap-2">Add</button><button onclick="fetchUsers()" class="text-xs bg-white/10 px-3 py-2 rounded hover:bg-white/20 transition">Refresh</button></div></div><div class="glass-card rounded-2xl overflow-hidden overflow-x-auto"><table class="w-full text-sm text-left text-gray-400 glass-table min-w-[600px]"><thead class="text-xs"><tr><th class="px-6 py-4">Name</th><th class="px-6 py-4">Email</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Actions</th></tr></thead><tbody class="divide-y divide-white/5" id="userListBody"><tr><td colspan="4" class="px-6 py-4 text-center">Loading...</td></tr></tbody></table></div></div>
+            
+            <div id="usersSection" class="tab-content hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-white">User Management</h2>
+                    <div class="flex gap-2">
+                        <button onclick="toggleAddUserModal(true)" class="text-xs bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-500 transition font-bold shadow-lg shadow-red-900/20 flex items-center gap-2">Add</button>
+                    </div>
+                </div>
+                <div class="glass-card rounded-2xl overflow-hidden overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-400 glass-table min-w-[600px]">
+                        <thead class="text-xs"><tr><th class="px-6 py-4">Name</th><th class="px-6 py-4">Email</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Actions</th></tr></thead>
+                        <tbody class="divide-y divide-white/5" id="userListBody"><tr><td colspan="4" class="px-6 py-4 text-center">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
             <div id="submissionsSection" class="tab-content hidden space-y-6"><div class="flex justify-between items-center"><h2 class="text-2xl font-bold text-white">Review Submissions</h2><button onclick="fetchSubmissions()" class="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20 transition">Refresh</button></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="submissionsGrid"><p class="text-gray-500 col-span-2 text-center">No pending submissions.</p></div></div>
             
             <div id="eventFormsSection" class="tab-content hidden max-w-4xl mx-auto space-y-6">
@@ -334,6 +348,19 @@
 
     <div id="addUserModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4"><div class="glass-card w-full max-w-md p-8 rounded-3xl relative"><button onclick="toggleAddUserModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button><h2 class="text-2xl font-bold text-white mb-6">Add New Student</h2><form id="adminAddUserForm" class="space-y-4"><input type="text" id="newUserName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Full Name"><input type="email" id="newUserEmail" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Email"><input type="password" id="newUserPassword" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Password"><div id="addUserStatus" class="hidden text-xs text-center p-2 rounded"></div><button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl transition-all mt-2">Create Account</button></form></div></div>
     
+    <div id="editUserModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-md p-8 rounded-3xl relative">
+            <button onclick="toggleEditUserModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <h2 class="text-2xl font-bold text-white mb-6">Edit User Name</h2>
+            <form id="editUserForm" class="space-y-4">
+                <input type="hidden" id="editUserId">
+                <input type="text" id="editUserName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Full Name">
+                <div id="editUserStatus" class="hidden text-xs text-center p-2 rounded"></div>
+                <button type="submit" class="w-full bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3 rounded-xl transition-all mt-2">Update Name</button>
+            </form>
+        </div>
+    </div>
+
     <div id="reportsModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-card w-full max-w-4xl h-[80vh] flex flex-col rounded-3xl relative overflow-hidden">
             <div class="p-6 border-b border-white/10 flex justify-between items-center bg-black/20">
@@ -366,7 +393,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, getDocs, addDoc, deleteDoc, setDoc, query, where, updateDoc, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, getDocs, addDoc, deleteDoc, setDoc, query, where, updateDoc, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
 
@@ -395,8 +422,6 @@
         let pastEventCover = null;
         let pastEventGallery = [];
         let certTemplateFile = null; 
-
-        // New Variables for Attendance
         let attendanceStudents = [];
 
         onAuthStateChanged(auth, async (user) => {
@@ -409,192 +434,81 @@
             } else { window.location.href = 'admin.html'; }
         });
 
-        // --- NEW: MANUAL ATTENDANCE ROSTER LOGIC ---
-        // 1. Fetch Students from 'attendance_students' collection
+        // --- MANUAL ATTENDANCE ROSTER LOGIC ---
         async function fetchAttendanceStudents() {
             try {
                 const q = query(collection(db, "attendance_students"), orderBy("name"));
                 const snap = await getDocs(q);
                 attendanceStudents = [];
                 let html = '';
-                
                 if (snap.empty) {
                     html = '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No students in roster. Add one above.</td></tr>';
                 } else {
                     snap.forEach(doc => {
                         const d = doc.data();
                         attendanceStudents.push({ id: doc.id, ...d });
-                        html += `
-                        <tr class="hover:bg-white/5 transition cursor-pointer" onclick="toggleAttendanceCheckbox('${doc.id}')">
-                            <td class="px-4 py-4 text-center">
-                                <input type="checkbox" class="custom-checkbox attendance-checkbox" value="${doc.id}" data-email="${d.email}" data-name="${d.name}" id="att-check-${doc.id}" onclick="event.stopPropagation()">
-                            </td>
-                            <td class="px-4 py-4 font-medium text-white">${d.name}</td>
-                            <td class="px-4 py-4 hidden sm:table-cell">${d.email}</td>
-                            <td class="px-4 py-4"><button onclick="deleteAttendanceStudent('${doc.id}', event)" class="text-red-400 hover:text-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td>
-                        </tr>`;
+                        html += `<tr class="hover:bg-white/5 transition cursor-pointer" onclick="toggleAttendanceCheckbox('${doc.id}')"><td class="px-4 py-4 text-center"><input type="checkbox" class="custom-checkbox attendance-checkbox" value="${doc.id}" data-email="${d.email}" data-name="${d.name}" id="att-check-${doc.id}" onclick="event.stopPropagation()"></td><td class="px-4 py-4 font-medium text-white">${d.name}</td><td class="px-4 py-4 hidden sm:table-cell">${d.email}</td><td class="px-4 py-4"><button onclick="deleteAttendanceStudent('${doc.id}', event)" class="text-red-400 hover:text-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
                     });
                 }
                 document.getElementById('attendanceListBody').innerHTML = html;
                 lucide.createIcons();
             } catch (e) { console.error(e); }
         }
-
-        // 2. Add New Student to Roster
         document.getElementById('addAttendanceStudentForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('attNewName').value;
             const email = document.getElementById('attNewEmail').value;
-            try {
-                await addDoc(collection(db, "attendance_students"), { name, email, createdAt: Date.now() });
-                document.getElementById('addAttendanceStudentForm').reset();
-                fetchAttendanceStudents();
-            } catch(e) { alert(e.message); }
+            try { await addDoc(collection(db, "attendance_students"), { name, email, createdAt: Date.now() }); document.getElementById('addAttendanceStudentForm').reset(); fetchAttendanceStudents(); } catch(e) { alert(e.message); }
         });
-
-        // 3. Delete Student from Roster
-        window.deleteAttendanceStudent = async (id, e) => {
-            e.stopPropagation();
-            if(confirm("Remove this student from roster?")) { await deleteDoc(doc(db, "attendance_students", id)); fetchAttendanceStudents(); }
-        };
-
+        window.deleteAttendanceStudent = async (id, e) => { e.stopPropagation(); if(confirm("Remove from roster?")) { await deleteDoc(doc(db, "attendance_students", id)); fetchAttendanceStudents(); } };
         window.toggleAttendanceCheckbox = (id) => { const cb = document.getElementById(`att-check-${id}`); cb.checked = !cb.checked; };
         window.selectAllAttendance = (s) => document.querySelectorAll('.attendance-checkbox').forEach(cb => cb.checked = s);
 
-        // 4. Submit Attendance (Saves Emails for Student Dashboard) WITH ABSENTEE LOGIC
         window.submitAttendance = async () => {
             const btn = document.querySelector('button[onclick="submitAttendance()"]');
             const eventName = document.getElementById('attendanceEventName').value;
             const date = document.getElementById('attendanceDate').value;
             const checkboxes = Array.from(document.querySelectorAll('.attendance-checkbox:checked'));
-            
-            if(!eventName || !date) { 
-                alert("Please enter event name and select a date."); 
-                return; 
-            }
-            
-            if(attendanceStudents.length === 0) {
-                alert("Roster is empty. Add students first.");
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerText = "Checking...";
-
+            if(!eventName || !date) { alert("Please enter event name and select a date."); return; }
+            if(attendanceStudents.length === 0) { alert("Roster is empty. Add students first."); return; }
+            btn.disabled = true; btn.innerText = "Checking...";
             try {
-                // LOCK CHECK: Query if attendance for this date already exists
                 const q = query(collection(db, "attendance"), where("date", "==", date));
                 const snap = await getDocs(q);
-
-                if (!snap.empty) {
-                    alert("⚠️ ATTENDANCE LOCKED: Attendance for " + date + " has already been marked and cannot be edited.");
-                    return; // Stop execution here
-                }
-
-                // If not locked, proceed to save
+                if (!snap.empty) { alert("⚠️ ATTENDANCE LOCKED: Attendance for " + date + " has already been marked."); return; }
                 btn.innerText = "Uploading...";
-                
-                // 1. Identify Present Students
                 const presentIds = checkboxes.map(cb => cb.value);
                 const presentEmails = checkboxes.map(cb => cb.getAttribute('data-email'));
-
-                // 2. Identify Absent Students (Everyone in roster NOT in presentIds)
                 const absentStudents = attendanceStudents.filter(s => !presentIds.includes(s.id));
                 const absentIds = absentStudents.map(s => s.id);
                 const absentEmails = absentStudents.map(s => s.email);
-
-                await addDoc(collection(db, "attendance"), {
-                    eventName,
-                    date,
-                    attendees: presentIds,      // Present IDs
-                    absentees: absentIds,       // Absent IDs
-                    presentEmails: presentEmails, // Present Emails
-                    absentEmails: absentEmails,   // Absent Emails
-                    totalPresent: presentIds.length,
-                    totalAbsent: absentIds.length,
-                    timestamp: Date.now()
-                });
-
-                alert("Attendance Uploaded & Date Locked Successfully!");
-                selectAllAttendance(false);
-                document.getElementById('attendanceEventName').value = '';
-                
-            } catch(e) { 
-                alert("Error: " + e.message); 
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "Upload Attendance";
-            }
+                await addDoc(collection(db, "attendance"), { eventName, date, attendees: presentIds, absentees: absentIds, presentEmails: presentEmails, absentEmails: absentEmails, totalPresent: presentIds.length, totalAbsent: absentIds.length, timestamp: Date.now() });
+                alert("Attendance Uploaded & Date Locked Successfully!"); selectAllAttendance(false); document.getElementById('attendanceEventName').value = '';
+            } catch(e) { alert("Error: " + e.message); } finally { btn.disabled = false; btn.innerText = "Upload Attendance"; }
         };
 
-        // --- REPORT & PRINT LOGIC ---
         window.openReportsModal = async function() {
-            document.getElementById('reportsModal').classList.remove('hidden');
-            const list = document.getElementById('reportEventsList');
-            list.innerHTML = '<p class="text-gray-500 text-xs">Loading...</p>';
+            document.getElementById('reportsModal').classList.remove('hidden'); const list = document.getElementById('reportEventsList'); list.innerHTML = '<p class="text-gray-500 text-xs">Loading...</p>';
             try {
                 const q = query(collection(db, "attendance"), orderBy("timestamp", "desc"));
                 const snap = await getDocs(q);
                 list.innerHTML = '';
-                snap.forEach(doc => {
-                    const d = doc.data();
-                    const div = document.createElement('div');
-                    div.className = "p-3 rounded-lg hover:bg-white/10 cursor-pointer transition border border-transparent hover:border-white/10 group";
-                    div.innerHTML = `<h4 class="text-sm font-bold text-white group-hover:text-red-400 transition">${d.eventName}</h4><div class="flex justify-between items-center mt-1"><span class="text-xs text-gray-500">${d.date}</span><span class="text-xs bg-green-900/30 text-green-400 px-2 py-0.5 rounded-full">${d.totalPresent || 0} Present</span></div>`;
-                    div.onclick = () => showReportDetails(d);
-                    list.appendChild(div);
-                });
+                snap.forEach(doc => { const d = doc.data(); const div = document.createElement('div'); div.className = "p-3 rounded-lg hover:bg-white/10 cursor-pointer transition border border-transparent hover:border-white/10 group"; div.innerHTML = `<h4 class="text-sm font-bold text-white group-hover:text-red-400 transition">${d.eventName}</h4><div class="flex justify-between items-center mt-1"><span class="text-xs text-gray-500">${d.date}</span><span class="text-xs bg-green-900/30 text-green-400 px-2 py-0.5 rounded-full">${d.totalPresent || 0} Present</span></div>`; div.onclick = () => showReportDetails(d); list.appendChild(div); });
             } catch(e) { console.error(e); }
         };
-
         window.showReportDetails = function(data) {
             document.getElementById('reportDetailTitle').textContent = data.eventName;
             document.getElementById('reportDetailMeta').textContent = `Date: ${data.date} • Present: ${data.totalPresent} • Absent: ${data.totalAbsent || 0}`;
-            const tbody = document.getElementById('reportAttendeesList');
-            tbody.innerHTML = '';
-            
-            // We want to show ALL students (Present AND Absent)
-            // Strategy: Iterate through our loaded 'attendanceStudents' (Roster) 
-            // and check their status in this record.
-            
-            if (attendanceStudents.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" class="px-4 py-8 text-center text-gray-500">Roster empty or not loaded.</td></tr>';
-                return;
-            }
-
-            // Create a map for quick lookup
-            const presentSet = new Set(data.attendees || []);
-            const absentSet = new Set(data.absentees || []);
-
-            // Sort Roster Alphabetically
-            const sortedRoster = [...attendanceStudents].sort((a,b) => a.name.localeCompare(b.name));
-
+            const tbody = document.getElementById('reportAttendeesList'); tbody.innerHTML = '';
+            if (attendanceStudents.length === 0) { tbody.innerHTML = '<tr><td colspan="3" class="px-4 py-8 text-center text-gray-500">Roster empty or not loaded.</td></tr>'; return; }
+            const presentSet = new Set(data.attendees || []); const absentSet = new Set(data.absentees || []); const sortedRoster = [...attendanceStudents].sort((a,b) => a.name.localeCompare(b.name));
             sortedRoster.forEach(student => {
                 let statusBadge = '<span class="text-xs text-gray-500">Unknown</span>';
-                let rowClass = "";
-
-                if (presentSet.has(student.id)) {
-                    statusBadge = '<span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded">PRESENT</span>';
-                } else if (absentSet.has(student.id)) {
-                    statusBadge = '<span class="bg-red-100 text-red-800 text-xs font-bold px-2 py-0.5 rounded">ABSENT</span>';
-                } else {
-                    // Student was not in roster when this attendance was taken
-                    statusBadge = '<span class="text-xs text-gray-500 italic">Not in Roster</span>';
-                }
-
-                tbody.innerHTML += `
-                    <tr class="${rowClass}">
-                        <td class="px-4 py-2 text-white border-b border-white/5">${student.name}</td>
-                        <td class="px-4 py-2 text-gray-400 border-b border-white/5">${student.email}</td>
-                        <td class="px-4 py-2 border-b border-white/5">${statusBadge}</td>
-                    </tr>`;
+                if (presentSet.has(student.id)) { statusBadge = '<span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded">PRESENT</span>'; } else if (absentSet.has(student.id)) { statusBadge = '<span class="bg-red-100 text-red-800 text-xs font-bold px-2 py-0.5 rounded">ABSENT</span>'; } else { statusBadge = '<span class="text-xs text-gray-500 italic">Not in Roster</span>'; }
+                tbody.innerHTML += `<tr><td class="px-4 py-2 text-white border-b border-white/5">${student.name}</td><td class="px-4 py-2 text-gray-400 border-b border-white/5">${student.email}</td><td class="px-4 py-2 border-b border-white/5">${statusBadge}</td></tr>`;
             });
         };
-
-        window.printReport = function() {
-            window.print();
-        };
-        // --- END ATTENDANCE LOGIC ---
+        window.printReport = function() { window.print(); };
 
         // --- UPLOAD HELPER ---
         async function uploadToDrive(file) {
@@ -614,62 +528,22 @@
 
         // --- CERTIFICATE LOGIC (BASE64) ---
         window.handleCertTemplate = (event) => {
-            const file = event.target.files[0];
-            if (!file) return;
-            if (file.size > 1024 * 1024) { alert("File too large! Please use an image under 1MB."); return; }
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image();
-                img.src = e.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
-                    const MAX_WIDTH = 1200; let width = img.width; let height = img.height;
-                    if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-                    canvas.width = width; canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    certTemplateFile = canvas.toDataURL('image/jpeg', 0.8);
-                    document.getElementById('certFileName').textContent = "Template Loaded (Ready)";
-                    document.getElementById('certFileName').classList.add('text-green-400');
-                };
-            };
-            reader.readAsDataURL(file);
+            const file = event.target.files[0]; if (!file) return; if (file.size > 1024 * 1024) { alert("File too large! Please use an image under 1MB."); return; }
+            const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.src = e.target.result; img.onload = () => { const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); const MAX_WIDTH = 1200; let width = img.width; let height = img.height; if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; } canvas.width = width; canvas.height = height; ctx.drawImage(img, 0, 0, width, height); certTemplateFile = canvas.toDataURL('image/jpeg', 0.8); document.getElementById('certFileName').textContent = "Template Loaded (Ready)"; document.getElementById('certFileName').classList.add('text-green-400'); }; }; reader.readAsDataURL(file);
         };
-
         window.fetchUsersForCert = async function() {
-            const list = document.getElementById('certUserListBody');
-            let html = '';
-            allUsers.forEach(u => {
-                const name = u.name || u.displayName || 'Unknown';
-                html += `<tr class="hover:bg-white/5 transition cursor-pointer" onclick="toggleCertCheckbox('${u.id}')"><td class="px-4 py-3 text-center"><input type="checkbox" class="custom-checkbox cert-checkbox" value="${u.id}" data-name="${name}" id="cert-check-${u.id}" onclick="event.stopPropagation()"></td><td class="px-4 py-3 text-white">${name}</td><td class="px-4 py-3 text-gray-400 text-xs">${u.email}</td></tr>`;
-            });
+            const list = document.getElementById('certUserListBody'); let html = '';
+            allUsers.forEach(u => { const name = u.name || u.displayName || 'Unknown'; html += `<tr class="hover:bg-white/5 transition cursor-pointer" onclick="toggleCertCheckbox('${u.id}')"><td class="px-4 py-3 text-center"><input type="checkbox" class="custom-checkbox cert-checkbox" value="${u.id}" data-name="${name}" id="cert-check-${u.id}" onclick="event.stopPropagation()"></td><td class="px-4 py-3 text-white">${name}</td><td class="px-4 py-3 text-gray-400 text-xs">${u.email}</td></tr>`; });
             list.innerHTML = html;
         };
-
         window.toggleCertCheckbox = (id) => { const cb = document.getElementById(`cert-check-${id}`); cb.checked = !cb.checked; };
         window.selectAllCertUsers = (s) => document.querySelectorAll('.cert-checkbox').forEach(cb => cb.checked = s);
-        window.filterCertUsers = () => {
-            const term = document.getElementById('certSearch').value.toLowerCase();
-            const rows = document.getElementById('certUserListBody').getElementsByTagName('tr');
-            Array.from(rows).forEach(row => { row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
-        };
-
+        window.filterCertUsers = () => { const term = document.getElementById('certSearch').value.toLowerCase(); const rows = document.getElementById('certUserListBody').getElementsByTagName('tr'); Array.from(rows).forEach(row => { row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; }); };
         window.issueCertificates = async () => {
-            const btn = document.getElementById('issueCertBtn');
-            const status = document.getElementById('certStatus');
-            const eventName = document.getElementById('certEventName').value;
-            const date = document.getElementById('certDate').value;
-            const selected = Array.from(document.querySelectorAll('.cert-checkbox:checked'));
+            const btn = document.getElementById('issueCertBtn'); const status = document.getElementById('certStatus'); const eventName = document.getElementById('certEventName').value; const date = document.getElementById('certDate').value; const selected = Array.from(document.querySelectorAll('.cert-checkbox:checked'));
             if(!eventName || !date || !certTemplateFile || selected.length === 0) { alert("Missing fields."); return; }
             btn.disabled = true; status.classList.remove('hidden'); status.textContent = "Processing..."; status.className = "mb-4 p-3 rounded text-sm text-center bg-yellow-500/20 text-yellow-400 block";
-            try {
-                let count = 0;
-                for (const checkbox of selected) {
-                    await addDoc(collection(db, "certificates"), { eventName, date, templateUrl: certTemplateFile, userId: checkbox.value, userName: checkbox.getAttribute('data-name'), issuedAt: Date.now() });
-                    count++; status.textContent = `Issued ${count}/${selected.length}...`;
-                }
-                status.textContent = "Success!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400 block";
-                document.getElementById('certEventName').value = ''; document.getElementById('certTemplateInput').value = ''; certTemplateFile = null; selectAllCertUsers(false);
-            } catch(e) { status.textContent = "Error: " + e.message; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; }
+            try { let count = 0; for (const checkbox of selected) { await addDoc(collection(db, "certificates"), { eventName, date, templateUrl: certTemplateFile, userId: checkbox.value, userName: checkbox.getAttribute('data-name'), issuedAt: Date.now() }); count++; status.textContent = `Issued ${count}/${selected.length}...`; } status.textContent = "Success!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400 block"; document.getElementById('certEventName').value = ''; document.getElementById('certTemplateInput').value = ''; certTemplateFile = null; selectAllCertUsers(false); } catch(e) { status.textContent = "Error: " + e.message; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; }
         };
 
         // --- PAST EVENTS ---
@@ -679,18 +553,14 @@
             e.preventDefault(); const btn = document.getElementById('savePastEventBtn'); const status = document.getElementById('pastEventStatus'); btn.disabled = true; btn.textContent = "Uploading..."; status.classList.remove('hidden');
             try {
                 let coverUrl = ""; if(pastEventCover) coverUrl = await uploadToDrive(pastEventCover);
-                let galleryUrls = [];
-                for(let i=0; i<pastEventGallery.length; i++) { if(pastEventGallery[i].size<5*1024*1024) galleryUrls.push(await uploadToDrive(pastEventGallery[i])); }
+                let galleryUrls = []; for(let i=0; i<pastEventGallery.length; i++) { if(pastEventGallery[i].size<5*1024*1024) galleryUrls.push(await uploadToDrive(pastEventGallery[i])); }
                 await addDoc(collection(db, "past_events"), { title: document.getElementById('peTitle').value, date: document.getElementById('peDate').value, description: document.getElementById('peDesc').value, coverImage: coverUrl, reportUrl: document.getElementById('peReport').value, gallery: galleryUrls, timestamp: Date.now() });
                 status.textContent = "Success!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400 block"; document.getElementById('pastEventForm').reset(); fetchPastEvents();
             } catch(e) { status.textContent = "Error: " + e.message; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; btn.textContent = "Archive Event"; }
         });
         async function fetchPastEvents() {
-            const list = document.getElementById('pastEventsList');
-            const q = query(collection(db, "past_events"), orderBy("date", "desc"));
-            const snap = await getDocs(q);
-            let html = ''; snap.forEach(doc => { const d = doc.data(); html += `<div class="bg-white/5 border border-white/10 p-4 rounded-xl flex justify-between items-center group hover:bg-white/10 transition"><div><h4 class="font-bold text-white text-sm">${d.title}</h4><p class="text-xs text-gray-500">${d.date}</p></div><button onclick="deletePastEvent('${doc.id}')" class="bg-red-500/10 text-red-400 p-2 rounded-lg hover:bg-red-500 hover:text-white transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`; });
-            list.innerHTML = html; lucide.createIcons();
+            const list = document.getElementById('pastEventsList'); const q = query(collection(db, "past_events"), orderBy("date", "desc")); const snap = await getDocs(q);
+            let html = ''; snap.forEach(doc => { const d = doc.data(); html += `<div class="bg-white/5 border border-white/10 p-4 rounded-xl flex justify-between items-center group hover:bg-white/10 transition"><div><h4 class="font-bold text-white text-sm">${d.title}</h4><p class="text-xs text-gray-500">${d.date}</p></div><button onclick="deletePastEvent('${doc.id}')" class="bg-red-500/10 text-red-400 p-2 rounded-lg hover:bg-red-500 hover:text-white transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`; }); list.innerHTML = html; lucide.createIcons();
         }
         window.deletePastEvent = async (id) => { if(confirm("Delete?")) { await deleteDoc(doc(db, "past_events", id)); fetchPastEvents(); } };
 
@@ -700,37 +570,95 @@
         window.removeQuestion = (id) => { currentQuestions=currentQuestions.filter(q=>q.id!==id); renderQuestionsPreview(); };
         function renderQuestionsPreview() { const c=document.getElementById('questionsPreview'); c.innerHTML=currentQuestions.map((q,i)=>`<div class="flex justify-between items-center bg-[#0a0a0a] border border-white/10 p-3 rounded-lg mb-2"><div class="flex items-center gap-3"><span class="text-xs bg-white/10 text-gray-300 w-6 h-6 flex items-center justify-center rounded-full">${i+1}</span><div><p class="text-sm font-bold text-white">${q.label}</p><p class="text-[10px] text-gray-500 uppercase">${q.type}</p></div></div><button onclick="removeQuestion(${q.id})" class="text-red-400 p-2"><i data-lucide="trash" class="w-4 h-4"></i></button></div>`).join(''); lucide.createIcons(); }
         document.getElementById('formBuilder').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if(currentQuestions.length===0) return alert("Add questions.");
+            e.preventDefault(); if(currentQuestions.length===0) return alert("Add questions.");
             try { await addDoc(collection(db, "eventForms"), { title: document.getElementById('formTitle').value, sheetUrl: document.getElementById('formSheetUrl').value, questions: currentQuestions, active: true, createdAt: Date.now() }); alert("Form Created!"); document.getElementById('formBuilder').reset(); currentQuestions=[]; renderQuestionsPreview(); fetchActiveForms(); } catch(e){alert(e.message);}
         });
         async function fetchActiveForms() {
-            const list = document.getElementById('activeFormsList');
-            const q = query(collection(db, "eventForms"), orderBy("createdAt", "desc"));
-            const snap = await getDocs(q);
-            let html = ''; snap.forEach(doc => { const d=doc.data(); html+=`<div class="bg-white/5 border border-white/10 p-4 rounded-xl flex justify-between items-center"><div><h4 class="font-bold text-white text-sm">${d.title}</h4><p class="text-xs text-gray-500">${d.questions.length} Qs • ${new Date(d.createdAt).toLocaleDateString()}</p></div><button onclick="deleteForm('${doc.id}')" class="text-red-400 p-2"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`; });
-            list.innerHTML = html; lucide.createIcons();
+            const list = document.getElementById('activeFormsList'); const q = query(collection(db, "eventForms"), orderBy("createdAt", "desc")); const snap = await getDocs(q);
+            let html = ''; snap.forEach(doc => { const d=doc.data(); html+=`<div class="bg-white/5 border border-white/10 p-4 rounded-xl flex justify-between items-center"><div><h4 class="font-bold text-white text-sm">${d.title}</h4><p class="text-xs text-gray-500">${d.questions.length} Qs • ${new Date(d.createdAt).toLocaleDateString()}</p></div><button onclick="deleteForm('${doc.id}')" class="text-red-400 p-2"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`; }); list.innerHTML = html; lucide.createIcons();
         }
         window.deleteForm = async (id) => { if(confirm("Delete?")) { await deleteDoc(doc(db, "eventForms", id)); fetchActiveForms(); } };
 
-        // --- USERS & SUBMISSIONS ---
-        async function fetchUsers() {
-            const snap = await getDocs(collection(db, "users"));
-            allUsers = []; let userHtml = ''; let count = 0;
-            snap.forEach(doc => { const d=doc.data(); allUsers.push({id:doc.id, ...d}); count++; userHtml+=`<tr><td class="px-6 py-4 text-white">${d.name||d.displayName||'Unknown'}</td><td class="px-6 py-4">${d.email}</td><td class="px-6 py-4">${d.role==='admin'?'Admin':'Student'}</td><td class="px-6 py-4"><button onclick="deleteUser('${doc.id}')" class="text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`; });
-            document.getElementById('userListBody').innerHTML = userHtml;
-            document.getElementById('totalUsersCount').textContent = count;
-            lucide.createIcons();
-            fetchUsersForCert(); 
-        }
-        window.deleteUser = async (id) => { if(confirm("Delete user?")) { await deleteDoc(doc(db, "users", id)); fetchUsers(); } };
+        // --- USERS (REAL-TIME FETCH) & EDIT LOGIC ---
+        let userUnsubscribe = null;
+        window.fetchUsers = function() {
+            if(userUnsubscribe) userUnsubscribe();
+            const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
+            userUnsubscribe = onSnapshot(q, (snapshot) => {
+                allUsers = [];
+                let userHtml = '';
+                let count = 0;
+                snapshot.forEach(doc => {
+                    const d = doc.data();
+                    allUsers.push({ id: doc.id, ...d });
+                    count++;
+                    const name = d.name || d.displayName || 'Unknown';
+                    const email = d.email || 'No Email';
+                    const roleBadge = d.role === 'admin' ? '<span class="text-red-400 font-bold">Admin</span>' : '<span class="text-green-400">Student</span>';
+                    
+                    // Added Edit Button next to Delete Button
+                    userHtml += `
+                        <tr class="hover:bg-white/5 transition border-b border-white/5 last:border-0">
+                            <td class="px-6 py-4 text-white font-medium">${name}</td>
+                            <td class="px-6 py-4 text-gray-400">${email}</td>
+                            <td class="px-6 py-4">${roleBadge}</td>
+                            <td class="px-6 py-4 flex gap-2">
+                                <button onclick="openEditUserModal('${doc.id}', '${name}')" class="text-yellow-400 hover:text-yellow-300 transition p-2 hover:bg-white/10 rounded" title="Edit Name">
+                                    <i data-lucide="pencil" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="deleteUser('${doc.id}')" class="text-red-400 hover:text-red-300 transition p-2 hover:bg-white/10 rounded" title="Delete User">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </td>
+                        </tr>`;
+                });
+                document.getElementById('userListBody').innerHTML = userHtml;
+                document.getElementById('totalUsersCount').textContent = count;
+                lucide.createIcons();
+                fetchUsersForCert(); // Update certificates list too
+            });
+        };
+
+        // --- NEW: EDIT USER LOGIC ---
+        window.toggleEditUserModal = (show) => { document.getElementById('editUserModal').classList.toggle('hidden', !show); };
+        window.openEditUserModal = (id, name) => {
+            document.getElementById('editUserId').value = id;
+            document.getElementById('editUserName').value = name;
+            toggleEditUserModal(true);
+        };
+        document.getElementById('editUserForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editUserId').value;
+            const newName = document.getElementById('editUserName').value;
+            const btn = e.target.querySelector('button');
+            const status = document.getElementById('editUserStatus');
+            
+            btn.disabled = true;
+            status.textContent = "Updating...";
+            status.classList.remove('hidden');
+            status.className = "text-xs text-center p-2 rounded bg-yellow-500/20 text-yellow-400 block";
+
+            try {
+                await updateDoc(doc(db, "users", id), { name: newName });
+                status.textContent = "Updated Successfully!";
+                status.className = "text-xs text-center p-2 rounded bg-green-500/20 text-green-400 block";
+                setTimeout(() => { toggleEditUserModal(false); status.classList.add('hidden'); }, 1000);
+            } catch(err) {
+                status.textContent = "Error: " + err.message;
+                status.className = "text-xs text-center p-2 rounded bg-red-500/20 text-red-400 block";
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        window.deleteUser = async (id) => { if(confirm("Delete user?")) { await deleteDoc(doc(db, "users", id)); } }; 
         window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
         document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
             e.preventDefault(); try {
                 const sa = initializeApp(firebaseConfig, "SA"); const sath = getAuth(sa);
                 const c = await createUserWithEmailAndPassword(sath, document.getElementById('newUserEmail').value, document.getElementById('newUserPassword').value);
                 await setDoc(doc(db, "users", c.user.uid), { name: document.getElementById('newUserName').value, email: c.user.email, role: 'student', createdAt: Date.now() });
-                await signOut(sath); alert("User Added!"); fetchUsers(); toggleAddUserModal(false);
+                await signOut(sath); alert("User Added!"); toggleAddUserModal(false);
             } catch(e){ alert(e.message); }
         });
 
@@ -746,10 +674,12 @@
         window.showTab = (t) => { document.querySelectorAll('.tab-content').forEach(e => e.classList.add('hidden')); document.getElementById(t+'Section').classList.remove('hidden'); };
 
         function loadDashboardData() {
-            fetchUsers(); fetchAnnouncementsCount(); fetchActiveForms(); fetchPastEvents(); fetchAttendanceStudents(); // Fetch the separate roster
+            fetchUsers(); // Starts the real-time listener
+            fetchAnnouncementsCount(); fetchActiveForms(); fetchPastEvents(); fetchAttendanceStudents(); 
             document.getElementById('attendanceDate').valueAsDate = new Date();
             document.getElementById('certDate').valueAsDate = new Date();
         }
     </script>
 </body>
-</html>
+    </html>
+
