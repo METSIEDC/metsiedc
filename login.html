@@ -167,18 +167,30 @@
             }
         }
 
-        // --- OTP LOGIC ---
+       // --- OTP LOGIC ---
         sendOtpBtn.addEventListener('click', () => {
             const email = document.getElementById('signupEmail').value;
             if(!email || !email.includes('@')) { alert("Enter valid email"); return; }
             
+            // 1. CHECK IF KEYS ARE SET
+            if(EMAILJS_TEMPLATE_ID === "YOUR_TEMPLATE_ID" || EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY") {
+                alert("Error: You have not pasted your EmailJS Template ID or Public Key in the code yet!");
+                return;
+            }
+
             sendOtpBtn.disabled = true; sendOtpBtn.textContent = "Sending...";
             
             // Generate 6 digit OTP
             generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-            console.log("OTP (For Testing):", generatedOTP); // Remove in production
+            console.log("OTP (For Testing):", generatedOTP); 
 
-            const templateParams = { to_email: email, otp: generatedOTP };
+            // --- FIX IS HERE: MATCHING YOUR TEMPLATE VARIABLES ---
+            // Your template expects 'email', 'passcode', and 'time'
+            const templateParams = { 
+                email: email,           // Matches {{email}} in your template
+                passcode: generatedOTP, // Matches {{passcode}} in your template
+                time: "5 minutes"       // Matches {{time}} in your template
+            };
 
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
                 .then(() => {
@@ -188,26 +200,10 @@
                     sendOtpBtn.textContent = "Resend";
                     sendOtpBtn.disabled = false;
                 }, (err) => {
-                    alert("Failed to send OTP. Check console.");
-                    console.error(err);
+                    alert("Failed to send OTP. Check console for details.");
+                    console.error("EmailJS Error:", err);
                     sendOtpBtn.disabled = false; sendOtpBtn.textContent = "Send OTP";
                 });
-        });
-
-        verifyOtpBtn.addEventListener('click', () => {
-            const userOtp = otpInput.value;
-            if(userOtp === generatedOTP) {
-                otpMessage.textContent = "Verified Successfully!";
-                otpMessage.className = "mb-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-xs text-center";
-                otpSection.classList.add('hidden');
-                passwordSection.classList.remove('opacity-50', 'pointer-events-none');
-                isVerified = true;
-                // Lock Email Field
-                document.getElementById('signupEmail').disabled = true;
-                sendOtpBtn.classList.add('hidden');
-            } else {
-                alert("Incorrect OTP");
-            }
         });
 
         // --- AUTH LOGIC ---
