@@ -376,41 +376,17 @@
         let currentUserId;
         let currentProfileImageBase64 = "";
 
-        // Auth Listener
+     // Auth Listener
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                currentUserId = user.uid;
-                document.getElementById('userEmailHeader').textContent = user.email;
-                document.getElementById('profileCardEmail').textContent = user.email;
-                document.getElementById('memEmail').value = user.email;
-                
-                try {
-                    const docSnap = await getDoc(doc(db, "users", user.uid, "profile", "userProfile"));
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        document.getElementById('profileName').value = data.name || '';
-                        document.getElementById('profileContact').value = data.contact || '';
-                        document.getElementById('profileBio').value = data.bio || '';
-                        document.getElementById('memName').value = data.name || '';
-                        
-                        document.getElementById('profileCardName').textContent = data.name || 'Student';
-                        document.getElementById('profileCardContact').textContent = data.contact || '--';
-                        document.getElementById('displayNameBanner').textContent = (data.name || user.email).split(' ')[0];
-
-                        if (data.profileImage) {
-                            document.getElementById('profileImagePreview').src = data.profileImage;
-                            document.getElementById('userAvatarHeader').innerHTML = `<img src="${data.profileImage}" class="w-full h-full rounded-full object-cover">`;
-                        }
-                    }
-                } catch(e) {}
-                fetchMySubmissions();
-                checkMembershipStatus();
-                fetchMyAttendance(); // Fetch Attendance Logic
-            } else {
-                window.location.href = 'login.html';
-            }
-        });
-
+                // SECURITY GATEKEEPER
+                if (!user.emailVerified) {
+                    await signOut(auth);
+                    alert("Security Alert: Your email is not verified. Access denied.");
+                    window.location.href = 'login.html';
+                    return;
+                }
+                // ... rest of your code ...
         // --- NEW: FETCH ATTENDANCE LOGIC (UPDATED WITH ABSENTEE) ---
         async function fetchMyAttendance() {
             const list = document.getElementById('myAttendanceList');
