@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -25,7 +24,6 @@
         .glass-nav { background: rgba(5, 5, 5, 0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         .glass-input { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
         .glass-input:focus { background: rgba(255, 255, 255, 0.08); border-color: #6366f1; outline: none; box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); }
-        .glass-input:disabled { opacity: 0.5; cursor: not-allowed; }
         .blob { position: absolute; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.4; animation: blob-bounce 10s infinite ease; }
         .blob-1 { top: 10%; left: 20%; width: 400px; height: 400px; background: #4f46e5; }
         .blob-2 { bottom: 10%; right: 20%; width: 400px; height: 400px; background: #9333ea; }
@@ -81,69 +79,41 @@
 
             <div id="loginError" class="hidden mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center"></div>
             <div id="signupError" class="hidden mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center"></div>
-            <div id="otpMessage" class="hidden mb-4 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs text-center"></div>
+            <div id="authMessage" class="hidden mb-4 p-4 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs text-center leading-relaxed"></div>
 
             <div id="loginForm" class="space-y-5">
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Email</label>
-                    <div class="relative">
-                        <i class="fas fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        <input type="email" id="loginEmail" placeholder="Enter your email" class="glass-input w-full rounded-xl py-3 pl-10 pr-4 text-sm">
-                    </div>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Password</label>
-                    <div class="relative">
-                        <i class="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        <input type="password" id="loginPassword" placeholder="••••••••" class="glass-input w-full rounded-xl py-3 pl-10 pr-4 text-sm">
-                    </div>
+                    <input type="password" id="loginPassword" placeholder="••••••••" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
                 </div>
-                
                 <button id="loginBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center">
                     <span id="loginBtnText">Sign In</span>
                     <div id="loginSpinner" class="spinner ml-2 hidden"></div>
                 </button>
-
-                <div class="flex justify-between items-center text-xs mt-6">
-                    <a href="#" id="forgotPasswordLink" class="text-gray-400 hover:text-indigo-400">Forgot Password?</a>
-                    <a href="admin.html" class="text-gray-400 hover:text-indigo-400">Admin Login</a>
-                </div>
+                <div class="flex justify-between items-center text-xs mt-6"><a href="#" id="forgotPasswordLink" class="text-gray-400 hover:text-indigo-400">Forgot Password?</a><a href="admin.html" class="text-gray-400 hover:text-indigo-400">Admin Login</a></div>
             </div>
 
             <div id="signupForm" class="space-y-5 hidden">
-                
-                <div id="stepOne">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Email</label>
-                        <div class="flex gap-2">
-                            <input type="email" id="signupEmail" placeholder="Enter your email" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                            <button id="sendOtpBtn" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3 rounded-xl transition whitespace-nowrap">Send OTP</button>
-                        </div>
-                    </div>
-                    
-                    <div id="otpSection" class="hidden mt-4">
-                        <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Enter OTP</label>
-                        <input type="text" id="otpInput" placeholder="6-digit code" class="glass-input w-full rounded-xl py-3 px-4 text-sm tracking-widest text-center">
-                        <button id="verifyOtpBtn" class="w-full mt-2 bg-green-600 hover:bg-green-500 text-white text-xs font-bold py-2 rounded-xl transition">Verify & Continue</button>
-                    </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Email</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
                 </div>
-
-                <div id="passwordSection" class="hidden space-y-5 border-t border-white/10 pt-4">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Password</label>
-                        <input type="password" id="signupPassword" placeholder="Min 6 characters" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Confirm Password</label>
-                        <input type="password" id="signupConfirmPassword" placeholder="Confirm password" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                    </div>
-                    
-                    <button id="signupBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center">
-                        <span id="signupBtnText">Create Account</span>
-                        <div id="signupSpinner" class="spinner ml-2 hidden"></div>
-                    </button>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Min 6 characters" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
                 </div>
-
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Confirm Password</label>
+                    <input type="password" id="signupConfirmPassword" placeholder="Confirm password" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
+                </div>
+                <button id="signupBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center">
+                    <span id="signupBtnText">Create Account</span>
+                    <div id="signupSpinner" class="spinner ml-2 hidden"></div>
+                </button>
             </div>
 
         </div>
@@ -151,7 +121,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
         // FIREBASE CONFIG
@@ -170,31 +140,15 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- EMAILJS CONFIG (REPLACE THESE) ---
-        const EMAILJS_SERVICE_ID = "service_bx5uu8w"; 
-        const EMAILJS_TEMPLATE_ID = "template_9r7x5h7"; // Replace with your ID
-        const EMAILJS_PUBLIC_KEY = "XlJSQA_pulXBpPApt"; // Replace with your Public Key
-        
-        // Initialize EmailJS
-        (function(){ emailjs.init(EMAILJS_PUBLIC_KEY); })();
-
-        let generatedOTP = null;
-        let isVerified = false; // CRITICAL FLAG
-
         // DOM Elements
         const loginTabBtn = document.getElementById('loginTabBtn');
         const signupTabBtn = document.getElementById('signupTabBtn');
         const loginForm = document.getElementById('loginForm');
         const signupForm = document.getElementById('signupForm');
         
-        // Signup Elements
-        const sendOtpBtn = document.getElementById('sendOtpBtn');
-        const otpSection = document.getElementById('otpSection');
-        const otpInput = document.getElementById('otpInput');
-        const verifyOtpBtn = document.getElementById('verifyOtpBtn');
-        const passwordSection = document.getElementById('passwordSection');
-        const signupEmailInput = document.getElementById('signupEmail');
-        const otpMessage = document.getElementById('otpMessage');
+        const authMessage = document.getElementById('authMessage');
+        const loginErrorDiv = document.getElementById('loginError');
+        const signupErrorDiv = document.getElementById('signupError');
 
         // Tab Logic
         window.showTab = function(tab) {
@@ -205,112 +159,115 @@
                 signupTabBtn.classList.add('active'); loginTabBtn.classList.remove('active');
                 signupForm.classList.remove('hidden'); loginForm.classList.add('hidden');
             }
+            authMessage.classList.add('hidden');
+            loginErrorDiv.classList.add('hidden');
+            signupErrorDiv.classList.add('hidden');
         }
 
-        // --- 1. SEND OTP ---
-        sendOtpBtn.addEventListener('click', () => {
-            const email = signupEmailInput.value;
-            if(!email || !email.includes('@')) { alert("Enter valid email"); return; }
-            
-            // Check Config
-            if(EMAILJS_TEMPLATE_ID === "YOUR_TEMPLATE_ID" || EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY") {
-                alert("EmailJS Keys Missing in Code!"); return;
-            }
-
-            sendOtpBtn.disabled = true; sendOtpBtn.textContent = "Sending...";
-            
-            // Generate OTP
-            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-            console.log("OTP:", generatedOTP); // Debug
-
-            const templateParams = { 
-                email: email, // Matches {{email}} in template
-                passcode: generatedOTP, // Matches {{passcode}} in template
-                time: "5 minutes"
-            };
-
-            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-                .then(() => {
-                    otpMessage.textContent = `OTP sent to ${email}`;
-                    otpMessage.classList.remove('hidden');
-                    otpSection.classList.remove('hidden'); // Show OTP Input
-                    sendOtpBtn.textContent = "Resend";
-                    sendOtpBtn.disabled = false;
-                }, (err) => {
-                    alert("Failed to send OTP. Check console.");
-                    console.error("EmailJS Error:", err);
-                    sendOtpBtn.disabled = false; sendOtpBtn.textContent = "Send OTP";
-                });
-        });
-
-        // --- 2. VERIFY OTP ---
-        verifyOtpBtn.addEventListener('click', () => {
-            const userOtp = otpInput.value;
-            if(userOtp === generatedOTP) {
-                // Success Logic
-                otpMessage.textContent = "✅ Email Verified! Set your password.";
-                otpMessage.className = "mb-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-xs text-center";
-                
-                // Hide OTP Section, Show Password Section
-                otpSection.classList.add('hidden');
-                passwordSection.classList.remove('hidden'); // SHOW CREATE ACCOUNT BTN ONLY NOW
-                
-                // Lock Email so they can't switch it
-                signupEmailInput.disabled = true;
-                sendOtpBtn.classList.add('hidden');
-                
-                isVerified = true; // Set Flag
-            } else {
-                alert("Incorrect OTP. Please try again.");
-            }
-        });
-
-        // --- 3. CREATE ACCOUNT (GUARDED) ---
+        // --- SECURE SIGNUP (SENDS LINK & LOGS OUT) ---
         document.getElementById('signupBtn').addEventListener('click', async () => {
-            // SECURITY GUARD: If verified flag is false, STOP.
-            if(!isVerified) {
-                alert("⛔ Security Alert: Email not verified.");
-                return;
-            }
-
-            const email = signupEmailInput.value; // This input is disabled/locked now
-            const p = document.getElementById('signupPassword').value;
-            const cp = document.getElementById('signupConfirmPassword').value;
-            
-            if(p !== cp) return alert("Passwords do not match");
-            if(p.length < 6) return alert("Password must be 6+ chars");
-
+            const email = document.getElementById('signupEmail').value;
+            const p1 = document.getElementById('signupPassword').value;
+            const p2 = document.getElementById('signupConfirmPassword').value;
             const btn = document.getElementById('signupBtn');
-            btn.disabled = true; btn.innerHTML = "Creating...";
+            const spinner = document.getElementById('signupSpinner');
+            const btnText = document.getElementById('signupBtnText');
+
+            if(!email || !p1) return alert("Fill all fields");
+            if(p1 !== p2) return alert("Passwords do not match");
+            if(p1.length < 6) return alert("Password too short");
+
+            btn.disabled = true;
+            btnText.classList.add('hidden');
+            spinner.classList.remove('hidden');
 
             try {
-                const uc = await createUserWithEmailAndPassword(auth, email, p);
-                // Save extra user data
-                await setDoc(doc(db, "users", uc.user.uid), { 
+                // 1. Create User
+                const userCredential = await createUserWithEmailAndPassword(auth, email, p1);
+                const user = userCredential.user;
+
+                // 2. Save basic data
+                await setDoc(doc(db, "users", user.uid), { 
                     email: email, 
                     role: 'student', 
                     createdAt: new Date(),
                     displayName: email.split('@')[0] 
                 });
-                window.location.href = 'dashboard.html';
+
+                // 3. SEND VERIFICATION EMAIL
+                await sendEmailVerification(user);
+
+                // 4. FORCE SIGN OUT
+                await signOut(auth);
+
+                // 5. Show Success & Switch to Login
+                alert("Account created! We have sent a verification link to " + email + ". Please verify before logging in.");
+                showTab('login');
+                authMessage.innerHTML = `<i class="fas fa-envelope-open-text mb-1 block text-lg"></i>Verification link sent to <b>${email}</b>.<br>Please check your inbox (and spam folder), click the link, and then log in.`;
+                authMessage.classList.remove('hidden');
+
             } catch(err) {
+                console.error(err);
                 document.getElementById('signupError').textContent = err.message;
                 document.getElementById('signupError').classList.remove('hidden');
-                btn.disabled = false; btn.innerHTML = "Create Account";
+            } finally {
+                btn.disabled = false;
+                btnText.classList.remove('hidden');
+                spinner.classList.add('hidden');
             }
         });
 
-        // --- LOGIN ---
+        // --- SECURE LOGIN (CHECKS VERIFICATION) ---
         document.getElementById('loginBtn').addEventListener('click', async () => {
-            const e = document.getElementById('loginEmail').value;
-            const p = document.getElementById('loginPassword').value;
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+            const spinner = document.getElementById('loginSpinner');
+            const btnText = document.getElementById('loginBtnText');
+
+            btn.disabled = true;
+            btnText.classList.add('hidden');
+            spinner.classList.remove('hidden');
+            loginErrorDiv.classList.add('hidden');
+
             try {
-                await signInWithEmailAndPassword(auth, e, p);
+                const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+                const user = userCredential.user;
+
+                // SECURITY CHECK: IS EMAIL VERIFIED?
+                if (!user.emailVerified) {
+                    await signOut(auth); // Kick them out immediately
+                    throw new Error("Email not verified. Please check your inbox.");
+                }
+
+                // If verified, proceed
                 window.location.href = 'dashboard.html';
+
             } catch(err) {
-                document.getElementById('loginError').textContent = "Login Failed: " + err.message;
-                document.getElementById('loginError').classList.remove('hidden');
+                loginErrorDiv.textContent = err.message;
+                loginErrorDiv.classList.remove('hidden');
+                
+                // If it's a verification error, offer to resend? (Optional advanced step)
+                if(err.message.includes("verified")) {
+                    authMessage.innerHTML = "Didn't receive the link? <a href='#' onclick='alert(\"Please try logging in again to trigger a resend option (requires complex logic)\")' class='underline'>Need help?</a>";
+                    authMessage.classList.remove('hidden');
+                }
+            } finally {
+                btn.disabled = false;
+                btnText.classList.remove('hidden');
+                spinner.classList.add('hidden');
             }
+        });
+
+        // Forgot Password
+        document.getElementById('forgotPasswordLink').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            if(!email) return alert("Enter email in the login box first.");
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alert("Reset link sent to " + email);
+            } catch(e) { alert(e.message); }
         });
 
         // Mobile Menu
@@ -321,7 +278,12 @@
         menuBtn.addEventListener('click', toggleMenu);
         closeMenuBtn.addEventListener('click', toggleMenu);
 
-        onAuthStateChanged(auth, (u) => { if(u) window.location.href = 'dashboard.html'; });
+        // Auto-redirect ONLY if verified
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.emailVerified) {
+                window.location.href = 'dashboard.html';
+            }
+        });
 
     </script>
 </body>
