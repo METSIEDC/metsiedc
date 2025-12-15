@@ -240,7 +240,7 @@
                 </div>
                 <div class="glass-card rounded-2xl overflow-hidden overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-400 glass-table min-w-[600px]">
-                        <thead class="text-xs"><tr><th class="px-6 py-4">Name</th><th class="px-6 py-4">Email</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Actions</th></tr></thead>
+                        <thead class="text-xs"><tr><th class="px-6 py-4">Name</th><th class="px-6 py-4">Email</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Action/Role</th></tr></thead>
                         <tbody class="divide-y divide-white/5" id="userListBody"><tr><td colspan="4" class="px-6 py-4 text-center">Loading...</td></tr></tbody>
                     </table>
                 </div>
@@ -351,12 +351,23 @@
     <div id="editUserModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="glass-card w-full max-w-md p-8 rounded-3xl relative">
             <button onclick="toggleEditUserModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
-            <h2 class="text-2xl font-bold text-white mb-6">Edit User Name</h2>
+            <h2 class="text-2xl font-bold text-white mb-6">Edit User Details</h2>
             <form id="editUserForm" class="space-y-4">
                 <input type="hidden" id="editUserId">
-                <input type="text" id="editUserName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Full Name">
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Full Name</label>
+                    <input type="text" id="editUserName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Full Name">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">User Role</label>
+                    <select id="editUserRole" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
+                        <option value="student">Student</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                
                 <div id="editUserStatus" class="hidden text-xs text-center p-2 rounded"></div>
-                <button type="submit" class="w-full bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3 rounded-xl transition-all mt-2">Update Name</button>
+                <button type="submit" class="w-full bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3 rounded-xl transition-all mt-2">Update Details</button>
             </form>
         </div>
     </div>
@@ -594,7 +605,8 @@
                     count++;
                     const name = d.name || d.displayName || 'Unknown';
                     const email = d.email || 'No Email';
-                    const roleBadge = d.role === 'admin' ? '<span class="text-red-400 font-bold">Admin</span>' : '<span class="text-green-400">Student</span>';
+                    const role = d.role || 'student'; // Get role
+                    const roleBadge = role === 'admin' ? '<span class="text-red-400 font-bold">Admin</span>' : '<span class="text-green-400">Student</span>';
                     
                     // Added Edit Button next to Delete Button
                     userHtml += `
@@ -603,7 +615,7 @@
                             <td class="px-6 py-4 text-gray-400">${email}</td>
                             <td class="px-6 py-4">${roleBadge}</td>
                             <td class="px-6 py-4 flex gap-2">
-                                <button onclick="openEditUserModal('${doc.id}', '${name}')" class="text-yellow-400 hover:text-yellow-300 transition p-2 hover:bg-white/10 rounded" title="Edit Name">
+                                <button onclick="openEditUserModal('${doc.id}', '${name.replace(/'/g, "\\'")}', '${role}')" class="text-yellow-400 hover:text-yellow-300 transition p-2 hover:bg-white/10 rounded" title="Edit Name/Role">
                                     <i data-lucide="pencil" class="w-4 h-4"></i>
                                 </button>
                                 <button onclick="deleteUser('${doc.id}')" class="text-red-400 hover:text-red-300 transition p-2 hover:bg-white/10 rounded" title="Delete User">
@@ -621,15 +633,18 @@
 
         // --- NEW: EDIT USER LOGIC ---
         window.toggleEditUserModal = (show) => { document.getElementById('editUserModal').classList.toggle('hidden', !show); };
-        window.openEditUserModal = (id, name) => {
+        // UPDATED: Now takes the role too
+        window.openEditUserModal = (id, name, role) => {
             document.getElementById('editUserId').value = id;
             document.getElementById('editUserName').value = name;
+            document.getElementById('editUserRole').value = role; // Set the role dropdown
             toggleEditUserModal(true);
         };
         document.getElementById('editUserForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('editUserId').value;
             const newName = document.getElementById('editUserName').value;
+            const newRole = document.getElementById('editUserRole').value; // Get the new role
             const btn = e.target.querySelector('button');
             const status = document.getElementById('editUserStatus');
             
@@ -639,7 +654,8 @@
             status.className = "text-xs text-center p-2 rounded bg-yellow-500/20 text-yellow-400 block";
 
             try {
-                await updateDoc(doc(db, "users", id), { name: newName });
+                // UPDATED: Updating both name and role
+                await updateDoc(doc(db, "users", id), { name: newName, role: newRole });
                 status.textContent = "Updated Successfully!";
                 status.className = "text-xs text-center p-2 rounded bg-green-500/20 text-green-400 block";
                 setTimeout(() => { toggleEditUserModal(false); status.classList.add('hidden'); }, 1000);
@@ -682,4 +698,3 @@
     </script>
 </body>
     </html>
-
