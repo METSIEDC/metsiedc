@@ -249,34 +249,6 @@
                                 <div class="pt-4 border-t border-white/5 flex justify-end"><button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-xl">Save Changes</button></div>
                             </form>
                         </div>
-
-                        <div class="glass-card rounded-3xl p-8">
-                            <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                                <i data-lucide="lock" class="w-5 h-5 text-red-400"></i> Change Password
-                            </h2>
-                            <form id="changePasswordForm" class="space-y-6">
-                                <div>
-                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Current Password</label>
-                                    <input type="password" id="currentPassword" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Current Password" required>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">New Password</label>
-                                        <input type="password" id="newPassword" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="••••••••" required minlength="6">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Confirm Password</label>
-                                        <input type="password" id="confirmPassword" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="••••••••" required minlength="6">
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center pt-4 border-t border-white/5">
-                                    <div id="passwordStatus" class="text-xs"></div>
-                                    <button type="submit" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 font-bold py-3 px-6 rounded-xl transition-all">
-                                        Update Password
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -349,7 +321,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signOut, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
@@ -379,14 +351,8 @@
         // Auth Listener
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // SECURITY GATEKEEPER
-                if (!user.emailVerified) {
-                    await signOut(auth);
-                    alert("Security Alert: Your email is not verified. Access denied.");
-                    window.location.href = 'login.html';
-                    return;
-                }
-
+                // *** EMAIL VERIFICATION CHECK REMOVED ***
+                
                 currentUserId = user.uid;
                 document.getElementById('userEmailHeader').textContent = user.email;
                 document.getElementById('profileCardEmail').textContent = user.email;
@@ -736,4 +702,4 @@
         };
     </script>
 </body>
-    </html>
+</html>
