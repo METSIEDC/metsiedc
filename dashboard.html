@@ -249,34 +249,6 @@
                                 <div class="pt-4 border-t border-white/5 flex justify-end"><button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-xl">Save Changes</button></div>
                             </form>
                         </div>
-
-                        <div class="glass-card rounded-3xl p-8">
-                            <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                                <i data-lucide="lock" class="w-5 h-5 text-red-400"></i> Change Password
-                            </h2>
-                            <form id="changePasswordForm" class="space-y-6">
-                                <div>
-                                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Current Password</label>
-                                    <input type="password" id="currentPassword" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Current Password" required>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">New Password</label>
-                                        <input type="password" id="newPassword" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="••••••••" required minlength="6">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Confirm Password</label>
-                                        <input type="password" id="confirmPassword" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="••••••••" required minlength="6">
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center pt-4 border-t border-white/5">
-                                    <div id="passwordStatus" class="text-xs"></div>
-                                    <button type="submit" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 font-bold py-3 px-6 rounded-xl transition-all">
-                                        Update Password
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -349,7 +321,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signOut, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
@@ -376,7 +348,7 @@
         let currentUserId;
         let currentProfileImageBase64 = "";
 
-     // Auth Listener
+        // Auth Listener
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 // SECURITY GATEKEEPER
@@ -386,17 +358,48 @@
                     window.location.href = 'login.html';
                     return;
                 }
-                // ... rest of your code ...
-        // --- NEW: FETCH ATTENDANCE LOGIC (UPDATED WITH ABSENTEE) ---
-        async function fetchMyAttendance() {
+
+                currentUserId = user.uid;
+                document.getElementById('userEmailHeader').textContent = user.email;
+                document.getElementById('profileCardEmail').textContent = user.email;
+                document.getElementById('memEmail').value = user.email;
+                
+                try {
+                    const docSnap = await getDoc(doc(db, "users", user.uid, "profile", "userProfile"));
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        document.getElementById('profileName').value = data.name || '';
+                        document.getElementById('profileContact').value = data.contact || '';
+                        document.getElementById('profileBio').value = data.bio || '';
+                        document.getElementById('memName').value = data.name || '';
+                        
+                        document.getElementById('profileCardName').textContent = data.name || 'Student';
+                        document.getElementById('profileCardContact').textContent = data.contact || '--';
+                        document.getElementById('displayNameBanner').textContent = (data.name || user.email).split(' ')[0];
+
+                        if (data.profileImage) {
+                            document.getElementById('profileImagePreview').src = data.profileImage;
+                            document.getElementById('userAvatarHeader').innerHTML = `<img src="${data.profileImage}" class="w-full h-full rounded-full object-cover">`;
+                        }
+                    }
+                } catch(e) {}
+
+                // LOAD DATA
+                window.fetchMySubmissions();
+                window.checkMembershipStatus();
+                window.fetchCertificates();
+                window.fetchMyAttendance();
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        // --- FETCH ATTENDANCE LOGIC ---
+        window.fetchMyAttendance = async function() {
             const list = document.getElementById('myAttendanceList');
             const email = auth.currentUser.email;
             
             try {
-                // We need to check both arrays: presentEmails AND absentEmails
-                // Firestore doesn't support logical OR directly in one simple query for different arrays efficiently without complex indexes.
-                // Simplest robust method: Run two queries and merge.
-                
                 const qPresent = query(collection(db, "attendance"), where("presentEmails", "array-contains", email));
                 const qAbsent = query(collection(db, "attendance"), where("absentEmails", "array-contains", email));
 
@@ -411,7 +414,6 @@
                     records.push({ id: doc.id, ...doc.data(), status: 'Absent' });
                 });
 
-                // Sort by date (descending)
                 records.sort((a, b) => b.timestamp - a.timestamp);
 
                 if (records.length === 0) {
@@ -442,13 +444,12 @@
                 lucide.createIcons();
             } catch(e) { 
                 console.error(e);
-                // If index error occurs, it will likely be for one of the queries.
                 if(e.message.includes("index")) list.innerHTML = `<p class="text-yellow-400 text-center text-sm">Index building required... Check console for link.</p>`;
             }
-        }
+        };
 
         // 2. Membership Status & Submission
-        async function checkMembershipStatus() {
+        window.checkMembershipStatus = async function() {
             try {
                 const q = query(collection(db, "submissions"), where("userId", "==", currentUserId), where("type", "==", "membership_application"));
                 const snap = await getDocs(q);
@@ -466,13 +467,12 @@
                     lucide.createIcons();
                 }
             } catch(e) {}
-        }
+        };
 
         document.getElementById('joinIedcForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button'); btn.innerText = "Submitting..."; btn.disabled = true;
             
-            // Collect Form Data
             const formData = {
                 name: document.getElementById('memName').value,
                 email: document.getElementById('memEmail').value,
@@ -485,7 +485,6 @@
             };
 
             try {
-                // 1. Save to Firebase (For Status Tracking)
                 await addDoc(collection(db, "submissions"), {
                     ...formData,
                     title: "Membership Application",
@@ -498,14 +497,13 @@
                     timestamp: Date.now()
                 });
 
-                // 2. Send to Google Sheets (If configured)
                 if (GOOGLE_SCRIPT_URL) {
                     const formBody = new FormData();
                     for(const key in formData) formBody.append(key, formData[key]);
                     fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formBody }).catch(err => console.log('Sheet Error', err));
                 }
 
-                checkMembershipStatus();
+                window.checkMembershipStatus();
             } catch(e) { alert("Error: " + e.message); btn.disabled = false; btn.innerText = "Submit Application"; }
         });
 
@@ -543,56 +541,6 @@
             btn.innerText = "Save Changes"; btn.disabled = false;
         });
 
-        // --- PASSWORD RESET LOGIC (UPDATED WITH RE-AUTH) ---
-        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const currentPass = document.getElementById('currentPassword').value;
-            const p1 = document.getElementById('newPassword').value;
-            const p2 = document.getElementById('confirmPassword').value;
-            const btn = e.target.querySelector('button');
-            const status = document.getElementById('passwordStatus');
-
-            if(p1 !== p2) {
-                status.textContent = "Passwords do not match!";
-                status.className = "text-xs text-red-400";
-                return;
-            }
-            if(p1.length < 6) {
-                 status.textContent = "Password must be at least 6 chars.";
-                 status.className = "text-xs text-red-400";
-                 return;
-            }
-
-            btn.disabled = true;
-            btn.textContent = "Verifying...";
-
-            try {
-                // 1. Create credential from Current Password
-                const user = auth.currentUser;
-                const credential = EmailAuthProvider.credential(user.email, currentPass);
-                
-                // 2. Re-authenticate
-                await reauthenticateWithCredential(user, credential);
-                
-                // 3. Update Password
-                btn.textContent = "Updating...";
-                await updatePassword(user, p1);
-                
-                status.textContent = "Password updated successfully!";
-                status.className = "text-xs text-green-400";
-                e.target.reset();
-            } catch(error) {
-                status.textContent = "Error: " + error.message; 
-                status.className = "text-xs text-red-400";
-                if(error.code === 'auth/wrong-password') {
-                    status.textContent = "Incorrect current password.";
-                }
-            } finally {
-                btn.disabled = false;
-                btn.textContent = "Update Password";
-            }
-        });
-
         // 6. Fetch Submissions
         window.fetchMySubmissions = async function() {
             const grid = document.getElementById('mySubmissionsGrid');
@@ -623,7 +571,7 @@
                 if(type === 'project') { data.title = document.getElementById('projectName').value; data.description = document.getElementById('projectDescription').value; data.teamMembers = document.getElementById('projectTeamMembers').value; data.stack = document.getElementById('projectTechnologyStack').value; data.link = document.getElementById('projectLink').value; }
                 else if(type === 'idea') { data.title = document.getElementById('ideaName').value; data.description = document.getElementById('ideaDescription').value; data.category = document.getElementById('ideaCategory').value; }
                 else if(type === 'event_proposal') { data.title = document.getElementById('eventName').value; data.description = document.getElementById('eventDescription').value; data.date = document.getElementById('eventDate').value; data.time = document.getElementById('eventTime').value; }
-                try { await addDoc(collection(db, "submissions"), data); alert("Submitted successfully!"); e.target.reset(); fetchMySubmissions(); } 
+                try { await addDoc(collection(db, "submissions"), data); alert("Submitted successfully!"); e.target.reset(); window.fetchMySubmissions(); } 
                 catch(e) { alert(e.message); } finally { btn.innerText = "Submit"; btn.disabled = false; }
             });
         };
@@ -754,10 +702,10 @@
             const activeLink = Array.from(document.querySelectorAll('.sidebar-link')).find(btn => btn.innerText.toLowerCase().includes(tabId.replace('Section','').toLowerCase().replace('overview','')));
             if(activeLink) activeLink.classList.add('active');
 
-            if (tabId === 'trackStatus') fetchMySubmissions();
-            if (tabId === 'certificates') fetchCertificates();
-            if (tabId === 'attendance') fetchMyAttendance();
+            if (tabId === 'trackStatus') window.fetchMySubmissions();
+            if (tabId === 'certificates') window.fetchCertificates();
+            if (tabId === 'attendance') window.fetchMyAttendance();
         };
     </script>
 </body>
-</html>
+                </html>
