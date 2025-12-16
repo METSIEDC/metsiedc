@@ -425,6 +425,18 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+
+        // --- SECURITY: HELPER FUNCTION ---
+        function escapeHtml(text) {
+            if (!text) return "";
+            return String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
         
         let allUsers = [];
         let newsImageFile = null;
@@ -603,19 +615,28 @@
                     const d = doc.data();
                     allUsers.push({ id: doc.id, ...d });
                     count++;
-                    const name = d.name || d.displayName || 'Unknown';
-                    const email = d.email || 'No Email';
-                    const role = d.role || 'student'; // Get role
+                    // 1. Get raw data
+                    let rawName = d.name || d.displayName || 'Unknown';
+                    let rawEmail = d.email || 'No Email';
+                    const role = d.role || 'student';
+
+                    // 2. SANITIZE FOR DISPLAY (Prevents XSS Attacks)
+                    const safeName = escapeHtml(rawName);
+                    const safeEmail = escapeHtml(rawEmail);
+
+                    // 3. SANITIZE FOR JAVASCRIPT (Prevents breaking the OnClick function)
+                    // We escape single quotes so the JS string doesn't break
+                    const jsSafeName = rawName.replace(/'/g, "\\'");
+
                     const roleBadge = role === 'admin' ? '<span class="text-red-400 font-bold">Admin</span>' : '<span class="text-green-400">Student</span>';
                     
-                    // Added Edit Button next to Delete Button
                     userHtml += `
                         <tr class="hover:bg-white/5 transition border-b border-white/5 last:border-0">
-                            <td class="px-6 py-4 text-white font-medium">${name}</td>
-                            <td class="px-6 py-4 text-gray-400">${email}</td>
+                            <td class="px-6 py-4 text-white font-medium">${safeName}</td>
+                            <td class="px-6 py-4 text-gray-400">${safeEmail}</td>
                             <td class="px-6 py-4">${roleBadge}</td>
                             <td class="px-6 py-4 flex gap-2">
-                                <button onclick="openEditUserModal('${doc.id}', '${name.replace(/'/g, "\\'")}', '${role}')" class="text-yellow-400 hover:text-yellow-300 transition p-2 hover:bg-white/10 rounded" title="Edit Name/Role">
+                                <button onclick="openEditUserModal('${doc.id}', '${jsSafeName}', '${role}')" class="text-yellow-400 hover:text-yellow-300 transition p-2 hover:bg-white/10 rounded" title="Edit Name/Role">
                                     <i data-lucide="pencil" class="w-4 h-4"></i>
                                 </button>
                                 <button onclick="deleteUser('${doc.id}')" class="text-red-400 hover:text-red-300 transition p-2 hover:bg-white/10 rounded" title="Delete User">
