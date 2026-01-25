@@ -171,10 +171,7 @@
             </div>
 
             <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto">
-                <div class="glass-card p-8 rounded-3xl border border-blue-500/20">
-                    <h2 class="text-2xl font-bold text-white mb-6">Post News</h2>
-                    <form id="newsForm" class="space-y-4"><input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Headline" required><textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Content" required></textarea><div class="grid grid-cols-2 gap-4"><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4"><label class="glass-input rounded-xl py-3 px-4 text-center cursor-pointer"><span id="newsFileName">Image</span><input type="file" id="newsImageInput" class="hidden" onchange="handleNewsImage(event)"></label></div><button type="submit" id="postNewsBtn" class="w-full bg-blue-600 py-3 rounded-xl font-bold">Publish News</button></form>
-                </div>
+                <div class="glass-card p-8 rounded-3xl border border-blue-500/20"><h2 class="text-2xl font-bold text-white mb-6">Post News</h2><form id="newsForm" class="space-y-4"><input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Headline" required><textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Content" required></textarea><div class="grid grid-cols-2 gap-4"><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4"><label class="glass-input rounded-xl py-3 px-4 text-center cursor-pointer"><span id="newsFileName">Image</span><input type="file" id="newsImageInput" class="hidden" onchange="handleNewsImage(event)"></label></div><button type="submit" id="postNewsBtn" class="w-full bg-blue-600 py-3 rounded-xl font-bold">Publish News</button></form></div>
             </div>
             <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto">
                 <div class="glass-card p-8 rounded-3xl"><h2 class="text-2xl font-bold text-white mb-6">Post Update</h2><form id="announcementForm" class="space-y-4"><input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Subject" required><textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Details" required></textarea><button type="submit" class="w-full bg-red-600 py-3 rounded-xl font-bold">Publish</button></form></div>
@@ -234,6 +231,7 @@
                 <input type="text" id="newUserName" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Full Name" required>
                 <input type="email" id="newUserEmail" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Email" required>
                 <input type="password" id="newUserPassword" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Password" required>
+                <div id="addUserStatus" class="hidden text-xs text-center p-2 rounded"></div>
                 <button type="submit" class="w-full bg-red-600 py-3 rounded-xl font-bold">Create</button>
                 <button type="button" onclick="toggleAddUserModal(false)" class="w-full text-gray-400 mt-2">Cancel</button>
             </form>
@@ -292,7 +290,7 @@
                 snap.forEach(doc => {
                     const u = doc.data();
                     
-                    // User Management Table (With Edit Button)
+                    // User Management Table
                     uHtml += `<tr class="border-b border-white/5">
                         <td class="px-6 py-4 text-white">${u.name}</td>
                         <td>${u.email}</td>
@@ -343,10 +341,9 @@
                 document.getElementById('excomMeetingsList').innerHTML = h || '<p class="text-gray-500 text-xs">No meetings logged.</p>';
             });
 
-            // OTHER COUNTS & LISTS
+            // OTHERS
             onSnapshot(collection(db, "announcements"), (s) => document.getElementById('totalAnnouncementsCount').textContent = s.size);
             onSnapshot(collection(db, "eventForms"), (s) => document.getElementById('activeFormsCount').textContent = s.size);
-            
             onSnapshot(query(collection(db, "eventForms"), orderBy("createdAt", "desc")), (snap) => {
                 let h = ''; snap.forEach(d => h += `<div class="bg-white/5 p-3 rounded flex justify-between mt-2"><span>${d.data().title}</span><button onclick="deleteDoc(doc(db,'eventForms','${d.id}'))" class="text-red-400 text-xs">Del</button></div>`);
                 document.getElementById('activeFormsList').innerHTML = h;
@@ -355,88 +352,96 @@
 
         // --- ACTIVITY LOGGER ---
         async function logActivity(action, details) {
-            await addDoc(collection(db, "logs"), {
-                action: action,
-                details: details,
-                admin: currentUserEmail,
-                timestamp: Date.now()
-            });
+            await addDoc(collection(db, "logs"), { action: action, details: details, admin: currentUserEmail, timestamp: Date.now() });
         }
 
-        // --- USER ROLE EDIT LOGIC ---
+        // --- ADD USER (FIXED FOR AUTH CONFLICT) ---
+        document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const name = document.getElementById('newUserName').value;
+            const email = document.getElementById('newUserEmail').value;
+            const password = document.getElementById('newUserPassword').value;
+
+            btn.disabled = true; btn.innerText = "Creating...";
+
+            try {
+                // Secondary App allows creating a user without logging out the Admin
+                const secondaryApp = initializeApp(firebaseConfig, "SecondaryApp-" + Date.now());
+                const secondaryAuth = getAuth(secondaryApp);
+                const uc = await createUserWithEmailAndPassword(secondaryAuth, email, password);
+                
+                // Write to main DB
+                await setDoc(doc(db, "users", uc.user.uid), { name, email, role: 'student', createdAt: Date.now() });
+                await logActivity("Created User", `Added ${name} (${email})`);
+                await signOut(secondaryAuth); // Clean up
+                
+                alert("User Created!");
+                toggleAddUserModal(false);
+                e.target.reset();
+            } catch (err) { alert("Error: " + err.message); } finally { btn.disabled = false; btn.innerText = "Create"; }
+        });
+
+        // --- UPDATE ROLE ---
         window.openEditUserModal = (id, name, role) => {
             document.getElementById('editUserId').value = id;
             document.getElementById('editUserName').value = name;
             document.getElementById('editUserRoleSelect').value = role;
             document.getElementById('editUserModal').classList.remove('hidden');
         };
-
-        window.toggleEditUserModal = (s) => document.getElementById('editUserModal').classList.toggle('hidden', !s);
-
         document.getElementById('editUserRoleForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('editUserId').value;
-            const newRole = document.getElementById('editUserRoleSelect').value;
-            const name = document.getElementById('editUserName').value;
-            
+            const role = document.getElementById('editUserRoleSelect').value;
             try {
-                await updateDoc(doc(db, "users", id), { role: newRole });
-                await logActivity("Updated Role", `Changed ${name} to ${newRole}`);
-                alert("Role Updated!");
-                toggleEditUserModal(false);
+                await updateDoc(doc(db, "users", id), { role });
+                await logActivity("Updated Role", `Changed ${document.getElementById('editUserName').value} to ${role}`);
+                alert("Updated!"); toggleEditUserModal(false);
             } catch(err) { alert(err.message); }
         });
 
-        // --- EXCOM ATTENDANCE LOGIC ---
-        window.openExcomAttendanceModal = () => {
-            document.getElementById('excomMeetingDate').valueAsDate = new Date();
-            document.getElementById('excomModal').classList.remove('hidden');
-        };
-
+        // --- EXCOM ATTENDANCE ---
+        window.openExcomAttendanceModal = () => { document.getElementById('excomMeetingDate').valueAsDate = new Date(); document.getElementById('excomModal').classList.remove('hidden'); };
         window.submitExcomAttendance = async () => {
             const title = document.getElementById('excomMeetingTitle').value;
             const date = document.getElementById('excomMeetingDate').value;
             const attendees = Array.from(document.querySelectorAll('.excom-checkbox:checked')).map(c => c.value);
-            
-            if(!title || !date) return alert("Fill meeting details");
-
             try {
                 await addDoc(collection(db, "excom_meetings"), { title, date, attendees, timestamp: Date.now() });
-                await logActivity("ExCom Meeting", `Logged: ${title} (${attendees.length} present)`);
-                alert("Meeting Logged!");
-                document.getElementById('excomModal').classList.add('hidden');
+                await logActivity("ExCom Meeting", `Logged: ${title}`);
+                alert("Saved!"); document.getElementById('excomModal').classList.add('hidden');
             } catch(err) { alert(err.message); }
         };
 
-        // --- GENERIC SUBMITS (With Logs) ---
+        // --- GENERIC SUBMITS ---
         document.getElementById('newsForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const btn = document.getElementById('postNewsBtn'); btn.disabled=true; btn.innerText="Uploading...";
+            e.preventDefault(); const btn = document.getElementById('postNewsBtn'); btn.disabled=true;
             try {
                 let url = newsImageFile ? await uploadToDrive(newsImageFile) : "";
-                const title = document.getElementById('newsTitle').value;
-                await addDoc(collection(db, "news"), { title, content: document.getElementById('newsContent').value, date: document.getElementById('newsDate').value, imageUrl: url, timestamp: Date.now() });
-                await logActivity("Posted News", title);
-                alert("News Posted!"); e.target.reset();
-            } catch(err) { alert(err.message); } finally { btn.disabled=false; btn.innerText="Publish News"; }
+                await addDoc(collection(db, "news"), { title: document.getElementById('newsTitle').value, content: document.getElementById('newsContent').value, date: document.getElementById('newsDate').value, imageUrl: url, timestamp: Date.now() });
+                await logActivity("Posted News", document.getElementById('newsTitle').value);
+                alert("Posted!"); e.target.reset();
+            } catch(err) { alert(err.message); } finally { btn.disabled=false; }
         });
 
         document.getElementById('announcementForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const title = document.getElementById('annTitle').value;
-            await addDoc(collection(db, "announcements"), { title, content: document.getElementById('annContent').value, category: document.getElementById('annCategory').value, date: document.getElementById('annDate').value, timestamp: Date.now() });
-            await logActivity("Posted Update", title);
-            alert("Update Posted!"); e.target.reset();
+            try {
+                await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, content: document.getElementById('annContent').value, timestamp: Date.now() });
+                await logActivity("Posted Update", document.getElementById('annTitle').value);
+                alert("Posted!"); e.target.reset();
+            } catch(err) { alert(err.message); }
         });
 
         window.submitAttendance = async () => {
             const eventName = document.getElementById('attendanceEventName').value;
             const date = document.getElementById('attendanceDate').value;
             const attendees = Array.from(document.querySelectorAll('.att-checkbox:checked')).map(c => c.value);
-            if(!eventName || !date) return alert("Fill details");
-            await addDoc(collection(db, "attendance"), { eventName, date, attendees, timestamp: Date.now() });
-            await logActivity("Marked Attendance", `${eventName} (${attendees.length})`);
-            alert("Attendance Saved!");
+            try {
+                await addDoc(collection(db, "attendance"), { eventName, date, attendees, timestamp: Date.now() });
+                await logActivity("Marked Attendance", `${eventName} (${attendees.length})`);
+                alert("Saved!");
+            } catch(err) { alert(err.message); }
         };
 
         // --- HELPERS ---
@@ -445,23 +450,14 @@
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                     const base64 = e.target.result.split(',')[1];
-                    try {
-                        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ base64, type: file.type, name: file.name })});
-                        const json = await res.json();
-                        if(json.url) resolve(json.url); else reject("Upload failed");
-                    } catch(e) { reject(e); }
-                };
-                reader.readAsDataURL(file);
+                    try { const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ base64, type: file.type, name: file.name })}); const json = await res.json(); if(json.url) resolve(json.url); else reject("Upload failed"); } catch(e) { reject(e); }
+                }; reader.readAsDataURL(file);
             });
         }
 
-        window.showTab = (t) => {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(t+'Section').classList.remove('hidden');
-            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
-            document.getElementById('nav-'+t).classList.add('active');
-        };
+        window.showTab = (t) => { document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); document.getElementById(t+'Section').classList.remove('hidden'); document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active')); document.getElementById('nav-'+t).classList.add('active'); };
         window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
+        window.toggleEditUserModal = (s) => document.getElementById('editUserModal').classList.toggle('hidden', !s);
         window.handleNewsImage = (e) => { newsImageFile = e.target.files[0]; document.getElementById('newsFileName').textContent = newsImageFile.name; };
         window.handleGalleryImages = (e) => { galleryImages = e.target.files; document.getElementById('galleryFileName').textContent = `${galleryImages.length} Files`; };
         window.handleCertTemplate = (e) => { const reader = new FileReader(); reader.onload = (ev) => { certTemplateBase64 = ev.target.result; document.getElementById('certFileName').textContent = "Template Loaded ✅"; }; reader.readAsDataURL(e.target.files[0]); };
