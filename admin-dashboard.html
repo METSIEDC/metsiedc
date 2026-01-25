@@ -35,15 +35,6 @@
         .custom-checkbox:checked { background-color: #ef4444; border-color: #ef4444; }
         .custom-checkbox:checked::before { content: "✔"; color: white; font-size: 0.8em; }
         ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-        
-        /* PRINT STYLES */
-        @media print {
-            body * { visibility: hidden; }
-            #printableArea, #printableArea * { visibility: visible; }
-            #printableArea { position: absolute; left: 0; top: 0; width: 100%; background: white; color: black; padding: 20px; }
-            .bg-green-100 { background-color: #dcfce7 !important; }
-            .text-green-800 { color: #166534 !important; }
-        }
     </style>
 </head>
 <body class="font-sans antialiased relative flex h-screen overflow-hidden">
@@ -58,13 +49,13 @@
         </div>
         <nav class="flex-grow px-4 py-4 space-y-2 overflow-y-auto">
             <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="bar-chart-2" class="w-5 h-5"></i> Overview</button>
+            <button onclick="showTab('logs')" id="nav-logs" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="activity" class="w-5 h-5"></i> Activity Logs</button>
+            <button onclick="showTab('excom')" id="nav-excom" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="shield" class="w-5 h-5"></i> ExCom & Meetings</button>
+            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="users" class="w-5 h-5"></i> Manage Users</button>
             <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="clipboard-check" class="w-5 h-5"></i> Mark Attendance</button>
             <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="award" class="w-5 h-5"></i> Issue Certificates</button>
-            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="users" class="w-5 h-5"></i> Manage Users</button>
-            <button onclick="showTab('submissions')" id="nav-submissions" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="inbox" class="w-5 h-5"></i> Submissions</button>
             <button onclick="showTab('eventForms')" id="nav-eventForms" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="file-plus" class="w-5 h-5"></i> Create Forms</button>
             <div class="pt-4 pb-2 px-4 text-xs font-semibold text-gray-500 uppercase">Content</div>
-            <button onclick="showTab('pastEvents')" id="nav-pastEvents" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="calendar-clock" class="w-5 h-5"></i> Past Events</button>
             <button onclick="showTab('news')" id="nav-news" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="newspaper" class="w-5 h-5"></i> Post News</button>
             <button onclick="showTab('announcements')" id="nav-announcements" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="bell" class="w-5 h-5"></i> Post Updates</button>
             <button onclick="showTab('gallery')" id="nav-gallery" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="image" class="w-5 h-5"></i> Manage Gallery</button>
@@ -85,15 +76,53 @@
             <div id="overviewSection" class="tab-content space-y-8">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="glass-card p-6 rounded-2xl border-l-4 border-red-500"><p class="text-gray-400 text-xs uppercase mb-1">Total Users</p><h3 class="text-3xl font-bold text-white" id="totalUsersCount">0</h3></div>
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-orange-500"><p class="text-gray-400 text-xs uppercase mb-1">Activity Logs</p><h3 class="text-3xl font-bold text-white" id="logsCount">0</h3></div>
                     <div class="glass-card p-6 rounded-2xl border-l-4 border-yellow-500"><p class="text-gray-400 text-xs uppercase mb-1">Announcements</p><h3 class="text-3xl font-bold text-white" id="totalAnnouncementsCount">0</h3></div>
                     <div class="glass-card p-6 rounded-2xl border-l-4 border-blue-500"><p class="text-gray-400 text-xs uppercase mb-1">Active Forms</p><h3 class="text-3xl font-bold text-white" id="activeFormsCount">0</h3></div>
-                    <div class="glass-card p-6 rounded-2xl border-l-4 border-green-500"><p class="text-gray-400 text-xs uppercase mb-1">Gallery Albums</p><h3 class="text-3xl font-bold text-white" id="galleryCount">0</h3></div>
+                </div>
+            </div>
+
+            <div id="logsSection" class="tab-content hidden space-y-6">
+                <h2 class="text-2xl font-bold text-white">System Logs</h2>
+                <div class="glass-card rounded-2xl overflow-hidden max-h-[600px] overflow-y-auto">
+                    <table class="w-full text-sm text-left text-gray-400">
+                        <thead class="bg-white/5 sticky top-0 text-white"><tr><th class="px-6 py-4">Time</th><th>Action</th><th>Details</th><th>Admin</th></tr></thead>
+                        <tbody id="logsListBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="excomSection" class="tab-content hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <div><h2 class="text-2xl font-bold text-white">ExCom & Meetings</h2><p class="text-xs text-gray-400">Track executive committee attendance.</p></div>
+                    <button onclick="openExcomAttendanceModal()" class="bg-orange-600 hover:bg-orange-500 text-white px-4 py-2 rounded-lg font-bold flex gap-2"><i data-lucide="plus-circle" class="w-4 h-4"></i> Log Meeting</button>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="glass-card p-6 rounded-2xl">
+                        <h3 class="font-bold text-white mb-4">ExCom Members</h3>
+                        <div id="excomMembersList" class="space-y-2 max-h-60 overflow-y-auto"></div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl">
+                        <h3 class="font-bold text-white mb-4">Recent Meetings</h3>
+                        <div id="excomMeetingsList" class="space-y-2 max-h-60 overflow-y-auto"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="usersSection" class="tab-content hidden space-y-6">
+                <div class="flex justify-between items-center"><h2 class="text-2xl font-bold text-white">User Management</h2><button onclick="toggleAddUserModal(true)" class="bg-red-600 px-4 py-2 rounded-lg font-bold">Add User</button></div>
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <table class="w-full text-sm text-left text-gray-400">
+                        <thead class="bg-white/5 text-white"><tr><th class="px-6 py-4">Name</th><th>Email</th><th>Role</th><th>Action</th></tr></thead>
+                        <tbody id="userListBody"></tbody>
+                    </table>
                 </div>
             </div>
 
             <div id="attendanceSection" class="tab-content hidden space-y-6">
-                <div class="flex justify-between items-end">
-                    <div><h2 class="text-2xl font-bold text-white">Mark Attendance</h2><p class="text-xs text-gray-400">Date-locked roster system.</p></div>
+                <div class="flex flex-col sm:flex-row justify-between items-end gap-4">
+                    <div><h2 class="text-2xl font-bold text-white mb-1">General Attendance</h2><p class="text-xs text-gray-400">Date-locked roster system.</p></div>
                     <div class="flex gap-2">
                          <button onclick="document.getElementById('reportsModal').classList.remove('hidden')" class="bg-white/10 px-4 py-2 rounded-lg font-bold">Reports</button>
                          <button onclick="submitAttendance()" class="bg-red-600 px-6 py-2 rounded-lg font-bold">Upload</button>
@@ -129,13 +158,6 @@
                 </div>
             </div>
 
-            <div id="usersSection" class="tab-content hidden space-y-6">
-                <div class="flex justify-between items-center"><h2 class="text-2xl font-bold text-white">User Management</h2><button onclick="toggleAddUserModal(true)" class="bg-red-600 px-4 py-2 rounded-lg font-bold">Add User</button></div>
-                <div class="glass-card rounded-2xl overflow-hidden"><table class="w-full text-sm text-left text-gray-400"><thead class="bg-white/5 text-white"><tr><th class="px-6 py-4">Name</th><th>Email</th><th>Role</th></tr></thead><tbody id="userListBody"></tbody></table></div>
-            </div>
-
-            <div id="submissionsSection" class="tab-content hidden space-y-6"><h2 class="text-2xl font-bold text-white">Submissions</h2><div class="glass-card p-6 text-center text-gray-500">No pending submissions found.</div></div>
-
             <div id="eventFormsSection" class="tab-content hidden max-w-2xl mx-auto">
                 <div class="glass-card p-8 rounded-3xl">
                     <h2 class="text-2xl font-bold text-white mb-6">Create Registration Form</h2>
@@ -148,55 +170,61 @@
                 </div>
             </div>
 
-            <div id="pastEventsSection" class="tab-content hidden max-w-4xl mx-auto space-y-6">
-                <div class="glass-card p-8 rounded-3xl border border-red-500/20">
-                    <h2 class="text-2xl font-bold text-white mb-6">Archive Past Event</h2>
-                    <form id="pastEventForm" class="space-y-4">
-                        <div class="grid grid-cols-2 gap-4"><input type="text" id="peTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Title"><input type="date" id="peDate" class="glass-input w-full rounded-xl py-3 px-4"></div>
-                        <textarea id="peDesc" rows="3" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Description"></textarea>
-                        <div class="grid grid-cols-2 gap-4"><label class="glass-input rounded-xl py-3 px-4 text-center cursor-pointer"><span id="peCoverName">Cover Image</span><input type="file" id="peCoverInput" class="hidden" onchange="handlePastEventCover(event)"></label><input type="text" id="peReport" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Report Link"></div>
-                        <button type="submit" id="savePastEventBtn" class="w-full bg-red-600 py-3 rounded-xl font-bold">Archive Event</button>
-                    </form>
-                </div>
-                <div id="pastEventsList" class="space-y-2"></div>
-            </div>
-
             <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto">
                 <div class="glass-card p-8 rounded-3xl border border-blue-500/20">
                     <h2 class="text-2xl font-bold text-white mb-6">Post News</h2>
-                    <form id="newsForm" class="space-y-4">
-                        <input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Headline" required>
-                        <textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Content" required></textarea>
-                        <div class="grid grid-cols-2 gap-4"><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4"><label class="glass-input rounded-xl py-3 px-4 text-center cursor-pointer"><span id="newsFileName">Image</span><input type="file" id="newsImageInput" class="hidden" onchange="handleNewsImage(event)"></label></div>
-                        <button type="submit" id="postNewsBtn" class="w-full bg-blue-600 py-3 rounded-xl font-bold">Publish News</button>
-                    </form>
+                    <form id="newsForm" class="space-y-4"><input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Headline" required><textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Content" required></textarea><div class="grid grid-cols-2 gap-4"><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4"><label class="glass-input rounded-xl py-3 px-4 text-center cursor-pointer"><span id="newsFileName">Image</span><input type="file" id="newsImageInput" class="hidden" onchange="handleNewsImage(event)"></label></div><button type="submit" id="postNewsBtn" class="w-full bg-blue-600 py-3 rounded-xl font-bold">Publish News</button></form>
                 </div>
             </div>
-
             <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto">
-                <div class="glass-card p-8 rounded-3xl">
-                    <h2 class="text-2xl font-bold text-white mb-6">Post Update</h2>
-                    <form id="announcementForm" class="space-y-4">
-                        <input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Subject" required>
-                        <textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Details" required></textarea>
-                        <div class="grid grid-cols-2 gap-4"><select id="annCategory" class="glass-input w-full rounded-xl py-3 px-4 bg-black"><option value="update">Update</option><option value="event">Event</option></select><input type="text" id="annDate" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Display Date"></div>
-                        <button type="submit" class="w-full bg-red-600 py-3 rounded-xl font-bold">Publish</button>
-                    </form>
-                </div>
+                <div class="glass-card p-8 rounded-3xl"><h2 class="text-2xl font-bold text-white mb-6">Post Update</h2><form id="announcementForm" class="space-y-4"><input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Subject" required><textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Details" required></textarea><button type="submit" class="w-full bg-red-600 py-3 rounded-xl font-bold">Publish</button></form></div>
             </div>
-
             <div id="gallerySection" class="tab-content hidden max-w-2xl mx-auto">
-                <div class="glass-card p-8 rounded-3xl border border-purple-500/20">
-                    <h2 class="text-2xl font-bold text-white mb-6">Upload Gallery</h2>
-                    <form id="galleryForm" class="space-y-4">
-                        <input type="text" id="galleryTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Album Title">
-                        <div class="grid grid-cols-2 gap-4"><input type="date" id="galleryDate" class="glass-input w-full rounded-xl py-3 px-4"><label class="glass-input rounded-xl py-3 px-4 text-center cursor-pointer"><span id="galleryFileName">Select Photos</span><input type="file" id="galleryImageInput" class="hidden" multiple onchange="handleGalleryImages(event)"></label></div>
-                        <button type="submit" id="postGalleryBtn" class="w-full bg-purple-600 py-3 rounded-xl font-bold">Upload Photos</button>
-                    </form>
-                </div>
+                <div class="glass-card p-8 rounded-3xl border border-purple-500/20"><h2 class="text-2xl font-bold text-white mb-6">Upload Gallery</h2><form id="galleryForm" class="space-y-4"><input type="text" id="galleryTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Album Title"><div class="grid grid-cols-2 gap-4"><input type="date" id="galleryDate" class="glass-input w-full rounded-xl py-3 px-4"><label class="glass-input rounded-xl py-3 px-4 text-center cursor-pointer"><span id="galleryFileName">Select Photos</span><input type="file" id="galleryImageInput" class="hidden" multiple onchange="handleGalleryImages(event)"></label></div><button type="submit" id="postGalleryBtn" class="w-full bg-purple-600 py-3 rounded-xl font-bold">Upload Photos</button></form></div>
+            </div>
+            <div id="pastEventsSection" class="tab-content hidden max-w-4xl mx-auto space-y-6">
+                <div class="glass-card p-8 rounded-3xl"><h2 class="text-2xl font-bold text-white mb-6">Archive Past Event</h2><form id="pastEventForm" class="space-y-4"><div class="grid grid-cols-2 gap-4"><input type="text" id="peTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Title"><input type="date" id="peDate" class="glass-input w-full rounded-xl py-3 px-4"></div><button type="submit" id="savePastEventBtn" class="w-full bg-red-600 py-3 rounded-xl font-bold">Archive</button></form></div>
             </div>
 
         </main>
+    </div>
+
+    <div id="editUserModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-md p-8 rounded-3xl">
+            <h2 class="text-xl font-bold mb-4">Edit User Role</h2>
+            <form id="editUserRoleForm" class="space-y-4">
+                <input type="hidden" id="editUserId">
+                <input type="text" id="editUserName" class="glass-input w-full rounded-xl py-3 px-4 bg-white/5 text-gray-400" readonly>
+                <div class="space-y-2">
+                    <label class="text-sm text-gray-400">Select Role</label>
+                    <select id="editUserRoleSelect" class="glass-input w-full rounded-xl py-3 px-4 bg-black">
+                        <option value="student">Student</option>
+                        <option value="excom">ExCom Member</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 py-3 rounded-xl font-bold">Update Role</button>
+                <button type="button" onclick="toggleEditUserModal(false)" class="w-full text-gray-400 mt-2">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="excomModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-lg p-8 rounded-3xl h-[80vh] flex flex-col">
+            <h2 class="text-xl font-bold mb-4">Log ExCom Meeting</h2>
+            <div class="space-y-4 mb-4">
+                <input type="text" id="excomMeetingTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Meeting Topic">
+                <input type="date" id="excomMeetingDate" class="glass-input w-full rounded-xl py-3 px-4">
+            </div>
+            <div class="flex-grow overflow-y-auto mb-4">
+                <table class="w-full text-sm text-left text-gray-400">
+                    <thead class="bg-white/5 sticky top-0"><tr><th class="px-4 py-2">Present?</th><th>Name</th></tr></thead>
+                    <tbody id="excomAttendanceList"></tbody>
+                </table>
+            </div>
+            <button onclick="submitExcomAttendance()" class="w-full bg-orange-600 py-3 rounded-xl font-bold">Save Log</button>
+            <button onclick="document.getElementById('excomModal').classList.add('hidden')" class="w-full text-gray-400 mt-2">Close</button>
+        </div>
     </div>
 
     <div id="addUserModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
@@ -211,11 +239,11 @@
             </form>
         </div>
     </div>
-    
+
     <div id="reportsModal" class="fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center p-4">
         <div class="glass-card w-full max-w-4xl h-[80vh] flex flex-col rounded-3xl relative overflow-hidden">
             <div class="p-6 border-b border-white/10 flex justify-between items-center bg-black/20">
-                <div><h2 class="text-xl font-bold text-white">Attendance Reports</h2></div>
+                <div><h2 class="text-xl font-bold text-white">Reports</h2></div>
                 <button onclick="document.getElementById('reportsModal').classList.add('hidden')" class="text-gray-400"><i data-lucide="x"></i></button>
             </div>
             <div class="flex-grow overflow-y-auto p-6" id="reportEventsList"></div>
@@ -225,7 +253,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, deleteDoc, setDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHmJ0B9qP2ND2YD0-lQxW2ZgL-m2siOYSHSpSrdgSD6v53i3iD9gGx9_bxrr_Wa6oalQ/exec"; 
@@ -235,69 +263,183 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // STATE VARIABLES
+        // STATE
         let newsImageFile = null;
         let galleryImages = [];
         let pastEventCover = null;
         let certTemplateBase64 = null;
-        let attendanceStudents = [];
+        let currentUserEmail = "";
 
+        // --- AUTH ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 if (userDoc.exists() && userDoc.data().role === 'admin') {
+                    currentUserEmail = user.email;
                     document.getElementById('adminEmailDisplay').textContent = user.email;
                     initSync();
-                } else { window.location.href = 'admin.html'; }
+                } else { signOut(auth).then(() => window.location.href = 'admin.html'); }
             } else { window.location.href = 'admin.html'; }
         });
 
-        // --- REALTIME SYNC ---
+        // --- CORE SYNC ---
         function initSync() {
-            // Users
+            // USERS & EXCOM
             onSnapshot(collection(db, "users"), (snap) => {
                 document.getElementById('totalUsersCount').textContent = snap.size;
-                let uHtml = '', cHtml = '';
+                let uHtml = '', certHtml = '', excomHtml = '', attHtml = '', excomModalHtml = '';
+                
                 snap.forEach(doc => {
                     const u = doc.data();
-                    uHtml += `<tr class="border-b border-white/5"><td class="px-6 py-4">${u.name}</td><td>${u.email}</td><td>${u.role}</td></tr>`;
-                    if(u.role === 'student') cHtml += `<tr><td class="px-4 py-2"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${doc.id}" data-name="${u.name}"></td><td>${u.name}</td></tr>`;
+                    
+                    // User Management Table (With Edit Button)
+                    uHtml += `<tr class="border-b border-white/5">
+                        <td class="px-6 py-4 text-white">${u.name}</td>
+                        <td>${u.email}</td>
+                        <td><span class="${u.role==='admin'?'text-red-400':u.role==='excom'?'text-orange-400':'text-green-400'} uppercase text-xs font-bold">${u.role}</span></td>
+                        <td><button onclick="openEditUserModal('${doc.id}', '${u.name}', '${u.role}')" class="text-blue-400 hover:text-white"><i data-lucide="edit-2" class="w-4 h-4"></i></button></td>
+                    </tr>`;
+
+                    // Student Only Lists
+                    if(u.role === 'student' || u.role === 'excom') {
+                        certHtml += `<tr><td class="px-4 py-2"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${doc.id}" data-name="${u.name}"></td><td>${u.name}</td></tr>`;
+                        attHtml += `<tr class="hover:bg-white/5 cursor-pointer" onclick="toggleAttCheck('${doc.id}')"><td class="px-4 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${doc.id}" value="${doc.id}"></td><td>${u.name}</td><td>${u.email}</td></tr>`;
+                    }
+
+                    // ExCom Only Lists
+                    if(u.role === 'excom') {
+                        excomHtml += `<div class="flex justify-between items-center bg-white/5 p-3 rounded mb-2"><span class="font-medium text-white">${u.name}</span><span class="text-xs text-orange-400">ExCom</span></div>`;
+                        excomModalHtml += `<tr><td class="px-4 py-2 text-center"><input type="checkbox" class="excom-checkbox custom-checkbox" value="${doc.id}"></td><td class="text-white">${u.name}</td></tr>`;
+                    }
                 });
+
                 document.getElementById('userListBody').innerHTML = uHtml;
-                document.getElementById('certUserListBody').innerHTML = cHtml;
-                
-                // Populate Attendance Roster based on students
-                let attHtml = '';
-                snap.forEach(doc => { if(doc.data().role === 'student') {
-                    attHtml += `<tr class="hover:bg-white/5 cursor-pointer" onclick="toggleAttCheck('${doc.id}')"><td class="px-4 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${doc.id}" value="${doc.id}"></td><td>${doc.data().name}</td><td>${doc.data().email}</td></tr>`;
-                }});
+                document.getElementById('certUserListBody').innerHTML = certHtml;
                 document.getElementById('attendanceListBody').innerHTML = attHtml;
+                document.getElementById('excomMembersList').innerHTML = excomHtml || '<p class="text-gray-500 text-xs">No ExCom members assigned.</p>';
+                document.getElementById('excomAttendanceList').innerHTML = excomModalHtml;
+                lucide.createIcons();
             });
 
-            // Counts
+            // LOGS
+            onSnapshot(query(collection(db, "logs"), orderBy("timestamp", "desc")), (snap) => {
+                document.getElementById('logsCount').textContent = snap.size;
+                let h = '';
+                snap.forEach(d => {
+                    const l = d.data();
+                    const date = new Date(l.timestamp).toLocaleString();
+                    h += `<tr class="border-b border-white/5 text-xs"><td class="px-6 py-3">${date}</td><td class="text-white">${l.action}</td><td>${l.details}</td><td class="text-gray-500">${l.admin}</td></tr>`;
+                });
+                document.getElementById('logsListBody').innerHTML = h;
+            });
+
+            // EXCOM MEETINGS
+            onSnapshot(query(collection(db, "excom_meetings"), orderBy("date", "desc")), (snap) => {
+                let h = '';
+                snap.forEach(d => {
+                    const m = d.data();
+                    h += `<div class="bg-white/5 p-3 rounded mb-2 text-sm"><div class="flex justify-between"><strong class="text-white">${m.title}</strong><span class="text-gray-500">${m.date}</span></div><div class="text-xs text-green-400 mt-1">${m.attendees.length} Attendees</div></div>`;
+                });
+                document.getElementById('excomMeetingsList').innerHTML = h || '<p class="text-gray-500 text-xs">No meetings logged.</p>';
+            });
+
+            // OTHER COUNTS & LISTS
             onSnapshot(collection(db, "announcements"), (s) => document.getElementById('totalAnnouncementsCount').textContent = s.size);
-            onSnapshot(collection(db, "gallery"), (s) => document.getElementById('galleryCount').textContent = s.size);
             onSnapshot(collection(db, "eventForms"), (s) => document.getElementById('activeFormsCount').textContent = s.size);
             
-            // Lists
             onSnapshot(query(collection(db, "eventForms"), orderBy("createdAt", "desc")), (snap) => {
-                let h = ''; snap.forEach(d => h += `<div class="bg-white/5 p-3 rounded flex justify-between"><span>${d.data().title}</span><button onclick="deleteDoc(doc(db,'eventForms','${d.id}'))" class="text-red-400">Del</button></div>`);
+                let h = ''; snap.forEach(d => h += `<div class="bg-white/5 p-3 rounded flex justify-between mt-2"><span>${d.data().title}</span><button onclick="deleteDoc(doc(db,'eventForms','${d.id}'))" class="text-red-400 text-xs">Del</button></div>`);
                 document.getElementById('activeFormsList').innerHTML = h;
-            });
-            
-            onSnapshot(query(collection(db, "past_events"), orderBy("date", "desc")), (snap) => {
-                let h = ''; snap.forEach(d => h += `<div class="bg-white/5 p-3 rounded flex justify-between"><span>${d.data().title}</span><button onclick="deleteDoc(doc(db,'past_events','${d.id}'))" class="text-red-400">Del</button></div>`);
-                document.getElementById('pastEventsList').innerHTML = h;
-            });
-
-            // Reports
-            onSnapshot(query(collection(db, "attendance"), orderBy("timestamp", "desc")), (snap) => {
-                let h = ''; snap.forEach(d => h += `<div class="bg-white/5 p-3 rounded mb-2"><strong>${d.data().eventName}</strong> - ${d.data().date} <span class="text-green-400">(${d.data().attendees.length} Present)</span></div>`);
-                document.getElementById('reportEventsList').innerHTML = h;
             });
         }
 
-        // --- UPLOAD HELPER ---
+        // --- ACTIVITY LOGGER ---
+        async function logActivity(action, details) {
+            await addDoc(collection(db, "logs"), {
+                action: action,
+                details: details,
+                admin: currentUserEmail,
+                timestamp: Date.now()
+            });
+        }
+
+        // --- USER ROLE EDIT LOGIC ---
+        window.openEditUserModal = (id, name, role) => {
+            document.getElementById('editUserId').value = id;
+            document.getElementById('editUserName').value = name;
+            document.getElementById('editUserRoleSelect').value = role;
+            document.getElementById('editUserModal').classList.remove('hidden');
+        };
+
+        window.toggleEditUserModal = (s) => document.getElementById('editUserModal').classList.toggle('hidden', !s);
+
+        document.getElementById('editUserRoleForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editUserId').value;
+            const newRole = document.getElementById('editUserRoleSelect').value;
+            const name = document.getElementById('editUserName').value;
+            
+            try {
+                await updateDoc(doc(db, "users", id), { role: newRole });
+                await logActivity("Updated Role", `Changed ${name} to ${newRole}`);
+                alert("Role Updated!");
+                toggleEditUserModal(false);
+            } catch(err) { alert(err.message); }
+        });
+
+        // --- EXCOM ATTENDANCE LOGIC ---
+        window.openExcomAttendanceModal = () => {
+            document.getElementById('excomMeetingDate').valueAsDate = new Date();
+            document.getElementById('excomModal').classList.remove('hidden');
+        };
+
+        window.submitExcomAttendance = async () => {
+            const title = document.getElementById('excomMeetingTitle').value;
+            const date = document.getElementById('excomMeetingDate').value;
+            const attendees = Array.from(document.querySelectorAll('.excom-checkbox:checked')).map(c => c.value);
+            
+            if(!title || !date) return alert("Fill meeting details");
+
+            try {
+                await addDoc(collection(db, "excom_meetings"), { title, date, attendees, timestamp: Date.now() });
+                await logActivity("ExCom Meeting", `Logged: ${title} (${attendees.length} present)`);
+                alert("Meeting Logged!");
+                document.getElementById('excomModal').classList.add('hidden');
+            } catch(err) { alert(err.message); }
+        };
+
+        // --- GENERIC SUBMITS (With Logs) ---
+        document.getElementById('newsForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            const btn = document.getElementById('postNewsBtn'); btn.disabled=true; btn.innerText="Uploading...";
+            try {
+                let url = newsImageFile ? await uploadToDrive(newsImageFile) : "";
+                const title = document.getElementById('newsTitle').value;
+                await addDoc(collection(db, "news"), { title, content: document.getElementById('newsContent').value, date: document.getElementById('newsDate').value, imageUrl: url, timestamp: Date.now() });
+                await logActivity("Posted News", title);
+                alert("News Posted!"); e.target.reset();
+            } catch(err) { alert(err.message); } finally { btn.disabled=false; btn.innerText="Publish News"; }
+        });
+
+        document.getElementById('announcementForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('annTitle').value;
+            await addDoc(collection(db, "announcements"), { title, content: document.getElementById('annContent').value, category: document.getElementById('annCategory').value, date: document.getElementById('annDate').value, timestamp: Date.now() });
+            await logActivity("Posted Update", title);
+            alert("Update Posted!"); e.target.reset();
+        });
+
+        window.submitAttendance = async () => {
+            const eventName = document.getElementById('attendanceEventName').value;
+            const date = document.getElementById('attendanceDate').value;
+            const attendees = Array.from(document.querySelectorAll('.att-checkbox:checked')).map(c => c.value);
+            if(!eventName || !date) return alert("Fill details");
+            await addDoc(collection(db, "attendance"), { eventName, date, attendees, timestamp: Date.now() });
+            await logActivity("Marked Attendance", `${eventName} (${attendees.length})`);
+            alert("Attendance Saved!");
+        };
+
+        // --- HELPERS ---
         async function uploadToDrive(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -313,82 +455,6 @@
             });
         }
 
-        // --- FUNCTION HANDLERS ---
-        window.handleNewsImage = (e) => { newsImageFile = e.target.files[0]; document.getElementById('newsFileName').textContent = newsImageFile.name; };
-        window.handlePastEventCover = (e) => { pastEventCover = e.target.files[0]; document.getElementById('peCoverName').textContent = pastEventCover.name; };
-        window.handleGalleryImages = (e) => { galleryImages = e.target.files; document.getElementById('galleryFileName').textContent = `${galleryImages.length} Files`; };
-        window.handleCertTemplate = (e) => { 
-            const reader = new FileReader();
-            reader.onload = (ev) => { certTemplateBase64 = ev.target.result; document.getElementById('certFileName').textContent = "Template Loaded ✅"; };
-            reader.readAsDataURL(e.target.files[0]);
-        };
-        window.toggleAttCheck = (id) => { const c = document.getElementById('att-'+id); c.checked = !c.checked; };
-
-        // --- SUBMIT LOGIC ---
-        document.getElementById('newsForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); const btn = document.getElementById('postNewsBtn'); btn.disabled=true; btn.innerText="Uploading...";
-            try {
-                let url = newsImageFile ? await uploadToDrive(newsImageFile) : "";
-                await addDoc(collection(db, "news"), { title: document.getElementById('newsTitle').value, content: document.getElementById('newsContent').value, date: document.getElementById('newsDate').value, imageUrl: url, timestamp: Date.now() });
-                alert("News Posted!"); e.target.reset();
-            } catch(err) { alert(err.message); } finally { btn.disabled=false; btn.innerText="Publish News"; }
-        });
-
-        document.getElementById('pastEventForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); const btn = document.getElementById('savePastEventBtn'); btn.disabled=true; btn.innerText="Archiving...";
-            try {
-                let url = pastEventCover ? await uploadToDrive(pastEventCover) : "";
-                await addDoc(collection(db, "past_events"), { title: document.getElementById('peTitle').value, date: document.getElementById('peDate').value, description: document.getElementById('peDesc').value, coverImage: url, reportLink: document.getElementById('peReport').value, timestamp: Date.now() });
-                alert("Event Archived!"); e.target.reset();
-            } catch(err) { alert(err.message); } finally { btn.disabled=false; btn.innerText="Archive Event"; }
-        });
-
-        document.getElementById('galleryForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); const btn = document.getElementById('postGalleryBtn'); btn.disabled=true; btn.innerText="Uploading...";
-            try {
-                let urls = []; for(let f of galleryImages) urls.push(await uploadToDrive(f));
-                await addDoc(collection(db, "gallery"), { title: document.getElementById('galleryTitle').value, date: document.getElementById('galleryDate').value, imageUrls: urls, timestamp: Date.now() });
-                alert("Gallery Uploaded!"); e.target.reset();
-            } catch(err) { alert(err.message); } finally { btn.disabled=false; btn.innerText="Upload Photos"; }
-        });
-
-        document.getElementById('announcementForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, content: document.getElementById('annContent').value, category: document.getElementById('annCategory').value, date: document.getElementById('annDate').value, timestamp: Date.now() });
-            alert("Update Posted!"); e.target.reset();
-        });
-
-        document.getElementById('formBuilderForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await addDoc(collection(db, "eventForms"), { title: document.getElementById('formTitle').value, webhook: document.getElementById('formWebhook').value, createdAt: Date.now() });
-            alert("Form Created!"); e.target.reset();
-        });
-
-        window.submitAttendance = async () => {
-            const eventName = document.getElementById('attendanceEventName').value;
-            const date = document.getElementById('attendanceDate').value;
-            const attendees = Array.from(document.querySelectorAll('.att-checkbox:checked')).map(c => c.value);
-            if(!eventName || !date) return alert("Fill details");
-            await addDoc(collection(db, "attendance"), { eventName, date, attendees, timestamp: Date.now() });
-            alert("Attendance Saved!");
-        };
-
-        window.issueCertificates = async () => {
-            const eventName = document.getElementById('certEventName').value;
-            const date = document.getElementById('certDate').value;
-            const selected = document.querySelectorAll('.cert-checkbox:checked');
-            if(!eventName || !certTemplateBase64 || selected.length === 0) return alert("Fill all fields");
-            const btn = document.getElementById('certBtn'); btn.disabled=true; btn.innerText="Issuing...";
-            
-            try {
-                for (const box of selected) {
-                    await addDoc(collection(db, "certificates"), { userId: box.value, userName: box.getAttribute('data-name'), eventName, date, templateUrl: certTemplateBase64, issuedAt: Date.now() });
-                }
-                alert("Certificates Issued!");
-            } catch(e){alert(e.message);} finally { btn.disabled=false; btn.innerText="Issue Certificates"; }
-        };
-
-        // --- HELPERS ---
         window.showTab = (t) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(t+'Section').classList.remove('hidden');
@@ -396,8 +462,12 @@
             document.getElementById('nav-'+t).classList.add('active');
         };
         window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
-        window.deleteDoc = deleteDoc; window.doc = doc; window.db = db; // Make global for onclick
-        
+        window.handleNewsImage = (e) => { newsImageFile = e.target.files[0]; document.getElementById('newsFileName').textContent = newsImageFile.name; };
+        window.handleGalleryImages = (e) => { galleryImages = e.target.files; document.getElementById('galleryFileName').textContent = `${galleryImages.length} Files`; };
+        window.handleCertTemplate = (e) => { const reader = new FileReader(); reader.onload = (ev) => { certTemplateBase64 = ev.target.result; document.getElementById('certFileName').textContent = "Template Loaded ✅"; }; reader.readAsDataURL(e.target.files[0]); };
+        window.toggleAttCheck = (id) => { const c = document.getElementById('att-'+id); c.checked = !c.checked; };
+        window.deleteDoc = deleteDoc; window.doc = doc; window.db = db;
+
         document.getElementById('adminLogoutBtn').addEventListener('click', () => signOut(auth).then(()=>window.location.href='admin.html'));
     </script>
 </body>
