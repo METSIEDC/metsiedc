@@ -111,11 +111,20 @@
             </div>
 
             <div id="usersSection" class="tab-content hidden space-y-6">
-                <div class="flex justify-between items-center"><h2 class="text-2xl font-bold text-white">User Management</h2><button onclick="toggleAddUserModal(true)" class="bg-red-600 px-4 py-2 rounded-lg font-bold">Add User</button></div>
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <h2 class="text-2xl font-bold text-white">User Management</h2>
+                    <div class="flex gap-3 w-full md:w-auto">
+                        <div class="relative w-full md:w-64">
+                            <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search Name or Email..." class="glass-input w-full pl-10 pr-4 py-2 rounded-lg text-sm">
+                            <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-gray-400"></i>
+                        </div>
+                        <button onclick="toggleAddUserModal(true)" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-bold whitespace-nowrap">Add User</button>
+                    </div>
+                </div>
                 <div class="glass-card rounded-2xl overflow-hidden">
                     <table class="w-full text-sm text-left text-gray-400">
                         <thead class="bg-white/5 text-white"><tr><th class="px-6 py-4">Name</th><th>Email</th><th>Role</th><th>Action</th></tr></thead>
-                        <tbody id="userListBody"></tbody>
+                        <tbody id="userListBody"><tr><td colspan="4" class="text-center py-4">Loading users...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -267,6 +276,7 @@
         let pastEventCover = null;
         let certTemplateBase64 = null;
         let currentUserEmail = "";
+        let allUsersData = []; // STORE FOR SEARCH
 
         // --- AUTH ---
         onAuthStateChanged(auth, async (user) => {
@@ -285,18 +295,13 @@
             // USERS & EXCOM
             onSnapshot(collection(db, "users"), (snap) => {
                 document.getElementById('totalUsersCount').textContent = snap.size;
-                let uHtml = '', certHtml = '', excomHtml = '', attHtml = '', excomModalHtml = '';
+                allUsersData = []; // Clear for search
+                let certHtml = '', excomHtml = '', attHtml = '', excomModalHtml = '';
                 
                 snap.forEach(doc => {
                     const u = doc.data();
-                    
-                    // User Management Table
-                    uHtml += `<tr class="border-b border-white/5">
-                        <td class="px-6 py-4 text-white">${u.name}</td>
-                        <td>${u.email}</td>
-                        <td><span class="${u.role==='admin'?'text-red-400':u.role==='excom'?'text-orange-400':'text-green-400'} uppercase text-xs font-bold">${u.role}</span></td>
-                        <td><button onclick="openEditUserModal('${doc.id}', '${u.name}', '${u.role}')" class="text-blue-400 hover:text-white"><i data-lucide="edit-2" class="w-4 h-4"></i></button></td>
-                    </tr>`;
+                    const userData = { id: doc.id, ...u };
+                    allUsersData.push(userData);
 
                     // Student Only Lists
                     if(u.role === 'student' || u.role === 'excom') {
@@ -311,7 +316,10 @@
                     }
                 });
 
-                document.getElementById('userListBody').innerHTML = uHtml;
+                // Initial Render of Users
+                renderUserTable(allUsersData);
+
+                // Populate other specific lists
                 document.getElementById('certUserListBody').innerHTML = certHtml;
                 document.getElementById('attendanceListBody').innerHTML = attHtml;
                 document.getElementById('excomMembersList').innerHTML = excomHtml || '<p class="text-gray-500 text-xs">No ExCom members assigned.</p>';
@@ -344,18 +352,43 @@
             // OTHERS
             onSnapshot(collection(db, "announcements"), (s) => document.getElementById('totalAnnouncementsCount').textContent = s.size);
             onSnapshot(collection(db, "eventForms"), (s) => document.getElementById('activeFormsCount').textContent = s.size);
+            
             onSnapshot(query(collection(db, "eventForms"), orderBy("createdAt", "desc")), (snap) => {
                 let h = ''; snap.forEach(d => h += `<div class="bg-white/5 p-3 rounded flex justify-between mt-2"><span>${d.data().title}</span><button onclick="deleteDoc(doc(db,'eventForms','${d.id}'))" class="text-red-400 text-xs">Del</button></div>`);
                 document.getElementById('activeFormsList').innerHTML = h;
             });
         }
 
+        // --- SEARCH & RENDER USERS ---
+        window.renderUserTable = (users) => {
+            let uHtml = '';
+            users.forEach(u => {
+                uHtml += `<tr class="border-b border-white/5">
+                    <td class="px-6 py-4 text-white">${u.name}</td>
+                    <td>${u.email}</td>
+                    <td><span class="${u.role==='admin'?'text-red-400':u.role==='excom'?'text-orange-400':'text-green-400'} uppercase text-xs font-bold">${u.role}</span></td>
+                    <td><button onclick="openEditUserModal('${u.id}', '${u.name}', '${u.role}')" class="text-blue-400 hover:text-white"><i data-lucide="edit-2" class="w-4 h-4"></i></button></td>
+                </tr>`;
+            });
+            document.getElementById('userListBody').innerHTML = uHtml || '<tr><td colspan="4" class="text-center py-4 text-gray-500">No users match your search.</td></tr>';
+            lucide.createIcons();
+        };
+
+        window.filterUsers = () => {
+            const term = document.getElementById('userSearchInput').value.toLowerCase();
+            const filtered = allUsersData.filter(u => 
+                (u.name && u.name.toLowerCase().includes(term)) || 
+                (u.email && u.email.toLowerCase().includes(term))
+            );
+            renderUserTable(filtered);
+        };
+
         // --- ACTIVITY LOGGER ---
         async function logActivity(action, details) {
             await addDoc(collection(db, "logs"), { action: action, details: details, admin: currentUserEmail, timestamp: Date.now() });
         }
 
-        // --- ADD USER (FIXED FOR AUTH CONFLICT) ---
+        // --- ADD USER (FIXED) ---
         document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
@@ -366,19 +399,15 @@
             btn.disabled = true; btn.innerText = "Creating...";
 
             try {
-                // Secondary App allows creating a user without logging out the Admin
                 const secondaryApp = initializeApp(firebaseConfig, "SecondaryApp-" + Date.now());
                 const secondaryAuth = getAuth(secondaryApp);
                 const uc = await createUserWithEmailAndPassword(secondaryAuth, email, password);
                 
-                // Write to main DB
                 await setDoc(doc(db, "users", uc.user.uid), { name, email, role: 'student', createdAt: Date.now() });
                 await logActivity("Created User", `Added ${name} (${email})`);
-                await signOut(secondaryAuth); // Clean up
+                await signOut(secondaryAuth);
                 
-                alert("User Created!");
-                toggleAddUserModal(false);
-                e.target.reset();
+                alert("User Created!"); toggleAddUserModal(false); e.target.reset();
             } catch (err) { alert("Error: " + err.message); } finally { btn.disabled = false; btn.innerText = "Create"; }
         });
 
@@ -427,7 +456,7 @@
         document.getElementById('announcementForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
-                await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, content: document.getElementById('annContent').value, timestamp: Date.now() });
+                await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, content: document.getElementById('annContent').value, category: document.getElementById('annCategory').value, date: document.getElementById('annDate').value, timestamp: Date.now() });
                 await logActivity("Posted Update", document.getElementById('annTitle').value);
                 alert("Posted!"); e.target.reset();
             } catch(err) { alert(err.message); }
