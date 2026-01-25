@@ -34,7 +34,7 @@
         .custom-checkbox { appearance: none; background-color: rgba(255,255,255,0.1); width: 1.25em; height: 1.25em; border: 1px solid rgba(255,255,255,0.3); border-radius: 0.25em; cursor: pointer; display: inline-grid; place-content: center; }
         .custom-checkbox:checked { background-color: #ef4444; border-color: #ef4444; }
         .custom-checkbox:checked::before { content: "✔"; color: white; font-size: 0.8em; }
-        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #050505; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
     </style>
 </head>
 <body class="font-sans antialiased relative flex h-screen overflow-hidden">
@@ -49,8 +49,8 @@
         </div>
         <nav class="flex-grow px-4 py-4 space-y-2 overflow-y-auto">
             <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="bar-chart-2" class="w-5 h-5"></i> Overview</button>
-            <button onclick="showTab('inventory')" id="nav-inventory" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="box" class="w-5 h-5"></i> Inventory</button>
             <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="users" class="w-5 h-5"></i> Manage Users</button>
+            <button onclick="showTab('inventory')" id="nav-inventory" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="box" class="w-5 h-5"></i> Inventory</button>
             <button onclick="showTab('logs')" id="nav-logs" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="activity" class="w-5 h-5"></i> Activity Logs</button>
             <button onclick="showTab('excom')" id="nav-excom" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="shield" class="w-5 h-5"></i> ExCom & Meetings</button>
             <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium"><i data-lucide="clipboard-check" class="w-5 h-5"></i> Mark Attendance</button>
@@ -83,6 +83,25 @@
                 </div>
             </div>
 
+            <div id="usersSection" class="tab-content hidden space-y-6">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <h2 class="text-2xl font-bold text-white">User Management</h2>
+                    <div class="flex gap-3 w-full md:w-auto">
+                        <div class="relative w-full md:w-64">
+                            <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search..." class="glass-input w-full pl-10 pr-4 py-2 rounded-lg text-sm">
+                            <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-gray-400"></i>
+                        </div>
+                        <button onclick="toggleAddUserModal(true)" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-bold whitespace-nowrap flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Add</button>
+                    </div>
+                </div>
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <table class="w-full text-sm text-left text-gray-400">
+                        <thead class="bg-white/5 text-white"><tr><th class="px-6 py-4">Name</th><th>Email</th><th>Role</th><th class="text-center">Actions</th></tr></thead>
+                        <tbody id="userListBody"><tr><td colspan="4" class="text-center py-4">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
             <div id="inventorySection" class="tab-content hidden space-y-6">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-bold text-white">Asset Inventory</h2>
@@ -97,25 +116,6 @@
                     <table class="w-full text-sm text-left text-gray-400">
                         <thead class="bg-white/5 text-white"><tr><th class="px-6 py-4">Item Name</th><th>Category</th><th>Status</th><th>Holder</th><th class="text-center">Action</th></tr></thead>
                         <tbody id="inventoryListBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="usersSection" class="tab-content hidden space-y-6">
-                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                    <h2 class="text-2xl font-bold text-white">User Management</h2>
-                    <div class="flex gap-3 w-full md:w-auto">
-                        <div class="relative w-full md:w-64">
-                            <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search Name/Email..." class="glass-input w-full pl-10 pr-4 py-2 rounded-lg text-sm">
-                            <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-gray-400"></i>
-                        </div>
-                        <button onclick="toggleAddUserModal(true)" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-bold whitespace-nowrap">Add User</button>
-                    </div>
-                </div>
-                <div class="glass-card rounded-2xl overflow-hidden">
-                    <table class="w-full text-sm text-left text-gray-400">
-                        <thead class="bg-white/5 text-white"><tr><th class="px-6 py-4">Name</th><th>Email</th><th>Role</th><th class="text-center">Actions</th></tr></thead>
-                        <tbody id="userListBody"><tr><td colspan="4" class="text-center py-4">Loading...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -163,7 +163,7 @@
 
     <div id="editUserModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
         <div class="glass-card w-full max-w-md p-8 rounded-3xl">
-            <h2 class="text-xl font-bold mb-4">Edit User Role</h2>
+            <h2 class="text-xl font-bold mb-4">Edit Role</h2>
             <form id="editUserRoleForm" class="space-y-4">
                 <input type="hidden" id="editUserId">
                 <input type="text" id="editUserName" class="glass-input w-full rounded-xl py-3 px-4 bg-white/5 text-gray-400" readonly>
@@ -201,6 +201,7 @@
     </div>
 
     <div id="excomModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4"><div class="glass-card w-full max-w-lg p-8 rounded-3xl h-[80vh] flex flex-col"><h2 class="text-xl font-bold mb-4">Log ExCom Meeting</h2><div class="space-y-4 mb-4"><input type="text" id="excomMeetingTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Meeting Topic"><input type="date" id="excomMeetingDate" class="glass-input w-full rounded-xl py-3 px-4"></div><div class="flex-grow overflow-y-auto mb-4"><table class="w-full text-sm text-left text-gray-400"><thead class="bg-white/5 sticky top-0"><tr><th class="px-4 py-2">Present?</th><th>Name</th></tr></thead><tbody id="excomAttendanceList"></tbody></table></div><button onclick="submitExcomAttendance()" class="w-full bg-orange-600 py-3 rounded-xl font-bold">Save Log</button><button onclick="document.getElementById('excomModal').classList.add('hidden')" class="w-full text-gray-400 mt-2">Close</button></div></div>
+    
     <div id="reportsModal" class="fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center p-4"><div class="glass-card w-full max-w-4xl h-[80vh] flex flex-col rounded-3xl relative overflow-hidden"><div class="p-6 border-b border-white/10 flex justify-between items-center bg-black/20"><div><h2 class="text-xl font-bold text-white">Reports</h2></div><button onclick="document.getElementById('reportsModal').classList.add('hidden')" class="text-gray-400"><i data-lucide="x"></i></button></div><div class="flex-grow overflow-y-auto p-6" id="reportEventsList"></div></div></div>
 
     <script type="module">
@@ -224,34 +225,33 @@
         let currentUserEmail = "";
         let allUsersData = [];
 
+        // HELPER: PREVENT CRASHES
+        function safeSetText(id, text) { const el = document.getElementById(id); if (el) el.textContent = text; }
+
         // --- AUTH ---
-   // --- NORMAL SECURE CODE ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Check if the user is actually an admin in the database
+                // Check Admin Role in Realtime DB
                 get(ref(db, "users/" + user.uid)).then((snapshot) => {
-                    if (snapshot.exists() && snapshot.val().role === 'admin') {
-                        // Success: Load Dashboard
+                    const userData = snapshot.val();
+                    if (snapshot.exists() && userData.role === 'admin') {
                         currentUserEmail = user.email;
-                        document.getElementById('adminEmailDisplay').textContent = user.email;
+                        safeSetText('adminEmailDisplay', user.email);
                         initSync();
                     } else { 
-                        // Fail: User exists but is not an admin
-                        alert("Access Denied: You do not have Admin permissions.");
-                        signOut(auth).then(() => window.location.href = 'admin.html'); 
+                        // Auto-fix block logic removed for production
+                        alert("Unauthorized"); signOut(auth).then(() => window.location.href = 'admin.html');
                     }
-                }).catch((err) => {
-                    console.error(err);
-                    signOut(auth).then(() => window.location.href = 'admin.html');
-                });
+                }).catch((err) => console.error(err));
             } else { window.location.href = 'admin.html'; }
         });
-        // --- CORE SYNC (REALTIME DB SDK) ---
+
+        // --- CORE SYNC ---
         function initSync() {
-            // USERS & EXCOM (onValue replaces onSnapshot)
+            // USERS
             onValue(ref(db, "users"), (snap) => {
                 const users = snap.val() || {};
-                document.getElementById('totalUsersCount').textContent = Object.keys(users).length;
+                safeSetText('totalUsersCount', Object.keys(users).length);
                 allUsersData = [];
                 let certHtml = '', excomHtml = '', attHtml = '', excomModalHtml = '';
 
@@ -267,24 +267,22 @@
                     }
                 }
                 renderUserTable(allUsersData);
-                document.getElementById('certUserListBody').innerHTML = certHtml;
-                document.getElementById('attendanceListBody').innerHTML = attHtml;
-                document.getElementById('excomMembersList').innerHTML = excomHtml || '<p class="text-gray-500 text-xs">No ExCom members assigned.</p>';
-                document.getElementById('excomAttendanceList').innerHTML = excomModalHtml;
+                if(document.getElementById('certUserListBody')) document.getElementById('certUserListBody').innerHTML = certHtml;
+                if(document.getElementById('attendanceListBody')) document.getElementById('attendanceListBody').innerHTML = attHtml;
+                if(document.getElementById('excomMembersList')) document.getElementById('excomMembersList').innerHTML = excomHtml || '<p class="text-gray-500 text-xs">No ExCom members.</p>';
+                if(document.getElementById('excomAttendanceList')) document.getElementById('excomAttendanceList').innerHTML = excomModalHtml;
                 lucide.createIcons();
             });
 
             // LOGS
             onValue(query(ref(db, "logs"), limitToLast(50)), (snap) => {
                 const logs = snap.val() || {};
-                document.getElementById('logsCount').textContent = Object.keys(logs).length;
+                safeSetText('logsCount', Object.keys(logs).length);
                 let h = '';
-                // Convert object to array, sort reverse chronological
                 Object.values(logs).reverse().forEach(l => {
-                    const date = new Date(l.timestamp).toLocaleString();
-                    h += `<tr class="border-b border-white/5 text-xs"><td class="px-6 py-3">${date}</td><td class="text-white">${l.action}</td><td>${l.details}</td><td class="text-gray-500">${l.admin}</td></tr>`;
+                    h += `<tr class="border-b border-white/5 text-xs"><td class="px-6 py-3">${new Date(l.timestamp).toLocaleString()}</td><td class="text-white">${l.action}</td><td>${l.details}</td><td class="text-gray-500">${l.admin}</td></tr>`;
                 });
-                document.getElementById('logsListBody').innerHTML = h;
+                if(document.getElementById('logsListBody')) document.getElementById('logsListBody').innerHTML = h;
             });
 
             // INVENTORY
@@ -296,35 +294,22 @@
                     const btn = item.status === 'Available' ? `<button onclick="toggleItemStatus('${id}', 'Borrowed')" class="text-yellow-400 hover:text-white border border-yellow-400 px-2 py-1 rounded text-xs">Lend</button>` : `<button onclick="toggleItemStatus('${id}', 'Available')" class="text-green-400 hover:text-white border border-green-400 px-2 py-1 rounded text-xs">Return</button>`;
                     h += `<tr class="border-b border-white/5"><td class="px-6 py-4">${item.name}</td><td>${item.category}</td><td class="${item.status==='Available'?'text-green-400':'text-red-400'}">${item.status}</td><td>${item.holder||'-'}</td><td class="text-center flex items-center justify-center gap-2 py-4">${btn}<button onclick="remove(ref(db,'inventory/${id}'))" class="text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
                 }
-                document.getElementById('inventoryListBody').innerHTML = h;
-                document.getElementById('invTotalOverview').textContent = total;
-                document.getElementById('invTotal').textContent = total;
-                document.getElementById('invAvail').textContent = avail;
-                document.getElementById('invBorrowed').textContent = borrowed;
+                if(document.getElementById('inventoryListBody')) document.getElementById('inventoryListBody').innerHTML = h;
+                safeSetText('invTotalOverview', total); safeSetText('invTotal', total); safeSetText('invAvail', avail); safeSetText('invBorrowed', borrowed);
                 lucide.createIcons();
             });
 
-            // EXCOM MEETINGS
-            onValue(query(ref(db, "excom_meetings"), limitToLast(20)), (snap) => {
-                const meetings = snap.val() || {};
-                let h = '';
-                Object.values(meetings).reverse().forEach(m => {
-                    h += `<div class="bg-white/5 p-3 rounded mb-2 text-sm"><div class="flex justify-between"><strong class="text-white">${m.title}</strong><span class="text-gray-500">${m.date}</span></div><div class="text-xs text-green-400 mt-1">${(m.attendees||[]).length} Attendees</div></div>`;
-                });
-                document.getElementById('excomMeetingsList').innerHTML = h;
-            });
-
             // OTHERS
-            onValue(ref(db, "announcements"), (s) => document.getElementById('totalAnnouncementsCount').textContent = s.exists() ? Object.keys(s.val()).length : 0);
+            onValue(ref(db, "announcements"), (s) => safeSetText('totalAnnouncementsCount', s.exists() ? Object.keys(s.val()).length : 0));
             onValue(ref(db, "eventForms"), (s) => {
                 const forms = s.val() || {};
-                document.getElementById('activeFormsCount').textContent = Object.keys(forms).length;
+                safeSetText('activeFormsCount', Object.keys(forms).length);
                 let h=''; Object.entries(forms).forEach(([id, d]) => h += `<div class="bg-white/5 p-3 rounded flex justify-between mt-2"><span>${d.title}</span><button onclick="remove(ref(db,'eventForms/${id}'))" class="text-red-400 text-xs">Del</button></div>`);
-                document.getElementById('activeFormsList').innerHTML = h;
+                if(document.getElementById('activeFormsList')) document.getElementById('activeFormsList').innerHTML = h;
             });
         }
 
-        // --- USER MANAGEMENT ---
+        // --- USER MANAGEMENT UI ---
         window.renderUserTable = (users) => {
             let uHtml = '';
             users.forEach(u => {
@@ -332,31 +317,30 @@
                 const safeRole = u.role || "student";
                 uHtml += `<tr class="border-b border-white/5"><td class="px-6 py-4 text-white">${u.name}</td><td>${u.email}</td><td><span class="uppercase text-xs font-bold ${safeRole==='admin'?'text-red-400':safeRole==='excom'?'text-orange-400':'text-green-400'}">${safeRole}</span></td><td class="text-center flex items-center justify-center gap-2 py-4"><button onclick="openEditUserModal('${u.id}', '${safeName}', '${safeRole}')" class="text-blue-400 hover:text-white p-2"><i data-lucide="edit-2" class="w-4 h-4"></i></button><button onclick="deleteUser('${u.id}', '${safeName}')" class="text-red-400 hover:text-white p-2"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
             });
-            document.getElementById('userListBody').innerHTML = uHtml || '<tr><td colspan="4" class="text-center py-4">No users.</td></tr>';
+            if(document.getElementById('userListBody')) document.getElementById('userListBody').innerHTML = uHtml || '<tr><td colspan="4" class="text-center py-4">No users found.</td></tr>';
             lucide.createIcons();
         };
 
         window.filterUsers = () => {
             const term = document.getElementById('userSearchInput').value.toLowerCase();
-            renderUserTable(allUsersData.filter(u => (u.name&&u.name.toLowerCase().includes(term)) || (u.email&&u.email.toLowerCase().includes(term))));
+            renderUserTable(allUsersData.filter(u => (u.name && u.name.toLowerCase().includes(term)) || (u.email && u.email.toLowerCase().includes(term))));
         };
 
         window.deleteUser = async (id, name) => {
             if(!confirm(`Delete ${name}?`)) return;
-            try { await remove(ref(db, "users/" + id)); await logActivity("Deleted User", `Removed ${name}`); alert("Deleted!"); } catch(e){ alert(e.message); }
+            try { await remove(ref(db, "users/" + id)); await logActivity("Deleted User", `Removed ${name}`); } catch(e){ alert(e.message); }
         };
 
+        // --- ACTIONS ---
         document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             btn.disabled = true; btn.innerText = "Creating...";
             const email = document.getElementById('newUserEmail').value;
             try {
-                // Secondary App for Auth
                 const secondaryApp = initializeApp(firebaseConfig, "SecondaryApp-" + Date.now());
                 const secondaryAuth = getAuth(secondaryApp);
                 const uc = await createUserWithEmailAndPassword(secondaryAuth, email, document.getElementById('newUserPassword').value);
-                // Write to Main RTDB
                 await set(ref(db, "users/" + uc.user.uid), { name: document.getElementById('newUserName').value, email, role: 'student', createdAt: Date.now() });
                 await logActivity("Created User", `Added ${email}`);
                 await signOut(secondaryAuth);
@@ -364,7 +348,6 @@
             } catch (err) { alert(err.message); } finally { btn.disabled = false; btn.innerText = "Create"; }
         });
 
-        // --- INVENTORY ---
         document.getElementById('addItemForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
@@ -372,40 +355,61 @@
                 alert("Item Added!"); document.getElementById('addItemModal').classList.add('hidden'); e.target.reset();
             } catch(e) { alert(e.message); }
         });
+
         window.toggleItemStatus = async (id, status) => {
             let holder = '';
             if(status === 'Borrowed') { holder = prompt("Who is borrowing this?"); if(!holder) return; }
             await update(ref(db, "inventory/" + id), { status, holder });
         };
 
-        // --- GENERIC FUNCTIONS ---
         async function logActivity(action, details) { await push(ref(db, "logs"), { action, details, admin: currentUserEmail, timestamp: Date.now() }); }
         
         window.openEditUserModal = (id, name, role) => { document.getElementById('editUserId').value=id; document.getElementById('editUserName').value=name; document.getElementById('editUserRoleSelect').value=role; document.getElementById('editUserModal').classList.remove('hidden'); };
+        
         document.getElementById('editUserRoleForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             try { await update(ref(db, "users/" + document.getElementById('editUserId').value), { role: document.getElementById('editUserRoleSelect').value }); alert("Updated!"); toggleEditUserModal(false); } catch(e){ alert(e.message); }
         });
 
-        // Submit Handlers
         document.getElementById('newsForm').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn=document.getElementById('postNewsBtn'); btn.disabled=true;
             try { let url = newsImageFile ? await uploadToDrive(newsImageFile) : ""; await push(ref(db, "news"), { title: document.getElementById('newsTitle').value, content: document.getElementById('newsContent').value, date: document.getElementById('newsDate').value, imageUrl: url, timestamp: Date.now() }); await logActivity("Posted News", document.getElementById('newsTitle').value); alert("Posted!"); e.target.reset(); } catch(e){alert(e.message);} finally{btn.disabled=false;}
         });
+
         document.getElementById('announcementForm').addEventListener('submit', async (e) => {
             e.preventDefault(); await push(ref(db, "announcements"), { title: document.getElementById('annTitle').value, content: document.getElementById('annContent').value, timestamp: Date.now() }); await logActivity("Posted Update", document.getElementById('annTitle').value); alert("Posted!"); e.target.reset();
         });
+
+        document.getElementById('formBuilderForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); await push(ref(db, "eventForms"), { title: document.getElementById('formTitle').value, webhook: document.getElementById('formWebhook').value, createdAt: Date.now() }); alert("Form Created!"); e.target.reset();
+        });
+
         window.submitAttendance = async () => {
             const attendees = Array.from(document.querySelectorAll('.att-checkbox:checked')).map(c => c.value);
             if(attendees.length === 0) return alert("Select students");
             await push(ref(db, "attendance"), { eventName: document.getElementById('attendanceEventName').value, date: document.getElementById('attendanceDate').value, attendees, timestamp: Date.now() }); alert("Saved!");
         };
+
         window.submitExcomAttendance = async () => {
             const attendees = Array.from(document.querySelectorAll('.excom-checkbox:checked')).map(c => c.value);
             await push(ref(db, "excom_meetings"), { title: document.getElementById('excomMeetingTitle').value, date: document.getElementById('excomMeetingDate').value, attendees, timestamp: Date.now() }); alert("Saved!"); document.getElementById('excomModal').classList.add('hidden');
         };
 
-        // Helpers
+        window.issueCertificates = async () => {
+            const eventName = document.getElementById('certEventName').value;
+            const date = document.getElementById('certDate').value;
+            const selected = document.querySelectorAll('.cert-checkbox:checked');
+            if(!eventName || !certTemplateBase64 || selected.length === 0) return alert("Fill all fields");
+            const btn = document.getElementById('certBtn'); btn.disabled=true; btn.innerText="Issuing...";
+            
+            try {
+                for (const box of selected) {
+                    await push(ref(db, "certificates"), { userId: box.value, userName: box.getAttribute('data-name'), eventName, date, templateUrl: certTemplateBase64, issuedAt: Date.now() });
+                }
+                alert("Certificates Issued!");
+            } catch(e){alert(e.message);} finally { btn.disabled=false; btn.innerText="Issue Certificates"; }
+        };
+
         async function uploadToDrive(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -415,6 +419,8 @@
                 }; reader.readAsDataURL(file);
             });
         }
+
+        // HELPERS
         window.showTab = (t) => { document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); document.getElementById(t+'Section').classList.remove('hidden'); document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active')); document.getElementById('nav-'+t).classList.add('active'); };
         window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
         window.toggleEditUserModal = (s) => document.getElementById('editUserModal').classList.toggle('hidden', !s);
