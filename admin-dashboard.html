@@ -39,20 +39,15 @@
         .glass-table th { background: rgba(255, 255, 255, 0.05); text-transform: uppercase; font-size: 0.75rem; color: #9ca3af; }
         .glass-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
         
-        /* PRINT STYLES */
         @media print {
             body * { visibility: hidden; }
             #printableArea, #printableArea * { visibility: visible; }
             #printableArea { position: absolute; left: 0; top: 0; width: 100%; background: white; color: black; padding: 20px; }
             .no-print { display: none !important; }
-            .bg-green-100 { background-color: #dcfce7 !important; }
-            .bg-red-100 { background-color: #fee2e2 !important; }
-            .text-green-800 { color: #166534 !important; }
-            .text-red-800 { color: #991b1b !important; }
         }
     </style>
 </head>
-<body class="font-sans antialiased relative selection:bg-red-500 selection:text-white flex h-screen overflow-hidden">
+<body class="font-sans antialiased relative flex h-screen overflow-hidden">
 
     <aside class="glass-sidebar w-64 flex-shrink-0 hidden md:flex flex-col h-full z-20">
         <div class="p-6 flex items-center gap-3">
@@ -73,42 +68,32 @@
             <button onclick="showTab('certificates')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="award" class="w-5 h-5"></i> Issue Certificates
             </button>
-            <button onclick="showTab('payments')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="indian-rupee" class="w-5 h-5"></i> Payments
-            </button>
             <button onclick="showTab('users')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="users" class="w-5 h-5"></i> Manage Users
-            </button>
-            <button onclick="showTab('submissions')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="inbox" class="w-5 h-5"></i> Submissions
             </button>
             <button onclick="showTab('eventForms')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="file-plus" class="w-5 h-5"></i> Create Forms
             </button>
             <div class="pt-4 pb-2 px-4 text-xs font-semibold text-gray-500 uppercase">Content</div>
-            <button onclick="showTab('pastEvents')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="calendar-clock" class="w-5 h-5"></i> Past Events
-            </button>
-            <button onclick="showTab('gallery')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="image" class="w-5 h-5"></i> Manage Gallery
-            </button>
             <button onclick="showTab('news')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="newspaper" class="w-5 h-5"></i> Post News
             </button>
             <button onclick="showTab('announcements')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="bell" class="w-5 h-5"></i> Post Updates
             </button>
+            <button onclick="showTab('gallery')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="image" class="w-5 h-5"></i> Manage Gallery
+            </button>
         </nav>
 
         <div class="p-4 border-t border-white/5">
-            <button id="adminLogoutBtn" class="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white py-2.5 rounded-lg transition-colors text-sm font-medium shadow-lg shadow-red-900/20">
+            <button id="adminLogoutBtn" class="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white py-2.5 rounded-lg transition-colors text-sm font-medium">
                 <i data-lucide="log-out" class="w-4 h-4"></i> Secure Logout
             </button>
         </div>
     </aside>
 
     <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10">
-        
         <header class="glass-header h-20 flex items-center justify-between px-6 md:px-10 shrink-0">
             <div class="flex items-center gap-4">
                 <button id="mobile-menu-toggle" class="md:hidden text-white p-2">
@@ -123,292 +108,120 @@
                     <p class="text-sm font-medium text-white" id="adminEmailDisplay">Loading...</p>
                     <p class="text-xs text-red-400">Super Admin</p>
                 </div>
-                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-red-600 to-orange-600 flex items-center justify-center text-white font-bold shadow-lg">A</div>
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-red-600 to-orange-600 flex items-center justify-center text-white font-bold">A</div>
             </div>
         </header>
 
         <main class="flex-grow overflow-y-auto p-6 md:p-10">
             
-            <div id="overviewSection" class="tab-content space-y-8"><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"><div class="glass-card p-6 rounded-2xl border-l-4 border-red-500"><p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Total Users</p><h3 class="text-3xl font-bold text-white" id="totalUsersCount">...</h3></div><div class="glass-card p-6 rounded-2xl border-l-4 border-orange-500"><p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Pending Projects</p><h3 class="text-3xl font-bold text-white" id="pendingProjectsCount">0</h3></div><div class="glass-card p-6 rounded-2xl border-l-4 border-yellow-500"><p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Announcements</p><h3 class="text-3xl font-bold text-white" id="totalAnnouncementsCount">...</h3></div></div></div>
-            
+            <div id="overviewSection" class="tab-content space-y-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-red-500">
+                        <p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Total Users</p>
+                        <h3 class="text-3xl font-bold text-white" id="totalUsersCount">...</h3>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-yellow-500">
+                        <p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Announcements</p>
+                        <h3 class="text-3xl font-bold text-white" id="totalAnnouncementsCount">...</h3>
+                    </div>
+                </div>
+            </div>
+
             <div id="attendanceSection" class="tab-content hidden space-y-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
-                    <div><h2 class="text-2xl font-bold text-white mb-1">Mark Attendance</h2><p class="text-xs text-gray-400">Manage separate attendance roster & upload reports.</p></div>
-                    <div class="flex gap-3 w-full sm:w-auto">
-                        <button onclick="openReportsModal()" class="flex-1 sm:flex-none bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg font-bold transition flex justify-center items-center gap-2">History & Print</button>
-                        <button onclick="submitAttendance()" class="flex-1 sm:flex-none bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-red-600/20 transition flex justify-center items-center gap-2">Upload Attendance</button>
+                <div class="flex flex-col sm:flex-row justify-between items-end gap-4">
+                    <div><h2 class="text-2xl font-bold text-white mb-1">Mark Attendance</h2><p class="text-xs text-gray-400">Date locked roster system.</p></div>
+                    <button onclick="submitAttendance()" class="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-lg font-bold">Upload Attendance</button>
+                </div>
+                <div class="glass-card rounded-2xl p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="attendanceEventName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Event Name">
+                        <input type="date" id="attendanceDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
                     </div>
                 </div>
-
-                <div class="glass-card rounded-2xl p-6 mb-6">
-                    <h3 class="text-sm font-bold text-white mb-3 uppercase tracking-wider">Add Student to Roster</h3>
-                    <form id="addAttendanceStudentForm" class="flex flex-col md:flex-row gap-3 items-end">
-                        <div class="w-full"><label class="block text-xs text-gray-500 mb-1">Student Name</label><input type="text" id="attNewName" class="glass-input w-full rounded-xl py-2 px-3 text-sm" placeholder="John Doe" required></div>
-                        <div class="w-full"><label class="block text-xs text-gray-500 mb-1">Email (Important for Dashboard Link)</label><input type="email" id="attNewEmail" class="glass-input w-full rounded-xl py-2 px-3 text-sm" placeholder="john@example.com" required></div>
-                        <button type="submit" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-xl text-sm font-bold transition w-full md:w-auto">Add</button>
-                    </form>
-                </div>
-
-                <div class="glass-card rounded-2xl p-6 mb-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Event Name</label><input type="text" id="attendanceEventName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="e.g. Weekly Meetup"></div>
-                        <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Date</label><input type="date" id="attendanceDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></div>
-                    </div>
-                </div>
-
                 <div class="glass-card rounded-2xl overflow-hidden">
-                    <div class="p-4 bg-white/5 border-b border-white/5 flex justify-between items-center">
-                        <h3 class="font-bold text-white text-sm">Attendance Roster</h3>
-                        <div class="flex gap-3"><button onclick="selectAllAttendance(true)" class="text-xs text-red-400 hover:text-white">All</button><button onclick="selectAllAttendance(false)" class="text-xs text-gray-400 hover:text-white">None</button></div>
-                    </div>
-                    <div class="max-h-[500px] overflow-y-auto">
-                        <table class="w-full text-sm text-left text-gray-400 glass-table">
-                            <thead class="text-xs sticky top-0 bg-[#0a0a0a] z-10"><tr><th class="px-4 py-4 w-12 text-center">#</th><th class="px-4 py-4">Name</th><th class="px-4 py-4 hidden sm:table-cell">Email</th><th class="px-4 py-4 w-10"></th></tr></thead>
-                            <tbody class="divide-y divide-white/5" id="attendanceListBody"><tr><td colspan="4" class="px-6 py-8 text-center">Loading roster...</td></tr></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="certificatesSection" class="tab-content hidden max-w-4xl mx-auto space-y-6">
-                <div class="glass-card p-8 rounded-3xl border border-yellow-500/20">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
-                            <i data-lucide="award" class="w-5 h-5 text-yellow-400"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-2xl font-bold text-white">Issue Certificates</h2>
-                            <p class="text-xs text-gray-400">Upload a template (auto-processed) and issue to students.</p>
-                        </div>
-                    </div>
-
-                    <div id="certStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
-
-                    <div class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Event Name</label>
-                                <input type="text" id="certEventName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="e.g. AI Workshop" required>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Date on Certificate</label>
-                                <input type="date" id="certDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required>
-                            </div>
-                        </div>
-
-                        <div class="relative group">
-                            <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Certificate Template (Image)</label>
-                            <label for="certTemplateInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-yellow-500/50 transition">
-                                <i data-lucide="image" class="w-4 h-4 mr-2"></i> <span id="certFileName">Upload Blank Certificate</span>
-                            </label>
-                            <input type="file" id="certTemplateInput" class="hidden" accept="image/*" onchange="handleCertTemplate(event)">
-                        </div>
-
-                        <div class="glass-card rounded-xl overflow-hidden mt-4">
-                            <div class="p-3 bg-white/5 border-b border-white/5 flex justify-between items-center">
-                                <h3 class="font-bold text-white text-xs">Select Recipients (Registered Users)</h3>
-                                <div class="flex gap-2">
-                                    <input type="text" id="certSearch" onkeyup="filterCertUsers()" placeholder="Search..." class="bg-black/20 border-none text-xs rounded px-2 py-1 text-white w-32 focus:ring-0">
-                                    <button onclick="selectAllCertUsers(true)" class="text-xs text-yellow-400 hover:text-white">All</button>
-                                    <button onclick="selectAllCertUsers(false)" class="text-xs text-gray-400 hover:text-white">None</button>
-                                </div>
-                            </div>
-                            <div class="max-h-[300px] overflow-y-auto">
-                                <table class="w-full text-sm text-left text-gray-400 glass-table">
-                                    <tbody class="divide-y divide-white/5" id="certUserListBody">
-                                        <tr><td class="px-4 py-4 text-center">Loading users...</td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <button onclick="issueCertificates()" id="issueCertBtn" class="w-full bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-yellow-900/20">
-                            Issue Certificates
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="paymentsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-10 rounded-3xl text-center border border-white/10 flex flex-col items-center justify-center min-h-[400px]"><div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-6"><i data-lucide="rocket" class="w-10 h-10 text-red-400"></i></div><h2 class="text-3xl font-bold text-white mb-3">Coming Soon</h2><p class="text-gray-400 max-w-md mx-auto leading-relaxed">Payment Portal in progress.</p><div class="mt-8 px-4 py-2 bg-red-500/10 text-red-400 rounded-full text-xs font-bold uppercase tracking-wider border border-red-500/20">Feature In Progress</div></div></div>
-            
-            <div id="usersSection" class="tab-content hidden space-y-6">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-bold text-white">User Management</h2>
-                    <div class="flex gap-2">
-                        <button onclick="toggleAddUserModal(true)" class="text-xs bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-500 transition font-bold shadow-lg shadow-red-900/20 flex items-center gap-2">Add</button>
-                    </div>
-                </div>
-                <div class="glass-card rounded-2xl overflow-hidden overflow-x-auto">
-                    <table class="w-full text-sm text-left text-gray-400 glass-table min-w-[600px]">
-                        <thead class="text-xs"><tr><th class="px-6 py-4">Name</th><th class="px-6 py-4">Email</th><th class="px-6 py-4">Role</th><th class="px-6 py-4">Action/Role</th></tr></thead>
-                        <tbody class="divide-y divide-white/5" id="userListBody"><tr><td colspan="4" class="px-6 py-4 text-center">Loading...</td></tr></tbody>
+                    <table class="w-full text-sm text-left text-gray-400">
+                        <thead class="bg-white/5 text-xs"><tr><th class="px-4 py-4 w-12 text-center">#</th><th class="px-4 py-4">Name</th><th>Email</th></tr></thead>
+                        <tbody id="attendanceListBody"><tr><td colspan="3" class="p-6 text-center">Loading...</td></tr></tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="submissionsSection" class="tab-content hidden space-y-6"><div class="flex justify-between items-center"><h2 class="text-2xl font-bold text-white">Review Submissions</h2><button onclick="fetchSubmissions()" class="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20 transition">Refresh</button></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="submissionsGrid"><p class="text-gray-500 col-span-2 text-center">No pending submissions.</p></div></div>
-            
-            <div id="eventFormsSection" class="tab-content hidden max-w-4xl mx-auto space-y-6">
-                <div class="glass-card p-8 rounded-3xl border border-green-500/20">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center"><i data-lucide="file-spreadsheet" class="w-5 h-5 text-green-400"></i></div>
-                        <div><h2 class="text-2xl font-bold text-white">Create Event Form</h2><p class="text-xs text-gray-400">Build a registration form & link to Google Sheets.</p></div>
-                    </div>
-                    <form id="formBuilder" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Event Title</label><input type="text" id="formTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="e.g., Hackathon 2025" required></div>
-                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Google Script URL (Webhook)</label><input type="text" id="formSheetUrl" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Paste Web App URL here"><p class="text-[10px] text-gray-500 mt-1">Deploy your Google Sheet script as a Web App (Anyone can access) and paste the URL here.</p></div>
-                        </div>
-                        <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-4">
-                            <h3 class="text-sm font-bold text-white">Add Questions</h3>
-                            <div class="flex flex-col md:flex-row gap-3">
-                                <input type="text" id="newQuestionLabel" class="glass-input flex-grow rounded-xl py-2 px-4 text-sm" placeholder="Question (e.g., WhatsApp Number)" onkeypress="handleEnter(event)">
-                                <select id="newQuestionType" class="glass-input w-full md:w-40 rounded-xl py-2 px-4 text-sm"><option value="text">Short Text</option><option value="number">Number</option><option value="email">Email</option><option value="date">Date</option><option value="textarea">Long Answer</option></select>
-                                <button type="button" onclick="addQuestionToStage()" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Add</button>
-                            </div>
-                            <div id="questionsPreview" class="space-y-2 mt-4"><p class="text-xs text-gray-500 text-center italic" id="emptyMsg">No questions added yet.</p></div>
-                        </div>
-                        <div id="formBuilderStatus" class="hidden text-sm text-center p-2 rounded"></div>
-                        <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-900/20">🚀 Publish Registration Form</button>
-                    </form>
+            <div id="usersSection" class="tab-content hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-white">User Management</h2>
+                    <button onclick="toggleAddUserModal(true)" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold">Add User</button>
                 </div>
-                <div class="glass-card p-6 rounded-2xl">
-                    <h3 class="text-lg font-bold text-white mb-4">Active Event Forms</h3>
-                    <div id="activeFormsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"><p class="text-gray-500 text-sm">Loading forms...</p></div>
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <table class="w-full text-sm text-left text-gray-400">
+                        <thead class="bg-white/5 text-xs"><tr><th class="px-6 py-4">Name</th><th>Email</th><th>Role</th><th>Action</th></tr></thead>
+                        <tbody id="userListBody"></tbody>
+                    </table>
                 </div>
             </div>
 
-            <div id="pastEventsSection" class="tab-content hidden max-w-4xl mx-auto space-y-6">
+            <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto">
+                <div class="glass-card p-8 rounded-3xl border border-blue-500/20">
+                    <h2 class="text-2xl font-bold text-white mb-6">Post News Article</h2>
+                    <div id="newsStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
+                    <form id="newsForm" class="space-y-5">
+                        <input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Headline" required>
+                        <textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Article content..." required></textarea>
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4">
+                            <label class="glass-input rounded-xl py-3 px-4 text-center cursor-pointer">
+                                <span id="newsFileName">Upload Image</span>
+                                <input type="file" id="newsImageInput" class="hidden" accept="image/*" onchange="handleNewsImage(event)">
+                            </label>
+                        </div>
+                        <button type="submit" id="postNewsBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl">Publish News</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto">
                 <div class="glass-card p-8 rounded-3xl border border-red-500/20">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center"><i data-lucide="calendar-clock" class="w-5 h-5 text-red-400"></i></div>
-                        <div><h2 class="text-2xl font-bold text-white">Add Past Event</h2><p class="text-xs text-gray-400">Archive completed events.</p></div>
-                    </div>
-                    <div id="pastEventStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
-                    <form id="pastEventForm" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Title</label><input type="text" id="peTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="e.g., Orientation Session" required></div>
-                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Date</label><input type="date" id="peDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required></div>
+                    <h2 class="text-2xl font-bold text-white mb-6">Post Update / Circular</h2>
+                    <div id="announcementStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
+                    <form id="announcementForm" class="space-y-5">
+                        <input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Subject" required>
+                        <textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Notice details..." required></textarea>
+                        <div class="grid grid-cols-2 gap-4">
+                            <select id="annCategory" class="glass-input w-full rounded-xl py-3 px-4">
+                                <option value="update">General Update</option>
+                                <option value="event">Event Alert</option>
+                                <option value="circular">Circular</option>
+                            </select>
+                            <input type="text" id="annDate" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Display Date (e.g. 24 Oct)">
                         </div>
-                        <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Description</label><textarea id="peDesc" rows="3" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Event summary..." required></textarea></div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="relative group"><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Cover Image</label><label for="peCoverInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-red-500/50 transition"><i data-lucide="image" class="w-4 h-4 mr-2"></i> <span id="peCoverName">Select Image</span></label><input type="file" id="peCoverInput" class="hidden" accept="image/*" onchange="handlePastEventCover(event)"></div>
-                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Report Link (PDF/Drive)</label><input type="text" id="peReport" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="https://drive.google.com/..."></div>
-                        </div>
-                        <div class="relative group"><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Event Gallery (Multiple)</label><label for="peGalleryInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-red-500/50 transition"><i data-lucide="images" class="w-4 h-4 mr-2"></i> <span id="peGalleryName">Select Photos (Max 5)</span></label><input type="file" id="peGalleryInput" class="hidden" accept="image/*" multiple onchange="handlePastEventGallery(event)"></div>
-                        <button type="submit" id="savePastEventBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition-all">Archive Event</button>
+                        <input type="text" id="annLink" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Link / PDF URL (Optional)">
+                        <button type="submit" id="postBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl">Publish Update</button>
                     </form>
-                </div>
-                <div class="glass-card p-6 rounded-2xl">
-                    <h3 class="text-lg font-bold text-white mb-4">Archived Events</h3>
-                    <div id="pastEventsList" class="space-y-3"><p class="text-gray-500 text-sm">Loading archive...</p></div>
                 </div>
             </div>
 
-            <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl border border-blue-500/20"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center"><i data-lucide="newspaper" class="w-5 h-5 text-blue-400"></i></div><div><h2 class="text-2xl font-bold text-white">Post News</h2><p class="text-xs text-gray-400">Articles & External News.</p></div></div><div id="newsStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="newsForm" class="space-y-5"><input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Headline"><textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Content..."></textarea><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><div class="relative group"><label for="newsImageInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-blue-500/50 transition"><i data-lucide="image" class="w-4 h-4 mr-2"></i> <span id="newsFileName">Upload Image</span></label><input type="file" id="newsImageInput" class="hidden" accept="image/*" onchange="handleNewsImage(event)"></div></div><button type="submit" id="postNewsBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish News</button></form></div></div>
-            <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl"><div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center"><i data-lucide="bell" class="w-5 h-5 text-red-400"></i></div><div><h2 class="text-2xl font-bold text-white">Post Update</h2><p class="text-xs text-gray-400">Notices & Circulars.</p></div></div><div id="announcementStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><form id="announcementForm" class="space-y-5"><input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Subject"><textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Notice details..."></textarea><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><select id="annCategory" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="update">General Update</option><option value="event">Event Alert</option><option value="circular">Circular</option></select><input type="text" id="annDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Display Date"></div><div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Link / PDF URL</label><input type="text" id="annLink" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="https://..."></div><button type="submit" id="postBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition-all">Publish Update</button></form></div></div>
-            <div id="gallerySection" class="tab-content hidden max-w-2xl mx-auto">
-                <div class="glass-card p-8 rounded-3xl border border-purple-500/20">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center"><i data-lucide="image" class="w-5 h-5 text-purple-400"></i></div>
-                        <div><h2 class="text-2xl font-bold text-white">Upload to Gallery</h2><p class="text-xs text-gray-400">Images saved to Google Drive.</p></div>
-                    </div>
-                    <div id="galleryStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
-                    <form id="galleryForm" class="space-y-5">
-                        <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Caption (Optional)</label><input type="text" id="galleryTitle" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Event Name"></div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Date</label><input type="date" id="galleryDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></div>
-                            <div class="relative group"><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Photos</label><label for="galleryImageInput" class="glass-input w-full rounded-xl py-3 px-4 text-sm flex items-center justify-center cursor-pointer hover:border-purple-500/50 transition"><i data-lucide="upload-cloud" class="w-4 h-4 mr-2"></i> <span id="galleryFileName">Select Photos (Max 5)</span></label><input type="file" id="galleryImageInput" class="hidden" accept="image/*" multiple onchange="handleGalleryImages(event)"></div>
-                        </div>
-                        <button type="submit" id="postGalleryBtn" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3.5 rounded-xl transition-all">Upload Photos</button>
-                    </form>
-                </div>
-            </div>
         </main>
     </div>
 
-    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
-    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-64 bg-[#0a0a0a] border-r border-white/10 z-50 transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col">
-        <div class="p-6 flex items-center justify-between border-b border-white/10"><span class="text-xl font-bold text-white">Menu</span><button onclick="toggleMobileSidebar()" class="text-white"><i data-lucide="x"></i></button></div>
-        <nav class="flex-grow px-4 py-4 space-y-2 overflow-y-auto">
-            <button onclick="showTab('overview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Overview</button>
-            <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Mark Attendance</button>
-            <button onclick="showTab('certificates'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Certificates</button>
-            <button onclick="showTab('payments'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Payments</button>
-            <button onclick="showTab('users'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Manage Users</button>
-            <button onclick="showTab('submissions'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Submissions</button>
-            <button onclick="showTab('eventForms'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Create Forms</button>
-            <button onclick="showTab('pastEvents'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Past Events</button>
-            <button onclick="showTab('gallery'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Gallery</button>
-            <button onclick="showTab('news'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Post News</button>
-            <button onclick="showTab('announcements'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Post Updates</button>
-            <button id="adminLogoutBtnMobile" class="w-full mt-4 bg-red-500/20 text-red-400 py-3 rounded-lg text-sm font-bold border border-red-500/20">Logout</button>
-        </nav>
-    </div>
-
-    <div id="addUserModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4"><div class="glass-card w-full max-w-md p-8 rounded-3xl relative"><button onclick="toggleAddUserModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button><h2 class="text-2xl font-bold text-white mb-6">Add New Student</h2><form id="adminAddUserForm" class="space-y-4"><input type="text" id="newUserName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Full Name"><input type="email" id="newUserEmail" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Email"><input type="password" id="newUserPassword" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Password"><div id="addUserStatus" class="hidden text-xs text-center p-2 rounded"></div><button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl transition-all mt-2">Create Account</button></form></div></div>
-    
-    <div id="editUserModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-card w-full max-w-md p-8 rounded-3xl relative">
-            <button onclick="toggleEditUserModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
-            <h2 class="text-2xl font-bold text-white mb-6">Edit User Details</h2>
-            <form id="editUserForm" class="space-y-4">
-                <input type="hidden" id="editUserId">
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Full Name</label>
-                    <input type="text" id="editUserName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Full Name">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">User Role</label>
-                    <select id="editUserRole" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                        <option value="student">Student</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                
-                <div id="editUserStatus" class="hidden text-xs text-center p-2 rounded"></div>
-                <button type="submit" class="w-full bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3 rounded-xl transition-all mt-2">Update Details</button>
+    <div id="addUserModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-md p-8 rounded-3xl">
+            <h2 class="text-xl font-bold mb-4">Add User</h2>
+            <form id="adminAddUserForm" class="space-y-4">
+                <input type="text" id="newUserName" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Full Name" required>
+                <input type="email" id="newUserEmail" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Email" required>
+                <input type="password" id="newUserPassword" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Password" required>
+                <button type="submit" class="w-full bg-red-600 py-3 rounded-xl font-bold">Create Account</button>
+                <button type="button" onclick="toggleAddUserModal(false)" class="w-full text-gray-400 mt-2">Cancel</button>
             </form>
-        </div>
-    </div>
-
-    <div id="reportsModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-card w-full max-w-4xl h-[80vh] flex flex-col rounded-3xl relative overflow-hidden">
-            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-black/20">
-                <div><h2 class="text-xl font-bold text-white">Attendance Reports</h2><p class="text-xs text-gray-400">Click event to view details</p></div>
-                <div class="flex gap-4">
-                    <button onclick="printReport()" class="text-white bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2"><i data-lucide="printer" class="w-4 h-4"></i> Print Report</button>
-                    <button onclick="document.getElementById('reportsModal').classList.add('hidden')" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
-                </div>
-            </div>
-            <div class="flex flex-grow overflow-hidden">
-                <div class="w-1/3 border-r border-white/10 overflow-y-auto p-4 space-y-2 bg-white/5" id="reportEventsList"></div>
-                <div class="w-2/3 flex flex-col bg-[#050505]">
-                    <div id="printableArea" class="h-full flex flex-col">
-                        <div class="p-4 border-b border-white/10 bg-white/5">
-                            <h3 class="font-bold text-white text-lg" id="reportDetailTitle">Select an event</h3>
-                            <p class="text-xs text-gray-400" id="reportDetailMeta">--</p>
-                        </div>
-                        <div class="flex-grow overflow-y-auto p-4">
-                            <table class="w-full text-sm text-left text-gray-400 glass-table">
-                                <thead class="text-xs sticky top-0 bg-[#0a0a0a] text-gray-500 uppercase"><tr><th class="px-4 py-2">Student Name</th><th class="px-4 py-2">Email</th><th class="px-4 py-2">Status</th></tr></thead>
-                                <tbody class="divide-y divide-white/5" id="reportAttendeesList"><tr><td colspan="3" class="px-4 py-8 text-center text-gray-600">No event selected.</td></tr></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, getDocs, addDoc, deleteDoc, setDoc, query, where, updateDoc, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, getDocs, addDoc, setDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
 
-        // THIS URL IS FOR IMAGE UPLOADS ONLY (News/Gallery)
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHmJ0B9qP2ND2YD0-lQxW2ZgL-m2siOYSHSpSrdgSD6v53i3iD9gGx9_bxrr_Wa6oalQ/exec"; 
 
         const firebaseConfig = {
@@ -426,26 +239,8 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- SECURITY: HELPER FUNCTION ---
-        function escapeHtml(text) {
-            if (!text) return "";
-            return String(text)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-        
-        
-        let allUsers = [];
         let newsImageFile = null;
-        let galleryImages = [];
-        let currentQuestions = []; 
-        let pastEventCover = null;
-        let pastEventGallery = [];
-        let certTemplateFile = null; 
-        let attendanceStudents = [];
+        let allUsersList = [];
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -453,269 +248,119 @@
                 if (userDoc.exists() && userDoc.data().role === 'admin') {
                     document.getElementById('adminEmailDisplay').textContent = user.email;
                     loadDashboardData();
-                } else { alert("Access Denied."); await signOut(auth); window.location.href = 'admin.html'; }
+                } else { window.location.href = 'admin.html'; }
             } else { window.location.href = 'admin.html'; }
         });
 
-        // --- MANUAL ATTENDANCE ROSTER LOGIC ---
-        async function fetchAttendanceStudents() {
-            try {
-                const q = query(collection(db, "attendance_students"), orderBy("name"));
-                const snap = await getDocs(q);
-                attendanceStudents = [];
-                let html = '';
-                if (snap.empty) {
-                    html = '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No students in roster. Add one above.</td></tr>';
-                } else {
-                    snap.forEach(doc => {
-                        const d = doc.data();
-                        attendanceStudents.push({ id: doc.id, ...d });
-                        html += `<tr class="hover:bg-white/5 transition cursor-pointer" onclick="toggleAttendanceCheckbox('${doc.id}')"><td class="px-4 py-4 text-center"><input type="checkbox" class="custom-checkbox attendance-checkbox" value="${doc.id}" data-email="${d.email}" data-name="${d.name}" id="att-check-${doc.id}" onclick="event.stopPropagation()"></td><td class="px-4 py-4 font-medium text-white">${d.name}</td><td class="px-4 py-4 hidden sm:table-cell">${d.email}</td><td class="px-4 py-4"><button onclick="deleteAttendanceStudent('${doc.id}', event)" class="text-red-400 hover:text-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
-                    });
-                }
-                document.getElementById('attendanceListBody').innerHTML = html;
-                lucide.createIcons();
-            } catch (e) { console.error(e); }
+        // --- CORE SYNC FUNCTIONS ---
+        async function loadDashboardData() {
+            syncOverview();
+            fetchUsersRealtime();
+            fetchAttendanceStudents();
         }
-        document.getElementById('addAttendanceStudentForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('attNewName').value;
-            const email = document.getElementById('attNewEmail').value;
-            try { await addDoc(collection(db, "attendance_students"), { name, email, createdAt: Date.now() }); document.getElementById('addAttendanceStudentForm').reset(); fetchAttendanceStudents(); } catch(e) { alert(e.message); }
-        });
-        window.deleteAttendanceStudent = async (id, e) => { e.stopPropagation(); if(confirm("Remove from roster?")) { await deleteDoc(doc(db, "attendance_students", id)); fetchAttendanceStudents(); } };
-        window.toggleAttendanceCheckbox = (id) => { const cb = document.getElementById(`att-check-${id}`); cb.checked = !cb.checked; };
-        window.selectAllAttendance = (s) => document.querySelectorAll('.attendance-checkbox').forEach(cb => cb.checked = s);
 
-        window.submitAttendance = async () => {
-            const btn = document.querySelector('button[onclick="submitAttendance()"]');
-            const eventName = document.getElementById('attendanceEventName').value;
-            const date = document.getElementById('attendanceDate').value;
-            const checkboxes = Array.from(document.querySelectorAll('.attendance-checkbox:checked'));
-            if(!eventName || !date) { alert("Please enter event name and select a date."); return; }
-            if(attendanceStudents.length === 0) { alert("Roster is empty. Add students first."); return; }
-            btn.disabled = true; btn.innerText = "Checking...";
-            try {
-                const q = query(collection(db, "attendance"), where("date", "==", date));
-                const snap = await getDocs(q);
-                if (!snap.empty) { alert("⚠️ ATTENDANCE LOCKED: Attendance for " + date + " has already been marked."); return; }
-                btn.innerText = "Uploading...";
-                const presentIds = checkboxes.map(cb => cb.value);
-                const presentEmails = checkboxes.map(cb => cb.getAttribute('data-email'));
-                const absentStudents = attendanceStudents.filter(s => !presentIds.includes(s.id));
-                const absentIds = absentStudents.map(s => s.id);
-                const absentEmails = absentStudents.map(s => s.email);
-                await addDoc(collection(db, "attendance"), { eventName, date, attendees: presentIds, absentees: absentIds, presentEmails: presentEmails, absentEmails: absentEmails, totalPresent: presentIds.length, totalAbsent: absentIds.length, timestamp: Date.now() });
-                alert("Attendance Uploaded & Date Locked Successfully!"); selectAllAttendance(false); document.getElementById('attendanceEventName').value = '';
-            } catch(e) { alert("Error: " + e.message); } finally { btn.disabled = false; btn.innerText = "Upload Attendance"; }
-        };
-
-        window.openReportsModal = async function() {
-            document.getElementById('reportsModal').classList.remove('hidden'); const list = document.getElementById('reportEventsList'); list.innerHTML = '<p class="text-gray-500 text-xs">Loading...</p>';
-            try {
-                const q = query(collection(db, "attendance"), orderBy("timestamp", "desc"));
-                const snap = await getDocs(q);
-                list.innerHTML = '';
-                snap.forEach(doc => { const d = doc.data(); const div = document.createElement('div'); div.className = "p-3 rounded-lg hover:bg-white/10 cursor-pointer transition border border-transparent hover:border-white/10 group"; div.innerHTML = `<h4 class="text-sm font-bold text-white group-hover:text-red-400 transition">${d.eventName}</h4><div class="flex justify-between items-center mt-1"><span class="text-xs text-gray-500">${d.date}</span><span class="text-xs bg-green-900/30 text-green-400 px-2 py-0.5 rounded-full">${d.totalPresent || 0} Present</span></div>`; div.onclick = () => showReportDetails(d); list.appendChild(div); });
-            } catch(e) { console.error(e); }
-        };
-        window.showReportDetails = function(data) {
-            document.getElementById('reportDetailTitle').textContent = data.eventName;
-            document.getElementById('reportDetailMeta').textContent = `Date: ${data.date} • Present: ${data.totalPresent} • Absent: ${data.totalAbsent || 0}`;
-            const tbody = document.getElementById('reportAttendeesList'); tbody.innerHTML = '';
-            if (attendanceStudents.length === 0) { tbody.innerHTML = '<tr><td colspan="3" class="px-4 py-8 text-center text-gray-500">Roster empty or not loaded.</td></tr>'; return; }
-            const presentSet = new Set(data.attendees || []); const absentSet = new Set(data.absentees || []); const sortedRoster = [...attendanceStudents].sort((a,b) => a.name.localeCompare(b.name));
-            sortedRoster.forEach(student => {
-                let statusBadge = '<span class="text-xs text-gray-500">Unknown</span>';
-                if (presentSet.has(student.id)) { statusBadge = '<span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded">PRESENT</span>'; } else if (absentSet.has(student.id)) { statusBadge = '<span class="bg-red-100 text-red-800 text-xs font-bold px-2 py-0.5 rounded">ABSENT</span>'; } else { statusBadge = '<span class="text-xs text-gray-500 italic">Not in Roster</span>'; }
-                tbody.innerHTML += `<tr><td class="px-4 py-2 text-white border-b border-white/5">${student.name}</td><td class="px-4 py-2 text-gray-400 border-b border-white/5">${student.email}</td><td class="px-4 py-2 border-b border-white/5">${statusBadge}</td></tr>`;
+        function syncOverview() {
+            // Realtime Sync for Counts
+            onSnapshot(collection(db, "users"), (snap) => {
+                document.getElementById('totalUsersCount').textContent = snap.size;
             });
-        };
-        window.printReport = function() { window.print(); };
+            onSnapshot(collection(db, "announcements"), (snap) => {
+                document.getElementById('totalAnnouncementsCount').textContent = snap.size;
+            });
+        }
 
-        // --- UPLOAD HELPER ---
+        function fetchUsersRealtime() {
+            const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snap) => {
+                let html = '';
+                snap.forEach(doc => {
+                    const u = doc.data();
+                    html += `<tr class="border-b border-white/5"><td class="px-6 py-4">${u.name}</td><td>${u.email}</td><td>${u.role}</td><td>---</td></tr>`;
+                });
+                document.getElementById('userListBody').innerHTML = html;
+            });
+        }
+
+        // --- POST UPDATES (FIXED) ---
+        document.getElementById('announcementForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('postBtn');
+            const status = document.getElementById('announcementStatus');
+            btn.disabled = true;
+            status.classList.remove('hidden');
+            status.textContent = "Publishing...";
+            status.className = "mb-4 p-3 rounded text-sm text-center bg-blue-500/20 text-blue-400";
+
+            try {
+                await addDoc(collection(db, "announcements"), {
+                    title: document.getElementById('annTitle').value,
+                    content: document.getElementById('annContent').value,
+                    category: document.getElementById('annCategory').value,
+                    date: document.getElementById('annDate').value || new Date().toLocaleDateString(),
+                    link: document.getElementById('annLink').value,
+                    timestamp: Date.now()
+                });
+                status.textContent = "Successfully Published!";
+                status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400";
+                document.getElementById('announcementForm').reset();
+            } catch (err) {
+                status.textContent = "Error: " + err.message;
+                status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400";
+            } finally { btn.disabled = false; }
+        });
+
+        // --- POST NEWS (FIXED) ---
+        window.handleNewsImage = (e) => {
+            newsImageFile = e.target.files[0];
+            if(newsImageFile) document.getElementById('newsFileName').textContent = newsImageFile.name;
+        };
+
+        document.getElementById('newsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('postNewsBtn');
+            btn.disabled = true;
+            try {
+                let imageUrl = "";
+                if(newsImageFile) {
+                    imageUrl = await uploadToDrive(newsImageFile);
+                }
+                await addDoc(collection(db, "news"), {
+                    title: document.getElementById('newsTitle').value,
+                    content: document.getElementById('newsContent').value,
+                    date: document.getElementById('newsDate').value,
+                    imageUrl: imageUrl,
+                    timestamp: Date.now()
+                });
+                alert("News Published!");
+                document.getElementById('newsForm').reset();
+            } catch (err) { alert(err.message); } finally { btn.disabled = false; }
+        });
+
+        // --- HELPERS ---
         async function uploadToDrive(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onload = async (e) => {
-                    const rawBase64 = e.target.result.split(',')[1];
-                    try {
-                        const response = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ base64: rawBase64, type: file.type, name: file.name }) });
-                        const result = await response.json();
-                        if(result.url) resolve(result.url); else reject(result.message || result.error || "Unknown Upload Error");
-                    } catch (err) { reject(err); }
+                    const base64 = e.target.result.split(',')[1];
+                    const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ base64, type: file.type, name: file.name })});
+                    const json = await res.json();
+                    if(json.url) resolve(json.url); else reject("Upload failed");
                 };
                 reader.readAsDataURL(file);
             });
         }
 
-        // --- CERTIFICATE LOGIC (BASE64) ---
-        window.handleCertTemplate = (event) => {
-            const file = event.target.files[0]; if (!file) return; if (file.size > 1024 * 1024) { alert("File too large! Please use an image under 1MB."); return; }
-            const reader = new FileReader(); reader.onload = (e) => { const img = new Image(); img.src = e.target.result; img.onload = () => { const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); const MAX_WIDTH = 1200; let width = img.width; let height = img.height; if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; } canvas.width = width; canvas.height = height; ctx.drawImage(img, 0, 0, width, height); certTemplateFile = canvas.toDataURL('image/jpeg', 0.8); document.getElementById('certFileName').textContent = "Template Loaded (Ready)"; document.getElementById('certFileName').classList.add('text-green-400'); }; }; reader.readAsDataURL(file);
-        };
-        window.fetchUsersForCert = async function() {
-            const list = document.getElementById('certUserListBody'); let html = '';
-            allUsers.forEach(u => { const name = u.name || u.displayName || 'Unknown'; html += `<tr class="hover:bg-white/5 transition cursor-pointer" onclick="toggleCertCheckbox('${u.id}')"><td class="px-4 py-3 text-center"><input type="checkbox" class="custom-checkbox cert-checkbox" value="${u.id}" data-name="${name}" id="cert-check-${u.id}" onclick="event.stopPropagation()"></td><td class="px-4 py-3 text-white">${name}</td><td class="px-4 py-3 text-gray-400 text-xs">${u.email}</td></tr>`; });
-            list.innerHTML = html;
-        };
-        window.toggleCertCheckbox = (id) => { const cb = document.getElementById(`cert-check-${id}`); cb.checked = !cb.checked; };
-        window.selectAllCertUsers = (s) => document.querySelectorAll('.cert-checkbox').forEach(cb => cb.checked = s);
-        window.filterCertUsers = () => { const term = document.getElementById('certSearch').value.toLowerCase(); const rows = document.getElementById('certUserListBody').getElementsByTagName('tr'); Array.from(rows).forEach(row => { row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; }); };
-        window.issueCertificates = async () => {
-            const btn = document.getElementById('issueCertBtn'); const status = document.getElementById('certStatus'); const eventName = document.getElementById('certEventName').value; const date = document.getElementById('certDate').value; const selected = Array.from(document.querySelectorAll('.cert-checkbox:checked'));
-            if(!eventName || !date || !certTemplateFile || selected.length === 0) { alert("Missing fields."); return; }
-            btn.disabled = true; status.classList.remove('hidden'); status.textContent = "Processing..."; status.className = "mb-4 p-3 rounded text-sm text-center bg-yellow-500/20 text-yellow-400 block";
-            try { let count = 0; for (const checkbox of selected) { await addDoc(collection(db, "certificates"), { eventName, date, templateUrl: certTemplateFile, userId: checkbox.value, userName: checkbox.getAttribute('data-name'), issuedAt: Date.now() }); count++; status.textContent = `Issued ${count}/${selected.length}...`; } status.textContent = "Success!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400 block"; document.getElementById('certEventName').value = ''; document.getElementById('certTemplateInput').value = ''; certTemplateFile = null; selectAllCertUsers(false); } catch(e) { status.textContent = "Error: " + e.message; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; }
+        window.showTab = (t) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(t+'Section').classList.remove('hidden');
+            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
         };
 
-        // --- PAST EVENTS ---
-        window.handlePastEventCover = (event) => { pastEventCover = event.target.files[0]; if(pastEventCover) document.getElementById('peCoverName').textContent = pastEventCover.name; };
-        window.handlePastEventGallery = (event) => { pastEventGallery = event.target.files; if(pastEventGallery.length > 0) document.getElementById('peGalleryName').textContent = `${pastEventGallery.length} Files Selected`; };
-        document.getElementById('pastEventForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); const btn = document.getElementById('savePastEventBtn'); const status = document.getElementById('pastEventStatus'); btn.disabled = true; btn.textContent = "Uploading..."; status.classList.remove('hidden');
-            try {
-                let coverUrl = ""; if(pastEventCover) coverUrl = await uploadToDrive(pastEventCover);
-                let galleryUrls = []; for(let i=0; i<pastEventGallery.length; i++) { if(pastEventGallery[i].size<5*1024*1024) galleryUrls.push(await uploadToDrive(pastEventGallery[i])); }
-                await addDoc(collection(db, "past_events"), { title: document.getElementById('peTitle').value, date: document.getElementById('peDate').value, description: document.getElementById('peDesc').value, coverImage: coverUrl, reportUrl: document.getElementById('peReport').value, gallery: galleryUrls, timestamp: Date.now() });
-                status.textContent = "Success!"; status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400 block"; document.getElementById('pastEventForm').reset(); fetchPastEvents();
-            } catch(e) { status.textContent = "Error: " + e.message; status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400 block"; } finally { btn.disabled = false; btn.textContent = "Archive Event"; }
-        });
-        async function fetchPastEvents() {
-            const list = document.getElementById('pastEventsList'); const q = query(collection(db, "past_events"), orderBy("date", "desc")); const snap = await getDocs(q);
-            let html = ''; snap.forEach(doc => { const d = doc.data(); html += `<div class="bg-white/5 border border-white/10 p-4 rounded-xl flex justify-between items-center group hover:bg-white/10 transition"><div><h4 class="font-bold text-white text-sm">${d.title}</h4><p class="text-xs text-gray-500">${d.date}</p></div><button onclick="deletePastEvent('${doc.id}')" class="bg-red-500/10 text-red-400 p-2 rounded-lg hover:bg-red-500 hover:text-white transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`; }); list.innerHTML = html; lucide.createIcons();
-        }
-        window.deletePastEvent = async (id) => { if(confirm("Delete?")) { await deleteDoc(doc(db, "past_events", id)); fetchPastEvents(); } };
-
-        // --- FORM BUILDER ---
-        window.handleEnter = (e) => { if(e.key==="Enter"){e.preventDefault(); addQuestionToStage();} };
-        window.addQuestionToStage = () => { const l=document.getElementById('newQuestionLabel'); const t=document.getElementById('newQuestionType'); if(!l.value)return; currentQuestions.push({label:l.value, type:t.value, id:Date.now()}); l.value=''; renderQuestionsPreview(); };
-        window.removeQuestion = (id) => { currentQuestions=currentQuestions.filter(q=>q.id!==id); renderQuestionsPreview(); };
-        function renderQuestionsPreview() { const c=document.getElementById('questionsPreview'); c.innerHTML=currentQuestions.map((q,i)=>`<div class="flex justify-between items-center bg-[#0a0a0a] border border-white/10 p-3 rounded-lg mb-2"><div class="flex items-center gap-3"><span class="text-xs bg-white/10 text-gray-300 w-6 h-6 flex items-center justify-center rounded-full">${i+1}</span><div><p class="text-sm font-bold text-white">${q.label}</p><p class="text-[10px] text-gray-500 uppercase">${q.type}</p></div></div><button onclick="removeQuestion(${q.id})" class="text-red-400 p-2"><i data-lucide="trash" class="w-4 h-4"></i></button></div>`).join(''); lucide.createIcons(); }
-        document.getElementById('formBuilder').addEventListener('submit', async (e) => {
-            e.preventDefault(); if(currentQuestions.length===0) return alert("Add questions.");
-            try { await addDoc(collection(db, "eventForms"), { title: document.getElementById('formTitle').value, sheetUrl: document.getElementById('formSheetUrl').value, questions: currentQuestions, active: true, createdAt: Date.now() }); alert("Form Created!"); document.getElementById('formBuilder').reset(); currentQuestions=[]; renderQuestionsPreview(); fetchActiveForms(); } catch(e){alert(e.message);}
-        });
-        async function fetchActiveForms() {
-            const list = document.getElementById('activeFormsList'); const q = query(collection(db, "eventForms"), orderBy("createdAt", "desc")); const snap = await getDocs(q);
-            let html = ''; snap.forEach(doc => { const d=doc.data(); html+=`<div class="bg-white/5 border border-white/10 p-4 rounded-xl flex justify-between items-center"><div><h4 class="font-bold text-white text-sm">${d.title}</h4><p class="text-xs text-gray-500">${d.questions.length} Qs • ${new Date(d.createdAt).toLocaleDateString()}</p></div><button onclick="deleteForm('${doc.id}')" class="text-red-400 p-2"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`; }); list.innerHTML = html; lucide.createIcons();
-        }
-        window.deleteForm = async (id) => { if(confirm("Delete?")) { await deleteDoc(doc(db, "eventForms", id)); fetchActiveForms(); } };
-
-        // --- USERS (REAL-TIME FETCH) & EDIT LOGIC ---
-        let userUnsubscribe = null;
-        window.fetchUsers = function() {
-            if(userUnsubscribe) userUnsubscribe();
-            const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
-            userUnsubscribe = onSnapshot(q, (snapshot) => {
-                allUsers = [];
-                let userHtml = '';
-                let count = 0;
-                snapshot.forEach(doc => {
-                    const d = doc.data();
-                    allUsers.push({ id: doc.id, ...d });
-                    count++;
-                    // 1. Get raw data
-                    let rawName = d.name || d.displayName || 'Unknown';
-                    let rawEmail = d.email || 'No Email';
-                    const role = d.role || 'student';
-
-                    // 2. SANITIZE FOR DISPLAY (Prevents XSS Attacks)
-                    const safeName = escapeHtml(rawName);
-                    const safeEmail = escapeHtml(rawEmail);
-
-                    // 3. SANITIZE FOR JAVASCRIPT (Prevents breaking the OnClick function)
-                    // We escape single quotes so the JS string doesn't break
-                    const jsSafeName = rawName.replace(/'/g, "\\'");
-
-                    const roleBadge = role === 'admin' ? '<span class="text-red-400 font-bold">Admin</span>' : '<span class="text-green-400">Student</span>';
-                    
-                    userHtml += `
-                        <tr class="hover:bg-white/5 transition border-b border-white/5 last:border-0">
-                            <td class="px-6 py-4 text-white font-medium">${safeName}</td>
-                            <td class="px-6 py-4 text-gray-400">${safeEmail}</td>
-                            <td class="px-6 py-4">${roleBadge}</td>
-                            <td class="px-6 py-4 flex gap-2">
-                                <button onclick="openEditUserModal('${doc.id}', '${jsSafeName}', '${role}')" class="text-yellow-400 hover:text-yellow-300 transition p-2 hover:bg-white/10 rounded" title="Edit Name/Role">
-                                    <i data-lucide="pencil" class="w-4 h-4"></i>
-                                </button>
-                                <button onclick="deleteUser('${doc.id}')" class="text-red-400 hover:text-red-300 transition p-2 hover:bg-white/10 rounded" title="Delete User">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                </button>
-                            </td>
-                        </tr>`;
-                });
-                document.getElementById('userListBody').innerHTML = userHtml;
-                document.getElementById('totalUsersCount').textContent = count;
-                lucide.createIcons();
-                fetchUsersForCert(); // Update certificates list too
-            });
-        };
-
-        // --- NEW: EDIT USER LOGIC ---
-        window.toggleEditUserModal = (show) => { document.getElementById('editUserModal').classList.toggle('hidden', !show); };
-        // UPDATED: Now takes the role too
-        window.openEditUserModal = (id, name, role) => {
-            document.getElementById('editUserId').value = id;
-            document.getElementById('editUserName').value = name;
-            document.getElementById('editUserRole').value = role; // Set the role dropdown
-            toggleEditUserModal(true);
-        };
-        document.getElementById('editUserForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('editUserId').value;
-            const newName = document.getElementById('editUserName').value;
-            const newRole = document.getElementById('editUserRole').value; // Get the new role
-            const btn = e.target.querySelector('button');
-            const status = document.getElementById('editUserStatus');
-            
-            btn.disabled = true;
-            status.textContent = "Updating...";
-            status.classList.remove('hidden');
-            status.className = "text-xs text-center p-2 rounded bg-yellow-500/20 text-yellow-400 block";
-
-            try {
-                // UPDATED: Updating both name and role
-                await updateDoc(doc(db, "users", id), { name: newName, role: newRole });
-                status.textContent = "Updated Successfully!";
-                status.className = "text-xs text-center p-2 rounded bg-green-500/20 text-green-400 block";
-                setTimeout(() => { toggleEditUserModal(false); status.classList.add('hidden'); }, 1000);
-            } catch(err) {
-                status.textContent = "Error: " + err.message;
-                status.className = "text-xs text-center p-2 rounded bg-red-500/20 text-red-400 block";
-            } finally {
-                btn.disabled = false;
-            }
-        });
-
-        window.deleteUser = async (id) => { if(confirm("Delete user?")) { await deleteDoc(doc(db, "users", id)); } }; 
         window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
-        document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); try {
-                const sa = initializeApp(firebaseConfig, "SA"); const sath = getAuth(sa);
-                const c = await createUserWithEmailAndPassword(sath, document.getElementById('newUserEmail').value, document.getElementById('newUserPassword').value);
-                await setDoc(doc(db, "users", c.user.uid), { name: document.getElementById('newUserName').value, email: c.user.email, role: 'student', createdAt: Date.now() });
-                await signOut(sath); alert("User Added!"); toggleAddUserModal(false);
-            } catch(e){ alert(e.message); }
-        });
 
-        // --- GENERAL ---
-        window.fetchSubmissions = async () => { /* Same as before, keeping short for length */ };
-        async function fetchAnnouncementsCount() { try { const s = await getDocs(collection(db, "announcements")); document.getElementById('totalAnnouncementsCount').textContent = s.size; } catch(e){} }
-        
-        const logout = async () => { await signOut(auth); window.location.href = 'admin.html'; };
+        const logout = () => signOut(auth).then(() => window.location.href = 'admin.html');
         document.getElementById('adminLogoutBtn').addEventListener('click', logout);
-        document.getElementById('adminLogoutBtnMobile').addEventListener('click', logout);
-        window.toggleMobileSidebar = () => { document.getElementById('mobile-sidebar').classList.toggle('-translate-x-full'); document.getElementById('mobile-sidebar-overlay').classList.toggle('hidden'); };
-        document.getElementById('mobile-menu-toggle').addEventListener('click', toggleMobileSidebar);
-        window.showTab = (t) => { document.querySelectorAll('.tab-content').forEach(e => e.classList.add('hidden')); document.getElementById(t+'Section').classList.remove('hidden'); };
-
-        function loadDashboardData() {
-            fetchUsers(); // Starts the real-time listener
-            fetchAnnouncementsCount(); fetchActiveForms(); fetchPastEvents(); fetchAttendanceStudents(); 
-            document.getElementById('attendanceDate').valueAsDate = new Date();
-            document.getElementById('certDate').valueAsDate = new Date();
-        }
     </script>
 </body>
-    </html>
+</html>
