@@ -27,13 +27,24 @@
         .glass-header { background: rgba(5, 5, 5, 0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         .glass-input { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
         .glass-input:focus { background: rgba(255, 255, 255, 0.08); border-color: #ef4444; outline: none; }
-        .sidebar-link { transition: all 0.3s ease; border-left: 3px solid transparent; cursor: pointer; }
+        select.glass-input option { background-color: #1a1a1a; color: white; }
+        .sidebar-link { transition: all 0.3s ease; border-left: 3px solid transparent; }
         .sidebar-link:hover { background: rgba(255, 255, 255, 0.05); color: white; }
         .sidebar-link.active { background: rgba(239, 68, 68, 0.1); color: #f87171; border-left-color: #f87171; }
-        .custom-checkbox { appearance: none; background-color: rgba(255,255,255,0.1); width: 1.25em; height: 1.25em; border: 1px solid rgba(255,255,255,0.3); border-radius: 0.25em; cursor: pointer; display: inline-grid; place-content: center; }
+        .custom-checkbox { appearance: none; background-color: rgba(255,255,255,0.1); margin: 0; width: 1.25em; height: 1.25em; border: 1px solid rgba(255,255,255,0.3); border-radius: 0.25em; display: grid; place-content: center; cursor: pointer; }
+        .custom-checkbox::before { content: ""; width: 0.65em; height: 0.65em; transform: scale(0); transition: 120ms transform ease-in-out; box-shadow: inset 1em 1em white; transform-origin: center; clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%); }
         .custom-checkbox:checked { background-color: #ef4444; border-color: #ef4444; }
-        .custom-checkbox:checked::before { content: "✔"; color: white; font-size: 0.8em; }
-        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        .custom-checkbox:checked::before { transform: scale(1); }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #050505; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        .glass-table th { background: rgba(255, 255, 255, 0.05); text-transform: uppercase; font-size: 0.75rem; color: #9ca3af; }
+        .glass-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+        
+        @media print {
+            body * { visibility: hidden; }
+            #printableArea, #printableArea * { visibility: visible; }
+            #printableArea { position: absolute; left: 0; top: 0; width: 100%; background: white; color: black; padding: 20px; }
+            .no-print { display: none !important; }
+        }
     </style>
 </head>
 <body class="font-sans antialiased relative flex h-screen overflow-hidden">
@@ -43,28 +54,40 @@
             <img src="assets/images/logos/MSEM.jpg" alt="Logo" class="w-10 h-10 rounded-full border-2 border-red-500/50">
             <div>
                 <span class="block text-lg font-bold text-white leading-tight">IEDC Admin</span>
-                <span class="text-xs text-red-400 font-medium uppercase">Control Panel</span>
+                <span class="text-xs text-red-400 font-medium uppercase tracking-wider">Control Panel</span>
             </div>
         </div>
+
         <nav class="flex-grow px-4 py-4 space-y-2 overflow-y-auto">
-            <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+            <button onclick="showTab('overview')" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="bar-chart-2" class="w-5 h-5"></i> Overview
             </button>
-            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="users" class="w-5 h-5"></i> Manage Users
+            <button onclick="showTab('attendance')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="clipboard-check" class="w-5 h-5"></i> Mark Attendance
             </button>
-            <button onclick="showTab('announcements')" id="nav-announcements" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="bell" class="w-5 h-5"></i> Post Updates
-            </button>
-            <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+            <button onclick="showTab('certificates')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="award" class="w-5 h-5"></i> Issue Certificates
             </button>
-            <button onclick="showTab('eventForms')" id="nav-eventForms" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+            <button onclick="showTab('users')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="users" class="w-5 h-5"></i> Manage Users
+            </button>
+            <button onclick="showTab('eventForms')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
                 <i data-lucide="file-plus" class="w-5 h-5"></i> Create Forms
             </button>
+            <div class="pt-4 pb-2 px-4 text-xs font-semibold text-gray-500 uppercase">Content</div>
+            <button onclick="showTab('news')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="newspaper" class="w-5 h-5"></i> Post News
+            </button>
+            <button onclick="showTab('announcements')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="bell" class="w-5 h-5"></i> Post Updates
+            </button>
+            <button onclick="showTab('gallery')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
+                <i data-lucide="image" class="w-5 h-5"></i> Manage Gallery
+            </button>
         </nav>
+
         <div class="p-4 border-t border-white/5">
-            <button id="adminLogoutBtn" class="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white py-2.5 rounded-lg text-sm font-medium">
+            <button id="adminLogoutBtn" class="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white py-2.5 rounded-lg transition-colors text-sm font-medium">
                 <i data-lucide="log-out" class="w-4 h-4"></i> Secure Logout
             </button>
         </div>
@@ -72,75 +95,106 @@
 
     <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10">
         <header class="glass-header h-20 flex items-center justify-between px-6 md:px-10 shrink-0">
-            <h1 class="text-xl font-bold text-white flex items-center gap-2">Admin Dashboard</h1>
-            <div class="text-right"><p class="text-sm font-medium text-white" id="adminEmailDisplay">Loading...</p></div>
+            <div class="flex items-center gap-4">
+                <button id="mobile-menu-toggle" class="md:hidden text-white p-2">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h1 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i data-lucide="shield-check" class="text-red-500"></i> <span class="hidden sm:inline">Admin Dashboard</span>
+                </h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="text-right hidden sm:block">
+                    <p class="text-sm font-medium text-white" id="adminEmailDisplay">Loading...</p>
+                    <p class="text-xs text-red-400">Super Admin</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-red-600 to-orange-600 flex items-center justify-center text-white font-bold">A</div>
+            </div>
         </header>
 
         <main class="flex-grow overflow-y-auto p-6 md:p-10">
             
             <div id="overviewSection" class="tab-content space-y-8">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="glass-card p-6 rounded-2xl border-l-4 border-red-500">
-                        <p class="text-gray-400 text-xs uppercase mb-1">Total Users</p>
-                        <h3 class="text-3xl font-bold text-white" id="totalUsersCount">0</h3>
+                        <p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Total Users</p>
+                        <h3 class="text-3xl font-bold text-white" id="totalUsersCount">...</h3>
                     </div>
                     <div class="glass-card p-6 rounded-2xl border-l-4 border-yellow-500">
-                        <p class="text-gray-400 text-xs uppercase mb-1">Announcements</p>
-                        <h3 class="text-3xl font-bold text-white" id="totalAnnouncementsCount">0</h3>
+                        <p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Announcements</p>
+                        <h3 class="text-3xl font-bold text-white" id="totalAnnouncementsCount">...</h3>
                     </div>
                 </div>
             </div>
 
-            <div id="usersSection" class="tab-content hidden space-y-6">
+            <div id="attendanceSection" class="tab-content hidden space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-end gap-4">
+                    <div><h2 class="text-2xl font-bold text-white mb-1">Mark Attendance</h2><p class="text-xs text-gray-400">Date locked roster system.</p></div>
+                    <button onclick="submitAttendance()" class="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-lg font-bold">Upload Attendance</button>
+                </div>
+                <div class="glass-card rounded-2xl p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="attendanceEventName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Event Name">
+                        <input type="date" id="attendanceDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
+                    </div>
+                </div>
                 <div class="glass-card rounded-2xl overflow-hidden">
                     <table class="w-full text-sm text-left text-gray-400">
-                        <thead class="bg-white/5 text-white"><tr><th class="px-6 py-4">Name</th><th>Email</th><th>Role</th></tr></thead>
+                        <thead class="bg-white/5 text-xs"><tr><th class="px-4 py-4 w-12 text-center">#</th><th class="px-4 py-4">Name</th><th>Email</th></tr></thead>
+                        <tbody id="attendanceListBody"><tr><td colspan="3" class="p-6 text-center">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="usersSection" class="tab-content hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-white">User Management</h2>
+                    <button onclick="toggleAddUserModal(true)" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold">Add User</button>
+                </div>
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <table class="w-full text-sm text-left text-gray-400">
+                        <thead class="bg-white/5 text-xs"><tr><th class="px-6 py-4">Name</th><th>Email</th><th>Role</th><th>Action</th></tr></thead>
                         <tbody id="userListBody"></tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto">
-                <div class="glass-card p-8 rounded-3xl">
-                    <h2 class="text-2xl font-bold text-white mb-6">Broadcast Update</h2>
-                    <form id="announcementForm" class="space-y-4">
-                        <input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Subject" required>
-                        <textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Details" required></textarea>
-                        <button type="submit" class="w-full bg-red-600 py-3 rounded-xl font-bold">Publish</button>
+            <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto">
+                <div class="glass-card p-8 rounded-3xl border border-blue-500/20">
+                    <h2 class="text-2xl font-bold text-white mb-6">Post News Article</h2>
+                    <div id="newsStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
+                    <form id="newsForm" class="space-y-5">
+                        <input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Headline" required>
+                        <textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Article content..." required></textarea>
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4">
+                            <label class="glass-input rounded-xl py-3 px-4 text-center cursor-pointer">
+                                <span id="newsFileName">Upload Image</span>
+                                <input type="file" id="newsImageInput" class="hidden" accept="image/*" onchange="handleNewsImage(event)">
+                            </label>
+                        </div>
+                        <button type="submit" id="postNewsBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl">Publish News</button>
                     </form>
                 </div>
             </div>
 
-            <div id="certificatesSection" class="tab-content hidden space-y-6">
-                <div class="glass-card p-8 rounded-3xl">
-                    <h2 class="text-2xl font-bold text-white mb-6">Issue Certificates</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <input type="text" id="certEventName" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Event Name">
-                        <input type="date" id="certDate" class="glass-input w-full rounded-xl py-3 px-4">
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-gray-400 text-sm mb-2">Upload Template (PNG/JPG)</label>
-                        <input type="file" onchange="handleCertTemplate(event)" class="text-sm text-gray-400">
-                        <p id="certFileName" class="mt-2 text-xs"></p>
-                    </div>
-                    <div class="glass-card rounded-xl overflow-hidden max-h-60 overflow-y-auto mb-6">
-                        <table class="w-full text-sm text-left text-gray-400">
-                            <thead class="bg-white/5"><tr><th class="px-4 py-2">Select</th><th>Name</th></tr></thead>
-                            <tbody id="certUserListBody"></tbody>
-                        </table>
-                    </div>
-                    <button onclick="issueCertificates()" id="certBtn" class="w-full bg-yellow-600 py-3 rounded-xl font-bold">Issue to Selected</button>
-                </div>
-            </div>
-
-            <div id="eventFormsSection" class="tab-content hidden max-w-2xl mx-auto">
-                <div class="glass-card p-8 rounded-3xl">
-                    <h2 class="text-2xl font-bold text-white mb-6">Create Event Registration Form</h2>
-                    <form id="formBuilderForm" class="space-y-4">
-                        <input type="text" id="formTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Form Title" required>
-                        <input type="text" id="formWebhook" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Google Script Webhook URL" required>
-                        <p class="text-[10px] text-gray-500 italic">This form will automatically sync responses to your Google Sheet via the provided script.</p>
-                        <button type="submit" class="w-full bg-green-600 py-3 rounded-xl font-bold">Create Form</button>
+            <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto">
+                <div class="glass-card p-8 rounded-3xl border border-red-500/20">
+                    <h2 class="text-2xl font-bold text-white mb-6">Post Update / Circular</h2>
+                    <div id="announcementStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
+                    <form id="announcementForm" class="space-y-5">
+                        <input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Subject" required>
+                        <textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Notice details..." required></textarea>
+                        <div class="grid grid-cols-2 gap-4">
+                            <select id="annCategory" class="glass-input w-full rounded-xl py-3 px-4">
+                                <option value="update">General Update</option>
+                                <option value="event">Event Alert</option>
+                                <option value="circular">Circular</option>
+                            </select>
+                            <input type="text" id="annDate" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Display Date (e.g. 24 Oct)">
+                        </div>
+                        <input type="text" id="annLink" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Link / PDF URL (Optional)">
+                        <button type="submit" id="postBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl">Publish Update</button>
                     </form>
                 </div>
             </div>
@@ -148,128 +202,165 @@
         </main>
     </div>
 
+    <div id="addUserModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-md p-8 rounded-3xl">
+            <h2 class="text-xl font-bold mb-4">Add User</h2>
+            <form id="adminAddUserForm" class="space-y-4">
+                <input type="text" id="newUserName" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Full Name" required>
+                <input type="email" id="newUserEmail" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Email" required>
+                <input type="password" id="newUserPassword" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Password" required>
+                <button type="submit" class="w-full bg-red-600 py-3 rounded-xl font-bold">Create Account</button>
+                <button type="button" onclick="toggleAddUserModal(false)" class="w-full text-gray-400 mt-2">Cancel</button>
+            </form>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, getDocs, addDoc, setDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
+
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHmJ0B9qP2ND2YD0-lQxW2ZgL-m2siOYSHSpSrdgSD6v53i3iD9gGx9_bxrr_Wa6oalQ/exec"; 
 
         const firebaseConfig = {
           apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
           authDomain: "metsiedc-3010e.firebaseapp.com",
+          databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
           projectId: "metsiedc-3010e",
           storageBucket: "metsiedc-3010e.firebasestorage.app",
           messagingSenderId: "954403413150",
-          appId: "1:954403413150:web:2523a3377f15a3d6002f8f"
+          appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+          measurementId: "G-6E7EK0D7JG"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let certTemplateBase64 = null;
+        let newsImageFile = null;
+        let allUsersList = [];
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 if (userDoc.exists() && userDoc.data().role === 'admin') {
                     document.getElementById('adminEmailDisplay').textContent = user.email;
-                    initSync();
-                } else { signOut(auth).then(() => window.location.href = 'admin.html'); }
+                    loadDashboardData();
+                } else { window.location.href = 'admin.html'; }
             } else { window.location.href = 'admin.html'; }
         });
 
-        function initSync() {
-            // Real-time Users
+        // --- CORE SYNC FUNCTIONS ---
+        async function loadDashboardData() {
+            syncOverview();
+            fetchUsersRealtime();
+            fetchAttendanceStudents();
+        }
+
+        function syncOverview() {
+            // Realtime Sync for Counts
             onSnapshot(collection(db, "users"), (snap) => {
                 document.getElementById('totalUsersCount').textContent = snap.size;
-                let userHtml = '';
-                let certHtml = '';
-                snap.forEach(doc => {
-                    const u = doc.data();
-                    userHtml += `<tr class="border-b border-white/5"><td class="px-6 py-4 text-white">${u.name}</td><td>${u.email}</td><td>${u.role}</td></tr>`;
-                    if(u.role === 'student') {
-                        certHtml += `<tr><td class="px-4 py-2"><input type="checkbox" class="cert-checkbox" value="${doc.id}" data-name="${u.name}"></td><td>${u.name}</td></tr>`;
-                    }
-                });
-                document.getElementById('userListBody').innerHTML = userHtml;
-                document.getElementById('certUserListBody').innerHTML = certHtml;
             });
-
-            // Real-time Announcements
             onSnapshot(collection(db, "announcements"), (snap) => {
                 document.getElementById('totalAnnouncementsCount').textContent = snap.size;
             });
         }
 
-        // ISSUE CERTIFICATES LOGIC
-        window.handleCertTemplate = (e) => {
-            const reader = new FileReader();
-            reader.onload = (event) => { certTemplateBase64 = event.target.result; document.getElementById('certFileName').textContent = "Template Loaded ✅"; };
-            reader.readAsDataURL(e.target.files[0]);
-        };
-
-        window.issueCertificates = async () => {
-            const eventName = document.getElementById('certEventName').value;
-            const date = document.getElementById('certDate').value;
-            const selected = document.querySelectorAll('.cert-checkbox:checked');
-            if(!eventName || !certTemplateBase64 || selected.length === 0) return alert("Complete all fields");
-
-            const btn = document.getElementById('certBtn');
-            btn.disabled = true; btn.textContent = "Processing...";
-
-            try {
-                for (const box of selected) {
-                    await addDoc(collection(db, "certificates"), {
-                        userId: box.value,
-                        userName: box.getAttribute('data-name'),
-                        eventName, date,
-                        templateUrl: certTemplateBase64,
-                        issuedAt: Date.now()
-                    });
-                }
-                alert("All Certificates Issued!");
-            } catch (err) { alert(err.message); } finally { btn.disabled = false; btn.textContent = "Issue to Selected"; }
-        };
-
-        // FORM BUILDER LOGIC
-        document.getElementById('formBuilderForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            try {
-                await addDoc(collection(db, "eventForms"), {
-                    title: document.getElementById('formTitle').value,
-                    webhook: document.getElementById('formWebhook').value,
-                    active: true,
-                    createdAt: Date.now()
+        function fetchUsersRealtime() {
+            const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snap) => {
+                let html = '';
+                snap.forEach(doc => {
+                    const u = doc.data();
+                    html += `<tr class="border-b border-white/5"><td class="px-6 py-4">${u.name}</td><td>${u.email}</td><td>${u.role}</td><td>---</td></tr>`;
                 });
-                alert("Form Configuration Saved!");
-                e.target.reset();
-            } catch (err) { alert(err.message); }
-        });
+                document.getElementById('userListBody').innerHTML = html;
+            });
+        }
 
-        // BROADCAST LOGIC
+        // --- POST UPDATES (FIXED) ---
         document.getElementById('announcementForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const btn = document.getElementById('postBtn');
+            const status = document.getElementById('announcementStatus');
+            btn.disabled = true;
+            status.classList.remove('hidden');
+            status.textContent = "Publishing...";
+            status.className = "mb-4 p-3 rounded text-sm text-center bg-blue-500/20 text-blue-400";
+
             try {
                 await addDoc(collection(db, "announcements"), {
                     title: document.getElementById('annTitle').value,
                     content: document.getElementById('annContent').value,
+                    category: document.getElementById('annCategory').value,
+                    date: document.getElementById('annDate').value || new Date().toLocaleDateString(),
+                    link: document.getElementById('annLink').value,
                     timestamp: Date.now()
                 });
-                alert("Broadcast Sent!");
-                e.target.reset();
-            } catch (err) { alert(err.message); }
+                status.textContent = "Successfully Published!";
+                status.className = "mb-4 p-3 rounded text-sm text-center bg-green-500/20 text-green-400";
+                document.getElementById('announcementForm').reset();
+            } catch (err) {
+                status.textContent = "Error: " + err.message;
+                status.className = "mb-4 p-3 rounded text-sm text-center bg-red-500/20 text-red-400";
+            } finally { btn.disabled = false; }
         });
 
-        window.showTab = (tabId) => {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(tabId + 'Section').classList.remove('hidden');
-            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
-            document.getElementById('nav-' + tabId).classList.add('active');
+        // --- POST NEWS (FIXED) ---
+        window.handleNewsImage = (e) => {
+            newsImageFile = e.target.files[0];
+            if(newsImageFile) document.getElementById('newsFileName').textContent = newsImageFile.name;
         };
 
-        document.getElementById('adminLogoutBtn').addEventListener('click', () => signOut(auth));
+        document.getElementById('newsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('postNewsBtn');
+            btn.disabled = true;
+            try {
+                let imageUrl = "";
+                if(newsImageFile) {
+                    imageUrl = await uploadToDrive(newsImageFile);
+                }
+                await addDoc(collection(db, "news"), {
+                    title: document.getElementById('newsTitle').value,
+                    content: document.getElementById('newsContent').value,
+                    date: document.getElementById('newsDate').value,
+                    imageUrl: imageUrl,
+                    timestamp: Date.now()
+                });
+                alert("News Published!");
+                document.getElementById('newsForm').reset();
+            } catch (err) { alert(err.message); } finally { btn.disabled = false; }
+        });
+
+        // --- HELPERS ---
+        async function uploadToDrive(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    const base64 = e.target.result.split(',')[1];
+                    const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ base64, type: file.type, name: file.name })});
+                    const json = await res.json();
+                    if(json.url) resolve(json.url); else reject("Upload failed");
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        window.showTab = (t) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(t+'Section').classList.remove('hidden');
+            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        };
+
+        window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
+
+        const logout = () => signOut(auth).then(() => window.location.href = 'admin.html');
+        document.getElementById('adminLogoutBtn').addEventListener('click', logout);
     </script>
 </body>
 </html>
