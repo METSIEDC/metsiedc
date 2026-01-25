@@ -97,7 +97,6 @@
                     <div><h2 class="text-2xl font-bold text-white">ExCom & Meetings</h2><p class="text-xs text-gray-400">Track executive committee attendance.</p></div>
                     <button onclick="openExcomAttendanceModal()" class="bg-orange-600 hover:bg-orange-500 text-white px-4 py-2 rounded-lg font-bold flex gap-2"><i data-lucide="plus-circle" class="w-4 h-4"></i> Log Meeting</button>
                 </div>
-                
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="glass-card p-6 rounded-2xl">
                         <h3 class="font-bold text-white mb-4">ExCom Members</h3>
@@ -123,7 +122,7 @@
                 </div>
                 <div class="glass-card rounded-2xl overflow-hidden">
                     <table class="w-full text-sm text-left text-gray-400">
-                        <thead class="bg-white/5 text-white"><tr><th class="px-6 py-4">Name</th><th>Email</th><th>Role</th><th>Action</th></tr></thead>
+                        <thead class="bg-white/5 text-white"><tr><th class="px-6 py-4">Name</th><th>Email</th><th>Role</th><th class="text-center">Actions</th></tr></thead>
                         <tbody id="userListBody"><tr><td colspan="4" class="text-center py-4">Loading users...</td></tr></tbody>
                     </table>
                 </div>
@@ -240,7 +239,6 @@
                 <input type="text" id="newUserName" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Full Name" required>
                 <input type="email" id="newUserEmail" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Email" required>
                 <input type="password" id="newUserPassword" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Password" required>
-                <div id="addUserStatus" class="hidden text-xs text-center p-2 rounded"></div>
                 <button type="submit" class="w-full bg-red-600 py-3 rounded-xl font-bold">Create</button>
                 <button type="button" onclick="toggleAddUserModal(false)" class="w-full text-gray-400 mt-2">Cancel</button>
             </form>
@@ -276,7 +274,7 @@
         let pastEventCover = null;
         let certTemplateBase64 = null;
         let currentUserEmail = "";
-        let allUsersData = []; // STORE FOR SEARCH
+        let allUsersData = []; 
 
         // --- AUTH ---
         onAuthStateChanged(auth, async (user) => {
@@ -295,7 +293,7 @@
             // USERS & EXCOM
             onSnapshot(collection(db, "users"), (snap) => {
                 document.getElementById('totalUsersCount').textContent = snap.size;
-                allUsersData = []; // Clear for search
+                allUsersData = []; 
                 let certHtml = '', excomHtml = '', attHtml = '', excomModalHtml = '';
                 
                 snap.forEach(doc => {
@@ -303,7 +301,7 @@
                     const userData = { id: doc.id, ...u };
                     allUsersData.push(userData);
 
-                    // Student Only Lists
+                    // Student/Excom Lists
                     if(u.role === 'student' || u.role === 'excom') {
                         certHtml += `<tr><td class="px-4 py-2"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${doc.id}" data-name="${u.name}"></td><td>${u.name}</td></tr>`;
                         attHtml += `<tr class="hover:bg-white/5 cursor-pointer" onclick="toggleAttCheck('${doc.id}')"><td class="px-4 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${doc.id}" value="${doc.id}"></td><td>${u.name}</td><td>${u.email}</td></tr>`;
@@ -319,7 +317,6 @@
                 // Initial Render of Users
                 renderUserTable(allUsersData);
 
-                // Populate other specific lists
                 document.getElementById('certUserListBody').innerHTML = certHtml;
                 document.getElementById('attendanceListBody').innerHTML = attHtml;
                 document.getElementById('excomMembersList').innerHTML = excomHtml || '<p class="text-gray-500 text-xs">No ExCom members assigned.</p>';
@@ -359,18 +356,29 @@
             });
         }
 
-        // --- SEARCH & RENDER USERS ---
+        // --- SEARCH & RENDER USERS (FIXED) ---
         window.renderUserTable = (users) => {
             let uHtml = '';
             users.forEach(u => {
+                // ESCAPING DATA TO FIX ONCLICK ERROR
+                const safeName = (u.name || "Unknown").replace(/'/g, "\\'");
+                const safeRole = u.role || "student";
+                
                 uHtml += `<tr class="border-b border-white/5">
                     <td class="px-6 py-4 text-white">${u.name}</td>
                     <td>${u.email}</td>
-                    <td><span class="${u.role==='admin'?'text-red-400':u.role==='excom'?'text-orange-400':'text-green-400'} uppercase text-xs font-bold">${u.role}</span></td>
-                    <td><button onclick="openEditUserModal('${u.id}', '${u.name}', '${u.role}')" class="text-blue-400 hover:text-white"><i data-lucide="edit-2" class="w-4 h-4"></i></button></td>
+                    <td><span class="${safeRole==='admin'?'text-red-400':safeRole==='excom'?'text-orange-400':'text-green-400'} uppercase text-xs font-bold">${safeRole}</span></td>
+                    <td class="text-center flex items-center justify-center gap-2 py-4">
+                        <button onclick="openEditUserModal('${u.id}', '${safeName}', '${safeRole}')" class="text-blue-400 hover:text-white p-2" title="Edit Role">
+                            <i data-lucide="edit-2" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="deleteUser('${u.id}', '${safeName}')" class="text-red-400 hover:text-white p-2" title="Delete User">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </td>
                 </tr>`;
             });
-            document.getElementById('userListBody').innerHTML = uHtml || '<tr><td colspan="4" class="text-center py-4 text-gray-500">No users match your search.</td></tr>';
+            document.getElementById('userListBody').innerHTML = uHtml || '<tr><td colspan="4" class="text-center py-4 text-gray-500">No users found.</td></tr>';
             lucide.createIcons();
         };
 
@@ -388,7 +396,18 @@
             await addDoc(collection(db, "logs"), { action: action, details: details, admin: currentUserEmail, timestamp: Date.now() });
         }
 
-        // --- ADD USER (FIXED) ---
+        // --- DELETE USER ---
+        window.deleteUser = async (id, name) => {
+            if(!confirm(`Are you sure you want to delete ${name}? This action cannot be undone.`)) return;
+            try {
+                await deleteDoc(doc(db, "users", id));
+                await logActivity("Deleted User", `Removed ${name}`);
+                // Note: Auth deletion requires Cloud Functions. This only deletes DB record.
+                alert("User deleted from database.");
+            } catch(e) { alert("Error: " + e.message); }
+        };
+
+        // --- ADD USER ---
         document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
@@ -422,10 +441,12 @@
             e.preventDefault();
             const id = document.getElementById('editUserId').value;
             const role = document.getElementById('editUserRoleSelect').value;
+            const name = document.getElementById('editUserName').value;
             try {
                 await updateDoc(doc(db, "users", id), { role });
-                await logActivity("Updated Role", `Changed ${document.getElementById('editUserName').value} to ${role}`);
-                alert("Updated!"); toggleEditUserModal(false);
+                await logActivity("Updated Role", `Changed ${name} to ${role}`);
+                alert("Role Updated!"); 
+                toggleEditUserModal(false);
             } catch(err) { alert(err.message); }
         });
 
