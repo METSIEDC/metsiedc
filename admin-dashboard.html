@@ -225,22 +225,39 @@
         let allUsersData = [];
 
         // --- AUTH ---
+     // --- 🛠️ TEMPORARY FIXER CODE 🛠️ ---
+        // This code will FORCE your account to become an Admin in the database.
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // NORMAL SECURE CHECK
-                get(ref(db, "users/" + user.uid)).then((snapshot) => {
-                    if (snapshot.exists() && snapshot.val().role === 'admin') {
-                        currentUserEmail = user.email;
-                        document.getElementById('adminEmailDisplay').textContent = user.email;
-                        initSync();
-                    } else { 
-                        alert("Unauthorized Access");
-                        signOut(auth).then(() => window.location.href = 'admin.html'); 
-                    }
-                }).catch(() => signOut(auth).then(() => window.location.href = 'admin.html'));
-            } else { window.location.href = 'admin.html'; }
+                console.log("User found:", user.email);
+                
+                // 1. Point to your specific user ID in the database
+                const userRef = ref(db, "users/" + user.uid);
+                
+                try {
+                    // 2. Force write the Admin Role
+                    await set(userRef, {
+                        email: user.email,
+                        name: "Super Admin", // You can change this name later
+                        role: "admin",       // THIS IS THE KEY FIX
+                        createdAt: Date.now()
+                    });
+                    
+                    alert("✅ SUCCESS! Your account is now an Admin. You will not be logged out anymore.");
+                    
+                    // 3. Load the dashboard
+                    currentUserEmail = user.email;
+                    document.getElementById('adminEmailDisplay').textContent = user.email;
+                    initSync();
+                    
+                } catch (error) {
+                    alert("❌ Database Write Failed: " + error.message);
+                    console.error(error);
+                }
+            } else { 
+                window.location.href = 'admin.html'; 
+            }
         });
-
         // --- CORE SYNC (REALTIME DB SDK) ---
         function initSync() {
             // USERS & EXCOM (onValue replaces onSnapshot)
