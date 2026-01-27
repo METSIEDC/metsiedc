@@ -39,12 +39,13 @@
 </head>
 <body class="font-sans antialiased relative flex h-screen overflow-hidden">
 
+    <!-- SIDEBAR -->
     <aside class="glass-sidebar w-64 flex-shrink-0 hidden md:flex flex-col h-full z-20">
         <div class="p-6 flex items-center gap-3">
             <img src="assets/images/logos/MSEM.jpg" alt="Logo" class="w-10 h-10 rounded-full border-2 border-red-500/50">
             <div>
                 <span class="block text-lg font-bold text-white leading-tight">IEDC Admin</span>
-                <span class="text-xs text-red-400 font-medium uppercase">RTDB Panel</span>
+                <span class="text-xs text-red-400 font-medium uppercase">Firestore</span>
             </div>
         </div>
         <nav class="flex-grow px-4 py-4 space-y-2 overflow-y-auto">
@@ -66,6 +67,7 @@
         </div>
     </aside>
 
+    <!-- MAIN CONTENT -->
     <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10">
         <header class="glass-header h-20 flex items-center justify-between px-6 md:px-10 shrink-0">
             <h1 class="text-xl font-bold text-white flex items-center gap-2"><i data-lucide="shield-check" class="text-red-500"></i> Admin Dashboard</h1>
@@ -74,6 +76,7 @@
 
         <main class="flex-grow overflow-y-auto p-6 md:p-10">
             
+            <!-- 1. OVERVIEW -->
             <div id="overviewSection" class="tab-content space-y-8">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="glass-card p-6 rounded-2xl border-l-4 border-red-500"><p class="text-gray-400 text-xs uppercase mb-1">Total Users</p><h3 class="text-3xl font-bold text-white" id="totalUsersCount">0</h3></div>
@@ -83,25 +86,27 @@
                 </div>
             </div>
 
+            <!-- 2. USERS MANAGEMENT (SEARCH + EDIT + DELETE) -->
             <div id="usersSection" class="tab-content hidden space-y-6">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                     <h2 class="text-2xl font-bold text-white">User Management</h2>
                     <div class="flex gap-3 w-full md:w-auto">
                         <div class="relative w-full md:w-64">
-                            <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search..." class="glass-input w-full pl-10 pr-4 py-2 rounded-lg text-sm">
+                            <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search Name or Email..." class="glass-input w-full pl-10 pr-4 py-2 rounded-lg text-sm">
                             <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-gray-400"></i>
                         </div>
-                        <button onclick="toggleAddUserModal(true)" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-bold whitespace-nowrap flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Add</button>
+                        <button onclick="toggleAddUserModal(true)" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-bold whitespace-nowrap">Add User</button>
                     </div>
                 </div>
                 <div class="glass-card rounded-2xl overflow-hidden">
                     <table class="w-full text-sm text-left text-gray-400">
                         <thead class="bg-white/5 text-white"><tr><th class="px-6 py-4">Name</th><th>Email</th><th>Role</th><th class="text-center">Actions</th></tr></thead>
-                        <tbody id="userListBody"><tr><td colspan="4" class="text-center py-4">Loading...</td></tr></tbody>
+                        <tbody id="userListBody"><tr><td colspan="4" class="text-center py-4">Loading users...</td></tr></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- 3. INVENTORY -->
             <div id="inventorySection" class="tab-content hidden space-y-6">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-bold text-white">Asset Inventory</h2>
@@ -113,13 +118,11 @@
                     <div class="glass-card p-4 rounded-xl border border-red-500/20 text-center"><span class="block text-gray-400 text-xs">Borrowed</span><span class="text-2xl font-bold text-red-400" id="invBorrowed">0</span></div>
                 </div>
                 <div class="glass-card rounded-2xl overflow-hidden">
-                    <table class="w-full text-sm text-left text-gray-400">
-                        <thead class="bg-white/5 text-white"><tr><th class="px-6 py-4">Item Name</th><th>Category</th><th>Status</th><th>Holder</th><th class="text-center">Action</th></tr></thead>
-                        <tbody id="inventoryListBody"></tbody>
-                    </table>
+                    <table class="w-full text-sm text-left text-gray-400"><thead class="bg-white/5 text-white"><tr><th class="px-6 py-4">Item Name</th><th>Category</th><th>Status</th><th>Holder</th><th class="text-center">Action</th></tr></thead><tbody id="inventoryListBody"></tbody></table>
                 </div>
             </div>
 
+            <!-- 4. LOGS & EXCOM -->
             <div id="logsSection" class="tab-content hidden space-y-6">
                 <h2 class="text-2xl font-bold text-white">System Logs</h2>
                 <div class="glass-card rounded-2xl overflow-hidden max-h-[600px] overflow-y-auto">
@@ -140,6 +143,7 @@
                 </div>
             </div>
 
+            <!-- 5. ATTENDANCE & CERTIFICATES -->
             <div id="attendanceSection" class="tab-content hidden space-y-6">
                 <div class="flex justify-between items-end">
                     <div><h2 class="text-2xl font-bold text-white">General Attendance</h2><p class="text-xs text-gray-400">Roster system.</p></div>
@@ -152,6 +156,7 @@
                 <div class="glass-card p-8 rounded-3xl border border-yellow-500/20"><h2 class="text-2xl font-bold text-white mb-6">Issue Certificates</h2><div id="certStatus" class="hidden mb-4 p-3 rounded text-sm text-center"></div><div class="grid grid-cols-2 gap-4 mb-6"><input type="text" id="certEventName" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Event Name"><input type="date" id="certDate" class="glass-input w-full rounded-xl py-3 px-4"></div><div class="mb-6"><input type="file" onchange="handleCertTemplate(event)" class="text-sm text-gray-400"><p id="certFileName" class="mt-2 text-xs text-green-400"></p></div><div class="glass-card rounded-xl overflow-hidden max-h-60 overflow-y-auto mb-6"><table class="w-full text-sm text-left text-gray-400"><thead class="bg-white/5"><tr><th class="px-4 py-2 w-10"></th><th>Name</th></tr></thead><tbody id="certUserListBody"></tbody></table></div><button onclick="issueCertificates()" id="certBtn" class="w-full bg-yellow-600 py-3 rounded-xl font-bold">Issue Certificates</button></div>
             </div>
 
+            <!-- 6. FORMS & CONTENT -->
             <div id="eventFormsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl"><h2 class="text-2xl font-bold text-white mb-6">Create Form</h2><form id="formBuilderForm" class="space-y-4"><input type="text" id="formTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Form Title" required><input type="text" id="formWebhook" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Google Script URL" required><button type="submit" class="w-full bg-green-600 py-3 rounded-xl font-bold">Create</button></form><div id="activeFormsList" class="mt-6 space-y-2"></div></div></div>
             <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl border border-blue-500/20"><h2 class="text-2xl font-bold text-white mb-6">Post News</h2><form id="newsForm" class="space-y-4"><input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Headline" required><textarea id="newsContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Content" required></textarea><div class="grid grid-cols-2 gap-4"><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3 px-4"><label class="glass-input rounded-xl py-3 px-4 text-center cursor-pointer"><span id="newsFileName">Image</span><input type="file" id="newsImageInput" class="hidden" onchange="handleNewsImage(event)"></label></div><button type="submit" id="postNewsBtn" class="w-full bg-blue-600 py-3 rounded-xl font-bold">Publish</button></form></div></div>
             <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto"><div class="glass-card p-8 rounded-3xl"><h2 class="text-2xl font-bold text-white mb-6">Post Update</h2><form id="announcementForm" class="space-y-4"><input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Subject" required><textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Details" required></textarea><button type="submit" class="w-full bg-red-600 py-3 rounded-xl font-bold">Publish</button></form></div></div>
@@ -161,6 +166,8 @@
         </main>
     </div>
 
+    <!-- MODALS -->
+    <!-- EDIT ROLE -->
     <div id="editUserModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
         <div class="glass-card w-full max-w-md p-8 rounded-3xl">
             <h2 class="text-xl font-bold mb-4">Edit Role</h2>
@@ -174,6 +181,7 @@
         </div>
     </div>
 
+    <!-- ADD ASSET -->
     <div id="addItemModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
         <div class="glass-card w-full max-w-md p-8 rounded-3xl">
             <h2 class="text-xl font-bold mb-4">Add Asset</h2>
@@ -186,6 +194,7 @@
         </div>
     </div>
 
+    <!-- ADD USER -->
     <div id="addUserModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
         <div class="glass-card w-full max-w-md p-8 rounded-3xl">
             <h2 class="text-xl font-bold mb-4">Add User</h2>
@@ -200,22 +209,24 @@
         </div>
     </div>
 
+    <!-- EXCOM LOG -->
     <div id="excomModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4"><div class="glass-card w-full max-w-lg p-8 rounded-3xl h-[80vh] flex flex-col"><h2 class="text-xl font-bold mb-4">Log ExCom Meeting</h2><div class="space-y-4 mb-4"><input type="text" id="excomMeetingTitle" class="glass-input w-full rounded-xl py-3 px-4" placeholder="Meeting Topic"><input type="date" id="excomMeetingDate" class="glass-input w-full rounded-xl py-3 px-4"></div><div class="flex-grow overflow-y-auto mb-4"><table class="w-full text-sm text-left text-gray-400"><thead class="bg-white/5 sticky top-0"><tr><th class="px-4 py-2">Present?</th><th>Name</th></tr></thead><tbody id="excomAttendanceList"></tbody></table></div><button onclick="submitExcomAttendance()" class="w-full bg-orange-600 py-3 rounded-xl font-bold">Save Log</button><button onclick="document.getElementById('excomModal').classList.add('hidden')" class="w-full text-gray-400 mt-2">Close</button></div></div>
     
+    <!-- REPORTS -->
     <div id="reportsModal" class="fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center p-4"><div class="glass-card w-full max-w-4xl h-[80vh] flex flex-col rounded-3xl relative overflow-hidden"><div class="p-6 border-b border-white/10 flex justify-between items-center bg-black/20"><div><h2 class="text-xl font-bold text-white">Reports</h2></div><button onclick="document.getElementById('reportsModal').classList.add('hidden')" class="text-gray-400"><i data-lucide="x"></i></button></div><div class="flex-grow overflow-y-auto p-6" id="reportEventsList"></div></div></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, set, push, update, remove, get, query, limitToLast } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, orderBy, onSnapshot, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHmJ0B9qP2ND2YD0-lQxW2ZgL-m2siOYSHSpSrdgSD6v53i3iD9gGx9_bxrr_Wa6oalQ/exec"; 
-        const firebaseConfig = { apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8", authDomain: "metsiedc-3010e.firebaseapp.com", projectId: "metsiedc-3010e", storageBucket: "metsiedc-3010e.firebasestorage.app", messagingSenderId: "954403413150", appId: "1:954403413150:web:2523a3377f15a3d6002f8f", databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com" };
+        const firebaseConfig = { apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8", authDomain: "metsiedc-3010e.firebaseapp.com", projectId: "metsiedc-3010e", storageBucket: "metsiedc-3010e.firebasestorage.app", messagingSenderId: "954403413150", appId: "1:954403413150:web:2523a3377f15a3d6002f8f" };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getDatabase(app);
+        const db = getFirestore(app);
 
         // STATE
         let newsImageFile = null;
@@ -231,15 +242,14 @@
         // --- AUTH ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Check Admin Role in Realtime DB
-                get(ref(db, "users/" + user.uid)).then((snapshot) => {
-                    const userData = snapshot.val();
+                // Check Admin Role in Firestore
+                getDoc(doc(db, "users", user.uid)).then((snapshot) => {
+                    const userData = snapshot.data();
                     if (snapshot.exists() && userData.role === 'admin') {
                         currentUserEmail = user.email;
                         safeSetText('adminEmailDisplay', user.email);
                         initSync();
                     } else { 
-                        // Auto-fix block logic removed for production
                         alert("Unauthorized"); signOut(auth).then(() => window.location.href = 'admin.html');
                     }
                 }).catch((err) => console.error(err));
@@ -249,14 +259,16 @@
         // --- CORE SYNC ---
         function initSync() {
             // USERS
-            onValue(ref(db, "users"), (snap) => {
-                const users = snap.val() || {};
-                safeSetText('totalUsersCount', Object.keys(users).length);
+            onSnapshot(collection(db, "users"), (snap) => {
+                safeSetText('totalUsersCount', snap.size);
                 allUsersData = [];
                 let certHtml = '', excomHtml = '', attHtml = '', excomModalHtml = '';
 
-                for (const [id, u] of Object.entries(users)) {
+                snap.forEach(docSnap => {
+                    const id = docSnap.id;
+                    const u = docSnap.data();
                     allUsersData.push({ id, ...u });
+                    
                     if(u.role === 'student' || u.role === 'excom') {
                         certHtml += `<tr><td class="px-4 py-2"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${id}" data-name="${u.name}"></td><td>${u.name}</td></tr>`;
                         attHtml += `<tr class="hover:bg-white/5 cursor-pointer" onclick="toggleAttCheck('${id}')"><td class="px-4 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${id}" value="${id}"></td><td>${u.name}</td><td>${u.email}</td></tr>`;
@@ -265,7 +277,7 @@
                         excomHtml += `<div class="flex justify-between items-center bg-white/5 p-3 rounded mb-2"><span class="font-medium text-white">${u.name}</span><span class="text-xs text-orange-400">ExCom</span></div>`;
                         excomModalHtml += `<tr><td class="px-4 py-2 text-center"><input type="checkbox" class="excom-checkbox custom-checkbox" value="${id}"></td><td class="text-white">${u.name}</td></tr>`;
                     }
-                }
+                });
                 renderUserTable(allUsersData);
                 if(document.getElementById('certUserListBody')) document.getElementById('certUserListBody').innerHTML = certHtml;
                 if(document.getElementById('attendanceListBody')) document.getElementById('attendanceListBody').innerHTML = attHtml;
@@ -275,36 +287,37 @@
             });
 
             // LOGS
-            onValue(query(ref(db, "logs"), limitToLast(50)), (snap) => {
-                const logs = snap.val() || {};
-                safeSetText('logsCount', Object.keys(logs).length);
+            onSnapshot(query(collection(db, "logs"), orderBy("timestamp", "desc"), limit(50)), (snap) => {
+                safeSetText('logsCount', snap.size);
                 let h = '';
-                Object.values(logs).reverse().forEach(l => {
-                    h += `<tr class="border-b border-white/5 text-xs"><td class="px-6 py-3">${new Date(l.timestamp).toLocaleString()}</td><td class="text-white">${l.action}</td><td>${l.details}</td><td class="text-gray-500">${l.admin}</td></tr>`;
+                snap.forEach(d => {
+                    const l = d.data();
+                    const date = new Date(l.timestamp).toLocaleString();
+                    h += `<tr class="border-b border-white/5 text-xs"><td class="px-6 py-3">${date}</td><td class="text-white">${l.action}</td><td>${l.details}</td><td class="text-gray-500">${l.admin}</td></tr>`;
                 });
                 if(document.getElementById('logsListBody')) document.getElementById('logsListBody').innerHTML = h;
             });
 
             // INVENTORY
-            onValue(ref(db, "inventory"), (snap) => {
-                const items = snap.val() || {};
+            onSnapshot(collection(db, "inventory"), (snap) => {
                 let h='', total=0, avail=0, borrowed=0;
-                for (const [id, item] of Object.entries(items)) {
+                snap.forEach(d => {
+                    const id = d.id;
+                    const item = d.data();
                     total++; if(item.status === 'Available') avail++; else borrowed++;
                     const btn = item.status === 'Available' ? `<button onclick="toggleItemStatus('${id}', 'Borrowed')" class="text-yellow-400 hover:text-white border border-yellow-400 px-2 py-1 rounded text-xs">Lend</button>` : `<button onclick="toggleItemStatus('${id}', 'Available')" class="text-green-400 hover:text-white border border-green-400 px-2 py-1 rounded text-xs">Return</button>`;
-                    h += `<tr class="border-b border-white/5"><td class="px-6 py-4">${item.name}</td><td>${item.category}</td><td class="${item.status==='Available'?'text-green-400':'text-red-400'}">${item.status}</td><td>${item.holder||'-'}</td><td class="text-center flex items-center justify-center gap-2 py-4">${btn}<button onclick="remove(ref(db,'inventory/${id}'))" class="text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
-                }
+                    h += `<tr class="border-b border-white/5"><td class="px-6 py-4">${item.name}</td><td>${item.category}</td><td class="${item.status==='Available'?'text-green-400':'text-red-400'}">${item.status}</td><td>${item.holder||'-'}</td><td class="text-center flex items-center justify-center gap-2 py-4">${btn}<button onclick="deleteDoc(doc(db,'inventory','${id}'))" class="text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
+                });
                 if(document.getElementById('inventoryListBody')) document.getElementById('inventoryListBody').innerHTML = h;
                 safeSetText('invTotalOverview', total); safeSetText('invTotal', total); safeSetText('invAvail', avail); safeSetText('invBorrowed', borrowed);
                 lucide.createIcons();
             });
 
             // OTHERS
-            onValue(ref(db, "announcements"), (s) => safeSetText('totalAnnouncementsCount', s.exists() ? Object.keys(s.val()).length : 0));
-            onValue(ref(db, "eventForms"), (s) => {
-                const forms = s.val() || {};
-                safeSetText('activeFormsCount', Object.keys(forms).length);
-                let h=''; Object.entries(forms).forEach(([id, d]) => h += `<div class="bg-white/5 p-3 rounded flex justify-between mt-2"><span>${d.title}</span><button onclick="remove(ref(db,'eventForms/${id}'))" class="text-red-400 text-xs">Del</button></div>`);
+            onSnapshot(collection(db, "announcements"), (s) => safeSetText('totalAnnouncementsCount', s.size));
+            onSnapshot(collection(db, "eventForms"), (s) => {
+                safeSetText('activeFormsCount', s.size);
+                let h=''; s.forEach(d => h += `<div class="bg-white/5 p-3 rounded flex justify-between mt-2"><span>${d.data().title}</span><button onclick="deleteDoc(doc(db,'eventForms','${d.id}'))" class="text-red-400 text-xs">Del</button></div>`);
                 if(document.getElementById('activeFormsList')) document.getElementById('activeFormsList').innerHTML = h;
             });
         }
@@ -328,10 +341,10 @@
 
         window.deleteUser = async (id, name) => {
             if(!confirm(`Delete ${name}?`)) return;
-            try { await remove(ref(db, "users/" + id)); await logActivity("Deleted User", `Removed ${name}`); } catch(e){ alert(e.message); }
+            try { await deleteDoc(doc(db, "users", id)); await logActivity("Deleted User", `Removed ${name}`); } catch(e){ alert(e.message); }
         };
 
-        // --- ACTIONS ---
+        // --- SUBMIT HANDLERS ---
         document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
@@ -341,7 +354,7 @@
                 const secondaryApp = initializeApp(firebaseConfig, "SecondaryApp-" + Date.now());
                 const secondaryAuth = getAuth(secondaryApp);
                 const uc = await createUserWithEmailAndPassword(secondaryAuth, email, document.getElementById('newUserPassword').value);
-                await set(ref(db, "users/" + uc.user.uid), { name: document.getElementById('newUserName').value, email, role: 'student', createdAt: Date.now() });
+                await setDoc(doc(db, "users", uc.user.uid), { name: document.getElementById('newUserName').value, email, role: 'student', createdAt: Date.now() });
                 await logActivity("Created User", `Added ${email}`);
                 await signOut(secondaryAuth);
                 alert("User Created!"); toggleAddUserModal(false); e.target.reset();
@@ -351,7 +364,7 @@
         document.getElementById('addItemForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
-                await push(ref(db, "inventory"), { name: document.getElementById('invName').value, category: document.getElementById('invCategory').value, status: 'Available', holder: '', createdAt: Date.now() });
+                await addDoc(collection(db, "inventory"), { name: document.getElementById('invName').value, category: document.getElementById('invCategory').value, status: 'Available', holder: '', createdAt: Date.now() });
                 alert("Item Added!"); document.getElementById('addItemModal').classList.add('hidden'); e.target.reset();
             } catch(e) { alert(e.message); }
         });
@@ -359,40 +372,45 @@
         window.toggleItemStatus = async (id, status) => {
             let holder = '';
             if(status === 'Borrowed') { holder = prompt("Who is borrowing this?"); if(!holder) return; }
-            await update(ref(db, "inventory/" + id), { status, holder });
+            await updateDoc(doc(db, "inventory", id), { status, holder });
         };
 
-        async function logActivity(action, details) { await push(ref(db, "logs"), { action, details, admin: currentUserEmail, timestamp: Date.now() }); }
+        async function logActivity(action, details) { await addDoc(collection(db, "logs"), { action, details, admin: currentUserEmail, timestamp: Date.now() }); }
         
-        window.openEditUserModal = (id, name, role) => { document.getElementById('editUserId').value=id; document.getElementById('editUserName').value=name; document.getElementById('editUserRoleSelect').value=role; document.getElementById('editUserModal').classList.remove('hidden'); };
+        window.openEditUserModal = (id, name, role) => { 
+            document.getElementById('editUserId').value=id; 
+            document.getElementById('editUserName').value=name; 
+            document.getElementById('editUserRoleSelect').value=role; 
+            document.getElementById('editUserModal').classList.remove('hidden'); 
+        };
         
         document.getElementById('editUserRoleForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            try { await update(ref(db, "users/" + document.getElementById('editUserId').value), { role: document.getElementById('editUserRoleSelect').value }); alert("Updated!"); toggleEditUserModal(false); } catch(e){ alert(e.message); }
+            try { await updateDoc(doc(db, "users", document.getElementById('editUserId').value), { role: document.getElementById('editUserRoleSelect').value }); alert("Updated!"); toggleEditUserModal(false); } catch(e){ alert(e.message); }
         });
 
         document.getElementById('newsForm').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn=document.getElementById('postNewsBtn'); btn.disabled=true;
-            try { let url = newsImageFile ? await uploadToDrive(newsImageFile) : ""; await push(ref(db, "news"), { title: document.getElementById('newsTitle').value, content: document.getElementById('newsContent').value, date: document.getElementById('newsDate').value, imageUrl: url, timestamp: Date.now() }); await logActivity("Posted News", document.getElementById('newsTitle').value); alert("Posted!"); e.target.reset(); } catch(e){alert(e.message);} finally{btn.disabled=false;}
+            try { let url = newsImageFile ? await uploadToDrive(newsImageFile) : ""; await addDoc(collection(db, "news"), { title: document.getElementById('newsTitle').value, content: document.getElementById('newsContent').value, date: document.getElementById('newsDate').value, imageUrl: url, timestamp: Date.now() }); await logActivity("Posted News", document.getElementById('newsTitle').value); alert("Posted!"); e.target.reset(); } catch(e){alert(e.message);} finally{btn.disabled=false;}
         });
 
         document.getElementById('announcementForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); await push(ref(db, "announcements"), { title: document.getElementById('annTitle').value, content: document.getElementById('annContent').value, timestamp: Date.now() }); await logActivity("Posted Update", document.getElementById('annTitle').value); alert("Posted!"); e.target.reset();
+            e.preventDefault(); await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, content: document.getElementById('annContent').value, timestamp: Date.now() }); await logActivity("Posted Update", document.getElementById('annTitle').value); alert("Posted!"); e.target.reset();
         });
 
         document.getElementById('formBuilderForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); await push(ref(db, "eventForms"), { title: document.getElementById('formTitle').value, webhook: document.getElementById('formWebhook').value, createdAt: Date.now() }); alert("Form Created!"); e.target.reset();
+            e.preventDefault(); await addDoc(collection(db, "eventForms"), { title: document.getElementById('formTitle').value, webhook: document.getElementById('formWebhook').value, createdAt: Date.now() }); alert("Form Created!"); e.target.reset();
         });
 
         window.submitAttendance = async () => {
             const attendees = Array.from(document.querySelectorAll('.att-checkbox:checked')).map(c => c.value);
             if(attendees.length === 0) return alert("Select students");
-            await push(ref(db, "attendance"), { eventName: document.getElementById('attendanceEventName').value, date: document.getElementById('attendanceDate').value, attendees, timestamp: Date.now() }); alert("Saved!");
+            await addDoc(collection(db, "attendance"), { eventName: document.getElementById('attendanceEventName').value, date: document.getElementById('attendanceDate').value, attendees, timestamp: Date.now() }); alert("Saved!");
         };
 
         window.submitExcomAttendance = async () => {
             const attendees = Array.from(document.querySelectorAll('.excom-checkbox:checked')).map(c => c.value);
-            await push(ref(db, "excom_meetings"), { title: document.getElementById('excomMeetingTitle').value, date: document.getElementById('excomMeetingDate').value, attendees, timestamp: Date.now() }); alert("Saved!"); document.getElementById('excomModal').classList.add('hidden');
+            await addDoc(collection(db, "excom_meetings"), { title: document.getElementById('excomMeetingTitle').value, date: document.getElementById('excomMeetingDate').value, attendees, timestamp: Date.now() }); alert("Saved!"); document.getElementById('excomModal').classList.add('hidden');
         };
 
         window.issueCertificates = async () => {
@@ -404,7 +422,7 @@
             
             try {
                 for (const box of selected) {
-                    await push(ref(db, "certificates"), { userId: box.value, userName: box.getAttribute('data-name'), eventName, date, templateUrl: certTemplateBase64, issuedAt: Date.now() });
+                    await addDoc(collection(db, "certificates"), { userId: box.value, userName: box.getAttribute('data-name'), eventName, date, templateUrl: certTemplateBase64, issuedAt: Date.now() });
                 }
                 alert("Certificates Issued!");
             } catch(e){alert(e.message);} finally { btn.disabled=false; btn.innerText="Issue Certificates"; }
@@ -420,7 +438,6 @@
             });
         }
 
-        // HELPERS
         window.showTab = (t) => { document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); document.getElementById(t+'Section').classList.remove('hidden'); document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active')); document.getElementById('nav-'+t).classList.add('active'); };
         window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
         window.toggleEditUserModal = (s) => document.getElementById('editUserModal').classList.toggle('hidden', !s);
@@ -428,7 +445,8 @@
         window.handleGalleryImages = (e) => { galleryImages = e.target.files; document.getElementById('galleryFileName').textContent = `${galleryImages.length} Files`; };
         window.handleCertTemplate = (e) => { const reader = new FileReader(); reader.onload = (ev) => { certTemplateBase64 = ev.target.result; document.getElementById('certFileName').textContent = "Template Loaded ✅"; }; reader.readAsDataURL(e.target.files[0]); };
         window.toggleAttCheck = (id) => { const c = document.getElementById('att-'+id); c.checked = !c.checked; };
-        window.remove = remove; window.ref = ref; window.db = db;
+        
+        window.deleteDoc = deleteDoc; window.doc = doc; window.db = db; // Global for onclick
 
         document.getElementById('adminLogoutBtn').addEventListener('click', () => signOut(auth).then(()=>window.location.href='admin.html'));
     </script>
