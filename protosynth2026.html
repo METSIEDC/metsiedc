@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protosynth 2026 | MET'S IEDC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        orbitron: ['Orbitron', 'sans-serif']
+                    },
+                    colors: {
+                        proto: {
+                            dark: '#030014', // Deep Space
+                            cyan: '#00f3ff', // Neon Cyan
+                            purple: '#bc13fe', // Neon Purple
+                            pink: '#ff0055', // Neon Pink
+                        },
+                        glass: {
+                            100: 'rgba(255, 255, 255, 0.05)',
+                            200: 'rgba(255, 255, 255, 0.1)',
+                            border: 'rgba(255, 255, 255, 0.1)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #030014; color: #ffffff; overflow-x: hidden; }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(18, 18, 28, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 243, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .glass-nav {
+            background: rgba(3, 0, 20, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(188, 19, 254, 0.2);
+        }
+
+        /* Hover Effects */
+        .glass-hover:hover {
+            background: rgba(188, 19, 254, 0.1);
+            border-color: #00f3ff;
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.2);
+            transform: translateY(-3px) scale(1.01);
+        }
+
+        /* Gradients */
+        .gradient-text { background: linear-gradient(to right, #00f3ff, #bc13fe); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .gradient-accent { background: linear-gradient(90deg, #00f3ff 0%, #bc13fe 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .gradient-bg { background: linear-gradient(135deg, #030014 0%, #0f0728 100%); }
+
+        /* Background Blobs */
+        .blob { position: absolute; border-radius: 50%; filter: blur(100px); z-index: -1; opacity: 0.5; animation: blob-bounce 12s infinite ease-in-out alternate; }
+        .blob-1 { top: -10%; left: -10%; width: 600px; height: 600px; background: #00f3ff; opacity: 0.2; }
+        .blob-2 { top: 30%; right: -15%; width: 500px; height: 500px; background: #bc13fe; opacity: 0.2; }
+        .blob-3 { bottom: -10%; left: 10%; width: 700px; height: 700px; background: #3b0764; opacity: 0.3; }
+        @keyframes blob-bounce { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, -30px) scale(1.1); } }
+
+        /* Mobile Menu */
+        .mobile-menu { transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mobile-menu.open { transform: translateX(0); }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #030014; }
+        ::-webkit-scrollbar-thumb { background: #bc13fe; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
+        
+        /* Neon Glows */
+        .neon-border { box-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
+        .neon-text { text-shadow: 0 0 10px rgba(188, 19, 254, 0.7); }
+
+        /* Swiper Styles */
+        .swiper-slide {
+            background-position: center;
+            background-size: cover;
+            width: 300px;
+            height: 400px;
+            filter: grayscale(100%);
+            opacity: 0.5;
+            transition: all 0.5s ease;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .swiper-slide-active {
+            filter: grayscale(0%);
+            opacity: 1;
+            transform: scale(1.1);
+            border: 2px solid #00f3ff;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+            z-index: 10;
+        }
+        .swiper-pagination-bullet { background: white; opacity: 0.5; }
+        .swiper-pagination-bullet-active { background: #00f3ff; opacity: 1; }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-proto-cyan selection:text-black relative">
+
+    <!-- POPUP MODAL -->
+    <div id="imagePopup" class="popup-overlay" onclick="closePopup(event)">
+        <div class="popup-content relative max-w-4xl w-[90%] md:w-auto mx-auto p-1">
+            <button onclick="closePopup(event)" class="absolute -top-4 -right-4 md:-top-6 md:-right-6 w-10 h-10 bg-proto-cyan rounded-full flex items-center justify-center text-black hover:bg-white transition-colors z-20 shadow-[0_0_15px_rgba(0,243,255,0.6)] border border-white">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="glass-card rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(188,19,254,0.3)] relative border-proto-cyan/30">
+                <img src="assets/images/events/IMG-20251112-WA0014.jpg" alt="Special Announcement" class="w-full h-auto max-h-[80vh] object-contain block">
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <!-- Grid Overlay for Tech Feel -->
+        <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+    </div>
+
+    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-3 group">
+                        <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full border-2 border-proto-cyan group-hover:shadow-[0_0_15px_rgba(0,243,255,0.5)] transition-all">
+                        <span class="text-2xl font-bold tracking-tight text-white font-orbitron">MET'S <span class="text-proto-cyan">IEDC</span></span>
+                    </a>
+                    <div class="hidden md:ml-12 md:flex md:space-x-8">
+                        <a href="index.html" class="text-gray-300 hover:text-proto-cyan px-3 py-2 text-sm font-medium transition-colors">Home</a>
+                        <a href="announcement.html" class="text-gray-300 hover:text-proto-cyan px-3 py-2 text-sm font-medium transition-colors">Announcement</a>
+                        <a href="event.html" class="text-gray-300 hover:text-proto-cyan px-3 py-2 text-sm font-medium transition-colors">Events</a>
+                        <a href="report.html" class="text-gray-300 hover:text-proto-cyan px-3 py-2 text-sm font-medium transition-colors">Reports</a>
+                        <a href="team.html" class="text-gray-300 hover:text-proto-cyan px-3 py-2 text-sm font-medium transition-colors">Ex-Com</a>
+                        <a href="initiatives.html" class="text-gray-300 hover:text-proto-cyan px-3 py-2 text-sm font-medium transition-colors">Initiatives</a>
+                        <a href="news.html" class="text-gray-300 hover:text-proto-cyan px-3 py-2 text-sm font-medium transition-colors">News</a>
+                        <a href="contact.html" class="text-gray-300 hover:text-proto-cyan px-3 py-2 text-sm font-medium transition-colors">Contact</a>
+                        <a href="about.html" class="text-gray-300 hover:text-proto-cyan px-3 py-2 text-sm font-medium transition-colors">About</a>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center">
+                    <a href="login.html" class="glass-card hover:bg-proto-cyan/10 hover:border-proto-cyan text-white px-6 py-2.5 rounded-full text-sm font-medium border border-white/10 transition-all">Log in</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-white p-2 hover:text-proto-cyan transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+        
+        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#030014]/95 backdrop-blur-xl z-50 border-l border-proto-purple/30">
+            <div class="flex justify-end p-6">
+                <button id="close-mobile-menu" class="text-white p-2 hover:text-proto-cyan">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <nav class="flex flex-col space-y-6 px-8 mt-10 text-center font-orbitron">
+                <a href="index.html" class="text-2xl font-light text-white hover:text-proto-cyan">Home</a>
+                <a href="announcement.html" class="text-2xl font-light text-white hover:text-proto-cyan">Announcement</a>
+                <a href="event.html" class="text-2xl font-light text-white hover:text-proto-cyan">Events</a>
+                <a href="report.html" class="text-2xl font-light text-white hover:text-proto-cyan">Reports</a>
+                <a href="team.html" class="text-2xl font-light text-white hover:text-proto-cyan">Ex-Com</a>
+                <a href="initiatives.html" class="text-2xl font-light text-white hover:text-proto-cyan">Initiatives</a>
+                <a href="contact.html" class="text-2xl font-light text-white hover:text-proto-cyan">Contact Us</a>
+                <a href="about.html" class="text-2xl font-light text-white hover:text-proto-cyan">About Us</a>
+                <a href="login.html" class="mt-8 py-4 bg-gradient-to-r from-proto-purple to-proto-cyan rounded-full text-white font-bold">Login</a>
+            </nav>
+        </div>
+    </nav>
+
+    <div class="relative pt-32 pb-10 lg:pt-48 lg:pb-20 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="text-5xl md:text-8xl font-black tracking-tighter mb-6 font-orbitron">
+                <span class="block text-transparent bg-clip-text bg-gradient-to-r from-proto-cyan via-white to-proto-purple drop-shadow-[0_0_15px_rgba(0,243,255,0.5)]">PROTOSYNTH</span>
+                <span class="block text-4xl md:text-6xl mt-4 text-white/90 font-light tracking-wide">2026</span>
+            </h1>
+            <p class="mt-8 text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-6 leading-relaxed font-light">
+                <span class="text-proto-cyan font-semibold">Grow Beyond the Idea.</span> <br>
+                A Hybrid Mode State Level Inter-College Hack-to-Product Buildathon.
+            </p>
+            <p class="text-sm md:text-base text-gray-400 mb-10 font-mono tracking-widest border border-white/10 inline-block px-4 py-2 rounded-full backdrop-blur-sm">
+                IN ASSOCIATION WITH IEDC, GEC THRISSUR
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfR2s-yrgLFL_o1UapBWPstYf1lUoVeXm79eqw-4jisIWGEBA/viewform" class="px-10 py-4 bg-gradient-to-r from-proto-cyan to-proto-purple hover:from-cyan-400 hover:to-purple-500 text-white rounded-none clip-path-polygon text-lg font-bold flex items-center justify-center gap-2 transition-all hover:scale-105 shadow-[0_0_20px_rgba(188,19,254,0.5)]" style="clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);">
+                    REGISTER NOW <i class="fas fa-rocket"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW SLIDER SECTION -->
+    <section class="py-12 relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-white mb-10 font-orbitron tracking-wide"><span class="text-proto-cyan">PAST</span> HIGHLIGHTS</h2>
+            <div class="swiper protoSwiper !pb-12">
+                <div class="swiper-wrapper">
+                    <!-- Slide 1 -->
+                    <div class="swiper-slide glass-card">
+                        <img src="assets/images/events/IMG-20251112-WA0014.jpg" class="w-full h-full object-cover rounded-2xl" alt="Event">
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="swiper-slide glass-card">
+                        <img src="assets/images/events/IMG-20251112-WA0013.jpg" class="w-full h-full object-cover rounded-2xl" alt="Event">
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="swiper-slide glass-card">
+                        <img src="assets/images/events/1.1.jpg" class="w-full h-full object-cover rounded-2xl" alt="Event">
+                    </div>
+                    <!-- Slide 4 -->
+                    <div class="swiper-slide glass-card">
+                        <img src="assets/images/events/2.1.jpg" class="w-full h-full object-cover rounded-2xl" alt="Event">
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-start mb-16">
+                <!-- Poster Image -->
+                <div class="glass-card p-1 rounded-none border border-proto-cyan/30 shadow-[0_0_30px_rgba(0,243,255,0.15)] hover:shadow-[0_0_50px_rgba(0,243,255,0.3)] transition-shadow duration-500">
+                    <img src="assets/images/events/PROTOSYNTH 2026.jpeg" alt="Protosynth 2026 Poster" class="w-full h-auto opacity-90 hover:opacity-100 transition-opacity duration-500">
+                </div>
+
+                <!-- Event Overview -->
+                <div class="space-y-8">
+                    <div class="glass-card p-8 rounded-xl border-l-4 border-l-proto-cyan relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-proto-cyan/10 blur-3xl rounded-full"></div>
+                        <h2 class="text-3xl font-bold text-white mb-6 font-orbitron">Smart Sustainable Solutions</h2>
+                        <p class="text-gray-300 leading-relaxed mb-6 text-lg">
+                            Innovation requires execution. <strong class="text-proto-cyan">Protosynth 2026</strong> is a high-intensity, hands-on innovation sprint designed to transform raw ideas into deployable prototypes. The teams Pitch, Ideate and Build prototypes of real-world solutions.
+                        </p>
+                        <h3 class="text-sm font-bold text-proto-purple uppercase tracking-widest mb-4">Focus Areas</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="px-4 py-2 bg-proto-cyan/10 text-proto-cyan border border-proto-cyan/20 rounded-lg text-sm font-semibold hover:bg-proto-cyan/20 cursor-default transition">AgroTech</span>
+                            <span class="px-4 py-2 bg-proto-purple/10 text-proto-purple border border-proto-purple/20 rounded-lg text-sm font-semibold hover:bg-proto-purple/20 cursor-default transition">Biotech</span>
+                            <span class="px-4 py-2 bg-proto-cyan/10 text-proto-cyan border border-proto-cyan/20 rounded-lg text-sm font-semibold hover:bg-proto-cyan/20 cursor-default transition">Healthcare</span>
+                            <span class="px-4 py-2 bg-white/5 text-white border border-white/10 rounded-lg text-sm font-semibold">Gold Tech</span>
+                            <span class="px-4 py-2 bg-white/5 text-white border border-white/10 rounded-lg text-sm font-semibold">AI & Robotics</span>
+                            <span class="px-4 py-2 bg-white/5 text-white border border-white/10 rounded-lg text-sm font-semibold">FoodTech</span>
+                            <span class="px-4 py-2 bg-white/5 text-white border border-white/10 rounded-lg text-sm font-semibold">Biomedical</span>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="glass-card p-6 rounded-xl border-t-2 border-t-yellow-400 text-center relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-yellow-400/5 group-hover:bg-yellow-400/10 transition-colors"></div>
+                            <i class="fas fa-trophy text-4xl text-yellow-400 mb-3 drop-shadow-[0_0_10px_rgba(250,204,21,0.5)]"></i>
+                            <h3 class="text-lg font-bold text-white mb-1">Best Innovator</h3>
+                            <p class="text-3xl font-black text-yellow-400 font-orbitron">₹10,000</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-xl border-t-2 border-t-gray-300 text-center relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-white/5 group-hover:bg-white/10 transition-colors"></div>
+                            <i class="fas fa-medal text-4xl text-gray-300 mb-3 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"></i>
+                            <h3 class="text-lg font-bold text-white mb-1">Best Visionary</h3>
+                            <p class="text-3xl font-black text-gray-300 font-orbitron">₹5,000</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-xl border border-white/5">
+                        <h2 class="text-2xl font-bold text-white mb-4 font-orbitron">Why Build?</h2>
+                        <ul class="space-y-4 text-gray-300 text-sm">
+                            <li class="flex items-start gap-3"><i class="fas fa-bolt text-proto-cyan mt-1"></i> <span>Build real prototypes in just <strong class="text-white">30 hours</strong>.</span></li>
+                            <li class="flex items-start gap-3"><i class="fas fa-bolt text-proto-cyan mt-1"></i> <span>Interact with industry mentors & researchers.</span></li>
+                            <li class="flex items-start gap-3"><i class="fas fa-bolt text-proto-cyan mt-1"></i> <span>Get identified for <strong class="text-proto-purple">KSUM Pre-Incubation</strong> support.</span></li>
+                            <li class="flex items-start gap-3"><i class="fas fa-bolt text-proto-cyan mt-1"></i> <span>Interdisciplinary teams encouraged.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Program Structure -->
+            <div class="glass-card p-10 rounded-2xl mb-16 border border-proto-purple/30 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-proto-purple/20 blur-[80px] rounded-full"></div>
+                <h2 class="text-3xl font-bold text-white mb-10 text-center font-orbitron tracking-wide"><span class="text-proto-cyan">PROGRAM</span> STRUCTURE</h2>
+                <div class="grid md:grid-cols-3 gap-8 relative z-10">
+                    <div class="bg-black/40 p-6 rounded-xl border border-white/10 hover:border-proto-cyan/50 transition-colors group">
+                        <div class="w-10 h-10 bg-proto-cyan/20 rounded-full flex items-center justify-center text-proto-cyan font-bold mb-4 group-hover:scale-110 transition-transform">1</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Bootcamp</h3>
+                        <p class="text-xs text-proto-cyan mb-3 font-mono">7-8 FEB 2026 | 7PM-9PM | ONLINE</p>
+                        <ul class="text-sm text-gray-400 list-disc list-inside space-y-1">
+                            <li>Idea Submission</li>
+                            <li>Idea Presentation</li>
+                            <li>Lean Canvas</li>
+                            <li>Screening</li>
+                        </ul>
+                    </div>
+                    <div class="bg-black/40 p-6 rounded-xl border border-white/10 hover:border-proto-purple/50 transition-colors group">
+                        <div class="w-10 h-10 bg-proto-purple/20 rounded-full flex items-center justify-center text-proto-purple font-bold mb-4 group-hover:scale-110 transition-transform">2</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Pre-buildathon</h3>
+                        <p class="text-xs text-proto-purple mb-3 font-mono">ONLINE SESSION</p>
+                        <ul class="text-sm text-gray-400 list-disc list-inside space-y-1">
+                            <li>Preliminary Design Review</li>
+                            <li>Mentor Feedback</li>
+                            <li>Hardware Check</li>
+                        </ul>
+                    </div>
+                    <div class="bg-black/40 p-6 rounded-xl border border-white/10 hover:border-white/50 transition-colors group">
+                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white font-bold mb-4 group-hover:scale-110 transition-transform">3</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Buildathon</h3>
+                        <p class="text-xs text-white mb-3 font-mono">11-12 FEB 2026 | MET'S MALA</p>
+                        <ul class="text-sm text-gray-400 list-disc list-inside space-y-1">
+                            <li>Intensive Residential Buildathon</li>
+                            <li>Prototype Making Workshop</li>
+                            <li>Live Demo & Evaluation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expert Panel -->
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-white mb-10 text-center font-orbitron">EXPERT <span class="text-proto-purple">PANEL</span></h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 rounded-lg border-l-4 border-l-proto-cyan hover:bg-white/5 transition group">
+                        <h4 class="text-lg font-bold text-white group-hover:text-proto-cyan transition-colors">Dr. Roy Francis</h4>
+                        <p class="text-xs text-gray-400 mt-1">HOD ECE, GEC Thrissur</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-lg border-l-4 border-l-proto-purple hover:bg-white/5 transition group">
+                        <h4 class="text-lg font-bold text-white group-hover:text-proto-purple transition-colors">Dr. John Bernet Johnson</h4>
+                        <p class="text-xs text-gray-400 mt-1">Scientist, RGCB</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-lg border-l-4 border-l-proto-cyan hover:bg-white/5 transition group">
+                        <h4 class="text-lg font-bold text-white group-hover:text-proto-cyan transition-colors">Mr. Dilavar Davood</h4>
+                        <p class="text-xs text-gray-400 mt-1">Senior AI Engineer, Agentic AI</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-lg border-l-4 border-l-proto-purple hover:bg-white/5 transition group">
+                        <h4 class="text-lg font-bold text-white group-hover:text-proto-purple transition-colors">Dr. A Surendran</h4>
+                        <p class="text-xs text-gray-400 mt-1">Senior Manager (Rtd), SIFL</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-lg border-l-4 border-l-proto-cyan hover:bg-white/5 transition group">
+                        <h4 class="text-lg font-bold text-white group-hover:text-proto-cyan transition-colors">Dr. Asha J</h4>
+                        <p class="text-xs text-gray-400 mt-1">Nodal Officer IEDC, GECT</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-lg border-l-4 border-l-proto-purple hover:bg-white/5 transition group">
+                        <h4 class="text-lg font-bold text-white group-hover:text-proto-purple transition-colors">Mr. Ajeesh S</h4>
+                        <p class="text-xs text-gray-400 mt-1">Asst. Professor, Christ Engineering</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-lg border-l-4 border-l-proto-cyan hover:bg-white/5 transition group">
+                        <h4 class="text-lg font-bold text-white group-hover:text-proto-cyan transition-colors">Ms. Pramitha KK</h4>
+                        <p class="text-xs text-gray-400 mt-1">Head Operations, Futura Lab</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-lg border-l-4 border-l-proto-purple hover:bg-white/5 transition group">
+                        <h4 class="text-lg font-bold text-white group-hover:text-proto-purple transition-colors">Ms. Rekha K</h4>
+                        <p class="text-xs text-gray-400 mt-1">Asst. Director, MSME-DFO</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-lg border-l-4 border-l-proto-cyan hover:bg-white/5 transition group">
+                        <h4 class="text-lg font-bold text-white group-hover:text-proto-cyan transition-colors">Dr. Madhu P C</h4>
+                        <p class="text-xs text-gray-400 mt-1">Professor, MET'S School of Engineering</p>
+                    </div>
+                     <div class="glass-card p-6 rounded-lg border-l-4 border-l-proto-purple hover:bg-white/5 transition group">
+                        <h4 class="text-lg font-bold text-white group-hover:text-proto-purple transition-colors">Dr. Sumi Maria Babu</h4>
+                        <p class="text-xs text-gray-400 mt-1">Asst. Professor, Dept of Biotechnology, MET'S</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Mentors -->
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center font-orbitron">STUDENT MENTORS</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                    <div class="glass-card p-4 rounded-xl border border-white/5"><p class="font-bold text-white text-sm">Mr. Amarthya Sekhar K N</p><p class="text-[10px] text-proto-cyan">IEDC Student Lead, GEC Thrissur</p></div>
+                    <div class="glass-card p-4 rounded-xl border border-white/5"><p class="font-bold text-white text-sm">Mr. Nibin Bin Ubaid</p><p class="text-[10px] text-proto-cyan">IEDC Tech Lead, GEC Thrissur</p></div>
+                    <div class="glass-card p-4 rounded-xl border border-white/5"><p class="font-bold text-white text-sm">Mr. Nikhil Nizam C K</p><p class="text-[10px] text-proto-cyan">IEDC Ops Lead, GEC Thrissur</p></div>
+                    <div class="glass-card p-4 rounded-xl border border-white/5"><p class="font-bold text-white text-sm">Mr. Rithu Dev C P</p><p class="text-[10px] text-proto-cyan">IEDC Tech Lead, GEC Thrissur</p></div>
+                    <div class="glass-card p-4 rounded-xl border border-white/5"><p class="font-bold text-white text-sm">Mr. Naveen P Suresh</p><p class="text-[10px] text-proto-cyan">S6 ECE, GEC Thrissur</p></div>
+                    <div class="glass-card p-4 rounded-xl border border-white/5"><p class="font-bold text-white text-sm">Mr. Abhijith S Menon</p><p class="text-[10px] text-proto-cyan">IEDC CFO, MET'S Mala</p></div>
+                    <div class="glass-card p-4 rounded-xl border border-white/5"><p class="font-bold text-white text-sm">Mr. Aswin Hari</p><p class="text-[10px] text-proto-cyan">S4 Biotech, MET'S Mala</p></div>
+                    <div class="glass-card p-4 rounded-xl border border-white/5"><p class="font-bold text-white text-sm">Ms. Sulthana M B</p><p class="text-[10px] text-proto-cyan">IEDC CIO, MET'S Mala</p></div>
+                    <div class="glass-card p-4 rounded-xl border border-white/5"><p class="font-bold text-white text-sm">Mr. Abhinav V S</p><p class="text-[10px] text-proto-cyan">IEDC Branding Lead, MET'S Mala</p></div>
+                    <div class="glass-card p-4 rounded-xl border border-white/5"><p class="font-bold text-white text-sm">Mr. Chris Babu</p><p class="text-[10px] text-proto-cyan">IEDC Student Lead, MET'S Mala</p></div>
+                </div>
+            </div>
+
+            <!-- Organizing Committee -->
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center font-orbitron">ORGANIZING COMMITTEE</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 rounded-2xl border-t border-proto-cyan/50">
+                        <h3 class="text-proto-cyan font-bold mb-2 uppercase text-sm tracking-wide">Chief Patrons</h3>
+                        <p class="text-sm text-white">Dr. Shaju Antony Aynikkal <span class="text-xs text-gray-500 block">Chairman, MET'S Group</span></p>
+                        <p class="text-sm text-white mt-2">Adv. Dr. George Kolenchery <span class="text-xs text-gray-500 block">CEO, MET'S Group</span></p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl border-t border-proto-purple/50">
+                        <h3 class="text-proto-purple font-bold mb-2 uppercase text-sm tracking-wide">Patrons</h3>
+                        <p class="text-sm text-white">Dr. Ambikadevi Amma T <span class="text-xs text-gray-500 block">Principal</span></p>
+                        <p class="text-sm text-white mt-2">Dr. Surendran A <span class="text-xs text-gray-500 block">Academic Director</span></p>
+                        <p class="text-sm text-white mt-2">Mr. Renooj A Kader <span class="text-xs text-gray-500 block">Administrative Director</span></p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl border-t border-white/50">
+                        <h3 class="text-white font-bold mb-2 uppercase text-sm tracking-wide">Program Coordinators</h3>
+                        <p class="text-sm text-white">Ms. Rekha M <span class="text-xs text-gray-500 block">IEDC Nodal Officer | 9947273434</span></p>
+                        <p class="text-sm text-white mt-2">Mr. Deepak Varghese <span class="text-xs text-gray-500 block">HOD Biotechnology | 9746246934</span></p>
+                    </div>
+                </div>
+                <div class="mt-6 glass-card p-6 rounded-2xl text-center border-t border-gray-600/50">
+                    <h3 class="text-gray-300 font-bold mb-4 uppercase text-sm tracking-wide">Student Coordinators</h3>
+                    <div class="flex flex-wrap justify-center gap-8">
+                        <div>
+                            <p class="text-white font-bold">Ms. Deena Abbas</p>
+                            <p class="text-xs text-gray-500">Student Lead | 7559917902</p>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold">Mr. Muhammed Shahil</p>
+                            <p class="text-xs text-gray-500">CCO | 7306226875</p>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold">Mr. Gokul K K</p>
+                            <p class="text-xs text-gray-500">CSO | 6282074500</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About MET'S -->
+            <div class="glass-card p-8 rounded-2xl mb-12 border-l-4 border-proto-purple">
+                <h2 class="text-2xl font-bold text-white mb-4 font-orbitron">About MET'S School of Engineering</h2>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    MET'S School of Engineering stands as a beacon of technical excellence and innovation under the Mala Education Trust. Established in 2002, approved by AICTE and affiliated to APJ Abdul Kalam Technological University, the institution has spent over two decades fostering a culture of research-driven engineering. With specialized expertise in Biotechnology, CSE, AI & Data Science, Mechanical, and Civil Engineering, MET'S provides the ideal ecosystem for this State-Level Buildathon by bridging the gap between classroom theory and industrial application.
+                    MET'S serves as a premier launchpad where student ingenuity meets state-of-the-art infrastructure to solve real-world challenges.
+                </p>
+                <div class="mt-4 text-xs text-gray-400 font-mono">
+                    <p><i class="fas fa-map-marker-alt text-proto-cyan mr-2"></i> Kuruvilassery P.O., Mala, Thrissur - 680732, Kerala, India</p>
+                </div>
+            </div>
+
+            <!-- Registration Footer / Ready to Innovate -->
+            <div class="relative overflow-hidden rounded-[30px] p-1 group mb-16">
+                <div class="absolute inset-0 bg-gradient-to-r from-proto-cyan via-proto-purple to-pink-600 opacity-80 blur-lg group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div class="relative bg-black rounded-[28px] p-8 md:p-14 text-center border border-white/10">
+                    <h2 class="text-4xl md:text-6xl font-black text-white mb-8 font-orbitron tracking-tight uppercase">
+                        Registration Ends In
+                    </h2>
+                    
+                    <div class="max-w-4xl mx-auto grid grid-cols-4 gap-4 mb-10">
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-md">
+                            <div class="text-3xl md:text-5xl font-bold text-proto-cyan mb-2 font-mono" id="days">00</div>
+                            <div class="text-[10px] md:text-sm text-gray-400 uppercase tracking-[0.2em]">Days</div>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-md">
+                            <div class="text-3xl md:text-5xl font-bold text-proto-purple mb-2 font-mono" id="hours">00</div>
+                            <div class="text-[10px] md:text-sm text-gray-400 uppercase tracking-[0.2em]">Hours</div>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-md">
+                            <div class="text-3xl md:text-5xl font-bold text-pink-500 mb-2 font-mono" id="minutes">00</div>
+                            <div class="text-[10px] md:text-sm text-gray-400 uppercase tracking-[0.2em]">Mins</div>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-md">
+                            <div class="text-3xl md:text-5xl font-bold text-white mb-2 font-mono" id="seconds">00</div>
+                            <div class="text-[10px] md:text-sm text-gray-400 uppercase tracking-[0.2em]">Secs</div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 text-gray-300 mb-10 bg-white/5 p-6 rounded-xl inline-block text-left w-full max-w-2xl">
+                         <p class="flex items-center gap-3"><i class="fas fa-users text-proto-cyan"></i> <strong>Who can participate?</strong> All college students across Kerala (Engineering, Polytechnic, Medical, Arts & Science, Management).</p>
+                         <p class="flex items-center gap-3"><i class="fas fa-user-friends text-proto-cyan"></i> <strong>Team Size:</strong> 2-4 Students</p>
+                         <p class="flex items-center gap-3"><i class="fas fa-coins text-proto-purple"></i> <strong>Fee:</strong> Phase I Free | Phase II ₹599 per team for selected teams.</p>
+                         <p class="text-xs text-gray-400 italic ml-7 border-l-2 border-proto-cyan pl-2">Note: You are welcome to bring your own components or purchase them directly from us at cost. Specific hardware requirements will be identified during our pre-buildathon session.</p>
+                    </div>
+
+                    <div class="block">
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfR2s-yrgLFL_o1UapBWPstYf1lUoVeXm79eqw-4jisIWGEBA/viewform" class="inline-flex items-center px-12 py-5 bg-white text-black hover:bg-proto-cyan hover:text-black rounded-full text-xl font-black transition-all transform hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+                            REGISTER TEAM <i class="fas fa-arrow-right ml-3"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 glass-card p-8 rounded-2xl">
+                <h2 class="text-2xl font-bold text-center text-white mb-8 font-orbitron">OFFICIAL PARTNERS</h2>
+                <div class="flex flex-wrap justify-center gap-8 items-center">
+                    <!-- Partner 1 -->
+                    <div class="group p-4 bg-white/5 rounded-xl border border-white/5 hover:border-proto-cyan/50 transition-all duration-300 w-40 h-24 flex items-center justify-center">
+                        <img src="assets/images/partners/futura_labs.png" alt="Futura Labs" class="max-w-full max-h-full opacity-70 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-xs font-bold text-gray-400 group-hover:text-proto-cyan text-center block\'>FUTURA LABS</span>'">
+                    </div>
+                    <!-- Partner 2 -->
+                    <div class="group p-4 bg-white/5 rounded-xl border border-white/5 hover:border-proto-cyan/50 transition-all duration-300 w-40 h-24 flex items-center justify-center">
+                        <img src="assets/images/partners/maaya.png" alt="Maaya Designer Jewellery" class="max-w-full max-h-full opacity-70 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-xs font-bold text-gray-400 group-hover:text-proto-cyan text-center block\'>MAAYA JEWELLERY</span>'">
+                    </div>
+                    <!-- Partner 3 -->
+                    <div class="group p-4 bg-white/5 rounded-xl border border-white/5 hover:border-proto-cyan/50 transition-all duration-300 w-40 h-24 flex items-center justify-center">
+                        <img src="assets/images/partners/dr_cl.png" alt="Dr. CL" class="max-w-full max-h-full opacity-70 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-xs font-bold text-gray-400 group-hover:text-proto-cyan text-center block\'>Dr. CL</span>'">
+                    </div>
+                    <!-- Partner 4 -->
+                    <div class="group p-4 bg-white/5 rounded-xl border border-white/5 hover:border-proto-cyan/50 transition-all duration-300 w-40 h-24 flex items-center justify-center">
+                        <img src="assets/images/partners/figmark.png" alt="Figmark Infotek" class="max-w-full max-h-full opacity-70 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-xs font-bold text-gray-400 group-hover:text-proto-cyan text-center block\'>FIGMARK INFOTEK</span>'">
+                    </div>
+                    <!-- Partner 5 -->
+                    <div class="group p-4 bg-white/5 rounded-xl border border-white/5 hover:border-proto-cyan/50 transition-all duration-300 w-40 h-24 flex items-center justify-center">
+                        <img src="assets/images/partners/millennium.png" alt="Millennium Rubber" class="max-w-full max-h-full opacity-70 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-xs font-bold text-gray-400 group-hover:text-proto-cyan text-center block\'>MILLENNIUM RUBBER</span>'">
+                    </div>
+                    <!-- Partner 6 -->
+                    <div class="group p-4 bg-white/5 rounded-xl border border-white/5 hover:border-proto-cyan/50 transition-all duration-300 w-40 h-24 flex items-center justify-center">
+                        <img src="assets/images/partners/artic_bath.png" alt="Artic Bath" class="max-w-full max-h-full opacity-70 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-xs font-bold text-gray-400 group-hover:text-proto-cyan text-center block\'>ARTIC BATH</span>'">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="border-t border-proto-purple/20 bg-[#020202] pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+                <div>
+                    <span class="text-2xl font-bold text-white font-orbitron">MET'S <span class="text-proto-cyan">IEDC</span></span>
+                    <p class="text-gray-500 mt-4 text-sm leading-relaxed">Fueling the future of innovation at MET'S School of Engineering. Join us to build the impossible.</p>
+                </div>
+                <div class="md:text-center">
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Official Partners</h3>
+                    <p class="text-xs text-gray-500">Futura Labs • Maaya Jewellery • Figmark Infotek</p>
+                </div>
+                <div class="md:text-right">
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Contact</h3>
+                    <p class="text-sm text-gray-500">Ms. Rekha M: 9947273434</p>
+                    <p class="text-sm text-gray-500">Mr. Deepak Varghese: 9746246934</p>
+                    <p class="text-sm text-gray-500">General: 9188400959</p>
+                </div>
+            </div>
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
+                <p>&copy; 2025 IEDC MET'S SCHOOL OF ENGINEERING.</p>
+                <p>PROTOSYNTH 2026</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        // Mobile Menu
+        const btn = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+        const closeBtn = document.getElementById('close-mobile-menu');
+        function toggleMenu() {
+            menu.classList.toggle('open');
+            document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+        }
+        if(btn) btn.addEventListener('click', toggleMenu);
+        if(closeBtn) closeBtn.addEventListener('click', toggleMenu);
+        
+        // Navbar Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 20) { nav.classList.add('shadow-lg'); nav.style.background = 'rgba(3, 0, 20, 0.9)'; } 
+            else { nav.classList.remove('shadow-lg'); nav.style.background = 'rgba(3, 0, 20, 0.8)'; }
+        });
+
+        // --- SLIDER INIT ---
+        const swiper = new Swiper('.protoSwiper', {
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            coverflowEffect: {
+                rotate: 0,
+                stretch: 0,
+                depth: 300,
+                modifier: 1,
+                slideShadows: true,
+            },
+            loop: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+
+        // --- COUNTDOWN LOGIC ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // Target Date: Feb 02, 2026 at 23:59:59
+            const countDownDate = new Date("Feb 2, 2026 23:59:59").getTime();
+
+            const x = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = countDownDate - now;
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                const formatTime = (time) => time < 10 ? `0${time}` : time;
+
+                const elDays = document.getElementById("days");
+                if(elDays) {
+                    elDays.innerHTML = formatTime(days);
+                    document.getElementById("hours").innerHTML = formatTime(hours);
+                    document.getElementById("minutes").innerHTML = formatTime(minutes);
+                    document.getElementById("seconds").innerHTML = formatTime(seconds);
+                }
+
+                if (distance < 0) {
+                    clearInterval(x);
+                    const container = document.getElementById("days").parentElement.parentElement;
+                    if(container) container.innerHTML = "<div class='col-span-4 text-2xl text-red-500 font-bold py-4'>Registration Closed!</div>";
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
