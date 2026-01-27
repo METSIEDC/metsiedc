@@ -82,9 +82,51 @@
         .swiper-slide { filter: grayscale(20%); transition: 0.3s; }
         .swiper-slide-active { filter: grayscale(0%); transform: scale(1.05); }
         .swiper-slide img { border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); }
+
+        /* POPUP STYLES */
+        .popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .popup-content {
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .popup-overlay.active .popup-content {
+            transform: scale(1);
+        }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-indigo-500 selection:text-white relative">
+
+    <!-- POPUP MODAL -->
+    <div id="imagePopup" class="popup-overlay" onclick="closePopup(event)">
+        <div class="popup-content relative max-w-4xl w-[90%] md:w-auto mx-auto p-1">
+            <!-- Close Button -->
+            <button onclick="closePopup(event)" class="absolute -top-4 -right-4 md:-top-6 md:-right-6 w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-white hover:bg-indigo-500 transition-colors z-20 shadow-lg border border-white/20">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <!-- Image Container with Glass Border -->
+            <div class="glass-card rounded-2xl overflow-hidden shadow-2xl relative">
+                <!-- Replace 'assets/images/popup.jpg' with your actual image path -->
+                <img src="assets/images/events/PROTOSYNTH 2026.jpeg" alt="Special Announcement" class="w-full h-auto max-h-[80vh] object-contain block">
+            </div>
+        </div>
+    </div>
 
     <div class="fixed inset-0 overflow-hidden pointer-events-none">
         <div class="blob blob-1"></div>
@@ -133,7 +175,7 @@
                 <a href="team.html" class="text-2xl font-light text-white hover:text-indigo-400">Ex-Com</a>
                 <a href="initiatives.html" class="text-2xl font-light text-white hover:text-indigo-400">Initiatives</a>
                  <a href="contact.html" class="text-2xl font-light text-white hover:text-indigo-400">Contact Us</a>
-           <a href="about.html" class="text-2xl font-light text-white hover:text-indigo-400">About Us</a>
+            <a href="about.html" class="text-2xl font-light text-white hover:text-indigo-400">About Us</a>
                 <a href="login.html" class="mt-8 py-4 bg-indigo-600 rounded-full text-white font-medium">Login</a>
             </nav>
         </div>
@@ -331,6 +373,18 @@
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // SHOW POPUP AUTOMATICALLY
+            const popup = document.getElementById('imagePopup');
+            setTimeout(() => {
+                if(popup) popup.classList.add('active');
+            }, 1500); // 1.5 second delay for better UX
+
+            window.closePopup = function(e) {
+                if (e.target === popup || e.target.closest('button')) {
+                    popup.classList.remove('active');
+                }
+            };
+
             // Swiper Config
             new Swiper('.mySwiper', {
                 effect: 'coverflow', grabCursor: true, centeredSlides: true, slidesPerView: 'auto',
@@ -398,4 +452,4 @@
         });
     </script>
 </body>
-    </html>
+</html>
