@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -68,24 +67,43 @@
         </div>
     </nav>
 
+    <!-- Main Content Container: Vertically and Horizontally Centered -->
     <div class="flex-grow flex items-center justify-center px-4 pt-24 pb-12 relative z-10">
         <div class="glass-card rounded-3xl p-8 w-full max-w-md relative overflow-hidden">
             
-            <div class="text-center mb-8">
+            <div class="text-center mb-6">
                 <h2 class="text-3xl font-bold text-white mb-2">Welcome Back</h2>
                 <p class="text-gray-400 text-sm">Access your IEDC dashboard</p>
             </div>
 
-            <div class="flex p-1 bg-white/5 rounded-xl mb-8">
+            <!-- Social Logins: Classes moved inline for correct rendering -->
+            <div class="space-y-3 mb-6">
+                <button id="googleBtn" class="w-full flex items-center justify-center gap-3 py-3 rounded-xl border border-white/10 hover:bg-white/5 transition-all duration-300 text-sm font-medium group">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
+                    <span>Continue with Google</span>
+                </button>
+                <button id="appleBtn" class="w-full flex items-center justify-center gap-3 py-3 rounded-xl border border-white/10 hover:bg-white/5 transition-all duration-300 text-sm font-medium group">
+                    <i class="fab fa-apple text-xl text-white"></i>
+                    <span>Continue with Apple</span>
+                </button>
+            </div>
+
+            <div class="relative flex py-2 items-center mb-6">
+                <div class="flex-grow border-t border-white/10"></div>
+                <span class="flex-shrink-0 mx-4 text-gray-500 text-xs uppercase">Or with email</span>
+                <div class="flex-grow border-t border-white/10"></div>
+            </div>
+
+            <div class="flex p-1 bg-white/5 rounded-xl mb-6">
                 <button id="loginTabBtn" class="tab-btn active w-1/2 py-2.5 rounded-lg text-sm font-medium" onclick="showTab('login')">Login</button>
                 <button id="signupTabBtn" class="tab-btn w-1/2 py-2.5 rounded-lg text-sm font-medium" onclick="showTab('signup')">Sign Up</button>
             </div>
 
             <div id="loginError" class="hidden mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center"></div>
             <div id="signupError" class="hidden mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center"></div>
-            <div id="otpMessage" class="hidden mb-4 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs text-center"></div>
             <div id="successMessage" class="hidden mb-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-xs text-center"></div>
 
+            <!-- LOGIN FORM -->
             <div id="loginForm" class="space-y-5">
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Email</label>
@@ -116,67 +134,45 @@
                 </div>
             </div>
 
+            <!-- SIGNUP FORM (SIMPLIFIED) -->
             <div id="signupForm" class="space-y-5 hidden">
-                
-                <div id="stepOne">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Email</label>
-                        <div class="flex gap-2">
-                            <input type="email" id="signupEmail" placeholder="Enter your email" class="glass-input w-full rounded-xl py-3 px-4 text-sm" autocomplete="email">
-                            <button id="sendOtpBtn" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3 rounded-xl transition whitespace-nowrap flex items-center gap-1">
-                                <span>Send OTP</span>
-                            </button>
-                        </div>
-                        <p id="otpCooldown" class="text-xs text-gray-500 mt-1 hidden"></p>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Email</label>
+                    <div class="relative">
+                        <i class="fas fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                        <input type="email" id="signupEmail" placeholder="Enter your email" class="glass-input w-full rounded-xl py-3 pl-10 pr-4 text-sm" autocomplete="email">
                     </div>
-                    
-                    <div id="otpSection" class="hidden mt-4">
-                        <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Enter OTP <span id="otpTimer" class="text-indigo-400"></span></label>
-                        <input type="text" id="otpInput" placeholder="6-digit code" class="glass-input w-full rounded-xl py-3 px-4 text-sm tracking-widest text-center" maxlength="6" inputmode="numeric" pattern="[0-9]*">
-                        <p id="otpAttempts" class="text-xs text-gray-500 mt-1"></p>
-                        <button id="verifyOtpBtn" class="w-full mt-2 bg-green-600 hover:bg-green-500 text-white text-xs font-bold py-2 rounded-xl transition flex justify-center items-center gap-2">
-                            <span>Verify & Continue</span>
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Password</label>
+                    <div class="relative">
+                        <input type="password" id="signupPassword" placeholder="Min 8 characters" class="glass-input w-full rounded-xl py-3 px-4 pr-12 text-sm" autocomplete="new-password">
+                        <button type="button" class="toggle-password absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-white">
+                            <i class="fas fa-eye"></i>
                         </button>
                     </div>
+                    <div id="passwordStrength" class="mt-2 h-1 rounded-full bg-white/10 overflow-hidden">
+                        <div id="passwordStrengthBar" class="h-full w-0 transition-all duration-300"></div>
+                    </div>
+                    <p id="passwordStrengthText" class="text-xs text-gray-500 mt-1"></p>
                 </div>
 
-                <div id="passwordSection" class="hidden space-y-5 border-t border-white/10 pt-4">
-                    <div class="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-                        <p class="text-green-400 text-xs flex items-center gap-2">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Email verified: <strong id="verifiedEmailDisplay"></strong></span>
-                        </p>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Confirm Password</label>
+                    <div class="relative">
+                        <input type="password" id="signupConfirmPassword" placeholder="Confirm password" class="glass-input w-full rounded-xl py-3 px-4 pr-12 text-sm" autocomplete="new-password">
+                        <button type="button" class="toggle-password absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-white">
+                            <i class="fas fa-eye"></i>
+                        </button>
                     </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Password</label>
-                        <div class="relative">
-                            <input type="password" id="signupPassword" placeholder="Min 8 characters" class="glass-input w-full rounded-xl py-3 px-4 pr-12 text-sm" autocomplete="new-password">
-                            <button type="button" class="toggle-password absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-white">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                        <div id="passwordStrength" class="mt-2 h-1 rounded-full bg-white/10 overflow-hidden">
-                            <div id="passwordStrengthBar" class="h-full w-0 transition-all duration-300"></div>
-                        </div>
-                        <p id="passwordStrengthText" class="text-xs text-gray-500 mt-1"></p>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Confirm Password</label>
-                        <div class="relative">
-                            <input type="password" id="signupConfirmPassword" placeholder="Confirm password" class="glass-input w-full rounded-xl py-3 px-4 pr-12 text-sm" autocomplete="new-password">
-                            <button type="button" class="toggle-password absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-white">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                        <p id="passwordMatchText" class="text-xs mt-1 hidden"></p>
-                    </div>
-                    
-                    <button id="signupBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span id="signupBtnText">Create Account</span>
-                        <div id="signupSpinner" class="spinner ml-2 hidden"></div>
-                    </button>
+                    <p id="passwordMatchText" class="text-xs mt-1 hidden"></p>
                 </div>
-
+                
+                <button id="signupBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center">
+                    <span id="signupBtnText">Create Account</span>
+                    <div id="signupSpinner" class="spinner ml-2 hidden"></div>
+                </button>
             </div>
 
         </div>
@@ -184,8 +180,17 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            sendPasswordResetEmail, 
+            onAuthStateChanged,
+            GoogleAuthProvider,
+            OAuthProvider,
+            signInWithPopup
+        } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
         // ============================================
         // FIREBASE CONFIG
@@ -206,198 +211,14 @@
         const db = getFirestore(app);
 
         // ============================================
-        // EMAILJS CONFIG
-        // ============================================
-        const EMAILJS_SERVICE_ID = "service_bx5uu8w"; 
-        const EMAILJS_TEMPLATE_ID = "template_9r7x5h7";
-        const EMAILJS_PUBLIC_KEY = "XlJSQA_pulXBpPApt";
-        
-        emailjs.init(EMAILJS_PUBLIC_KEY);
-
-        // ============================================
-        // SECURITY: OTP VERIFICATION STATE
-        // Using closure to prevent console manipulation
-        // ============================================
-        const OTPVerification = (() => {
-            // Private variables - cannot be accessed from console
-            let _otpHash = null;
-            let _verifiedEmail = null;
-            let _expirationTime = null;
-            let _attempts = 0;
-            let _lastOtpSentTime = 0;
-            let _verificationToken = null;
-            
-            const MAX_ATTEMPTS = 5;
-            const OTP_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
-            const COOLDOWN_MS = 60 * 1000; // 60 seconds between OTP requests
-            
-            // Simple hash function for OTP (in production, use server-side)
-            const hashOTP = async (otp, salt) => {
-                const encoder = new TextEncoder();
-                const data = encoder.encode(otp + salt);
-                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-                const hashArray = Array.from(new Uint8Array(hashBuffer));
-                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            };
-            
-            // Generate cryptographically secure OTP
-            const generateSecureOTP = () => {
-                const array = new Uint32Array(1);
-                crypto.getRandomValues(array);
-                return String(100000 + (array[0] % 900000));
-            };
-            
-            // Generate verification token
-            const generateToken = () => {
-                const array = new Uint8Array(32);
-                crypto.getRandomValues(array);
-                return Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
-            };
-
-            return {
-                // Check if can send OTP (rate limiting)
-                canSendOTP: function() {
-                    const now = Date.now();
-                    const timeSinceLastOTP = now - _lastOtpSentTime;
-                    return timeSinceLastOTP >= COOLDOWN_MS;
-                },
-                
-                getCooldownRemaining: function() {
-                    const now = Date.now();
-                    const remaining = COOLDOWN_MS - (now - _lastOtpSentTime);
-                    return Math.max(0, Math.ceil(remaining / 1000));
-                },
-                
-                // Generate and store OTP hash
-                generateOTP: async function(email) {
-                    const otp = generateSecureOTP();
-                    const salt = generateToken();
-                    _otpHash = await hashOTP(otp, salt);
-                    _expirationTime = Date.now() + OTP_EXPIRY_MS;
-                    _attempts = 0;
-                    _verifiedEmail = null;
-                    _verificationToken = null;
-                    _lastOtpSentTime = Date.now();
-                    
-                    // Store salt temporarily (will be cleared after verification)
-                    sessionStorage.setItem('_otp_salt', salt);
-                    sessionStorage.setItem('_otp_email', email);
-                    
-                    return otp; // Return plain OTP only to send via email
-                },
-                
-                // Verify OTP
-                verifyOTP: async function(inputOTP, email) {
-                    // Check if expired
-                    if (!_expirationTime || Date.now() > _expirationTime) {
-                        this.reset();
-                        return { success: false, error: 'OTP expired. Please request a new one.' };
-                    }
-                    
-                    // Check attempts
-                    _attempts++;
-                    if (_attempts > MAX_ATTEMPTS) {
-                        this.reset();
-                        return { success: false, error: 'Too many failed attempts. Please request a new OTP.' };
-                    }
-                    
-                    // Verify email matches
-                    const storedEmail = sessionStorage.getItem('_otp_email');
-                    if (email !== storedEmail) {
-                        return { success: false, error: 'Email mismatch detected.', attemptsLeft: MAX_ATTEMPTS - _attempts };
-                    }
-                    
-                    // Verify OTP hash
-                    const salt = sessionStorage.getItem('_otp_salt');
-                    const inputHash = await hashOTP(inputOTP, salt);
-                    
-                    if (inputHash === _otpHash) {
-                        _verifiedEmail = email;
-                        _verificationToken = generateToken();
-                        
-                        // Clear sensitive data
-                        sessionStorage.removeItem('_otp_salt');
-                        sessionStorage.removeItem('_otp_email');
-                        _otpHash = null;
-                        
-                        return { success: true, token: _verificationToken };
-                    }
-                    
-                    return { success: false, error: 'Incorrect OTP.', attemptsLeft: MAX_ATTEMPTS - _attempts };
-                },
-                
-                // Get remaining attempts
-                getAttemptsLeft: function() {
-                    return MAX_ATTEMPTS - _attempts;
-                },
-                
-                // Get expiration time remaining
-                getTimeRemaining: function() {
-                    if (!_expirationTime) return 0;
-                    return Math.max(0, Math.ceil((_expirationTime - Date.now()) / 1000));
-                },
-                
-                // Validate before account creation
-                validateForSignup: function(email, token) {
-                    if (!_verifiedEmail || !_verificationToken) {
-                        return { valid: false, error: 'Email not verified.' };
-                    }
-                    if (_verifiedEmail !== email) {
-                        return { valid: false, error: 'Email mismatch. Please verify again.' };
-                    }
-                    if (_verificationToken !== token) {
-                        return { valid: false, error: 'Invalid verification token.' };
-                    }
-                    return { valid: true };
-                },
-                
-                // Get verified email (read-only)
-                getVerifiedEmail: function() {
-                    return _verifiedEmail ? String(_verifiedEmail) : null;
-                },
-                
-                // Reset all state
-                reset: function() {
-                    _otpHash = null;
-                    _verifiedEmail = null;
-                    _expirationTime = null;
-                    _attempts = 0;
-                    _verificationToken = null;
-                    sessionStorage.removeItem('_otp_salt');
-                    sessionStorage.removeItem('_otp_email');
-                },
-                
-                // Get current token (for signup validation)
-                getToken: function() {
-                    return _verificationToken;
-                }
-            };
-        })();
-
-        // Freeze the object to prevent modification
-        Object.freeze(OTPVerification);
-
-        // ============================================
         // DOM ELEMENTS
         // ============================================
         const loginTabBtn = document.getElementById('loginTabBtn');
         const signupTabBtn = document.getElementById('signupTabBtn');
         const loginForm = document.getElementById('loginForm');
         const signupForm = document.getElementById('signupForm');
-        
-        const sendOtpBtn = document.getElementById('sendOtpBtn');
-        const otpSection = document.getElementById('otpSection');
-        const otpInput = document.getElementById('otpInput');
-        const verifyOtpBtn = document.getElementById('verifyOtpBtn');
-        const passwordSection = document.getElementById('passwordSection');
-        const signupEmailInput = document.getElementById('signupEmail');
-        const otpMessage = document.getElementById('otpMessage');
-        const signupError = document.getElementById('signupError');
-        const successMessage = document.getElementById('successMessage');
-        const otpTimer = document.getElementById('otpTimer');
-        const otpAttempts = document.getElementById('otpAttempts');
-        const otpCooldown = document.getElementById('otpCooldown');
-        const verifiedEmailDisplay = document.getElementById('verifiedEmailDisplay');
+        const googleBtn = document.getElementById('googleBtn');
+        const appleBtn = document.getElementById('appleBtn');
 
         // ============================================
         // UTILITY FUNCTIONS
@@ -415,8 +236,9 @@
         }
 
         function showSuccess(message) {
-            successMessage.textContent = message;
-            successMessage.classList.remove('hidden');
+            const el = document.getElementById('successMessage');
+            el.textContent = message;
+            el.classList.remove('hidden');
         }
 
         function sanitizeEmail(email) {
@@ -439,6 +261,154 @@
         }
 
         // ============================================
+        // SOCIAL AUTHENTICATION
+        // ============================================
+        
+        // 1. Google Sign-In
+        googleBtn.addEventListener('click', async () => {
+            const provider = new GoogleAuthProvider();
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                
+                // Check if user exists in Firestore, if not create
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (!userDoc.exists()) {
+                    await setDoc(doc(db, "users", user.uid), {
+                        email: user.email,
+                        displayName: user.displayName,
+                        photoURL: user.photoURL,
+                        role: 'student',
+                        authProvider: 'google',
+                        createdAt: serverTimestamp()
+                    });
+                }
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                console.error("Google Sign-In Error:", error);
+                showError('loginError', 'Google Sign-In failed. Please try again.');
+            }
+        });
+
+        // 2. Apple Sign-In
+        appleBtn.addEventListener('click', async () => {
+            const provider = new OAuthProvider('apple.com');
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (!userDoc.exists()) {
+                    await setDoc(doc(db, "users", user.uid), {
+                        email: user.email,
+                        displayName: user.displayName || 'Apple User',
+                        role: 'student',
+                        authProvider: 'apple',
+                        createdAt: serverTimestamp()
+                    });
+                }
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                console.error("Apple Sign-In Error:", error);
+                showError('loginError', 'Apple Sign-In failed. Configuration required in Firebase Console.');
+            }
+        });
+
+        // ============================================
+        // TRADITIONAL AUTHENTICATION
+        // ============================================
+
+        // 1. Sign Up (Email/Password)
+        document.getElementById('signupBtn').addEventListener('click', async () => {
+            const email = sanitizeEmail(document.getElementById('signupEmail').value);
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            
+            if (!validateEmail(email)) {
+                showError('signupError', 'Please enter a valid email.');
+                return;
+            }
+            if (password !== confirmPassword) {
+                showError('signupError', 'Passwords do not match.');
+                return;
+            }
+            if (password.length < 8) {
+                showError('signupError', 'Password must be at least 8 characters.');
+                return;
+            }
+
+            const btn = document.getElementById('signupBtn');
+            const btnText = document.getElementById('signupBtnText');
+            const spinner = document.getElementById('signupSpinner');
+            
+            hideError('signupError');
+            btn.disabled = true;
+            btnText.textContent = 'Creating Account...';
+            spinner.classList.remove('hidden');
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                // Save to Firestore
+                await setDoc(doc(db, "users", userCredential.user.uid), {
+                    email: email,
+                    role: 'student',
+                    authProvider: 'email',
+                    createdAt: serverTimestamp(),
+                    displayName: email.split('@')[0]
+                });
+
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                console.error('Signup Error:', error);
+                let msg = 'Failed to create account.';
+                if (error.code === 'auth/email-already-in-use') msg = 'Email already in use. Try logging in.';
+                if (error.code === 'auth/weak-password') msg = 'Password is too weak.';
+                showError('signupError', msg);
+                btn.disabled = false;
+                btnText.textContent = 'Create Account';
+                spinner.classList.add('hidden');
+            }
+        });
+
+        // 2. Login (Email/Password)
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const email = sanitizeEmail(document.getElementById('loginEmail').value);
+            const password = document.getElementById('loginPassword').value;
+
+            if (!validateEmail(email) || !password) {
+                showError('loginError', 'Please enter valid credentials.');
+                return;
+            }
+
+            const btn = document.getElementById('loginBtn');
+            const btnText = document.getElementById('loginBtnText');
+            const spinner = document.getElementById('loginSpinner');
+
+            hideError('loginError');
+            btn.disabled = true;
+            btnText.textContent = 'Signing in...';
+            spinner.classList.remove('hidden');
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                console.error('Login Error:', error);
+                let msg = 'Login failed.';
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+                    msg = 'Invalid email or password.';
+                } else if (error.code === 'auth/too-many-requests') {
+                    msg = 'Too many attempts. Try again later.';
+                }
+                showError('loginError', msg);
+                btn.disabled = false;
+                btnText.textContent = 'Sign In';
+                spinner.classList.add('hidden');
+            }
+        });
+
+        // ============================================
         // PASSWORD VISIBILITY TOGGLE
         // ============================================
         document.querySelectorAll('.toggle-password').forEach(button => {
@@ -458,13 +428,12 @@
         });
 
         // ============================================
-        // PASSWORD STRENGTH INDICATOR
+        // PASSWORD STRENGTH & MATCH UI
         // ============================================
         document.getElementById('signupPassword').addEventListener('input', function() {
             const strength = checkPasswordStrength(this.value);
             const bar = document.getElementById('passwordStrengthBar');
             const text = document.getElementById('passwordStrengthText');
-            
             const colors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-lime-500', 'bg-green-500'];
             const labels = ['Very Weak', 'Weak', 'Fair', 'Strong', 'Very Strong'];
             
@@ -474,9 +443,6 @@
             text.className = `text-xs mt-1 ${strength < 2 ? 'text-red-400' : strength < 4 ? 'text-yellow-400' : 'text-green-400'}`;
         });
 
-        // ============================================
-        // PASSWORD MATCH CHECK
-        // ============================================
         document.getElementById('signupConfirmPassword').addEventListener('input', function() {
             const password = document.getElementById('signupPassword').value;
             const matchText = document.getElementById('passwordMatchText');
@@ -501,7 +467,6 @@
         window.showTab = function(tab) {
             hideError('loginError');
             hideError('signupError');
-            successMessage.classList.add('hidden');
             
             if (tab === 'login') {
                 loginTabBtn.classList.add('active');
@@ -517,316 +482,20 @@
         };
 
         // ============================================
-        // OTP TIMER DISPLAY
-        // ============================================
-        let otpTimerInterval = null;
-        function startOTPTimer() {
-            if (otpTimerInterval) clearInterval(otpTimerInterval);
-            
-            otpTimerInterval = setInterval(() => {
-                const remaining = OTPVerification.getTimeRemaining();
-                if (remaining > 0) {
-                    const mins = Math.floor(remaining / 60);
-                    const secs = remaining % 60;
-                    otpTimer.textContent = `(${mins}:${secs.toString().padStart(2, '0')})`;
-                } else {
-                    otpTimer.textContent = '(Expired)';
-                    clearInterval(otpTimerInterval);
-                }
-            }, 1000);
-        }
-
-        // ============================================
-        // COOLDOWN TIMER FOR OTP BUTTON
-        // ============================================
-        let cooldownInterval = null;
-        function startCooldownTimer() {
-            if (cooldownInterval) clearInterval(cooldownInterval);
-            
-            sendOtpBtn.disabled = true;
-            cooldownInterval = setInterval(() => {
-                const remaining = OTPVerification.getCooldownRemaining();
-                if (remaining > 0) {
-                    otpCooldown.textContent = `Wait ${remaining}s before resending`;
-                    otpCooldown.classList.remove('hidden');
-                } else {
-                    otpCooldown.classList.add('hidden');
-                    sendOtpBtn.disabled = false;
-                    sendOtpBtn.innerHTML = '<span>Resend OTP</span>';
-                    clearInterval(cooldownInterval);
-                }
-            }, 1000);
-        }
-
-        // ============================================
-        // SEND OTP
-        // ============================================
-        sendOtpBtn.addEventListener('click', async () => {
-            const email = sanitizeEmail(signupEmailInput.value);
-            
-            // Validate email
-            if (!validateEmail(email)) {
-                showError('signupError', 'Please enter a valid email address.');
-                return;
-            }
-            
-            // Check rate limiting
-            if (!OTPVerification.canSendOTP()) {
-                const remaining = OTPVerification.getCooldownRemaining();
-                showError('signupError', `Please wait ${remaining} seconds before requesting another OTP.`);
-                return;
-            }
-            
-            // Check EmailJS config
-            if (EMAILJS_TEMPLATE_ID === "YOUR_TEMPLATE_ID" || EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY") {
-                showError('signupError', 'EmailJS not configured properly.');
-                return;
-            }
-            
-            hideError('signupError');
-            sendOtpBtn.disabled = true;
-            sendOtpBtn.innerHTML = '<div class="spinner"></div>';
-            
-            try {
-                // Generate OTP using secure method
-                const otp = await OTPVerification.generateOTP(email);
-                
-                // Send via EmailJS
-                const templateParams = {
-                    email: email,
-                    passcode: otp,
-                    time: "5 minutes"
-                };
-                
-                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
-                
-                // Show success
-                otpMessage.textContent = `OTP sent to ${email}. Valid for 5 minutes.`;
-                otpMessage.className = "mb-4 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs text-center";
-                otpMessage.classList.remove('hidden');
-                
-                // Show OTP input section
-                otpSection.classList.remove('hidden');
-                otpAttempts.textContent = `${OTPVerification.getAttemptsLeft()} attempts remaining`;
-                
-                // Start timers
-                startOTPTimer();
-                startCooldownTimer();
-                
-                // Focus OTP input
-                otpInput.focus();
-                
-            } catch (error) {
-                console.error('Failed to send OTP:', error);
-                showError('signupError', 'Failed to send OTP. Please try again.');
-                sendOtpBtn.disabled = false;
-                sendOtpBtn.innerHTML = '<span>Send OTP</span>';
-            }
-        });
-
-        // ============================================
-        // VERIFY OTP
-        // ============================================
-        verifyOtpBtn.addEventListener('click', async () => {
-            const userOTP = otpInput.value.trim();
-            const email = sanitizeEmail(signupEmailInput.value);
-            
-            if (!/^\d{6}$/.test(userOTP)) {
-                showError('signupError', 'Please enter a valid 6-digit OTP.');
-                otpInput.classList.add('shake');
-                setTimeout(() => otpInput.classList.remove('shake'), 500);
-                return;
-            }
-            
-            hideError('signupError');
-            verifyOtpBtn.disabled = true;
-            verifyOtpBtn.innerHTML = '<div class="spinner"></div><span>Verifying...</span>';
-            
-            const result = await OTPVerification.verifyOTP(userOTP, email);
-            
-            if (result.success) {
-                // Success - show password section
-                otpMessage.textContent = '✅ Email verified successfully!';
-                otpMessage.className = "mb-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-xs text-center";
-                
-                // Hide OTP section, show password section
-                otpSection.classList.add('hidden');
-                document.getElementById('stepOne').classList.add('hidden');
-                passwordSection.classList.remove('hidden');
-                
-                // Display verified email (read-only from secure state)
-                verifiedEmailDisplay.textContent = OTPVerification.getVerifiedEmail();
-                
-                // Clear timer
-                if (otpTimerInterval) clearInterval(otpTimerInterval);
-                
-                // Focus password field
-                document.getElementById('signupPassword').focus();
-                
-            } else {
-                showError('signupError', result.error);
-                otpInput.classList.add('shake');
-                setTimeout(() => otpInput.classList.remove('shake'), 500);
-                
-                if (result.attemptsLeft !== undefined) {
-                    otpAttempts.textContent = `${result.attemptsLeft} attempts remaining`;
-                }
-                
-                verifyOtpBtn.disabled = false;
-                verifyOtpBtn.innerHTML = '<span>Verify & Continue</span>';
-                
-                // If no attempts left or expired, reset
-                if (result.attemptsLeft === 0 || result.error.includes('expired')) {
-                    otpSection.classList.add('hidden');
-                    otpInput.value = '';
-                }
-            }
-        });
-
-        // ============================================
-        // CREATE ACCOUNT
-        // ============================================
-        document.getElementById('signupBtn').addEventListener('click', async () => {
-            const verifiedEmail = OTPVerification.getVerifiedEmail();
-            const token = OTPVerification.getToken();
-            const password = document.getElementById('signupPassword').value;
-            const confirmPassword = document.getElementById('signupConfirmPassword').value;
-            
-            // SECURITY: Validate using secure state
-            const validation = OTPVerification.validateForSignup(verifiedEmail, token);
-            if (!validation.valid) {
-                showError('signupError', '⛔ Security Error: ' + validation.error);
-                // Reset to step one
-                passwordSection.classList.add('hidden');
-                document.getElementById('stepOne').classList.remove('hidden');
-                OTPVerification.reset();
-                return;
-            }
-            
-            // Validate passwords
-            if (password !== confirmPassword) {
-                showError('signupError', 'Passwords do not match.');
-                return;
-            }
-            
-            if (password.length < 8) {
-                showError('signupError', 'Password must be at least 8 characters.');
-                return;
-            }
-            
-            if (checkPasswordStrength(password) < 2) {
-                showError('signupError', 'Password is too weak. Add uppercase, numbers, or symbols.');
-                return;
-            }
-            
-            hideError('signupError');
-            const btn = document.getElementById('signupBtn');
-            const btnText = document.getElementById('signupBtnText');
-            const spinner = document.getElementById('signupSpinner');
-            
-            btn.disabled = true;
-            btnText.textContent = 'Creating...';
-            spinner.classList.remove('hidden');
-            
-            try {
-                // Create user with verified email
-                const userCredential = await createUserWithEmailAndPassword(auth, verifiedEmail, password);
-                
-                // Save user data to Firestore
-                await setDoc(doc(db, "users", userCredential.user.uid), {
-                    email: verifiedEmail,
-                    role: 'student',
-                    emailVerified: true,
-                    createdAt: serverTimestamp(),
-                    displayName: verifiedEmail.split('@')[0]
-                });
-                
-                // Clear OTP state
-                OTPVerification.reset();
-                
-                // Redirect to dashboard
-                window.location.href = 'dashboard.html';
-                
-            } catch (error) {
-                console.error('Signup error:', error);
-                let errorMessage = 'Failed to create account.';
-                
-                if (error.code === 'auth/email-already-in-use') {
-                    errorMessage = 'This email is already registered. Please login instead.';
-                } else if (error.code === 'auth/weak-password') {
-                    errorMessage = 'Password is too weak.';
-                }
-                
-                showError('signupError', errorMessage);
-                btn.disabled = false;
-                btnText.textContent = 'Create Account';
-                spinner.classList.add('hidden');
-            }
-        });
-
-        // ============================================
-        // LOGIN
-        // ============================================
-        document.getElementById('loginBtn').addEventListener('click', async () => {
-            const email = sanitizeEmail(document.getElementById('loginEmail').value);
-            const password = document.getElementById('loginPassword').value;
-            
-            if (!validateEmail(email)) {
-                showError('loginError', 'Please enter a valid email.');
-                return;
-            }
-            
-            if (!password) {
-                showError('loginError', 'Please enter your password.');
-                return;
-            }
-            
-            hideError('loginError');
-            const btn = document.getElementById('loginBtn');
-            const btnText = document.getElementById('loginBtnText');
-            const spinner = document.getElementById('loginSpinner');
-            
-            btn.disabled = true;
-            btnText.textContent = 'Signing in...';
-            spinner.classList.remove('hidden');
-            
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                window.location.href = 'dashboard.html';
-            } catch (error) {
-                console.error('Login error:', error);
-                let errorMessage = 'Login failed.';
-                
-                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                    errorMessage = 'Invalid email or password.';
-                } else if (error.code === 'auth/too-many-requests') {
-                    errorMessage = 'Too many failed attempts. Please try again later.';
-                }
-                
-                showError('loginError', errorMessage);
-                btn.disabled = false;
-                btnText.textContent = 'Sign In';
-                spinner.classList.add('hidden');
-            }
-        });
-
-        // ============================================
         // FORGOT PASSWORD
         // ============================================
         document.getElementById('forgotPasswordLink').addEventListener('click', async (e) => {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
-            
             if (!validateEmail(email)) {
-                showError('loginError', 'Please enter your email address first.');
+                showError('loginError', 'Enter email address first.');
                 return;
             }
-            
             try {
                 await sendPasswordResetEmail(auth, email);
-                showSuccess(`Password reset email sent to ${email}`);
+                showSuccess(`Reset link sent to ${email}`);
             } catch (error) {
-                showError('loginError', 'Failed to send reset email. Please check your email address.');
+                showError('loginError', 'Failed to send reset email.');
             }
         });
 
@@ -836,34 +505,15 @@
         const menuBtn = document.getElementById('mobile-menu-button');
         const menu = document.getElementById('mobile-menu');
         const closeMenuBtn = document.getElementById('close-mobile-menu');
-        
         function toggleMenu() { menu.classList.toggle('open'); }
-        menuBtn.addEventListener('click', toggleMenu);
-        closeMenuBtn.addEventListener('click', toggleMenu);
+        if(menuBtn) menuBtn.addEventListener('click', toggleMenu);
+        if(closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
 
-        // ============================================
-        // AUTH STATE CHECK
-        // ============================================
+        // Check if already logged in
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                window.location.href = 'dashboard.html';
-            }
-        });
-
-        // ============================================
-        // OTP INPUT - NUMBERS ONLY
-        // ============================================
-        otpInput.addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
-
-        // Allow Enter key to submit OTP
-        otpInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                verifyOtpBtn.click();
-            }
+            if (user) window.location.href = 'dashboard.html';
         });
 
     </script>
 </body>
-    </html>
+</html>
