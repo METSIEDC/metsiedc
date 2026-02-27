@@ -1,144 +1,226 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Past Events | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Immersive Theme Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: { iedc: { red: '#ef4444', dark: '#991b1b' } }
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif']
+                    }
                 }
             }
         }
     </script>
 
     <style>
-        body { background-color: #050505; color: #ffffff; overflow-x: hidden; }
-        
-        /* Glassmorphism */
-        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.3s ease; }
-        .glass-card:hover { transform: translateY(-5px); border-color: rgba(239, 68, 68, 0.3); background: rgba(255, 255, 255, 0.05); }
-        .glass-nav { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        body { 
+            background-color: #0f1115; /* Deep cinematic dark */
+            color: #ffffff; 
+            overflow-x: hidden; 
+        }
 
-        /* Background Blobs */
-        .blob { position: absolute; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.3; animation: blob-bounce 10s infinite ease; }
-        .blob-1 { top: 0%; left: 0%; width: 600px; height: 600px; background: #7f1d1d; }
-        .blob-2 { bottom: 0%; right: 0%; width: 500px; height: 500px; background: #c2410c; }
-        @keyframes blob-bounce { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(20px, -20px) scale(1.1); } }
+        /* Monochromatic Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            border-radius: 24px;
+        }
 
-        /* Mobile Menu */
-        .mobile-menu { transform: translateX(100%); transition: transform 0.3s ease; }
-        .mobile-menu.open { transform: translateX(0); }
+        .glass-nav {
+            background: rgba(15, 17, 21, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-menu {
+            background: rgba(10, 12, 15, 0.85);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        /* Cinematic Hover Effects */
+        .glass-hover { transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .glass-hover:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.8), 0 0 30px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f1115; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
     </style>
 </head>
-<body class="font-sans antialiased relative min-h-screen flex flex-col">
+<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-white selection:text-black">
 
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
+    <!-- Subtle Monochromatic Atmospheric Lighting -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
     </div>
 
-    <nav class="glass-nav fixed top-0 w-full z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <a href="index.html" class="flex items-center gap-3">
-                    <img src="assets/images/logos/MSEM.jpg" alt="Logo" class="w-10 h-10 rounded-full border-2 border-red-500/50">
-                    <span class="text-xl font-bold text-white tracking-tight">MET'S <span class="text-red-500">IEDC</span></span>
+    <!-- Frosted Glass Navbar -->
+    <header id="navbar" class="h-20 px-6 md:px-10 fixed top-0 w-full z-50 transition-all duration-300 py-4 glass-nav">
+        <div class="max-w-[95%] mx-auto h-full flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="flex items-center group">
+                    <span class="text-xl font-display font-bold tracking-tight text-white group-hover:opacity-80 transition-opacity uppercase">
+                        MET'S IEDC
+                    </span>
                 </a>
-                <div class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Home</a>
-                    <a href="event.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Active Events</a>
-                    <a href="past-events.html" class="text-white px-3 py-2 text-sm font-medium border-b-2 border-red-500">Past Events</a>
-                </div>
-                <button onclick="document.getElementById('mobile-menu').classList.toggle('open')" class="md:hidden text-white"><i data-lucide="menu"></i></button>
             </div>
-        </div>
-        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-64 h-screen bg-black/95 border-l border-white/10 z-50 p-6">
-            <div class="flex justify-end mb-8"><button onclick="document.getElementById('mobile-menu').classList.remove('open')" class="text-white"><i data-lucide="x"></i></button></div>
-            <div class="flex flex-col space-y-4">
-                <a href="index.html" class="text-xl text-gray-300">Home</a>
-                <a href="event.html" class="text-xl text-gray-300">Active Events</a>
-                <a href="past-events.html" class="text-xl text-red-500 font-bold">Past Events</a>
-            </div>
-        </div>
-    </nav>
 
-    <main class="flex-grow container mx-auto px-4 py-32 relative z-10">
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex items-center space-x-8 bg-white/5 backdrop-blur-md px-8 py-3 rounded-full border border-white/10 shadow-lg">
+                <a href="index.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Home</a>
+                <a href="event.html" class="text-white text-[10px] uppercase tracking-[0.2em] font-bold transition-colors">Events</a>
+                <a href="initiatives.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Initiatives</a>
+                <a href="report.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Reports</a>
+                <a href="team.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Ex-Com</a>
+                <a href="contact.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Contact</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="login.html" class="hidden md:flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-white transition-all bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-3 rounded-full">
+                    <i class="fas fa-user-circle"></i> Login
+                </a>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="lg:hidden w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white backdrop-blur-md">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Glass Mobile Menu -->
+    <div id="mobile-menu" class="fixed top-0 right-0 w-full h-screen glass-menu z-[200] overflow-y-auto transform translate-x-full transition-transform duration-500 ease-in-out">
+        <div class="flex justify-between items-center p-8">
+            <span class="text-xl font-display font-bold text-white tracking-widest">MENU</span>
+            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <nav class="flex flex-col space-y-8 px-8 py-12 text-center">
+            <a href="index.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Home</a>
+            <a href="announcement.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Announcement</a>
+            <a href="event.html" class="text-2xl font-display font-bold text-white tracking-[0.2em] uppercase transition-colors">Events</a>
+            <a href="initiatives.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Initiatives</a>
+            <a href="report.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Reports</a>
+            <a href="team.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Ex-Com</a>
+            <a href="contact.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Contact</a>
+            <div class="pt-8 mt-8 border-t border-white/10">
+                <a href="login.html" class="text-sm font-display font-bold text-white tracking-[0.2em] uppercase flex items-center justify-center gap-3 py-4 rounded-xl bg-white/5 border border-white/10">
+                    <i class="fas fa-user-circle"></i> Portal Login
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <main class="flex-grow pt-40 pb-24 relative z-10">
         
+        <!-- List View -->
         <div id="listView">
-            <div class="text-center mb-16">
-                <span class="text-red-500 font-semibold tracking-wider text-sm uppercase mb-2 block">Our Legacy</span>
-                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Past Events & Reports</h1>
-                <p class="text-gray-400 max-w-2xl mx-auto">Explore our history of workshops, hackathons, and seminars. Relive the moments and access detailed reports.</p>
+            <div class="text-center px-4 mb-24">
+                <div class="inline-flex items-center px-5 py-2 rounded-full glass-panel text-[10px] uppercase tracking-[0.2em] font-bold text-white/70 mb-8">
+                    <span class="w-1.5 h-1.5 rounded-full bg-white mr-3"></span> Our Legacy
+                </div>
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-display font-black mb-6 text-white tracking-tighter uppercase drop-shadow-2xl">
+                    Archive
+                </h1>
+                <div class="h-[1px] w-24 bg-white/20 mx-auto mb-8"></div>
+                <p class="text-sm md:text-base text-white/50 max-w-2xl mx-auto font-light leading-relaxed tracking-wide">
+                    Explore our history of workshops, hackathons, and seminars. Relive the moments and access detailed event reports.
+                </p>
+                
+                <!-- Sub-nav for Events -->
+                <div class="flex justify-center mt-12 gap-4">
+                    <a href="event.html" class="px-6 py-3 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 hover:text-white transition-colors border border-transparent hover:border-white/10">Active Events</a>
+                    <a href="past-events.html" class="px-6 py-3 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold text-white bg-white/10 border border-white/20">Past Events</a>
+                </div>
             </div>
 
-            <div id="pastEventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="col-span-full text-center py-20 text-gray-500 animate-pulse">Loading archive...</div>
+            <div id="pastEventsGrid" class="px-4 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="col-span-full text-center py-20 text-white/40 uppercase tracking-widest text-sm animate-pulse">Loading archive...</div>
             </div>
         </div>
 
-        <div id="detailView" class="hidden">
-            <button onclick="closeDetails()" class="mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition group">
+        <!-- Detail View -->
+        <div id="detailView" class="hidden px-4 max-w-5xl mx-auto">
+            <button onclick="closeDetails()" class="mb-10 flex items-center gap-3 text-xs uppercase tracking-widest text-white/50 hover:text-white transition group">
                 <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i> Back to Archive
             </button>
 
-            <div class="max-w-4xl mx-auto">
-                <div class="relative w-full h-64 md:h-96 rounded-3xl overflow-hidden mb-8 shadow-2xl shadow-red-900/20 border border-white/10">
-                    <img id="detailImage" src="" alt="Event Cover" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 p-8">
-                        <span id="detailDate" class="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block">--</span>
-                        <h1 id="detailTitle" class="text-3xl md:text-5xl font-bold text-white leading-tight">--</h1>
+            <div class="glass-panel p-2 md:p-3 mb-10">
+                <div class="relative w-full h-72 md:h-[28rem] rounded-2xl overflow-hidden bg-[#0a0c0f]">
+                    <img id="detailImage" src="" alt="Event Cover" class="w-full h-full object-cover opacity-80 mix-blend-lighten">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0a0c0f] via-transparent to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-8 md:p-12 w-full">
+                        <span id="detailDate" class="bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] uppercase tracking-widest font-bold px-4 py-2 rounded mb-4 inline-block">--</span>
+                        <h1 id="detailTitle" class="text-3xl md:text-5xl lg:text-6xl font-display font-black text-white leading-tight uppercase tracking-tighter">--</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 space-y-8">
+                    <div class="glass-panel p-8 md:p-10">
+                        <h3 class="text-sm font-display font-bold text-white mb-6 uppercase tracking-[0.2em] border-b border-white/10 pb-4">Event Overview</h3>
+                        <p id="detailDescription" class="text-white/50 font-light leading-relaxed tracking-wide whitespace-pre-line text-sm">--</p>
+                    </div>
+
+                    <div class="glass-panel p-8 md:p-10">
+                        <h3 class="text-sm font-display font-bold text-white mb-6 uppercase tracking-[0.2em] border-b border-white/10 pb-4 flex items-center justify-between">
+                            Event Gallery <i data-lucide="image" class="w-4 h-4 text-white/50"></i>
+                        </h3>
+                        <div id="detailGallery" class="grid grid-cols-2 gap-4">
+                            <!-- Images populated dynamically -->
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                    <div class="lg:col-span-2 space-y-8">
-                        <div class="glass-card p-8 rounded-2xl">
-                            <h3 class="text-xl font-bold text-white mb-4">Event Overview</h3>
-                            <p id="detailDescription" class="text-gray-400 leading-relaxed whitespace-pre-line">--</p>
-                        </div>
-
-                        <div>
-                            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                                <i data-lucide="image" class="w-5 h-5 text-red-400"></i> Event Gallery
-                            </h3>
-                            <div id="detailGallery" class="grid grid-cols-2 gap-4">
+                <div class="space-y-6">
+                    <div class="glass-panel p-8 sticky top-32">
+                        <h3 class="text-sm font-display font-bold text-white mb-6 uppercase tracking-[0.2em] border-b border-white/10 pb-4">Resources</h3>
+                        
+                        <a id="reportBtn" href="#" target="_blank" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white p-5 rounded-xl flex items-center justify-between group transition-all mb-8">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded border border-white/10 bg-[#0a0c0f] flex items-center justify-center text-white/70 group-hover:text-white transition-colors">
+                                    <i data-lucide="file-text" class="w-4 h-4"></i>
                                 </div>
-                        </div>
-                    </div>
-
-                    <div class="space-y-6">
-                        <div class="glass-card p-6 rounded-2xl sticky top-24">
-                            <h3 class="font-bold text-white mb-4">Resources</h3>
-                            
-                            <a id="reportBtn" href="#" target="_blank" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white p-4 rounded-xl flex items-center justify-between group transition-all mb-3">
-                                <div class="flex items-center gap-3">
-                                    <div class="bg-red-500/20 p-2 rounded-lg text-red-400"><i data-lucide="file-text" class="w-5 h-5"></i></div>
-                                    <div class="text-left">
-                                        <span class="block text-sm font-bold">Event Report</span>
-                                        <span class="block text-xs text-gray-500">PDF Document</span>
-                                    </div>
+                                <div class="text-left">
+                                    <span class="block text-sm font-bold tracking-wide uppercase">Report</span>
+                                    <span class="block text-[10px] text-white/40 tracking-widest uppercase mt-1">PDF Format</span>
                                 </div>
-                                <i data-lucide="download" class="w-4 h-4 text-gray-400 group-hover:text-white"></i>
-                            </a>
-                            
-                            <div class="border-t border-white/10 my-4"></div>
-
-                            <h4 class="text-xs font-bold text-gray-500 uppercase mb-3">Share</h4>
-                            <div class="flex gap-2">
-                                <button class="flex-1 bg-blue-600/20 hover:bg-blue-600/40 text-blue-400 py-2 rounded-lg transition"><i class="fab fa-linkedin"></i></button>
-                                <button class="flex-1 bg-green-600/20 hover:bg-green-600/40 text-green-400 py-2 rounded-lg transition"><i class="fab fa-whatsapp"></i></button>
-                                <button class="flex-1 bg-white/5 hover:bg-white/10 text-white py-2 rounded-lg transition"><i class="fas fa-link"></i></button>
                             </div>
+                            <i data-lucide="download" class="w-4 h-4 text-white/30 group-hover:text-white transition-colors"></i>
+                        </a>
+
+                        <h4 class="text-[10px] font-bold text-white/50 uppercase tracking-[0.2em] mb-4 text-center">Share Event</h4>
+                        <div class="flex gap-3 justify-center">
+                            <button class="w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-white/70 hover:text-white transition flex items-center justify-center"><i class="fab fa-linkedin-in text-sm"></i></button>
+                            <button class="w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-white/70 hover:text-white transition flex items-center justify-center"><i class="fab fa-whatsapp text-sm"></i></button>
+                            <button class="w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-white/70 hover:text-white transition flex items-center justify-center"><i class="fas fa-link text-sm"></i></button>
                         </div>
                     </div>
                 </div>
@@ -147,15 +229,100 @@
 
     </main>
 
-    <footer class="py-6 text-center text-xs text-gray-600 border-t border-white/5 bg-black/80 backdrop-blur-md mt-20">
-        <p>&copy; 2025 MET'S IEDC. All rights reserved.</p>
+    <!-- Cinematic Glass Footer -->
+    <footer class="glass-panel rounded-none border-x-0 border-b-0 pt-20 pb-10 relative z-10 mt-10">
+        <div class="max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+                <div class="md:col-span-5">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="text-3xl font-display font-bold text-white tracking-tight uppercase">MET'S IEDC.</span>
+                    </div>
+                    <p class="text-white/50 text-sm leading-relaxed max-w-md font-light tracking-wide">
+                        Fostering a culture of innovation and entrepreneurship among students at MET'S School of Engineering. Supported by Kerala Startup Mission.
+                    </p>
+                </div>
+                
+                <div class="md:col-span-3">
+                    <h3 class="text-[10px] font-bold text-white mb-6 uppercase tracking-[0.2em]">Navigation</h3>
+                    <ul class="space-y-4 text-sm font-light text-white/50 tracking-wide">
+                        <li><a href="about.html" class="hover:text-white transition-colors">About Story</a></li>
+                        <li><a href="event.html" class="hover:text-white transition-colors">Latest Events</a></li>
+                        <li><a href="initiatives.html" class="hover:text-white transition-colors">Our Initiatives</a></li>
+                        <li><a href="https://startupmission.kerala.gov.in/" target="_blank" class="hover:text-white transition-colors">Kerala Startup Mission</a></li>
+                    </ul>
+                </div>
+                
+                <div class="md:col-span-4">
+                    <h3 class="text-[10px] font-bold text-white mb-6 uppercase tracking-[0.2em]">Connect</h3>
+                    <div class="space-y-4 text-sm font-light text-white/50 tracking-wide mb-8">
+                        <p>MET'S School of Engineering,<br>Mala, Thrissur, Kerala</p>
+                        <p class="hover:text-white transition-colors cursor-pointer">+91 7306226875</p>
+                        <p class="hover:text-white transition-colors cursor-pointer">metsenggiedc@gmail.com</p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/MetsIedc" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-light text-white/40 tracking-widest uppercase">
+                <p>© <span id="year">2026</span> MET'S IEDC. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms</a>
+                </div>
+            </div>
+        </div>
     </footer>
 
-  <script type="module">
+    <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
+
+        // Mobile Menu Logic
+        const btn = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+        const closeBtn = document.getElementById('close-mobile-menu');
+
+        function toggleMobileMenu() {
+            if(menu.classList.contains('translate-x-full')) {
+                menu.classList.remove('translate-x-full');
+                menu.classList.add('translate-x-0');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.add('translate-x-full');
+                menu.classList.remove('translate-x-0');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        if(btn) btn.addEventListener('click', toggleMobileMenu);
+        if(closeBtn) closeBtn.addEventListener('click', toggleMobileMenu);
+
+        const menuLinks = menu.querySelectorAll('#mobile-menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (!menu.classList.contains('translate-x-full')) {
+                    toggleMobileMenu();
+                }
+            });
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) { 
+                nav.classList.add('scrolled-nav');
+                nav.classList.remove('py-4');
+            } else { 
+                nav.classList.remove('scrolled-nav');
+                nav.classList.add('py-4');
+            }
+        });
 
         const firebaseConfig = {
           apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
@@ -173,21 +340,18 @@
 
         // --- THE MAGIC FIXER FUNCTION ---
         function getDirectDriveLink(url) {
-            if (!url) return 'https://images.unsplash.com/photo-1614726365723-49fb6d0d9326?q=80&w=2000'; // Default Fallback
+            if (!url) return 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2000'; // Default Fallback
             
             let fileId = null;
 
-            // Pattern 1: https://drive.google.com/file/d/FILE_ID/view
             if (url.includes('/file/d/')) {
                 fileId = url.split('/file/d/')[1].split('/')[0];
             } 
-            // Pattern 2: https://drive.google.com/uc?id=FILE_ID
             else if (url.includes('id=')) {
                 fileId = url.split('id=')[1].split('&')[0];
             }
 
             if (fileId) {
-                // Returns the High-Performance Google Image Link (Bypasses Preview Page)
                 return `https://lh3.googleusercontent.com/d/${fileId}`;
             }
             
@@ -197,7 +361,7 @@
         // --- FETCH AND RENDER ---
         async function loadPastEvents() {
             const grid = document.getElementById('pastEventsGrid');
-            grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-500 animate-pulse">Loading archive...</div>';
+            grid.innerHTML = '<div class="col-span-full text-center py-20 text-white/40 uppercase tracking-widest text-sm animate-pulse">Loading archive...</div>';
 
             try {
                 const q = query(collection(db, "past_events"), orderBy("date", "desc"));
@@ -205,9 +369,9 @@
 
                 if (snap.empty) {
                     grid.innerHTML = `
-                        <div class="col-span-full text-center py-10">
-                            <div class="inline-flex bg-white/5 p-4 rounded-full mb-4"><i data-lucide="archive" class="w-6 h-6 text-gray-400"></i></div>
-                            <p class="text-gray-500">No past events found in the archive.</p>
+                        <div class="col-span-full text-center py-20">
+                            <div class="inline-flex glass-panel p-6 rounded-full mb-6"><i data-lucide="archive" class="w-8 h-8 text-white/30"></i></div>
+                            <p class="text-white/50 text-sm tracking-widest uppercase font-bold">No past events found in the archive.</p>
                         </div>`;
                     lucide.createIcons();
                     return;
@@ -216,32 +380,30 @@
                 grid.innerHTML = '';
                 snap.forEach(doc => {
                     const data = doc.data();
-                    
-                    // 1. Fix the Cover Image Link
                     const fixedImage = getDirectDriveLink(data.coverImage);
 
                     const card = document.createElement('div');
-                    card.className = "glass-card rounded-2xl overflow-hidden group cursor-pointer h-full flex flex-col bg-[#0a0a0a]";
+                    card.className = "glass-panel overflow-hidden group cursor-pointer h-full flex flex-col glass-hover p-0";
                     card.onclick = () => showEventDetails(data);
 
                     card.innerHTML = `
-                        <div class="relative h-48 overflow-hidden bg-gray-900">
+                        <div class="relative h-56 overflow-hidden border-b border-white/5">
                             <img src="${fixedImage}" 
                                  alt="${data.title}" 
-                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-500" 
+                                 class="w-full h-full object-cover group-hover:scale-105 opacity-80 mix-blend-lighten transition duration-700" 
                                  loading="lazy"
                                  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1517245386807-bb43f82c33c4';">
                             
-                            <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition"></div>
-                            <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold text-white border border-white/10">
+                            <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition duration-700"></div>
+                            <div class="absolute top-4 left-4 bg-[#0a0c0f]/80 backdrop-blur-md px-3 py-1.5 rounded text-[10px] uppercase tracking-widest font-bold text-white border border-white/10 shadow-lg">
                                 ${new Date(data.date).toLocaleDateString()}
                             </div>
                         </div>
-                        <div class="p-6 flex-grow flex flex-col">
-                            <h3 class="text-xl font-bold text-white mb-2 line-clamp-1">${data.title}</h3>
-                            <p class="text-gray-400 text-sm mb-4 line-clamp-3 flex-grow">${data.description}</p>
-                            <div class="flex items-center text-red-400 text-sm font-bold mt-auto group-hover:translate-x-1 transition-transform">
-                                View Details <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        <div class="p-8 flex-grow flex flex-col">
+                            <h3 class="text-xl md:text-2xl font-display font-bold text-white mb-3 uppercase tracking-tight line-clamp-2">${data.title}</h3>
+                            <p class="text-white/50 text-sm mb-6 line-clamp-3 flex-grow font-light leading-relaxed tracking-wide">${data.description}</p>
+                            <div class="flex items-center text-white/70 text-[10px] tracking-[0.2em] uppercase font-bold mt-auto group-hover:text-white transition-colors">
+                                View Details <i data-lucide="arrow-right" class="w-4 h-4 ml-3 group-hover:translate-x-2 transition-transform duration-300"></i>
                             </div>
                         </div>
                     `;
@@ -257,11 +419,9 @@
 
         // --- DETAIL VIEW LOGIC ---
         window.showEventDetails = (data) => {
-            // Fix Cover Image for Detail View
             const fixedDetailImage = getDirectDriveLink(data.coverImage);
             document.getElementById('detailImage').src = fixedDetailImage;
             
-            // Basic Info
             document.getElementById('detailTitle').textContent = data.title;
             document.getElementById('detailDate').textContent = new Date(data.date).toDateString();
             document.getElementById('detailDescription').textContent = data.description;
@@ -271,11 +431,11 @@
             if (data.reportUrl && data.reportUrl.trim() !== "") {
                 reportBtn.href = data.reportUrl;
                 reportBtn.classList.remove('opacity-50', 'pointer-events-none');
-                reportBtn.querySelector('span.text-xs').textContent = "Click to Download";
+                reportBtn.querySelector('span.text-\\[10px\\]').textContent = "Click to Download";
             } else {
                 reportBtn.href = "#";
                 reportBtn.classList.add('opacity-50', 'pointer-events-none');
-                reportBtn.querySelector('span.text-xs').textContent = "Not Available";
+                reportBtn.querySelector('span.text-\\[10px\\]').textContent = "Not Available";
             }
 
             // Handle Gallery Images
@@ -284,21 +444,22 @@
             
             if (data.gallery && data.gallery.length > 0) {
                 data.gallery.forEach(imgUrl => {
-                    // Fix Gallery Image Links
                     const fixedGalleryUrl = getDirectDriveLink(imgUrl);
+                    
+                    const imgContainer = document.createElement('div');
+                    imgContainer.className = "overflow-hidden rounded-xl border border-white/10 bg-[#0a0c0f] aspect-[4/3]";
                     
                     const img = document.createElement('img');
                     img.src = fixedGalleryUrl;
-                    img.className = "w-full h-32 object-cover rounded-xl border border-white/10 hover:opacity-80 transition cursor-pointer bg-gray-900";
+                    img.className = "w-full h-full object-cover opacity-80 hover:opacity-100 hover:scale-110 transition duration-500 cursor-pointer mix-blend-lighten";
                     img.onclick = () => window.open(fixedGalleryUrl, '_blank');
+                    img.onerror = function() { imgContainer.style.display = 'none'; }; 
                     
-                    // Fallback if gallery image fails
-                    img.onerror = function() { this.style.display = 'none'; }; 
-                    
-                    galleryGrid.appendChild(img);
+                    imgContainer.appendChild(img);
+                    galleryGrid.appendChild(imgContainer);
                 });
             } else {
-                galleryGrid.innerHTML = '<p class="text-gray-500 text-sm col-span-2 italic">No additional photos.</p>';
+                galleryGrid.innerHTML = '<p class="text-white/30 text-xs tracking-widest uppercase col-span-2 italic pt-2">No additional photos.</p>';
             }
 
             // Switch View
@@ -310,10 +471,11 @@
         window.closeDetails = () => {
             document.getElementById('detailView').classList.add('hidden');
             document.getElementById('listView').classList.remove('hidden');
+            window.scrollTo(0, 0);
         };
 
         // Load on start
         loadPastEvents();
     </script>
 </body>
-                  </html>
+</html>
