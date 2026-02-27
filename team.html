@@ -6,406 +6,411 @@
     <title>Our Team | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Immersive Theme Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
+                    fontFamily: { 
                         sans: ['Inter', 'sans-serif'],
-                    },
+                        display: ['Montserrat', 'sans-serif']
+                    }
                 }
             }
         }
     </script>
 
     <style>
-        body {
-            background-color: #050505;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
-
-        /* Glassmorphism Classes */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+        body { 
+            background-color: #0f1115; /* Deep cinematic dark */
+            color: #ffffff; 
+            overflow-x: hidden; 
         }
 
         .glass-nav {
-            background: rgba(5, 5, 5, 0.7);
+            background: rgba(15, 17, 21, 0.6);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .glass-hover:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(79, 70, 229, 0.2); /* Indigo glow */
-            transform: translateY(-8px);
+        .glass-menu {
+            background: rgba(10, 12, 15, 0.85);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
         }
 
-        .gradient-accent {
-            background: linear-gradient(90deg, #4f46e5 0%, #9333ea 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
+        /* Outline Text (Exact match to reference image) */
+        .text-outline {
             color: transparent;
+            -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.8);
+        }
+        @media (min-width: 768px) {
+            .text-outline {
+                -webkit-text-stroke: 3px rgba(255, 255, 255, 0.8);
+            }
         }
 
-        /* Background Blobs */
-        .blob {
-            position: absolute;
+        /* Cutout Image Masking (Fades the bottom slightly so it blends into the footer) */
+        .cutout-image {
+            mask-image: linear-gradient(to top, transparent 0%, black 15%);
+            -webkit-mask-image: linear-gradient(to top, transparent 0%, black 15%);
+        }
+
+        /* Swiper Custom Navigation */
+        .swiper-button-next, .swiper-button-prev {
+            color: white !important;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            width: 50px !important;
+            height: 50px !important;
             border-radius: 50%;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.4;
-            animation: blob-bounce 10s infinite ease;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
         }
-        .blob-1 { top: 0%; left: -10%; width: 500px; height: 500px; background: #4f46e5; }
-        .blob-2 { top: 30%; right: -10%; width: 400px; height: 400px; background: #9333ea; }
-        .blob-3 { bottom: 0%; left: 20%; width: 600px; height: 600px; background: #2563eb; }
-
-        @keyframes blob-bounce {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(20px, -20px) scale(1.1); }
+        .swiper-button-next:hover, .swiper-button-prev:hover {
+            background: rgba(255,255,255,0.15);
+            transform: scale(1.1);
+        }
+        .swiper-button-next::after, .swiper-button-prev::after {
+            font-size: 1rem !important;
+            font-weight: bold;
         }
 
-        /* Mobile Menu */
-        .mobile-menu {
-            transform: translateX(100%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .mobile-menu.open {
-            transform: translateX(0);
-        }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f1115; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
     </style>
 </head>
-<body class="font-sans antialiased relative selection:bg-indigo-500 selection:text-white">
+<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-white selection:text-black">
 
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
+    <!-- Subtle Atmospheric Lighting -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
     </div>
 
-    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center">
-                    <a href="index.html" class="flex items-center space-x-3 group">
-                        <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
-                        <span class="text-2xl font-bold tracking-tight text-white">MET'S <span class="text-indigo-400">IEDC</span></span>
-                    </a>
-                    <div class="hidden md:ml-12 md:flex md:space-x-8">
-                        <a href="about.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">About</a>
-                        <a href="team.html" class="text-white px-3 py-2 text-sm font-medium border-b-2 border-indigo-500">Ex-Com</a>
-                        <a href="initiatives.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Initiatives</a>
-                        <a href="news.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">News</a>
-                        <a href="contact.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Contact</a>
-                    </div>
-                </div>
-                <div class="hidden md:flex items-center">
-                    <a href="login.html" class="glass-card glass-hover text-white px-6 py-2.5 rounded-full text-sm font-medium border border-white/10">
-                        Log in
-                    </a>
-                </div>
-                <button id="mobile-menu-button" class="md:hidden text-white p-2">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+    <!-- Frosted Glass Navbar -->
+    <header id="navbar" class="h-20 px-6 md:px-10 fixed top-0 w-full z-50 transition-all duration-300 py-4 glass-nav">
+        <div class="max-w-[95%] mx-auto h-full flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="flex items-center group">
+                    <span class="text-xl font-display font-bold tracking-tight text-white group-hover:opacity-80 transition-opacity uppercase">
+                        MET'S IEDC
+                    </span>
+                </a>
+            </div>
+
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex items-center space-x-8 bg-white/5 backdrop-blur-md px-8 py-3 rounded-full border border-white/10 shadow-lg">
+                <a href="index.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Home</a>
+                <a href="event.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Events</a>
+                <a href="initiatives.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Initiatives</a>
+                <a href="report.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Reports</a>
+                <a href="team.html" class="text-white text-[10px] uppercase tracking-[0.2em] font-bold transition-colors">Ex-Com</a>
+                <a href="contact.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Contact</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="login.html" class="hidden md:flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-white transition-all bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-3 rounded-full">
+                    <i class="fas fa-user-circle"></i> Login
+                </a>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="lg:hidden w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white backdrop-blur-md">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
         </div>
-        
-        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-xl z-50">
-            <div class="flex justify-end p-6">
-                <button id="close-mobile-menu" class="text-white p-2">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <nav class="flex flex-col space-y-6 px-8 mt-10 text-center">
-                <a href="about.html" class="text-2xl font-light text-white hover:text-indigo-400">About Us</a>
-                <a href="team.html" class="text-2xl font-light text-white hover:text-indigo-400">Our Team</a>
-                <a href="initiatives.html" class="text-2xl font-light text-white hover:text-indigo-400">Initiatives</a>
-                <a href="events.html" class="text-2xl font-light text-white hover:text-indigo-400">Gallery</a>
-                <a href="login.html" class="mt-8 py-4 bg-indigo-600 rounded-full text-white font-medium">Student Login</a>
-            </nav>
-        </div>
-    </nav>
+    </header>
 
-    <div class="pt-32 pb-16 lg:pt-48 lg:pb-24 text-center px-4 relative z-10">
-        <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-            Executive <span class="gradient-accent">Committee</span>
-        </h1>
-        <p class="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            The diverse group of passionate professionals driving innovation and entrepreneurship at MET'S IEDC.
-        </p>
+    <!-- Glass Mobile Menu -->
+    <div id="mobile-menu" class="fixed top-0 right-0 w-full h-screen glass-menu z-[200] overflow-y-auto transform translate-x-full transition-transform duration-500 ease-in-out">
+        <div class="flex justify-between items-center p-8">
+            <span class="text-xl font-display font-bold text-white tracking-widest">MENU</span>
+            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <nav class="flex flex-col space-y-8 px-8 py-12 text-center">
+            <a href="index.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Home</a>
+            <a href="announcement.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Announcement</a>
+            <a href="event.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Events</a>
+            <a href="initiatives.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Initiatives</a>
+            <a href="report.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Reports</a>
+            <a href="team.html" class="text-2xl font-display font-bold text-white tracking-[0.2em] uppercase transition-colors">Ex-Com</a>
+            <a href="contact.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Contact</a>
+            <div class="pt-8 mt-8 border-t border-white/10">
+                <a href="login.html" class="text-sm font-display font-bold text-white tracking-[0.2em] uppercase flex items-center justify-center gap-3 py-4 rounded-xl bg-white/5 border border-white/10">
+                    <i class="fas fa-user-circle"></i> Portal Login
+                </a>
+            </div>
+        </nav>
     </div>
 
-    <section class="pb-32 px-4 relative z-10">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- Main Fullscreen Team Slider -->
+    <main class="flex-grow relative z-10 w-full">
+        <div class="swiper mySwiper w-full h-screen">
+            <div class="swiper-wrapper">
 
-                <div class="glass-card rounded-3xl p-6 glass-hover group flex flex-col h-full">
-                    <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-6 border border-white/10 group-hover:border-white/30 transition-colors">
-                        <img src="assets/images/team/CHRISS.jpg" alt="Chris Babu" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <!-- Member 1: Chris -->
+                <div class="swiper-slide relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
+                    
+                    <!-- Background Typography Layer -->
+                    <div class="absolute inset-0 flex flex-col items-center justify-center z-0 w-full pointer-events-none pb-20 md:pb-32" data-swiper-parallax="-300">
+                        <p class="text-white/60 text-xs md:text-sm font-medium mb-2 tracking-widest uppercase">👋, meet Chris and he is our dedicated</p>
+                        <!-- Solid Text -->
+                        <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-white tracking-tighter uppercase">CHIEF</h1>
+                        <!-- Outlined Text -->
+                        <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-outline tracking-tighter uppercase">& EXECUTIVE</h1>
                     </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl font-bold text-white group-hover:text-indigo-300 transition-colors">Chris Babu</h3>
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">CEO</span>
+                    
+                    <!-- Cutout Image Layer (Overlapping the text) -->
+                    <!-- Note: For best results, use a transparent PNG image for the team members -->
+                    <div class="absolute bottom-0 w-full flex justify-center z-10 pointer-events-none" data-swiper-parallax="-100">
+                        <img src="assets/images/team/CHRISS.jpg" alt="Chris Babu" class="cutout-image h-[50vh] md:h-[75vh] object-contain object-bottom pointer-events-auto grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop&bg=transparent'">
+                    </div>
+
+                    <!-- Bottom Gradient to ensure text readability -->
+                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#0f1115] via-[#0f1115]/80 to-transparent z-10"></div>
+
+                    <!-- Foreground Details / Buttons -->
+                    <div class="absolute bottom-10 w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
+                        <div class="hidden md:block text-left">
+                            <p class="text-white/70 text-sm font-medium tracking-wider">based in Kerala, India.</p>
+                            <p class="text-white/40 text-xs mt-1">Driving business infrastructure.</p>
                         </div>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                            Dedicated to growing business infrastructure and its success, with a strong emphasis on smart solutions.
-                        </p>
-                    </div>
-                    <div class="flex gap-4 pt-4 border-t border-white/5">
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
-                        <a href="https://www.instagram.com/chris_babu_" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-instagram text-xl"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-twitter text-xl"></i></a>
+                        <div class="flex gap-4 mt-6 md:mt-0">
+                            <a href="#" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
+                            <a href="https://www.instagram.com/chris_babu_" target="_blank" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="glass-card rounded-3xl p-6 glass-hover group flex flex-col h-full">
-                    <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-6 border border-white/10 group-hover:border-white/30 transition-colors">
-                        <img src="assets/images/team/DEENA.jpg" alt="Deena Abbas Kalathil" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <!-- Member 2: Deena -->
+                <div class="swiper-slide relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center z-0 w-full pointer-events-none pb-20 md:pb-32" data-swiper-parallax="-300">
+                        <p class="text-white/60 text-xs md:text-sm font-medium mb-2 tracking-widest uppercase">✨, meet Deena and she is our dedicated</p>
+                        <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-white tracking-tighter uppercase">WOMEN'S</h1>
+                        <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-outline tracking-tighter uppercase">& EXECUTIVE</h1>
                     </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl font-bold text-white group-hover:text-purple-300 transition-colors">Deena Abbas</h3>
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30">CEO (Women)</span>
+                    
+                    <div class="absolute bottom-0 w-full flex justify-center z-10 pointer-events-none" data-swiper-parallax="-100">
+                        <img src="assets/images/team/DEENA.jpg" alt="Deena Abbas" class="cutout-image h-[50vh] md:h-[75vh] object-contain object-bottom pointer-events-auto grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800'">
+                    </div>
+
+                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#0f1115] via-[#0f1115]/80 to-transparent z-10"></div>
+
+                    <div class="absolute bottom-10 w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
+                        <div class="hidden md:block text-left">
+                            <p class="text-white/70 text-sm font-medium tracking-wider">based in Kerala, India.</p>
+                            <p class="text-white/40 text-xs mt-1">Marketing expert & brand guide.</p>
                         </div>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                            Marketing expert specializing in digital campaigns and brand guilds for top product lines.
-                        </p>
-                    </div>
-                    <div class="flex gap-4 pt-4 border-t border-white/5">
-                        <a href="https://www.linkedin.com/in/deena-abbas-kalathil-2a09bb314" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
-                        <a href="https://www.instagram.com/deena_abbas_" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+                        <div class="flex gap-4 mt-6 md:mt-0">
+                            <a href="https://www.linkedin.com/in/deena-abbas-kalathil-2a09bb314" target="_blank" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
+                            <a href="https://www.instagram.com/deena_abbas_" target="_blank" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="glass-card rounded-3xl p-6 glass-hover group flex flex-col h-full">
-                    <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-6 border border-white/10 group-hover:border-white/30 transition-colors">
-                        <img src="assets/images/team/HABEEB.jpg" alt="Habeeb Rahman" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <!-- Member 3: Habeeb -->
+                <div class="swiper-slide relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center z-0 w-full pointer-events-none pb-20 md:pb-32" data-swiper-parallax="-300">
+                        <p class="text-white/60 text-xs md:text-sm font-medium mb-2 tracking-widest uppercase">🚀, meet Habeeb and he is our dedicated</p>
+                        <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-white tracking-tighter uppercase">CHIEF</h1>
+                        <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-outline tracking-tighter uppercase">& REVENUE</h1>
                     </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl font-bold text-white group-hover:text-blue-300 transition-colors">Habeeb Rahman</h3>
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">CRO</span>
+                    
+                    <div class="absolute bottom-0 w-full flex justify-center z-10 pointer-events-none" data-swiper-parallax="-100">
+                        <img src="assets/images/team/HABEEB.jpg" alt="Habeeb Rahman" class="cutout-image h-[50vh] md:h-[75vh] object-contain object-bottom pointer-events-auto grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=800'">
+                    </div>
+
+                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#0f1115] via-[#0f1115]/80 to-transparent z-10"></div>
+
+                    <div class="absolute bottom-10 w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
+                        <div class="hidden md:block text-left">
+                            <p class="text-white/70 text-sm font-medium tracking-wider">based in Kerala, India.</p>
+                            <p class="text-white/40 text-xs mt-1">Focused on user-centric solutions.</p>
                         </div>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                            Passionate problem-manager focused on delivering user-centric solutions that exceed expectations.
-                        </p>
-                    </div>
-                    <div class="flex gap-4 pt-4 border-t border-white/5">
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+                        <div class="flex gap-4 mt-6 md:mt-0">
+                            <a href="#" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
+                            <a href="#" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="glass-card rounded-3xl p-6 glass-hover group flex flex-col h-full">
-                    <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-6 border border-white/10 group-hover:border-white/30 transition-colors">
-                        <img src="assets/images/team/Abhijith S.jpg" alt="Abhijith S Menon" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <!-- Member 4: Abhijith -->
+                <div class="swiper-slide relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center z-0 w-full pointer-events-none pb-20 md:pb-32" data-swiper-parallax="-300">
+                        <p class="text-white/60 text-xs md:text-sm font-medium mb-2 tracking-widest uppercase">💡, meet Abhijith and he is our dedicated</p>
+                        <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-white tracking-tighter uppercase">CHIEF</h1>
+                        <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-outline tracking-tighter uppercase">& FINANCIAL</h1>
                     </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl font-bold text-white group-hover:text-indigo-300 transition-colors">Abhijith S Menon</h3>
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-500/20 text-gray-300 border border-gray-500/30">CFO</span>
+                    
+                    <div class="absolute bottom-0 w-full flex justify-center z-10 pointer-events-none" data-swiper-parallax="-100">
+                        <img src="assets/images/team/Abhijith S.jpg" alt="Abhijith S Menon" class="cutout-image h-[50vh] md:h-[75vh] object-contain object-bottom pointer-events-auto grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=800'">
+                    </div>
+
+                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#0f1115] via-[#0f1115]/80 to-transparent z-10"></div>
+
+                    <div class="absolute bottom-10 w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
+                        <div class="hidden md:block text-left">
+                            <p class="text-white/70 text-sm font-medium tracking-wider">based in Kerala, India.</p>
+                            <p class="text-white/40 text-xs mt-1">Technical guru & infrastructure lead.</p>
                         </div>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                            Technical guru with a passion for developing scalable and secure cloud-based applications.
-                        </p>
-                    </div>
-                    <div class="flex gap-4 pt-4 border-t border-white/5">
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+                        <div class="flex gap-4 mt-6 md:mt-0">
+                            <a href="#" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
+                            <a href="#" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="glass-card rounded-3xl p-6 glass-hover group flex flex-col h-full">
-                    <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-6 border border-white/10 group-hover:border-white/30 transition-colors">
-                        <img src="assets/images/team/ARSHINA.jpg" alt="Arshina Arsal" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                 <!-- Member 5: Arshina -->
+                 <div class="swiper-slide relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center z-0 w-full pointer-events-none pb-20 md:pb-32" data-swiper-parallax="-300">
+                        <p class="text-white/60 text-xs md:text-sm font-medium mb-2 tracking-widest uppercase">📈, meet Arshina and she is our dedicated</p>
+                        <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-white tracking-tighter uppercase">CHIEF</h1>
+                        <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-outline tracking-tighter uppercase">& OPERATING</h1>
                     </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl font-bold text-white group-hover:text-indigo-300 transition-colors">Arshina Arsal</h3>
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-pink-500/20 text-pink-300 border border-pink-500/30">COO</span>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                            Data strategist with a proven track record of finding what our users need and driving revenue growth.
-                        </p>
+                    
+                    <div class="absolute bottom-0 w-full flex justify-center z-10 pointer-events-none" data-swiper-parallax="-100">
+                        <img src="assets/images/team/ARSHINA.jpg" alt="Arshina Arsal" class="cutout-image h-[50vh] md:h-[75vh] object-contain object-bottom pointer-events-auto grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=800'">
                     </div>
-                    <div class="flex gap-4 pt-4 border-t border-white/5">
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-instagram text-xl"></i></a>
-                    </div>
-                </div>
 
-                <div class="glass-card rounded-3xl p-6 glass-hover group flex flex-col h-full">
-                    <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-6 border border-white/10 group-hover:border-white/30 transition-colors">
-                        <img src="assets/images/team/ABHINAV.jpg" alt="Abhinav V S" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl font-bold text-white group-hover:text-indigo-300 transition-colors">Abhinav V S</h3>
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-orange-500/20 text-orange-300 border border-orange-500/30">CMO</span>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                            Senior developer with a heart for innovative technology, clean code, and streamlined engineering systems.
-                        </p>
-                    </div>
-                    <div class="flex gap-4 pt-4 border-t border-white/5">
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-instagram text-xl"></i></a>
-                    </div>
-                </div>
+                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#0f1115] via-[#0f1115]/80 to-transparent z-10"></div>
 
-                <div class="glass-card rounded-3xl p-6 glass-hover group flex flex-col h-full">
-                    <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-6 border border-white/10 group-hover:border-white/30 transition-colors">
-                        <img src="assets/images/team/CHRISTY.jpg" alt="Christy Antony" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl font-bold text-white group-hover:text-indigo-300 transition-colors">Christy Antony</h3>
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">CTO</span>
+                    <div class="absolute bottom-10 w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
+                        <div class="hidden md:block text-left">
+                            <p class="text-white/70 text-sm font-medium tracking-wider">based in Kerala, India.</p>
+                            <p class="text-white/40 text-xs mt-1">Driving operational excellence.</p>
                         </div>
-                    </div>
-                    <div class="flex gap-4 pt-4 border-t border-white/5">
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-instagram text-xl"></i></a>
-                    </div>
-                </div>
-
-                <div class="glass-card rounded-3xl p-6 glass-hover group flex flex-col h-full">
-                    <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-6 border border-white/10 group-hover:border-white/30 transition-colors">
-                        <img src="assets/images/team/shahil.jpg" alt="Muhammed Shahil" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl font-bold text-white group-hover:text-indigo-300 transition-colors">Muhammed Shahil</h3>
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-500/20 text-green-300 border border-green-500/30">CCO</span>
+                        <div class="flex gap-4 mt-6 md:mt-0">
+                            <a href="#" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
+                            <a href="#" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
                         </div>
-                    </div>
-                    <div class="flex gap-4 pt-4 border-t border-white/5">
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-twitter text-xl"></i></a>
-                    </div>
-                </div>
-
-                <div class="glass-card rounded-3xl p-6 glass-hover group flex flex-col h-full">
-                    <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-6 border border-white/10 group-hover:border-white/30 transition-colors">
-                        <img src="assets/images/team/Ajina.jpg" alt="Ajina Mathew" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl font-bold text-white group-hover:text-indigo-300 transition-colors">Ajina Mathew</h3>
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-teal-500/20 text-teal-300 border border-teal-500/30">CIO</span>
-                        </div>
-                    </div>
-                    <div class="flex gap-4 pt-4 border-t border-white/5">
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-twitter text-xl"></i></a>
-                    </div>
-                </div>
-
-                <div class="glass-card rounded-3xl p-6 glass-hover group flex flex-col h-full">
-                    <div class="relative w-full aspect-square rounded-2xl overflow-hidden mb-6 border border-white/10 group-hover:border-white/30 transition-colors">
-                        <img src="assets/images/team/ANN.jpg" alt="Ann Treesa Saji" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    </div>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl font-bold text-white group-hover:text-indigo-300 transition-colors">Ann Treesa Saji</h3>
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30">CWO</span>
-                        </div>
-                    </div>
-                    <div class="flex gap-4 pt-4 border-t border-white/5">
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-twitter text-xl"></i></a>
                     </div>
                 </div>
 
             </div>
-        </div>
-    </section>
 
-    <footer class="border-t border-white/5 bg-[#020202] pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                <div class="lg:col-span-2">
-                    <span class="text-2xl font-bold text-white">MET'S IEDC</span>
-                    <p class="text-gray-500 mt-4 text-sm leading-relaxed max-w-md">
-                        Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.
+            <!-- Custom Navigation Arrows -->
+            <div class="swiper-button-next hidden md:flex"></div>
+            <div class="swiper-button-prev hidden md:flex"></div>
+            
+            <!-- Custom Pagination -->
+            <div class="swiper-pagination !bottom-24 md:!bottom-12"></div>
+        </div>
+    </main>
+
+    <!-- Cinematic Glass Footer (Pushed below the fold) -->
+    <footer class="bg-[#0a0c0f] border-t border-white/5 pt-16 pb-10 relative z-10">
+        <div class="max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
+                <div class="md:col-span-5">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="text-3xl font-display font-bold text-white tracking-tight uppercase">MET'S IEDC.</span>
+                    </div>
+                    <p class="text-white/50 text-sm leading-relaxed max-w-md font-light tracking-wide">
+                        Fostering a culture of innovation and entrepreneurship among students at MET'S School of Engineering.
                     </p>
                 </div>
-
-                <div>
-                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h3>
-                    <ul class="space-y-3 text-sm text-gray-500">
-                        <li><a href="index.html" class="hover:text-indigo-400 transition-colors">Home</a></li>
-                        <li><a href="about.html" class="hover:text-indigo-400 transition-colors">About Us</a></li>
-                        <li><a href="events.html" class="hover:text-indigo-400 transition-colors">Events</a></li>
-                        <li><a href="news.html" class="hover:text-indigo-400 transition-colors">News</a></li>
+                
+                <div class="md:col-span-3">
+                    <h3 class="text-[10px] font-bold text-white mb-6 uppercase tracking-[0.2em]">Navigation</h3>
+                    <ul class="space-y-4 text-sm font-light text-white/50 tracking-wide">
+                        <li><a href="about.html" class="hover:text-white transition-colors">About Story</a></li>
+                        <li><a href="event.html" class="hover:text-white transition-colors">Latest Events</a></li>
+                        <li><a href="initiatives.html" class="hover:text-white transition-colors">Our Initiatives</a></li>
+                        <li><a href="https://startupmission.kerala.gov.in/" target="_blank" class="hover:text-white transition-colors">Kerala Startup Mission</a></li>
                     </ul>
                 </div>
-
-                <div>
-                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contact</h3>
-                    <div class="space-y-3 text-sm text-gray-500">
-                        <p class="flex items-center"><i class="fas fa-envelope mr-3 text-indigo-500"></i>metsenggiedc@gmail.com</p>
-                        <p class="flex items-center"><i class="fas fa-phone mr-3 text-indigo-500"></i>+91 7306226875</p>
-                        <p class="flex items-center"><i class="fas fa-map-marker-alt mr-3 text-indigo-500"></i>Mala, Thrissur, Kerala</p>
+                
+                <div class="md:col-span-4">
+                    <h3 class="text-[10px] font-bold text-white mb-6 uppercase tracking-[0.2em]">Connect</h3>
+                    <div class="space-y-4 text-sm font-light text-white/50 tracking-wide mb-8">
+                        <p>MET'S School of Engineering,<br>Mala, Thrissur</p>
+                        <p class="hover:text-white transition-colors cursor-pointer">+91 7306226875</p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/MetsIedc" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
             </div>
             
-            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
-                <p>© 2025 IEDC MET'S SCHOOL OF ENGINEERING.</p>
-                <div class="flex space-x-6">
-                    <a href="#" class="hover:text-white transition-colors"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://x.com/MetsIedc" class="hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
-                    <a href="https://www.instagram.com/metsiedc/" class="hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="hover:text-white transition-colors"><i class="fab fa-linkedin-in"></i></a>
-                </div>
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-light text-white/40 tracking-widest uppercase">
+                <p>© <span id="year">2026</span> MET'S IEDC.</p>
             </div>
         </div>
     </footer>
 
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Update Copyright Year
+            document.getElementById('year').textContent = new Date().getFullYear();
+
             // Mobile Menu Logic
             const btn = document.getElementById('mobile-menu-button');
             const menu = document.getElementById('mobile-menu');
             const closeBtn = document.getElementById('close-mobile-menu');
 
-            function toggleMenu() {
-                menu.classList.toggle('open');
-                document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
-            }
-
-            btn.addEventListener('click', toggleMenu);
-            closeBtn.addEventListener('click', toggleMenu);
-            
-            // Navbar Scroll Effect
-            window.addEventListener('scroll', () => {
-                const nav = document.querySelector('nav');
-                if (window.scrollY > 20) {
-                    nav.classList.add('shadow-lg');
-                    nav.style.background = 'rgba(5, 5, 5, 0.9)';
+            function toggleMobileMenu() {
+                if(menu.classList.contains('translate-x-full')) {
+                    menu.classList.remove('translate-x-full');
+                    menu.classList.add('translate-x-0');
+                    document.body.style.overflow = 'hidden';
                 } else {
-                    nav.classList.remove('shadow-lg');
-                    nav.style.background = 'rgba(5, 5, 5, 0.7)';
+                    menu.classList.add('translate-x-full');
+                    menu.classList.remove('translate-x-0');
+                    document.body.style.overflow = '';
+                }
+            }
+            
+            if(btn) btn.addEventListener('click', toggleMobileMenu);
+            if(closeBtn) closeBtn.addEventListener('click', toggleMobileMenu);
+
+            const menuLinks = menu.querySelectorAll('#mobile-menu a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!menu.classList.contains('translate-x-full')) {
+                        toggleMobileMenu();
+                    }
+                });
+            });
+
+            // Initialize Swiper with Parallax
+            var swiper = new Swiper(".mySwiper", {
+                speed: 1000,
+                parallax: true,
+                grabCursor: true,
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                mousewheel: {
+                    forceToAxis: true,
+                },
+                keyboard: {
+                    enabled: true,
                 }
             });
+            
+            // Initialize Lucide Icons
+            lucide.createIcons();
         });
     </script>
 </body>
