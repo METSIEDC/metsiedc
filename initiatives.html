@@ -6,262 +6,270 @@
     <title>Initiatives | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Immersive Theme Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
+                    fontFamily: { 
                         sans: ['Inter', 'sans-serif'],
-                    },
+                        display: ['Montserrat', 'sans-serif']
+                    }
                 }
             }
         }
     </script>
 
     <style>
-        body {
-            background-color: #050505;
-            color: #ffffff;
-            overflow-x: hidden;
+        body { 
+            background-color: #0f1115; /* Deep cinematic dark */
+            color: #ffffff; 
+            overflow-x: hidden; 
         }
 
-        /* Glassmorphism Classes */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+        /* Monochromatic Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            border-radius: 24px;
         }
 
         .glass-nav {
-            background: rgba(5, 5, 5, 0.7);
+            background: rgba(15, 17, 21, 0.6);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
+        .glass-menu {
+            background: rgba(10, 12, 15, 0.85);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        /* Cinematic Hover Effects */
+        .glass-hover { transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); }
         .glass-hover:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(79, 70, 229, 0.15);
-            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.8), 0 0 30px 0 rgba(255, 255, 255, 0.03);
         }
 
-        .gradient-accent {
-            background: linear-gradient(90deg, #4f46e5 0%, #9333ea 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        /* Background Blobs */
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.4;
-            animation: blob-bounce 10s infinite ease;
-        }
-        .blob-1 { top: 10%; left: -10%; width: 500px; height: 500px; background: #4f46e5; }
-        .blob-2 { top: 40%; right: -10%; width: 400px; height: 400px; background: #9333ea; }
-        .blob-3 { bottom: 10%; left: 20%; width: 600px; height: 600px; background: #2563eb; }
-
-        @keyframes blob-bounce {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(20px, -20px) scale(1.1); }
-        }
-
-        /* Mobile Menu */
-        .mobile-menu {
-            transform: translateX(100%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .mobile-menu.open {
-            transform: translateX(0);
-        }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f1115; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
     </style>
 </head>
-<body class="font-sans antialiased relative selection:bg-indigo-500 selection:text-white">
+<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-white selection:text-black">
 
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
+    <!-- Subtle Monochromatic Atmospheric Lighting (to power the glass effect) -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
     </div>
 
-    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center">
-                    <a href="index.html" class="flex items-center space-x-3 group">
-                        <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
-                        <span class="text-2xl font-bold tracking-tight text-white">MET'S <span class="text-indigo-400">IEDC</span></span>
-                    </a>
-                    <div class="hidden md:ml-12 md:flex md:space-x-8">
-                        <a href="about.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">About</a>
-                        <a href="team.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Ex-Com</a>
-                        <a href="initiatives.html" class="text-white px-3 py-2 text-sm font-medium border-b-2 border-indigo-500">Initiatives</a>
-                        <a href="news.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">News</a>
-                        <a href="contact.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Contact</a>
-                    </div>
-                </div>
-                <div class="hidden md:flex items-center">
-                    <a href="login.html" class="glass-card glass-hover text-white px-6 py-2.5 rounded-full text-sm font-medium border border-white/10">
-                        Log in
-                    </a>
-                </div>
-                <button id="mobile-menu-button" class="md:hidden text-white p-2">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+    <!-- Frosted Glass Navbar -->
+    <header id="navbar" class="h-20 px-6 md:px-10 fixed top-0 w-full z-50 transition-all duration-300 py-4 glass-nav">
+        <div class="max-w-[95%] mx-auto h-full flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="flex items-center group">
+                    <span class="text-xl font-display font-bold tracking-tight text-white group-hover:opacity-80 transition-opacity uppercase">
+                        MET'S IEDC
+                    </span>
+                </a>
+            </div>
+
+            <!-- Desktop Links (Minimalist Glass Pill) -->
+            <div class="hidden lg:flex items-center space-x-8 bg-white/5 backdrop-blur-md px-8 py-3 rounded-full border border-white/10 shadow-lg">
+                <a href="index.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Home</a>
+                <a href="event.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Events</a>
+                <a href="initiatives.html" class="text-white text-[10px] uppercase tracking-[0.2em] font-bold transition-colors">Initiatives</a>
+                <a href="report.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Reports</a>
+                <a href="team.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Ex-Com</a>
+                <a href="contact.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Contact</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="login.html" class="hidden md:flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-white transition-all bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-3 rounded-full">
+                    <i class="fas fa-user-circle"></i> Login
+                </a>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="lg:hidden w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white backdrop-blur-md">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
         </div>
+    </header>
+
+    <!-- Glass Mobile Menu -->
+    <div id="mobile-menu" class="fixed top-0 right-0 w-full h-screen glass-menu z-[200] overflow-y-auto transform translate-x-full transition-transform duration-500 ease-in-out">
+        <div class="flex justify-between items-center p-8">
+            <span class="text-xl font-display font-bold text-white tracking-widest">MENU</span>
+            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <nav class="flex flex-col space-y-8 px-8 py-12 text-center">
+            <a href="index.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Home</a>
+            <a href="announcement.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Announcement</a>
+            <a href="event.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Events</a>
+            <a href="initiatives.html" class="text-2xl font-display font-bold text-white tracking-[0.2em] uppercase transition-colors">Initiatives</a>
+            <a href="report.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Reports</a>
+            <a href="team.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Ex-Com</a>
+            <a href="contact.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Contact</a>
+            <div class="pt-8 mt-8 border-t border-white/10">
+                <a href="login.html" class="text-sm font-display font-bold text-white tracking-[0.2em] uppercase flex items-center justify-center gap-3 py-4 rounded-xl bg-white/5 border border-white/10">
+                    <i class="fas fa-user-circle"></i> Portal Login
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <main class="flex-grow pt-40 pb-24 relative z-10">
         
-        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-xl z-50">
-            <div class="flex justify-end p-6">
-                <button id="close-mobile-menu" class="text-white p-2">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+        <!-- Hero Section -->
+        <div class="text-center px-4 mb-24">
+            <div class="inline-flex items-center px-5 py-2 rounded-full glass-panel text-[10px] uppercase tracking-[0.2em] font-bold text-white/70 mb-8">
+                <span class="w-1.5 h-1.5 rounded-full bg-white mr-3 animate-pulse"></span> Programs & Support
             </div>
-            <nav class="flex flex-col space-y-6 px-8 mt-10 text-center">
-                <a href="about.html" class="text-2xl font-light text-white hover:text-indigo-400">About Us</a>
-                <a href="team.html" class="text-2xl font-light text-white hover:text-indigo-400">Our Team</a>
-                <a href="initiatives.html" class="text-2xl font-light text-white hover:text-indigo-400">Initiatives</a>
-                <a href="events.html" class="text-2xl font-light text-white hover:text-indigo-400">Gallery</a>
-                <a href="login.html" class="mt-8 py-4 bg-indigo-600 rounded-full text-white font-medium">Student Login</a>
-            </nav>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-display font-black mb-6 text-white tracking-tighter uppercase drop-shadow-2xl">
+                Initiatives
+            </h1>
+            <div class="h-[1px] w-24 bg-white/20 mx-auto mb-8"></div>
+            <p class="text-sm md:text-base text-white/50 max-w-2xl mx-auto font-light leading-relaxed tracking-wide">
+                Fostering innovation through structured programs designed to nurture student startups and build the next generation of tech leaders.
+            </p>
         </div>
-    </nav>
 
-    <div class="pt-32 pb-16 lg:pt-48 lg:pb-24 text-center px-4 relative z-10">
-        <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-            Our <span class="gradient-accent">Initiatives</span>
-        </h1>
-        <p class="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            Programs and support systems designed to nurture student innovation and build the next generation of leaders.
-        </p>
-    </div>
-
-    <section class="pb-32 px-4 relative z-10">
-        <div class="max-w-7xl mx-auto">
+        <!-- Initiatives Grid (Monochromatic Glass Cards) -->
+        <section class="px-4 max-w-7xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                <div class="glass-card rounded-3xl p-8 glass-hover group">
-                    <div class="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
-                        <i class="fas fa-lightbulb text-2xl"></i>
+                <!-- Card 1 -->
+                <div class="glass-panel p-10 glass-hover group flex flex-col">
+                    <div class="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/70 group-hover:text-white group-hover:bg-white/10 transition-all mb-8">
+                        <i class="fas fa-lightbulb text-xl"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Idea Incubation</h3>
-                    <p class="text-gray-400 leading-relaxed">
+                    <h3 class="text-2xl font-display font-bold text-white mb-4 uppercase tracking-tight">Idea Incubation</h3>
+                    <p class="text-white/50 font-light text-sm leading-relaxed tracking-wide">
                         We provide mentorship, resources, and seed funding opportunities to transform promising ideas into viable startup projects.
                     </p>
                 </div>
 
-                <div class="glass-card rounded-3xl p-8 glass-hover group">
-                    <div class="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-6 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
-                        <i class="fas fa-tools text-2xl"></i>
+                <!-- Card 2 -->
+                <div class="glass-panel p-10 glass-hover group flex flex-col">
+                    <div class="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/70 group-hover:text-white group-hover:bg-white/10 transition-all mb-8">
+                        <i class="fas fa-tools text-xl"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Skill Workshops</h3>
-                    <p class="text-gray-400 leading-relaxed">
+                    <h3 class="text-2xl font-display font-bold text-white mb-4 uppercase tracking-tight">Skill Workshops</h3>
+                    <p class="text-white/50 font-light text-sm leading-relaxed tracking-wide">
                         Regular workshops on cutting-edge technologies, business management, marketing, and intellectual property rights.
                     </p>
                 </div>
 
-                <div class="glass-card rounded-3xl p-8 glass-hover group">
-                    <div class="w-16 h-16 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-400 mb-6 group-hover:bg-yellow-500 group-hover:text-white transition-all duration-300">
-                        <i class="fas fa-chalkboard-teacher text-2xl"></i>
+                <!-- Card 3 -->
+                <div class="glass-panel p-10 glass-hover group flex flex-col">
+                    <div class="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/70 group-hover:text-white group-hover:bg-white/10 transition-all mb-8">
+                        <i class="fas fa-chalkboard-teacher text-xl"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Mentor Connect</h3>
-                    <p class="text-gray-400 leading-relaxed">
+                    <h3 class="text-2xl font-display font-bold text-white mb-4 uppercase tracking-tight">Mentor Connect</h3>
+                    <p class="text-white/50 font-light text-sm leading-relaxed tracking-wide">
                         Connecting student entrepreneurs with experienced industry mentors, successful founders, and subject matter experts.
                     </p>
                 </div>
 
-                <div class="glass-card rounded-3xl p-8 glass-hover group">
-                    <div class="w-16 h-16 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400 mb-6 group-hover:bg-purple-500 group-hover:text-white transition-all duration-300">
-                        <i class="fas fa-handshake text-2xl"></i>
+                <!-- Card 4 -->
+                <div class="glass-panel p-10 glass-hover group flex flex-col">
+                    <div class="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/70 group-hover:text-white group-hover:bg-white/10 transition-all mb-8">
+                        <i class="fas fa-handshake text-xl"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Industry Linkages</h3>
-                    <p class="text-gray-400 leading-relaxed">
+                    <h3 class="text-2xl font-display font-bold text-white mb-4 uppercase tracking-tight">Industry Linkages</h3>
+                    <p class="text-white/50 font-light text-sm leading-relaxed tracking-wide">
                         Facilitating collaborations with industry partners for internships, projects, and technology transfer opportunities.
                     </p>
                 </div>
 
-                <div class="glass-card rounded-3xl p-8 glass-hover group">
-                    <div class="w-16 h-16 rounded-full bg-pink-500/10 flex items-center justify-center text-pink-400 mb-6 group-hover:bg-pink-500 group-hover:text-white transition-all duration-300">
-                        <i class="fas fa-microphone-alt text-2xl"></i>
+                <!-- Card 5 -->
+                <div class="glass-panel p-10 glass-hover group flex flex-col">
+                    <div class="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/70 group-hover:text-white group-hover:bg-white/10 transition-all mb-8">
+                        <i class="fas fa-microphone-alt text-xl"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Pitching Platforms</h3>
-                    <p class="text-gray-400 leading-relaxed">
+                    <h3 class="text-2xl font-display font-bold text-white mb-4 uppercase tracking-tight">Pitching Platforms</h3>
+                    <p class="text-white/50 font-light text-sm leading-relaxed tracking-wide">
                         Organizing internal and participating in external pitching competitions to help students refine their ideas and gain exposure.
                     </p>
                 </div>
 
-                <div class="glass-card rounded-3xl p-8 glass-hover group">
-                    <div class="w-16 h-16 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400 mb-6 group-hover:bg-cyan-500 group-hover:text-white transition-all duration-300">
-                        <i class="fas fa-rocket text-2xl"></i>
+                <!-- Card 6 -->
+                <div class="glass-panel p-10 glass-hover group flex flex-col">
+                    <div class="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/70 group-hover:text-white group-hover:bg-white/10 transition-all mb-8">
+                        <i class="fas fa-rocket text-xl"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Pre-Incubation</h3>
-                    <p class="text-gray-400 leading-relaxed">
+                    <h3 class="text-2xl font-display font-bold text-white mb-4 uppercase tracking-tight">Pre-Incubation</h3>
+                    <p class="text-white/50 font-light text-sm leading-relaxed tracking-wide">
                         Providing early-stage support for student ventures, helping them develop prototypes and scalable business models.
                     </p>
                 </div>
 
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <div class="fixed bottom-6 right-6 z-40">
-        <a href="https://whatsapp.com/channel/0029Vb5RvKWI1rchteX7pu3A" target="_blank" class="flex items-center justify-center w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all transform hover:scale-110 group">
-            <i class="fab fa-whatsapp text-2xl text-white"></i>
-            <span class="absolute right-16 bg-white text-black text-xs font-bold px-3 py-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Join Channel</span>
-        </a>
-    </div>
-
-    <footer class="border-t border-white/5 bg-[#020202] pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                <div class="lg:col-span-2">
-                    <span class="text-2xl font-bold text-white">MET'S IEDC</span>
-                    <p class="text-gray-500 mt-4 text-sm leading-relaxed max-w-md">
-                        Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.
+    <!-- Cinematic Glass Footer -->
+    <footer class="glass-panel rounded-none border-x-0 border-b-0 pt-20 pb-10 relative z-10 mt-10">
+        <div class="max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+                <div class="md:col-span-5">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="text-3xl font-display font-bold text-white tracking-tight uppercase">MET'S IEDC.</span>
+                    </div>
+                    <p class="text-white/50 text-sm leading-relaxed max-w-md font-light tracking-wide">
+                        Fostering a culture of innovation and entrepreneurship among students at MET'S School of Engineering. Supported by Kerala Startup Mission.
                     </p>
                 </div>
-
-                <div>
-                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h3>
-                    <ul class="space-y-3 text-sm text-gray-500">
-                        <li><a href="index.html" class="hover:text-indigo-400 transition-colors">Home</a></li>
-                        <li><a href="about.html" class="hover:text-indigo-400 transition-colors">About Us</a></li>
-                        <li><a href="events.html" class="hover:text-indigo-400 transition-colors">Events</a></li>
-                        <li><a href="news.html" class="hover:text-indigo-400 transition-colors">News</a></li>
+                
+                <div class="md:col-span-3">
+                    <h3 class="text-[10px] font-bold text-white mb-6 uppercase tracking-[0.2em]">Navigation</h3>
+                    <ul class="space-y-4 text-sm font-light text-white/50 tracking-wide">
+                        <li><a href="about.html" class="hover:text-white transition-colors">About Story</a></li>
+                        <li><a href="event.html" class="hover:text-white transition-colors">Latest Events</a></li>
+                        <li><a href="initiatives.html" class="text-white">Our Initiatives</a></li>
+                        <li><a href="https://startupmission.kerala.gov.in/" target="_blank" class="hover:text-white transition-colors">Kerala Startup Mission</a></li>
                     </ul>
                 </div>
-
-                <div>
-                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contact</h3>
-                    <div class="space-y-3 text-sm text-gray-500">
-                        <p class="flex items-center"><i class="fas fa-envelope mr-3 text-indigo-500"></i>metsenggiedc@gmail.com</p>
-                        <p class="flex items-center"><i class="fas fa-phone mr-3 text-indigo-500"></i>+91 7306226875</p>
+                
+                <div class="md:col-span-4">
+                    <h3 class="text-[10px] font-bold text-white mb-6 uppercase tracking-[0.2em]">Connect</h3>
+                    <div class="space-y-4 text-sm font-light text-white/50 tracking-wide mb-8">
+                        <p>MET'S School of Engineering,<br>Mala, Thrissur, Kerala</p>
+                        <p class="hover:text-white transition-colors cursor-pointer">+91 7306226875</p>
+                        <p class="hover:text-white transition-colors cursor-pointer">metsenggiedc@gmail.com</p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/MetsIedc" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
             </div>
             
-            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
-                <p>© 2025 IEDC MET'S SCHOOL OF ENGINEERING.</p>
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-light text-white/40 tracking-widest uppercase">
+                <p>© <span id="year">2026</span> MET'S IEDC. All rights reserved.</p>
                 <div class="flex space-x-6">
-                    <a href="#" class="hover:text-white transition-colors"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://x.com/MetsIedc" class="hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
-                    <a href="https://www.instagram.com/metsiedc/" class="hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="hover:text-white transition-colors"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms</a>
                 </div>
             </div>
         </div>
@@ -269,30 +277,40 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Update Copyright Year
+            document.getElementById('year').textContent = new Date().getFullYear();
+
             // Mobile Menu Logic
             const btn = document.getElementById('mobile-menu-button');
             const menu = document.getElementById('mobile-menu');
             const closeBtn = document.getElementById('close-mobile-menu');
 
-            function toggleMenu() {
-                menu.classList.toggle('open');
-                document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
-            }
-
-            btn.addEventListener('click', toggleMenu);
-            closeBtn.addEventListener('click', toggleMenu);
-            
-            // Navbar Scroll Effect
-            window.addEventListener('scroll', () => {
-                const nav = document.querySelector('nav');
-                if (window.scrollY > 20) {
-                    nav.classList.add('shadow-lg');
-                    nav.style.background = 'rgba(5, 5, 5, 0.9)';
+            function toggleMobileMenu() {
+                if(menu.classList.contains('translate-x-full')) {
+                    menu.classList.remove('translate-x-full');
+                    menu.classList.add('translate-x-0');
+                    document.body.style.overflow = 'hidden';
                 } else {
-                    nav.classList.remove('shadow-lg');
-                    nav.style.background = 'rgba(5, 5, 5, 0.7)';
+                    menu.classList.add('translate-x-full');
+                    menu.classList.remove('translate-x-0');
+                    document.body.style.overflow = '';
                 }
+            }
+            
+            if(btn) btn.addEventListener('click', toggleMobileMenu);
+            if(closeBtn) closeBtn.addEventListener('click', toggleMobileMenu);
+
+            const menuLinks = menu.querySelectorAll('a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!menu.classList.contains('translate-x-full')) {
+                        toggleMobileMenu();
+                    }
+                });
             });
+            
+            // Initialize Lucide Icons
+            lucide.createIcons();
         });
     </script>
 </body>
