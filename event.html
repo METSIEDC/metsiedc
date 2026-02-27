@@ -6,134 +6,215 @@
     <title>Event Registration | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Immersive Theme Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: { iedc: { red: '#ef4444', dark: '#991b1b' } }
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif']
+                    },
+                    colors: {
+                        dark: {
+                            base: '#0f1115',
+                            card: '#181b21',
+                            accent: '#2a2e37'
+                        }
+                    }
                 }
             }
         }
     </script>
 
     <style>
-        body { background-color: #050505; color: #ffffff; overflow-x: hidden; }
-        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); }
-        .glass-input { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
-        .glass-input:focus { background: rgba(255, 255, 255, 0.08); border-color: #ef4444; outline: none; }
-        .blob { position: absolute; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.3; animation: blob-bounce 10s infinite ease; }
-        .blob-1 { top: 0%; left: 0%; width: 600px; height: 600px; background: #7f1d1d; }
-        .blob-2 { bottom: 0%; right: 0%; width: 500px; height: 500px; background: #c2410c; }
-        @keyframes blob-bounce { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(20px, -20px) scale(1.1); } }
+        body { 
+            background-color: #0f1115; /* Deep cinematic dark */
+            color: #e2e8f0; 
+            overflow-x: hidden; 
+        }
+        
+        /* Card & Input Styles */
+        .glass-input { 
+            background: #0a0c0f; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            color: white; 
+            transition: all 0.3s ease; 
+        }
+        .glass-input:focus { 
+            background: #12141a; 
+            border-color: rgba(255, 255, 255, 0.5); 
+            outline: none; 
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+        }
+        
+        .card-hover { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
 
         /* Ticket Styles */
         .ticket-cut {
-            border-top: 2px dashed rgba(255,255,255,0.2);
+            border-top: 1px dashed rgba(0,0,0,0.2);
             position: relative;
         }
         .ticket-cut::before, .ticket-cut::after {
-            content: ''; position: absolute; top: -10px; width: 20px; height: 20px; background-color: #050505; border-radius: 50%;
+            content: ''; position: absolute; top: -10px; width: 20px; height: 20px; background-color: #0f1115; border-radius: 50%;
         }
         .ticket-cut::before { left: -10px; }
         .ticket-cut::after { right: -10px; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f1115; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
 
         @media print {
             body * { visibility: hidden; }
             #ticketView, #ticketView * { visibility: visible; }
             #ticketView { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; background: white; color: black; border: 2px solid black; }
             .no-print { display: none !important; }
-            .ticket-text-dark { color: black !important; }
-            .ticket-bg-white { background: white !important; }
+            .ticket-cut::before, .ticket-cut::after { background-color: white !important; border: 1px solid black; }
         }
     </style>
 </head>
 <body class="font-sans antialiased relative min-h-screen flex flex-col">
 
-    <div class="fixed inset-0 overflow-hidden pointer-events-none no-print">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
+    <!-- Minimalist Navbar -->
+    <header class="h-20 px-6 md:px-10 border-b border-white/5 bg-[#0f1115]/90 backdrop-blur-xl sticky top-0 z-50 no-print">
+        <div class="max-w-[95%] mx-auto h-full flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="flex items-center group">
+                    <span class="text-xl font-display font-bold tracking-tight text-white group-hover:opacity-80 transition-opacity">
+                        MET'S IEDC
+                    </span>
+                </a>
+            </div>
 
-    <header class="h-20 flex items-center justify-between px-6 md:px-10 border-b border-white/10 bg-black/50 backdrop-blur-md sticky top-0 z-50 no-print">
-        <div class="flex items-center gap-3">
-            <img src="assets/images/logos/MSEM.jpg" alt="Logo" class="w-10 h-10 rounded-full border-2 border-red-500/50">
-            <span class="text-xl font-bold text-white tracking-tight">MET'S <span class="text-red-500">IEDC</span></span>
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex items-center space-x-10">
+                <a href="index.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Home</a>
+                <a href="event.html" class="text-white text-[11px] uppercase tracking-[0.15em] font-bold transition-colors">Events</a>
+                <a href="initiatives.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Initiatives</a>
+                <a href="report.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Reports</a>
+                <a href="team.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Ex-Com</a>
+                <a href="contact.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Contact</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button onclick="toggleHistoryModal()" class="flex items-center gap-2 text-[10px] md:text-xs uppercase tracking-[0.2em] text-white/80 hover:text-white transition-colors border border-white/20 hover:border-white/40 px-4 py-2.5 rounded">
+                    <i data-lucide="ticket" class="w-4 h-4"></i> <span class="hidden sm:inline">My Tickets</span>
+                </button>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="lg:hidden text-white p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
         </div>
-        <button onclick="toggleHistoryModal()" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full text-sm font-medium transition border border-white/10">
-            <i data-lucide="ticket" class="w-4 h-4 text-red-400"></i> My Tickets
-        </button>
     </header>
 
-    <main class="flex-grow container mx-auto px-4 py-10">
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed top-0 right-0 w-full h-screen bg-[#0f1115]/95 backdrop-blur-xl z-[200] overflow-y-auto transform translate-x-full transition-transform duration-400 ease-in-out no-print">
+        <div class="flex justify-between items-center p-8">
+            <span class="text-xl font-display font-bold text-white">MENU</span>
+            <button id="close-mobile-menu" class="text-white/70 hover:text-white p-2">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <nav class="flex flex-col space-y-8 px-8 py-12 text-center">
+            <a href="index.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Home</a>
+            <a href="announcement.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Announcement</a>
+            <a href="event.html" class="text-2xl font-display font-bold text-white tracking-widest uppercase">Events</a>
+            <a href="initiatives.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Initiatives</a>
+            <a href="report.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Reports</a>
+            <a href="team.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Ex-Com</a>
+            <a href="contact.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Contact</a>
+        </nav>
+    </div>
+
+    <main class="flex-grow container mx-auto px-4 py-16">
         
-        <div id="eventListView" class="max-w-5xl mx-auto">
-            <div class="text-center mb-12">
-                <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">Upcoming Events</h1>
-                <p class="text-gray-400">Register for workshops, hackathons, and seminars.</p>
+        <!-- Events List View -->
+        <div id="eventListView" class="max-w-6xl mx-auto">
+            <div class="text-center mb-20">
+                <span class="text-white/40 font-semibold tracking-[0.2em] text-xs uppercase mb-4 block">Select an Event</span>
+                <h1 class="text-4xl md:text-6xl font-display font-bold mb-6 text-white tracking-tight uppercase">Registration</h1>
+                <div class="h-[1px] w-24 bg-white/20 mx-auto"></div>
             </div>
-            <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="col-span-full text-center py-20 text-gray-500 animate-pulse">Loading active events...</div>
+            <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="col-span-full text-center py-20 text-white/40 uppercase tracking-widest text-sm animate-pulse">Loading active events...</div>
             </div>
         </div>
 
+        <!-- Registration Form View -->
         <div id="formView" class="hidden max-w-2xl mx-auto no-print">
-            <button onclick="goBack()" class="mb-6 flex items-center gap-2 text-gray-400 hover:text-white transition group">
+            <button onclick="goBack()" class="mb-8 flex items-center gap-3 text-xs uppercase tracking-widest text-white/50 hover:text-white transition group">
                 <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i> Back to Events
             </button>
-            <div class="glass-card p-8 md:p-10 rounded-3xl border border-red-500/20 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-orange-600"></div>
-                <div class="mb-8">
-                    <span class="inline-block px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-bold uppercase tracking-wider mb-3">Registration Open</span>
-                    <h2 class="text-3xl font-bold text-white mb-2" id="formTitleDisplay">Event Name</h2>
-                    <p class="text-sm text-gray-400">Please fill in the details below to confirm your spot.</p>
+            <div class="bg-dark-card p-8 md:p-14 rounded-xl border border-white/10 relative overflow-hidden shadow-2xl">
+                <div class="mb-10 text-center">
+                    <span class="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-white/80 text-[10px] font-bold tracking-[0.2em] uppercase mb-6">
+                        <span class="w-2 h-2 rounded-full bg-white inline-block mr-2 animate-pulse"></span> Open
+                    </span>
+                    <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4 uppercase tracking-tight" id="formTitleDisplay">Event Name</h2>
+                    <p class="text-sm text-white/50 font-light">Please fill in the details below to secure your entry.</p>
                 </div>
                 <form id="dynamicForm" class="space-y-6">
-                    </form>
-                <div id="submissionStatus" class="hidden mt-6 p-4 rounded-xl text-center text-sm font-medium"></div>
+                    <!-- Form fields will be injected here -->
+                </form>
+                <div id="submissionStatus" class="hidden mt-6 p-4 rounded text-center text-sm font-medium"></div>
             </div>
         </div>
 
-        <div id="ticketView" class="hidden max-w-md mx-auto transform transition-all">
-            <div class="bg-white text-black rounded-3xl overflow-hidden shadow-2xl relative ticket-bg-white">
-                <div class="bg-gradient-to-r from-red-600 to-orange-600 p-6 text-white text-center">
-                    <h2 class="text-2xl font-bold uppercase tracking-wide">Entry Ticket</h2>
-                    <p class="text-xs opacity-80 mt-1">MET'S IEDC OFFICIAL PASS</p>
+        <!-- Digital Ticket View -->
+        <div id="ticketView" class="hidden max-w-md mx-auto transform transition-all mt-8">
+            <div class="bg-[#e2e8f0] text-black rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative">
+                <!-- Ticket Header -->
+                <div class="bg-[#0a0c0f] p-8 text-white text-center border-b border-white/10">
+                    <h2 class="text-2xl font-display font-bold uppercase tracking-[0.3em]">Pass</h2>
+                    <p class="text-[9px] uppercase tracking-[0.2em] text-white/50 mt-2">MET'S IEDC OFFICIAL ENTRY</p>
                 </div>
                 
-                <div class="p-8 text-center ticket-text-dark">
-                    <h1 class="text-2xl font-bold mb-2 leading-tight" id="ticketEventName">Event Name</h1>
-                    <p class="text-sm text-gray-500 mb-6" id="ticketDate">Date: --</p>
+                <!-- Ticket Body -->
+                <div class="p-8 text-center bg-white">
+                    <h1 class="text-2xl font-display font-bold mb-2 leading-tight uppercase tracking-tight text-[#0a0c0f]" id="ticketEventName">Event Name</h1>
+                    <p class="text-xs uppercase tracking-widest text-gray-500 mb-8 font-semibold" id="ticketDate">Date: --</p>
                     
-                    <div class="w-40 h-40 bg-gray-100 mx-auto mb-6 rounded-xl flex items-center justify-center border-4 border-black/5">
-                        <img id="ticketQR" src="" alt="QR Code" class="w-32 h-32 opacity-90">
+                    <div class="w-48 h-48 bg-white mx-auto mb-8 flex items-center justify-center border border-gray-200 p-2 shadow-sm">
+                        <img id="ticketQR" src="" alt="QR Code" class="w-full h-full opacity-90">
                     </div>
 
-                    <div class="space-y-2 mb-6">
-                        <p class="text-xs uppercase text-gray-400 font-bold">Attendee</p>
-                        <p class="text-lg font-bold" id="ticketAttendee">Guest User</p>
+                    <div class="space-y-1 mb-6">
+                        <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold">Attendee</p>
+                        <p class="text-xl font-display font-bold uppercase tracking-wide text-[#0a0c0f]" id="ticketAttendee">Guest User</p>
                     </div>
 
-                    <div class="space-y-2">
-                        <p class="text-xs uppercase text-gray-400 font-bold">Ticket ID</p>
-                        <p class="font-mono text-red-600 font-bold tracking-widest bg-red-50 py-2 rounded-lg" id="ticketID">#IEDC-0000</p>
+                    <div class="space-y-1">
+                        <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold">Ticket ID</p>
+                        <p class="font-mono text-black font-bold tracking-widest text-lg" id="ticketID">#IEDC-0000</p>
                     </div>
                 </div>
 
-                <div class="p-4 bg-gray-50 ticket-cut flex justify-between items-center ticket-text-dark">
-                    <span class="text-[10px] text-gray-400">Admit One</span>
-                    <span class="text-[10px] text-gray-400">Non-Transferable</span>
+                <!-- Ticket Footer (Tear line) -->
+                <div class="p-5 bg-gray-100 ticket-cut flex justify-between items-center">
+                    <span class="text-[9px] uppercase tracking-[0.2em] text-gray-400 font-bold">Admit One</span>
+                    <span class="text-[9px] uppercase tracking-[0.2em] text-gray-400 font-bold">Non-Transferable</span>
                 </div>
             </div>
 
-            <div class="mt-6 flex gap-3 no-print">
-                <button onclick="window.print()" class="flex-1 bg-white text-black font-bold py-3 rounded-xl hover:bg-gray-200 transition flex justify-center items-center gap-2">
-                    <i data-lucide="printer" class="w-4 h-4"></i> Print / Save PDF
+            <!-- Actions -->
+            <div class="mt-8 flex gap-4 no-print">
+                <button onclick="window.print()" class="flex-1 bg-white text-black font-bold py-4 rounded text-xs uppercase tracking-widest hover:bg-gray-200 transition flex justify-center items-center gap-2">
+                    <i data-lucide="printer" class="w-4 h-4"></i> Save
                 </button>
-                <button onclick="closeTicket()" class="flex-1 bg-white/10 text-white font-bold py-3 rounded-xl hover:bg-white/20 transition">
+                <button onclick="closeTicket()" class="flex-1 border border-white/20 text-white font-bold py-4 rounded text-xs uppercase tracking-widest hover:bg-white/10 transition">
                     Close
                 </button>
             </div>
@@ -141,12 +222,13 @@
 
     </main>
 
-    <div id="historyModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
-        <div class="glass-card w-full max-w-md p-6 rounded-3xl relative">
-            <button onclick="toggleHistoryModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i data-lucide="x"></i></button>
-            <h2 class="text-xl font-bold text-white mb-6">My Bookings</h2>
-            <div id="historyList" class="space-y-3 max-h-[60vh] overflow-y-auto">
-                <p class="text-center text-gray-500 text-sm py-4">No tickets found on this device.</p>
+    <!-- Ticket History Modal -->
+    <div id="historyModal" class="fixed inset-0 bg-[#0f1115]/95 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4 no-print transition-opacity">
+        <div class="bg-dark-card border border-white/10 w-full max-w-md p-8 rounded-xl relative shadow-2xl">
+            <button onclick="toggleHistoryModal()" class="absolute top-6 right-6 text-white/40 hover:text-white transition-colors"><i data-lucide="x"></i></button>
+            <h2 class="text-xl font-display font-bold text-white mb-8 tracking-wide uppercase">My Bookings</h2>
+            <div id="historyList" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+                <p class="text-center text-white/40 text-xs tracking-widest uppercase py-8">No tickets found on this device.</p>
             </div>
         </div>
     </div>
@@ -181,7 +263,7 @@
                 const snap = await getDocs(q);
 
                 if (snap.empty) {
-                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-500">No active events.</div>';
+                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-white/40 uppercase tracking-widest text-sm">No active events.</div>';
                     return;
                 }
 
@@ -189,8 +271,20 @@
                 snap.forEach(doc => {
                     const data = doc.data();
                     const card = document.createElement('div');
-                    card.className = "glass-card p-6 rounded-2xl hover:border-red-500/30 transition duration-300 flex flex-col justify-between min-h-[200px]";
-                    card.innerHTML = `<div><div class="flex justify-between items-start mb-4"><div class="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center text-red-400"><i data-lucide="calendar" class="w-5 h-5"></i></div><span class="text-[10px] text-gray-500 bg-white/5 px-2 py-1 rounded">${new Date(data.createdAt).toLocaleDateString()}</span></div><h3 class="text-xl font-bold text-white mb-2">${data.title}</h3><p class="text-sm text-gray-400 line-clamp-2">Register now.</p></div><button class="mt-6 w-full py-3 rounded-xl bg-white/5 hover:bg-red-600 text-white font-bold text-sm transition-all flex items-center justify-center gap-2">Register Now <i data-lucide="arrow-right" class="w-4 h-4"></i></button>`;
+                    card.className = "bg-dark-card border border-white/10 p-8 rounded-xl flex flex-col justify-between min-h-[200px] card-hover";
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex justify-between items-start mb-6">
+                                <div class="w-10 h-10 border border-white/10 bg-[#0a0c0f] rounded flex items-center justify-center text-white"><i data-lucide="calendar" class="w-4 h-4"></i></div>
+                                <span class="text-[10px] uppercase tracking-widest text-white/40">${new Date(data.createdAt).toLocaleDateString()}</span>
+                            </div>
+                            <h3 class="text-2xl font-display font-bold text-white mb-3 uppercase tracking-tight">${data.title}</h3>
+                            <p class="text-xs font-light tracking-wide text-white/50 line-clamp-2">Secure your spot.</p>
+                        </div>
+                        <button class="mt-8 w-full py-4 border border-white/20 hover:border-white hover:bg-white hover:text-black text-white font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 rounded">
+                            Register <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    `;
                     card.querySelector('button').onclick = () => openEventForm(data);
                     grid.appendChild(card);
                 });
@@ -214,11 +308,11 @@
             data.questions.forEach((q) => {
                 const div = document.createElement('div');
                 const label = document.createElement('label');
-                label.className = "block text-xs font-medium text-gray-400 mb-1.5 uppercase";
+                label.className = "block text-[10px] font-bold text-white/50 tracking-[0.2em] mb-2 uppercase";
                 label.innerText = q.label;
                 let input = document.createElement(q.type === 'textarea' ? 'textarea' : 'input');
                 if(q.type !== 'textarea') input.type = q.type || 'text'; else input.rows = 4;
-                input.className = "glass-input w-full rounded-xl py-3 px-4 text-sm";
+                input.className = "glass-input w-full rounded py-4 px-4 text-sm font-light";
                 input.required = true;
                 input.dataset.label = q.label; 
                 div.appendChild(label); div.appendChild(input); form.appendChild(div);
@@ -226,8 +320,8 @@
 
             const submitBtn = document.createElement('button');
             submitBtn.type = "submit";
-            submitBtn.className = "w-full bg-red-600 hover:bg-red-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-red-900/20 mt-4 flex items-center justify-center gap-2";
-            submitBtn.innerHTML = `Confirm Registration <i data-lucide="check-circle" class="w-4 h-4"></i>`;
+            submitBtn.className = "w-full bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded text-xs uppercase tracking-widest transition-all mt-8 flex items-center justify-center gap-3";
+            submitBtn.innerHTML = `Confirm Entry <i data-lucide="check" class="w-4 h-4"></i>`;
             form.appendChild(submitBtn);
             lucide.createIcons();
         };
@@ -255,7 +349,7 @@
             const payload = { eventName: currentEventData.title, userName: userName, userEmail: "Guest", responses: responses, ticketID: ticketID };
 
             btn.disabled = true;
-            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Processing...`;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> PROCESSING`;
 
             try {
                 // Post to Google Sheet
@@ -279,7 +373,8 @@
                 showTicket(currentEventData.title, userName, ticketID, new Date().toLocaleDateString());
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `Confirm Registration <i data-lucide="check-circle" class="w-4 h-4"></i>`;
+                btn.innerHTML = `Confirm Entry <i data-lucide="check" class="w-4 h-4"></i>`;
+                lucide.createIcons();
             }
         });
 
@@ -294,13 +389,14 @@
             document.getElementById('ticketDate').textContent = `Date: ${date}`;
             
             // Generate QR Code (using Google Charts API for simplicity)
-            document.getElementById('ticketQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${id}`;
+            document.getElementById('ticketQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${id}`;
         }
 
         window.closeTicket = () => {
             document.getElementById('ticketView').classList.add('hidden');
             document.getElementById('eventListView').classList.remove('hidden');
             document.getElementById('dynamicForm').reset();
+            window.scrollTo(0,0);
         };
 
         window.goBack = () => {
@@ -322,16 +418,25 @@
             
             if (modal.classList.contains('hidden')) {
                 modal.classList.remove('hidden');
+                // Small delay to allow display:block before fading in (if using opacity transition)
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+                
                 const history = JSON.parse(localStorage.getItem('iedc_bookings') || '[]');
                 
                 if (history.length === 0) {
-                    list.innerHTML = '<p class="text-center text-gray-500 text-sm py-4">No tickets found on this device.</p>';
+                    list.innerHTML = '<p class="text-center text-white/40 text-xs tracking-widest uppercase py-8">No tickets found on this device.</p>';
                 } else {
                     list.innerHTML = '';
                     history.forEach(t => {
                         const div = document.createElement('div');
-                        div.className = "bg-white/5 border border-white/10 p-3 rounded-xl cursor-pointer hover:bg-white/10 transition flex justify-between items-center";
-                        div.innerHTML = `<div><h4 class="font-bold text-white text-sm">${t.eventName}</h4><p class="text-xs text-gray-500">${t.ticketID} • ${t.date}</p></div><i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>`;
+                        div.className = "border border-white/10 bg-[#0a0c0f] p-4 rounded cursor-pointer hover:border-white/30 transition-all flex justify-between items-center group";
+                        div.innerHTML = `
+                            <div>
+                                <h4 class="font-display font-bold text-white text-sm uppercase tracking-wide mb-1">${t.eventName}</h4>
+                                <p class="text-[10px] text-white/40 tracking-widest uppercase font-mono">${t.ticketID} • ${t.date}</p>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-white/30 group-hover:text-white transition-colors"></i>
+                        `;
                         div.onclick = () => {
                             toggleHistoryModal(); // Close modal
                             showTicket(t.eventName, t.attendee, t.ticketID, t.date); // Open ticket
@@ -346,6 +451,35 @@
         };
 
         loadEvents();
+
+        // Mobile Menu Logic
+        const btn = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+        const closeBtn = document.getElementById('close-mobile-menu');
+        
+        function toggleMobileMenu() {
+            if(menu.classList.contains('translate-x-full')) {
+                menu.classList.remove('translate-x-full');
+                menu.classList.add('translate-x-0');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.add('translate-x-full');
+                menu.classList.remove('translate-x-0');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        if(btn) btn.addEventListener('click', toggleMobileMenu);
+        if(closeBtn) closeBtn.addEventListener('click', toggleMobileMenu);
+
+        const menuLinks = menu.querySelectorAll('a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (!menu.classList.contains('translate-x-full')) {
+                    toggleMobileMenu();
+                }
+            });
+        });
     </script>
 </body>
 </html>
