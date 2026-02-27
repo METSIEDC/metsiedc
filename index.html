@@ -6,19 +6,23 @@
     <title>MET'S IEDC | Innovation Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Using Montserrat for the massive impactful headers, Inter for readable body text -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif']
+                    },
                     colors: {
-                        glass: {
-                            100: 'rgba(255, 255, 255, 0.05)',
-                            200: 'rgba(255, 255, 255, 0.1)',
-                            border: 'rgba(255, 255, 255, 0.1)',
+                        dark: {
+                            base: '#0f1115',
+                            card: '#181b21',
+                            accent: '#2a2e37'
                         }
                     }
                 }
@@ -27,67 +31,64 @@
     </script>
 
     <style>
-        body { background-color: #050505; color: #ffffff; overflow-x: hidden; }
-
-        /* Glassmorphism */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        body { 
+            background-color: #0f1115; /* Deep cinematic dark */
+            color: #e2e8f0; 
+            overflow-x: hidden; 
         }
 
-        .glass-nav {
-            background: rgba(5, 5, 5, 0.7);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        /* Nav Transition */
+        .scrolled-nav {
+            background: rgba(15, 17, 21, 0.95);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
         }
 
         /* Hover Effects */
-        .glass-hover { transition: all 0.3s ease; }
-        .glass-hover:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
+        .card-hover { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
-        /* Gradients */
-        .gradient-text { background: linear-gradient(90deg, #fff 0%, #a5a5a5 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .gradient-accent { background: linear-gradient(90deg, #4f46e5 0%, #9333ea 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-
-        /* Background Blobs */
-        .blob { position: absolute; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.4; animation: blob-bounce 10s infinite ease; }
-        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #4f46e5; }
-        .blob-2 { top: 20%; right: -10%; width: 400px; height: 400px; background: #9333ea; }
-        .blob-3 { bottom: -10%; left: 20%; width: 600px; height: 600px; background: #2563eb; }
-        @keyframes blob-bounce { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(20px, -20px) scale(1.1); } }
-
-        /* Mobile Menu */
-        .mobile-menu { transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .mobile-menu.open { transform: translateX(0); }
+        /* Vertical Text Utilities */
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+        
+        .social-vertical {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+        }
 
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f1115; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #555; }
 
         /* Logos */
-        .partner-logo { filter: grayscale(100%) brightness(0) invert(1) opacity(0.6); transition: all 0.3s; }
-        .partner-logo:hover { filter: grayscale(0%) brightness(1) invert(0) opacity(1); }
+        .partner-logo { filter: grayscale(100%) brightness(200%) opacity(0.5); transition: all 0.3s; }
+        .partner-logo:hover { filter: grayscale(0%) brightness(100%) opacity(1); }
 
         /* Swiper */
-        .swiper-slide { filter: grayscale(20%); transition: 0.3s; }
-        .swiper-slide-active { filter: grayscale(0%); transform: scale(1.05); }
-        .swiper-slide img { border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); }
+        .swiper-slide { filter: grayscale(50%) brightness(0.7); transition: 0.5s; opacity: 0.5; }
+        .swiper-slide-active { filter: grayscale(0%) brightness(1.1); transform: scale(1.05); opacity: 1; z-index: 10; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+        .swiper-slide img { border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+
+        /* Mobile Menu */
+        .mobile-menu { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mobile-menu.open { transform: translateX(0); }
 
         /* POPUP STYLES */
         .popup-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
             z-index: 1000;
             display: flex;
@@ -95,7 +96,7 @@
             justify-content: center;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
         }
         .popup-overlay.active {
             opacity: 1;
@@ -103,244 +104,306 @@
         }
         .popup-content {
             transform: scale(0.95);
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .popup-overlay.active .popup-content {
             transform: scale(1);
         }
     </style>
 </head>
-<body class="font-sans antialiased selection:bg-indigo-500 selection:text-white relative">
+<body class="font-sans antialiased selection:bg-white selection:text-black relative">
 
     <!-- POPUP MODAL -->
     <div id="imagePopup" class="popup-overlay" onclick="closePopup(event)">
-        <div class="popup-content relative max-w-4xl w-[90%] md:w-auto mx-auto p-1">
+        <div class="popup-content relative max-w-4xl w-[90%] md:w-auto mx-auto bg-dark-card p-1 rounded-xl shadow-2xl border border-white/10">
             <!-- Close Button -->
-            <button onclick="closePopup(event)" class="absolute -top-4 -right-4 md:-top-6 md:-right-6 w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-white hover:bg-indigo-500 transition-colors z-20 shadow-lg border border-white/20">
-                <i class="fas fa-times"></i>
+            <button onclick="closePopup(event)" class="absolute -top-5 -right-5 w-10 h-10 bg-white rounded-full flex items-center justify-center text-black hover:bg-gray-200 transition-colors z-20 shadow-xl">
+                <i class="fas fa-times text-lg"></i>
             </button>
             
-            <!-- Image Container with Glass Border -->
-            <div class="glass-card rounded-2xl overflow-hidden shadow-2xl relative">
-                <!-- Replace 'assets/images/popup.jpg' with your actual image path -->
-                <img src="assets/images/events/PROTOSYNTH 2026.jpeg" alt="Special Announcement" class="w-full h-auto max-h-[80vh] object-contain block">
+            <div class="rounded-lg overflow-hidden relative">
+                <img src="assets/images/events/PROTOSYNTH 2026.jpeg" alt="Special Announcement" class="w-full h-auto max-h-[80vh] object-contain block bg-black" onerror="this.src='https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=1200'">
             </div>
         </div>
     </div>
 
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
-
-    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
+    <!-- Main Navigation (Transparent & Minimalist) -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-500 py-6">
+        <div class="max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-12">
+                <!-- Logo area matching reference image -->
                 <div class="flex items-center">
-                    <a href="index.html" class="flex items-center space-x-3 group">
-                        <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
-                        <span class="text-2xl font-bold tracking-tight text-white">MET'S <span class="text-indigo-400">IEDC</span></span>
+                    <a href="index.html" class="flex items-center group">
+                        <span class="text-2xl font-display font-bold tracking-tight text-white group-hover:opacity-80 transition-opacity">
+                            MET'S IEDC
+                        </span>
                     </a>
-                    <div class="hidden md:ml-12 md:flex md:space-x-8">
-                        <a href="announcement.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Announcement</a>
-                        <a href="event.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Events</a>
-                        <a href="report.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Reports</a>
-                        <a href="team.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Ex-Com</a>
-                        <a href="initiatives.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Initiatives</a>
-                        <a href="news.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">News</a>
-                        <a href="contact.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Contact</a>
-                        <a href="about.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">About</a>
-                    </div>
                 </div>
-                <div class="hidden md:flex items-center">
-                    <a href="login.html" class="glass-card glass-hover text-white px-6 py-2.5 rounded-full text-sm font-medium border border-white/10">Log in</a>
+                
+                <!-- Desktop Links matching reference style -->
+                <div class="hidden md:flex items-center space-x-10">
+                    <a href="event.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Events</a>
+                    <a href="initiatives.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Initiatives</a>
+                    <a href="report.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Reports</a>
+                    <a href="team.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Ex-Com</a>
+                    <a href="contact.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Contact</a>
+                    
+                    <!-- Search Icon matching reference -->
+                    <button class="text-white/80 hover:text-white ml-4 transition-colors">
+                        <i class="fas fa-search text-sm"></i>
+                    </button>
                 </div>
+
+                <!-- Mobile Menu Button -->
                 <button id="mobile-menu-button" class="md:hidden text-white p-2">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
         </div>
         
-        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-xl z-50">
-            <div class="flex justify-end p-6">
-                <button id="close-mobile-menu" class="text-white p-2">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <!-- Mobile Menu (Dark Theme) -->
+        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-dark-base/95 backdrop-blur-xl z-50 overflow-y-auto">
+            <div class="flex justify-between items-center p-8">
+                <span class="text-xl font-display font-bold text-white">MENU</span>
+                <button id="close-mobile-menu" class="text-white/70 hover:text-white p-2">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <nav class="flex flex-col space-y-6 px-8 mt-10 text-center">
-                      <a href="announcement.html" class="text-2xl font-light text-white hover:text-indigo-400">Announcement</a>
-                 <a href="event.html" class="text-2xl font-light text-white hover:text-indigo-400">Events</a>
-                 <a href="report.html" class="text-2xl font-light text-white hover:text-indigo-400">Reports</a>
-                <a href="team.html" class="text-2xl font-light text-white hover:text-indigo-400">Ex-Com</a>
-                <a href="initiatives.html" class="text-2xl font-light text-white hover:text-indigo-400">Initiatives</a>
-                 <a href="contact.html" class="text-2xl font-light text-white hover:text-indigo-400">Contact Us</a>
-            <a href="about.html" class="text-2xl font-light text-white hover:text-indigo-400">About Us</a>
-                <a href="login.html" class="mt-8 py-4 bg-indigo-600 rounded-full text-white font-medium">Login</a>
+            <nav class="flex flex-col space-y-8 px-8 py-12 text-center">
+                <a href="announcement.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Announcement</a>
+                <a href="event.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Events</a>
+                <a href="initiatives.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Initiatives</a>
+                <a href="report.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Reports</a>
+                <a href="team.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Ex-Com</a>
+                <a href="contact.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Contact</a>
+                <div class="pt-8 mt-8 border-t border-white/10">
+                    <a href="login.html" class="text-lg font-display font-medium text-white tracking-widest uppercase flex items-center justify-center gap-3">
+                        <i class="fas fa-user-circle"></i> Portal Login
+                    </a>
+                </div>
             </nav>
         </div>
     </nav>
 
-    <div class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-8">
-                <span class="block text-white mb-2">Innovate together</span>
-                <span class="block gradient-accent">with bold ideas</span>
+    <!-- Cinematic Hero Section -->
+    <div class="relative h-screen w-full flex items-center justify-center overflow-hidden">
+        <!-- Background Image (Tech/Innovation Theme) -->
+        <!-- Using a dark, dynamic tech innovation image to match the IEDC context while keeping the cinematic vibe -->
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2000')] bg-cover bg-center transform scale-105" style="background-position: center 30%;"></div>
+        
+        <!-- Gradient Overlays to match the warm/dark atmospheric lighting of the reference image -->
+        <div class="absolute inset-0 bg-gradient-to-tr from-[#12161c]/95 via-[#1a2125]/80 to-[#5a4329]/40 mix-blend-multiply"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0f1115]"></div>
+
+        <!-- Main Center Content -->
+        <div class="relative z-10 text-center text-white px-4 w-full flex flex-col items-center mt-12">
+            <h2 class="text-3xl md:text-5xl lg:text-6xl font-display font-light text-white/90 mb-0 md:mb-2 tracking-wide">
+                The spirit of
+            </h2>
+            <h1 class="text-[5rem] md:text-[8rem] lg:text-[11rem] font-display font-black uppercase leading-[0.9] tracking-tighter mb-8 text-white drop-shadow-2xl">
+                Innovation
             </h1>
-            <p class="mt-6 text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">MET'S IEDC empowers students to build, test, and launch impactful innovations within a futuristic ecosystem.</p>
-            
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="events.html" class="glass-card glass-hover px-8 py-4 rounded-full text-white font-semibold flex items-center justify-center gap-2 group">
-                    <span>Explore Gallery</span>
-                    <i class="fas fa-arrow-right text-sm transform group-hover:translate-x-1 transition-transform"></i>
-                </a>
-                <a href="https://iedc.startupmission.in/" class="px-8 py-4 rounded-full text-white font-semibold border border-white/20 hover:bg-white/5 transition-colors">IEDC Portal</a>
-            </div>
+            <a href="events.html" class="text-[10px] md:text-xs uppercase tracking-[0.3em] text-white/80 hover:text-white transition-colors flex items-center gap-3 font-semibold group">
+                SEE OUR INITIATIVES 
+                <i class="fas fa-chevron-right text-[10px] transform group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
+
+        <!-- Right Side Vertical Social Links -->
+        <div class="absolute right-8 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-10 text-[10px] uppercase tracking-[0.2em] font-medium text-white/60 z-40 social-vertical">
+            <a href="#" class="hover:text-white transition-colors">Youtube</a>
+            <a href="#" class="hover:text-white transition-colors">Instagram</a>
+            <a href="#" class="hover:text-white transition-colors">Twitter</a>
+            <a href="#" class="hover:text-white transition-colors">Facebook</a>
+        </div>
+
+        <!-- Bottom Right Scroll Indicator -->
+        <div class="absolute bottom-12 right-10 hidden md:flex flex-col items-center gap-6 z-40">
+            <span class="vertical-text text-[10px] uppercase tracking-[0.3em] font-medium text-white/60">SCROLL</span>
+            <div class="w-[1px] h-16 bg-gradient-to-b from-white/60 to-transparent"></div>
+        </div>
+
+        <!-- Bottom Left Icon (Audio/Wave style from reference) -->
+        <div class="absolute bottom-12 left-10 hidden md:flex items-center gap-1 z-40 opacity-70">
+            <div class="w-[2px] h-3 bg-white rounded-full animate-[pulse_1s_ease-in-out_infinite]"></div>
+            <div class="w-[2px] h-6 bg-white rounded-full animate-[pulse_1.2s_ease-in-out_infinite_0.2s]"></div>
+            <div class="w-[2px] h-4 bg-white rounded-full animate-[pulse_0.9s_ease-in-out_infinite_0.4s]"></div>
+            <div class="w-[2px] h-8 bg-white rounded-full animate-[pulse_1.5s_ease-in-out_infinite_0.1s]"></div>
+            <div class="w-[2px] h-5 bg-white rounded-full animate-[pulse_1.1s_ease-in-out_infinite_0.5s]"></div>
+            <div class="w-[2px] h-3 bg-white rounded-full animate-[pulse_1s_ease-in-out_infinite_0.3s]"></div>
+        </div>
+
+        <!-- Bottom Center Slider Dots -->
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-4 z-40">
+            <button class="w-1.5 h-1.5 rounded-full bg-white transition-all"></button>
+            <button class="w-1.5 h-1.5 rounded-full border border-white/50 hover:bg-white/50 transition-all"></button>
+            <button class="w-1.5 h-1.5 rounded-full border border-white/50 hover:bg-white/50 transition-all"></button>
         </div>
     </div>
 
-    <section class="py-20 relative">
+    <!-- Gallery / Journey Section -->
+    <section class="py-24 relative bg-dark-base">
         <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Our Journey</h2>
-                <div class="h-1 w-20 bg-indigo-500 mx-auto rounded-full"></div>
+            <div class="text-center mb-20">
+                <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-6 tracking-tight">Our Journey</h2>
+                <div class="h-[1px] w-24 bg-white/20 mx-auto"></div>
+                <p class="mt-6 text-white/50 max-w-2xl mx-auto font-light tracking-wide text-sm">Glimpses of our events, workshops, and milestones.</p>
             </div>
             
-            <div class="swiper mySwiper !pb-12">
+            <div class="swiper mySwiper !pb-20 max-w-7xl mx-auto">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="assets/images/events/IMG-20251112-WA0014.jpg" class="w-full h-64 md:h-96 object-cover"></div>
-                    <div class="swiper-slide"><img src="assets/images/events/IMG-20251112-WA0013.jpg" class="w-full h-64 md:h-96 object-cover"></div>
-                    <div class="swiper-slide"><img src="assets/images/events/1.1.jpg" class="w-full h-64 md:h-96 object-cover"></div>
-                    <div class="swiper-slide"><img src="assets/images/events/2.1.jpg" class="w-full h-64 md:h-96 object-cover"></div>
+                    <!-- Placeholder images -->
+                    <div class="swiper-slide"><img src="assets/images/events/IMG-20251112-WA0014.jpg" onerror="this.src='https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800'" class="w-full h-[400px] object-cover"></div>
+                    <div class="swiper-slide"><img src="assets/images/events/IMG-20251112-WA0013.jpg" onerror="this.src='https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800'" class="w-full h-[400px] object-cover"></div>
+                    <div class="swiper-slide"><img src="assets/images/events/1.1.jpg" onerror="this.src='https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800'" class="w-full h-[400px] object-cover"></div>
+                    <div class="swiper-slide"><img src="assets/images/events/2.1.jpg" onerror="this.src='https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?q=80&w=800'" class="w-full h-[400px] object-cover"></div>
                 </div>
+                <!-- Custom styling for pagination to match dark theme -->
                 <div class="swiper-pagination"></div>
             </div>
         </div>
     </section>
 
-    <section class="py-20">
+    <!-- Upcoming Events Section -->
+    <section class="py-24 bg-[#14171c] border-t border-white/5">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <span class="text-indigo-400 font-semibold tracking-wider text-sm uppercase mb-2 block">Mark Your Calendar</span>
-                <h2 class="text-4xl font-bold text-white">Upcoming Events</h2>
+            <div class="text-center mb-20">
+                <span class="text-white/40 font-semibold tracking-[0.2em] text-xs uppercase mb-4 block">Mark Your Calendar</span>
+                <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-6 tracking-tight">Upcoming Events</h2>
+                <div class="h-[1px] w-24 bg-white/20 mx-auto"></div>
             </div>
             
-            <div class="max-w-5xl mx-auto space-y-8">
-                
-                <div class="glass-card rounded-3xl p-1 overflow-hidden group">
-                    <div class="bg-[#0a0a0a]/50 rounded-[22px] p-6 md:p-10">
-                        <div class="grid md:grid-cols-2 gap-8 items-center">
-                            <div class="order-2 md:order-1">
-                                <div class="inline-flex items-center px-3 py-1 rounded-full border border-yellow-500/30 bg-yellow-500/10 text-yellow-500 text-xs font-medium mb-4">
-                                    <span class="w-2 h-2 rounded-full bg-yellow-500 mr-2 animate-pulse"></span> Buildathon
+            <div class="max-w-6xl mx-auto">
+                <div class="bg-dark-card rounded-xl border border-white/10 overflow-hidden card-hover">
+                    <div class="p-8 md:p-14">
+                        <div class="grid lg:grid-cols-2 gap-12 items-center">
+                            <div class="order-2 lg:order-1">
+                                <div class="inline-flex items-center px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-white/80 text-xs font-semibold tracking-wider uppercase mb-8">
+                                    <span class="w-2 h-2 rounded-full bg-red-500 mr-3 animate-pulse"></span> Buildathon
                                 </div>
-                                <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">PROTOSYNTH 2026</h3>
+                                <h3 class="text-4xl md:text-5xl font-display font-bold text-white mb-6 tracking-tight">PROTOSYNTH 2026</h3>
                                 
-                                <div class="flex flex-wrap gap-4 text-gray-400 text-sm mb-6">
-                                    <div class="flex items-center"><i class="far fa-calendar-alt mr-2 text-indigo-400"></i> Feb 11 2026 & Feb 12 2026</div>
-                                    <div class="flex items-center"><i class="far fa-clock mr-2 text-indigo-400"></i> 09:00 AM</div>
-                                    <p class="text-gray-400 mb-8 leading-relaxed">Cowntdown for registration deadline</p>
+                                <div class="flex flex-col space-y-4 text-white/60 font-light mb-10 text-sm">
+                                    <div class="flex items-center"><i class="far fa-calendar-alt w-6 opacity-70"></i> Feb 11, 2026 - Feb 12, 2026</div>
+                                    <div class="flex items-center"><i class="far fa-clock w-6 opacity-70"></i> 09:00 AM IST</div>
+                                    <div class="flex items-center"><i class="fas fa-map-marker-alt w-6 opacity-70"></i> MET'S School of Engineering Campus</div>
                                 </div>
 
-                                <div class="grid grid-cols-4 gap-2 md:gap-4 mb-8 text-center" id="countdown-container">
-                                    <div class="p-2 md:p-3 bg-white/5 rounded-lg border border-white/10 backdrop-blur-sm">
-                                        <div class="text-xl md:text-2xl font-bold text-white" id="days">00</div>
-                                        <div class="text-[10px] md:text-xs text-gray-400 uppercase tracking-wider">Days</div>
+                                <p class="text-white/40 uppercase tracking-widest text-xs font-semibold mb-6">Registration Closing In:</p>
+                                
+                                <div class="grid grid-cols-4 gap-4 mb-10 text-center" id="countdown-container">
+                                    <div class="p-4 bg-[#0a0c0f] rounded-lg border border-white/5">
+                                        <div class="text-3xl md:text-4xl font-display font-light text-white" id="days">00</div>
+                                        <div class="text-[9px] text-white/40 uppercase tracking-widest mt-2">Days</div>
                                     </div>
-                                    <div class="p-2 md:p-3 bg-white/5 rounded-lg border border-white/10 backdrop-blur-sm">
-                                        <div class="text-xl md:text-2xl font-bold text-white" id="hours">00</div>
-                                        <div class="text-[10px] md:text-xs text-gray-400 uppercase tracking-wider">Hours</div>
+                                    <div class="p-4 bg-[#0a0c0f] rounded-lg border border-white/5">
+                                        <div class="text-3xl md:text-4xl font-display font-light text-white" id="hours">00</div>
+                                        <div class="text-[9px] text-white/40 uppercase tracking-widest mt-2">Hours</div>
                                     </div>
-                                    <div class="p-2 md:p-3 bg-white/5 rounded-lg border border-white/10 backdrop-blur-sm">
-                                        <div class="text-xl md:text-2xl font-bold text-white" id="minutes">00</div>
-                                        <div class="text-[10px] md:text-xs text-gray-400 uppercase tracking-wider">Mins</div>
+                                    <div class="p-4 bg-[#0a0c0f] rounded-lg border border-white/5">
+                                        <div class="text-3xl md:text-4xl font-display font-light text-white" id="minutes">00</div>
+                                        <div class="text-[9px] text-white/40 uppercase tracking-widest mt-2">Mins</div>
                                     </div>
-                                    <div class="p-2 md:p-3 bg-white/5 rounded-lg border border-white/10 backdrop-blur-sm">
-                                        <div class="text-xl md:text-2xl font-bold text-indigo-400" id="seconds">00</div>
-                                        <div class="text-[10px] md:text-xs text-gray-400 uppercase tracking-wider">Secs</div>
+                                    <div class="p-4 bg-white/5 rounded-lg border border-white/10">
+                                        <div class="text-3xl md:text-4xl font-display font-light text-white" id="seconds">00</div>
+                                        <div class="text-[9px] text-white/60 uppercase tracking-widest mt-2">Secs</div>
                                     </div>
                                 </div>
-                                <p class="text-gray-400 mb-8 leading-relaxed">
-PROTOSYNTH 2026
-Stop Dreaming. Start Synthesizing
 
-Are you sitting on a concept that could solve a daily struggle? Do you have a sketch that could change the world? It is time to Grow Beyond the Idea.                                </p>
+                                <p class="text-white/50 font-light mb-10 leading-relaxed text-sm">
+                                    <strong class="text-white font-medium block mb-2">Stop Dreaming. Start Synthesizing.</strong>
+                                    Are you sitting on a concept that could solve a daily struggle? Do you have a sketch that could change the world? It is time to Grow Beyond the Idea.
+                                </p>
                                 
-                                <div class="flex flex-wrap gap-4">
-                                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfR2s-yrgLFL_o1UapBWPstYf1lUoVeXm79eqw-4jisIWGEBA/viewform" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold flex items-center gap-2 transition-colors">
-                                        Register Now <i class="fas fa-arrow-right"></i>
+                                <div class="flex flex-wrap gap-5">
+                                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfR2s-yrgLFL_o1UapBWPstYf1lUoVeXm79eqw-4jisIWGEBA/viewform" target="_blank" class="px-8 py-4 bg-white text-black hover:bg-gray-200 rounded text-xs tracking-widest uppercase font-bold transition-colors">
+                                        Register Now
                                     </a>
-                                    <a href="protosynth2026.html" class="px-6 py-3 border border-white/20 hover:bg-white/10 text-white rounded-xl text-sm font-medium transition-colors">
-                                        Learn More
+                                    <a href="protosynth2026.html" class="px-8 py-4 border border-white/20 hover:border-white text-white rounded text-xs tracking-widest uppercase font-bold transition-colors">
+                                        Guidelines
                                     </a>
                                 </div>
                             </div>
-                            <div class="order-1 md:order-2">
-                                <div class="relative rounded-2xl overflow-hidden aspect-[3/4] border border-white/10 group-hover:border-white/20 transition-all">
-                                    <img src="assets/images/events/PROTOSYNTH 2026.jpeg" alt="Protosynth 2026 Poster" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" onerror="this.src='https://images.unsplash.com/photo-1614726365723-49fb6d0d9326?q=80&w=2000'">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                            <div class="order-1 lg:order-2">
+                                <div class="relative aspect-[3/4] overflow-hidden group">
+                                    <!-- Using an image that fits the aesthetic -->
+                                    <div class="absolute inset-0 bg-dark-base z-0"></div>
+                                    <img src="assets/images/events/PROTOSYNTH 2026.jpeg" alt="Protosynth Poster" class="w-full h-full object-cover relative z-10 transition-transform duration-1000 group-hover:scale-105 opacity-80 mix-blend-lighten" onerror="this.src='https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800'">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-[#181b21] via-transparent to-transparent z-20"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
     </section>
 
-    <div class="py-20 border-t border-white/5 bg-black/40">
+    <!-- Partners Section -->
+    <div class="py-20 bg-dark-base border-y border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p class="text-center text-gray-500 text-sm uppercase tracking-widest mb-12">In Collaboration With</p>
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-8 items-center justify-items-center opacity-70">
-                <img class="h-12 w-auto partner-logo" src="assets/images/logos/APJ_Abdul_Kalam_Technological_University_logo.png" alt="KTU">
-                <img class="h-12 w-auto partner-logo" src="assets/images/logos/IIC.png" alt="IIC">
-                <img class="h-12 w-auto partner-logo" src="assets/images/logos/KERALA IEDC.png" alt="Kerala IEDC">
-                <img class="h-12 w-auto partner-logo" src="assets/images/logos/IPL_LOGO-removebg-preview.png" alt="IPL">
-                <img class="h-12 w-auto partner-logo" src="assets/images/logos/METS IEDC LOGO.jpg" alt="METS IEDC">
-                <img class="h-12 w-auto partner-logo" src="assets/images/logos/ksum.png" alt="KSUM">
-                <img class="h-12 w-auto partner-logo" src="assets/images/logos/mets_logo.png" alt="METS">
+            <h3 class="text-center text-white/30 text-xs font-semibold uppercase tracking-[0.2em] mb-12">In Collaboration With</h3>
+            <div class="flex flex-wrap justify-center gap-12 md:gap-20 items-center">
+                <img class="h-12 w-auto partner-logo" src="assets/images/logos/APJ_Abdul_Kalam_Technological_University_logo.png" alt="KTU" onerror="this.src='https://ui-avatars.com/api/?name=KTU&background=181b21&color=fff&font-size=0.4'">
+                <img class="h-12 w-auto partner-logo" src="assets/images/logos/IIC.png" alt="IIC" onerror="this.src='https://ui-avatars.com/api/?name=IIC&background=181b21&color=fff&font-size=0.4'">
+                <img class="h-12 w-auto partner-logo" src="assets/images/logos/KERALA IEDC.png" alt="Kerala IEDC" onerror="this.src='https://ui-avatars.com/api/?name=IEDC&background=181b21&color=fff&font-size=0.4'">
+                <img class="h-12 w-auto partner-logo" src="assets/images/logos/IPL_LOGO-removebg-preview.png" alt="IPL" onerror="this.src='https://ui-avatars.com/api/?name=IPL&background=181b21&color=fff&font-size=0.4'">
+                <img class="h-12 w-auto partner-logo" src="assets/images/logos/ksum.png" alt="KSUM" onerror="this.src='https://ui-avatars.com/api/?name=KSUM&background=181b21&color=fff&font-size=0.4'">
+                <img class="h-12 w-auto partner-logo" src="assets/images/logos/mets_logo.png" alt="METS" onerror="this.src='https://ui-avatars.com/api/?name=METS&background=181b21&color=fff&font-size=0.4'">
             </div>
         </div>
     </div>
 
-    <div class="fixed bottom-6 right-6 z-40">
-        <a href="https://whatsapp.com/channel/0029Vb5RvKWI1rchteX7pu3A" target="_blank" class="flex items-center justify-center w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all transform hover:scale-110">
-            <i class="fab fa-whatsapp text-2xl text-white"></i>
+    <!-- Floating Contact (Subtle version) -->
+    <div class="fixed bottom-8 right-8 z-40 hidden lg:block">
+        <a href="https://whatsapp.com/channel/0029Vb5RvKWI1rchteX7pu3A" target="_blank" class="w-12 h-12 rounded-full border border-white/20 bg-dark-base/80 backdrop-blur-md flex items-center justify-center text-white/70 hover:text-white hover:border-white transition-all hover:scale-110">
+            <i class="fab fa-whatsapp text-xl"></i>
         </a>
     </div>
 
-    <footer class="border-t border-white/5 bg-[#020202] pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                <div class="lg:col-span-2">
-                    <span class="text-2xl font-bold text-white">MET'S IEDC</span>
-                    <p class="text-gray-500 mt-4 text-sm leading-relaxed max-w-md">Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission. We are building the future, one idea at a time.</p>
+    <!-- Footer -->
+    <footer class="bg-[#0a0c0f] pt-24 pb-12 border-t border-white/5">
+        <div class="max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-16 mb-20">
+                <div class="md:col-span-5">
+                    <span class="text-3xl font-display font-bold text-white tracking-tight mb-6 block">MET'S IEDC.</span>
+                    <p class="text-white/50 text-sm leading-relaxed max-w-md font-light">
+                        Fostering a culture of innovation and entrepreneurship among students at MET'S School of Engineering. Supported by Kerala Startup Mission, we build the tech leaders of tomorrow.
+                    </p>
                 </div>
-                <div>
-                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h3>
-                    <ul class="space-y-3 text-sm text-gray-500">
-                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Home</a></li>
-                        <li><a href="about.html" class="hover:text-indigo-400 transition-colors">About Us</a></li>
-                        <li><a href="events.html" class="hover:text-indigo-400 transition-colors">Events</a></li>
-                        <li><a href="news.html" class="hover:text-indigo-400 transition-colors">News</a></li>
+                
+                <div class="md:col-span-3">
+                    <h3 class="text-xs font-bold text-white uppercase tracking-[0.2em] mb-8">Navigation</h3>
+                    <ul class="space-y-4 text-sm font-light text-white/50">
+                        <li><a href="about.html" class="hover:text-white transition-colors">About Story</a></li>
+                        <li><a href="events.html" class="hover:text-white transition-colors">Latest Events</a></li>
+                        <li><a href="initiatives.html" class="hover:text-white transition-colors">Our Initiatives</a></li>
+                        <li><a href="https://startupmission.kerala.gov.in/" target="_blank" class="hover:text-white transition-colors">Kerala Startup Mission</a></li>
                     </ul>
                 </div>
-                <div>
-                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contact</h3>
-                    <div class="space-y-3 text-sm text-gray-500">
-                        <p class="flex items-center"><i class="fas fa-envelope mr-3 text-indigo-500"></i>metsenggiedc@gmail.com</p>
-                        <p class="flex items-center"><i class="fas fa-phone mr-3 text-indigo-500"></i>+91 7306226875</p>
-                        <p class="flex items-center"><i class="fas fa-map-marker-alt mr-3 text-indigo-500"></i>Mala, Thrissur, Kerala</p>
+                
+                <div class="md:col-span-4">
+                    <h3 class="text-xs font-bold text-white uppercase tracking-[0.2em] mb-8">Connect</h3>
+                    <div class="space-y-4 text-sm font-light text-white/50 mb-8">
+                        <p>MET'S School of Engineering,<br>Mala, Thrissur, Kerala - 680732</p>
+                        <p class="hover:text-white transition-colors cursor-pointer">+91 7306226875</p>
+                        <p class="hover:text-white transition-colors cursor-pointer">metsenggiedc@gmail.com</p>
                     </div>
-                    <div class="flex space-x-4 mt-6">
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-instagram text-xl"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-twitter text-xl"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-white/40 hover:text-white transition-colors"><i class="fab fa-instagram text-lg"></i></a>
+                        <a href="#" class="text-white/40 hover:text-white transition-colors"><i class="fab fa-twitter text-lg"></i></a>
+                        <a href="#" class="text-white/40 hover:text-white transition-colors"><i class="fab fa-linkedin-in text-lg"></i></a>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
-                <p>© 2025 IEDC MET'S SCHOOL OF ENGINEERING.</p>
-                <p>Designed for Innovation</p>
+            
+            <!-- Bottom Bar -->
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-light tracking-wide text-white/40">
+                <p>© <span id="year">2026</span> MET'S IEDC. ALL RIGHTS RESERVED.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-white transition-colors uppercase">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors uppercase">Terms</a>
+                </div>
             </div>
         </div>
     </footer>
@@ -348,11 +411,14 @@ Are you sitting on a concept that could solve a daily struggle? Do you have a sk
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // SHOW POPUP AUTOMATICALLY
+            // Update Copyright Year
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // SHOW POPUP
             const popup = document.getElementById('imagePopup');
             setTimeout(() => {
                 if(popup) popup.classList.add('active');
-            }, 1500); // 1.5 second delay for better UX
+            }, 1200); 
 
             window.closePopup = function(e) {
                 if (e.target === popup || e.target.closest('button')) {
@@ -360,11 +426,11 @@ Are you sitting on a concept that could solve a daily struggle? Do you have a sk
                 }
             };
 
-            // Swiper Config
+            // Swiper Config (Subtle cinematic transition)
             new Swiper('.mySwiper', {
                 effect: 'coverflow', grabCursor: true, centeredSlides: true, slidesPerView: 'auto',
-                coverflowEffect: { rotate: 20, stretch: 0, depth: 200, modifier: 1, slideShadows: true },
-                loop: true, autoplay: { delay: 3000, disableOnInteraction: false },
+                coverflowEffect: { rotate: 5, stretch: 0, depth: 100, modifier: 1.5, slideShadows: false },
+                loop: true, autoplay: { delay: 4000, disableOnInteraction: false },
                 pagination: { el: '.swiper-pagination', clickable: true },
             });
 
@@ -372,43 +438,65 @@ Are you sitting on a concept that could solve a daily struggle? Do you have a sk
             const btn = document.getElementById('mobile-menu-button');
             const menu = document.getElementById('mobile-menu');
             const closeBtn = document.getElementById('close-mobile-menu');
+            
             function toggleMenu() {
                 menu.classList.toggle('open');
                 document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
             }
+            
             if(btn) btn.addEventListener('click', toggleMenu);
             if(closeBtn) closeBtn.addEventListener('click', toggleMenu);
+
+            // Close menu when a link inside it is clicked
+            const menuLinks = menu.querySelectorAll('a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (menu.classList.contains('open')) {
+                        toggleMenu();
+                    }
+                });
+            });
             
-            // Navbar Scroll
+            // Navbar Scroll Effect
             window.addEventListener('scroll', () => {
-                const nav = document.querySelector('nav');
-                if (window.scrollY > 20) { nav.classList.add('shadow-lg'); nav.style.background = 'rgba(5, 5, 5, 0.9)'; } 
-                else { nav.classList.remove('shadow-lg'); nav.style.background = 'rgba(5, 5, 5, 0.7)'; }
+                const nav = document.getElementById('navbar');
+                if (window.scrollY > 50) { 
+                    nav.classList.add('scrolled-nav');
+                    nav.classList.remove('py-6');
+                } else { 
+                    nav.classList.remove('scrolled-nav');
+                    nav.classList.add('py-6');
+                }
             });
 
-            // --- COUNTDOWN LOGIC (UPDATED TARGET: Feb 2, 2026 23:59:00) ---
-            // Set the date we're counting down to
+            // --- COUNTDOWN LOGIC ---
             const countDownDate = new Date("Feb 2, 2026 23:59:00").getTime();
 
-            // Update the count down every 1 second
             const x = setInterval(function() {
-
-                // Get today's date and time
                 const now = new Date().getTime();
-
-                // Find the distance between now and the count down date
                 const distance = countDownDate - now;
 
-                // Time calculations for days, hours, minutes and seconds
+                if (distance < 0) {
+                    clearInterval(x);
+                    const container = document.getElementById("countdown-container");
+                    if(container) {
+                        container.className = "mb-10";
+                        container.innerHTML = `
+                            <div class="border border-white/20 bg-white/5 rounded p-6 text-center">
+                                <div class="font-display font-light text-xl text-white tracking-widest uppercase mb-2">Registration Closed</div>
+                                <div class="text-white/50 text-xs font-light">The deadline for applications has passed.</div>
+                            </div>`;
+                    }
+                    return;
+                }
+
                 const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                // Helper to add leading zero (e.g., "9" becomes "09")
                 const formatTime = (time) => time < 10 ? `0${time}` : time;
 
-                // Display the result in the elements
                 const elDays = document.getElementById("days");
                 if(elDays) {
                     document.getElementById("days").innerHTML = formatTime(days);
@@ -416,15 +504,13 @@ Are you sitting on a concept that could solve a daily struggle? Do you have a sk
                     document.getElementById("minutes").innerHTML = formatTime(minutes);
                     document.getElementById("seconds").innerHTML = formatTime(seconds);
                 }
-
-                // If the count down is finished, write some text
-                if (distance < 0) {
-                    clearInterval(x);
-                    document.getElementById("countdown-container").innerHTML = "<div class='text-xl text-red-500 font-bold py-4'>Registration Closed!</div>";
-                }
             }, 1000);
-            // --- END COUNTDOWN LOGIC ---
         });
     </script>
+    <style>
+        /* Custom Pagination Dots override for dark theme */
+        .swiper-pagination-bullet { background: rgba(255,255,255,0.3); opacity: 1; }
+        .swiper-pagination-bullet-active { background: #fff; }
+    </style>
 </body>
 </html>
