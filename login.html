@@ -425,6 +425,22 @@
             }
         });
 
+        // --- FORGOT PASSWORD LOGIC ---
+        document.getElementById('forgotPasswordLink').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            if (!email) {
+                return showMessage("Please enter your email address first to reset your password.", "error");
+            }
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showMessage("Password reset email sent! Check your inbox.", "success");
+            } catch (error) {
+                showMessage("Error: " + error.message, "error");
+            }
+        });
+
         // --- EMAIL OTP SIGNUP LOGIC ---
         document.getElementById('sendEmailOtpBtn').addEventListener('click', async () => {
             const email = document.getElementById('signupEmailInput').value;
