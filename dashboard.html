@@ -6,89 +6,140 @@
     <title>Student Dashboard | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Immersive Theme Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif']
+                    }
                 }
             }
         }
     </script>
 
     <style>
-        body { background-color: #050505; color: #ffffff; overflow-x: hidden; }
-        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); }
-        .glass-sidebar { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.05); }
-        .glass-header { background: rgba(5, 5, 5, 0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .glass-input { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
-        .glass-input:focus { background: rgba(255, 255, 255, 0.08); border-color: #6366f1; outline: none; }
-        select.glass-input option { background-color: #1a1a1a; color: white; }
+        body { 
+            background-color: #0f1115; /* Deep cinematic dark */
+            color: #ffffff; 
+            overflow-x: hidden; 
+        }
+
+        /* Monochromatic Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-sidebar {
+            background: rgba(10, 12, 15, 0.8);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-header {
+            background: rgba(15, 17, 21, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Input styling */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.4);
+            outline: none;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+        select.glass-input option { background-color: #0f1115; color: white; }
+
+        /* Sidebar Links */
         .sidebar-link { transition: all 0.3s ease; border-left: 3px solid transparent; }
         .sidebar-link:hover { background: rgba(255, 255, 255, 0.05); color: white; }
-        .sidebar-link.active { background: rgba(99, 102, 241, 0.1); color: #818cf8; border-left-color: #818cf8; }
-        .blob { position: absolute; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.4; animation: blob-bounce 10s infinite ease; }
-        .blob-1 { top: 0%; left: 0%; width: 600px; height: 600px; background: #4f46e5; }
-        .blob-2 { bottom: 0%; right: 0%; width: 500px; height: 500px; background: #9333ea; }
-        @keyframes blob-bounce { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(20px, -20px) scale(1.1); } }
-        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #050505; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        .sidebar-link.active { background: rgba(255, 255, 255, 0.1); color: #ffffff; border-left-color: #ffffff; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f1115; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+
+        /* Spinner */
+        .spinner { border: 3px solid rgba(255, 255, 255, 0.1); border-radius: 50%; border-top: 3px solid #ffffff; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="font-sans antialiased relative selection:bg-indigo-500 selection:text-white flex h-screen overflow-hidden">
+<body class="font-sans antialiased relative selection:bg-white selection:text-black flex h-screen overflow-hidden">
 
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
+    <!-- Subtle Atmospheric Lighting -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
     </div>
 
+    <!-- Sidebar (Desktop) -->
     <aside class="glass-sidebar w-64 flex-shrink-0 hidden md:flex flex-col h-full z-20">
-        <div class="p-6 flex items-center gap-3">
-            <img src="assets/images/logos/MSEM.jpg" alt="Logo" class="w-10 h-10 rounded-full border border-white/20">
-            <span class="text-xl font-bold text-white">MET'S IEDC</span>
+        <div class="p-6 flex items-center gap-3 border-b border-white/5">
+            <span class="text-xl font-display font-bold text-white tracking-widest uppercase">MET'S IEDC</span>
         </div>
 
-        <nav class="flex-grow px-4 py-4 space-y-2 overflow-y-auto">
-            <button onclick="showTab('dashboardOverview')" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+        <nav class="flex-grow px-4 py-6 space-y-2 overflow-y-auto">
+            <button onclick="showTab('dashboardOverview')" class="sidebar-link active w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
             </button>
-            <button onclick="showTab('profile')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="user" class="w-5 h-5"></i> My Profile
+            <button onclick="showTab('profile')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
+                <i data-lucide="user" class="w-4 h-4"></i> Profile
             </button>
-            <button onclick="showTab('joinIedc')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="badge-check" class="w-5 h-5"></i> Join IEDC
+            <button onclick="showTab('joinIedc')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
+                <i data-lucide="badge-check" class="w-4 h-4"></i> Join IEDC
             </button>
-            <button onclick="showTab('payments')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="credit-card" class="w-5 h-5"></i> Payments
+            <button onclick="showTab('payments')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
+                <i data-lucide="credit-card" class="w-4 h-4"></i> Payments
             </button>
-            <button onclick="showTab('attendance')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="clipboard-list" class="w-5 h-5"></i> Attendance
+            <button onclick="showTab('attendance')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
+                <i data-lucide="clipboard-list" class="w-4 h-4"></i> Attendance
             </button>
-            <button onclick="showTab('trackStatus')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="activity" class="w-5 h-5"></i> Track Status
+            <button onclick="showTab('trackStatus')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
+                <i data-lucide="activity" class="w-4 h-4"></i> Status
             </button>
-            <button onclick="showTab('certificates')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                <i data-lucide="award" class="w-5 h-5"></i> Certificates
+            <button onclick="showTab('certificates')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
+                <i data-lucide="award" class="w-4 h-4"></i> Certificates
             </button>
             
-            <div class="pt-4 pb-2">
-                <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Actions</p>
-                <button onclick="showTab('submitProject')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                    <i data-lucide="folder-plus" class="w-5 h-5"></i> Submit Project
+            <div class="pt-6 pb-2">
+                <p class="px-4 text-[9px] font-bold text-white/30 uppercase tracking-[0.2em] mb-4">Actions</p>
+                <button onclick="showTab('submitProject')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
+                    <i data-lucide="folder-plus" class="w-4 h-4"></i> Project
                 </button>
-                <button onclick="showTab('submitIdea')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                    <i data-lucide="lightbulb" class="w-5 h-5"></i> Submit Idea
+                <button onclick="showTab('submitIdea')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
+                    <i data-lucide="lightbulb" class="w-4 h-4"></i> Idea
                 </button>
-                <button onclick="showTab('submitEvent')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-lg text-gray-400 text-sm font-medium">
-                    <i data-lucide="calendar-plus" class="w-5 h-5"></i> Propose Event
+                <button onclick="showTab('submitEvent')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
+                    <i data-lucide="calendar-plus" class="w-4 h-4"></i> Event
                 </button>
             </div>
         </nav>
 
         <div class="p-4 border-t border-white/5">
-            <button id="logoutBtn" class="w-full flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 py-2.5 rounded-lg transition-colors text-sm font-medium border border-red-500/20">
+            <button id="logoutBtn" class="w-full flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white py-4 rounded border border-white/10 transition-colors text-xs font-bold uppercase tracking-widest">
                 <i data-lucide="log-out" class="w-4 h-4"></i> Logout
             </button>
         </div>
@@ -96,203 +147,248 @@
 
     <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10">
         
+        <!-- Header -->
         <header class="glass-header h-20 flex items-center justify-between px-6 md:px-10 shrink-0">
             <div class="flex items-center gap-4">
                 <button id="mobile-menu-toggle" class="md:hidden text-white p-2"><i data-lucide="menu" class="w-6 h-6"></i></button>
-                <h1 class="text-xl font-bold text-white">Student Dashboard</h1>
+                <h1 class="text-xl font-display font-bold text-white uppercase tracking-widest hidden sm:block">Dashboard</h1>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-4">
                 <div class="text-right hidden sm:block">
-                    <p class="text-sm font-medium text-white" id="userEmailHeader">Loading...</p>
-                    <p class="text-xs text-gray-500">Student</p>
+                    <p class="text-xs font-bold text-white uppercase tracking-wider" id="userEmailHeader">Loading...</p>
+                    <p class="text-[10px] text-white/50 uppercase tracking-widest">Student</p>
                 </div>
-                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold shadow-lg overflow-hidden" id="userAvatarHeader">
+                <div class="w-10 h-10 rounded border border-white/20 bg-[#0a0c0f] flex items-center justify-center text-white font-display font-bold shadow-lg overflow-hidden" id="userAvatarHeader">
                     S
                 </div>
             </div>
         </header>
 
-        <main class="flex-grow overflow-y-auto p-6 md:p-10">
+        <!-- Main Content Area -->
+        <main class="flex-grow overflow-y-auto p-4 md:p-10">
             
+            <!-- Dashboard Overview -->
             <div id="dashboardOverviewSection" class="tab-content space-y-8 max-w-7xl mx-auto">
-                <div class="glass-card rounded-3xl p-8 md:p-10">
-                    <h2 class="text-3xl font-bold text-white mb-2">Hello, <span id="displayNameBanner" class="text-indigo-400">Student</span>! 👋</h2>
-                    <p class="text-gray-400">Welcome to your innovation workspace.</p>
+                <div class="glass-panel rounded-2xl p-8 md:p-12">
+                    <span class="text-white/50 text-[10px] uppercase tracking-[0.2em] font-bold mb-2 block">Welcome Back</span>
+                    <h2 class="text-4xl md:text-5xl font-display font-black text-white mb-2 tracking-tighter uppercase"><span id="displayNameBanner" class="text-white">Student</span></h2>
+                    <p class="text-white/70 font-light tracking-wide">Your central hub for innovation and updates.</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div onclick="showTab('joinIedc')" class="glass-card p-6 rounded-2xl cursor-pointer hover:bg-white/5 transition border border-indigo-500/30">
-                        <i data-lucide="badge-check" class="w-8 h-8 text-indigo-400 mb-4"></i>
-                        <h3 class="text-xl font-bold text-white">Join IEDC</h3>
-                        <p class="text-gray-400 text-sm">Become an official member.</p>
+                    <div onclick="showTab('joinIedc')" class="glass-panel p-8 rounded-2xl cursor-pointer hover:bg-white/5 transition border border-white/20 group">
+                        <i data-lucide="badge-check" class="w-8 h-8 text-white mb-6 opacity-70 group-hover:opacity-100 transition-opacity"></i>
+                        <h3 class="text-xl font-display font-bold text-white uppercase tracking-tight mb-2">Join IEDC</h3>
+                        <p class="text-white/50 text-xs tracking-wide leading-relaxed">Become an official member.</p>
                     </div>
-                    <div onclick="showTab('submitProject')" class="glass-card p-6 rounded-2xl cursor-pointer hover:bg-white/5 transition">
-                        <i data-lucide="folder-plus" class="w-8 h-8 text-blue-400 mb-4"></i>
-                        <h3 class="text-xl font-bold text-white">Submit Project</h3>
-                        <p class="text-gray-400 text-sm">Submit your project details for review.</p>
+                    <div onclick="showTab('submitProject')" class="glass-panel p-8 rounded-2xl cursor-pointer hover:bg-white/5 transition group">
+                        <i data-lucide="folder-plus" class="w-8 h-8 text-white mb-6 opacity-70 group-hover:opacity-100 transition-opacity"></i>
+                        <h3 class="text-xl font-display font-bold text-white uppercase tracking-tight mb-2">Project</h3>
+                        <p class="text-white/50 text-xs tracking-wide leading-relaxed">Submit your project details for review.</p>
                     </div>
-                    <div onclick="showTab('certificates')" class="glass-card p-6 rounded-2xl cursor-pointer hover:bg-white/5 transition">
-                        <i data-lucide="award" class="w-8 h-8 text-yellow-400 mb-4"></i>
-                        <h3 class="text-xl font-bold text-white">Certificates</h3>
-                        <p class="text-gray-400 text-sm">Download your event certificates.</p>
+                    <div onclick="showTab('certificates')" class="glass-panel p-8 rounded-2xl cursor-pointer hover:bg-white/5 transition group">
+                        <i data-lucide="award" class="w-8 h-8 text-white mb-6 opacity-70 group-hover:opacity-100 transition-opacity"></i>
+                        <h3 class="text-xl font-display font-bold text-white uppercase tracking-tight mb-2">Certificates</h3>
+                        <p class="text-white/50 text-xs tracking-wide leading-relaxed">Download your event certificates.</p>
                     </div>
                 </div>
             </div>
 
+            <!-- Join IEDC -->
             <div id="joinIedcSection" class="tab-content hidden max-w-3xl mx-auto">
-                <div id="membershipStatusCard" class="hidden glass-card rounded-3xl p-10 text-center mb-8">
-                    <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6" id="memStatusIconContainer">
-                        <i data-lucide="clock" class="w-10 h-10 text-yellow-400" id="memStatusIcon"></i>
+                <div id="membershipStatusCard" class="hidden glass-panel rounded-2xl p-12 text-center mb-8">
+                    <div class="w-20 h-20 border border-white/20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6" id="memStatusIconContainer">
+                        <i data-lucide="clock" class="w-8 h-8 text-white" id="memStatusIcon"></i>
                     </div>
-                    <h2 class="text-2xl font-bold text-white mb-2" id="memStatusTitle">Application Pending</h2>
-                    <p class="text-gray-400 mb-6 max-w-lg mx-auto" id="memStatusDesc">We have received your request to join MET'S IEDC. We are reviewing your details.</p>
+                    <h2 class="text-2xl font-display font-bold text-white mb-4 uppercase tracking-widest" id="memStatusTitle">Pending</h2>
+                    <p class="text-white/50 text-sm tracking-wide max-w-lg mx-auto leading-relaxed" id="memStatusDesc">We have received your request to join MET'S IEDC. We are reviewing your details.</p>
                 </div>
                 
-                <div id="membershipFormCard" class="glass-card rounded-3xl p-8">
-                    <div class="border-b border-white/10 pb-6 mb-6">
-                        <h2 class="text-2xl font-bold text-white mb-2">Become an IEDC Member</h2>
-                        <p class="text-gray-400 text-sm">Fill in the details to join the community of innovators.</p>
+                <div id="membershipFormCard" class="glass-panel rounded-2xl p-8 md:p-12">
+                    <div class="border-b border-white/10 pb-8 mb-8">
+                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white mb-2 uppercase tracking-tight">Become a Member</h2>
+                        <p class="text-white/50 text-sm font-light tracking-wide">Fill in the details to join the community of innovators.</p>
                     </div>
                     <form id="joinIedcForm" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Full Name</label><input type="text" id="memName" class="glass-input w-full rounded-xl py-3 px-4 text-sm bg-white/5" readonly></div>
-                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Email</label><input type="email" id="memEmail" class="glass-input w-full rounded-xl py-3 px-4 text-sm bg-white/5" readonly></div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Full Name</label><input type="text" id="memName" class="glass-input w-full rounded py-4 px-4 text-sm" readonly></div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Email</label><input type="email" id="memEmail" class="glass-input w-full rounded py-4 px-4 text-sm" readonly></div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Phone Number</label><input type="tel" id="memPhone" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="+91 9876543210" required></div>
-                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Gender</label><select id="memGender" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Phone Number</label><input type="tel" id="memPhone" class="glass-input w-full rounded py-4 px-4 text-sm" placeholder="+91 9876543210" required></div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Gender</label><select id="memGender" class="glass-input w-full rounded py-4 px-4 text-sm"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Batch / Year</label><select id="memYear" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="1st Year">1st Year</option><option value="2nd Year">2nd Year</option><option value="3rd Year">3rd Year</option><option value="4th Year">4th Year</option></select></div>
-                            <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Department</label><select id="memDept" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="CSE">CSE</option><option value="ECE">ECE</option><option value="EEE">EEE</option><option value="ME">ME</option><option value="CE">CE</option><option value="BT">BT</option><option value="RA">RA</option></select></div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Batch / Year</label><select id="memYear" class="glass-input w-full rounded py-4 px-4 text-sm"><option value="1st Year">1st Year</option><option value="2nd Year">2nd Year</option><option value="3rd Year">3rd Year</option><option value="4th Year">4th Year</option></select></div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Department</label><select id="memDept" class="glass-input w-full rounded py-4 px-4 text-sm"><option value="CSE">CSE</option><option value="ECE">ECE</option><option value="EEE">EEE</option><option value="ME">ME</option><option value="CE">CE</option><option value="BT">BT</option><option value="RA">RA</option></select></div>
                         </div>
-                        <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Primary Interest</label><select id="memDomain" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="Web Development">Web Development</option><option value="App Development">App Development</option><option value="UI/UX Design">UI/UX Design</option><option value="IoT & Robotics">IoT & Robotics</option><option value="Marketing & Management">Marketing & Management</option><option value="Other">Other</option></select></div>
-                        <div><label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase">Why do you want to join?</label><textarea id="memReason" rows="3" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Tell us what motivates you..."></textarea></div>
-                        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-500/30 transition-all">Submit Application</button>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Primary Interest</label><select id="memDomain" class="glass-input w-full rounded py-4 px-4 text-sm"><option value="Web Development">Web Development</option><option value="App Development">App Development</option><option value="UI/UX Design">UI/UX Design</option><option value="IoT & Robotics">IoT & Robotics</option><option value="Marketing & Management">Marketing & Management</option><option value="Other">Other</option></select></div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Why do you want to join?</label><textarea id="memReason" rows="4" class="glass-input w-full rounded py-4 px-4 text-sm" placeholder="Tell us what motivates you..."></textarea></div>
+                        <button type="submit" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded text-xs uppercase tracking-widest transition-all mt-4">Submit Application</button>
                     </form>
                 </div>
             </div>
 
+            <!-- Payments -->
             <div id="paymentsSection" class="tab-content hidden max-w-2xl mx-auto">
-                <div class="glass-card p-10 rounded-3xl text-center border border-white/10 flex flex-col items-center justify-center min-h-[400px]">
-                    <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-6">
-                        <i data-lucide="rocket" class="w-10 h-10 text-indigo-400"></i>
+                <div class="glass-panel p-12 rounded-2xl text-center flex flex-col items-center justify-center min-h-[400px]">
+                    <div class="w-16 h-16 border border-white/20 bg-[#0a0c0f] rounded-full flex items-center justify-center mb-8">
+                        <i data-lucide="rocket" class="w-6 h-6 text-white"></i>
                     </div>
-                    <h2 class="text-3xl font-bold text-white mb-3">Coming Soon</h2>
-                    <p class="text-gray-400 max-w-md mx-auto leading-relaxed">
+                    <h2 class="text-3xl font-display font-bold text-white mb-4 uppercase tracking-widest">Coming Soon</h2>
+                    <p class="text-white/50 max-w-md mx-auto leading-relaxed text-sm font-light tracking-wide">
                         We are currently integrating a secure payment gateway. Soon you will be able to pay fees and download receipts directly from here.
                     </p>
-                    <div class="mt-8 px-4 py-2 bg-indigo-500/10 text-indigo-400 rounded-full text-xs font-bold uppercase tracking-wider border border-indigo-500/20">
+                    <div class="mt-10 px-6 py-2 bg-white/5 text-white/70 rounded border border-white/10 text-[10px] font-bold uppercase tracking-widest">
                         Feature In Progress
                     </div>
                 </div>
             </div>
 
+            <!-- Attendance -->
             <div id="attendanceSection" class="tab-content hidden max-w-4xl mx-auto">
-                <div class="glass-card p-8 rounded-3xl mb-6">
-                    <h2 class="text-2xl font-bold text-white mb-2">My Attendance</h2>
-                    <p class="text-gray-400 text-sm">Track your event participation history.</p>
+                <div class="glass-panel p-8 md:p-10 rounded-2xl mb-8">
+                    <h2 class="text-2xl font-display font-bold text-white mb-2 uppercase tracking-widest">My Attendance</h2>
+                    <p class="text-white/50 text-sm font-light tracking-wide">Track your event participation history.</p>
                 </div>
                 <div id="myAttendanceList" class="space-y-4">
-                    <p class="text-gray-500 text-center py-8">Loading attendance...</p>
+                    <div class="glass-panel p-8 text-center"><div class="spinner"></div></div>
                 </div>
             </div>
 
+            <!-- Track Status -->
             <div id="trackStatusSection" class="tab-content hidden max-w-4xl mx-auto">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-white">My Submissions</h2>
-                    <button onclick="fetchMySubmissions()" class="text-xs bg-white/10 px-3 py-2 rounded hover:bg-white/20 transition flex items-center gap-2">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+                    <h2 class="text-2xl font-display font-bold text-white uppercase tracking-widest">My Submissions</h2>
+                    <button onclick="fetchMySubmissions()" class="text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/10 px-5 py-2.5 rounded hover:bg-white/10 text-white transition flex items-center gap-3">
                         <i data-lucide="refresh-cw" class="w-3 h-3"></i> Refresh
                     </button>
                 </div>
-                <div id="mySubmissionsGrid" class="grid grid-cols-1 gap-4">
-                    <p class="text-gray-500 text-center py-8">Loading your history...</p>
+                <div id="mySubmissionsGrid" class="space-y-4">
+                    <div class="glass-panel p-8 text-center"><div class="spinner"></div></div>
                 </div>
             </div>
 
+            <!-- Certificates -->
             <div id="certificatesSection" class="tab-content hidden max-w-5xl mx-auto">
-                <div class="glass-card rounded-3xl p-8 mb-8">
-                    <h2 class="text-2xl font-bold text-white mb-2">My Certificates</h2>
-                    <p class="text-gray-400 text-sm">Download certificates for events you have attended.</p>
+                <div class="glass-panel rounded-2xl p-8 md:p-10 mb-8">
+                    <h2 class="text-2xl font-display font-bold text-white mb-2 uppercase tracking-widest">My Certificates</h2>
+                    <p class="text-white/50 text-sm font-light tracking-wide">Download certificates for events you have attended.</p>
                 </div>
-                <div id="certificatesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <p class="text-gray-500 col-span-full text-center py-8">Loading certificates...</p>
+                <div id="certificatesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="col-span-full glass-panel p-10 text-center"><div class="spinner"></div></div>
                 </div>
             </div>
 
+            <!-- Profile -->
             <div id="profileSection" class="tab-content hidden max-w-5xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="glass-card rounded-3xl p-8 flex flex-col items-center text-center h-fit">
-                        <div class="relative group cursor-pointer mb-6" onclick="document.getElementById('profileImageInput').click()">
-                            <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-indigo-500/30 shadow-lg shadow-indigo-500/20 relative">
-                                <img id="profileImagePreview" src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff" alt="Profile" class="w-full h-full object-cover">
+                    <!-- Profile Card -->
+                    <div class="glass-panel rounded-2xl p-8 flex flex-col items-center text-center h-fit">
+                        <div class="relative group cursor-pointer mb-8" onclick="document.getElementById('profileImageInput').click()">
+                            <div class="w-32 h-32 rounded bg-[#0a0c0f] overflow-hidden border border-white/20 shadow-xl relative">
+                                <img id="profileImagePreview" src="https://ui-avatars.com/api/?name=User&background=0f1115&color=fff" alt="Profile" class="w-full h-full object-cover grayscale">
                             </div>
-                            <div class="absolute inset-0 rounded-full bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"><i data-lucide="camera" class="w-8 h-8 text-white"></i></div>
+                            <div class="absolute inset-0 rounded bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"><i data-lucide="camera" class="w-8 h-8 text-white"></i></div>
                             <input type="file" id="profileImageInput" class="hidden" accept="image/*" onchange="handleImageUpload(event)">
                         </div>
-                        <h2 class="text-2xl font-bold text-white mb-1" id="profileCardName">Student Name</h2>
-                        <p class="text-indigo-400 text-sm font-medium mb-6">Student Innovator</p>
+                        <h2 class="text-2xl font-display font-bold text-white mb-2 tracking-tight uppercase" id="profileCardName">Student Name</h2>
+                        <p class="text-white/50 text-[10px] uppercase tracking-widest font-bold mb-8">Student Innovator</p>
+                        
                         <div class="w-full space-y-4 text-left">
-                            <div class="p-4 bg-white/5 rounded-xl border border-white/5"><p class="text-xs text-gray-500 uppercase">Contact</p><p class="text-gray-200 text-sm flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-indigo-400"></i> <span id="profileCardContact">--</span></p></div>
-                            <div class="p-4 bg-white/5 rounded-xl border border-white/5"><p class="text-xs text-gray-500 uppercase">Email</p><p class="text-gray-200 text-sm flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-indigo-400"></i> <span id="profileCardEmail">--</span></p></div>
+                            <div class="p-5 bg-white/5 rounded border border-white/10">
+                                <p class="text-[9px] text-white/40 uppercase tracking-[0.2em] font-bold mb-2">Contact</p>
+                                <p class="text-white text-sm flex items-center gap-3 font-mono"><i data-lucide="phone" class="w-4 h-4 opacity-50"></i> <span id="profileCardContact">--</span></p>
+                            </div>
+                            <div class="p-5 bg-white/5 rounded border border-white/10">
+                                <p class="text-[9px] text-white/40 uppercase tracking-[0.2em] font-bold mb-2">Email</p>
+                                <p class="text-white text-xs flex items-center gap-3"><i data-lucide="mail" class="w-4 h-4 opacity-50"></i> <span id="profileCardEmail" class="break-all">--</span></p>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="md:col-span-2 space-y-8">
-                        <div class="glass-card rounded-3xl p-8">
-                            <div class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold text-white">Edit Profile</h2><div id="profileStatusMessage" class="hidden text-xs px-3 py-1 rounded bg-green-500/20 text-green-400"></div></div>
+                    <!-- Edit Form -->
+                    <div class="md:col-span-2">
+                        <div class="glass-panel rounded-2xl p-8 md:p-10">
+                            <div class="flex justify-between items-center border-b border-white/10 pb-6 mb-8">
+                                <h2 class="text-xl font-display font-bold text-white uppercase tracking-widest">Edit Profile</h2>
+                                <div id="profileStatusMessage" class="hidden text-[10px] px-4 py-2 rounded font-bold uppercase tracking-widest bg-white/10 text-white"></div>
+                            </div>
                             <form id="profileForm" class="space-y-6">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <input type="text" id="profileName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Full Name">
-                                    <input type="tel" id="profileContact" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Contact Number">
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Full Name</label>
+                                        <input type="text" id="profileName" class="glass-input w-full rounded py-4 px-4 text-sm font-light" placeholder="John Doe">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Contact Number</label>
+                                        <input type="tel" id="profileContact" class="glass-input w-full rounded py-4 px-4 text-sm font-light" placeholder="+91">
+                                    </div>
                                 </div>
-                                <textarea id="profileBio" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Bio"></textarea>
-                                <div class="pt-4 border-t border-white/5 flex justify-end"><button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-xl">Save Changes</button></div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Bio</label>
+                                    <textarea id="profileBio" rows="5" class="glass-input w-full rounded py-4 px-4 text-sm font-light" placeholder="Tell us about yourself..."></textarea>
+                                </div>
+                                <div class="pt-6 flex justify-end">
+                                    <button type="submit" class="bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 px-10 rounded text-[10px] uppercase tracking-widest transition-all">Save Changes</button>
+                                </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Submit Project -->
             <div id="submitProjectSection" class="tab-content hidden max-w-3xl mx-auto">
-                <div class="glass-card rounded-3xl p-8">
-                    <h2 class="text-2xl font-bold text-white mb-6">Submit Project</h2>
-                    <div id="projectStatusMessage" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
+                <div class="glass-panel rounded-2xl p-8 md:p-12">
+                    <div class="border-b border-white/10 pb-6 mb-8">
+                        <h2 class="text-2xl font-display font-bold text-white mb-2 uppercase tracking-widest">Submit Project</h2>
+                        <p class="text-white/50 text-sm font-light">Submit your details for review.</p>
+                    </div>
+                    <div id="projectStatusMessage" class="hidden mb-6 p-4 rounded text-xs tracking-widest text-center uppercase font-bold border border-white/20 bg-white/10"></div>
                     <form id="projectForm" class="space-y-6">
-                        <input type="text" id="projectName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Project Name">
-                        <textarea id="projectDescription" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Detailed Description..."></textarea>
-                        <input type="text" id="projectTeamMembers" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Team Members (Names/Emails)">
-                        <input type="text" id="projectTechnologyStack" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Tech Stack (e.g. React, Python)">
-                        <input type="url" id="projectLink" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Link (GitHub/Drive)">
-                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl w-full">Submit for Review</button>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Project Name</label><input type="text" id="projectName" class="glass-input w-full rounded py-4 px-4 text-sm" required></div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Detailed Description</label><textarea id="projectDescription" rows="5" class="glass-input w-full rounded py-4 px-4 text-sm" required></textarea></div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Team Members</label><input type="text" id="projectTeamMembers" class="glass-input w-full rounded py-4 px-4 text-sm" placeholder="Names / Emails"></div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Tech Stack</label><input type="text" id="projectTechnologyStack" class="glass-input w-full rounded py-4 px-4 text-sm" placeholder="e.g. React, Node.js"></div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Link (Optional)</label><input type="url" id="projectLink" class="glass-input w-full rounded py-4 px-4 text-sm" placeholder="GitHub / Drive Link"></div>
+                        <button type="submit" class="bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded w-full text-xs uppercase tracking-widest transition-all mt-4">Submit for Review</button>
                     </form>
                 </div>
             </div>
 
+            <!-- Submit Idea -->
             <div id="submitIdeaSection" class="tab-content hidden max-w-3xl mx-auto">
-                <div class="glass-card rounded-3xl p-8">
-                    <h2 class="text-2xl font-bold text-white mb-6">Submit Idea</h2>
-                    <div id="ideaStatusMessage" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
+                <div class="glass-panel rounded-2xl p-8 md:p-12">
+                    <div class="border-b border-white/10 pb-6 mb-8">
+                        <h2 class="text-2xl font-display font-bold text-white mb-2 uppercase tracking-widest">Submit Idea</h2>
+                        <p class="text-white/50 text-sm font-light">Share your innovative concept.</p>
+                    </div>
+                    <div id="ideaStatusMessage" class="hidden mb-6 p-4 rounded text-xs tracking-widest text-center uppercase font-bold border border-white/20 bg-white/10"></div>
                     <form id="ideaForm" class="space-y-6">
-                        <input type="text" id="ideaName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Idea Title">
-                        <textarea id="ideaDescription" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" required placeholder="Problem & Solution..."></textarea>
-                        <select id="ideaCategory" class="glass-input w-full rounded-xl py-3 px-4 text-sm"><option value="Healthcare">Healthcare</option><option value="Education">Education</option><option value="Fintech">Fintech</option><option value="Other">Other</option></select>
-                        <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white font-bold py-3.5 rounded-xl w-full">Submit Idea</button>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Idea Title</label><input type="text" id="ideaName" class="glass-input w-full rounded py-4 px-4 text-sm" required></div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Problem & Solution</label><textarea id="ideaDescription" rows="6" class="glass-input w-full rounded py-4 px-4 text-sm" required></textarea></div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Category</label><select id="ideaCategory" class="glass-input w-full rounded py-4 px-4 text-sm"><option value="Healthcare">Healthcare</option><option value="Education">Education</option><option value="Fintech">Fintech</option><option value="Other">Other</option></select></div>
+                        <button type="submit" class="bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded w-full text-xs uppercase tracking-widest transition-all mt-4">Submit Idea</button>
                     </form>
                 </div>
             </div>
 
+            <!-- Propose Event -->
             <div id="submitEventSection" class="tab-content hidden max-w-3xl mx-auto">
-                <div class="glass-card rounded-3xl p-8">
-                    <h2 class="text-2xl font-bold text-white mb-6">Propose Event</h2>
-                    <div id="eventStatusMessage" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
+                <div class="glass-panel rounded-2xl p-8 md:p-12">
+                    <div class="border-b border-white/10 pb-6 mb-8">
+                        <h2 class="text-2xl font-display font-bold text-white mb-2 uppercase tracking-widest">Propose Event</h2>
+                        <p class="text-white/50 text-sm font-light">Suggest an activity or workshop.</p>
+                    </div>
+                    <div id="eventStatusMessage" class="hidden mb-6 p-4 rounded text-xs tracking-widest text-center uppercase font-bold border border-white/20 bg-white/10"></div>
                     <form id="eventForm" class="space-y-6">
-                        <input type="text" id="eventName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Event Title">
-                        <div class="grid grid-cols-2 gap-4">
-                            <input type="date" id="eventDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                            <input type="text" id="eventTime" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Time">
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Title</label><input type="text" id="eventName" class="glass-input w-full rounded py-4 px-4 text-sm" required></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date</label><input type="date" id="eventDate" class="glass-input w-full rounded py-4 px-4 text-sm" required></div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Time</label><input type="time" id="eventTime" class="glass-input w-full rounded py-4 px-4 text-sm" required></div>
                         </div>
-                        <textarea id="eventDescription" rows="4" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Description..."></textarea>
-                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl w-full">Propose Event</button>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Description & Requirements</label><textarea id="eventDescription" rows="5" class="glass-input w-full rounded py-4 px-4 text-sm" required></textarea></div>
+                        <button type="submit" class="bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded w-full text-xs uppercase tracking-widest transition-all mt-4">Submit Proposal</button>
                     </form>
                 </div>
             </div>
@@ -300,23 +396,31 @@
         </main>
     </div>
 
-    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
-    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-64 bg-[#0a0a0a] border-r border-white/10 z-50 transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col">
-        <div class="p-6 flex items-center justify-between border-b border-white/10"><span class="text-xl font-bold text-white">Menu</span><button onclick="toggleMobileSidebar()" class="text-white"><i data-lucide="x"></i></button></div>
-        <nav class="flex-grow px-4 py-4 space-y-2 overflow-y-auto">
-            <button onclick="showTab('dashboardOverview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Dashboard</button>
-            <button onclick="showTab('profile'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">My Profile</button>
-            <button onclick="showTab('joinIedc'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Join IEDC</button>
-            <button onclick="showTab('payments'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Payments</button>
-            <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Attendance</button>
-            <button onclick="showTab('trackStatus'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Track Status</button>
-            <button onclick="showTab('certificates'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Certificates</button>
-            <div class="h-px bg-white/10 my-2"></div>
-            <button onclick="showTab('submitProject'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Submit Project</button>
-            <button onclick="showTab('submitIdea'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Submit Idea</button>
-            <button onclick="showTab('submitEvent'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 text-sm font-medium">Propose Event</button>
-            <button id="logoutBtnMobile" class="w-full mt-4 bg-red-500/20 text-red-400 py-3 rounded-lg text-sm font-bold border border-red-500/20">Logout</button>
+    <!-- Mobile Sidebar -->
+    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-[#0f1115]/90 backdrop-blur-sm z-40 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
+    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-[#0a0c0f] border-r border-white/5 z-50 transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
+        <div class="p-6 flex items-center justify-between border-b border-white/5">
+            <span class="text-xl font-display font-bold text-white uppercase tracking-widest">Menu</span>
+            <button onclick="toggleMobileSidebar()" class="text-white/50 hover:text-white"><i data-lucide="x"></i></button>
+        </div>
+        <nav class="flex-grow px-4 py-6 space-y-2 overflow-y-auto">
+            <button onclick="showTab('dashboardOverview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Dashboard</button>
+            <button onclick="showTab('profile'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">My Profile</button>
+            <button onclick="showTab('joinIedc'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Join IEDC</button>
+            <button onclick="showTab('payments'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Payments</button>
+            <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Attendance</button>
+            <button onclick="showTab('trackStatus'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Track Status</button>
+            <button onclick="showTab('certificates'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Certificates</button>
+            <div class="h-px bg-white/5 my-4"></div>
+            <button onclick="showTab('submitProject'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Submit Project</button>
+            <button onclick="showTab('submitIdea'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Submit Idea</button>
+            <button onclick="showTab('submitEvent'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Propose Event</button>
         </nav>
+        <div class="p-6 border-t border-white/5">
+            <button id="logoutBtnMobile" class="w-full bg-white/5 hover:bg-white/10 text-white py-4 rounded border border-white/10 text-xs font-bold uppercase tracking-widest transition-colors flex justify-center items-center gap-2">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+            </button>
+        </div>
     </div>
 
     <script type="module">
@@ -351,12 +455,10 @@
         // Auth Listener
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // *** EMAIL VERIFICATION CHECK REMOVED ***
-                
                 currentUserId = user.uid;
-                document.getElementById('userEmailHeader').textContent = user.email;
-                document.getElementById('profileCardEmail').textContent = user.email;
-                document.getElementById('memEmail').value = user.email;
+                document.getElementById('userEmailHeader').textContent = user.email || 'User';
+                document.getElementById('profileCardEmail').textContent = user.email || 'No email attached';
+                document.getElementById('memEmail').value = user.email || '';
                 
                 try {
                     const docSnap = await getDoc(doc(db, "users", user.uid, "profile", "userProfile"));
@@ -369,11 +471,12 @@
                         
                         document.getElementById('profileCardName').textContent = data.name || 'Student';
                         document.getElementById('profileCardContact').textContent = data.contact || '--';
-                        document.getElementById('displayNameBanner').textContent = (data.name || user.email).split(' ')[0];
+                        document.getElementById('displayNameBanner').textContent = (data.name || user.email || 'Student').split(' ')[0];
 
                         if (data.profileImage) {
                             document.getElementById('profileImagePreview').src = data.profileImage;
-                            document.getElementById('userAvatarHeader').innerHTML = `<img src="${data.profileImage}" class="w-full h-full rounded-full object-cover">`;
+                            document.getElementById('profileImagePreview').classList.remove('grayscale');
+                            document.getElementById('userAvatarHeader').innerHTML = `<img src="${data.profileImage}" class="w-full h-full rounded object-cover">`;
                         }
                     }
                 } catch(e) {}
@@ -392,6 +495,10 @@
         window.fetchMyAttendance = async function() {
             const list = document.getElementById('myAttendanceList');
             const email = auth.currentUser.email;
+            if(!email) {
+                list.innerHTML = `<div class="glass-panel p-8 text-center"><p class="text-white/50 text-xs tracking-widest uppercase">Email needed for attendance.</p></div>`;
+                return;
+            }
             
             try {
                 const qPresent = query(collection(db, "attendance"), where("presentEmails", "array-contains", email));
@@ -411,7 +518,8 @@
                 records.sort((a, b) => b.timestamp - a.timestamp);
 
                 if (records.length === 0) {
-                    list.innerHTML = `<div class="glass-card p-8 rounded-2xl text-center"><p class="text-gray-400">No attendance records found.</p></div>`;
+                    list.innerHTML = `<div class="glass-panel p-10 text-center"><i data-lucide="calendar-x" class="w-8 h-8 text-white/20 mx-auto mb-4"></i><p class="text-white/40 text-xs tracking-widest uppercase font-bold">No attendance records found.</p></div>`;
+                    lucide.createIcons();
                     return;
                 }
 
@@ -419,16 +527,16 @@
                 records.forEach(d => {
                     let statusBadge = '';
                     if(d.status === 'Present') {
-                        statusBadge = `<div class="flex items-center gap-2 px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full"><i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i><span class="text-xs font-bold text-green-400 uppercase">Present</span></div>`;
+                        statusBadge = `<div class="flex items-center gap-2 px-4 py-1.5 bg-white border border-white rounded text-black"><i data-lucide="check" class="w-3 h-3"></i><span class="text-[10px] font-bold uppercase tracking-widest">Present</span></div>`;
                     } else {
-                        statusBadge = `<div class="flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-full"><i data-lucide="x-circle" class="w-4 h-4 text-red-400"></i><span class="text-xs font-bold text-red-400 uppercase">Absent</span></div>`;
+                        statusBadge = `<div class="flex items-center gap-2 px-4 py-1.5 bg-transparent border border-white/20 rounded text-white/50"><i data-lucide="x" class="w-3 h-3"></i><span class="text-[10px] font-bold uppercase tracking-widest">Absent</span></div>`;
                     }
 
                     html += `
-                        <div class="glass-card p-5 rounded-xl flex items-center justify-between hover:bg-white/5 transition">
+                        <div class="glass-panel p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:bg-white/5 transition border border-white/5">
                             <div>
-                                <h3 class="text-lg font-bold text-white">${d.eventName}</h3>
-                                <p class="text-sm text-gray-400">${d.date}</p>
+                                <h3 class="text-lg font-display font-bold text-white mb-1 uppercase tracking-tight">${d.eventName}</h3>
+                                <p class="text-[10px] text-white/40 font-mono uppercase tracking-widest">${d.date}</p>
                             </div>
                             ${statusBadge}
                         </div>
@@ -438,7 +546,7 @@
                 lucide.createIcons();
             } catch(e) { 
                 console.error(e);
-                if(e.message.includes("index")) list.innerHTML = `<p class="text-yellow-400 text-center text-sm">Index building required... Check console for link.</p>`;
+                if(e.message.includes("index")) list.innerHTML = `<div class="glass-panel p-6 text-center"><p class="text-white/50 text-xs tracking-widest uppercase">Database Index building required...</p></div>`;
             }
         };
 
@@ -452,10 +560,10 @@
                     document.getElementById('membershipFormCard').classList.add('hidden');
                     document.getElementById('membershipStatusCard').classList.remove('hidden');
                     if(data.status === 'approved') {
-                        document.getElementById('memStatusTitle').textContent = "Membership Approved!";
-                        document.getElementById('memStatusDesc').textContent = "Congratulations! You are now an official member.";
-                        document.getElementById('memStatusIconContainer').className = "w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6";
-                        document.getElementById('memStatusIcon').className = "w-10 h-10 text-green-400";
+                        document.getElementById('memStatusTitle').textContent = "Approved!";
+                        document.getElementById('memStatusDesc').textContent = "Welcome to the IEDC community. You are now an official member.";
+                        document.getElementById('memStatusIconContainer').className = "w-20 h-20 bg-white border border-white rounded-full flex items-center justify-center mx-auto mb-8";
+                        document.getElementById('memStatusIcon').className = "w-8 h-8 text-[#0f1115]";
                         document.getElementById('memStatusIcon').innerHTML = `<polyline points="20 6 9 17 4 12"></polyline>`;
                     }
                     lucide.createIcons();
@@ -465,7 +573,7 @@
 
         document.getElementById('joinIedcForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = e.target.querySelector('button'); btn.innerText = "Submitting..."; btn.disabled = true;
+            const btn = e.target.querySelector('button'); btn.innerText = "Processing..."; btn.disabled = true;
             
             const formData = {
                 name: document.getElementById('memName').value,
@@ -512,8 +620,10 @@
                     const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
                     const scaleSize = 300 / img.width; canvas.width = 300; canvas.height = img.height * scaleSize;
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    currentProfileImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                    document.getElementById('profileImagePreview').src = currentProfileImageBase64;
+                    currentProfileImageBase64 = canvas.toDataURL('image/jpeg', 0.8);
+                    const preview = document.getElementById('profileImagePreview');
+                    preview.src = currentProfileImageBase64;
+                    preview.classList.remove('grayscale');
                 };
             };
             reader.readAsDataURL(file);
@@ -527,45 +637,78 @@
                 const profileData = { name: document.getElementById('profileName').value, contact: document.getElementById('profileContact').value, bio: document.getElementById('profileBio').value };
                 if (currentProfileImageBase64) profileData.profileImage = currentProfileImageBase64;
                 await setDoc(doc(db, "users", currentUserId, "profile", "userProfile"), profileData, { merge: true });
+                
                 document.getElementById('profileCardName').textContent = profileData.name;
+                document.getElementById('profileCardContact').textContent = profileData.contact || '--';
                 document.getElementById('displayNameBanner').textContent = profileData.name.split(' ')[0];
-                document.getElementById('profileStatusMessage').classList.remove('hidden'); document.getElementById('profileStatusMessage').textContent = "Saved!";
-                if(profileData.profileImage) document.getElementById('userAvatarHeader').innerHTML = `<img src="${profileData.profileImage}" class="w-full h-full rounded-full object-cover">`;
+                
+                const statusMsg = document.getElementById('profileStatusMessage');
+                statusMsg.classList.remove('hidden'); 
+                statusMsg.textContent = "Saved Successfully";
+                setTimeout(() => statusMsg.classList.add('hidden'), 3000);
+
+                if(profileData.profileImage) {
+                    document.getElementById('userAvatarHeader').innerHTML = `<img src="${profileData.profileImage}" class="w-full h-full rounded object-cover">`;
+                }
             } catch(e) { alert("Error: " + e.message); }
             btn.innerText = "Save Changes"; btn.disabled = false;
         });
 
-        // 6. Fetch Submissions
+        // 6. Fetch Submissions (Track Status)
         window.fetchMySubmissions = async function() {
             const grid = document.getElementById('mySubmissionsGrid');
             try {
                 const q = query(collection(db, "submissions"), where("userId", "==", auth.currentUser.uid), orderBy("timestamp", "desc"));
                 const snap = await getDocs(q);
-                if (snap.empty) { grid.innerHTML = `<div class="glass-card p-8 rounded-2xl text-center"><p class="text-gray-400">No submissions yet.</p></div>`; return; }
+                if (snap.empty) { grid.innerHTML = `<div class="glass-panel p-10 text-center"><i data-lucide="inbox" class="w-8 h-8 text-white/20 mx-auto mb-4"></i><p class="text-white/40 text-xs tracking-widest uppercase font-bold">No submissions yet.</p></div>`; lucide.createIcons(); return; }
+                
                 let html = '';
                 snap.forEach((doc) => {
                     const data = doc.data();
-                    let statusColor = "text-yellow-400 bg-yellow-400/10 border-yellow-400/20"; let icon = "clock";
-                    if (data.status === 'approved') { statusColor = "text-green-400 bg-green-400/10 border-green-400/20"; icon = "check-circle"; }
-                    else if (data.status === 'rejected') { statusColor = "text-red-400 bg-red-400/10 border-red-400/20"; icon = "x-circle"; }
-                    html += `<div class="glass-card p-5 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:bg-white/5 transition"><div class="flex-grow"><div class="flex items-center gap-3 mb-1"><span class="text-xs font-bold uppercase tracking-wider text-indigo-400 bg-indigo-400/10 px-2 py-0.5 rounded border border-indigo-400/20">${(data.type||'').replace('_', ' ')}</span><span class="text-xs text-gray-500">${new Date(data.timestamp).toLocaleDateString()}</span></div><h3 class="text-lg font-bold text-white">${data.title}</h3><p class="text-sm text-gray-400 line-clamp-1">${data.description}</p></div><div class="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg border ${statusColor}"><i data-lucide="${icon}" class="w-4 h-4"></i><span class="text-sm font-bold uppercase tracking-wide">${data.status || 'Pending'}</span></div></div>`;
+                    let statusColor = "text-white/50 border-white/20 bg-transparent"; let icon = "clock";
+                    if (data.status === 'approved') { statusColor = "text-[#0f1115] bg-white border-white"; icon = "check"; }
+                    else if (data.status === 'rejected') { statusColor = "text-white border-white bg-transparent opacity-50"; icon = "x"; }
+                    
+                    html += `
+                        <div class="glass-panel p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 hover:bg-white/5 transition border border-white/5 group">
+                            <div class="flex-grow">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <span class="text-[9px] font-bold uppercase tracking-[0.2em] text-white/70 bg-white/5 px-3 py-1 rounded border border-white/10 group-hover:border-white/30 transition-colors">${(data.type||'').replace('_', ' ')}</span>
+                                    <span class="text-[10px] text-white/40 font-mono tracking-widest">${new Date(data.timestamp).toLocaleDateString()}</span>
+                                </div>
+                                <h3 class="text-xl font-display font-bold text-white mb-1 uppercase tracking-tight">${data.title}</h3>
+                                <p class="text-sm text-white/50 font-light line-clamp-1 tracking-wide">${data.description}</p>
+                            </div>
+                            <div class="flex-shrink-0 flex items-center gap-3 px-5 py-2.5 rounded border ${statusColor}">
+                                <i data-lucide="${icon}" class="w-4 h-4"></i><span class="text-[10px] font-bold uppercase tracking-[0.2em]">${data.status || 'Pending'}</span>
+                            </div>
+                        </div>`;
                 });
                 grid.innerHTML = html; lucide.createIcons();
-            } catch (e) { if(e.message.includes("index")) grid.innerHTML = `<p class="text-yellow-400 text-center text-sm">Index building...</p>`; }
+            } catch (e) { if(e.message.includes("index")) grid.innerHTML = `<div class="glass-panel p-6 text-center"><p class="text-white/50 text-xs tracking-widest uppercase">Database Index building...</p></div>`; }
         };
 
         // 7. Generic Submission
         const submitGeneric = async (formId, type, statusId) => {
             document.getElementById(formId).addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const btn = e.target.querySelector('button'); btn.innerText = "Submitting..."; btn.disabled = true;
+                const btn = e.target.querySelector('button'); btn.innerText = "Processing..."; btn.disabled = true;
                 const inputs = e.target.querySelectorAll('input, textarea, select');
                 const data = { type: type, status: 'pending', userId: auth.currentUser.uid, userEmail: auth.currentUser.email, userName: document.getElementById('profileName').value || 'Student', timestamp: Date.now() };
                 inputs.forEach(i => data[i.id.replace(type, '').toLowerCase()] = i.value); 
                 if(type === 'project') { data.title = document.getElementById('projectName').value; data.description = document.getElementById('projectDescription').value; data.teamMembers = document.getElementById('projectTeamMembers').value; data.stack = document.getElementById('projectTechnologyStack').value; data.link = document.getElementById('projectLink').value; }
                 else if(type === 'idea') { data.title = document.getElementById('ideaName').value; data.description = document.getElementById('ideaDescription').value; data.category = document.getElementById('ideaCategory').value; }
                 else if(type === 'event_proposal') { data.title = document.getElementById('eventName').value; data.description = document.getElementById('eventDescription').value; data.date = document.getElementById('eventDate').value; data.time = document.getElementById('eventTime').value; }
-                try { await addDoc(collection(db, "submissions"), data); alert("Submitted successfully!"); e.target.reset(); window.fetchMySubmissions(); } 
+                
+                try { 
+                    await addDoc(collection(db, "submissions"), data); 
+                    const statusMsg = document.getElementById(statusId);
+                    statusMsg.textContent = "Submitted successfully!";
+                    statusMsg.classList.remove('hidden');
+                    e.target.reset(); 
+                    window.fetchMySubmissions(); 
+                    setTimeout(() => statusMsg.classList.add('hidden'), 4000);
+                } 
                 catch(e) { alert(e.message); } finally { btn.innerText = "Submit"; btn.disabled = false; }
             });
         };
@@ -578,7 +721,7 @@
         document.getElementById('logoutBtn').addEventListener('click', logout);
         document.getElementById('logoutBtnMobile').addEventListener('click', logout);
 
-        // Mobile Menu
+        // Mobile Menu Sidebar
         window.toggleMobileSidebar = function() {
             const sidebar = document.getElementById('mobile-sidebar');
             const overlay = document.getElementById('mobile-sidebar-overlay');
@@ -588,8 +731,6 @@
         document.getElementById('mobile-menu-toggle').addEventListener('click', toggleMobileSidebar);
 
         // --- NEW CERTIFICATE LOGIC ---
-
-        // Fetch Certificates
         window.fetchCertificates = async function() {
             const grid = document.getElementById('certificatesGrid');
             if(!auth.currentUser) return;
@@ -600,11 +741,11 @@
 
                 if (snap.empty) {
                     grid.innerHTML = `
-                        <div class="col-span-full glass-card p-10 rounded-3xl text-center flex flex-col items-center">
-                            <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4">
-                                <i data-lucide="award" class="w-8 h-8 text-gray-500"></i>
+                        <div class="col-span-full glass-panel p-12 rounded-2xl text-center flex flex-col items-center">
+                            <div class="w-16 h-16 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mb-6">
+                                <i data-lucide="award" class="w-8 h-8 text-white/30"></i>
                             </div>
-                            <p class="text-gray-400">No certificates issued yet.</p>
+                            <p class="text-white/40 text-xs uppercase tracking-widest font-bold">No certificates issued yet.</p>
                         </div>`;
                     lucide.createIcons();
                     return;
@@ -614,20 +755,20 @@
                 snap.forEach((doc) => {
                     const data = doc.data();
                     html += `
-                    <div class="glass-card rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition duration-300 border border-white/5">
-                        <div class="h-32 bg-gradient-to-br from-indigo-900/50 to-purple-900/50 relative overflow-hidden">
-                             <img src="${data.templateUrl}" class="w-full h-full object-cover opacity-50 group-hover:opacity-80 transition" alt="Cert">
+                    <div class="glass-panel p-0 rounded-2xl overflow-hidden group hover:border-white/30 transition duration-500 border border-white/5 flex flex-col">
+                        <div class="h-40 bg-gradient-to-br from-white/10 to-transparent relative overflow-hidden flex-shrink-0">
+                             <img src="${data.templateUrl}" class="w-full h-full object-cover opacity-40 mix-blend-lighten group-hover:opacity-70 group-hover:scale-105 transition duration-700" alt="Cert">
                              <div class="absolute inset-0 flex items-center justify-center">
-                                <i data-lucide="award" class="w-10 h-10 text-white shadow-lg"></i>
+                                <i data-lucide="award" class="w-10 h-10 text-white shadow-lg drop-shadow-2xl"></i>
                              </div>
                         </div>
-                        <div class="p-6">
-                            <h3 class="text-lg font-bold text-white mb-1">${data.eventName}</h3>
-                            <p class="text-xs text-gray-400 mb-4">Issued: ${new Date(data.date).toLocaleDateString()}</p>
+                        <div class="p-8 flex-grow flex flex-col">
+                            <h3 class="text-xl font-display font-bold text-white mb-2 uppercase tracking-tight leading-snug">${data.eventName}</h3>
+                            <p class="text-[10px] text-white/40 font-mono tracking-widest uppercase mb-8 flex-grow">Issued: ${new Date(data.date).toLocaleDateString()}</p>
                             
                             <button onclick="generateAndDownloadCert('${data.templateUrl}', '${data.userName}', '${data.eventName}')" 
-                                class="w-full bg-white/10 hover:bg-white/20 text-white text-sm font-semibold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all group-hover:bg-indigo-600">
-                                <i data-lucide="download" class="w-4 h-4"></i> Download
+                                class="w-full bg-white hover:bg-gray-200 text-[#0f1115] text-[10px] uppercase tracking-widest font-bold py-3.5 rounded flex items-center justify-center gap-3 transition-all mt-auto">
+                                Download <i data-lucide="download" class="w-3 h-3"></i>
                             </button>
                         </div>
                     </div>
@@ -637,7 +778,7 @@
                 lucide.createIcons();
             } catch (e) {
                 console.error(e);
-                grid.innerHTML = `<p class="text-red-400 text-center col-span-full">Error loading certificates.</p>`;
+                grid.innerHTML = `<div class="col-span-full glass-panel p-8 text-center"><p class="text-red-400 text-xs font-bold uppercase tracking-widest">Error loading certificates.</p></div>`;
             }
         };
 
@@ -645,7 +786,7 @@
         window.generateAndDownloadCert = function(templateUrl, studentName, eventName) {
             const btn = event.currentTarget;
             const originalText = btn.innerHTML;
-            btn.innerHTML = `<span class="animate-pulse">Generating...</span>`;
+            btn.innerHTML = `<span class="animate-pulse">Processing...</span>`;
             btn.disabled = true;
 
             const canvas = document.createElement('canvas');
@@ -659,13 +800,12 @@
                 canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
 
-                // Font Config - Auto-scales based on image width
+                // Font Config
                 const fontSize = Math.floor(canvas.width / 30); 
-                ctx.font = `bold ${fontSize}px 'Inter', sans-serif`;
-                ctx.fillStyle = "#000000"; // Change this if you need white text
+                ctx.font = `bold ${fontSize}px 'Montserrat', sans-serif`;
+                ctx.fillStyle = "#000000"; 
                 ctx.textAlign = "center";
                 
-                // Draw Name in Center
                 const centerX = canvas.width / 2;
                 const centerY = canvas.height / 2;
                 ctx.fillText(studentName, centerX, centerY);
@@ -677,23 +817,32 @@
 
                 btn.innerHTML = originalText;
                 btn.disabled = false;
+                lucide.createIcons();
             };
 
             img.onerror = () => {
                 alert("Could not load certificate template. Check CORS settings or URL.");
                 btn.innerHTML = originalText;
                 btn.disabled = false;
+                lucide.createIcons();
             };
         };
 
-        // Tabs
+        // Tabs Logic
         window.showTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(tabId + 'Section').classList.remove('hidden');
             
             document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
-            // Helper to highlight sidebar button
-            const activeLink = Array.from(document.querySelectorAll('.sidebar-link')).find(btn => btn.innerText.toLowerCase().includes(tabId.replace('Section','').toLowerCase().replace('overview','')));
+            const activeLinks = document.querySelectorAll('.sidebar-link');
+            
+            // Map tabId to sidebar button text
+            let searchText = tabId.replace('Section','').toLowerCase().replace('overview','dashboard');
+            if(searchText === 'submitproject') searchText = 'project';
+            if(searchText === 'submitidea') searchText = 'idea';
+            if(searchText === 'submitevent') searchText = 'event';
+
+            const activeLink = Array.from(activeLinks).find(btn => btn.innerText.toLowerCase().includes(searchText));
             if(activeLink) activeLink.classList.add('active');
 
             if (tabId === 'trackStatus') window.fetchMySubmissions();
