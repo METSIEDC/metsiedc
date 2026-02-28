@@ -6,131 +6,127 @@
     <title>Admin Portal | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Immersive Theme Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
+                    fontFamily: { 
                         sans: ['Inter', 'sans-serif'],
-                    },
+                        display: ['Montserrat', 'sans-serif']
+                    }
                 }
             }
         }
     </script>
 
     <style>
-        body {
-            background-color: #050505;
-            color: #ffffff;
-            overflow-x: hidden;
+        body { 
+            background-color: #0f1115; /* Deep cinematic dark */
+            color: #ffffff; 
+            overflow-x: hidden; 
         }
 
-        /* Glassmorphism Card */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        /* Monochromatic Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.5);
+            border-radius: 24px;
         }
 
-        /* Input Styling */
+        /* Input styling */
         .glass-input {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
+            backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
         .glass-input:focus {
             background: rgba(255, 255, 255, 0.08);
-            border-color: #ef4444; /* Red accent for Admin */
+            border-color: rgba(255, 255, 255, 0.4);
             outline: none;
-            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
         }
         .glass-input::placeholder {
             color: rgba(255, 255, 255, 0.3);
         }
 
-        /* Background Blobs */
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.4;
-            animation: blob-bounce 10s infinite ease;
-        }
-        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #991b1b; }
-        .blob-2 { bottom: -10%; right: -10%; width: 500px; height: 500px; background: #ea580c; }
-
-        @keyframes blob-bounce {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(20px, -20px) scale(1.1); }
-        }
-
         /* Loading Spinner */
         .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 50%;
-            border-top: 3px solid white;
-            width: 20px;
-            height: 20px;
+            border-top: 2px solid #000;
+            width: 16px;
+            height: 16px;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="font-sans antialiased relative min-h-screen flex items-center justify-center">
+<body class="font-sans antialiased relative min-h-screen flex items-center justify-center selection:bg-white selection:text-black">
 
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
+    <!-- Subtle Atmospheric Lighting -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
     </div>
 
-    <div class="w-full max-w-md px-4 relative z-10">
+    <div class="w-full max-w-md px-4 relative z-10 flex flex-col items-center">
         
-        <div class="text-center mb-8">
-            <a href="index.html" class="inline-block mb-4">
-                <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-16 w-16 rounded-full border-2 border-white/10 shadow-xl mx-auto">
+        <!-- Logo & Header -->
+        <div class="text-center mb-10">
+            <a href="index.html" class="inline-block mb-6 group">
+                <div class="w-20 h-20 rounded-2xl bg-[#0a0c0f] border border-white/20 shadow-2xl flex items-center justify-center mx-auto overflow-hidden group-hover:border-white/40 transition-colors">
+                    <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="w-full h-full object-cover grayscale opacity-80" onerror="this.src='https://ui-avatars.com/api/?name=MI&background=0f1115&color=fff'">
+                </div>
             </a>
-            <h1 class="text-3xl font-bold text-white tracking-tight">Admin Portal</h1>
-            <p class="text-gray-400 mt-2 text-sm">MET'S Innovation & Entrepreneurship Development Centre</p>
+            <h1 class="text-3xl font-display font-bold text-white tracking-widest uppercase mb-2">Admin Portal</h1>
+            <p class="text-white/40 text-[10px] uppercase tracking-[0.2em] font-bold">MET'S IEDC Workspace</p>
         </div>
 
-        <div class="glass-card rounded-3xl p-8 md:p-10 border-t-4 border-t-red-500">
+        <div class="glass-panel w-full p-8 md:p-10 border-t border-t-white/30">
             
             <div class="flex justify-center mb-8">
-                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold uppercase tracking-wider">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold uppercase tracking-widest">
                     <i class="fas fa-lock"></i> Restricted Access
                 </span>
             </div>
 
-            <div id="loginError" class="hidden mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex items-start gap-3">
-                <i class="fas fa-exclamation-circle mt-0.5"></i>
+            <div id="loginError" class="hidden mb-8 p-4 rounded text-xs tracking-wide text-center border font-medium bg-red-500/10 border-red-500/20 text-red-400 flex items-center justify-center gap-3">
+                <i class="fas fa-exclamation-circle"></i>
                 <span id="loginErrorText">Invalid credentials</span>
             </div>
 
             <form id="adminLoginForm" class="space-y-6">
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Admin ID / Email</label>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Admin ID / Email</label>
                     <div class="relative">
-                        <i class="fas fa-user-shield absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        <input type="email" id="adminEmail" placeholder="admin@metsiedc.in" class="glass-input w-full rounded-xl py-3.5 pl-12 pr-4 text-sm font-medium">
+                        <i class="fas fa-user-shield absolute left-4 top-1/2 transform -translate-y-1/2 text-white/30"></i>
+                        <input type="email" id="adminEmail" placeholder="admin@metsiedc.in" class="glass-input w-full rounded py-4 pl-12 pr-4 text-sm font-light">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">Security Key / Password</label>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Security Key</label>
                     <div class="relative">
-                        <i class="fas fa-key absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        <input type="password" id="adminPassword" placeholder="••••••••••••" class="glass-input w-full rounded-xl py-3.5 pl-12 pr-4 text-sm font-medium">
+                        <i class="fas fa-key absolute left-4 top-1/2 transform -translate-y-1/2 text-white/30"></i>
+                        <input type="password" id="adminPassword" placeholder="••••••••••••" class="glass-input w-full rounded py-4 pl-12 pr-12 text-sm font-light">
+                        <button type="button" class="toggle-password absolute right-4 top-1/2 transform -translate-y-1/2 text-white/30 hover:text-white transition-colors">
+                            <i class="fas fa-eye"></i>
+                        </button>
                     </div>
                 </div>
 
-                <div class="pt-2">
-                    <button type="submit" id="loginBtn" class="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold py-3.5 rounded-xl transition-all shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:shadow-[0_0_30px_rgba(239,68,68,0.6)] flex justify-center items-center gap-2 transform hover:scale-[1.02]">
+                <div class="pt-4">
+                    <button type="submit" id="loginBtn" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded text-[10px] uppercase tracking-widest transition-all shadow-xl flex justify-center items-center gap-3">
                         <span id="loginBtnText">Access Dashboard</span>
                         <div id="loginSpinner" class="spinner hidden"></div>
                         <i id="loginIcon" class="fas fa-arrow-right"></i>
@@ -138,38 +134,36 @@
                 </div>
             </form>
 
-            <div class="mt-8 text-center">
-                <a href="index.html" class="text-xs text-gray-500 hover:text-white transition-colors flex items-center justify-center gap-2">
-                    <i class="fas fa-arrow-left"></i> Back to Main Site
+            <div class="mt-8 pt-6 border-t border-white/10 text-center">
+                <a href="index.html" class="text-[9px] uppercase tracking-[0.2em] font-bold text-white/30 hover:text-white transition-colors flex items-center justify-center gap-2">
+                    <i class="fas fa-arrow-left"></i> Return to Main Site
                 </a>
             </div>
         </div>
 
-        <p class="text-center text-gray-600 text-xs mt-8">
-            This system is monitored. Unauthorized access attempts will be logged.<br>
-            &copy; 2025 MET'S IEDC Web Admin.
+        <p class="text-center text-white/30 text-[9px] uppercase tracking-widest mt-10 leading-relaxed max-w-xs">
+            System monitored.<br>Unauthorized access is prohibited.<br>
+            &copy; 2026 MET'S IEDC.
         </p>
     </div>
 
-  <script type="module">
-        // Import Firebase (Using stable v10 to ensure compatibility)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        console.log("Script loaded. Initializing Firebase...");
+    <script type="module">
+        // Import Firebase (Updated to match v11.6.1 used in rest of site)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- PASTE YOUR FIREBASE CONFIGURATION HERE ---
-const firebaseConfig = {
-  apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
-  authDomain: "metsiedc-3010e.firebaseapp.com",
-  databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
-  projectId: "metsiedc-3010e",
-  storageBucket: "metsiedc-3010e.firebasestorage.app",
-  messagingSenderId: "954403413150",
-  appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
-  measurementId: "G-6E7EK0D7JG"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+            authDomain: "metsiedc-3010e.firebaseapp.com",
+            databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+            projectId: "metsiedc-3010e",
+            storageBucket: "metsiedc-3010e.firebasestorage.app",
+            messagingSenderId: "954403413150",
+            appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+            measurementId: "G-6E7EK0D7JG"
+        };
         // ----------------------------------------------
 
         // Initialize
@@ -178,7 +172,6 @@ const firebaseConfig = {
             app = initializeApp(firebaseConfig);
             auth = getAuth(app);
             db = getFirestore(app);
-            console.log("Firebase initialized successfully.");
         } catch (e) {
             console.error("Firebase Init Error:", e);
             alert("Error initializing Firebase. Check console (F12).");
@@ -188,24 +181,31 @@ const firebaseConfig = {
         const loginBtn = document.getElementById('loginBtn');
         const loginBtnText = document.getElementById('loginBtnText');
         const loginSpinner = document.getElementById('loginSpinner');
+        const loginIcon = document.getElementById('loginIcon');
         const loginError = document.getElementById('loginError');
         const loginErrorText = document.getElementById('loginErrorText');
+
+        // Toggle Password Visibility
+        document.querySelectorAll('.toggle-password').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                const icon = this.querySelector('i');
+                input.type = input.type === 'password' ? 'text' : 'password';
+                icon.classList.toggle('fa-eye'); icon.classList.toggle('fa-eye-slash');
+            });
+        });
 
         // Check Login Status
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                console.log("User already logged in:", user.email);
                 // Optional: Auto-redirect if already admin
                 // checkAdminStatus(user); 
-            } else {
-                console.log("No user logged in.");
             }
         });
 
         // Handle Login Submission
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            console.log("Login button clicked.");
 
             const email = document.getElementById('adminEmail').value.trim();
             const password = document.getElementById('adminPassword').value;
@@ -219,13 +219,12 @@ const firebaseConfig = {
             loginBtn.disabled = true;
             loginBtnText.textContent = "Verifying...";
             if(loginSpinner) loginSpinner.classList.remove('hidden');
+            if(loginIcon) loginIcon.classList.add('hidden');
             loginError.classList.add('hidden');
 
             try {
-                console.log("Attempting sign in for:", email);
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-                console.log("Authentication successful. Checking Admin Role...");
 
                 // CHECK ADMIN ROLE IN FIRESTORE
                 const userDocRef = doc(db, "users", user.uid);
@@ -233,16 +232,13 @@ const firebaseConfig = {
                 
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
-                    console.log("User data found:", userData);
 
                     if (userData.role === 'admin') {
-                        console.log("Admin Authorized! Redirecting...");
-                        window.location.href = 'admin-dashboard.html'; // Make sure this file exists!
+                        window.location.href = 'admin-dashboard.html'; 
                     } else {
                         throw new Error("Access Denied: Your account does not have the 'admin' role.");
                     }
                 } else {
-                    console.log("User document does not exist in 'users' collection.");
                     throw new Error("Access Denied: User profile not found in database.");
                 }
 
@@ -265,6 +261,7 @@ const firebaseConfig = {
                 loginBtn.disabled = false;
                 loginBtnText.textContent = "Access Dashboard";
                 if(loginSpinner) loginSpinner.classList.add('hidden');
+                if(loginIcon) loginIcon.classList.remove('hidden');
             }
         });
 
@@ -275,5 +272,3 @@ const firebaseConfig = {
     </script>
 </body>
 </html>
-
-
