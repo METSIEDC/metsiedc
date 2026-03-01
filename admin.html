@@ -148,10 +148,9 @@
     </div>
 
     <script type="module">
-        // Import Firebase (Updated to match v11.6.1 used in rest of site)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- PASTE YOUR FIREBASE CONFIGURATION HERE ---
         const firebaseConfig = {
@@ -198,8 +197,7 @@
         // Check Login Status
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Optional: Auto-redirect if already admin
-                // checkAdminStatus(user); 
+                // Keep session open but do nothing automatically to prevent false bypasses.
             }
         });
 
@@ -234,11 +232,41 @@
                     const userData = userDoc.data();
 
                     if (userData.role === 'admin') {
+                        // LOG SUCCESSFUL ADMIN LOGIN
+                        try {
+                            await addDoc(collection(db, "logs"), {
+                                action: "Admin Login",
+                                details: "Successful login to Admin Portal",
+                                admin: email,
+                                timestamp: Date.now()
+                            });
+                        } catch (err) { console.error("Logging failed", err); }
+
                         window.location.href = 'admin-dashboard.html'; 
                     } else {
+                        // LOG UNAUTHORIZED NON-ADMIN
+                        try {
+                            await addDoc(collection(db, "logs"), {
+                                action: "Unauthorized Access",
+                                details: "Non-admin attempted to login to Admin Portal",
+                                admin: email,
+                                timestamp: Date.now()
+                            });
+                        } catch (err) { console.error("Logging failed", err); }
+
                         throw new Error("Access Denied: Your account does not have the 'admin' role.");
                     }
                 } else {
+                    // LOG UNKNOWN USER
+                    try {
+                        await addDoc(collection(db, "logs"), {
+                            action: "Unauthorized Access",
+                            details: "Unknown profile attempted to login",
+                            admin: email,
+                            timestamp: Date.now()
+                        });
+                    } catch (err) { console.error("Logging failed", err); }
+
                     throw new Error("Access Denied: User profile not found in database.");
                 }
 
