@@ -203,10 +203,10 @@
                     </div>
                 </div>
 
-                <div class="p-4 bg-white/5 border border-white/10 rounded-xl flex items-start gap-4">
-                    <i data-lucide="alert-circle" class="w-5 h-5 text-yellow-500 mt-0.5"></i>
+                <div class="p-5 bg-white/5 border border-white/10 rounded-xl flex items-start gap-4">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-500 mt-0.5"></i>
                     <p class="text-xs text-white/70 font-light leading-relaxed">
-                        <strong class="text-white">Why are some users missing?</strong> Users created manually inside the Firebase Authentication Console do not have a Database Profile yet. They will automatically appear here the moment they log into the Student Dashboard and save their profile.
+                        <strong class="text-white">Why are some recent signups missing?</strong> If a new user signed up via Google or Email but isn't appearing here, it's because their database profile wasn't generated during the login redirect process. They currently only exist in Firebase Authentication. They will appear here the moment they log into the Student Dashboard and click "Save Profile", OR you can manually add them here.
                     </p>
                 </div>
 
@@ -636,32 +636,43 @@
             let certHtml = '', excomHtml = '', attHtml = '', excomModalHtml = '';
 
             snap.forEach(docSnap => {
-                allUsersData.push({ id: docSnap.id, ...docSnap.data() });
+                if (docSnap.id) {
+                    allUsersData.push({ id: docSnap.id, ...docSnap.data() });
+                }
             });
 
             // Sort users so newest created are safely at the top of the list (Handles missing/null timestamps)
+            // Wrapped in try/catch to absolutely prevent sorting crashes
             allUsersData.sort((a, b) => {
                 const getMs = (val) => {
-                    if (!val) return Date.now(); // Prioritize missing timestamps to TOP
-                    if (typeof val.toMillis === 'function') return val.toMillis();
-                    if (val.seconds) return val.seconds * 1000;
-                    return new Date(val).getTime() || Date.now();
+                    try {
+                        if (!val) return 0; 
+                        if (typeof val.toMillis === 'function') return val.toMillis();
+                        if (val.seconds) return val.seconds * 1000;
+                        if (typeof val === 'number') return val;
+                        const parsed = new Date(val).getTime();
+                        return isNaN(parsed) ? 0 : parsed;
+                    } catch(e) { return 0; }
                 };
                 return getMs(b.createdAt) - getMs(a.createdAt);
             });
 
             allUsersData.forEach(u => {
-                const id = u.id;
-                const displayHtmlName = escapeHTML(getSafeText(u.name));
-                const safeRole = u.role || 'student';
+                try {
+                    const id = u.id;
+                    const displayHtmlName = escapeHTML(getSafeText(u.name));
+                    const safeRole = u.role || 'student';
 
-                if(safeRole === 'student' || safeRole === 'excom') {
-                    certHtml += `<tr class="border-b border-white/5"><td class="px-6 py-4 text-center"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${id}" data-name="${displayHtmlName}"></td><td class="text-sm font-light text-white">${displayHtmlName}</td></tr>`;
-                    attHtml += `<tr class="hover:bg-white/5 cursor-pointer border-b border-white/5 transition-colors" onclick="toggleAttCheck('${id}')"><td class="px-6 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${id}" value="${id}"></td><td class="text-sm font-bold text-white">${displayHtmlName}</td><td class="text-xs font-mono text-white/50">${escapeHTML(u.email || '')}</td></tr>`;
-                }
-                if(safeRole === 'excom') {
-                    excomHtml += `<div class="flex justify-between items-center bg-white/5 border border-white/10 p-4 rounded-xl mb-2"><span class="font-bold text-sm text-white">${displayHtmlName}</span><span class="text-[9px] font-bold uppercase tracking-[0.2em] text-white/50 border border-white/10 px-2 py-1 rounded">ExCom</span></div>`;
-                    excomModalHtml += `<tr class="border-b border-white/5"><td class="px-6 py-4 text-center"><input type="checkbox" class="excom-checkbox custom-checkbox" value="${id}"></td><td class="text-sm font-bold text-white">${displayHtmlName}</td></tr>`;
+                    if(safeRole === 'student' || safeRole === 'excom') {
+                        certHtml += `<tr class="border-b border-white/5"><td class="px-6 py-4 text-center"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${id}" data-name="${displayHtmlName}"></td><td class="text-sm font-light text-white">${displayHtmlName}</td></tr>`;
+                        attHtml += `<tr class="hover:bg-white/5 cursor-pointer border-b border-white/5 transition-colors" onclick="toggleAttCheck('${id}')"><td class="px-6 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${id}" value="${id}"></td><td class="text-sm font-bold text-white">${displayHtmlName}</td><td class="text-xs font-mono text-white/50">${escapeHTML(u.email || '')}</td></tr>`;
+                    }
+                    if(safeRole === 'excom') {
+                        excomHtml += `<div class="flex justify-between items-center bg-white/5 border border-white/10 p-4 rounded-xl mb-2"><span class="font-bold text-sm text-white">${displayHtmlName}</span><span class="text-[9px] font-bold uppercase tracking-[0.2em] text-white/50 border border-white/10 px-2 py-1 rounded">ExCom</span></div>`;
+                        excomModalHtml += `<tr class="border-b border-white/5"><td class="px-6 py-4 text-center"><input type="checkbox" class="excom-checkbox custom-checkbox" value="${id}"></td><td class="text-sm font-bold text-white">${displayHtmlName}</td></tr>`;
+                    }
+                } catch(err) {
+                    console.error("Error processing user row data:", err);
                 }
             });
 
@@ -692,8 +703,11 @@
             if(btn) { btn.disabled = true; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> <span class="text-[10px] uppercase tracking-widest font-bold whitespace-nowrap hidden sm:inline">Fetching...</span>`; }
             
             try {
+                // Hard fetch directly from server to bypass potential local cache state
                 const snap = await getDocs(collection(db, "users"));
                 processAndRenderUsers(snap);
+                
+                // Re-establish real-time listener to keep UI alive afterwards
                 fetchUsersListener();
             } catch(e) {
                 console.error(e);
@@ -756,42 +770,46 @@
         window.renderUserTable = (users) => {
             let uHtml = '';
             users.forEach(u => {
-                const displayHtmlName = escapeHTML(getSafeText(u.name));
-                const safeEmail = escapeHTML(getSafeText(u.email));
-                const safeRole = u.role || "student";
-                const safeProvider = u.authProvider || "email";
-                
-                let roleBadge = '';
-                if(safeRole === 'admin') roleBadge = 'text-white bg-white/10 border-white/20';
-                else if(safeRole === 'excom') roleBadge = 'text-white/80 bg-white/5 border-white/10';
-                else roleBadge = 'text-white/50 bg-transparent border-white/5';
+                try {
+                    const displayHtmlName = escapeHTML(getSafeText(u.name));
+                    const safeEmail = escapeHTML(getSafeText(u.email));
+                    const safeRole = u.role || "student";
+                    const safeProvider = u.authProvider || "email";
+                    
+                    let roleBadge = '';
+                    if(safeRole === 'admin') roleBadge = 'text-white bg-white/10 border-white/20';
+                    else if(safeRole === 'excom') roleBadge = 'text-white/80 bg-white/5 border-white/10';
+                    else roleBadge = 'text-white/50 bg-transparent border-white/5';
 
-                let authBadge = '';
-                if(safeProvider === 'google') {
-                    authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-white/10 text-white border border-white/20"><i class="fab fa-google"></i> Google</span>';
-                } else if(safeProvider === 'phone') {
-                    authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-white/5 text-white/70 border border-white/10"><i data-lucide="smartphone" class="w-3 h-3"></i> Phone</span>';
-                } else {
-                    authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-white/5 text-white/70 border border-white/10"><i data-lucide="mail" class="w-3 h-3"></i> Password</span>';
+                    let authBadge = '';
+                    if(safeProvider === 'google') {
+                        authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-white/10 text-white border border-white/20"><i class="fab fa-google"></i> Google</span>';
+                    } else if(safeProvider === 'phone') {
+                        authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-white/5 text-white/70 border border-white/10"><i data-lucide="smartphone" class="w-3 h-3"></i> Phone</span>';
+                    } else {
+                        authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-white/5 text-white/70 border border-white/10"><i data-lucide="mail" class="w-3 h-3"></i> Password</span>';
+                    }
+
+                    // Use HTML data-attributes instead of inline onclick to prevent quote-breaking bugs entirely.
+                    uHtml += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                        <td class="px-6 py-5 text-sm font-bold text-white">${displayHtmlName}</td>
+                        <td class="py-4">
+                            <div class="flex flex-col items-start gap-1.5">
+                                <span class="text-xs text-white/50 font-mono">${safeEmail}</span>
+                                ${authBadge}
+                            </div>
+                        </td>
+                        <td><span class="uppercase text-[9px] tracking-widest font-bold px-3 py-1.5 rounded border ${roleBadge}">${safeRole}</span></td>
+                        <td class="text-center py-4">
+                            <div class="flex items-center justify-center gap-4">
+                                <button class="edit-user-btn text-white/50 hover:text-white transition-colors" data-id="${u.id}" data-name="${displayHtmlName}" data-role="${safeRole}"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                                <button class="delete-user-btn text-red-400/70 hover:text-red-400 transition-colors" data-id="${u.id}" data-name="${displayHtmlName}"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </div>
+                        </td>
+                    </tr>`;
+                } catch(err) {
+                    console.error("Failed to render user row:", err);
                 }
-
-                // Use data-attributes so we don't break string literals
-                uHtml += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
-                    <td class="px-6 py-5 text-sm font-bold text-white">${displayHtmlName}</td>
-                    <td class="py-4">
-                        <div class="flex flex-col items-start gap-1.5">
-                            <span class="text-xs text-white/50 font-mono">${safeEmail}</span>
-                            ${authBadge}
-                        </div>
-                    </td>
-                    <td><span class="uppercase text-[9px] tracking-widest font-bold px-3 py-1.5 rounded border ${roleBadge}">${safeRole}</span></td>
-                    <td class="text-center py-4">
-                        <div class="flex items-center justify-center gap-4">
-                            <button class="edit-user-btn text-white/50 hover:text-white transition-colors" data-id="${u.id}" data-name="${displayHtmlName}" data-role="${safeRole}"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                            <button class="delete-user-btn text-red-400/70 hover:text-red-400 transition-colors" data-id="${u.id}" data-name="${displayHtmlName}"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                        </div>
-                    </td>
-                </tr>`;
             });
             const tbody = document.getElementById('userListBody');
             if(tbody) tbody.innerHTML = uHtml || '<tr><td colspan="4" class="text-center py-8 text-white/40 text-xs tracking-widest uppercase font-bold">No users found.</td></tr>';
@@ -867,13 +885,6 @@
         };
 
         async function logActivity(action, details) { await addDoc(collection(db, "logs"), { action, details, admin: currentUserEmail, timestamp: Date.now() }); }
-        
-        window.openEditUserModal = (id, encodedName, role) => { 
-            document.getElementById('editUserId').value = id; 
-            document.getElementById('editUserName').value = decodeURIComponent(encodedName); 
-            document.getElementById('editUserRoleSelect').value = role || 'student'; 
-            document.getElementById('editUserModal').classList.remove('hidden'); 
-        };
         
         document.getElementById('editUserRoleForm').addEventListener('submit', async (e) => {
             e.preventDefault();
