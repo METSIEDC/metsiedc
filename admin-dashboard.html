@@ -751,19 +751,36 @@
                 const displayHtmlName = escapeHTML(getSafeText(u.name));
                 const safeEmail = escapeHTML(getSafeText(u.email));
                 const safeRole = u.role || "student";
+                const safeProvider = u.authProvider || "email";
                 
                 let roleBadge = '';
                 if(safeRole === 'admin') roleBadge = 'text-white bg-white/10 border-white/20';
                 else if(safeRole === 'excom') roleBadge = 'text-white/80 bg-white/5 border-white/10';
                 else roleBadge = 'text-white/50 bg-transparent border-white/5';
 
+                let authBadge = '';
+                if(safeProvider === 'google') {
+                    authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-white/10 text-white border border-white/20"><i class="fab fa-google"></i> Google</span>';
+                } else if(safeProvider === 'phone') {
+                    authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-green-500/10 text-green-400 border border-green-500/20"><i data-lucide="smartphone" class="w-3 h-3"></i> Phone</span>';
+                } else {
+                    authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-500/20"><i data-lucide="mail" class="w-3 h-3"></i> Password</span>';
+                }
+
                 uHtml += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
                     <td class="px-6 py-5 text-sm font-bold text-white">${displayHtmlName}</td>
-                    <td class="text-xs text-white/50 font-mono">${safeEmail}</td>
+                    <td class="py-4">
+                        <div class="flex flex-col items-start gap-1.5">
+                            <span class="text-xs text-white/50 font-mono">${safeEmail}</span>
+                            ${authBadge}
+                        </div>
+                    </td>
                     <td><span class="uppercase text-[9px] tracking-widest font-bold px-3 py-1.5 rounded border ${roleBadge}">${safeRole}</span></td>
-                    <td class="text-center flex items-center justify-center gap-4 py-4">
-                        <button class="edit-user-btn text-white/50 hover:text-white transition-colors" data-id="${u.id}" data-name="${displayHtmlName}" data-role="${safeRole}"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                        <button class="delete-user-btn text-red-400/70 hover:text-red-400 transition-colors" data-id="${u.id}" data-name="${displayHtmlName}"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    <td class="text-center py-4">
+                        <div class="flex items-center justify-center gap-4">
+                            <button class="edit-user-btn text-white/50 hover:text-white transition-colors" data-id="${u.id}" data-name="${displayHtmlName}" data-role="${safeRole}"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                            <button class="delete-user-btn text-red-400/70 hover:text-red-400 transition-colors" data-id="${u.id}" data-name="${displayHtmlName}"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
                     </td>
                 </tr>`;
             });
