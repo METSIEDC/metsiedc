@@ -141,8 +141,11 @@
     <!-- MAIN CONTENT -->
     <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10">
         <header class="glass-header h-20 flex items-center justify-between px-6 md:px-10 shrink-0">
-            <h1 class="text-xl font-display font-bold text-white flex items-center gap-3 uppercase tracking-widest"><i data-lucide="shield-check" class="text-white/50 w-5 h-5"></i> Admin Dashboard</h1>
-            <div class="text-right"><p class="text-xs font-bold text-white tracking-widest uppercase" id="adminEmailDisplay">Loading...</p><p class="text-[9px] text-white/50 font-bold tracking-[0.2em] uppercase">Super Admin</p></div>
+            <div class="flex items-center gap-4">
+                <button id="mobile-menu-toggle" class="md:hidden text-white p-2"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                <h1 class="text-xl font-display font-bold text-white flex items-center gap-3 uppercase tracking-widest"><i data-lucide="shield-check" class="text-white/50 w-5 h-5"></i> Admin Dashboard</h1>
+            </div>
+            <div class="text-right hidden sm:block"><p class="text-xs font-bold text-white tracking-widest uppercase" id="adminEmailDisplay">Loading...</p><p class="text-[9px] text-white/50 font-bold tracking-[0.2em] uppercase">Super Admin</p></div>
         </header>
 
         <main class="flex-grow overflow-y-auto p-6 md:p-10">
@@ -173,7 +176,7 @@
                 </div>
             </div>
 
-            <!-- 2. USERS MANAGEMENT (SEARCH + EDIT + DELETE) -->
+            <!-- 2. USERS MANAGEMENT -->
             <div id="usersSection" class="tab-content hidden space-y-8 max-w-7xl mx-auto">
                 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-2">
                     <div>
@@ -192,7 +195,7 @@
                         </div>
                         <button onclick="forceRefreshUsers(this)" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-5 py-3.5 rounded transition-colors flex items-center justify-center gap-2" title="Force Fetch Users From Server">
                             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                            <span class="text-[10px] uppercase tracking-widest font-bold whitespace-nowrap hidden sm:inline">Fetch New Users</span>
+                            <span class="text-[10px] uppercase tracking-widest font-bold whitespace-nowrap hidden sm:inline">Refresh</span>
                         </button>
                         <button onclick="toggleAddUserModal(true)" class="bg-white hover:bg-gray-200 text-[#0f1115] px-6 py-3.5 rounded text-[10px] uppercase tracking-widest font-bold whitespace-nowrap transition-colors flex items-center gap-2">
                             <i data-lucide="user-plus" class="w-4 h-4"></i> Add User
@@ -201,7 +204,7 @@
                 </div>
 
                 <div class="p-4 bg-white/5 border border-white/10 rounded-xl flex items-start gap-4">
-                    <i data-lucide="alert-circle" class="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0"></i>
+                    <i data-lucide="info" class="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0"></i>
                     <p class="text-xs text-white/70 font-light leading-relaxed">
                         <strong class="text-white">Missing users?</strong> If a user exists in the Authentication console but not here, it means their database profile hasn't been created yet. Click "Add User" and use the <strong>Sync Existing User</strong> tab to link their Auth UID manually without changing their password!
                     </p>
@@ -245,7 +248,7 @@
                 </div>
             </div>
 
-            <!-- 4. LOGS & EXCOM -->
+            <!-- 4. LOGS -->
             <div id="logsSection" class="tab-content hidden space-y-8 max-w-7xl mx-auto">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-4">
                     <div>
@@ -267,6 +270,7 @@
                 </div>
             </div>
 
+            <!-- EXCOM TRACKING -->
             <div id="excomSection" class="tab-content hidden space-y-8 max-w-7xl mx-auto">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-4">
                     <div>
@@ -282,9 +286,9 @@
                         <h3 class="text-sm font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Committee Members</h3>
                         <div id="excomMembersList" class="space-y-1 max-h-80 overflow-y-auto pr-2"></div>
                     </div>
-                    <div class="glass-panel p-8 rounded-2xl">
+                    <div class="glass-panel p-8 rounded-2xl flex flex-col">
                         <h3 class="text-sm font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Recent Meetings</h3>
-                        <div id="excomMeetingsList" class="space-y-3 max-h-80 overflow-y-auto pr-2"></div>
+                        <div id="excomMeetingsList" class="space-y-3 flex-grow overflow-y-auto pr-2"></div>
                     </div>
                 </div>
             </div>
@@ -556,7 +560,7 @@
         </div>
     </div>
 
-    <!-- EXCOM LOG -->
+    <!-- EXCOM LOG MODAL -->
     <div id="excomModal" class="fixed inset-0 bg-[#0f1115]/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-lg p-8 md:p-10 rounded-2xl h-[85vh] flex flex-col shadow-2xl border border-white/20">
             <h2 class="text-2xl font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Log ExCom Meeting</h2>
@@ -568,14 +572,14 @@
             <div class="flex-grow overflow-y-auto mb-6 border border-white/10 rounded-xl bg-[#0a0c0f]">
                 <table class="w-full text-left">
                     <thead class="bg-white/5 sticky top-0 border-b border-white/10 text-[10px] uppercase tracking-widest font-bold text-white/50">
-                        <tr><th class="px-6 py-4 text-center">Present</th><th>Name</th></tr>
+                        <tr><th class="px-6 py-4 text-center w-32">Status</th><th class="pl-4">Name</th></tr>
                     </thead>
                     <tbody id="excomAttendanceList" class="divide-y divide-white/5"></tbody>
                 </table>
             </div>
             <div class="flex gap-4 pt-2">
                 <button onclick="document.getElementById('excomModal').classList.add('hidden')" class="flex-1 bg-transparent hover:bg-white/5 border border-white/20 text-white py-4 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Close</button>
-                <button onclick="submitExcomAttendance()" class="flex-1 bg-white hover:bg-gray-200 text-[#0f1115] py-4 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Save Log</button>
+                <button id="saveExcomBtn" onclick="submitExcomAttendance()" class="flex-1 bg-white hover:bg-gray-200 text-[#0f1115] py-4 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Save Log</button>
             </div>
         </div>
     </div>
@@ -613,6 +617,7 @@
         let certTemplateBase64 = null;
         let currentUserEmail = "";
         let allUsersData = [];
+        let excomMeetingsData = []; // To track meetings for date locking
 
         // HELPER: ESCAPE STRINGS FOR HTML RENDERING
         function getSafeText(val) {
@@ -664,8 +669,6 @@
                 }
             });
 
-            // Sort users so newest created are safely at the top of the list (Handles missing/null timestamps)
-            // Wrapped in try/catch to absolutely prevent sorting crashes
             allUsersData.sort((a, b) => {
                 const getMs = (val) => {
                     try {
@@ -692,7 +695,19 @@
                     }
                     if(safeRole === 'excom') {
                         excomHtml += `<div class="flex justify-between items-center bg-white/5 border border-white/10 p-4 rounded-xl mb-2"><span class="font-bold text-sm text-white">${displayHtmlName}</span><span class="text-[9px] font-bold uppercase tracking-[0.2em] text-white/50 border border-white/10 px-2 py-1 rounded">ExCom</span></div>`;
-                        excomModalHtml += `<tr class="border-b border-white/5"><td class="px-6 py-4 text-center"><input type="checkbox" class="excom-checkbox custom-checkbox" value="${id}"></td><td class="text-sm font-bold text-white">${displayHtmlName}</td></tr>`;
+                        
+                        // Dropdown logic for ExCom Tracking
+                        excomModalHtml += `
+                        <tr class="border-b border-white/5">
+                            <td class="px-6 py-3 text-center">
+                                <select class="excom-status-select glass-input text-[10px] uppercase font-bold py-1.5 px-2 rounded cursor-pointer w-full text-center" data-id="${id}" data-name="${displayHtmlName}">
+                                    <option value="Absent" class="text-red-500">Absent</option>
+                                    <option value="Present" class="text-green-500">Present</option>
+                                    <option value="Informed" class="text-yellow-500">Informed</option>
+                                </select>
+                            </td>
+                            <td class="text-sm font-bold text-white pl-4">${displayHtmlName}</td>
+                        </tr>`;
                     }
                 } catch(err) {
                     console.error("Error processing user row data:", err);
@@ -726,11 +741,8 @@
             if(btn) { btn.disabled = true; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> <span class="text-[10px] uppercase tracking-widest font-bold whitespace-nowrap hidden sm:inline">Fetching...</span>`; }
             
             try {
-                // Hard fetch directly from server to bypass potential local cache state
                 const snap = await getDocs(collection(db, "users"));
                 processAndRenderUsers(snap);
-                
-                // Re-establish real-time listener to keep UI alive afterwards
                 fetchUsersListener();
             } catch(e) {
                 console.error(e);
@@ -778,6 +790,27 @@
                 lucide.createIcons();
             });
 
+            // EXCOM MEETINGS
+            onSnapshot(query(collection(db, "excom_meetings"), orderBy("date", "desc")), (snap) => {
+                excomMeetingsData = [];
+                let h = '';
+                snap.forEach(d => {
+                    const m = { id: d.id, ...d.data() };
+                    excomMeetingsData.push(m);
+                    h += `
+                    <div class="bg-white/5 border border-white/10 p-4 rounded-xl mb-3">
+                        <div class="flex justify-between items-start mb-3">
+                            <h4 class="font-bold text-white text-sm uppercase tracking-wider">${escapeHTML(m.title)}</h4>
+                            <span class="text-[10px] text-white/50 bg-black/50 px-2 py-1 rounded border border-white/10 font-mono">${m.date}</span>
+                        </div>
+                        <button onclick="printExcomMeeting('${m.id}')" class="text-[9px] bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-2 rounded text-white uppercase tracking-widest font-bold transition-colors flex items-center justify-center gap-2 w-full"><i data-lucide="printer" class="w-3 h-3"></i> Print Report</button>
+                    </div>`;
+                });
+                const list = document.getElementById('excomMeetingsList');
+                if(list) list.innerHTML = h || '<p class="text-white/40 text-xs italic">No meetings logged yet.</p>';
+                lucide.createIcons();
+            });
+
             // OTHERS
             onSnapshot(collection(db, "announcements"), (s) => safeSetText('totalAnnouncementsCount', s.size));
             onSnapshot(collection(db, "eventForms"), (s) => {
@@ -788,6 +821,168 @@
                 lucide.createIcons();
             });
         }
+
+        // --- EXCOM LOGIC & DATE LOCKING ---
+        document.getElementById('excomMeetingDate').addEventListener('change', (e) => {
+            const selectedDate = e.target.value;
+            const btn = document.getElementById('saveExcomBtn');
+            const existing = excomMeetingsData.find(m => m.date === selectedDate);
+            
+            if (existing) {
+                alert("A meeting is already logged for this date. You cannot overwrite it.");
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.innerText = "Date Locked";
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.innerText = "Save Log";
+            }
+        });
+
+        window.submitExcomAttendance = async () => {
+            const title = document.getElementById('excomMeetingTitle').value.trim();
+            const date = document.getElementById('excomMeetingDate').value;
+            if(!title || !date) return alert("Please provide a meeting topic and date.");
+            
+            // Final lock check
+            if(excomMeetingsData.some(m => m.date === date)) return alert("A meeting is already logged for this date.");
+
+            const attendanceRecords = Array.from(document.querySelectorAll('.excom-status-select')).map(sel => ({
+                id: sel.dataset.id,
+                name: sel.dataset.name,
+                status: sel.value
+            }));
+
+            const btn = document.getElementById('saveExcomBtn');
+            btn.disabled = true; 
+            btn.innerText = "Saving...";
+
+            try {
+                await addDoc(collection(db, "excom_meetings"), { 
+                    title: title, 
+                    date: date, 
+                    attendance: attendanceRecords, 
+                    timestamp: Date.now(),
+                    loggedBy: currentUserEmail
+                }); 
+                await logActivity("ExCom Logged", `Meeting: ${date}`);
+                alert("Meeting Logged Successfully!"); 
+                document.getElementById('excomModal').classList.add('hidden');
+                
+                // Clear Form
+                document.getElementById('excomMeetingTitle').value = '';
+                document.getElementById('excomMeetingDate').value = '';
+                document.querySelectorAll('.excom-status-select').forEach(s => s.value = 'Absent');
+            } catch(e) {
+                alert(e.message);
+            } finally {
+                btn.disabled = false; 
+                btn.innerText = "Save Log";
+            }
+        };
+
+        window.printExcomMeeting = (meetingId) => {
+            const m = excomMeetingsData.find(x => x.id === meetingId);
+            if(!m) return alert("Meeting not found.");
+
+            let rows = '';
+            if(m.attendance && Array.isArray(m.attendance)) {
+                m.attendance.forEach(a => {
+                    let color = a.status === 'Present' ? '#16a34a' : a.status === 'Informed' ? '#d97706' : '#dc2626';
+                    rows += `<tr><td>${a.name}</td><td style="color:${color}; font-weight:bold; text-transform:uppercase; font-size:10px; letter-spacing:1px;">${a.status}</td></tr>`;
+                });
+            }
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>ExCom Meeting Report</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #333; }
+                        h2 { text-transform: uppercase; letter-spacing: 2px; color: #000; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 5px; }
+                        .meta { font-size: 12px; color: #666; margin-bottom: 30px; }
+                        table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top:20px; }
+                        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+                        th { background-color: #f8f9fa; font-weight: bold; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; }
+                    </style>
+                </head>
+                <body>
+                    <h2>ExCom Meeting Attendance</h2>
+                    <div class="meta">
+                        <p><strong>Topic:</strong> ${m.title || 'General Meeting'}</p>
+                        <p><strong>Date:</strong> ${m.date}</p>
+                        <p><strong>Logged By:</strong> ${m.loggedBy || 'System Admin'}</p>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Member Name</th>
+                                <th>Attendance Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows || '<tr><td colspan="2">No detailed records found for this legacy meeting.</td></tr>'}
+                        </tbody>
+                    </table>
+                    <script>
+                        window.onload = () => { window.print(); setTimeout(() => window.close(), 500); };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        };
+
+        // --- PRINT SYSTEM LOGS LOGIC ---
+        window.printLogs = () => {
+            const logsTableContent = document.getElementById('logsListBody').innerHTML;
+            if (!logsTableContent || logsTableContent.trim() === '') {
+                alert("No logs available to print.");
+                return;
+            }
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>System Logs - MET'S IEDC</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #333; }
+                        h2 { text-transform: uppercase; letter-spacing: 2px; color: #000; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 5px; }
+                        .meta { font-size: 12px; color: #666; margin-bottom: 30px; font-style: italic; }
+                        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+                        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+                        th { background-color: #f8f9fa; font-weight: bold; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; }
+                        /* Strip Tailwind dark mode text colors for clean black-on-white printing */
+                        * { color: #000 !important; }
+                    </style>
+                </head>
+                <body>
+                    <h2>Admin System Logs</h2>
+                    <p class="meta">Generated on: ${new Date().toLocaleString()}</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                                <th>Admin / User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${logsTableContent}
+                        </tbody>
+                    </table>
+                    <script>
+                        window.onload = () => { window.print(); setTimeout(() => window.close(), 500); };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        };
 
         // --- USER MANAGEMENT UI ---
         window.renderUserTable = (users) => {
@@ -994,11 +1189,6 @@
             await addDoc(collection(db, "attendance"), { eventName: document.getElementById('attendanceEventName').value, date: document.getElementById('attendanceDate').value, attendees, timestamp: Date.now() }); alert("Attendance Logged Successfully!");
         };
 
-        window.submitExcomAttendance = async () => {
-            const attendees = Array.from(document.querySelectorAll('.excom-checkbox:checked')).map(c => c.value);
-            await addDoc(collection(db, "excom_meetings"), { title: document.getElementById('excomMeetingTitle').value, date: document.getElementById('excomMeetingDate').value, attendees, timestamp: Date.now() }); alert("Meeting Logged Successfully!"); document.getElementById('excomModal').classList.add('hidden');
-        };
-
         window.issueCertificates = async () => {
             const eventName = document.getElementById('certEventName').value;
             const date = document.getElementById('certDate').value;
@@ -1033,60 +1223,6 @@
         window.toggleAttCheck = (id) => { const c = document.getElementById('att-'+id); c.checked = !c.checked; };
         
         window.deleteDoc = deleteDoc; window.doc = doc; window.db = db; // Global for onclick
-
-        // Print Logs Logic
-        window.printLogs = () => {
-            const logsTableContent = document.getElementById('logsListBody').innerHTML;
-            if (!logsTableContent || logsTableContent.trim() === '') {
-                alert("No logs available to print.");
-                return;
-            }
-
-            // Create a clean, printer-friendly popup window
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>System Logs - MET'S IEDC</title>
-                    <style>
-                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #333; }
-                        h2 { text-transform: uppercase; letter-spacing: 2px; color: #000; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 5px; }
-                        .meta { font-size: 12px; color: #666; margin-bottom: 30px; font-style: italic; }
-                        table { width: 100%; border-collapse: collapse; font-size: 12px; }
-                        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-                        th { background-color: #f8f9fa; font-weight: bold; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; }
-                        /* Strip Tailwind dark mode text colors for clean black-on-white printing */
-                        * { color: #000 !important; }
-                    </style>
-                </head>
-                <body>
-                    <h2>Admin System Logs</h2>
-                    <p class="meta">Generated on: ${new Date().toLocaleString()}</p>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Timestamp</th>
-                                <th>Action</th>
-                                <th>Details</th>
-                                <th>Admin / User</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${logsTableContent}
-                        </tbody>
-                    </table>
-                    <script>
-                        window.onload = () => {
-                            window.print();
-                            // Close window after print dialog closes
-                            setTimeout(() => window.close(), 500);
-                        };
-                    <\/script>
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
-        };
 
         document.getElementById('adminLogoutBtn').addEventListener('click', async () => {
             const btn = document.getElementById('adminLogoutBtn');
