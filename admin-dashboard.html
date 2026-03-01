@@ -203,17 +203,17 @@
                     </div>
                 </div>
 
-                <div class="p-4 bg-white/5 border border-white/10 rounded-xl flex items-start gap-3">
-                    <i data-lucide="info" class="w-5 h-5 text-white/50 mt-0.5"></i>
+                <div class="p-4 bg-white/5 border border-white/10 rounded-xl flex items-start gap-4">
+                    <i data-lucide="alert-circle" class="w-5 h-5 text-yellow-500 mt-0.5"></i>
                     <p class="text-xs text-white/70 font-light leading-relaxed">
-                        <strong class="text-white">Notice:</strong> If you recently created users directly in the Firebase Console (Auth Tab), they will not appear here until they log in for the first time. To instantly add a user to the database, use the <strong class="text-white">Add User</strong> button above.
+                        <strong class="text-white">Why are some users missing?</strong> Users created manually inside the Firebase Authentication Console do not have a Database Profile yet. They will automatically appear here the moment they log into the Student Dashboard and save their profile.
                     </p>
                 </div>
 
                 <div class="glass-panel rounded-2xl overflow-hidden">
                     <table class="w-full text-left">
                         <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50">
-                            <tr><th class="px-6 py-5">Name</th><th>Email / Auth</th><th>Role</th><th class="text-center">Actions</th></tr>
+                            <tr><th class="px-6 py-5">Name</th><th>Email / Auth Method</th><th>Role</th><th class="text-center">Actions</th></tr>
                         </thead>
                         <tbody id="userListBody" class="divide-y divide-white/5">
                             <tr><td colspan="4" class="text-center py-8 text-white/40 text-xs tracking-widest uppercase font-bold">Loading users...</td></tr>
@@ -770,11 +770,12 @@
                 if(safeProvider === 'google') {
                     authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-white/10 text-white border border-white/20"><i class="fab fa-google"></i> Google</span>';
                 } else if(safeProvider === 'phone') {
-                    authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-green-500/10 text-green-400 border border-green-500/20"><i data-lucide="smartphone" class="w-3 h-3"></i> Phone</span>';
+                    authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-white/5 text-white/70 border border-white/10"><i data-lucide="smartphone" class="w-3 h-3"></i> Phone</span>';
                 } else {
-                    authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-500/20"><i data-lucide="mail" class="w-3 h-3"></i> Password</span>';
+                    authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-white/5 text-white/70 border border-white/10"><i data-lucide="mail" class="w-3 h-3"></i> Password</span>';
                 }
 
+                // Use data-attributes so we don't break string literals
                 uHtml += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
                     <td class="px-6 py-5 text-sm font-bold text-white">${displayHtmlName}</td>
                     <td class="py-4">
@@ -816,10 +817,12 @@
             const editBtn = e.target.closest('.edit-user-btn');
             if (editBtn) {
                 document.getElementById('editUserId').value = editBtn.getAttribute('data-id'); 
+                
                 // Unescape HTML for input
                 const txt = document.createElement('textarea');
                 txt.innerHTML = editBtn.getAttribute('data-name');
                 document.getElementById('editUserName').value = txt.value; 
+                
                 document.getElementById('editUserRoleSelect').value = editBtn.getAttribute('data-role'); 
                 document.getElementById('editUserModal').classList.remove('hidden'); 
             }
@@ -828,7 +831,7 @@
             if (delBtn) {
                 const txt = document.createElement('textarea');
                 txt.innerHTML = delBtn.getAttribute('data-name');
-                deleteUser(delBtn.getAttribute('data-id'), txt.value);
+                window.deleteUser(delBtn.getAttribute('data-id'), txt.value);
             }
         });
 
@@ -865,6 +868,13 @@
 
         async function logActivity(action, details) { await addDoc(collection(db, "logs"), { action, details, admin: currentUserEmail, timestamp: Date.now() }); }
         
+        window.openEditUserModal = (id, encodedName, role) => { 
+            document.getElementById('editUserId').value = id; 
+            document.getElementById('editUserName').value = decodeURIComponent(encodedName); 
+            document.getElementById('editUserRoleSelect').value = role || 'student'; 
+            document.getElementById('editUserModal').classList.remove('hidden'); 
+        };
+        
         document.getElementById('editUserRoleForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('updateUserBtn');
@@ -872,10 +882,10 @@
             btn.innerText = "Updating...";
             
             try { 
-                await updateDoc(doc(db, "users", document.getElementById('editUserId').value), { 
+                await setDoc(doc(db, "users", document.getElementById('editUserId').value), { 
                     role: document.getElementById('editUserRoleSelect').value,
                     name: document.getElementById('editUserName').value
-                }); 
+                }, { merge: true }); 
                 alert("User Updated Successfully!"); 
                 toggleEditUserModal(false); 
             } catch(e){ 
