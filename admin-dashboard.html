@@ -447,12 +447,12 @@
     <!-- EDIT ROLE -->
     <div id="editUserModal" class="fixed inset-0 bg-[#0f1115]/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md p-8 md:p-10 rounded-2xl relative shadow-2xl border border-white/20">
-            <h2 class="text-2xl font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Edit Role</h2>
+            <h2 class="text-2xl font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Edit User</h2>
             <form id="editUserRoleForm" class="space-y-6">
                 <input type="hidden" id="editUserId">
                 <div>
                     <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">User Name</label>
-                    <input type="text" id="editUserName" class="glass-input w-full rounded py-4 px-4 text-sm font-light opacity-70" readonly>
+                    <input type="text" id="editUserName" class="glass-input w-full rounded py-4 px-4 text-sm font-light">
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Assign Role</label>
@@ -604,24 +604,29 @@
                     allUsersData.push({ id, ...u });
                 });
 
-                // Sort users so newest created are safely at the top of the list
+                // Sort users so newest created are safely at the top of the list (Handles missing/null timestamps)
                 allUsersData.sort((a, b) => {
-                    let timeA = a.createdAt?.seconds ? a.createdAt.seconds * 1000 : (a.createdAt || 0);
-                    let timeB = b.createdAt?.seconds ? b.createdAt.seconds * 1000 : (b.createdAt || 0);
-                    return timeB - timeA;
+                    const getMs = (val) => {
+                        if (!val) return 0;
+                        if (val.seconds) return val.seconds * 1000;
+                        if (typeof val === 'number') return val;
+                        return new Date(val).getTime() || 0;
+                    };
+                    return getMs(b.createdAt) - getMs(a.createdAt);
                 });
 
                 allUsersData.forEach(u => {
                     const id = u.id;
-                    const safeName = String(u.name || "Unknown"); // Prevents missing name crashes
+                    const rawName = String(u.name || "Unknown"); 
+                    const displayHtmlName = rawName.replace(/[&<>'"]/g, tag => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[tag]));
 
                     if(u.role === 'student' || u.role === 'excom' || !u.role) {
-                        certHtml += `<tr class="border-b border-white/5"><td class="px-6 py-4 text-center"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${id}" data-name="${safeName.replace(/"/g, '&quot;')}"></td><td class="text-sm font-light text-white">${safeName}</td></tr>`;
-                        attHtml += `<tr class="hover:bg-white/5 cursor-pointer border-b border-white/5 transition-colors" onclick="toggleAttCheck('${id}')"><td class="px-6 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${id}" value="${id}"></td><td class="text-sm font-bold text-white">${safeName}</td><td class="text-xs font-mono text-white/50">${u.email || ''}</td></tr>`;
+                        certHtml += `<tr class="border-b border-white/5"><td class="px-6 py-4 text-center"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${id}" data-name="${displayHtmlName}"></td><td class="text-sm font-light text-white">${displayHtmlName}</td></tr>`;
+                        attHtml += `<tr class="hover:bg-white/5 cursor-pointer border-b border-white/5 transition-colors" onclick="toggleAttCheck('${id}')"><td class="px-6 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${id}" value="${id}"></td><td class="text-sm font-bold text-white">${displayHtmlName}</td><td class="text-xs font-mono text-white/50">${u.email || ''}</td></tr>`;
                     }
                     if(u.role === 'excom') {
-                        excomHtml += `<div class="flex justify-between items-center bg-white/5 border border-white/10 p-4 rounded-xl mb-2"><span class="font-bold text-sm text-white">${safeName}</span><span class="text-[9px] font-bold uppercase tracking-[0.2em] text-white/50 border border-white/10 px-2 py-1 rounded">ExCom</span></div>`;
-                        excomModalHtml += `<tr class="border-b border-white/5"><td class="px-6 py-4 text-center"><input type="checkbox" class="excom-checkbox custom-checkbox" value="${id}"></td><td class="text-sm font-bold text-white">${safeName}</td></tr>`;
+                        excomHtml += `<div class="flex justify-between items-center bg-white/5 border border-white/10 p-4 rounded-xl mb-2"><span class="font-bold text-sm text-white">${displayHtmlName}</span><span class="text-[9px] font-bold uppercase tracking-[0.2em] text-white/50 border border-white/10 px-2 py-1 rounded">ExCom</span></div>`;
+                        excomModalHtml += `<tr class="border-b border-white/5"><td class="px-6 py-4 text-center"><input type="checkbox" class="excom-checkbox custom-checkbox" value="${id}"></td><td class="text-sm font-bold text-white">${displayHtmlName}</td></tr>`;
                     }
                 });
 
@@ -682,7 +687,10 @@
         window.renderUserTable = (users) => {
             let uHtml = '';
             users.forEach(u => {
-                const safeName = String(u.name || "Unknown").replace(/'/g, "\\'");
+                const rawName = u.name || "Unknown";
+                const displayHtmlName = String(rawName).replace(/[&<>'"]/g, tag => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[tag]));
+                const jsSafeName = String(rawName).replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, "");
+                
                 const safeRole = u.role || "student";
                 
                 let roleBadge = '';
@@ -690,7 +698,7 @@
                 else if(safeRole === 'excom') roleBadge = 'text-white/80 bg-white/5 border-white/10';
                 else roleBadge = 'text-white/50 bg-transparent border-white/5';
 
-                uHtml += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors"><td class="px-6 py-5 text-sm font-bold text-white">${u.name || 'Unknown'}</td><td class="text-xs text-white/50 font-mono">${u.email || ''}</td><td><span class="uppercase text-[9px] tracking-widest font-bold px-3 py-1.5 rounded border ${roleBadge}">${safeRole}</span></td><td class="text-center flex items-center justify-center gap-4 py-4"><button onclick="openEditUserModal('${u.id}', '${safeName}', '${safeRole}')" class="text-white/50 hover:text-white transition-colors"><i data-lucide="edit-2" class="w-4 h-4"></i></button><button onclick="deleteUser('${u.id}', '${safeName}')" class="text-red-400/70 hover:text-red-400 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
+                uHtml += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors"><td class="px-6 py-5 text-sm font-bold text-white">${displayHtmlName}</td><td class="text-xs text-white/50 font-mono">${u.email || ''}</td><td><span class="uppercase text-[9px] tracking-widest font-bold px-3 py-1.5 rounded border ${roleBadge}">${safeRole}</span></td><td class="text-center flex items-center justify-center gap-4 py-4"><button onclick="openEditUserModal('${u.id}', '${jsSafeName}', '${safeRole}')" class="text-white/50 hover:text-white transition-colors"><i data-lucide="edit-2" class="w-4 h-4"></i></button><button onclick="deleteUser('${u.id}', '${jsSafeName}')" class="text-red-400/70 hover:text-red-400 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
             });
             const tbody = document.getElementById('userListBody');
             if(tbody) tbody.innerHTML = uHtml || '<tr><td colspan="4" class="text-center py-8 text-white/40 text-xs tracking-widest uppercase font-bold">No users found.</td></tr>';
@@ -746,14 +754,22 @@
         
         window.openEditUserModal = (id, name, role) => { 
             document.getElementById('editUserId').value=id; 
-            document.getElementById('editUserName').value=name; 
+            // Decode the escaped quotes so they display properly in the text input
+            document.getElementById('editUserName').value=name.replace(/&quot;/g, '"'); 
             document.getElementById('editUserRoleSelect').value=role; 
             document.getElementById('editUserModal').classList.remove('hidden'); 
         };
         
         document.getElementById('editUserRoleForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            try { await updateDoc(doc(db, "users", document.getElementById('editUserId').value), { role: document.getElementById('editUserRoleSelect').value }); alert("Role Updated!"); toggleEditUserModal(false); } catch(e){ alert(e.message); }
+            try { 
+                await updateDoc(doc(db, "users", document.getElementById('editUserId').value), { 
+                    role: document.getElementById('editUserRoleSelect').value,
+                    name: document.getElementById('editUserName').value
+                }); 
+                alert("User Updated Successfully!"); 
+                toggleEditUserModal(false); 
+            } catch(e){ alert(e.message); }
         });
 
         document.getElementById('newsForm').addEventListener('submit', async (e) => {
