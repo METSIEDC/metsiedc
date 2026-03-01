@@ -195,7 +195,7 @@
                         </div>
                         <button onclick="forceRefreshUsers(this)" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-5 py-3.5 rounded transition-colors flex items-center justify-center gap-2" title="Force Fetch Users From Server">
                             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                            <span class="text-[10px] uppercase tracking-widest font-bold whitespace-nowrap hidden sm:inline">Fetch New Users</span>
+                            <span class="text-[10px] uppercase tracking-widest font-bold whitespace-nowrap hidden sm:inline">Refresh</span>
                         </button>
                         <button onclick="toggleAddUserModal(true)" class="bg-white hover:bg-gray-200 text-[#0f1115] px-6 py-3.5 rounded text-[10px] uppercase tracking-widest font-bold whitespace-nowrap transition-colors flex items-center gap-2">
                             <i data-lucide="user-plus" class="w-4 h-4"></i> Add User
@@ -203,10 +203,10 @@
                     </div>
                 </div>
 
-                <div class="p-5 bg-white/5 border border-white/10 rounded-xl flex items-start gap-4">
-                    <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-500 mt-0.5"></i>
+                <div class="p-4 bg-white/5 border border-white/10 rounded-xl flex items-start gap-4">
+                    <i data-lucide="info" class="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0"></i>
                     <p class="text-xs text-white/70 font-light leading-relaxed">
-                        <strong class="text-white">Why are some recent signups missing?</strong> If a new user signed up via Google or Email but isn't appearing here, it's because their database profile wasn't generated during the login redirect process. They currently only exist in Firebase Authentication. They will appear here the moment they log into the Student Dashboard and click "Save Profile", OR you can manually add them here.
+                        <strong class="text-white">Missing users?</strong> If a user exists in the Authentication console but not here, it means their database profile hasn't been created yet. Click "Add User" and use the <strong>Sync Existing User</strong> tab to link their Auth UID manually without changing their password!
                     </p>
                 </div>
 
@@ -515,19 +515,39 @@
         </div>
     </div>
 
-    <!-- ADD USER -->
+    <!-- ADD USER / SYNC USER MODAL -->
     <div id="addUserModal" class="fixed inset-0 bg-[#0f1115]/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md p-8 md:p-10 rounded-2xl relative shadow-2xl border border-white/20">
-            <h2 class="text-2xl font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Create User</h2>
+            <h2 class="text-2xl font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Add User</h2>
+            
+            <div class="flex mb-6 border-b border-white/10">
+                <button type="button" id="tabCreateNew" class="flex-1 pb-3 text-[10px] font-bold uppercase tracking-widest border-b-2 border-white text-white transition-colors" onclick="switchAddMode('create')">Create New</button>
+                <button type="button" id="tabSyncExisting" class="flex-1 pb-3 text-[10px] font-bold uppercase tracking-widest border-b-2 border-transparent text-white/50 hover:text-white transition-colors" onclick="switchAddMode('sync')">Sync Existing</button>
+            </div>
+
             <form id="adminAddUserForm" class="space-y-5">
+                <input type="hidden" id="addUserMode" value="create">
+                
                 <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Full Name</label><input type="text" id="newUserName" class="glass-input w-full rounded py-3.5 px-4 text-sm font-light" placeholder="John Doe" required></div>
+                
                 <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Email Address</label><input type="email" id="newUserEmail" class="glass-input w-full rounded py-3.5 px-4 text-sm font-light" placeholder="student@example.com" required></div>
-                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Temporary Password</label><input type="text" id="newUserPassword" class="glass-input w-full rounded py-3.5 px-4 text-sm font-light" placeholder="Min 8 chars" required></div>
+                
+                <div id="passwordFieldGroup">
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Temporary Password</label>
+                    <input type="text" id="newUserPassword" class="glass-input w-full rounded py-3.5 px-4 text-sm font-light" placeholder="Min 8 chars" required>
+                </div>
+
+                <div id="uidFieldGroup" class="hidden">
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">User UID (From Firebase Auth Console)</label>
+                    <input type="text" id="newUserUid" class="glass-input w-full rounded py-3.5 px-4 text-sm font-light" placeholder="Paste UID here...">
+                    <p class="text-white/30 text-[9px] mt-2 leading-relaxed">Paste the exact User UID from your Firebase Authentication list to link their existing login to this database profile.</p>
+                </div>
+
                 <div id="addUserStatus" class="hidden text-[10px] text-center p-3 rounded font-bold uppercase tracking-widest border border-white/20"></div>
                 
                 <div class="pt-4 flex gap-4">
                     <button type="button" onclick="toggleAddUserModal(false)" class="flex-1 bg-transparent hover:bg-white/5 border border-white/20 text-white py-3.5 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button>
-                    <button type="submit" class="flex-1 bg-white hover:bg-gray-200 text-[#0f1115] py-3.5 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Create User</button>
+                    <button type="submit" id="submitAddUserBtn" class="flex-1 bg-white hover:bg-gray-200 text-[#0f1115] py-3.5 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Create User</button>
                 </div>
             </form>
         </div>
@@ -853,21 +873,66 @@
             }
         });
 
+        // --- NEW/SYNC ADD USER LOGIC ---
+        window.switchAddMode = (mode) => {
+            document.getElementById('addUserMode').value = mode;
+            if(mode === 'create') {
+                document.getElementById('tabCreateNew').className = "flex-1 pb-3 text-[10px] font-bold uppercase tracking-widest border-b-2 border-white text-white transition-colors";
+                document.getElementById('tabSyncExisting').className = "flex-1 pb-3 text-[10px] font-bold uppercase tracking-widest border-b-2 border-transparent text-white/50 hover:text-white transition-colors";
+                document.getElementById('passwordFieldGroup').classList.remove('hidden');
+                document.getElementById('newUserPassword').required = true;
+                document.getElementById('uidFieldGroup').classList.add('hidden');
+                document.getElementById('newUserUid').required = false;
+                document.getElementById('submitAddUserBtn').innerText = "Create User";
+            } else {
+                document.getElementById('tabSyncExisting').className = "flex-1 pb-3 text-[10px] font-bold uppercase tracking-widest border-b-2 border-white text-white transition-colors";
+                document.getElementById('tabCreateNew').className = "flex-1 pb-3 text-[10px] font-bold uppercase tracking-widest border-b-2 border-transparent text-white/50 hover:text-white transition-colors";
+                document.getElementById('passwordFieldGroup').classList.add('hidden');
+                document.getElementById('newUserPassword').required = false;
+                document.getElementById('uidFieldGroup').classList.remove('hidden');
+                document.getElementById('newUserUid').required = true;
+                document.getElementById('submitAddUserBtn').innerText = "Sync User";
+            }
+        };
+
         // --- SUBMIT HANDLERS ---
         document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.disabled = true; btn.innerText = "Creating...";
-            const email = document.getElementById('newUserEmail').value;
+            const btn = document.getElementById('submitAddUserBtn');
+            const mode = document.getElementById('addUserMode').value;
+            const email = document.getElementById('newUserEmail').value.trim();
+            const name = document.getElementById('newUserName').value.trim();
+            
+            btn.disabled = true; 
+            btn.innerText = "Processing...";
+
             try {
-                const secondaryApp = initializeApp(firebaseConfig, "SecondaryApp-" + Date.now());
-                const secondaryAuth = getAuth(secondaryApp);
-                const uc = await createUserWithEmailAndPassword(secondaryAuth, email, document.getElementById('newUserPassword').value);
-                await setDoc(doc(db, "users", uc.user.uid), { name: document.getElementById('newUserName').value, email, role: 'student', createdAt: Date.now() });
-                await logActivity("Created User", `Added ${email}`);
-                await signOut(secondaryAuth);
-                alert("User Created!"); toggleAddUserModal(false); e.target.reset();
-            } catch (err) { alert(err.message); } finally { btn.disabled = false; btn.innerText = "Create User"; }
+                if (mode === 'create') {
+                    const secondaryApp = initializeApp(firebaseConfig, "SecondaryApp-" + Date.now());
+                    const secondaryAuth = getAuth(secondaryApp);
+                    const uc = await createUserWithEmailAndPassword(secondaryAuth, email, document.getElementById('newUserPassword').value);
+                    await setDoc(doc(db, "users", uc.user.uid), { name: name, email: email, role: 'student', createdAt: Date.now(), authProvider: 'email' });
+                    await logActivity("Created User", `Added ${email}`);
+                    await signOut(secondaryAuth);
+                    alert("User Created Successfully!");
+                } else if (mode === 'sync') {
+                    const uid = document.getElementById('newUserUid').value.trim();
+                    if(!uid) throw new Error("UID is required for syncing existing users.");
+                    // Create the database record WITHOUT altering authentication
+                    await setDoc(doc(db, "users", uid), { name: name, email: email, role: 'student', createdAt: Date.now() }, { merge: true });
+                    await logActivity("Synced Existing User", `Added DB profile for ${email}`);
+                    alert("User Synced Successfully!");
+                }
+                
+                toggleAddUserModal(false); 
+                e.target.reset();
+                switchAddMode('create'); // Reset to default
+            } catch (err) { 
+                alert(err.message); 
+            } finally { 
+                btn.disabled = false; 
+                btn.innerText = mode === 'create' ? "Create User" : "Sync User"; 
+            }
         });
 
         document.getElementById('addItemForm').addEventListener('submit', async (e) => {
