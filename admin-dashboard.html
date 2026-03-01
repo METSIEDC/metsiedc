@@ -247,9 +247,15 @@
 
             <!-- 4. LOGS & EXCOM -->
             <div id="logsSection" class="tab-content hidden space-y-8 max-w-7xl mx-auto">
-                <div class="mb-4">
-                    <h2 class="text-3xl font-display font-bold text-white tracking-tight uppercase">System Logs</h2>
-                    <p class="text-white/50 text-sm font-light tracking-wide">Monitor recent administrative actions.</p>
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-4">
+                    <div>
+                        <h2 class="text-3xl font-display font-bold text-white tracking-tight uppercase">System Logs</h2>
+                        <p class="text-white/50 text-sm font-light tracking-wide">Monitor recent administrative actions.</p>
+                    </div>
+                    <button onclick="printLogs()" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-3.5 rounded transition-colors flex items-center justify-center gap-2" title="Print Activity Logs">
+                        <i data-lucide="printer" class="w-4 h-4"></i>
+                        <span class="text-[10px] uppercase tracking-widest font-bold whitespace-nowrap">Print Logs</span>
+                    </button>
                 </div>
                 <div class="glass-panel rounded-2xl overflow-hidden max-h-[600px] overflow-y-auto">
                     <table class="w-full text-left">
@@ -1027,6 +1033,60 @@
         window.toggleAttCheck = (id) => { const c = document.getElementById('att-'+id); c.checked = !c.checked; };
         
         window.deleteDoc = deleteDoc; window.doc = doc; window.db = db; // Global for onclick
+
+        // Print Logs Logic
+        window.printLogs = () => {
+            const logsTableContent = document.getElementById('logsListBody').innerHTML;
+            if (!logsTableContent || logsTableContent.trim() === '') {
+                alert("No logs available to print.");
+                return;
+            }
+
+            // Create a clean, printer-friendly popup window
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>System Logs - MET'S IEDC</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #333; }
+                        h2 { text-transform: uppercase; letter-spacing: 2px; color: #000; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 5px; }
+                        .meta { font-size: 12px; color: #666; margin-bottom: 30px; font-style: italic; }
+                        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+                        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+                        th { background-color: #f8f9fa; font-weight: bold; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; }
+                        /* Strip Tailwind dark mode text colors for clean black-on-white printing */
+                        * { color: #000 !important; }
+                    </style>
+                </head>
+                <body>
+                    <h2>Admin System Logs</h2>
+                    <p class="meta">Generated on: ${new Date().toLocaleString()}</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                                <th>Admin / User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${logsTableContent}
+                        </tbody>
+                    </table>
+                    <script>
+                        window.onload = () => {
+                            window.print();
+                            // Close window after print dialog closes
+                            setTimeout(() => window.close(), 500);
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        };
 
         document.getElementById('adminLogoutBtn').addEventListener('click', async () => {
             const btn = document.getElementById('adminLogoutBtn');
