@@ -6,8 +6,8 @@
     <title>Student Dashboard | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Immersive Theme Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
+    <!-- Using Poppins to perfectly match the rounded, modern typography of the reference image -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
@@ -15,8 +15,32 @@
             theme: {
                 extend: {
                     fontFamily: { 
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Montserrat', 'sans-serif']
+                        sans: ['Poppins', 'sans-serif'],
+                        display: ['Poppins', 'sans-serif']
+                    },
+                    colors: {
+                        coach: {
+                            primary: '#249387',      // The main teal color
+                            primaryDark: '#1a6f65',
+                            bgStart: '#e4f6f4',      // Gradient start (mint)
+                            bgEnd: '#e6e4f8',        // Gradient end (lavender)
+                            card: '#ffffff',
+                            textDark: '#1c2833',
+                            textMuted: '#737e8c',
+                            // Widget pastel colors
+                            iconPurple: '#a881e6',
+                            bgPurple: '#f3eefe',
+                            iconPink: '#ff749a',
+                            bgPink: '#ffeff3',
+                            iconOrange: '#ff9a62',
+                            bgOrange: '#fff4ee',
+                            iconBlue: '#4cb3f9',
+                            bgBlue: '#eef7ff'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.05)',
+                        'inner-light': 'inset 0 2px 4px 0 rgba(255, 255, 255, 0.3)'
                     }
                 }
             }
@@ -25,311 +49,362 @@
 
     <style>
         body { 
-            background-color: #0f1115; /* Deep cinematic dark */
-            color: #ffffff; 
+            /* Exact gradient match from the reference image */
+            background: linear-gradient(135deg, #e4f6f4 0%, #ebf4f5 50%, #e6e4f8 100%);
+            color: #1c2833; 
             overflow-x: hidden; 
         }
 
-        /* Monochromatic Glassmorphism */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            border-left: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        /* Smooth rounded inputs */
+        .coach-input {
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            color: #1c2833;
+            transition: all 0.2s ease;
+            border-radius: 1rem;
         }
-
-        .glass-sidebar {
-            background: rgba(10, 12, 15, 0.8);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .glass-header {
-            background: rgba(15, 17, 21, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* Input styling */
-        .glass-input {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-        .glass-input:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.4);
+        .coach-input:focus {
+            background: #ffffff;
+            border-color: #249387;
             outline: none;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 0 4px rgba(36, 147, 135, 0.1);
         }
-        select.glass-input option { background-color: #0f1115; color: white; }
+        .coach-input::placeholder { color: #94a3b8; font-weight: 400; }
+        
+        select.coach-input { color: #1c2833; }
 
-        /* Sidebar Links */
-        .sidebar-link { transition: all 0.3s ease; border-left: 3px solid transparent; }
-        .sidebar-link:hover { background: rgba(255, 255, 255, 0.05); color: white; }
-        .sidebar-link.active { background: rgba(255, 255, 255, 0.1); color: #ffffff; border-left-color: #ffffff; }
+        /* Sidebar Links (Floating Style) */
+        .sidebar-link { 
+            transition: all 0.3s ease; 
+            cursor: pointer; 
+            font-weight: 500;
+            color: #737e8c;
+            border-radius: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        .sidebar-link:hover:not(.active) { 
+            color: #1c2833; 
+            background-color: rgba(255,255,255,0.4); 
+        }
+        .sidebar-link.active { 
+            color: #ffffff; 
+            /* Deep teal gradient pill */
+            background: linear-gradient(90deg, #177e74 0%, #259b91 100%);
+            box-shadow: 0 4px 15px rgba(36, 147, 135, 0.3);
+            font-weight: 600;
+        }
+
+        /* Card Styling */
+        .coach-card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.04);
+            border: 1px solid rgba(255,255,255,0.6);
+        }
 
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0f1115; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+        ::-webkit-scrollbar { width: 6px; height: 6px; } 
+        ::-webkit-scrollbar-track { background: transparent; } 
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        /* Spinner */
-        .spinner { border: 3px solid rgba(255, 255, 255, 0.1); border-radius: 50%; border-top: 3px solid #ffffff; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(36, 147, 135, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #249387;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="font-sans antialiased relative selection:bg-white selection:text-black flex h-screen overflow-hidden">
+<body class="font-sans antialiased relative selection:bg-coach-primary selection:text-white flex h-screen overflow-hidden">
 
-    <!-- Subtle Atmospheric Lighting -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
-        <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
-    </div>
-
-    <!-- Sidebar (Desktop) -->
-    <aside class="glass-sidebar w-64 flex-shrink-0 hidden md:flex flex-col h-full z-20">
-        <div class="p-6 flex items-center gap-3 border-b border-white/5">
-            <span class="text-xl font-display font-bold text-white tracking-widest uppercase">MET'S IEDC</span>
+    <!-- Transparent Floating Sidebar (Desktop) -->
+    <aside class="w-64 flex-shrink-0 hidden md:flex flex-col h-full z-20 pt-8 px-4 pb-6 bg-transparent">
+        <div class="px-4 flex items-center gap-3 mb-10">
+            <span class="text-2xl font-bold text-coach-textDark tracking-tight">IEDC<span class="text-coach-primary">Hub</span></span>
         </div>
 
-        <nav class="flex-grow px-4 py-6 space-y-2 overflow-y-auto">
-            <button onclick="showTab('dashboardOverview')" class="sidebar-link active w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
-                <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+        <nav class="flex-grow space-y-1 overflow-y-auto pr-2">
+            <button onclick="showTab('dashboardOverview')" id="nav-dashboardOverview" class="sidebar-link active w-full flex items-center gap-4 px-4 py-3.5 text-sm">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
             </button>
-            <button onclick="showTab('profile')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
-                <i data-lucide="user" class="w-4 h-4"></i> Profile
+            <button onclick="showTab('profile')" id="nav-profile" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
+                <i data-lucide="user" class="w-5 h-5"></i> Profile
             </button>
-            <button onclick="showTab('joinIedc')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
-                <i data-lucide="badge-check" class="w-4 h-4"></i> Join IEDC
+            <button onclick="showTab('joinIedc')" id="nav-joinIedc" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
+                <i data-lucide="users" class="w-5 h-5"></i> Join IEDC
             </button>
-            <button onclick="showTab('payments')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
-                <i data-lucide="credit-card" class="w-4 h-4"></i> Payments
+            <button onclick="showTab('trackStatus')" id="nav-trackStatus" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
+                <i data-lucide="activity" class="w-5 h-5"></i> Status
             </button>
-            <button onclick="showTab('attendance')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
-                <i data-lucide="clipboard-list" class="w-4 h-4"></i> Attendance
+            <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
+                <i data-lucide="calendar" class="w-5 h-5"></i> Attendance
             </button>
-            <button onclick="showTab('trackStatus')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
-                <i data-lucide="activity" class="w-4 h-4"></i> Status
-            </button>
-            <button onclick="showTab('certificates')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
-                <i data-lucide="award" class="w-4 h-4"></i> Certificates
+            <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
+                <i data-lucide="award" class="w-5 h-5"></i> Certificates
             </button>
             
-            <div class="pt-6 pb-2">
-                <p class="px-4 text-[9px] font-bold text-white/30 uppercase tracking-[0.2em] mb-4">Actions</p>
-                <button onclick="showTab('submitProject')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
-                    <i data-lucide="folder-plus" class="w-4 h-4"></i> Project
-                </button>
-                <button onclick="showTab('submitIdea')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
-                    <i data-lucide="lightbulb" class="w-4 h-4"></i> Idea
-                </button>
-                <button onclick="showTab('submitEvent')" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-r-lg text-white/60 text-xs font-bold uppercase tracking-widest">
-                    <i data-lucide="calendar-plus" class="w-4 h-4"></i> Event
-                </button>
-            </div>
+            <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-coach-textMuted uppercase tracking-wider">Submissions</div>
+            
+            <button onclick="showTab('submitProject')" id="nav-submitProject" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
+                <i data-lucide="rocket" class="w-5 h-5"></i> Submit Project
+            </button>
+            <button onclick="showTab('submitIdea')" id="nav-submitIdea" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
+                <i data-lucide="lightbulb" class="w-5 h-5"></i> Pitch Idea
+            </button>
+            <button onclick="showTab('submitEvent')" id="nav-submitEvent" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
+                <i data-lucide="calendar-plus" class="w-5 h-5"></i> Propose Event
+            </button>
         </nav>
 
-        <div class="p-4 border-t border-white/5">
-            <button id="logoutBtn" class="w-full flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white py-4 rounded border border-white/10 transition-colors text-xs font-bold uppercase tracking-widest">
+        <div class="mt-auto pt-6">
+            <button id="logoutBtn" class="w-full bg-white/50 hover:bg-white text-coach-textMuted hover:text-red-500 py-3.5 rounded-2xl text-sm font-semibold transition-all shadow-sm flex items-center justify-center gap-3">
                 <i data-lucide="log-out" class="w-4 h-4"></i> Logout
             </button>
         </div>
     </aside>
 
+    <!-- Main Content Area -->
     <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10">
         
         <!-- Header -->
-        <header class="glass-header h-20 flex items-center justify-between px-6 md:px-10 shrink-0">
-            <div class="flex items-center gap-4">
-                <button id="mobile-menu-toggle" class="md:hidden text-white p-2"><i data-lucide="menu" class="w-6 h-6"></i></button>
-                <h1 class="text-xl font-display font-bold text-white uppercase tracking-widest hidden sm:block">Dashboard</h1>
-            </div>
-            <div class="flex items-center gap-4">
-                <div class="text-right hidden sm:block">
-                    <p class="text-xs font-bold text-white uppercase tracking-wider" id="userEmailHeader">Loading...</p>
-                    <p class="text-[10px] text-white/50 uppercase tracking-widest">Student</p>
+        <header class="h-28 flex items-center justify-between px-6 md:px-8 lg:px-10 shrink-0 w-full pt-4">
+            <div class="flex items-start gap-4">
+                <button id="mobile-menu-toggle" class="md:hidden text-coach-textDark p-2 bg-white/50 rounded-xl"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                <div class="hidden sm:block">
+                    <p class="text-sm font-semibold text-coach-primary mb-0.5">Welcome back, <span id="headerWelcomeName">Student</span>👋</p>
+                    <h1 class="text-4xl font-bold text-coach-textDark tracking-tight" id="headerTitle">Dashboard</h1>
                 </div>
-                <div class="w-10 h-10 rounded border border-white/20 bg-[#0a0c0f] flex items-center justify-center text-white font-display font-bold shadow-lg overflow-hidden" id="userAvatarHeader">
-                    S
+            </div>
+            
+            <!-- Top Right Utilities -->
+            <div class="flex items-center gap-5">
+                <div class="hidden md:flex items-center gap-3">
+                    <button class="w-10 h-10 rounded-full bg-white/50 hover:bg-white text-coach-textMuted flex items-center justify-center transition-all shadow-sm">
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                    </button>
+                    <button class="w-10 h-10 rounded-full bg-white/50 hover:bg-white text-coach-textMuted flex items-center justify-center transition-all shadow-sm relative">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                        <span class="absolute top-2 right-2.5 w-2 h-2 bg-coach-iconPink rounded-full"></span>
+                    </button>
+                </div>
+                
+                <div class="flex items-center gap-3 pl-2 md:pl-4 border-l border-coach-textMuted/20">
+                    <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-coach-bgPurple flex items-center justify-center text-coach-primary font-bold" id="userAvatarHeader">
+                        S
+                    </div>
+                    <p class="text-sm font-semibold text-coach-textDark hidden sm:block" id="userEmailHeader">Loading...</p>
                 </div>
             </div>
         </header>
 
-        <!-- Main Content Area -->
-        <main class="flex-grow overflow-y-auto p-4 md:p-10">
+        <!-- Dynamic Content -->
+        <main class="flex-grow overflow-y-auto px-4 md:px-8 lg:px-10 pb-10 w-full">
             
-            <!-- Dashboard Overview -->
-            <div id="dashboardOverviewSection" class="tab-content space-y-8 max-w-7xl mx-auto">
-                <div class="glass-panel rounded-2xl p-8 md:p-12">
-                    <span class="text-white/50 text-[10px] uppercase tracking-[0.2em] font-bold mb-2 block">Welcome Back</span>
-                    <h2 class="text-4xl md:text-5xl font-display font-black text-white mb-2 tracking-tighter uppercase"><span id="displayNameBanner" class="text-white">Student</span></h2>
-                    <p class="text-white/70 font-light tracking-wide">Your central hub for innovation and updates.</p>
+            <!-- Dashboard Overview (Replicating CoachPro Grid) -->
+            <div id="dashboardOverviewSection" class="tab-content w-full h-full">
+                <!-- Mobile Header Title (Visible only on mobile) -->
+                <div class="sm:hidden mb-6">
+                    <p class="text-xs font-semibold text-coach-primary mb-1">Welcome back 👋</p>
+                    <h1 class="text-3xl font-bold text-coach-textDark tracking-tight">Dashboard</h1>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div onclick="showTab('joinIedc')" class="glass-panel p-8 rounded-2xl cursor-pointer hover:bg-white/5 transition border border-white/20 group">
-                        <i data-lucide="badge-check" class="w-8 h-8 text-white mb-6 opacity-70 group-hover:opacity-100 transition-opacity"></i>
-                        <h3 class="text-xl font-display font-bold text-white uppercase tracking-tight mb-2">Join IEDC</h3>
-                        <p class="text-white/50 text-xs tracking-wide leading-relaxed">Become an official member.</p>
-                    </div>
-                    <div onclick="showTab('submitProject')" class="glass-panel p-8 rounded-2xl cursor-pointer hover:bg-white/5 transition group">
-                        <i data-lucide="folder-plus" class="w-8 h-8 text-white mb-6 opacity-70 group-hover:opacity-100 transition-opacity"></i>
-                        <h3 class="text-xl font-display font-bold text-white uppercase tracking-tight mb-2">Project</h3>
-                        <p class="text-white/50 text-xs tracking-wide leading-relaxed">Submit your project details for review.</p>
-                    </div>
-                    <div onclick="showTab('certificates')" class="glass-panel p-8 rounded-2xl cursor-pointer hover:bg-white/5 transition group">
-                        <i data-lucide="award" class="w-8 h-8 text-white mb-6 opacity-70 group-hover:opacity-100 transition-opacity"></i>
-                        <h3 class="text-xl font-display font-bold text-white uppercase tracking-tight mb-2">Certificates</h3>
-                        <p class="text-white/50 text-xs tracking-wide leading-relaxed">Download your event certificates.</p>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Join IEDC -->
-            <div id="joinIedcSection" class="tab-content hidden max-w-3xl mx-auto">
-                <div id="membershipStatusCard" class="hidden glass-panel rounded-2xl p-12 text-center mb-8">
-                    <div class="w-20 h-20 border border-white/20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6" id="memStatusIconContainer">
-                        <i data-lucide="clock" class="w-8 h-8 text-white" id="memStatusIcon"></i>
-                    </div>
-                    <h2 class="text-2xl font-display font-bold text-white mb-4 uppercase tracking-widest" id="memStatusTitle">Pending</h2>
-                    <p class="text-white/50 text-sm tracking-wide max-w-lg mx-auto leading-relaxed" id="memStatusDesc">We have received your request to join MET'S IEDC. We are reviewing your details.</p>
-                </div>
-                
-                <div id="membershipFormCard" class="glass-panel rounded-2xl p-8 md:p-12">
-                    <div class="border-b border-white/10 pb-8 mb-8">
-                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white mb-2 uppercase tracking-tight">Become a Member</h2>
-                        <p class="text-white/50 text-sm font-light tracking-wide">Fill in the details to join the community of innovators.</p>
-                    </div>
-                    <form id="joinIedcForm" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Full Name</label><input type="text" id="memName" class="glass-input w-full rounded py-4 px-4 text-sm" readonly></div>
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Email</label><input type="email" id="memEmail" class="glass-input w-full rounded py-4 px-4 text-sm" readonly></div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 w-full">
+                    
+                    <!-- Left Column (Wider) -->
+                    <div class="lg:col-span-7 flex flex-col gap-6 md:gap-8">
+                        
+                        <!-- "Next Game" Style Card -> Upcoming Activities -->
+                        <div class="coach-card p-6 md:p-8">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-lg font-bold text-coach-textDark">Active Announcements</h3>
+                                <a href="announcement.html" class="text-xs font-semibold text-coach-primary hover:underline">View all</a>
+                            </div>
+                            
+                            <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
+                                <div class="flex flex-col items-center md:items-start text-center md:text-left">
+                                    <span class="text-xs font-bold text-coach-iconBlue uppercase tracking-wider mb-2 flex items-center gap-1.5"><i data-lucide="bell" class="w-3.5 h-3.5"></i> Notice</span>
+                                    <h4 class="text-xl font-bold text-coach-textDark">IEDC Registrations Open</h4>
+                                    <p class="text-sm text-coach-textMuted mt-1">Join the community today.</p>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-full bg-coach-bgPurple text-coach-iconPurple flex items-center justify-center text-xl shadow-sm"><i data-lucide="users"></i></div>
+                                    <span class="text-sm font-bold text-gray-300">VS</span>
+                                    <div class="w-12 h-12 rounded-full bg-coach-bgPink text-coach-iconPink flex items-center justify-center text-xl shadow-sm"><i data-lucide="rocket"></i></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Phone Number</label><input type="tel" id="memPhone" class="glass-input w-full rounded py-4 px-4 text-sm" placeholder="+91 9876543210" required></div>
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Gender</label><select id="memGender" class="glass-input w-full rounded py-4 px-4 text-sm"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
+
+                        <!-- "Standings" Style Card -> Recent Submissions -->
+                        <div class="coach-card p-6 md:p-8 flex-grow">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-lg font-bold text-coach-textDark">Recent Submissions</h3>
+                                <button onclick="showTab('trackStatus')" class="text-xs font-semibold text-coach-primary hover:underline">View all</button>
+                            </div>
+                            
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="text-[10px] uppercase font-bold text-coach-textMuted tracking-wider border-b border-gray-100">
+                                        <tr>
+                                            <th class="pb-4 font-semibold">Title</th>
+                                            <th class="pb-4 font-semibold">Type</th>
+                                            <th class="pb-4 font-semibold text-right">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dashboardSubmissionsList" class="divide-y divide-gray-50">
+                                        <tr><td colspan="3" class="py-8 text-center text-sm text-gray-400">Loading submissions...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Batch / Year</label><select id="memYear" class="glass-input w-full rounded py-4 px-4 text-sm"><option value="1st Year">1st Year</option><option value="2nd Year">2nd Year</option><option value="3rd Year">3rd Year</option><option value="4th Year">4th Year</option></select></div>
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Department</label><select id="memDept" class="glass-input w-full rounded py-4 px-4 text-sm"><option value="CSE">CSE</option><option value="ECE">ECE</option><option value="EEE">EEE</option><option value="ME">ME</option><option value="CE">CE</option><option value="BT">BT</option><option value="RA">RA</option></select></div>
+                    </div>
+
+                    <!-- Right Column (Narrower) -->
+                    <div class="lg:col-span-5 flex flex-col gap-6 md:gap-8">
+                        
+                        <!-- 4 Squares Grid -->
+                        <div class="grid grid-cols-2 gap-4 md:gap-6">
+                            
+                            <!-- Square 1 -->
+                            <div onclick="showTab('joinIedc')" class="coach-card p-6 flex flex-col justify-between cursor-pointer hover:-translate-y-1 transition-transform">
+                                <div class="w-12 h-12 rounded-2xl bg-coach-bgPurple text-coach-iconPurple flex items-center justify-center mb-4">
+                                    <i data-lucide="users" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold text-coach-textMuted uppercase tracking-wider mb-0.5">Membership</p>
+                                    <h4 class="text-lg font-bold text-coach-textDark">Join IEDC</h4>
+                                </div>
+                            </div>
+
+                            <!-- Square 2 -->
+                            <div onclick="showTab('submitProject')" class="coach-card p-6 flex flex-col justify-between cursor-pointer hover:-translate-y-1 transition-transform">
+                                <div class="w-12 h-12 rounded-2xl bg-coach-bgPink text-coach-iconPink flex items-center justify-center mb-4">
+                                    <i data-lucide="rocket" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold text-coach-textMuted uppercase tracking-wider mb-0.5">Incubation</p>
+                                    <h4 class="text-lg font-bold text-coach-textDark">Add Project</h4>
+                                </div>
+                            </div>
+
+                            <!-- Square 3 -->
+                            <div onclick="showTab('submitIdea')" class="coach-card p-6 flex flex-col justify-between cursor-pointer hover:-translate-y-1 transition-transform">
+                                <div class="w-12 h-12 rounded-2xl bg-coach-bgOrange text-coach-iconOrange flex items-center justify-center mb-4">
+                                    <i data-lucide="lightbulb" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold text-coach-textMuted uppercase tracking-wider mb-0.5">Pitch Deck</p>
+                                    <h4 class="text-lg font-bold text-coach-textDark">Share Idea</h4>
+                                </div>
+                            </div>
+
+                            <!-- Square 4 -->
+                            <div onclick="showTab('certificates')" class="coach-card p-6 flex flex-col justify-between cursor-pointer hover:-translate-y-1 transition-transform">
+                                <div class="w-12 h-12 rounded-2xl bg-coach-bgBlue text-coach-iconBlue flex items-center justify-center mb-4">
+                                    <i data-lucide="award" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold text-coach-textMuted uppercase tracking-wider mb-0.5">Achievements</p>
+                                    <h4 class="text-lg font-bold text-coach-textDark">Certificates</h4>
+                                </div>
+                            </div>
+
                         </div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Primary Interest</label><select id="memDomain" class="glass-input w-full rounded py-4 px-4 text-sm"><option value="Web Development">Web Development</option><option value="App Development">App Development</option><option value="UI/UX Design">UI/UX Design</option><option value="IoT & Robotics">IoT & Robotics</option><option value="Marketing & Management">Marketing & Management</option><option value="Other">Other</option></select></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Why do you want to join?</label><textarea id="memReason" rows="4" class="glass-input w-full rounded py-4 px-4 text-sm" placeholder="Tell us what motivates you..."></textarea></div>
-                        <button type="submit" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded text-xs uppercase tracking-widest transition-all mt-4">Submit Application</button>
-                    </form>
-                </div>
-            </div>
 
-            <!-- Payments -->
-            <div id="paymentsSection" class="tab-content hidden max-w-2xl mx-auto">
-                <div class="glass-panel p-12 rounded-2xl text-center flex flex-col items-center justify-center min-h-[400px]">
-                    <div class="w-16 h-16 border border-white/20 bg-[#0a0c0f] rounded-full flex items-center justify-center mb-8">
-                        <i data-lucide="rocket" class="w-6 h-6 text-white"></i>
-                    </div>
-                    <h2 class="text-3xl font-display font-bold text-white mb-4 uppercase tracking-widest">Coming Soon</h2>
-                    <p class="text-white/50 max-w-md mx-auto leading-relaxed text-sm font-light tracking-wide">
-                        We are currently integrating a secure payment gateway. Soon you will be able to pay fees and download receipts directly from here.
-                    </p>
-                    <div class="mt-10 px-6 py-2 bg-white/5 text-white/70 rounded border border-white/10 text-[10px] font-bold uppercase tracking-widest">
-                        Feature In Progress
+                        <!-- Bottom Promo Banner (Exact match to image style) -->
+                        <div class="coach-card bg-gradient-to-r from-coach-primaryDark to-coach-primary border-none p-8 flex flex-col justify-center relative overflow-hidden flex-grow shadow-lg shadow-coach-primary/30 min-h-[160px]">
+                            <!-- Decorative 3D elements placeholder -->
+                            <div class="absolute -right-4 -bottom-4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                            <div class="absolute right-10 top-4 w-12 h-12 bg-coach-yellow rounded-lg rotate-12 opacity-80 shadow-lg"></div>
+                            <div class="absolute right-4 bottom-8 w-8 h-8 rounded-full bg-white opacity-80 shadow-lg"></div>
+                            
+                            <div class="relative z-10 w-2/3">
+                                <p class="text-xs font-bold text-white/80 uppercase tracking-wider mb-2">Explore Now</p>
+                                <h3 class="text-xl font-bold text-white mb-4 leading-tight">Check out the latest IEDC events.</h3>
+                                <a href="event.html" class="inline-block bg-white text-coach-primary font-bold text-xs px-5 py-2.5 rounded-xl hover:shadow-md transition-shadow">
+                                    View Events
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
 
-            <!-- Attendance -->
-            <div id="attendanceSection" class="tab-content hidden max-w-4xl mx-auto">
-                <div class="glass-panel p-8 md:p-10 rounded-2xl mb-8">
-                    <h2 class="text-2xl font-display font-bold text-white mb-2 uppercase tracking-widest">My Attendance</h2>
-                    <p class="text-white/50 text-sm font-light tracking-wide">Track your event participation history.</p>
-                </div>
-                <div id="myAttendanceList" class="space-y-4">
-                    <div class="glass-panel p-8 text-center"><div class="spinner"></div></div>
-                </div>
-            </div>
-
-            <!-- Track Status -->
-            <div id="trackStatusSection" class="tab-content hidden max-w-4xl mx-auto">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-                    <h2 class="text-2xl font-display font-bold text-white uppercase tracking-widest">My Submissions</h2>
-                    <button onclick="fetchMySubmissions()" class="text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/10 px-5 py-2.5 rounded hover:bg-white/10 text-white transition flex items-center gap-3">
-                        <i data-lucide="refresh-cw" class="w-3 h-3"></i> Refresh
-                    </button>
-                </div>
-                <div id="mySubmissionsGrid" class="space-y-4">
-                    <div class="glass-panel p-8 text-center"><div class="spinner"></div></div>
-                </div>
-            </div>
-
-            <!-- Certificates -->
-            <div id="certificatesSection" class="tab-content hidden max-w-5xl mx-auto">
-                <div class="glass-panel rounded-2xl p-8 md:p-10 mb-8">
-                    <h2 class="text-2xl font-display font-bold text-white mb-2 uppercase tracking-widest">My Certificates</h2>
-                    <p class="text-white/50 text-sm font-light tracking-wide">Download certificates for events you have attended.</p>
-                </div>
-                <div id="certificatesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="col-span-full glass-panel p-10 text-center"><div class="spinner"></div></div>
-                </div>
-            </div>
+            <!-- TEMPLATES FOR OTHER TABS (Restyled to match CoachPro) -->
+            <style>
+                .cp-form-card { @apply coach-card p-6 md:p-10 max-w-3xl mx-auto w-full; }
+                .cp-form-header { @apply mb-8 border-b border-gray-100 pb-6; }
+                .cp-form-title { @apply text-2xl font-bold text-coach-textDark mb-1; }
+                .cp-form-subtitle { @apply text-coach-textMuted text-sm font-medium; }
+                .cp-label { @apply block text-xs font-bold text-coach-textMuted mb-2 uppercase tracking-wider; }
+                .cp-btn { @apply w-full bg-coach-primary hover:bg-coach-primaryDark text-white font-bold py-3.5 rounded-xl text-sm transition-all shadow-md shadow-coach-primary/30 flex justify-center items-center gap-2; }
+            </style>
 
             <!-- Profile -->
-            <div id="profileSection" class="tab-content hidden max-w-5xl mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div id="profileSection" class="tab-content hidden max-w-5xl mx-auto w-full space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
                     <!-- Profile Card -->
-                    <div class="glass-panel rounded-2xl p-8 flex flex-col items-center text-center h-fit">
-                        <div class="relative group cursor-pointer mb-8" onclick="document.getElementById('profileImageInput').click()">
-                            <div class="w-32 h-32 rounded bg-[#0a0c0f] overflow-hidden border border-white/20 shadow-xl relative">
-                                <img id="profileImagePreview" src="https://ui-avatars.com/api/?name=User&background=0f1115&color=fff" alt="Profile" class="w-full h-full object-cover grayscale">
+                    <div class="coach-card p-8 flex flex-col items-center text-center h-fit">
+                        <div class="relative group cursor-pointer mb-6" onclick="document.getElementById('profileImageInput').click()">
+                            <div class="w-32 h-32 rounded-full bg-coach-bgPurple overflow-hidden border-4 border-white shadow-md relative flex items-center justify-center">
+                                <img id="profileImagePreview" src="https://ui-avatars.com/api/?name=User&background=249387&color=fff" alt="Profile" class="w-full h-full object-cover">
                             </div>
-                            <div class="absolute inset-0 rounded bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"><i data-lucide="camera" class="w-8 h-8 text-white"></i></div>
+                            <div class="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="camera" class="w-6 h-6 text-white"></i></div>
                             <input type="file" id="profileImageInput" class="hidden" accept="image/*" onchange="handleImageUpload(event)">
                         </div>
-                        <h2 class="text-2xl font-display font-bold text-white mb-2 tracking-tight uppercase" id="profileCardName">Student Name</h2>
-                        <p class="text-white/50 text-[10px] uppercase tracking-widest font-bold mb-8">Student Innovator</p>
+                        <h2 class="text-xl font-bold text-coach-textDark mb-1" id="profileCardName">Student Name</h2>
+                        <p class="text-coach-primary text-xs font-bold mb-6">Student Innovator</p>
                         
-                        <div class="w-full space-y-4 text-left">
-                            <div class="p-5 bg-white/5 rounded border border-white/10">
-                                <p class="text-[9px] text-white/40 uppercase tracking-[0.2em] font-bold mb-2">Contact</p>
-                                <p class="text-white text-sm flex items-center gap-3 font-mono"><i data-lucide="phone" class="w-4 h-4 opacity-50"></i> <span id="profileCardContact">--</span></p>
+                        <div class="w-full space-y-3 text-left">
+                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-coach-primary shadow-sm"><i data-lucide="phone" class="w-4 h-4"></i></div>
+                                <div>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Contact</p>
+                                    <p class="text-coach-textDark text-sm font-semibold" id="profileCardContact">--</p>
+                                </div>
                             </div>
-                            <div class="p-5 bg-white/5 rounded border border-white/10">
-                                <p class="text-[9px] text-white/40 uppercase tracking-[0.2em] font-bold mb-2">Email</p>
-                                <p class="text-white text-xs flex items-center gap-3"><i data-lucide="mail" class="w-4 h-4 opacity-50"></i> <span id="profileCardEmail" class="break-all">--</span></p>
+                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-coach-primary shadow-sm"><i data-lucide="mail" class="w-4 h-4"></i></div>
+                                <div class="overflow-hidden">
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Email</p>
+                                    <p class="text-coach-textDark text-sm font-semibold truncate" id="profileCardEmail">--</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Edit Form -->
-                    <div class="md:col-span-2">
-                        <div class="glass-panel rounded-2xl p-8 md:p-10">
-                            <div class="flex justify-between items-center border-b border-white/10 pb-6 mb-8">
-                                <h2 class="text-xl font-display font-bold text-white uppercase tracking-widest">Edit Profile</h2>
-                                <div id="profileStatusMessage" class="hidden text-[10px] px-4 py-2 rounded font-bold uppercase tracking-widest bg-white/10 text-white"></div>
+                    <div class="lg:col-span-2">
+                        <div class="coach-card p-6 md:p-10">
+                            <div class="flex justify-between items-center border-b border-gray-100 pb-5 mb-6">
+                                <h3 class="text-lg font-bold text-coach-textDark">Edit Details</h3>
+                                <div id="profileStatusMessage" class="hidden text-xs px-3 py-1.5 rounded-lg font-bold bg-green-50 text-green-700"></div>
                             </div>
                             <form id="profileForm" class="space-y-6">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Full Name</label>
-                                        <input type="text" id="profileName" class="glass-input w-full rounded py-4 px-4 text-sm font-light" placeholder="John Doe">
+                                        <label class="cp-label">Full Name</label>
+                                        <input type="text" id="profileName" class="coach-input w-full py-3 px-4 text-sm" placeholder="John Doe">
                                     </div>
                                     <div>
-                                        <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Contact Number</label>
-                                        <input type="tel" id="profileContact" class="glass-input w-full rounded py-4 px-4 text-sm font-light" placeholder="+91">
+                                        <label class="cp-label">Contact Number</label>
+                                        <input type="tel" id="profileContact" class="coach-input w-full py-3 px-4 text-sm" placeholder="+91">
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Bio</label>
-                                    <textarea id="profileBio" rows="5" class="glass-input w-full rounded py-4 px-4 text-sm font-light" placeholder="Tell us about yourself..."></textarea>
+                                    <label class="cp-label">Bio</label>
+                                    <textarea id="profileBio" rows="4" class="coach-input w-full py-3 px-4 text-sm" placeholder="Tell us about your skills..."></textarea>
                                 </div>
-                                <div class="pt-6 flex justify-end">
-                                    <button type="submit" class="bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 px-10 rounded text-[10px] uppercase tracking-widest transition-all">Save Changes</button>
+                                <div class="pt-4 flex justify-end">
+                                    <button type="submit" class="bg-coach-primary hover:bg-coach-primaryDark text-white font-bold py-3 px-8 rounded-xl text-sm transition-colors shadow-md shadow-coach-primary/30 flex items-center gap-2">
+                                        <i data-lucide="save" class="w-4 h-4"></i> Save Changes
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -337,91 +412,150 @@
                 </div>
             </div>
 
-            <!-- Submit Project -->
-            <div id="submitProjectSection" class="tab-content hidden max-w-3xl mx-auto">
-                <div class="glass-panel rounded-2xl p-8 md:p-12">
-                    <div class="border-b border-white/10 pb-6 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-white mb-2 uppercase tracking-widest">Submit Project</h2>
-                        <p class="text-white/50 text-sm font-light">Submit your details for review.</p>
+            <!-- Join IEDC -->
+            <div id="joinIedcSection" class="tab-content hidden w-full">
+                <div id="membershipStatusCard" class="hidden cp-form-card text-center">
+                    <div class="w-20 h-20 bg-coach-bgStart rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i data-lucide="clock" class="w-10 h-10 text-coach-primary" id="memStatusIcon"></i>
                     </div>
-                    <div id="projectStatusMessage" class="hidden mb-6 p-4 rounded text-xs tracking-widest text-center uppercase font-bold border border-white/20 bg-white/10"></div>
+                    <h2 class="text-2xl font-bold text-coach-textDark mb-2" id="memStatusTitle">Application Pending</h2>
+                    <p class="text-coach-textMuted text-sm max-w-md mx-auto leading-relaxed" id="memStatusDesc">We have received your request to join MET'S IEDC. We are reviewing your details.</p>
+                </div>
+                
+                <div id="membershipFormCard" class="cp-form-card">
+                    <div class="cp-form-header">
+                        <h2 class="cp-form-title">Join IEDC</h2>
+                        <p class="cp-form-subtitle">Fill in the details to join the community.</p>
+                    </div>
+                    <form id="joinIedcForm" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div><label class="cp-label">Full Name</label><input type="text" id="memName" class="coach-input w-full py-3 px-4 text-sm font-semibold" disabled></div>
+                            <div><label class="cp-label">Email</label><input type="email" id="memEmail" class="coach-input w-full py-3 px-4 text-sm font-semibold" disabled></div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div><label class="cp-label">Phone Number</label><input type="tel" id="memPhone" class="coach-input w-full py-3 px-4 text-sm" placeholder="+91 9876543210" required></div>
+                            <div><label class="cp-label">Gender</label><select id="memGender" class="coach-input w-full py-3 px-4 text-sm"><option>Male</option><option>Female</option><option>Other</option></select></div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div><label class="cp-label">Batch / Year</label><select id="memYear" class="coach-input w-full py-3 px-4 text-sm"><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></div>
+                            <div><label class="cp-label">Department</label><select id="memDept" class="coach-input w-full py-3 px-4 text-sm"><option>CSE</option><option>ECE</option><option>EEE</option><option>ME</option><option>CE</option><option>BT</option><option>RA</option></select></div>
+                        </div>
+                        <div><label class="cp-label">Primary Interest</label><select id="memDomain" class="coach-input w-full py-3 px-4 text-sm"><option>Web Development</option><option>App Development</option><option>UI/UX Design</option><option>IoT & Robotics</option><option>Marketing & Management</option><option>Other</option></select></div>
+                        <div><label class="cp-label">Why do you want to join?</label><textarea id="memReason" rows="3" class="coach-input w-full py-3 px-4 text-sm" placeholder="Tell us what motivates you..."></textarea></div>
+                        <div class="pt-4"><button type="submit" class="cp-btn">Submit Application</button></div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Submit Project -->
+            <div id="submitProjectSection" class="tab-content hidden w-full">
+                <div class="cp-form-card">
+                    <div class="cp-form-header">
+                        <h2 class="cp-form-title">Submit Project</h2>
+                        <p class="cp-form-subtitle">Share your project details for mentorship or review.</p>
+                    </div>
+                    <div id="projectStatusMessage" class="hidden mb-6 p-4 rounded-xl text-sm font-bold text-center bg-green-50 text-green-700"></div>
                     <form id="projectForm" class="space-y-6">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Project Name</label><input type="text" id="projectName" class="glass-input w-full rounded py-4 px-4 text-sm" required></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Detailed Description</label><textarea id="projectDescription" rows="5" class="glass-input w-full rounded py-4 px-4 text-sm" required></textarea></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Team Members</label><input type="text" id="projectTeamMembers" class="glass-input w-full rounded py-4 px-4 text-sm" placeholder="Names / Emails"></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Tech Stack</label><input type="text" id="projectTechnologyStack" class="glass-input w-full rounded py-4 px-4 text-sm" placeholder="e.g. React, Node.js"></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Link (Optional)</label><input type="url" id="projectLink" class="glass-input w-full rounded py-4 px-4 text-sm" placeholder="GitHub / Drive Link"></div>
-                        <button type="submit" class="bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded w-full text-xs uppercase tracking-widest transition-all mt-4">Submit for Review</button>
+                        <div><label class="cp-label">Project Name</label><input type="text" id="projectName" class="coach-input w-full py-3 px-4 text-sm" required></div>
+                        <div><label class="cp-label">Detailed Description</label><textarea id="projectDescription" rows="4" class="coach-input w-full py-3 px-4 text-sm" required></textarea></div>
+                        <div><label class="cp-label">Team Members</label><input type="text" id="projectTeamMembers" class="coach-input w-full py-3 px-4 text-sm" placeholder="Names / Emails"></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div><label class="cp-label">Tech Stack</label><input type="text" id="projectTechnologyStack" class="coach-input w-full py-3 px-4 text-sm" placeholder="e.g. React, Node.js"></div>
+                            <div><label class="cp-label">Link (Optional)</label><input type="url" id="projectLink" class="coach-input w-full py-3 px-4 text-sm" placeholder="GitHub / Drive Link"></div>
+                        </div>
+                        <div class="pt-4"><button type="submit" class="cp-btn">Submit for Review</button></div>
                     </form>
                 </div>
             </div>
 
             <!-- Submit Idea -->
-            <div id="submitIdeaSection" class="tab-content hidden max-w-3xl mx-auto">
-                <div class="glass-panel rounded-2xl p-8 md:p-12">
-                    <div class="border-b border-white/10 pb-6 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-white mb-2 uppercase tracking-widest">Submit Idea</h2>
-                        <p class="text-white/50 text-sm font-light">Share your innovative concept.</p>
+            <div id="submitIdeaSection" class="tab-content hidden w-full">
+                <div class="cp-form-card">
+                    <div class="cp-form-header">
+                        <h2 class="cp-form-title">Submit Idea</h2>
+                        <p class="cp-form-subtitle">Share your innovative concept for incubation.</p>
                     </div>
-                    <div id="ideaStatusMessage" class="hidden mb-6 p-4 rounded text-xs tracking-widest text-center uppercase font-bold border border-white/20 bg-white/10"></div>
+                    <div id="ideaStatusMessage" class="hidden mb-6 p-4 rounded-xl text-sm font-bold text-center bg-green-50 text-green-700"></div>
                     <form id="ideaForm" class="space-y-6">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Idea Title</label><input type="text" id="ideaName" class="glass-input w-full rounded py-4 px-4 text-sm" required></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Problem & Solution</label><textarea id="ideaDescription" rows="6" class="glass-input w-full rounded py-4 px-4 text-sm" required></textarea></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Category</label><select id="ideaCategory" class="glass-input w-full rounded py-4 px-4 text-sm"><option value="Healthcare">Healthcare</option><option value="Education">Education</option><option value="Fintech">Fintech</option><option value="Other">Other</option></select></div>
-                        <button type="submit" class="bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded w-full text-xs uppercase tracking-widest transition-all mt-4">Submit Idea</button>
+                        <div><label class="cp-label">Idea Title</label><input type="text" id="ideaName" class="coach-input w-full py-3 px-4 text-sm" required></div>
+                        <div><label class="cp-label">Problem & Solution</label><textarea id="ideaDescription" rows="5" class="coach-input w-full py-3 px-4 text-sm" required placeholder="What problem does this solve?"></textarea></div>
+                        <div><label class="cp-label">Category</label><select id="ideaCategory" class="coach-input w-full py-3 px-4 text-sm"><option>Healthcare</option><option>Education</option><option>Fintech</option><option>Agriculture</option><option>SaaS</option><option>Other</option></select></div>
+                        <div class="pt-4"><button type="submit" class="cp-btn">Submit Idea</button></div>
                     </form>
                 </div>
             </div>
 
             <!-- Propose Event -->
-            <div id="submitEventSection" class="tab-content hidden max-w-3xl mx-auto">
-                <div class="glass-panel rounded-2xl p-8 md:p-12">
-                    <div class="border-b border-white/10 pb-6 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-white mb-2 uppercase tracking-widest">Propose Event</h2>
-                        <p class="text-white/50 text-sm font-light">Suggest an activity or workshop.</p>
+            <div id="submitEventSection" class="tab-content hidden w-full">
+                <div class="cp-form-card">
+                    <div class="cp-form-header">
+                        <h2 class="cp-form-title">Propose Event</h2>
+                        <p class="cp-form-subtitle">Suggest an activity, competition, or workshop.</p>
                     </div>
-                    <div id="eventStatusMessage" class="hidden mb-6 p-4 rounded text-xs tracking-widest text-center uppercase font-bold border border-white/20 bg-white/10"></div>
+                    <div id="eventStatusMessage" class="hidden mb-6 p-4 rounded-xl text-sm font-bold text-center bg-green-50 text-green-700"></div>
                     <form id="eventForm" class="space-y-6">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Title</label><input type="text" id="eventName" class="glass-input w-full rounded py-4 px-4 text-sm" required></div>
+                        <div><label class="cp-label">Event Title</label><input type="text" id="eventName" class="coach-input w-full py-3 px-4 text-sm" required></div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date</label><input type="date" id="eventDate" class="glass-input w-full rounded py-4 px-4 text-sm" required></div>
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Time</label><input type="time" id="eventTime" class="glass-input w-full rounded py-4 px-4 text-sm" required></div>
+                            <div><label class="cp-label">Proposed Date</label><input type="date" id="eventDate" class="coach-input w-full py-3 px-4 text-sm" required></div>
+                            <div><label class="cp-label">Duration / Time</label><input type="time" id="eventTime" class="coach-input w-full py-3 px-4 text-sm" required></div>
                         </div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Description & Requirements</label><textarea id="eventDescription" rows="5" class="glass-input w-full rounded py-4 px-4 text-sm" required></textarea></div>
-                        <button type="submit" class="bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded w-full text-xs uppercase tracking-widest transition-all mt-4">Submit Proposal</button>
+                        <div><label class="cp-label">Description & Requirements</label><textarea id="eventDescription" rows="4" class="coach-input w-full py-3 px-4 text-sm" required placeholder="Target audience, resources needed, etc."></textarea></div>
+                        <div class="pt-4"><button type="submit" class="cp-btn">Submit Proposal</button></div>
                     </form>
+                </div>
+            </div>
+
+            <!-- Track Status -->
+            <div id="trackStatusSection" class="tab-content hidden max-w-5xl mx-auto w-full">
+                <div class="flex justify-between items-end mb-6">
+                    <h2 class="text-2xl font-bold text-coach-textDark">My Submissions</h2>
+                    <button onclick="fetchMySubmissions()" class="text-xs font-bold text-coach-primary bg-coach-bgStart border border-coach-primary/20 px-4 py-2 rounded-xl transition hover:bg-coach-primary hover:text-white flex items-center gap-2">
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh
+                    </button>
+                </div>
+                <div id="mySubmissionsGridList" class="space-y-4">
+                    <div class="coach-card p-12 text-center"><div class="spinner"></div></div>
+                </div>
+            </div>
+
+            <!-- Attendance -->
+            <div id="attendanceSection" class="tab-content hidden max-w-5xl mx-auto w-full">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-coach-textDark">My Attendance</h2>
+                </div>
+                <div id="myAttendanceList" class="space-y-4">
+                    <div class="coach-card p-12 text-center"><div class="spinner"></div></div>
+                </div>
+            </div>
+
+            <!-- Certificates -->
+            <div id="certificatesSection" class="tab-content hidden max-w-5xl mx-auto w-full">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-coach-textDark">My Certificates</h2>
+                </div>
+                <div id="certificatesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="col-span-full coach-card p-12 text-center"><div class="spinner"></div></div>
+                </div>
+            </div>
+            
+            <!-- Payments -->
+            <div id="paymentsSection" class="tab-content hidden max-w-2xl mx-auto w-full">
+                <div class="coach-card p-12 text-center flex flex-col items-center justify-center min-h-[400px]">
+                    <div class="w-20 h-20 bg-coach-bgOrange rounded-full flex items-center justify-center mb-6">
+                        <i data-lucide="credit-card" class="w-10 h-10 text-coach-iconOrange"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-coach-textDark mb-3">Coming Soon</h2>
+                    <p class="text-coach-textMuted max-w-md mx-auto leading-relaxed text-sm">
+                        We are integrating a secure payment gateway. Soon you'll pay fees and download receipts here.
+                    </p>
                 </div>
             </div>
 
         </main>
     </div>
 
-    <!-- Mobile Sidebar -->
-    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-[#0f1115]/90 backdrop-blur-sm z-40 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
-    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-[#0a0c0f] border-r border-white/5 z-50 transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
-        <div class="p-6 flex items-center justify-between border-b border-white/5">
-            <span class="text-xl font-display font-bold text-white uppercase tracking-widest">Menu</span>
-            <button onclick="toggleMobileSidebar()" class="text-white/50 hover:text-white"><i data-lucide="x"></i></button>
-        </div>
-        <nav class="flex-grow px-4 py-6 space-y-2 overflow-y-auto">
-            <button onclick="showTab('dashboardOverview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Dashboard</button>
-            <button onclick="showTab('profile'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">My Profile</button>
-            <button onclick="showTab('joinIedc'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Join IEDC</button>
-            <button onclick="showTab('payments'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Payments</button>
-            <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Attendance</button>
-            <button onclick="showTab('trackStatus'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Track Status</button>
-            <button onclick="showTab('certificates'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Certificates</button>
-            <div class="h-px bg-white/5 my-4"></div>
-            <button onclick="showTab('submitProject'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Submit Project</button>
-            <button onclick="showTab('submitIdea'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Submit Idea</button>
-            <button onclick="showTab('submitEvent'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/70 text-xs font-bold uppercase tracking-widest">Propose Event</button>
-        </nav>
-        <div class="p-6 border-t border-white/5">
-            <button id="logoutBtnMobile" class="w-full bg-white/5 hover:bg-white/10 text-white py-4 rounded border border-white/10 text-xs font-bold uppercase tracking-widest transition-colors flex justify-center items-center gap-2">
-                <i data-lucide="log-out" class="w-4 h-4"></i> Logout
-            </button>
-        </div>
-    </div>
+    <!-- Mobile Sidebar Overlay -->
+    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-40 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -430,10 +564,8 @@
 
         lucide.createIcons();
 
-        // --- PASTE YOUR GOOGLE SCRIPT URL HERE (If you deployed one) ---
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygN6dZebvmijxVTVLcneuCOl9BbQmTuMzId36L4dQw_PfGNvfzFabNgtJOr43nUEzw/exec"; 
 
-        // --- PASTE YOUR FIREBASE CONFIG HERE ---
         const firebaseConfig = {
             apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
             authDomain: "metsiedc-3010e.firebaseapp.com",
@@ -444,7 +576,6 @@
             appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
             measurementId: "G-6E7EK0D7JG"
         };
-        // ---------------------------------------
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -456,7 +587,11 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUserId = user.uid;
-                document.getElementById('userEmailHeader').textContent = user.email || 'User';
+                
+                const initialName = user.displayName || user.email.split('@')[0];
+                document.getElementById('userEmailHeader').textContent = initialName;
+                document.getElementById('headerWelcomeName').textContent = initialName;
+                
                 document.getElementById('profileCardEmail').textContent = user.email || 'No email attached';
                 document.getElementById('memEmail').value = user.email || '';
                 
@@ -471,17 +606,24 @@
                         
                         document.getElementById('profileCardName').textContent = data.name || 'Student';
                         document.getElementById('profileCardContact').textContent = data.contact || '--';
-                        document.getElementById('displayNameBanner').textContent = (data.name || user.email || 'Student').split(' ')[0];
+                        
+                        const firstName = (data.name || initialName).split(' ')[0];
+                        document.getElementById('displayNameBanner').textContent = firstName;
+                        document.getElementById('userEmailHeader').textContent = firstName;
+                        document.getElementById('headerWelcomeName').textContent = firstName;
 
                         if (data.profileImage) {
                             document.getElementById('profileImagePreview').src = data.profileImage;
-                            document.getElementById('profileImagePreview').classList.remove('grayscale');
-                            document.getElementById('userAvatarHeader').innerHTML = `<img src="${data.profileImage}" class="w-full h-full rounded object-cover">`;
+                            document.getElementById('userAvatarHeader').innerHTML = `<img src="${data.profileImage}" class="w-full h-full rounded-full object-cover">`;
                         }
+                    } else if (user.displayName) {
+                        document.getElementById('profileName').value = user.displayName;
+                        document.getElementById('memName').value = user.displayName;
+                        document.getElementById('profileCardName').textContent = user.displayName;
+                        document.getElementById('displayNameBanner').textContent = user.displayName.split(' ')[0];
                     }
                 } catch(e) {}
 
-                // LOAD DATA
                 window.fetchMySubmissions();
                 window.checkMembershipStatus();
                 window.fetchCertificates();
@@ -491,52 +633,119 @@
             }
         });
 
-        // --- FETCH ATTENDANCE LOGIC ---
+        // Dashboard Submissions Overview & Track Status View
+        window.fetchMySubmissions = async function() {
+            const gridList = document.getElementById('mySubmissionsGridList'); // Track Status Tab
+            const dashList = document.getElementById('dashboardSubmissionsList'); // Dashboard Tab
+            
+            try {
+                const q = query(collection(db, "submissions"), where("userId", "==", auth.currentUser.uid), orderBy("timestamp", "desc"));
+                const snap = await getDocs(q);
+                
+                if (snap.empty) { 
+                    const emptyState = `<div class="coach-card p-12 text-center"><div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3"><i data-lucide="inbox" class="w-5 h-5 text-gray-400"></i></div><p class="text-gray-500 text-sm font-medium">No submissions yet.</p></div>`;
+                    if(gridList) gridList.innerHTML = emptyState; 
+                    if(dashList) dashList.innerHTML = `<tr><td colspan="3" class="py-8 text-center text-sm text-gray-400">No submissions found.</td></tr>`;
+                    lucide.createIcons(); 
+                    return; 
+                }
+                
+                let htmlList = '';
+                let htmlTableRows = '';
+
+                snap.forEach((doc) => {
+                    const data = doc.data();
+                    let statusColor = "text-gray-600 bg-gray-100"; let icon = "clock";
+                    if (data.status === 'approved') { statusColor = "text-green-700 bg-green-50 border border-green-200"; icon = "check-circle"; }
+                    else if (data.status === 'rejected') { statusColor = "text-red-700 bg-red-50 border border-red-200"; icon = "x-circle"; }
+                    
+                    // Track Status Full Card View
+                    htmlList += `
+                        <div class="coach-card p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition hover:-translate-y-0.5">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 bg-coach-bgStart rounded-xl flex items-center justify-center text-coach-primary">
+                                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2 mb-0.5">
+                                        <h3 class="text-sm font-bold text-coach-textDark">${data.title}</h3>
+                                        <span class="text-[9px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded font-bold uppercase tracking-wider">${(data.type||'').replace('_', ' ')}</span>
+                                    </div>
+                                    <p class="text-xs text-coach-textMuted line-clamp-1 max-w-sm">${data.description}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="text-xs text-gray-400 hidden md:inline font-medium">${new Date(data.timestamp).toLocaleDateString()}</span>
+                                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${statusColor}">
+                                    <i data-lucide="${icon}" class="w-3.5 h-3.5"></i><span class="text-[10px] font-bold uppercase tracking-wider">${data.status || 'Pending'}</span>
+                                </div>
+                            </div>
+                        </div>`;
+
+                    // Dashboard Small Table View
+                    htmlTableRows += `
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="py-3 text-sm font-bold text-coach-textDark">${data.title}</td>
+                            <td class="py-3"><span class="text-[9px] bg-gray-100 text-gray-600 px-2 py-1 rounded font-bold uppercase tracking-wider">${(data.type||'').replace('_', ' ')}</span></td>
+                            <td class="py-3 text-right">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[9px] font-bold uppercase tracking-wider ${statusColor}">
+                                    ${data.status || 'Pending'}
+                                </span>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                if(gridList) gridList.innerHTML = htmlList; 
+                if(dashList) dashList.innerHTML = htmlTableRows;
+                lucide.createIcons();
+            } catch (e) { 
+                if(e.message.includes("index")) {
+                    if(gridList) gridList.innerHTML = `<div class="coach-card p-8 text-center"><p class="text-gray-500 text-sm">Database Index building...</p></div>`; 
+                }
+            }
+        };
+
+        // Fetch Attendance
         window.fetchMyAttendance = async function() {
             const list = document.getElementById('myAttendanceList');
-            const email = auth.currentUser.email;
-            if(!email) {
-                list.innerHTML = `<div class="glass-panel p-8 text-center"><p class="text-white/50 text-xs tracking-widest uppercase">Email needed for attendance.</p></div>`;
-                return;
-            }
+            const email = auth.currentUser?.email;
+            if(!email) return;
             
             try {
                 const qPresent = query(collection(db, "attendance"), where("presentEmails", "array-contains", email));
                 const qAbsent = query(collection(db, "attendance"), where("absentEmails", "array-contains", email));
 
                 const [snapPresent, snapAbsent] = await Promise.all([getDocs(qPresent), getDocs(qAbsent)]);
-                
                 let records = [];
 
-                snapPresent.forEach(doc => {
-                    records.push({ id: doc.id, ...doc.data(), status: 'Present' });
-                });
-                snapAbsent.forEach(doc => {
-                    records.push({ id: doc.id, ...doc.data(), status: 'Absent' });
-                });
+                snapPresent.forEach(doc => { records.push({ id: doc.id, ...doc.data(), status: 'Present' }); });
+                snapAbsent.forEach(doc => { records.push({ id: doc.id, ...doc.data(), status: 'Absent' }); });
 
                 records.sort((a, b) => b.timestamp - a.timestamp);
 
                 if (records.length === 0) {
-                    list.innerHTML = `<div class="glass-panel p-10 text-center"><i data-lucide="calendar-x" class="w-8 h-8 text-white/20 mx-auto mb-4"></i><p class="text-white/40 text-xs tracking-widest uppercase font-bold">No attendance records found.</p></div>`;
+                    list.innerHTML = `<div class="coach-card p-10 text-center"><div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3"><i data-lucide="calendar-x" class="w-5 h-5 text-gray-400"></i></div><p class="text-gray-500 text-sm font-medium">No attendance records found.</p></div>`;
                     lucide.createIcons();
                     return;
                 }
 
                 let html = '';
                 records.forEach(d => {
-                    let statusBadge = '';
-                    if(d.status === 'Present') {
-                        statusBadge = `<div class="flex items-center gap-2 px-4 py-1.5 bg-white border border-white rounded text-black"><i data-lucide="check" class="w-3 h-3"></i><span class="text-[10px] font-bold uppercase tracking-widest">Present</span></div>`;
-                    } else {
-                        statusBadge = `<div class="flex items-center gap-2 px-4 py-1.5 bg-transparent border border-white/20 rounded text-white/50"><i data-lucide="x" class="w-3 h-3"></i><span class="text-[10px] font-bold uppercase tracking-widest">Absent</span></div>`;
-                    }
+                    let statusBadge = d.status === 'Present' 
+                        ? `<div class="flex items-center gap-1.5 px-3 py-1 bg-green-50 border border-green-200 text-green-700 rounded-lg"><i data-lucide="check" class="w-3.5 h-3.5"></i><span class="text-xs font-bold tracking-wide">Present</span></div>`
+                        : `<div class="flex items-center gap-1.5 px-3 py-1 bg-red-50 border border-red-200 text-red-600 rounded-lg"><i data-lucide="x" class="w-3.5 h-3.5"></i><span class="text-xs font-bold tracking-wide">Absent</span></div>`;
 
                     html += `
-                        <div class="glass-panel p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:bg-white/5 transition border border-white/5">
-                            <div>
-                                <h3 class="text-lg font-display font-bold text-white mb-1 uppercase tracking-tight">${d.eventName}</h3>
-                                <p class="text-[10px] text-white/40 font-mono uppercase tracking-widest">${d.date}</p>
+                        <div class="coach-card p-5 flex items-center justify-between transition hover:-translate-y-0.5 border border-transparent hover:border-gray-100">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 bg-coach-bgStart rounded-xl flex items-center justify-center text-coach-primary">
+                                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-coach-textDark">${d.eventName}</h3>
+                                    <p class="text-xs text-coach-textMuted">${d.date}</p>
+                                </div>
                             </div>
                             ${statusBadge}
                         </div>
@@ -544,13 +753,10 @@
                 });
                 list.innerHTML = html;
                 lucide.createIcons();
-            } catch(e) { 
-                console.error(e);
-                if(e.message.includes("index")) list.innerHTML = `<div class="glass-panel p-6 text-center"><p class="text-white/50 text-xs tracking-widest uppercase">Database Index building required...</p></div>`;
-            }
+            } catch(e) {}
         };
 
-        // 2. Membership Status & Submission
+        // Membership Status
         window.checkMembershipStatus = async function() {
             try {
                 const q = query(collection(db, "submissions"), where("userId", "==", currentUserId), where("type", "==", "membership_application"));
@@ -561,9 +767,10 @@
                     document.getElementById('membershipStatusCard').classList.remove('hidden');
                     if(data.status === 'approved') {
                         document.getElementById('memStatusTitle').textContent = "Approved!";
+                        document.getElementById('memStatusTitle').classList.replace('text-coach-textDark', 'text-green-600');
                         document.getElementById('memStatusDesc').textContent = "Welcome to the IEDC community. You are now an official member.";
-                        document.getElementById('memStatusIconContainer').className = "w-20 h-20 bg-white border border-white rounded-full flex items-center justify-center mx-auto mb-8";
-                        document.getElementById('memStatusIcon').className = "w-8 h-8 text-[#0f1115]";
+                        document.getElementById('memStatusIconContainer').className = "w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6";
+                        document.getElementById('memStatusIcon').className = "w-10 h-10 text-green-600";
                         document.getElementById('memStatusIcon').innerHTML = `<polyline points="20 6 9 17 4 12"></polyline>`;
                     }
                     lucide.createIcons();
@@ -573,7 +780,7 @@
 
         document.getElementById('joinIedcForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = e.target.querySelector('button'); btn.innerText = "Processing..."; btn.disabled = true;
+            const btn = e.target.querySelector('button'); btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Processing...`; btn.disabled = true; lucide.createIcons();
             
             const formData = {
                 name: document.getElementById('memName').value,
@@ -602,97 +809,18 @@
                 if (GOOGLE_SCRIPT_URL) {
                     const formBody = new FormData();
                     for(const key in formData) formBody.append(key, formData[key]);
-                    fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formBody }).catch(err => console.log('Sheet Error', err));
+                    fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formBody }).catch(e=>console.log(e));
                 }
 
                 window.checkMembershipStatus();
-            } catch(e) { alert("Error: " + e.message); btn.disabled = false; btn.innerText = "Submit Application"; }
+            } catch(e) { alert("Error: " + e.message); btn.disabled = false; btn.innerHTML = `Submit Application`; }
         });
 
-        // 4. Image Upload
-        window.handleImageUpload = (event) => {
-            const file = event.target.files[0];
-            if (!file || file.size > 500 * 1024) return alert("Image too large (Max 500KB)");
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image(); img.src = e.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
-                    const scaleSize = 300 / img.width; canvas.width = 300; canvas.height = img.height * scaleSize;
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    currentProfileImageBase64 = canvas.toDataURL('image/jpeg', 0.8);
-                    const preview = document.getElementById('profileImagePreview');
-                    preview.src = currentProfileImageBase64;
-                    preview.classList.remove('grayscale');
-                };
-            };
-            reader.readAsDataURL(file);
-        };
-
-        // 5. Save Profile
-        document.getElementById('profileForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button'); btn.innerText = "Saving..."; btn.disabled = true;
-            try {
-                const profileData = { name: document.getElementById('profileName').value, contact: document.getElementById('profileContact').value, bio: document.getElementById('profileBio').value };
-                if (currentProfileImageBase64) profileData.profileImage = currentProfileImageBase64;
-                await setDoc(doc(db, "users", currentUserId, "profile", "userProfile"), profileData, { merge: true });
-                
-                document.getElementById('profileCardName').textContent = profileData.name;
-                document.getElementById('profileCardContact').textContent = profileData.contact || '--';
-                document.getElementById('displayNameBanner').textContent = profileData.name.split(' ')[0];
-                
-                const statusMsg = document.getElementById('profileStatusMessage');
-                statusMsg.classList.remove('hidden'); 
-                statusMsg.textContent = "Saved Successfully";
-                setTimeout(() => statusMsg.classList.add('hidden'), 3000);
-
-                if(profileData.profileImage) {
-                    document.getElementById('userAvatarHeader').innerHTML = `<img src="${profileData.profileImage}" class="w-full h-full rounded object-cover">`;
-                }
-            } catch(e) { alert("Error: " + e.message); }
-            btn.innerText = "Save Changes"; btn.disabled = false;
-        });
-
-        // 6. Fetch Submissions (Track Status)
-        window.fetchMySubmissions = async function() {
-            const grid = document.getElementById('mySubmissionsGrid');
-            try {
-                const q = query(collection(db, "submissions"), where("userId", "==", auth.currentUser.uid), orderBy("timestamp", "desc"));
-                const snap = await getDocs(q);
-                if (snap.empty) { grid.innerHTML = `<div class="glass-panel p-10 text-center"><i data-lucide="inbox" class="w-8 h-8 text-white/20 mx-auto mb-4"></i><p class="text-white/40 text-xs tracking-widest uppercase font-bold">No submissions yet.</p></div>`; lucide.createIcons(); return; }
-                
-                let html = '';
-                snap.forEach((doc) => {
-                    const data = doc.data();
-                    let statusColor = "text-white/50 border-white/20 bg-transparent"; let icon = "clock";
-                    if (data.status === 'approved') { statusColor = "text-[#0f1115] bg-white border-white"; icon = "check"; }
-                    else if (data.status === 'rejected') { statusColor = "text-white border-white bg-transparent opacity-50"; icon = "x"; }
-                    
-                    html += `
-                        <div class="glass-panel p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 hover:bg-white/5 transition border border-white/5 group">
-                            <div class="flex-grow">
-                                <div class="flex items-center gap-3 mb-3">
-                                    <span class="text-[9px] font-bold uppercase tracking-[0.2em] text-white/70 bg-white/5 px-3 py-1 rounded border border-white/10 group-hover:border-white/30 transition-colors">${(data.type||'').replace('_', ' ')}</span>
-                                    <span class="text-[10px] text-white/40 font-mono tracking-widest">${new Date(data.timestamp).toLocaleDateString()}</span>
-                                </div>
-                                <h3 class="text-xl font-display font-bold text-white mb-1 uppercase tracking-tight">${data.title}</h3>
-                                <p class="text-sm text-white/50 font-light line-clamp-1 tracking-wide">${data.description}</p>
-                            </div>
-                            <div class="flex-shrink-0 flex items-center gap-3 px-5 py-2.5 rounded border ${statusColor}">
-                                <i data-lucide="${icon}" class="w-4 h-4"></i><span class="text-[10px] font-bold uppercase tracking-[0.2em]">${data.status || 'Pending'}</span>
-                            </div>
-                        </div>`;
-                });
-                grid.innerHTML = html; lucide.createIcons();
-            } catch (e) { if(e.message.includes("index")) grid.innerHTML = `<div class="glass-panel p-6 text-center"><p class="text-white/50 text-xs tracking-widest uppercase">Database Index building...</p></div>`; }
-        };
-
-        // 7. Generic Submission
+        // Generic Submission
         const submitGeneric = async (formId, type, statusId) => {
             document.getElementById(formId).addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const btn = e.target.querySelector('button'); btn.innerText = "Processing..."; btn.disabled = true;
+                const btn = e.target.querySelector('button'); const origText = btn.innerText; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Processing...`; btn.disabled = true; lucide.createIcons();
                 const inputs = e.target.querySelectorAll('input, textarea, select');
                 const data = { type: type, status: 'pending', userId: auth.currentUser.uid, userEmail: auth.currentUser.email, userName: document.getElementById('profileName').value || 'Student', timestamp: Date.now() };
                 inputs.forEach(i => data[i.id.replace(type, '').toLowerCase()] = i.value); 
@@ -709,28 +837,14 @@
                     window.fetchMySubmissions(); 
                     setTimeout(() => statusMsg.classList.add('hidden'), 4000);
                 } 
-                catch(e) { alert(e.message); } finally { btn.innerText = "Submit"; btn.disabled = false; }
+                catch(e) { alert(e.message); } finally { btn.innerText = origText; btn.disabled = false; }
             });
         };
         submitGeneric('projectForm', 'project', 'projectStatusMessage');
         submitGeneric('ideaForm', 'idea', 'ideaStatusMessage');
         submitGeneric('eventForm', 'event_proposal', 'eventStatusMessage');
 
-        // Logout
-        const logout = async () => { await signOut(auth); window.location.href = 'login.html'; };
-        document.getElementById('logoutBtn').addEventListener('click', logout);
-        document.getElementById('logoutBtnMobile').addEventListener('click', logout);
-
-        // Mobile Menu Sidebar
-        window.toggleMobileSidebar = function() {
-            const sidebar = document.getElementById('mobile-sidebar');
-            const overlay = document.getElementById('mobile-sidebar-overlay');
-            if (sidebar.classList.contains('-translate-x-full')) { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); } 
-            else { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); }
-        };
-        document.getElementById('mobile-menu-toggle').addEventListener('click', toggleMobileSidebar);
-
-        // --- NEW CERTIFICATE LOGIC ---
+        // Fetch Certificates
         window.fetchCertificates = async function() {
             const grid = document.getElementById('certificatesGrid');
             if(!auth.currentUser) return;
@@ -741,11 +855,11 @@
 
                 if (snap.empty) {
                     grid.innerHTML = `
-                        <div class="col-span-full glass-panel p-12 rounded-2xl text-center flex flex-col items-center">
-                            <div class="w-16 h-16 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mb-6">
-                                <i data-lucide="award" class="w-8 h-8 text-white/30"></i>
+                        <div class="col-span-full coach-card p-12 text-center flex flex-col items-center">
+                            <div class="w-16 h-16 bg-coach-bgBlue rounded-full flex items-center justify-center mb-4">
+                                <i data-lucide="award" class="w-8 h-8 text-coach-iconBlue"></i>
                             </div>
-                            <p class="text-white/40 text-xs uppercase tracking-widest font-bold">No certificates issued yet.</p>
+                            <p class="text-coach-textMuted text-sm font-semibold">No certificates issued yet.</p>
                         </div>`;
                     lucide.createIcons();
                     return;
@@ -755,20 +869,17 @@
                 snap.forEach((doc) => {
                     const data = doc.data();
                     html += `
-                    <div class="glass-panel p-0 rounded-2xl overflow-hidden group hover:border-white/30 transition duration-500 border border-white/5 flex flex-col">
-                        <div class="h-40 bg-gradient-to-br from-white/10 to-transparent relative overflow-hidden flex-shrink-0">
-                             <img src="${data.templateUrl}" class="w-full h-full object-cover opacity-40 mix-blend-lighten group-hover:opacity-70 group-hover:scale-105 transition duration-700" alt="Cert">
-                             <div class="absolute inset-0 flex items-center justify-center">
-                                <i data-lucide="award" class="w-10 h-10 text-white shadow-lg drop-shadow-2xl"></i>
-                             </div>
+                    <div class="coach-card p-4 flex flex-col hover:-translate-y-1 transition-transform">
+                        <div class="h-40 bg-gray-100 rounded-xl relative overflow-hidden flex-shrink-0 flex items-center justify-center mb-4">
+                             <img src="${data.templateUrl}" class="w-full h-full object-cover opacity-90" alt="Cert">
                         </div>
-                        <div class="p-8 flex-grow flex flex-col">
-                            <h3 class="text-xl font-display font-bold text-white mb-2 uppercase tracking-tight leading-snug">${data.eventName}</h3>
-                            <p class="text-[10px] text-white/40 font-mono tracking-widest uppercase mb-8 flex-grow">Issued: ${new Date(data.date).toLocaleDateString()}</p>
+                        <div class="flex-grow flex flex-col px-2 pb-1">
+                            <h3 class="text-sm font-bold text-coach-textDark mb-1 line-clamp-1">${data.eventName}</h3>
+                            <p class="text-[10px] text-coach-textMuted font-semibold mb-4 uppercase tracking-wider flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> Issued: ${new Date(data.date).toLocaleDateString()}</p>
                             
                             <button onclick="generateAndDownloadCert('${data.templateUrl}', '${data.userName}', '${data.eventName}')" 
-                                class="w-full bg-white hover:bg-gray-200 text-[#0f1115] text-[10px] uppercase tracking-widest font-bold py-3.5 rounded flex items-center justify-center gap-3 transition-all mt-auto">
-                                Download <i data-lucide="download" class="w-3 h-3"></i>
+                                class="w-full bg-coach-bgStart hover:bg-coach-primary text-coach-primary hover:text-white text-xs font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 transition-colors mt-auto">
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i> Download
                             </button>
                         </div>
                     </div>
@@ -777,8 +888,7 @@
                 grid.innerHTML = html;
                 lucide.createIcons();
             } catch (e) {
-                console.error(e);
-                grid.innerHTML = `<div class="col-span-full glass-panel p-8 text-center"><p class="text-red-400 text-xs font-bold uppercase tracking-widest">Error loading certificates.</p></div>`;
+                grid.innerHTML = `<div class="col-span-full coach-card p-8 text-center"><p class="text-red-500 text-sm font-semibold">Error loading certificates.</p></div>`;
             }
         };
 
@@ -786,8 +896,9 @@
         window.generateAndDownloadCert = function(templateUrl, studentName, eventName) {
             const btn = event.currentTarget;
             const originalText = btn.innerHTML;
-            btn.innerHTML = `<span class="animate-pulse">Processing...</span>`;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin inline"></i> Wait...`;
             btn.disabled = true;
+            lucide.createIcons();
 
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
@@ -800,9 +911,8 @@
                 canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
 
-                // Font Config
                 const fontSize = Math.floor(canvas.width / 30); 
-                ctx.font = `bold ${fontSize}px 'Montserrat', sans-serif`;
+                ctx.font = `bold ${fontSize}px 'Poppins', sans-serif`;
                 ctx.fillStyle = "#000000"; 
                 ctx.textAlign = "center";
                 
@@ -821,12 +931,31 @@
             };
 
             img.onerror = () => {
-                alert("Could not load certificate template. Check CORS settings or URL.");
+                alert("Could not load certificate template.");
                 btn.innerHTML = originalText;
                 btn.disabled = false;
                 lucide.createIcons();
             };
         };
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', async () => { await signOut(auth); window.location.href = 'login.html'; });
+
+        // Mobile Sidebar Logic
+        const mobileBtn = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-sidebar');
+        const overlay = document.getElementById('mobile-sidebar-overlay');
+
+        window.toggleMobileSidebar = function() {
+            if (mobileMenu.classList.contains('-translate-x-full')) { 
+                mobileMenu.classList.remove('-translate-x-full'); 
+                overlay.classList.remove('hidden'); 
+            } else { 
+                mobileMenu.classList.add('-translate-x-full'); 
+                overlay.classList.add('hidden'); 
+            }
+        };
+        if(mobileBtn) mobileBtn.addEventListener('click', toggleMobileSidebar);
 
         // Tabs Logic
         window.showTab = function(tabId) {
@@ -834,16 +963,19 @@
             document.getElementById(tabId + 'Section').classList.remove('hidden');
             
             document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
-            const activeLinks = document.querySelectorAll('.sidebar-link');
+            const activeDesktop = document.getElementById('nav-'+tabId);
+            if(activeDesktop) activeDesktop.classList.add('active');
             
-            // Map tabId to sidebar button text
-            let searchText = tabId.replace('Section','').toLowerCase().replace('overview','dashboard');
-            if(searchText === 'submitproject') searchText = 'project';
-            if(searchText === 'submitidea') searchText = 'idea';
-            if(searchText === 'submitevent') searchText = 'event';
-
-            const activeLink = Array.from(activeLinks).find(btn => btn.innerText.toLowerCase().includes(searchText));
-            if(activeLink) activeLink.classList.add('active');
+            // Map tabId to sidebar button text for title
+            let title = "Dashboard";
+            if(tabId === 'joinIedc') title = "Join IEDC";
+            else if(tabId === 'submitProject') title = "Submit Project";
+            else if(tabId === 'submitIdea') title = "Submit Idea";
+            else if(tabId === 'submitEvent') title = "Propose Event";
+            else if(tabId === 'trackStatus') title = "My Submissions";
+            else title = tabId.charAt(0).toUpperCase() + tabId.slice(1);
+            
+            document.getElementById('headerTitle').textContent = title;
 
             if (tabId === 'trackStatus') window.fetchMySubmissions();
             if (tabId === 'certificates') window.fetchCertificates();
