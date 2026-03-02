@@ -6,8 +6,7 @@
     <title>Admin Dashboard | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Immersive Theme Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
@@ -15,8 +14,20 @@
             theme: {
                 extend: {
                     fontFamily: { 
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Montserrat', 'sans-serif']
+                        sans: ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        brand: {
+                            bg: '#f8f9fc',
+                            sidebar: '#ffffff',
+                            primary: '#4d44b5', // The deep purple
+                            primaryLight: '#f3f2fa',
+                            yellow: '#f4c150',
+                            pink: '#e86b8f',
+                            purpleLight: '#a698e6',
+                            textDark: '#1e293b',
+                            textGray: '#64748b'
+                        }
                     }
                 }
             }
@@ -25,476 +36,485 @@
 
     <style>
         body { 
-            background-color: #0f1115; /* Deep cinematic dark */
-            color: #ffffff; 
+            background-color: #f8f9fc; 
+            color: #1e293b; 
             overflow-x: hidden; 
         }
 
-        /* Monochromatic Glassmorphism */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            border-left: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-        }
-
-        .glass-sidebar {
-            background: rgba(10, 12, 15, 0.8);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .glass-header {
-            background: rgba(15, 17, 21, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
         /* Input styling */
-        .glass-input {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
+        .light-input {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            color: #1e293b;
+            transition: all 0.2s ease;
         }
-        .glass-input:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.4);
+        .light-input:focus {
+            border-color: #4d44b5;
             outline: none;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 0 3px rgba(77, 68, 181, 0.1);
         }
-        select.glass-input option { background-color: #0f1115; color: white; }
+        .light-input::placeholder { color: #94a3b8; }
+        
+        /* Select specific styles to ensure text is visible */
+        select.light-input { color: #1e293b; }
+        select.light-input option { color: #1e293b; background: white; }
 
         /* Sidebar Links */
-        .sidebar-link { transition: all 0.3s ease; border-left: 3px solid transparent; cursor: pointer; }
-        .sidebar-link:hover { background: rgba(255, 255, 255, 0.05); color: white; }
-        .sidebar-link.active { background: rgba(255, 255, 255, 0.1); color: #ffffff; border-left-color: #ffffff; }
+        .sidebar-link { transition: all 0.2s ease; border-left: 3px solid transparent; cursor: pointer; font-weight: 500;}
+        .sidebar-link:hover { color: #4d44b5; }
+        .sidebar-link.active { 
+            color: #4d44b5; 
+            background-color: #f3f2fa;
+            border-left-color: #4d44b5;
+        }
 
         /* Custom Checkbox */
         .custom-checkbox { 
             appearance: none; 
-            background-color: rgba(255,255,255,0.05); 
+            background-color: #f1f5f9; 
             width: 1.25em; 
             height: 1.25em; 
-            border: 1px solid rgba(255,255,255,0.2); 
+            border: 1px solid #cbd5e1; 
             border-radius: 0.25em; 
             cursor: pointer; 
             display: inline-grid; 
             place-content: center; 
             transition: all 0.2s;
         }
-        .custom-checkbox:checked { background-color: #ffffff; border-color: #ffffff; }
-        .custom-checkbox:checked::before { content: "✔"; color: #0f1115; font-size: 0.8em; font-weight: bold; }
+        .custom-checkbox:checked { background-color: #4d44b5; border-color: #4d44b5; }
+        .custom-checkbox:checked::before { content: "✔"; color: #ffffff; font-size: 0.8em; font-weight: bold; }
 
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; } 
-        ::-webkit-scrollbar-track { background: #0f1115; } 
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+        ::-webkit-scrollbar { width: 6px; height: 6px; } 
+        ::-webkit-scrollbar-track { background: transparent; } 
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="font-sans antialiased relative flex h-screen overflow-hidden selection:bg-white selection:text-black">
-
-    <!-- Subtle Atmospheric Lighting -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
-        <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
-    </div>
+<body class="font-sans antialiased relative flex h-screen overflow-hidden selection:bg-brand-primary selection:text-white">
 
     <!-- SIDEBAR (Desktop) -->
-    <aside class="glass-sidebar w-64 flex-shrink-0 hidden md:flex flex-col h-full z-20">
-        <div class="p-6 flex items-center gap-4 border-b border-white/5">
-            <div class="w-10 h-10 rounded border border-white/20 bg-[#0a0c0f] flex items-center justify-center overflow-hidden">
-                <img src="assets/images/logos/MSEM.jpg" alt="Logo" class="w-full h-full object-cover grayscale opacity-80" onerror="this.src='https://ui-avatars.com/api/?name=MI&background=0f1115&color=fff'">
+    <aside class="w-64 bg-white border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col h-full z-20 shadow-sm">
+        <div class="p-6 flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-brand-primary flex items-center justify-center text-white font-bold text-lg shadow-md shadow-indigo-200">
+                P
             </div>
-            <div>
-                <span class="block text-lg font-display font-bold text-white tracking-widest uppercase">Admin</span>
-                <span class="text-[9px] text-white/50 font-bold uppercase tracking-[0.2em]">Workspace</span>
-            </div>
+            <span class="text-xl font-bold text-gray-800 tracking-tight">IEDC.io</span>
         </div>
-        <nav class="flex-grow px-4 py-6 space-y-1.5 overflow-y-auto">
-            <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="bar-chart-2" class="w-4 h-4"></i> Overview</button>
-            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="users" class="w-4 h-4"></i> Users</button>
-            <button onclick="showTab('inventory')" id="nav-inventory" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="box" class="w-4 h-4"></i> Inventory</button>
-            <button onclick="showTab('logs')" id="nav-logs" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="activity" class="w-4 h-4"></i> Activity Logs</button>
-            <button onclick="showTab('excom')" id="nav-excom" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="shield" class="w-4 h-4"></i> ExCom Tracking</button>
-            <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="clipboard-check" class="w-4 h-4"></i> Attendance</button>
-            <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="award" class="w-4 h-4"></i> Certificates</button>
-            <button onclick="showTab('eventForms')" id="nav-eventForms" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="file-plus" class="w-4 h-4"></i> Forms</button>
+
+        <div class="px-6 py-4">
+            <button onclick="toggleAddUserModal(true)" class="w-full flex items-center justify-between bg-brand-primaryLight hover:bg-indigo-100 text-brand-primary px-4 py-3 rounded-xl text-sm font-semibold transition-colors shadow-sm">
+                Add New User
+                <div class="w-6 h-6 rounded-full bg-brand-primary text-white flex items-center justify-center">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                </div>
+            </button>
+        </div>
+
+        <nav class="flex-grow px-4 py-2 space-y-1 overflow-y-auto text-gray-500">
+            <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</button>
+            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm"><i data-lucide="users" class="w-5 h-5"></i> Users</button>
+            <button onclick="showTab('inventory')" id="nav-inventory" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm"><i data-lucide="box" class="w-5 h-5"></i> Inventory</button>
+            <button onclick="showTab('logs')" id="nav-logs" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm"><i data-lucide="activity" class="w-5 h-5"></i> Activity Logs</button>
+            <button onclick="showTab('excom')" id="nav-excom" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm"><i data-lucide="shield" class="w-5 h-5"></i> ExCom Tracking</button>
+            <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm"><i data-lucide="clipboard-check" class="w-5 h-5"></i> Attendance</button>
+            <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm"><i data-lucide="award" class="w-5 h-5"></i> Certificates</button>
             
-            <div class="pt-6 pb-2 px-4 text-[9px] font-bold text-white/30 uppercase tracking-[0.2em]">Content</div>
-            <button onclick="showTab('news')" id="nav-news" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="newspaper" class="w-4 h-4"></i> Post News</button>
-            <button onclick="showTab('announcements')" id="nav-announcements" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="bell" class="w-4 h-4"></i> Post Updates</button>
-            <button onclick="showTab('gallery')" id="nav-gallery" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="image" class="w-4 h-4"></i> Gallery</button>
+            <div class="pt-4 pb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Content</div>
+            <button onclick="showTab('eventForms')" id="nav-eventForms" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm"><i data-lucide="file-plus" class="w-5 h-5"></i> Forms</button>
+            <button onclick="showTab('news')" id="nav-news" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm"><i data-lucide="newspaper" class="w-5 h-5"></i> Post News</button>
+            <button onclick="showTab('announcements')" id="nav-announcements" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm"><i data-lucide="bell" class="w-5 h-5"></i> Post Updates</button>
+            <button onclick="showTab('gallery')" id="nav-gallery" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm"><i data-lucide="image" class="w-5 h-5"></i> Gallery</button>
         </nav>
-        <div class="p-4 border-t border-white/5">
-            <button id="adminLogoutBtn" class="w-full flex items-center justify-center gap-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 py-3.5 rounded text-[10px] font-bold uppercase tracking-widest transition-colors"><i data-lucide="log-out" class="w-4 h-4"></i> Secure Logout</button>
+
+        <div class="p-6 mt-auto">
+            <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 text-center">
+                <div class="w-10 h-10 bg-indigo-100 text-brand-primary rounded-full flex items-center justify-center mx-auto mb-2">
+                    <i data-lucide="lock" class="w-5 h-5"></i>
+                </div>
+                <p class="text-xs text-gray-500 mb-3">Secure Admin Session</p>
+                <button id="adminLogoutBtn" class="w-full bg-white hover:bg-gray-50 border border-gray-200 text-brand-primary py-2 rounded-lg text-xs font-bold transition-colors shadow-sm">Sign Out</button>
+            </div>
         </div>
     </aside>
 
     <!-- Mobile Sidebar -->
-    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-[#0f1115]/90 backdrop-blur-sm z-40 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
-    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-[#0a0c0f] border-r border-white/5 z-50 transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
-        <div class="p-6 flex items-center justify-between border-b border-white/5">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded border border-white/20 bg-white/5 flex items-center justify-center overflow-hidden">
-                    <img src="assets/images/logos/MSEM.jpg" alt="Logo" class="w-full h-full object-cover grayscale opacity-80" onerror="this.src='https://ui-avatars.com/api/?name=MI&background=0f1115&color=fff'">
-                </div>
-                <span class="text-sm font-display font-bold text-white uppercase tracking-widest">Admin</span>
+    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-40 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
+    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-white z-50 transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
+        <div class="p-6 flex items-center justify-between border-b border-gray-100">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-brand-primary flex items-center justify-center text-white font-bold shadow-sm">P</div>
+                <span class="text-lg font-bold text-gray-800">IEDC.io</span>
             </div>
-            <button onclick="toggleMobileSidebar()" class="text-white/50 hover:text-white"><i data-lucide="x"></i></button>
+            <button onclick="toggleMobileSidebar()" class="text-gray-400 hover:text-gray-800"><i data-lucide="x"></i></button>
         </div>
-        <nav class="flex-grow px-4 py-6 space-y-1.5 overflow-y-auto">
-            <button onclick="showTab('overview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="bar-chart-2" class="w-4 h-4"></i> Overview</button>
-            <button onclick="showTab('users'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="users" class="w-4 h-4"></i> Users</button>
-            <button onclick="showTab('inventory'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="box" class="w-4 h-4"></i> Inventory</button>
-            <button onclick="showTab('logs'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="activity" class="w-4 h-4"></i> Activity Logs</button>
-            <button onclick="showTab('excom'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="shield" class="w-4 h-4"></i> ExCom Tracking</button>
-            <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="clipboard-check" class="w-4 h-4"></i> Attendance</button>
-            <button onclick="showTab('certificates'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="award" class="w-4 h-4"></i> Certificates</button>
-            <button onclick="showTab('eventForms'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="file-plus" class="w-4 h-4"></i> Forms</button>
-            
-            <div class="pt-6 pb-2 px-4 text-[9px] font-bold text-white/30 uppercase tracking-[0.2em]">Content</div>
-            <button onclick="showTab('news'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="newspaper" class="w-4 h-4"></i> Post News</button>
-            <button onclick="showTab('announcements'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="bell" class="w-4 h-4"></i> Post Updates</button>
-            <button onclick="showTab('gallery'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded text-white/60 text-[10px] font-bold uppercase tracking-widest"><i data-lucide="image" class="w-4 h-4"></i> Gallery</button>
+        <nav class="flex-grow px-4 py-6 space-y-1 overflow-y-auto text-gray-500">
+            <button onclick="showTab('overview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</button>
+            <button onclick="showTab('users'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="users" class="w-5 h-5"></i> Users</button>
+            <button onclick="showTab('inventory'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="box" class="w-5 h-5"></i> Inventory</button>
+            <button onclick="showTab('logs'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="activity" class="w-5 h-5"></i> Logs</button>
+            <button onclick="showTab('excom'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="shield" class="w-5 h-5"></i> ExCom</button>
+            <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="clipboard-check" class="w-5 h-5"></i> Attendance</button>
+            <button onclick="showTab('certificates'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="award" class="w-5 h-5"></i> Certificates</button>
+            <div class="h-px bg-gray-100 my-4 mx-4"></div>
+            <button onclick="showTab('eventForms'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="file-plus" class="w-5 h-5"></i> Forms</button>
+            <button onclick="showTab('news'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="newspaper" class="w-5 h-5"></i> Post News</button>
+            <button onclick="showTab('announcements'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="bell" class="w-5 h-5"></i> Post Updates</button>
         </nav>
-        <div class="p-4 border-t border-white/5">
-            <button id="adminLogoutBtnMobile" class="w-full flex items-center justify-center gap-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 py-3.5 rounded text-[10px] font-bold uppercase tracking-widest transition-colors"><i data-lucide="log-out" class="w-4 h-4"></i> Secure Logout</button>
-        </div>
     </div>
 
     <!-- MAIN CONTENT -->
-    <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10 w-full">
-        <header class="glass-header h-20 flex items-center justify-between px-6 md:px-10 shrink-0 w-full">
+    <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10 w-full bg-brand-bg">
+        
+        <!-- Header -->
+        <header class="h-20 flex items-center justify-between px-6 md:px-10 shrink-0 w-full bg-brand-bg">
             <div class="flex items-center gap-4">
-                <button id="mobile-menu-toggle" class="md:hidden text-white p-2 hover:bg-white/10 rounded transition-colors"><i data-lucide="menu" class="w-6 h-6"></i></button>
-                <h1 class="text-xl font-display font-bold text-white flex items-center gap-3 uppercase tracking-widest"><i data-lucide="shield-check" class="text-white/50 w-5 h-5 hidden sm:inline-block"></i> <span class="hidden sm:inline-block">Admin</span> Dashboard</h1>
+                <button id="mobile-menu-toggle" class="md:hidden text-gray-500 p-2 hover:bg-gray-100 rounded-lg transition-colors"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800" id="headerTitle">Dashboard</h1>
+                    <p class="text-xs text-gray-500 font-medium" id="headerSubtitle">Overview & Statistics</p>
+                </div>
             </div>
-            <div class="text-right"><p class="text-xs font-bold text-white tracking-widest uppercase hidden sm:block" id="adminEmailDisplay">Loading...</p><p class="text-[9px] text-white/50 font-bold tracking-[0.2em] uppercase">Super Admin</p></div>
+            <div class="flex items-center gap-6">
+                <button class="text-gray-400 hover:text-brand-primary transition-colors"><i data-lucide="mail" class="w-5 h-5"></i></button>
+                <button class="text-gray-400 hover:text-brand-primary transition-colors relative">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+                </button>
+                <div class="h-6 w-px bg-gray-300"></div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold text-gray-800" id="adminEmailDisplay">Admin User</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-brand-primary font-bold shadow-sm">
+                        AD
+                    </div>
+                </div>
+            </div>
         </header>
 
         <main class="flex-grow overflow-y-auto p-4 md:p-10 w-full">
             
             <!-- 1. OVERVIEW -->
             <div id="overviewSection" class="tab-content space-y-8 max-w-7xl mx-auto w-full">
-                <div class="mb-8 px-2 md:px-0">
-                    <h2 class="text-2xl md:text-3xl font-display font-bold text-white tracking-tight uppercase">System Overview</h2>
-                    <p class="text-white/50 text-sm font-light tracking-wide">High-level metrics for MET'S IEDC operations.</p>
+                
+                <!-- Welcome Banner -->
+                <div class="bg-brand-primaryLight rounded-2xl p-8 md:p-10 flex justify-between items-center shadow-sm border border-indigo-50">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-brand-primary mb-3">Hi, Admin 👋</h2>
+                        <p class="text-indigo-800/70 text-sm md:text-base max-w-md leading-relaxed">Ready to start your day? Here is what is happening across the IEDC platform today.</p>
+                    </div>
+                    <div class="hidden lg:block opacity-90">
+                        <!-- Simple placeholder illustration using SVG -->
+                        <svg width="150" height="100" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="20" y="20" width="160" height="100" rx="10" fill="#4d44b5" opacity="0.1"/>
+                            <rect x="40" y="40" width="120" height="60" rx="5" fill="#4d44b5" opacity="0.2"/>
+                            <circle cx="100" cy="70" r="20" fill="#4d44b5" opacity="0.5"/>
+                            <path d="M70 120 h60" stroke="#4d44b5" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
                 </div>
+
+                <div class="flex justify-between items-end">
+                    <h3 class="text-lg font-bold text-gray-800">Overview</h3>
+                </div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                    <div class="glass-panel p-6 md:p-8 rounded-2xl flex flex-col justify-center">
-                        <p class="text-white/50 text-[10px] uppercase tracking-widest font-bold mb-2">Total Users</p>
-                        <h3 class="text-4xl md:text-5xl font-display font-black text-white" id="totalUsersCount">0</h3>
+                    <!-- Total Users (Yellow) -->
+                    <div class="bg-brand-yellow p-6 md:p-8 rounded-2xl shadow-md shadow-yellow-200/50 flex flex-col relative overflow-hidden text-white">
+                        <i data-lucide="users" class="absolute -right-4 -bottom-4 w-24 h-24 text-white/20"></i>
+                        <p class="text-white/90 text-sm font-semibold mb-2 relative z-10">Total Users</p>
+                        <h3 class="text-4xl md:text-5xl font-black relative z-10" id="totalUsersCount">0</h3>
                     </div>
-                    <div class="glass-panel p-6 md:p-8 rounded-2xl flex flex-col justify-center">
-                        <p class="text-white/50 text-[10px] uppercase tracking-widest font-bold mb-2">Inventory Assets</p>
-                        <h3 class="text-4xl md:text-5xl font-display font-black text-white" id="invTotalOverview">0</h3>
+                    <!-- Assets (Purple) -->
+                    <div class="bg-brand-primary p-6 md:p-8 rounded-2xl shadow-md shadow-indigo-200/50 flex flex-col relative overflow-hidden text-white">
+                        <i data-lucide="box" class="absolute -right-4 -bottom-4 w-24 h-24 text-white/10"></i>
+                        <p class="text-white/80 text-sm font-semibold mb-2 relative z-10">Inventory Assets</p>
+                        <h3 class="text-4xl md:text-5xl font-black relative z-10" id="invTotalOverview">0</h3>
                     </div>
-                    <div class="glass-panel p-6 md:p-8 rounded-2xl flex flex-col justify-center">
-                        <p class="text-white/50 text-[10px] uppercase tracking-widest font-bold mb-2">Announcements</p>
-                        <h3 class="text-4xl md:text-5xl font-display font-black text-white" id="totalAnnouncementsCount">0</h3>
+                    <!-- Announcements (Pink) -->
+                    <div class="bg-brand-pink p-6 md:p-8 rounded-2xl shadow-md shadow-pink-200/50 flex flex-col relative overflow-hidden text-white">
+                        <i data-lucide="bell" class="absolute -right-4 -bottom-4 w-24 h-24 text-white/20"></i>
+                        <p class="text-white/90 text-sm font-semibold mb-2 relative z-10">Announcements</p>
+                        <h3 class="text-4xl md:text-5xl font-black relative z-10" id="totalAnnouncementsCount">0</h3>
                     </div>
-                    <div class="glass-panel p-6 md:p-8 rounded-2xl flex flex-col justify-center">
-                        <p class="text-white/50 text-[10px] uppercase tracking-widest font-bold mb-2">Active Forms</p>
-                        <h3 class="text-4xl md:text-5xl font-display font-black text-white" id="activeFormsCount">0</h3>
+                    <!-- Forms (Light Purple) -->
+                    <div class="bg-brand-purpleLight p-6 md:p-8 rounded-2xl shadow-md shadow-purple-200/50 flex flex-col relative overflow-hidden text-white">
+                        <i data-lucide="file-text" class="absolute -right-4 -bottom-4 w-24 h-24 text-white/20"></i>
+                        <p class="text-white/90 text-sm font-semibold mb-2 relative z-10">Active Forms</p>
+                        <h3 class="text-4xl md:text-5xl font-black relative z-10" id="activeFormsCount">0</h3>
                     </div>
                 </div>
             </div>
 
             <!-- 2. USERS MANAGEMENT -->
-            <div id="usersSection" class="tab-content hidden space-y-6 md:space-y-8 max-w-7xl mx-auto w-full">
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 md:gap-6 mb-2 px-2 md:px-0">
-                    <div>
-                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white tracking-tight uppercase">User Management</h2>
-                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide flex items-center gap-3">
-                            Manage students and roles. 
-                            <span class="inline-flex items-center justify-center px-3 py-1 bg-white/10 rounded-full text-white text-[10px] font-bold uppercase tracking-widest">
-                                Total: <span id="manageUsersTotalCount" class="ml-1">0</span>
-                            </span>
-                        </p>
-                    </div>
-                    <div class="flex gap-2 w-full lg:w-auto overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
-                        <div class="relative min-w-[150px] md:min-w-[200px] flex-grow">
-                            <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search Name or Email..." class="glass-input w-full pl-10 md:pl-12 pr-4 py-3 md:py-3.5 rounded text-xs md:text-sm font-light">
-                            <i data-lucide="search" class="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40"></i>
+            <div id="usersSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-2">
+                    <div class="flex gap-2 w-full lg:w-auto overflow-x-auto pb-2 lg:pb-0 scrollbar-hide flex-grow max-w-2xl">
+                        <div class="relative flex-grow">
+                            <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search Name or Email..." class="light-input w-full pl-10 pr-4 py-3 rounded-xl text-sm shadow-sm">
+                            <i data-lucide="search" class="absolute left-3.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"></i>
                         </div>
-                        <button onclick="forceRefreshUsers(this)" class="flex-shrink-0 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-3 md:py-3.5 rounded transition-colors flex items-center justify-center gap-2" title="Force Fetch Users From Server">
+                        <button onclick="forceRefreshUsers(this)" class="flex-shrink-0 bg-white border border-gray-200 text-gray-600 hover:text-brand-primary hover:border-brand-primaryLight hover:bg-brand-primaryLight px-4 py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm" title="Refresh Users">
                             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                            <span class="text-[10px] uppercase tracking-widest font-bold whitespace-nowrap hidden sm:inline">Refresh</span>
-                        </button>
-                        <button onclick="toggleAddUserModal(true)" class="flex-shrink-0 bg-white hover:bg-gray-200 text-[#0f1115] px-4 md:px-6 py-3 md:py-3.5 rounded text-[10px] uppercase tracking-widest font-bold whitespace-nowrap transition-colors flex items-center gap-2">
-                            <i data-lucide="user-plus" class="w-4 h-4"></i> Add User
                         </button>
                     </div>
                 </div>
 
-                <div class="p-4 mx-2 md:mx-0 bg-white/5 border border-white/10 rounded-xl flex items-start gap-3 md:gap-4">
-                    <i data-lucide="info" class="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0"></i>
-                    <p class="text-[10px] md:text-xs text-white/70 font-light leading-relaxed">
-                        <strong class="text-white">Missing users?</strong> If a user exists in the Authentication console but not here, it means their database profile hasn't been created yet. Click "Add User" and use the <strong>Sync Existing User</strong> tab to link their Auth UID manually without changing their password!
-                    </p>
-                </div>
-
-                <div class="glass-panel rounded-2xl overflow-x-auto w-full">
-                    <table class="w-full text-left min-w-[600px]">
-                        <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50">
-                            <tr><th class="px-4 md:px-6 py-4 md:py-5">Name</th><th class="px-4 md:px-6">Email / Auth Method</th><th class="px-4 md:px-6">Role</th><th class="text-center px-4 md:px-6">Actions</th></tr>
-                        </thead>
-                        <tbody id="userListBody" class="divide-y divide-white/5">
-                            <tr><td colspan="4" class="text-center py-8 text-white/40 text-xs tracking-widest uppercase font-bold">Loading users...</td></tr>
-                        </tbody>
-                    </table>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden w-full">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left min-w-[600px]">
+                            <thead class="bg-gray-50 border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wider uppercase">
+                                <tr>
+                                    <th class="px-6 py-4">User Name</th>
+                                    <th class="px-6 py-4">Email / Auth</th>
+                                    <th class="px-6 py-4">Role</th>
+                                    <th class="text-center px-6 py-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userListBody" class="divide-y divide-gray-100">
+                                <tr><td colspan="4" class="text-center py-10 text-gray-400 text-sm font-medium">Loading users...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <!-- 3. INVENTORY -->
-            <div id="inventorySection" class="tab-content hidden space-y-6 md:space-y-8 max-w-7xl mx-auto w-full">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-2 md:px-0">
-                    <div>
-                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white tracking-tight uppercase">Asset Inventory</h2>
-                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Manage IEDC hardware and resources.</p>
+            <div id="inventorySection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="flex gap-4">
+                        <div class="bg-white px-5 py-3 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-brand-yellow"></div><span class="text-xs font-bold text-gray-600 uppercase tracking-wide">Total: <span id="invTotal" class="text-gray-900 text-sm ml-1">0</span></span></div>
+                        <div class="bg-white px-5 py-3 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-green-500"></div><span class="text-xs font-bold text-gray-600 uppercase tracking-wide">Avail: <span id="invAvail" class="text-gray-900 text-sm ml-1">0</span></span></div>
                     </div>
-                    <button onclick="document.getElementById('addItemModal').classList.remove('hidden')" class="bg-white hover:bg-gray-200 text-[#0f1115] px-6 py-3 rounded text-[10px] uppercase tracking-widest font-bold flex items-center gap-3 transition-colors">
+                    <button onclick="document.getElementById('addItemModal').classList.remove('hidden')" class="bg-brand-primary hover:bg-indigo-700 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2 transition-colors shadow-md shadow-indigo-200">
                         <i data-lucide="plus" class="w-4 h-4"></i> Add Asset
                     </button>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
-                    <div class="glass-panel p-6 rounded-2xl border border-white/10 flex justify-between items-center"><span class="text-white/50 text-[10px] md:text-xs font-bold uppercase tracking-widest">Total Assets</span><span class="text-2xl font-display font-bold text-white" id="invTotal">0</span></div>
-                    <div class="glass-panel p-6 rounded-2xl border border-white/10 flex justify-between items-center"><span class="text-white/50 text-[10px] md:text-xs font-bold uppercase tracking-widest">Available</span><span class="text-2xl font-display font-bold text-white" id="invAvail">0</span></div>
-                    <div class="glass-panel p-6 rounded-2xl border border-white/10 flex justify-between items-center"><span class="text-white/50 text-[10px] md:text-xs font-bold uppercase tracking-widest">Borrowed</span><span class="text-2xl font-display font-bold text-white" id="invBorrowed">0</span></div>
-                </div>
-                <div class="glass-panel rounded-2xl overflow-x-auto w-full">
-                    <table class="w-full text-left min-w-[500px]">
-                        <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50">
-                            <tr><th class="px-4 md:px-6 py-4">Item Name</th><th class="px-4">Category</th><th class="px-4">Status</th><th class="px-4">Holder</th><th class="text-center px-4">Action</th></tr>
-                        </thead>
-                        <tbody id="inventoryListBody" class="divide-y divide-white/5"></tbody>
-                    </table>
+                
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden w-full">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left min-w-[600px]">
+                            <thead class="bg-gray-50 border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wider uppercase">
+                                <tr><th class="px-6 py-4">Item Name</th><th class="px-6 py-4">Category</th><th class="px-6 py-4">Status</th><th class="px-6 py-4">Holder</th><th class="text-center px-6 py-4">Action</th></tr>
+                            </thead>
+                            <tbody id="inventoryListBody" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <!-- 4. LOGS -->
-            <div id="logsSection" class="tab-content hidden space-y-6 md:space-y-8 max-w-7xl mx-auto w-full">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-2 md:px-0">
-                    <div>
-                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white tracking-tight uppercase">System Logs</h2>
-                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Monitor recent administrative actions.</p>
-                    </div>
-                    <button onclick="printLogs()" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-5 py-3 rounded transition-colors flex items-center justify-center gap-2" title="Print Activity Logs">
-                        <i data-lucide="printer" class="w-4 h-4"></i>
-                        <span class="text-[10px] uppercase tracking-widest font-bold whitespace-nowrap">Print Logs</span>
+            <div id="logsSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <p class="text-gray-500 text-sm">Monitor recent administrative actions.</p>
+                    <button onclick="printLogs()" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 px-5 py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm font-semibold shadow-sm">
+                        <i data-lucide="printer" class="w-4 h-4"></i> Print Logs
                     </button>
                 </div>
-                <div class="glass-panel rounded-2xl overflow-x-auto w-full max-h-[600px] overflow-y-auto">
-                    <table class="w-full text-left min-w-[500px]">
-                        <thead class="bg-[#0a0c0f] border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10">
-                            <tr><th class="px-4 md:px-6 py-4">Timestamp</th><th class="px-4">Action</th><th class="px-4">Details</th><th class="px-4">Admin</th></tr>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden w-full max-h-[600px] overflow-y-auto">
+                    <table class="w-full text-left min-w-[600px]">
+                        <thead class="bg-gray-50 border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wider uppercase sticky top-0 z-10">
+                            <tr><th class="px-6 py-4">Timestamp</th><th class="px-6 py-4">Action</th><th class="px-6 py-4">Details</th><th class="px-6 py-4">Admin</th></tr>
                         </thead>
-                        <tbody id="logsListBody" class="divide-y divide-white/5"></tbody>
+                        <tbody id="logsListBody" class="divide-y divide-gray-100"></tbody>
                     </table>
                 </div>
             </div>
 
             <!-- EXCOM TRACKING -->
-            <div id="excomSection" class="tab-content hidden space-y-6 md:space-y-8 max-w-7xl mx-auto w-full">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-2 md:px-0">
-                    <div>
-                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white tracking-tight uppercase">ExCom Tracking</h2>
-                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Manage committee members and meetings.</p>
-                    </div>
-                    <button onclick="openExcomAttendanceModal()" class="w-full md:w-auto bg-white hover:bg-gray-200 text-[#0f1115] px-6 py-3 rounded text-[10px] uppercase tracking-widest font-bold flex items-center justify-center gap-3 transition-colors">
+            <div id="excomSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-2">
+                    <p class="text-gray-500 text-sm">Manage committee members and track attendance.</p>
+                    <button onclick="openExcomAttendanceModal()" class="w-full md:w-auto bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 px-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-colors">
                         <i data-lucide="clipboard-edit" class="w-4 h-4"></i> Log Meeting
                     </button>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-                    <div class="glass-panel p-6 md:p-8 rounded-2xl">
-                        <h3 class="text-xs md:text-sm font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Committee Members</h3>
-                        <div id="excomMembersList" class="space-y-2 max-h-80 overflow-y-auto pr-2"></div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
+                        <h3 class="text-sm font-bold text-gray-800 mb-6 uppercase tracking-wider border-b border-gray-100 pb-3">Committee Members</h3>
+                        <div id="excomMembersList" class="space-y-2 max-h-[400px] overflow-y-auto pr-2"></div>
                     </div>
-                    <div class="glass-panel p-6 md:p-8 rounded-2xl flex flex-col">
-                        <h3 class="text-xs md:text-sm font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Recent Meetings</h3>
+                    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
+                        <h3 class="text-sm font-bold text-gray-800 mb-6 uppercase tracking-wider border-b border-gray-100 pb-3">Recent Meetings</h3>
                         <div id="excomMeetingsList" class="space-y-3 flex-grow overflow-y-auto pr-2"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 5. ATTENDANCE & CERTIFICATES -->
-            <div id="attendanceSection" class="tab-content hidden space-y-6 md:space-y-8 max-w-5xl mx-auto w-full">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-2 md:px-0">
-                    <div>
-                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white tracking-tight uppercase">Attendance Roster</h2>
-                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Mark attendance for events.</p>
-                    </div>
+            <!-- 5. ATTENDANCE -->
+            <div id="attendanceSection" class="tab-content hidden space-y-6 max-w-5xl mx-auto w-full">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <p class="text-gray-500 text-sm">Mark attendance for general events.</p>
                     <div class="flex gap-3 w-full md:w-auto">
-                        <button onclick="document.getElementById('reportsModal').classList.remove('hidden')" class="flex-1 md:flex-none bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3 rounded text-[10px] uppercase tracking-widest font-bold transition-colors">Reports</button>
-                        <button onclick="submitAttendance()" class="flex-1 md:flex-none bg-white hover:bg-gray-200 text-[#0f1115] px-6 py-3 rounded text-[10px] uppercase tracking-widest font-bold transition-colors">Save List</button>
+                        <button onclick="document.getElementById('reportsModal').classList.remove('hidden')" class="flex-1 md:flex-none bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 shadow-sm px-6 py-3 rounded-xl text-sm font-semibold transition-colors">Reports</button>
+                        <button onclick="submitAttendance()" class="flex-1 md:flex-none bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 px-6 py-3 rounded-xl text-sm font-bold transition-colors">Save List</button>
                     </div>
                 </div>
-                <div class="glass-panel rounded-2xl p-6 md:p-8 mb-6">
+                <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 mb-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                         <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Name</label>
-                            <input type="text" id="attendanceEventName" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light" placeholder="E.g. Buildathon 2026">
+                            <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Event Name</label>
+                            <input type="text" id="attendanceEventName" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="E.g. Buildathon 2026">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date</label>
-                            <input type="date" id="attendanceDate" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light">
+                            <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Date</label>
+                            <input type="date" id="attendanceDate" class="light-input w-full rounded-xl py-3 px-4 text-sm">
                         </div>
                     </div>
                 </div>
-                <div class="glass-panel rounded-2xl overflow-x-auto max-h-[600px] overflow-y-auto border border-white/10 w-full">
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 w-full max-h-[600px] overflow-y-auto">
                     <table class="w-full text-left min-w-[400px]">
-                        <thead class="bg-[#0a0c0f] border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10">
-                            <tr><th class="px-4 md:px-6 py-4 text-center w-16">Present</th><th class="px-4 md:px-6">Name</th><th class="px-4 md:px-6">Email</th></tr>
+                        <thead class="bg-gray-50 border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wider uppercase sticky top-0 z-10">
+                            <tr><th class="px-6 py-4 text-center w-20">Present</th><th class="px-6 py-4">Name</th><th class="px-6 py-4">Email</th></tr>
                         </thead>
-                        <tbody id="attendanceListBody" class="divide-y divide-white/5"></tbody>
+                        <tbody id="attendanceListBody" class="divide-y divide-gray-100"></tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="certificatesSection" class="tab-content hidden space-y-6 md:space-y-8 max-w-4xl mx-auto w-full">
-                <div class="glass-panel p-6 md:p-12 rounded-2xl border border-white/20">
-                    <div class="border-b border-white/10 pb-6 mb-6 md:mb-8">
-                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white mb-2 tracking-tight uppercase">Issue Certificates</h2>
-                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Generate and assign digital certificates to users.</p>
+            <!-- CERTIFICATES -->
+            <div id="certificatesSection" class="tab-content hidden space-y-6 max-w-4xl mx-auto w-full">
+                <div class="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="border-b border-gray-100 pb-6 mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Issue Certificates</h2>
+                        <p class="text-gray-500 text-sm">Generate and assign digital certificates to users.</p>
                     </div>
-                    <div id="certStatus" class="hidden mb-6 p-4 rounded text-[10px] font-bold uppercase tracking-widest text-center border border-white/20 bg-white/10"></div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
+                    <div id="certStatus" class="hidden mb-6 p-4 rounded-xl text-sm font-bold text-center border"></div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
                         <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Name</label>
-                            <input type="text" id="certEventName" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light" placeholder="Event Name">
+                            <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Event Name</label>
+                            <input type="text" id="certEventName" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Event Name">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date of Issue</label>
-                            <input type="date" id="certDate" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light">
+                            <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Date of Issue</label>
+                            <input type="date" id="certDate" class="light-input w-full rounded-xl py-3 px-4 text-sm">
                         </div>
                     </div>
 
-                    <div class="mb-6 md:mb-8 p-4 md:p-6 border border-white/10 rounded-xl bg-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                    <div class="mb-6 p-4 md:p-6 border border-gray-200 border-dashed rounded-xl bg-gray-50 flex flex-col md:flex-row items-center justify-between gap-4">
                         <div>
-                            <p class="text-sm font-bold text-white mb-1">Certificate Template</p>
-                            <p class="text-[10px] text-white/50 uppercase tracking-widest font-bold" id="certFileName">Upload a clean image design</p>
+                            <p class="text-sm font-bold text-gray-800 mb-1">Certificate Template</p>
+                            <p class="text-xs text-gray-500" id="certFileName">Upload a clean image design</p>
                         </div>
-                        <label class="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3 rounded text-[10px] uppercase tracking-widest font-bold cursor-pointer transition-colors w-full md:w-auto text-center">
+                        <label class="bg-white border border-gray-200 text-gray-700 hover:text-brand-primary px-6 py-2.5 rounded-lg text-xs font-bold cursor-pointer transition-colors shadow-sm text-center">
                             <span>Browse Image</span>
                             <input type="file" onchange="handleCertTemplate(event)" class="hidden" accept="image/*">
                         </label>
                     </div>
 
-                    <label class="block text-[10px] font-bold text-white/50 mb-3 uppercase tracking-widest">Select Recipients</label>
-                    <div class="border border-white/10 rounded-xl overflow-x-auto max-h-72 overflow-y-auto mb-6 md:mb-8 bg-[#0a0c0f]">
+                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Select Recipients</label>
+                    <div class="border border-gray-200 rounded-xl overflow-x-auto max-h-72 overflow-y-auto mb-6 bg-white">
                         <table class="w-full text-left min-w-[300px]">
-                            <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10">
+                            <thead class="bg-gray-50 border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wider uppercase sticky top-0 z-10">
                                 <tr><th class="px-4 py-3 w-16 text-center"><i data-lucide="check-square" class="w-4 h-4 mx-auto"></i></th><th>Student Name</th></tr>
                             </thead>
-                            <tbody id="certUserListBody" class="divide-y divide-white/5"></tbody>
+                            <tbody id="certUserListBody" class="divide-y divide-gray-100"></tbody>
                         </table>
                     </div>
 
-                    <button onclick="issueCertificates()" id="certBtn" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] py-4 rounded text-xs font-bold uppercase tracking-widest transition-all">Issue Certificates</button>
+                    <button onclick="issueCertificates()" id="certBtn" class="w-full bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 py-3.5 rounded-xl text-sm font-bold transition-all">Issue Certificates</button>
                 </div>
             </div>
 
             <!-- 6. FORMS & CONTENT -->
-            <div id="eventFormsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 md:space-y-8 w-full">
-                <div class="glass-panel p-6 md:p-12 rounded-2xl">
-                    <div class="border-b border-white/10 pb-6 mb-6 md:mb-8">
-                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white mb-2 uppercase tracking-tight">Form Builder</h2>
-                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Link external forms for data collection.</p>
+            <div id="eventFormsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
+                <div class="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="border-b border-gray-100 pb-5 mb-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-1">Form Builder</h2>
+                        <p class="text-gray-500 text-sm">Link external forms for data collection.</p>
                     </div>
-                    <form id="formBuilderForm" class="space-y-6">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Form Title</label><input type="text" id="formTitle" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light" placeholder="E.g. Hackathon Registration" required></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Webhook / Script URL</label><input type="url" id="formWebhook" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light" placeholder="https://script.google.com/..." required></div>
-                        <button type="submit" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] py-3.5 md:py-4 rounded text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all mt-4">Create Registration Link</button>
+                    <form id="formBuilderForm" class="space-y-5">
+                        <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Form Title</label><input type="text" id="formTitle" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="E.g. Hackathon Registration" required></div>
+                        <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Webhook / Script URL</label><input type="url" id="formWebhook" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="https://script.google.com/..." required></div>
+                        <button type="submit" class="w-full bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 py-3 rounded-xl text-sm font-bold transition-all mt-2">Create Registration Link</button>
                     </form>
                 </div>
-                <div class="glass-panel p-6 md:p-8 rounded-2xl">
-                    <h3 class="text-xs md:text-sm font-display font-bold text-white mb-4 uppercase tracking-[0.2em]">Active Forms</h3>
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 class="text-sm font-bold text-gray-800 mb-4 uppercase tracking-wider border-b border-gray-100 pb-3">Active Forms</h3>
                     <div id="activeFormsList" class="space-y-3"></div>
                 </div>
             </div>
 
-            <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 md:space-y-8 w-full">
-                <div class="glass-panel p-6 md:p-12 rounded-2xl border border-white/20">
-                    <div class="border-b border-white/10 pb-6 mb-6 md:mb-8">
-                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white mb-2 uppercase tracking-tight">Post News</h2>
-                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Publish articles to the Newsroom.</p>
+            <!-- NEWS -->
+            <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
+                <div class="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="border-b border-gray-100 pb-5 mb-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-1">Post News</h2>
+                        <p class="text-gray-500 text-sm">Publish articles to the Newsroom.</p>
                     </div>
-                    <form id="newsForm" class="space-y-6">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Headline</label><input type="text" id="newsTitle" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light" placeholder="Major Announcement" required></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Content</label><textarea id="newsContent" rows="6" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light leading-relaxed" placeholder="Write the full story here..." required></textarea></div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Publish Date</label><input type="date" id="newsDate" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light" required></div>
+                    <form id="newsForm" class="space-y-5">
+                        <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Headline</label><input type="text" id="newsTitle" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Major Announcement" required></div>
+                        <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Content</label><textarea id="newsContent" rows="5" class="light-input w-full rounded-xl py-3 px-4 text-sm leading-relaxed" placeholder="Write the full story here..." required></textarea></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Publish Date</label><input type="date" id="newsDate" class="light-input w-full rounded-xl py-3 px-4 text-sm" required></div>
                             <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Cover Image</label>
-                                <label class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light text-center cursor-pointer block border-dashed border-white/20 hover:bg-white/5 transition-colors">
-                                    <span id="newsFileName" class="text-white/50"><i class="fas fa-upload mr-2"></i> Browse File</span>
+                                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Cover Image</label>
+                                <label class="light-input w-full rounded-xl py-3 px-4 text-sm text-center cursor-pointer block border-dashed bg-gray-50 hover:bg-gray-100 transition-colors">
+                                    <span id="newsFileName" class="text-gray-500"><i class="fas fa-upload mr-2"></i> Browse File</span>
                                     <input type="file" id="newsImageInput" class="hidden" onchange="handleNewsImage(event)">
                                 </label>
                             </div>
                         </div>
-                        <button type="submit" id="postNewsBtn" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] py-3.5 md:py-4 rounded text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all mt-6">Publish News</button>
+                        <button type="submit" id="postNewsBtn" class="w-full bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 py-3 rounded-xl text-sm font-bold transition-all mt-4">Publish News</button>
                     </form>
                 </div>
             </div>
 
-            <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 md:space-y-8 w-full">
-                <div class="glass-panel p-6 md:p-12 rounded-2xl">
-                    <div class="border-b border-white/10 pb-6 mb-6 md:mb-8">
-                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white mb-2 uppercase tracking-tight">Post Update / Circular</h2>
-                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Quick text-based announcements.</p>
+            <!-- UPDATES -->
+            <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
+                <div class="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="border-b border-gray-100 pb-5 mb-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-1">Post Circular</h2>
+                        <p class="text-gray-500 text-sm">Quick text-based announcements.</p>
                     </div>
-                    <form id="announcementForm" class="space-y-6">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Subject</label><input type="text" id="annTitle" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light" placeholder="Important Notice" required></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Details</label><textarea id="annContent" rows="5" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light" placeholder="Information goes here..." required></textarea></div>
-                        <button type="submit" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] py-3.5 md:py-4 rounded text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all mt-4">Broadcast Update</button>
+                    <form id="announcementForm" class="space-y-5">
+                        <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Subject</label><input type="text" id="annTitle" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Important Notice" required></div>
+                        <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Details</label><textarea id="annContent" rows="4" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Information goes here..." required></textarea></div>
+                        <button type="submit" class="w-full bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 py-3 rounded-xl text-sm font-bold transition-all mt-2">Broadcast Update</button>
                     </form>
                 </div>
             </div>
 
-            <div id="gallerySection" class="tab-content hidden max-w-2xl mx-auto space-y-6 md:space-y-8 w-full">
-                <div class="glass-panel p-6 md:p-12 rounded-2xl border border-white/20">
-                    <div class="border-b border-white/10 pb-6 mb-6 md:mb-8">
-                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white mb-2 uppercase tracking-tight">Upload Gallery</h2>
-                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Add photos to the public albums.</p>
+            <!-- GALLERY -->
+            <div id="gallerySection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
+                <div class="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="border-b border-gray-100 pb-5 mb-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-1">Upload Gallery</h2>
+                        <p class="text-gray-500 text-sm">Add photos to the public albums.</p>
                     </div>
-                    <form id="galleryForm" class="space-y-6">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Album / Event Title</label><input type="text" id="galleryTitle" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light" placeholder="Event Name"></div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Date</label><input type="date" id="galleryDate" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light"></div>
+                    <form id="galleryForm" class="space-y-5">
+                        <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Album / Event Title</label><input type="text" id="galleryTitle" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Event Name"></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Event Date</label><input type="date" id="galleryDate" class="light-input w-full rounded-xl py-3 px-4 text-sm"></div>
                             <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Batch Upload</label>
-                                <label class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light text-center cursor-pointer block border-dashed border-white/20 hover:bg-white/5 transition-colors">
-                                    <span id="galleryFileName" class="text-white/50"><i class="fas fa-images mr-2"></i> Select Photos</span>
+                                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Batch Upload</label>
+                                <label class="light-input w-full rounded-xl py-3 px-4 text-sm text-center cursor-pointer block border-dashed bg-gray-50 hover:bg-gray-100 transition-colors">
+                                    <span id="galleryFileName" class="text-gray-500"><i class="fas fa-images mr-2"></i> Select Photos</span>
                                     <input type="file" id="galleryImageInput" class="hidden" multiple onchange="handleGalleryImages(event)">
                                 </label>
                             </div>
                         </div>
-                        <button type="submit" id="postGalleryBtn" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] py-3.5 md:py-4 rounded text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all mt-6">Upload Photos</button>
+                        <button type="submit" id="postGalleryBtn" class="w-full bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 py-3 rounded-xl text-sm font-bold transition-all mt-2">Upload Photos</button>
                     </form>
                 </div>
             </div>
 
-            <div id="pastEventsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 md:space-y-8 w-full">
-                <div class="glass-panel p-6 md:p-12 rounded-2xl">
-                    <div class="border-b border-white/10 pb-6 mb-6 md:mb-8">
-                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white mb-2 uppercase tracking-tight">Archive Past Event</h2>
-                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Move an event to the public archive.</p>
+            <!-- ARCHIVE -->
+            <div id="pastEventsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
+                <div class="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="border-b border-gray-100 pb-5 mb-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-1">Archive Past Event</h2>
+                        <p class="text-gray-500 text-sm">Move an event to the public archive.</p>
                     </div>
-                    <form id="pastEventForm" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Title</label><input type="text" id="peTitle" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light" placeholder="Event Title"></div>
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date</label><input type="date" id="peDate" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light"></div>
+                    <form id="pastEventForm" class="space-y-5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Title</label><input type="text" id="peTitle" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Event Title"></div>
+                            <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Date</label><input type="date" id="peDate" class="light-input w-full rounded-xl py-3 px-4 text-sm"></div>
                         </div>
-                        <button type="submit" id="savePastEventBtn" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] py-3.5 md:py-4 rounded text-[10px] md:text-xs font-bold uppercase tracking-widest transition-all mt-4">Save to Archive</button>
+                        <button type="submit" id="savePastEventBtn" class="w-full bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 py-3 rounded-xl text-sm font-bold transition-all mt-2">Save to Archive</button>
                     </form>
                 </div>
             </div>
@@ -503,141 +523,147 @@
     </div>
 
     <!-- MODALS -->
+
     <!-- EDIT ROLE -->
-    <div id="editUserModal" class="fixed inset-0 bg-[#0f1115]/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-6 md:p-10 rounded-2xl relative shadow-2xl border border-white/20">
-            <h2 class="text-xl md:text-2xl font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Edit User</h2>
-            <form id="editUserRoleForm" class="space-y-4 md:space-y-6">
+    <div id="editUserModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md p-8 rounded-2xl relative shadow-2xl border border-gray-100">
+            <h2 class="text-xl font-bold text-gray-800 mb-6 uppercase tracking-wider border-b border-gray-100 pb-4">Edit User Role</h2>
+            <form id="editUserRoleForm" class="space-y-5">
                 <input type="hidden" id="editUserId">
                 <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">User Name</label>
-                    <input type="text" id="editUserName" class="glass-input w-full rounded py-3 md:py-4 px-4 text-sm font-light" placeholder="Name">
+                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">User Name</label>
+                    <input type="text" id="editUserName" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Name">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Assign Role</label>
-                    <select id="editUserRoleSelect" class="glass-input w-full rounded py-3 md:py-4 px-4 text-sm font-light">
+                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Assign Role</label>
+                    <select id="editUserRoleSelect" class="light-input w-full rounded-xl py-3 px-4 text-sm font-semibold">
                         <option value="student">Student</option>
                         <option value="excom">ExCom Member</option>
                         <option value="admin">Admin</option>
                     </select>
                 </div>
-                <div class="pt-4 flex flex-col sm:flex-row gap-3 md:gap-4">
-                    <button type="button" onclick="toggleEditUserModal(false)" class="w-full sm:flex-1 bg-transparent hover:bg-white/5 border border-white/20 text-white py-3 md:py-3.5 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button>
-                    <button type="submit" id="updateUserBtn" class="w-full sm:flex-1 bg-white hover:bg-gray-200 text-[#0f1115] py-3 md:py-3.5 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Update</button>
+                <div class="pt-4 flex gap-3">
+                    <button type="button" onclick="toggleEditUserModal(false)" class="flex-1 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors shadow-sm">Cancel</button>
+                    <button type="submit" id="updateUserBtn" class="flex-1 bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors">Update</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- ADD ASSET -->
-    <div id="addItemModal" class="fixed inset-0 bg-[#0f1115]/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-6 md:p-10 rounded-2xl relative shadow-2xl border border-white/20">
-            <h2 class="text-xl md:text-2xl font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Add Asset</h2>
-            <form id="addItemForm" class="space-y-4 md:space-y-6">
+    <div id="addItemModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md p-8 rounded-2xl relative shadow-2xl border border-gray-100">
+            <h2 class="text-xl font-bold text-gray-800 mb-6 uppercase tracking-wider border-b border-gray-100 pb-4">Add Asset</h2>
+            <form id="addItemForm" class="space-y-5">
                 <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Item Name</label>
-                    <input type="text" id="invName" class="glass-input w-full rounded py-3 md:py-4 px-4 text-sm font-light" placeholder="E.g. Arduino Uno" required>
+                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Item Name</label>
+                    <input type="text" id="invName" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="E.g. Arduino Uno" required>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Category</label>
-                    <select id="invCategory" class="glass-input w-full rounded py-3 md:py-4 px-4 text-sm font-light">
+                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Category</label>
+                    <select id="invCategory" class="light-input w-full rounded-xl py-3 px-4 text-sm font-medium">
                         <option value="Electronics">Electronics</option>
                         <option value="Stationery">Stationery</option>
                         <option value="Furniture">Furniture</option>
                     </select>
                 </div>
-                <div class="pt-4 flex flex-col sm:flex-row gap-3 md:gap-4">
-                    <button type="button" onclick="document.getElementById('addItemModal').classList.add('hidden')" class="w-full sm:flex-1 bg-transparent hover:bg-white/5 border border-white/20 text-white py-3 md:py-3.5 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button>
-                    <button type="submit" class="w-full sm:flex-1 bg-white hover:bg-gray-200 text-[#0f1115] py-3 md:py-3.5 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Add Item</button>
+                <div class="pt-4 flex gap-3">
+                    <button type="button" onclick="document.getElementById('addItemModal').classList.add('hidden')" class="flex-1 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors shadow-sm">Cancel</button>
+                    <button type="submit" class="flex-1 bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors">Add Item</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- ADD USER / SYNC USER MODAL -->
-    <div id="addUserModal" class="fixed inset-0 bg-[#0f1115]/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-6 md:p-10 rounded-2xl relative shadow-2xl border border-white/20">
-            <h2 class="text-xl md:text-2xl font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Add User</h2>
+    <div id="addUserModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md p-8 rounded-2xl relative shadow-2xl border border-gray-100">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 uppercase tracking-wider border-b border-gray-100 pb-4">Add User</h2>
             
-            <div class="flex mb-6 border-b border-white/10">
-                <button type="button" id="tabCreateNew" class="flex-1 pb-3 text-[10px] font-bold uppercase tracking-widest border-b-2 border-white text-white transition-colors" onclick="switchAddMode('create')">Create New</button>
-                <button type="button" id="tabSyncExisting" class="flex-1 pb-3 text-[10px] font-bold uppercase tracking-widest border-b-2 border-transparent text-white/50 hover:text-white transition-colors" onclick="switchAddMode('sync')">Sync Existing</button>
+            <div class="flex mb-6 bg-gray-50 p-1 rounded-lg border border-gray-200">
+                <button type="button" id="tabCreateNew" class="flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-md bg-white shadow-sm text-brand-primary transition-all" onclick="switchAddMode('create')">Create New</button>
+                <button type="button" id="tabSyncExisting" class="flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-md text-gray-500 hover:text-gray-800 transition-all" onclick="switchAddMode('sync')">Sync Existing</button>
             </div>
 
-            <form id="adminAddUserForm" class="space-y-4 md:space-y-5">
+            <form id="adminAddUserForm" class="space-y-4">
                 <input type="hidden" id="addUserMode" value="create">
                 
-                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Full Name</label><input type="text" id="newUserName" class="glass-input w-full rounded py-3 md:py-3.5 px-4 text-sm font-light" placeholder="John Doe" required></div>
+                <div><label class="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wider">Full Name</label><input type="text" id="newUserName" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="John Doe" required></div>
                 
-                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Email Address</label><input type="email" id="newUserEmail" class="glass-input w-full rounded py-3 md:py-3.5 px-4 text-sm font-light" placeholder="student@example.com" required></div>
+                <div><label class="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wider">Email Address</label><input type="email" id="newUserEmail" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="student@example.com" required></div>
                 
                 <div id="passwordFieldGroup">
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Temporary Password</label>
-                    <input type="text" id="newUserPassword" class="glass-input w-full rounded py-3 md:py-3.5 px-4 text-sm font-light" placeholder="Min 8 chars" required>
+                    <label class="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wider">Temporary Password</label>
+                    <input type="text" id="newUserPassword" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Min 8 chars" required>
                 </div>
 
                 <div id="uidFieldGroup" class="hidden">
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">User UID (From Firebase Auth)</label>
-                    <input type="text" id="newUserUid" class="glass-input w-full rounded py-3 md:py-3.5 px-4 text-sm font-light" placeholder="Paste UID here...">
-                    <p class="text-white/30 text-[9px] mt-2 leading-relaxed">Paste the exact User UID from your Firebase Authentication list to link their existing login to this database profile.</p>
+                    <label class="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wider">User UID (From Firebase)</label>
+                    <input type="text" id="newUserUid" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Paste UID here...">
+                    <p class="text-gray-400 text-[10px] mt-1.5 leading-relaxed">Paste the exact User UID from your Firebase Authentication list to link their existing login to this database profile.</p>
                 </div>
 
-                <div id="addUserStatus" class="hidden text-[10px] text-center p-3 rounded font-bold uppercase tracking-widest border border-white/20"></div>
+                <div id="addUserStatus" class="hidden text-xs text-center p-3 rounded-lg font-bold uppercase tracking-wider border"></div>
                 
-                <div class="pt-4 flex flex-col sm:flex-row gap-3 md:gap-4">
-                    <button type="button" onclick="toggleAddUserModal(false)" class="w-full sm:flex-1 bg-transparent hover:bg-white/5 border border-white/20 text-white py-3 md:py-3.5 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button>
-                    <button type="submit" id="submitAddUserBtn" class="w-full sm:flex-1 bg-white hover:bg-gray-200 text-[#0f1115] py-3 md:py-3.5 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Create User</button>
+                <div class="pt-4 flex gap-3">
+                    <button type="button" onclick="toggleAddUserModal(false)" class="flex-1 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors shadow-sm">Cancel</button>
+                    <button type="submit" id="submitAddUserBtn" class="flex-1 bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors">Create User</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- EXCOM LOG MODAL -->
-    <div id="excomModal" class="fixed inset-0 bg-[#0f1115]/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-2xl p-6 md:p-10 rounded-2xl max-h-[90vh] h-full flex flex-col shadow-2xl border border-white/20">
-            <h2 class="text-xl md:text-2xl font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4 shrink-0">Log ExCom Meeting</h2>
+    <!-- EXCOM LOG MODAL (Wider & Taller to fix spacing issues) -->
+    <div id="excomModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-3xl p-8 rounded-2xl max-h-[90vh] h-full flex flex-col shadow-2xl border border-gray-100">
+            <h2 class="text-xl font-bold text-gray-800 mb-6 uppercase tracking-wider border-b border-gray-100 pb-4 shrink-0">Log ExCom Meeting</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 shrink-0">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 shrink-0">
                 <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Meeting Name / Topic</label>
-                    <input type="text" id="excomMeetingTitle" class="glass-input w-full rounded py-3 md:py-4 px-4 text-sm font-light" placeholder="e.g. Core Committee Sync">
+                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Meeting Name / Topic</label>
+                    <input type="text" id="excomMeetingTitle" class="light-input w-full rounded-xl py-3 px-4 text-sm font-medium" placeholder="e.g. Core Committee Sync">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date</label>
-                    <input type="date" id="excomMeetingDate" class="glass-input w-full rounded py-3 md:py-4 px-4 text-sm font-light">
+                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Date</label>
+                    <input type="date" id="excomMeetingDate" class="light-input w-full rounded-xl py-3 px-4 text-sm font-medium">
                 </div>
             </div>
             
-            <label class="block text-[10px] font-bold text-white/50 mb-3 uppercase tracking-widest shrink-0">Mark Attendance</label>
+            <label class="block text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider shrink-0">Mark Attendance</label>
             
-            <div class="flex-grow overflow-y-auto mb-6 border border-white/10 rounded-xl bg-[#0a0c0f]">
+            <div class="flex-grow overflow-y-auto mb-6 border border-gray-200 rounded-xl bg-gray-50/50 shadow-inner">
                 <table class="w-full text-left min-w-full">
-                    <thead class="bg-white/5 sticky top-0 border-b border-white/10 text-[10px] uppercase tracking-widest font-bold text-white/50 z-10">
+                    <thead class="bg-white sticky top-0 border-b border-gray-200 text-xs uppercase tracking-wider font-bold text-gray-500 z-10 shadow-sm">
                         <tr>
-                            <th class="px-6 py-4 w-40 text-left">Status</th>
-                            <th class="px-6 py-4">Name</th>
+                            <th class="px-6 py-4 w-48 text-center border-r border-gray-100">Status</th>
+                            <th class="px-6 py-4">Committee Member</th>
                         </tr>
                     </thead>
-                    <tbody id="excomAttendanceList" class="divide-y divide-white/5"></tbody>
+                    <tbody id="excomAttendanceList" class="divide-y divide-gray-200 bg-white"></tbody>
                 </table>
             </div>
             
-            <div class="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 shrink-0">
-                <button onclick="document.getElementById('excomModal').classList.add('hidden')" class="w-full sm:flex-1 bg-transparent hover:bg-white/5 border border-white/20 text-white py-3 md:py-4 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Close</button>
-                <button id="saveExcomBtn" onclick="submitExcomAttendance()" class="w-full sm:flex-1 bg-white hover:bg-gray-200 text-[#0f1115] py-3 md:py-4 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Save Log</button>
+            <div class="flex justify-end gap-4 pt-2 shrink-0 border-t border-gray-100 pt-4">
+                <button onclick="document.getElementById('excomModal').classList.add('hidden')" class="px-8 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors shadow-sm">Cancel</button>
+                <button id="saveExcomBtn" onclick="submitExcomAttendance()" class="px-8 bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors flex gap-2 items-center"><i data-lucide="save" class="w-4 h-4"></i> Save Log</button>
             </div>
         </div>
     </div>
     
     <!-- REPORTS -->
-    <div id="reportsModal" class="fixed inset-0 bg-[#0f1115]/95 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-4xl h-[85vh] flex flex-col rounded-2xl relative overflow-hidden shadow-2xl border border-white/20">
-            <div class="p-6 md:p-8 border-b border-white/10 flex justify-between items-center bg-[#0a0c0f]">
-                <h2 class="text-xl md:text-2xl font-display font-bold text-white uppercase tracking-widest">Reports Console</h2>
-                <button onclick="document.getElementById('reportsModal').classList.add('hidden')" class="text-white/50 hover:text-white transition-colors"><i data-lucide="x"></i></button>
+    <div id="reportsModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-4xl h-[85vh] flex flex-col rounded-2xl relative overflow-hidden shadow-2xl border border-gray-100">
+            <div class="p-6 md:p-8 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h2 class="text-xl font-bold text-gray-800 uppercase tracking-wider">Reports Console</h2>
+                <button onclick="document.getElementById('reportsModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-800 transition-colors"><i data-lucide="x"></i></button>
             </div>
             <div class="flex-grow overflow-y-auto p-6 md:p-8" id="reportEventsList">
-                <p class="text-white/40 text-xs uppercase tracking-widest font-bold text-center mt-10">Select an event to view reports.</p>
+                <div class="flex flex-col items-center justify-center h-full text-center">
+                    <div class="w-16 h-16 bg-indigo-50 text-brand-primary rounded-full flex items-center justify-center mb-4">
+                        <i data-lucide="file-text" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-gray-500 text-sm tracking-wider uppercase font-bold">Select an event to view reports.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -668,7 +694,6 @@
         const btn = document.getElementById('mobile-menu-toggle');
         const menu = document.getElementById('mobile-sidebar');
         const overlay = document.getElementById('mobile-sidebar-overlay');
-        const closeBtn = document.querySelector('#mobile-sidebar button');
 
         window.toggleMobileSidebar = function() {
             if (menu.classList.contains('-translate-x-full')) { 
@@ -679,8 +704,6 @@
                 overlay.classList.add('hidden'); 
             }
         };
-
-        if(btn) btn.addEventListener('click', toggleMobileSidebar);
 
         // HELPER: ESCAPE STRINGS FOR HTML RENDERING
         function getSafeText(val) {
@@ -707,7 +730,7 @@
                     const userData = snapshot.data();
                     if (snapshot.exists() && userData.role === 'admin') {
                         currentUserEmail = user.email;
-                        safeSetText('adminEmailDisplay', user.email);
+                        safeSetText('adminEmailDisplay', user.email || 'Admin');
                         initSync();
                     } else { 
                         alert("Unauthorized. Admin access required."); signOut(auth).then(() => window.location.href = 'admin.html');
@@ -753,22 +776,22 @@
                     const safeRole = u.role || 'student';
 
                     if(safeRole === 'student' || safeRole === 'excom') {
-                        certHtml += `<tr class="border-b border-white/5"><td class="px-4 md:px-6 py-4 text-center"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${id}" data-name="${displayHtmlName}"></td><td class="text-xs md:text-sm font-light text-white whitespace-nowrap">${displayHtmlName}</td></tr>`;
-                        attHtml += `<tr class="hover:bg-white/5 cursor-pointer border-b border-white/5 transition-colors" onclick="toggleAttCheck('${id}')"><td class="px-4 md:px-6 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${id}" value="${id}"></td><td class="text-xs md:text-sm font-bold text-white whitespace-nowrap">${displayHtmlName}</td><td class="text-[10px] md:text-xs font-mono text-white/50">${escapeHTML(u.email || '')}</td></tr>`;
+                        certHtml += `<tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors"><td class="px-4 md:px-6 py-4 text-center"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${id}" data-name="${displayHtmlName}"></td><td class="text-sm font-medium text-gray-800 whitespace-nowrap">${displayHtmlName}</td></tr>`;
+                        attHtml += `<tr class="hover:bg-gray-50 cursor-pointer border-b border-gray-100 transition-colors" onclick="toggleAttCheck('${id}')"><td class="px-4 md:px-6 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${id}" value="${id}"></td><td class="text-sm font-bold text-gray-800 whitespace-nowrap">${displayHtmlName}</td><td class="text-xs text-gray-500">${escapeHTML(u.email || '')}</td></tr>`;
                     }
                     if(safeRole === 'excom') {
-                        excomHtml += `<div class="flex justify-between items-center bg-white/5 border border-white/10 p-3 md:p-4 rounded-xl mb-2"><span class="font-bold text-xs md:text-sm text-white">${displayHtmlName}</span><span class="text-[8px] md:text-[9px] font-bold uppercase tracking-[0.2em] text-white/50 border border-white/10 px-2 py-1 rounded">ExCom</span></div>`;
+                        excomHtml += `<div class="flex justify-between items-center bg-gray-50 border border-gray-100 p-3 md:p-4 rounded-xl mb-2"><span class="font-bold text-sm text-gray-800">${displayHtmlName}</span><span class="text-[9px] font-bold uppercase tracking-[0.2em] text-brand-primary bg-indigo-100 px-3 py-1.5 rounded-md">ExCom</span></div>`;
                         
                         excomModalHtml += `
-                        <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
-                            <td class="px-6 py-3">
-                                <select class="excom-status-select glass-input text-xs uppercase font-bold py-2 px-3 rounded cursor-pointer w-full text-center" data-id="${id}" data-name="${displayHtmlName}">
-                                    <option value="Absent" class="text-red-500">Absent</option>
-                                    <option value="Present" class="text-green-500">Present</option>
-                                    <option value="Informed" class="text-yellow-500">Informed</option>
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+                            <td class="px-6 py-3 border-r border-gray-100 text-center">
+                                <select class="excom-status-select light-input text-xs uppercase font-bold py-2 px-3 rounded-lg cursor-pointer w-full text-center shadow-sm" data-id="${id}" data-name="${displayHtmlName}">
+                                    <option value="Absent" class="text-red-600">Absent</option>
+                                    <option value="Present" class="text-green-600">Present</option>
+                                    <option value="Informed" class="text-yellow-600">Informed</option>
                                 </select>
                             </td>
-                            <td class="text-sm font-bold text-white px-6 whitespace-nowrap">${displayHtmlName}</td>
+                            <td class="text-sm font-bold text-gray-800 px-6 whitespace-nowrap">${displayHtmlName}</td>
                         </tr>`;
                     }
                 } catch(err) {
@@ -780,7 +803,7 @@
             
             if(document.getElementById('certUserListBody')) document.getElementById('certUserListBody').innerHTML = certHtml;
             if(document.getElementById('attendanceListBody')) document.getElementById('attendanceListBody').innerHTML = attHtml;
-            if(document.getElementById('excomMembersList')) document.getElementById('excomMembersList').innerHTML = excomHtml || '<p class="text-white/40 text-xs italic">No ExCom members configured.</p>';
+            if(document.getElementById('excomMembersList')) document.getElementById('excomMembersList').innerHTML = excomHtml || '<p class="text-gray-400 text-sm italic py-4 text-center">No ExCom members configured.</p>';
             if(document.getElementById('excomAttendanceList')) document.getElementById('excomAttendanceList').innerHTML = excomModalHtml;
             lucide.createIcons();
         }
@@ -793,7 +816,7 @@
             }, (error) => {
                 console.error("Error fetching users:", error);
                 const tbody = document.getElementById('userListBody');
-                if(tbody) tbody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-red-400 text-xs tracking-widest uppercase font-bold">Error loading users. Check console.</td></tr>`;
+                if(tbody) tbody.innerHTML = `<tr><td colspan="4" class="text-center py-10 text-red-500 text-sm font-semibold">Error loading users. Check console.</td></tr>`;
             });
         }
 
@@ -827,7 +850,7 @@
                 snap.forEach(d => {
                     const l = d.data();
                     const date = new Date(l.timestamp).toLocaleString();
-                    h += `<tr class="border-b border-white/5 text-xs"><td class="px-4 md:px-6 py-4 md:py-5 text-white/50 font-mono whitespace-nowrap">${date}</td><td class="text-white font-bold uppercase tracking-wider text-[9px] md:text-[10px] px-4">${l.action}</td><td class="text-white/70 tracking-wide px-4 min-w-[200px]">${l.details}</td><td class="text-white/40 font-mono px-4 break-all">${l.admin}</td></tr>`;
+                    h += `<tr class="hover:bg-gray-50 transition-colors text-sm"><td class="px-6 py-4 text-gray-500 font-mono whitespace-nowrap">${date}</td><td class="text-gray-800 font-bold uppercase text-[10px] tracking-wider px-6">${l.action}</td><td class="text-gray-600 px-6 min-w-[200px]">${l.details}</td><td class="text-gray-400 font-mono px-6 text-xs break-all">${l.admin}</td></tr>`;
                 });
                 if(document.getElementById('logsListBody')) document.getElementById('logsListBody').innerHTML = h;
             });
@@ -838,11 +861,11 @@
                     const id = d.id;
                     const item = d.data();
                     total++; if(item.status === 'Available') avail++; else borrowed++;
-                    const btn = item.status === 'Available' ? `<button onclick="toggleItemStatus('${id}', 'Borrowed')" class="text-white/70 hover:text-white border border-white/20 hover:border-white/50 bg-white/5 px-3 py-1.5 md:px-4 md:py-2 rounded text-[8px] md:text-[9px] uppercase tracking-widest font-bold transition-all">Lend</button>` : `<button onclick="toggleItemStatus('${id}', 'Available')" class="text-[#0f1115] bg-white hover:bg-gray-200 px-3 py-1.5 md:px-4 md:py-2 rounded text-[8px] md:text-[9px] uppercase tracking-widest font-bold transition-all">Return</button>`;
+                    const btn = item.status === 'Available' ? `<button onclick="toggleItemStatus('${id}', 'Borrowed')" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-600 px-4 py-2 rounded-lg text-[10px] uppercase tracking-widest font-bold transition-all shadow-sm">Lend</button>` : `<button onclick="toggleItemStatus('${id}', 'Available')" class="bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 px-4 py-2 rounded-lg text-[10px] uppercase tracking-widest font-bold transition-all">Return</button>`;
                     
-                    const statusBadge = item.status === 'Available' ? `<span class="text-[8px] md:text-[9px] font-bold uppercase tracking-widest px-2 py-1 md:px-3 md:py-1.5 rounded border text-white bg-white/10 border-white/20">${item.status}</span>` : `<span class="text-[8px] md:text-[9px] font-bold uppercase tracking-widest px-2 py-1 md:px-3 md:py-1.5 rounded border text-white/50 bg-transparent border-white/10">${item.status}</span>`;
+                    const statusBadge = item.status === 'Available' ? `<span class="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-md text-green-700 bg-green-50 border border-green-100">${item.status}</span>` : `<span class="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-md text-red-700 bg-red-50 border border-red-100">${item.status}</span>`;
 
-                    h += `<tr class="border-b border-white/5"><td class="px-4 md:px-6 py-4 md:py-5 text-xs md:text-sm font-bold text-white whitespace-nowrap">${item.name}</td><td class="text-[9px] md:text-[10px] text-white/50 uppercase tracking-widest font-bold px-4">${item.category}</td><td class="px-4">${statusBadge}</td><td class="text-[10px] md:text-xs text-white/80 font-medium px-4">${item.holder||'-'}</td><td class="text-center flex items-center justify-center gap-3 md:gap-4 py-4 px-4">${btn}<button onclick="deleteDoc(doc(db,'inventory','${id}'))" class="text-red-400/70 hover:text-red-400 transition-colors p-2"><i data-lucide="trash-2" class="w-3 h-3 md:w-4 md:h-4"></i></button></td></tr>`;
+                    h += `<tr class="hover:bg-gray-50 transition-colors"><td class="px-6 py-4 text-sm font-bold text-gray-800 whitespace-nowrap">${item.name}</td><td class="text-xs text-gray-500 uppercase tracking-wider font-semibold px-6">${item.category}</td><td class="px-6">${statusBadge}</td><td class="text-sm text-gray-600 font-medium px-6">${item.holder||'-'}</td><td class="text-center flex items-center justify-center gap-4 py-4 px-6">${btn}<button onclick="deleteDoc(doc(db,'inventory','${id}'))" class="text-red-400 hover:text-red-600 transition-colors p-2 bg-red-50 rounded-lg"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
                 });
                 if(document.getElementById('inventoryListBody')) document.getElementById('inventoryListBody').innerHTML = h;
                 safeSetText('invTotalOverview', total); safeSetText('invTotal', total); safeSetText('invAvail', avail); safeSetText('invBorrowed', borrowed);
@@ -856,16 +879,16 @@
                     const m = { id: d.id, ...d.data() };
                     excomMeetingsData.push(m);
                     h += `
-                    <div class="bg-white/5 border border-white/10 p-4 rounded-xl mb-3">
+                    <div class="bg-gray-50 border border-gray-100 p-4 rounded-xl mb-3 shadow-sm">
                         <div class="flex justify-between items-start mb-3">
-                            <h4 class="font-bold text-white text-xs md:text-sm uppercase tracking-wider">${escapeHTML(m.title)}</h4>
-                            <span class="text-[9px] md:text-[10px] text-white/50 bg-black/50 px-2 py-1 rounded border border-white/10 font-mono">${m.date}</span>
+                            <h4 class="font-bold text-gray-800 text-sm uppercase tracking-wide">${escapeHTML(m.title)}</h4>
+                            <span class="text-[10px] text-gray-500 bg-white px-2 py-1 rounded border border-gray-200 font-mono shadow-sm">${m.date}</span>
                         </div>
-                        <button onclick="printExcomMeeting('${m.id}')" class="text-[9px] bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-2 rounded text-white uppercase tracking-widest font-bold transition-colors flex items-center justify-center gap-2 w-full"><i data-lucide="printer" class="w-3 h-3"></i> Print Report</button>
+                        <button onclick="printExcomMeeting('${m.id}')" class="text-[10px] bg-white hover:bg-gray-100 border border-gray-200 px-4 py-2.5 rounded-lg text-gray-700 uppercase tracking-widest font-bold transition-colors flex items-center justify-center gap-2 w-full shadow-sm"><i data-lucide="printer" class="w-3 h-3"></i> Print Report</button>
                     </div>`;
                 });
                 const list = document.getElementById('excomMeetingsList');
-                if(list) list.innerHTML = h || '<p class="text-white/40 text-xs italic">No meetings logged yet.</p>';
+                if(list) list.innerHTML = h || '<p class="text-gray-400 text-sm italic py-4 text-center">No meetings logged yet.</p>';
                 lucide.createIcons();
             });
 
@@ -873,7 +896,7 @@
             onSnapshot(collection(db, "eventForms"), (s) => {
                 safeSetText('activeFormsCount', s.size);
                 let h=''; 
-                s.forEach(d => h += `<div class="bg-white/5 border border-white/10 p-4 md:p-5 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mt-3"><span class="text-xs md:text-sm font-bold text-white tracking-wide break-all">${d.data().title}</span><button onclick="deleteDoc(doc(db,'eventForms','${d.id}'))" class="text-red-400/70 hover:text-red-400 text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-colors flex items-center gap-2 bg-red-500/10 px-3 py-1.5 rounded"><i data-lucide="trash-2" class="w-3 h-3"></i> Del</button></div>`);
+                s.forEach(d => h += `<div class="bg-gray-50 border border-gray-100 p-4 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mt-3 shadow-sm"><span class="text-sm font-bold text-gray-800 break-all">${d.data().title}</span><button onclick="deleteDoc(doc(db,'eventForms','${d.id}'))" class="text-red-600 hover:text-red-700 text-[10px] font-bold uppercase tracking-widest transition-colors flex items-center gap-2 bg-red-50 border border-red-100 px-3 py-2 rounded-lg shadow-sm"><i data-lucide="trash-2" class="w-3 h-3"></i> Delete</button></div>`);
                 if(document.getElementById('activeFormsList')) document.getElementById('activeFormsList').innerHTML = h;
                 lucide.createIcons();
             });
@@ -885,9 +908,10 @@
             const btn = document.getElementById('saveExcomBtn');
             btn.disabled = false;
             btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            btn.innerText = "Save Log";
+            btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log';
             document.querySelectorAll('.excom-status-select').forEach(s => s.value = 'Absent');
             document.getElementById('excomModal').classList.remove('hidden');
+            lucide.createIcons();
         };
 
         document.getElementById('excomMeetingDate').addEventListener('change', (e) => {
@@ -899,12 +923,13 @@
                 alert("A meeting is already logged for this date. You cannot overwrite it.");
                 btn.disabled = true;
                 btn.classList.add('opacity-50', 'cursor-not-allowed');
-                btn.innerText = "Date Locked";
+                btn.innerHTML = '<i data-lucide="lock" class="w-4 h-4"></i> Date Locked';
             } else {
                 btn.disabled = false;
                 btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                btn.innerText = "Save Log";
+                btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log';
             }
+            lucide.createIcons();
         });
 
         window.submitExcomAttendance = async () => {
@@ -922,7 +947,8 @@
 
             const btn = document.getElementById('saveExcomBtn');
             btn.disabled = true; 
-            btn.innerText = "Saving...";
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Saving...`;
+            lucide.createIcons();
 
             try {
                 await addDoc(collection(db, "excom_meetings"), { 
@@ -935,15 +961,12 @@
                 await logActivity("ExCom Logged", `Meeting: ${date}`);
                 alert("Meeting Logged Successfully!"); 
                 document.getElementById('excomModal').classList.add('hidden');
-                
-                document.getElementById('excomMeetingTitle').value = '';
-                document.getElementById('excomMeetingDate').value = '';
-                document.querySelectorAll('.excom-status-select').forEach(s => s.value = 'Absent');
             } catch(e) {
                 alert(e.message);
             } finally {
                 btn.disabled = false; 
-                btn.innerText = "Save Log";
+                btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log';
+                lucide.createIcons();
             }
         };
 
@@ -955,7 +978,13 @@
             if(m.attendance && Array.isArray(m.attendance)) {
                 m.attendance.forEach(a => {
                     let color = a.status === 'Present' ? '#16a34a' : a.status === 'Informed' ? '#d97706' : '#dc2626';
-                    rows += `<tr><td>${a.name}</td><td style="color:${color}; font-weight:bold; text-transform:uppercase; font-size:10px; letter-spacing:1px;">${a.status}</td></tr>`;
+                    let bg = a.status === 'Present' ? '#f0fdf4' : a.status === 'Informed' ? '#fffbeb' : '#fef2f2';
+                    rows += `<tr style="border-bottom:1px solid #eee;">
+                        <td style="padding:12px; font-weight:600;">${a.name}</td>
+                        <td style="padding:12px; text-align:right;">
+                            <span style="color:${color}; background:${bg}; padding:4px 8px; border-radius:4px; font-weight:bold; text-transform:uppercase; font-size:10px; letter-spacing:1px; border:1px solid ${color}30;">${a.status}</span>
+                        </td>
+                    </tr>`;
                 });
             }
 
@@ -965,30 +994,32 @@
                 <head>
                     <title>ExCom Meeting Report</title>
                     <style>
-                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #333; }
-                        h2 { text-transform: uppercase; letter-spacing: 2px; color: #000; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 5px; }
-                        .meta { font-size: 12px; color: #666; margin-bottom: 30px; }
-                        table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top:20px; }
-                        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-                        th { background-color: #f8f9fa; font-weight: bold; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; }
+                        body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; padding: 40px; color: #333; max-width:800px; margin:0 auto; }
+                        h2 { text-transform: uppercase; letter-spacing: 2px; color: #111; border-bottom: 2px solid #111; padding-bottom: 10px; margin-bottom: 20px; font-size: 24px; }
+                        .meta { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #eaeaea; font-size: 13px; color: #555; margin-bottom: 30px; }
+                        .meta p { margin: 5px 0; }
+                        table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top:20px; border: 1px solid #eaeaea; }
+                        th { background-color: #f1f5f9; font-weight: bold; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; color: #64748b; padding:15px 12px; text-align:left; border-bottom: 2px solid #e2e8f0; }
+                        td { border-bottom: 1px solid #f1f5f9; }
                     </style>
                 </head>
                 <body>
-                    <h2>ExCom Meeting Attendance</h2>
+                    <h2>ExCom Attendance Report</h2>
                     <div class="meta">
-                        <p><strong>Name / Topic:</strong> ${m.title || 'General Meeting'}</p>
-                        <p><strong>Date:</strong> ${m.date}</p>
-                        <p><strong>Logged By:</strong> ${m.loggedBy || 'System Admin'}</p>
+                        <p><strong>Meeting Topic:</strong> <span style="color:#000; font-weight:bold;">${m.title || 'General Meeting'}</span></p>
+                        <p><strong>Date of Meeting:</strong> ${m.date}</p>
+                        <p><strong>Recorded By:</strong> ${m.loggedBy || 'System Admin'}</p>
+                        <p><strong>Generated On:</strong> ${new Date().toLocaleString()}</p>
                     </div>
                     <table>
                         <thead>
                             <tr>
-                                <th>Member Name</th>
-                                <th>Attendance Status</th>
+                                <th>Committee Member</th>
+                                <th style="text-align:right;">Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            ${rows || '<tr><td colspan="2">No detailed records found for this legacy meeting.</td></tr>'}
+                            ${rows || '<tr><td colspan="2" style="padding:20px;text-align:center;color:#999;">No detailed records found.</td></tr>'}
                         </tbody>
                     </table>
                     <script>
@@ -1013,14 +1044,14 @@
                 <head>
                     <title>System Logs - MET'S IEDC</title>
                     <style>
-                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #333; }
-                        h2 { text-transform: uppercase; letter-spacing: 2px; color: #000; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 5px; }
+                        body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; padding: 40px; color: #333; }
+                        h2 { text-transform: uppercase; letter-spacing: 2px; color: #111; border-bottom: 2px solid #111; padding-bottom: 10px; margin-bottom: 5px; }
                         .meta { font-size: 12px; color: #666; margin-bottom: 30px; font-style: italic; }
                         table { width: 100%; border-collapse: collapse; font-size: 12px; }
                         th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-                        th { background-color: #f8f9fa; font-weight: bold; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; }
-                        /* Strip Tailwind dark mode text colors for clean black-on-white printing */
-                        * { color: #000 !important; }
+                        th { background-color: #f1f5f9; font-weight: bold; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; color: #475569; }
+                        * { color: #000 !important; background: transparent !important; }
+                        th { background-color: #eee !important; }
                     </style>
                 </head>
                 <body>
@@ -1032,7 +1063,7 @@
                                 <th>Timestamp</th>
                                 <th>Action</th>
                                 <th>Details</th>
-                                <th>Admin / User</th>
+                                <th>Admin User</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1058,32 +1089,37 @@
                     const safeProvider = u.authProvider || "email";
                     
                     let roleBadge = '';
-                    if(safeRole === 'admin') roleBadge = 'text-white bg-white/10 border-white/20';
-                    else if(safeRole === 'excom') roleBadge = 'text-white/80 bg-white/5 border-white/10';
-                    else roleBadge = 'text-white/50 bg-transparent border-white/5';
+                    if(safeRole === 'admin') roleBadge = 'text-brand-primary bg-indigo-100 border-indigo-200';
+                    else if(safeRole === 'excom') roleBadge = 'text-brand-yellow bg-yellow-50 border-yellow-200';
+                    else roleBadge = 'text-gray-500 bg-gray-100 border-gray-200';
 
                     let authBadge = '';
                     if(safeProvider === 'google') {
-                        authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-white/10 text-white border border-white/20"><i class="fab fa-google"></i> Google</span>';
+                        authBadge = '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200"><i class="fab fa-google"></i> Google</span>';
                     } else if(safeProvider === 'phone') {
-                        authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-white/5 text-white/70 border border-white/10"><i data-lucide="smartphone" class="w-3 h-3"></i> Phone</span>';
+                        authBadge = '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200"><i data-lucide="smartphone" class="w-3 h-3"></i> Phone</span>';
                     } else {
-                        authBadge = '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-white/5 text-white/70 border border-white/10"><i data-lucide="mail" class="w-3 h-3"></i> Password</span>';
+                        authBadge = '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200"><i data-lucide="mail" class="w-3 h-3"></i> Email</span>';
                     }
 
-                    uHtml += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
-                        <td class="px-4 md:px-6 py-4 md:py-5 text-xs md:text-sm font-bold text-white whitespace-nowrap">${displayHtmlName}</td>
-                        <td class="py-4 px-4 md:px-6">
+                    uHtml += `<tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
+                        <td class="px-6 py-5 text-sm font-bold text-gray-800 whitespace-nowrap">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold text-xs uppercase">${displayHtmlName.charAt(0)}</div>
+                                ${displayHtmlName}
+                            </div>
+                        </td>
+                        <td class="py-4 px-6">
                             <div class="flex flex-col items-start gap-1.5">
-                                <span class="text-[10px] md:text-xs text-white/50 font-mono">${safeEmail}</span>
+                                <span class="text-xs text-gray-500 font-medium">${safeEmail}</span>
                                 ${authBadge}
                             </div>
                         </td>
-                        <td class="px-4 md:px-6"><span class="uppercase text-[8px] md:text-[9px] tracking-widest font-bold px-2 py-1 md:px-3 md:py-1.5 rounded border ${roleBadge}">${safeRole}</span></td>
-                        <td class="text-center py-4 px-4 md:px-6">
-                            <div class="flex items-center justify-center gap-3 md:gap-4">
-                                <button class="edit-user-btn text-white/50 hover:text-white transition-colors p-2" data-id="${u.id}" data-name="${displayHtmlName}" data-role="${safeRole}"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                                <button class="delete-user-btn text-red-400/70 hover:text-red-400 transition-colors p-2" data-id="${u.id}" data-name="${displayHtmlName}"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        <td class="px-6"><span class="uppercase text-[9px] tracking-wider font-bold px-3 py-1.5 rounded-md border ${roleBadge}">${safeRole}</span></td>
+                        <td class="text-center py-4 px-6">
+                            <div class="flex items-center justify-center gap-3">
+                                <button class="edit-user-btn bg-white border border-gray-200 text-gray-500 hover:text-brand-primary hover:border-brand-primaryLight hover:bg-brand-primaryLight transition-all p-2 rounded-lg shadow-sm" data-id="${u.id}" data-name="${displayHtmlName}" data-role="${safeRole}"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                                <button class="delete-user-btn bg-white border border-gray-200 text-red-400 hover:text-red-600 hover:bg-red-50 hover:border-red-100 transition-all p-2 rounded-lg shadow-sm" data-id="${u.id}" data-name="${displayHtmlName}"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                             </div>
                         </td>
                     </tr>`;
@@ -1092,7 +1128,7 @@
                 }
             });
             const tbody = document.getElementById('userListBody');
-            if(tbody) tbody.innerHTML = uHtml || '<tr><td colspan="4" class="text-center py-8 text-white/40 text-xs tracking-widest uppercase font-bold">No users found.</td></tr>';
+            if(tbody) tbody.innerHTML = uHtml || '<tr><td colspan="4" class="text-center py-10 text-gray-400 text-sm font-medium tracking-wide">No users found.</td></tr>';
             lucide.createIcons();
         };
 
@@ -1132,16 +1168,16 @@
         window.switchAddMode = (mode) => {
             document.getElementById('addUserMode').value = mode;
             if(mode === 'create') {
-                document.getElementById('tabCreateNew').className = "flex-1 pb-3 text-[10px] font-bold uppercase tracking-widest border-b-2 border-white text-white transition-colors";
-                document.getElementById('tabSyncExisting').className = "flex-1 pb-3 text-[10px] font-bold uppercase tracking-widest border-b-2 border-transparent text-white/50 hover:text-white transition-colors";
+                document.getElementById('tabCreateNew').className = "flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-md bg-white shadow-sm text-brand-primary transition-all";
+                document.getElementById('tabSyncExisting').className = "flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-md text-gray-500 hover:text-gray-800 transition-all";
                 document.getElementById('passwordFieldGroup').classList.remove('hidden');
                 document.getElementById('newUserPassword').required = true;
                 document.getElementById('uidFieldGroup').classList.add('hidden');
                 document.getElementById('newUserUid').required = false;
                 document.getElementById('submitAddUserBtn').innerText = "Create User";
             } else {
-                document.getElementById('tabSyncExisting').className = "flex-1 pb-3 text-[10px] font-bold uppercase tracking-widest border-b-2 border-white text-white transition-colors";
-                document.getElementById('tabCreateNew').className = "flex-1 pb-3 text-[10px] font-bold uppercase tracking-widest border-b-2 border-transparent text-white/50 hover:text-white transition-colors";
+                document.getElementById('tabSyncExisting').className = "flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-md bg-white shadow-sm text-brand-primary transition-all";
+                document.getElementById('tabCreateNew').className = "flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-md text-gray-500 hover:text-gray-800 transition-all";
                 document.getElementById('passwordFieldGroup').classList.add('hidden');
                 document.getElementById('newUserPassword').required = false;
                 document.getElementById('uidFieldGroup').classList.remove('hidden');
@@ -1269,7 +1305,21 @@
             });
         }
 
-        window.showTab = (t) => { document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); document.getElementById(t+'Section').classList.remove('hidden'); document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active')); document.getElementById('nav-'+t).classList.add('active'); };
+        window.showTab = (t) => { 
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); 
+            document.getElementById(t+'Section').classList.remove('hidden'); 
+            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active')); 
+            
+            const activeDesktop = document.getElementById('nav-'+t);
+            if(activeDesktop) activeDesktop.classList.add('active');
+
+            // Set Title dynamically
+            let title = t.charAt(0).toUpperCase() + t.slice(1);
+            if(t === 'eventForms') title = "Forms";
+            if(t === 'excom') title = "ExCom";
+            document.getElementById('headerTitle').textContent = title;
+        };
+
         window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
         window.toggleEditUserModal = (s) => document.getElementById('editUserModal').classList.toggle('hidden', !s);
         window.handleNewsImage = (e) => { newsImageFile = e.target.files[0]; document.getElementById('newsFileName').textContent = newsImageFile.name; };
@@ -1282,28 +1332,7 @@
         document.getElementById('adminLogoutBtn').addEventListener('click', async () => {
             const btn = document.getElementById('adminLogoutBtn');
             btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Logging Out...`;
-            lucide.createIcons();
-            
-            try {
-                await addDoc(collection(db, "logs"), {
-                    action: "Admin Logout",
-                    details: "Admin securely logged out",
-                    admin: currentUserEmail || "Unknown Admin",
-                    timestamp: Date.now()
-                });
-            } catch(e) {
-                console.error("Failed to write logout log:", e);
-            }
-            
-            signOut(auth).then(()=>window.location.href='admin.html');
-        });
-        
-        // Add listener for mobile logout button as well
-        document.getElementById('adminLogoutBtnMobile').addEventListener('click', async () => {
-            const btn = document.getElementById('adminLogoutBtnMobile');
-            btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Logging Out...`;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Logging Out...`;
             lucide.createIcons();
             
             try {
