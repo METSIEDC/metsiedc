@@ -205,7 +205,6 @@
                         <p class="text-indigo-800/70 text-sm md:text-base max-w-md leading-relaxed">Ready to start your day? Here is what is happening across the IEDC platform today.</p>
                     </div>
                     <div class="hidden lg:block opacity-90">
-                        <!-- Simple placeholder illustration using SVG -->
                         <svg width="150" height="100" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="20" y="20" width="160" height="100" rx="10" fill="#4d44b5" opacity="0.1"/>
                             <rect x="40" y="40" width="120" height="60" rx="5" fill="#4d44b5" opacity="0.2"/>
@@ -220,25 +219,21 @@
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                    <!-- Total Users (Yellow) -->
                     <div class="bg-brand-yellow p-6 md:p-8 rounded-2xl shadow-md shadow-yellow-200/50 flex flex-col relative overflow-hidden text-white">
                         <i data-lucide="users" class="absolute -right-4 -bottom-4 w-24 h-24 text-white/20"></i>
                         <p class="text-white/90 text-sm font-semibold mb-2 relative z-10">Total Users</p>
                         <h3 class="text-4xl md:text-5xl font-black relative z-10" id="totalUsersCount">0</h3>
                     </div>
-                    <!-- Assets (Purple) -->
                     <div class="bg-brand-primary p-6 md:p-8 rounded-2xl shadow-md shadow-indigo-200/50 flex flex-col relative overflow-hidden text-white">
                         <i data-lucide="box" class="absolute -right-4 -bottom-4 w-24 h-24 text-white/10"></i>
                         <p class="text-white/80 text-sm font-semibold mb-2 relative z-10">Inventory Assets</p>
                         <h3 class="text-4xl md:text-5xl font-black relative z-10" id="invTotalOverview">0</h3>
                     </div>
-                    <!-- Announcements (Pink) -->
                     <div class="bg-brand-pink p-6 md:p-8 rounded-2xl shadow-md shadow-pink-200/50 flex flex-col relative overflow-hidden text-white">
                         <i data-lucide="bell" class="absolute -right-4 -bottom-4 w-24 h-24 text-white/20"></i>
                         <p class="text-white/90 text-sm font-semibold mb-2 relative z-10">Announcements</p>
                         <h3 class="text-4xl md:text-5xl font-black relative z-10" id="totalAnnouncementsCount">0</h3>
                     </div>
-                    <!-- Forms (Light Purple) -->
                     <div class="bg-brand-purpleLight p-6 md:p-8 rounded-2xl shadow-md shadow-purple-200/50 flex flex-col relative overflow-hidden text-white">
                         <i data-lucide="file-text" class="absolute -right-4 -bottom-4 w-24 h-24 text-white/20"></i>
                         <p class="text-white/90 text-sm font-semibold mb-2 relative z-10">Active Forms</p>
@@ -248,192 +243,256 @@
             </div>
 
             <!-- 2. USERS MANAGEMENT -->
-            <div id="usersSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-2">
-                    <div class="flex gap-2 w-full lg:w-auto overflow-x-auto pb-2 lg:pb-0 scrollbar-hide flex-grow max-w-2xl">
-                        <div class="relative flex-grow">
-                            <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search Name or Email..." class="light-input w-full pl-10 pr-4 py-3 rounded-xl text-sm shadow-sm">
-                            <i data-lucide="search" class="absolute left-3.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+            <div id="usersSection" class="tab-content hidden space-y-6 md:space-y-8 max-w-7xl mx-auto w-full">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 md:gap-6 mb-2 px-2 md:px-0">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white tracking-tight uppercase">User Management</h2>
+                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide flex items-center gap-3">
+                            Manage students and roles. 
+                            <span class="inline-flex items-center justify-center px-3 py-1 bg-white/10 rounded-full text-white text-[10px] font-bold uppercase tracking-widest">
+                                Total: <span id="manageUsersTotalCount" class="ml-1">0</span>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="flex gap-2 w-full lg:w-auto overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
+                        <div class="relative min-w-[150px] md:min-w-[200px] flex-grow">
+                            <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search Name or Email..." class="light-input w-full pl-10 md:pl-12 pr-4 py-3 md:py-3.5 rounded text-xs md:text-sm font-light">
+                            <i data-lucide="search" class="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"></i>
                         </div>
-                        <button onclick="forceRefreshUsers(this)" class="flex-shrink-0 bg-white border border-gray-200 text-gray-600 hover:text-brand-primary hover:border-brand-primaryLight hover:bg-brand-primaryLight px-4 py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm" title="Refresh Users">
+                        <button onclick="forceRefreshUsers(this)" class="flex-shrink-0 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-3 md:py-3.5 rounded transition-colors flex items-center justify-center gap-2" title="Force Fetch Users From Server">
                             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                            <span class="text-[10px] uppercase tracking-widest font-bold whitespace-nowrap hidden sm:inline">Refresh</span>
+                        </button>
+                        <button onclick="toggleAddUserModal(true)" class="flex-shrink-0 bg-white hover:bg-gray-200 text-[#0f1115] px-4 md:px-6 py-3 md:py-3.5 rounded text-[10px] uppercase tracking-widest font-bold whitespace-nowrap transition-colors flex items-center gap-2">
+                            <i data-lucide="user-plus" class="w-4 h-4"></i> Add User
                         </button>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden w-full">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left min-w-[600px]">
-                            <thead class="bg-gray-50 border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wider uppercase">
-                                <tr>
-                                    <th class="px-6 py-4">User Name</th>
-                                    <th class="px-6 py-4">Email / Auth</th>
-                                    <th class="px-6 py-4">Role</th>
-                                    <th class="text-center px-6 py-4">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="userListBody" class="divide-y divide-gray-100">
-                                <tr><td colspan="4" class="text-center py-10 text-gray-400 text-sm font-medium">Loading users...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="p-4 mx-2 md:mx-0 bg-white/5 border border-white/10 rounded-xl flex items-start gap-3 md:gap-4">
+                    <i data-lucide="info" class="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0"></i>
+                    <p class="text-[10px] md:text-xs text-white/70 font-light leading-relaxed">
+                        <strong class="text-white">Missing users?</strong> If a user exists in the Authentication console but not here, it means their database profile hasn't been created yet. Click "Add User" and use the <strong>Sync Existing User</strong> tab to link their Auth UID manually without changing their password!
+                    </p>
+                </div>
+
+                <div class="glass-panel rounded-2xl overflow-x-auto w-full">
+                    <table class="w-full text-left min-w-[600px]">
+                        <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50">
+                            <tr><th class="px-4 md:px-6 py-4 md:py-5">Name</th><th class="px-4 md:px-6">Email / Auth Method</th><th class="px-4 md:px-6">Role</th><th class="text-center px-4 md:px-6">Actions</th></tr>
+                        </thead>
+                        <tbody id="userListBody" class="divide-y divide-white/5">
+                            <tr><td colspan="4" class="text-center py-8 text-white/40 text-xs tracking-widest uppercase font-bold">Loading users...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <!-- 3. INVENTORY -->
-            <div id="inventorySection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div class="flex gap-4">
-                        <div class="bg-white px-5 py-3 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-brand-yellow"></div><span class="text-xs font-bold text-gray-600 uppercase tracking-wide">Total: <span id="invTotal" class="text-gray-900 text-sm ml-1">0</span></span></div>
-                        <div class="bg-white px-5 py-3 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-green-500"></div><span class="text-xs font-bold text-gray-600 uppercase tracking-wide">Avail: <span id="invAvail" class="text-gray-900 text-sm ml-1">0</span></span></div>
+            <div id="inventorySection" class="tab-content hidden space-y-6 md:space-y-8 max-w-7xl mx-auto w-full">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-2 md:px-0">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white tracking-tight uppercase">Asset Inventory</h2>
+                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Manage IEDC hardware and resources.</p>
                     </div>
-                    <button onclick="document.getElementById('addItemModal').classList.remove('hidden')" class="bg-brand-primary hover:bg-indigo-700 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2 transition-colors shadow-md shadow-indigo-200">
+                    <button onclick="document.getElementById('addItemModal').classList.remove('hidden')" class="bg-white hover:bg-gray-200 text-[#0f1115] px-6 py-3 rounded text-[10px] uppercase tracking-widest font-bold flex items-center gap-3 transition-colors">
                         <i data-lucide="plus" class="w-4 h-4"></i> Add Asset
                     </button>
                 </div>
-                
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden w-full">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left min-w-[600px]">
-                            <thead class="bg-gray-50 border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wider uppercase">
-                                <tr><th class="px-6 py-4">Item Name</th><th class="px-6 py-4">Category</th><th class="px-6 py-4">Status</th><th class="px-6 py-4">Holder</th><th class="text-center px-6 py-4">Action</th></tr>
-                            </thead>
-                            <tbody id="inventoryListBody" class="divide-y divide-gray-100"></tbody>
-                        </table>
-                    </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+                    <div class="glass-panel p-6 rounded-2xl border border-white/10 flex justify-between items-center"><span class="text-white/50 text-[10px] md:text-xs font-bold uppercase tracking-widest">Total Assets</span><span class="text-2xl font-display font-bold text-white" id="invTotal">0</span></div>
+                    <div class="glass-panel p-6 rounded-2xl border border-white/10 flex justify-between items-center"><span class="text-white/50 text-[10px] md:text-xs font-bold uppercase tracking-widest">Available</span><span class="text-2xl font-display font-bold text-white" id="invAvail">0</span></div>
+                    <div class="glass-panel p-6 rounded-2xl border border-white/10 flex justify-between items-center"><span class="text-white/50 text-[10px] md:text-xs font-bold uppercase tracking-widest">Borrowed</span><span class="text-2xl font-display font-bold text-white" id="invBorrowed">0</span></div>
+                </div>
+                <div class="glass-panel rounded-2xl overflow-x-auto w-full">
+                    <table class="w-full text-left min-w-[500px]">
+                        <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50">
+                            <tr><th class="px-4 md:px-6 py-4">Item Name</th><th class="px-4">Category</th><th class="px-4">Status</th><th class="px-4">Holder</th><th class="text-center px-4">Action</th></tr>
+                        </thead>
+                        <tbody id="inventoryListBody" class="divide-y divide-white/5"></tbody>
+                    </table>
                 </div>
             </div>
 
             <!-- 4. LOGS -->
-            <div id="logsSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <p class="text-gray-500 text-sm">Monitor recent administrative actions.</p>
-                    <button onclick="printLogs()" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 px-5 py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm font-semibold shadow-sm">
-                        <i data-lucide="printer" class="w-4 h-4"></i> Print Logs
+            <div id="logsSection" class="tab-content hidden space-y-6 md:space-y-8 max-w-7xl mx-auto w-full">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-2 md:px-0">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white tracking-tight uppercase">System Logs</h2>
+                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Monitor recent administrative actions.</p>
+                    </div>
+                    <button onclick="printLogs()" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-5 py-3 rounded transition-colors flex items-center justify-center gap-2" title="Print Activity Logs">
+                        <i data-lucide="printer" class="w-4 h-4"></i>
+                        <span class="text-[10px] uppercase tracking-widest font-bold whitespace-nowrap">Print Logs</span>
                     </button>
                 </div>
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden w-full max-h-[600px] overflow-y-auto">
-                    <table class="w-full text-left min-w-[600px]">
-                        <thead class="bg-gray-50 border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wider uppercase sticky top-0 z-10">
-                            <tr><th class="px-6 py-4">Timestamp</th><th class="px-6 py-4">Action</th><th class="px-6 py-4">Details</th><th class="px-6 py-4">Admin</th></tr>
+                <div class="glass-panel rounded-2xl overflow-x-auto w-full max-h-[600px] overflow-y-auto">
+                    <table class="w-full text-left min-w-[500px]">
+                        <thead class="bg-[#0a0c0f] border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10">
+                            <tr><th class="px-4 md:px-6 py-4">Timestamp</th><th class="px-4">Action</th><th class="px-4">Details</th><th class="px-4">Admin</th></tr>
                         </thead>
-                        <tbody id="logsListBody" class="divide-y divide-gray-100"></tbody>
+                        <tbody id="logsListBody" class="divide-y divide-white/5"></tbody>
                     </table>
                 </div>
             </div>
 
             <!-- EXCOM TRACKING -->
-            <div id="excomSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-2">
-                    <p class="text-gray-500 text-sm">Manage committee members and track attendance.</p>
-                    <button onclick="openExcomAttendanceModal()" class="w-full md:w-auto bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 px-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-colors">
+            <div id="excomSection" class="tab-content hidden space-y-6 md:space-y-8 max-w-7xl mx-auto w-full">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-2 md:px-0">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white tracking-tight uppercase">ExCom Tracking</h2>
+                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Manage committee members and meetings.</p>
+                    </div>
+                    <button onclick="openExcomAttendanceModal()" class="w-full md:w-auto bg-white hover:bg-gray-200 text-[#0f1115] px-6 py-3 rounded text-[10px] uppercase tracking-widest font-bold flex items-center justify-center gap-3 transition-colors">
                         <i data-lucide="clipboard-edit" class="w-4 h-4"></i> Log Meeting
                     </button>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
-                        <h3 class="text-sm font-bold text-gray-800 mb-6 uppercase tracking-wider border-b border-gray-100 pb-3">Committee Members</h3>
-                        <div id="excomMembersList" class="space-y-2 max-h-[400px] overflow-y-auto pr-2"></div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+                    <div class="glass-panel p-6 md:p-8 rounded-2xl">
+                        <h3 class="text-xs md:text-sm font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Committee Members</h3>
+                        <div id="excomMembersList" class="space-y-2 max-h-80 overflow-y-auto pr-2"></div>
                     </div>
-                    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
-                        <h3 class="text-sm font-bold text-gray-800 mb-6 uppercase tracking-wider border-b border-gray-100 pb-3">Recent Meetings</h3>
+                    <div class="glass-panel p-6 md:p-8 rounded-2xl flex flex-col">
+                        <h3 class="text-xs md:text-sm font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Recent Meetings</h3>
                         <div id="excomMeetingsList" class="space-y-3 flex-grow overflow-y-auto pr-2"></div>
                     </div>
                 </div>
             </div>
 
             <!-- 5. ATTENDANCE -->
-            <div id="attendanceSection" class="tab-content hidden space-y-6 max-w-5xl mx-auto w-full">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <p class="text-gray-500 text-sm">Mark attendance for general events.</p>
+            <div id="attendanceSection" class="tab-content hidden space-y-6 md:space-y-8 max-w-5xl mx-auto w-full">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-2 md:px-0">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white tracking-tight uppercase">Attendance Roster</h2>
+                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Mark attendance for events.</p>
+                    </div>
                     <div class="flex gap-3 w-full md:w-auto">
-                        <button onclick="document.getElementById('reportsModal').classList.remove('hidden')" class="flex-1 md:flex-none bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 shadow-sm px-6 py-3 rounded-xl text-sm font-semibold transition-colors">Reports</button>
-                        <button onclick="submitAttendance()" class="flex-1 md:flex-none bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 px-6 py-3 rounded-xl text-sm font-bold transition-colors">Save List</button>
+                        <button onclick="document.getElementById('reportsModal').classList.remove('hidden')" class="flex-1 md:flex-none bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3 rounded text-[10px] uppercase tracking-widest font-bold transition-colors">Reports</button>
+                        <button onclick="submitAttendance()" class="flex-1 md:flex-none bg-white hover:bg-gray-200 text-[#0f1115] px-6 py-3 rounded text-[10px] uppercase tracking-widest font-bold transition-colors">Save List</button>
                     </div>
                 </div>
-                <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 mb-6">
+                <div class="glass-panel rounded-2xl p-6 md:p-8 mb-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Event Name</label>
-                            <input type="text" id="attendanceEventName" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="E.g. Buildathon 2026">
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Name</label>
+                            <input type="text" id="attendanceEventName" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light" placeholder="E.g. Buildathon 2026">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Date</label>
-                            <input type="date" id="attendanceDate" class="light-input w-full rounded-xl py-3 px-4 text-sm">
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date</label>
+                            <input type="date" id="attendanceDate" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light">
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 w-full max-h-[600px] overflow-y-auto">
+                <div class="glass-panel rounded-2xl overflow-x-auto max-h-[600px] overflow-y-auto border border-white/10 w-full">
                     <table class="w-full text-left min-w-[400px]">
-                        <thead class="bg-gray-50 border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wider uppercase sticky top-0 z-10">
-                            <tr><th class="px-6 py-4 text-center w-20">Present</th><th class="px-6 py-4">Name</th><th class="px-6 py-4">Email</th></tr>
+                        <thead class="bg-[#0a0c0f] border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10">
+                            <tr><th class="px-6 py-5 w-16 text-center">Present</th><th>Name</th><th>Email</th></tr>
                         </thead>
-                        <tbody id="attendanceListBody" class="divide-y divide-gray-100"></tbody>
+                        <tbody id="attendanceListBody" class="divide-y divide-white/5"></tbody>
                     </table>
                 </div>
             </div>
 
             <!-- CERTIFICATES -->
-            <div id="certificatesSection" class="tab-content hidden space-y-6 max-w-4xl mx-auto w-full">
-                <div class="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-gray-100">
-                    <div class="border-b border-gray-100 pb-6 mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Issue Certificates</h2>
-                        <p class="text-gray-500 text-sm">Generate and assign digital certificates to users.</p>
+            <div id="certificatesSection" class="tab-content hidden space-y-6 md:space-y-8 max-w-4xl mx-auto w-full">
+                <div class="glass-panel p-6 md:p-12 rounded-2xl border border-white/20">
+                    <div class="border-b border-white/10 pb-6 mb-6 md:mb-8">
+                        <h2 class="text-2xl md:text-3xl font-display font-bold text-white mb-2 tracking-tight uppercase">Issue Certificates</h2>
+                        <p class="text-white/50 text-xs md:text-sm font-light tracking-wide">Generate and assign digital certificates to users.</p>
                     </div>
+                    <div id="certStatus" class="hidden mb-6 p-4 rounded text-[10px] font-bold uppercase tracking-widest text-center border border-white/20 bg-white/10"></div>
                     
-                    <div id="certStatus" class="hidden mb-6 p-4 rounded-xl text-sm font-bold text-center border"></div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Event Name</label>
-                            <input type="text" id="certEventName" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Event Name">
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Name</label>
+                            <input type="text" id="certEventName" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light" placeholder="Event Name">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Date of Issue</label>
-                            <input type="date" id="certDate" class="light-input w-full rounded-xl py-3 px-4 text-sm">
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date of Issue</label>
+                            <input type="date" id="certDate" class="glass-input w-full rounded py-3 md:py-4 px-4 text-xs md:text-sm font-light">
                         </div>
                     </div>
 
-                    <div class="mb-6 p-4 md:p-6 border border-gray-200 border-dashed rounded-xl bg-gray-50 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="mb-6 md:mb-8 p-4 md:p-6 border border-white/10 rounded-xl bg-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
                         <div>
-                            <p class="text-sm font-bold text-gray-800 mb-1">Certificate Template</p>
-                            <p class="text-xs text-gray-500" id="certFileName">Upload a clean image design</p>
+                            <p class="text-sm font-bold text-white mb-1">Certificate Template</p>
+                            <p class="text-[10px] text-white/50 uppercase tracking-widest font-bold" id="certFileName">Upload a clean image design</p>
                         </div>
-                        <label class="bg-white border border-gray-200 text-gray-700 hover:text-brand-primary px-6 py-2.5 rounded-lg text-xs font-bold cursor-pointer transition-colors shadow-sm text-center">
+                        <label class="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3 rounded text-[10px] uppercase tracking-widest font-bold cursor-pointer transition-colors w-full md:w-auto text-center">
                             <span>Browse Image</span>
                             <input type="file" onchange="handleCertTemplate(event)" class="hidden" accept="image/*">
                         </label>
                     </div>
 
-                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Select Recipients</label>
-                    <div class="border border-gray-200 rounded-xl overflow-x-auto max-h-72 overflow-y-auto mb-6 bg-white">
+                    <label class="block text-[10px] font-bold text-white/50 mb-3 uppercase tracking-widest">Select Recipients</label>
+                    <div class="border border-white/10 rounded-xl overflow-x-auto max-h-72 overflow-y-auto mb-6 md:mb-8 bg-[#0a0c0f]">
                         <table class="w-full text-left min-w-[300px]">
-                            <thead class="bg-gray-50 border-b border-gray-100 text-xs text-gray-500 font-semibold tracking-wider uppercase sticky top-0 z-10">
+                            <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10">
                                 <tr><th class="px-4 py-3 w-16 text-center"><i data-lucide="check-square" class="w-4 h-4 mx-auto"></i></th><th>Student Name</th></tr>
                             </thead>
-                            <tbody id="certUserListBody" class="divide-y divide-gray-100"></tbody>
+                            <tbody id="certUserListBody" class="divide-y divide-white/5"></tbody>
                         </table>
                     </div>
 
-                    <button onclick="issueCertificates()" id="certBtn" class="w-full bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 py-3.5 rounded-xl text-sm font-bold transition-all">Issue Certificates</button>
+                    <button onclick="issueCertificates()" id="certBtn" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] py-4 rounded text-xs font-bold uppercase tracking-widest transition-all">Issue Certificates</button>
                 </div>
             </div>
 
-            <!-- 6. FORMS & CONTENT -->
-            <div id="eventFormsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
+            <!-- 6. FORMS & CONTENT (ADVANCED FORM BUILDER) -->
+            <div id="eventFormsSection" class="tab-content hidden max-w-3xl mx-auto space-y-6 w-full">
                 <div class="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-gray-100">
-                    <div class="border-b border-gray-100 pb-5 mb-6">
-                        <h2 class="text-xl font-bold text-gray-800 mb-1">Form Builder</h2>
-                        <p class="text-gray-500 text-sm">Link external forms for data collection.</p>
+                    <div class="border-b border-gray-100 pb-5 mb-6 flex justify-between items-end">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800 mb-1">Advanced Form Builder</h2>
+                            <p class="text-gray-500 text-sm">Create dynamic registration forms with multiple question types.</p>
+                        </div>
                     </div>
-                    <form id="formBuilderForm" class="space-y-5">
-                        <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Form Title</label><input type="text" id="formTitle" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="E.g. Hackathon Registration" required></div>
-                        <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Webhook / Script URL</label><input type="url" id="formWebhook" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="https://script.google.com/..." required></div>
-                        <button type="submit" class="w-full bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 py-3 rounded-xl text-sm font-bold transition-all mt-2">Create Registration Link</button>
+                    <form id="formBuilderForm" class="space-y-8">
+                        <!-- Form Settings -->
+                        <div class="space-y-5 bg-gray-50 p-6 rounded-xl border border-gray-100">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Form Cover Image (Header)</label>
+                                <label class="light-input w-full rounded-xl py-3 px-4 text-sm text-center cursor-pointer block border-dashed bg-gray-50 hover:bg-gray-100 transition-colors">
+                                    <span id="formCoverFileName" class="text-gray-500"><i class="fas fa-image mr-2"></i> Browse Image</span>
+                                    <input type="file" id="formCoverImageInput" class="hidden" onchange="handleFormCoverImage(event)" accept="image/*">
+                                </label>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Form Title</label>
+                                <input type="text" id="formTitle" class="light-input w-full rounded-xl py-3 px-4 text-sm font-medium" placeholder="E.g. Hackathon Registration" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Form Description (Optional)</label>
+                                <textarea id="formDescription" rows="2" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Provide instructions or context..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Webhook / Google Script URL (Optional)</label>
+                                <input type="url" id="formWebhook" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="https://script.google.com/...">
+                            </div>
+                        </div>
+
+                        <!-- Questions Container -->
+                        <div>
+                            <h3 class="text-sm font-bold text-gray-800 mb-4 uppercase tracking-wider border-b border-gray-100 pb-2">Form Questions</h3>
+                            <div id="questionsContainer" class="space-y-4">
+                                <!-- Fields are dynamically injected here -->
+                            </div>
+                            
+                            <button type="button" onclick="addQuestionField()" class="mt-4 w-full border-2 border-dashed border-gray-300 text-gray-500 hover:text-brand-primary hover:border-brand-primary hover:bg-brand-primaryLight py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all">
+                                <i data-lucide="plus-circle" class="w-5 h-5"></i> Add New Question
+                            </button>
+                        </div>
+
+                        <div class="border-t border-gray-200 pt-6">
+                            <button type="submit" id="saveFormBtn" class="w-full bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 py-4 rounded-xl text-sm font-bold transition-all flex justify-center items-center gap-2">
+                                <i data-lucide="save" class="w-4 h-4"></i> Publish Form
+                            </button>
+                        </div>
                     </form>
                 </div>
+                
                 <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
-                    <h3 class="text-sm font-bold text-gray-800 mb-4 uppercase tracking-wider border-b border-gray-100 pb-3">Active Forms</h3>
+                    <h3 class="text-sm font-bold text-gray-800 mb-4 uppercase tracking-wider border-b border-gray-100 pb-3">Active Forms List</h3>
                     <div id="activeFormsList" class="space-y-3"></div>
                 </div>
             </div>
@@ -613,7 +672,7 @@
         </div>
     </div>
 
-    <!-- EXCOM LOG MODAL (Wider & Taller to fix spacing issues) -->
+    <!-- EXCOM LOG MODAL -->
     <div id="excomModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-3xl p-8 rounded-2xl max-h-[90vh] h-full flex flex-col shadow-2xl border border-gray-100">
             <h2 class="text-xl font-bold text-gray-800 mb-6 uppercase tracking-wider border-b border-gray-100 pb-4 shrink-0">Log ExCom Meeting</h2>
@@ -689,6 +748,146 @@
         let currentUserEmail = "";
         let allUsersData = [];
         let excomMeetingsData = [];
+        let formCoverImageFile = null;
+
+        // --- FORM BUILDER STATE & LOGIC ---
+        // Pre-loaded with standard Google Form style questions
+        let formBuilderFields = [
+            { id: generateId(), label: 'Full Name', type: 'text', required: true, options: [] },
+            { id: generateId(), label: 'Email Address', type: 'email', required: true, options: [] },
+            { id: generateId(), label: 'Mobile Number', type: 'tel', required: true, options: [] },
+            { id: generateId(), label: 'Gender', type: 'select', required: true, options: ['Male', 'Female', 'Other'] }
+        ];
+
+        function generateId() { 
+            return Math.random().toString(36).substr(2, 9); 
+        }
+
+        window.handleFormCoverImage = (e) => { 
+            formCoverImageFile = e.target.files[0]; 
+            document.getElementById('formCoverFileName').textContent = formCoverImageFile.name; 
+        };
+
+        window.addQuestionField = () => {
+            formBuilderFields.push({ id: generateId(), label: '', type: 'text', required: false, options: [] });
+            renderFormBuilderFields();
+        };
+
+        window.removeQuestionField = (id) => {
+            formBuilderFields = formBuilderFields.filter(f => f.id !== id);
+            renderFormBuilderFields();
+        };
+
+        window.updateField = (id, key, value) => {
+            const field = formBuilderFields.find(f => f.id === id);
+            if (field) {
+                field[key] = value;
+                if (key === 'type') {
+                    // Initialize options array if transitioning to a choice-based type
+                    if (['radio', 'checkbox', 'select'].includes(value) && (!field.options || field.options.length === 0)) {
+                        field.options = ['Option 1'];
+                    }
+                    renderFormBuilderFields();
+                }
+            }
+        };
+
+        window.addFieldOption = (id) => {
+            const field = formBuilderFields.find(f => f.id === id);
+            if (field) {
+                if(!field.options) field.options = [];
+                field.options.push(`Option ${field.options.length + 1}`);
+                renderFormBuilderFields();
+            }
+        };
+
+        window.removeFieldOption = (id, optIndex) => {
+            const field = formBuilderFields.find(f => f.id === id);
+            if (field && field.options) {
+                field.options.splice(optIndex, 1);
+                renderFormBuilderFields();
+            }
+        };
+
+        window.updateFieldOption = (id, optIndex, value) => {
+            const field = formBuilderFields.find(f => f.id === id);
+            if (field && field.options) {
+                field.options[optIndex] = value;
+            }
+        };
+
+        window.renderFormBuilderFields = () => {
+            const container = document.getElementById('questionsContainer');
+            if(!container) return;
+            
+            container.innerHTML = '';
+            
+            formBuilderFields.forEach((field, index) => {
+                let optionsHtml = '';
+                
+                if (['radio', 'checkbox', 'select'].includes(field.type)) {
+                    let opts = '';
+                    if(field.options && field.options.length > 0) {
+                        field.options.forEach((opt, optIdx) => {
+                            const iconType = field.type === 'checkbox' ? 'square' : 'circle';
+                            opts += `
+                                <div class="flex items-center gap-3 mt-2">
+                                    <i data-lucide="${iconType}" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                                    <input type="text" class="light-input w-full rounded-lg py-2 px-3 text-sm" value="${escapeHTML(opt)}" oninput="updateFieldOption('${field.id}', ${optIdx}, this.value)" placeholder="Option text">
+                                    <button type="button" onclick="removeFieldOption('${field.id}', ${optIdx})" class="text-red-400 hover:text-red-600 transition-colors p-1"><i data-lucide="x" class="w-4 h-4"></i></button>
+                                </div>
+                            `;
+                        });
+                    }
+                    
+                    optionsHtml = `
+                        <div class="mt-4 pl-4 border-l-2 border-indigo-200">
+                            <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Answer Options</label>
+                            ${opts}
+                            <button type="button" onclick="addFieldOption('${field.id}')" class="mt-3 text-xs text-brand-primary font-bold flex items-center gap-1.5 hover:underline"><i data-lucide="plus" class="w-3 h-3"></i> Add Option</button>
+                        </div>
+                    `;
+                }
+
+                container.innerHTML += `
+                    <div class="bg-white border border-gray-200 rounded-xl p-5 md:p-6 relative group shadow-sm">
+                        <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-4">
+                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Question ${index + 1}</span>
+                            <button type="button" onclick="removeQuestionField('${field.id}')" class="text-gray-400 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="md:col-span-2">
+                                <label class="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wider">Question Title</label>
+                                <input type="text" class="light-input w-full rounded-lg py-2.5 px-3 text-sm font-medium" value="${escapeHTML(field.label)}" oninput="updateField('${field.id}', 'label', this.value)" placeholder="e.g. What is your department?">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wider">Answer Type</label>
+                                <select class="light-input w-full rounded-lg py-2.5 px-3 text-sm font-medium" onchange="updateField('${field.id}', 'type', this.value)">
+                                    <option value="text" ${field.type === 'text' ? 'selected' : ''}>Short Answer</option>
+                                    <option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Paragraph</option>
+                                    <option value="email" ${field.type === 'email' ? 'selected' : ''}>Email Address</option>
+                                    <option value="tel" ${field.type === 'tel' ? 'selected' : ''}>Phone Number</option>
+                                    <option value="radio" ${field.type === 'radio' ? 'selected' : ''}>Multiple Choice</option>
+                                    <option value="checkbox" ${field.type === 'checkbox' ? 'selected' : ''}>Checkboxes</option>
+                                    <option value="select" ${field.type === 'select' ? 'selected' : ''}>Dropdown</option>
+                                    <option value="date" ${field.type === 'date' ? 'selected' : ''}>Date</option>
+                                    <option value="file" ${field.type === 'file' ? 'selected' : ''}>File Upload (Image/Doc)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        ${optionsHtml}
+
+                        <div class="mt-5 flex items-center justify-end gap-3 border-t border-gray-100 pt-4">
+                            <label class="text-xs font-bold text-gray-600 uppercase tracking-wider cursor-pointer select-none" for="req-${field.id}">Required Field</label>
+                            <input type="checkbox" id="req-${field.id}" class="custom-checkbox" ${field.required ? 'checked' : ''} onchange="updateField('${field.id}', 'required', this.checked)">
+                        </div>
+                    </div>
+                `;
+            });
+            lucide.createIcons();
+        };
 
         // Mobile Menu Logic
         const btn = document.getElementById('mobile-menu-toggle');
@@ -732,6 +931,7 @@
                         currentUserEmail = user.email;
                         safeSetText('adminEmailDisplay', user.email || 'Admin');
                         initSync();
+                        renderFormBuilderFields(); // Initial render for form builder
                     } else { 
                         alert("Unauthorized. Admin access required."); signOut(auth).then(() => window.location.href = 'admin.html');
                     }
@@ -896,7 +1096,13 @@
             onSnapshot(collection(db, "eventForms"), (s) => {
                 safeSetText('activeFormsCount', s.size);
                 let h=''; 
-                s.forEach(d => h += `<div class="bg-gray-50 border border-gray-100 p-4 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mt-3 shadow-sm"><span class="text-sm font-bold text-gray-800 break-all">${d.data().title}</span><button onclick="deleteDoc(doc(db,'eventForms','${d.id}'))" class="text-red-600 hover:text-red-700 text-[10px] font-bold uppercase tracking-widest transition-colors flex items-center gap-2 bg-red-50 border border-red-100 px-3 py-2 rounded-lg shadow-sm"><i data-lucide="trash-2" class="w-3 h-3"></i> Delete</button></div>`);
+                s.forEach(d => {
+                    const docData = d.data();
+                    h += `<div class="bg-gray-50 border border-gray-100 p-4 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mt-3 shadow-sm">
+                        <span class="text-sm font-bold text-gray-800 break-all flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4 text-brand-primary"></i> ${escapeHTML(docData.title)}</span>
+                        <button onclick="deleteDoc(doc(db,'eventForms','${d.id}'))" class="text-red-600 hover:text-red-700 text-[10px] font-bold uppercase tracking-widest transition-colors flex items-center gap-2 bg-red-50 border border-red-100 px-3 py-2 rounded-lg shadow-sm"><i data-lucide="trash-2" class="w-3 h-3"></i> Delete</button>
+                    </div>`;
+                });
                 if(document.getElementById('activeFormsList')) document.getElementById('activeFormsList').innerHTML = h;
                 lucide.createIcons();
             });
@@ -1270,8 +1476,58 @@
             e.preventDefault(); await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, content: document.getElementById('annContent').value, timestamp: Date.now() }); await logActivity("Posted Update", document.getElementById('annTitle').value); alert("Update Broadcasted!"); e.target.reset();
         });
 
+        // ADVANCED FORM BUILDER SUBMISSION
         document.getElementById('formBuilderForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); await addDoc(collection(db, "eventForms"), { title: document.getElementById('formTitle').value, webhook: document.getElementById('formWebhook').value, createdAt: Date.now() }); alert("Form Active!"); e.target.reset();
+            e.preventDefault();
+            
+            const title = document.getElementById('formTitle').value.trim();
+            const desc = document.getElementById('formDescription').value.trim();
+            const webhook = document.getElementById('formWebhook').value.trim();
+
+            if (formBuilderFields.length === 0) return alert("Please add at least one question to the form.");
+
+            const btn = document.getElementById('saveFormBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Creating...`;
+            lucide.createIcons();
+
+            let coverUrl = "";
+
+            try {
+                if (formCoverImageFile) {
+                    coverUrl = await uploadToDrive(formCoverImageFile);
+                }
+
+                await addDoc(collection(db, "eventForms"), { 
+                    title: title, 
+                    description: desc,
+                    coverImage: coverUrl,
+                    webhook: webhook, 
+                    questions: formBuilderFields,
+                    createdAt: Date.now() 
+                }); 
+                alert("Form Created Successfully!"); 
+                e.target.reset();
+                
+                // Reset builder fields to default state
+                formCoverImageFile = null;
+                document.getElementById('formCoverFileName').innerHTML = '<i class="fas fa-image mr-2"></i> Browse Image';
+                
+                formBuilderFields = [
+                    { id: generateId(), label: 'Full Name', type: 'text', required: true, options: [] },
+                    { id: generateId(), label: 'Email Address', type: 'email', required: true, options: [] },
+                    { id: generateId(), label: 'Mobile Number', type: 'tel', required: true, options: [] },
+                    { id: generateId(), label: 'Gender', type: 'select', required: true, options: ['Male', 'Female', 'Other'] }
+                ];
+                renderFormBuilderFields();
+            } catch (error) {
+                console.error(error);
+                alert("Error saving form: " + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="save" class="w-4 h-4"></i> Publish Form`;
+                lucide.createIcons();
+            }
         });
 
         window.submitAttendance = async () => {
@@ -1331,6 +1587,27 @@
 
         document.getElementById('adminLogoutBtn').addEventListener('click', async () => {
             const btn = document.getElementById('adminLogoutBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Logging Out...`;
+            lucide.createIcons();
+            
+            try {
+                await addDoc(collection(db, "logs"), {
+                    action: "Admin Logout",
+                    details: "Admin securely logged out",
+                    admin: currentUserEmail || "Unknown Admin",
+                    timestamp: Date.now()
+                });
+            } catch(e) {
+                console.error("Failed to write logout log:", e);
+            }
+            
+            signOut(auth).then(()=>window.location.href='admin.html');
+        });
+        
+        // Add listener for mobile logout button as well
+        document.getElementById('adminLogoutBtnMobile').addEventListener('click', async () => {
+            const btn = document.getElementById('adminLogoutBtnMobile');
             btn.disabled = true;
             btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Logging Out...`;
             lucide.createIcons();
