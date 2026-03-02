@@ -204,9 +204,9 @@
                 </div>
 
                 <div class="p-4 bg-white/5 border border-white/10 rounded-xl flex items-start gap-4">
-                    <i data-lucide="info" class="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0"></i>
+                    <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-500 mt-0.5 flex-shrink-0"></i>
                     <p class="text-xs text-white/70 font-light leading-relaxed">
-                        <strong class="text-white">Missing users?</strong> If a user exists in the Authentication console but not here, it means their database profile hasn't been created yet. Click "Add User" and use the <strong>Sync Existing User</strong> tab to link their Auth UID manually without changing their password!
+                        <strong class="text-white">Why are some recent signups missing?</strong> If a new user signed up via Google or Email but isn't appearing here, it's because their database profile wasn't generated during the login redirect process. They currently only exist in Firebase Authentication. They will appear here the moment they log into the Student Dashboard and click "Save Profile", OR you can manually add them here.
                     </p>
                 </div>
 
@@ -741,8 +741,11 @@
             if(btn) { btn.disabled = true; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> <span class="text-[10px] uppercase tracking-widest font-bold whitespace-nowrap hidden sm:inline">Fetching...</span>`; }
             
             try {
+                // Hard fetch directly from server to bypass potential local cache state
                 const snap = await getDocs(collection(db, "users"));
                 processAndRenderUsers(snap);
+                
+                // Re-establish real-time listener to keep UI alive afterwards
                 fetchUsersListener();
             } catch(e) {
                 console.error(e);
@@ -823,6 +826,17 @@
         }
 
         // --- EXCOM LOGIC & DATE LOCKING ---
+        window.openExcomAttendanceModal = () => {
+            document.getElementById('excomMeetingTitle').value = '';
+            document.getElementById('excomMeetingDate').value = '';
+            const btn = document.getElementById('saveExcomBtn');
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            btn.innerText = "Save Log";
+            document.querySelectorAll('.excom-status-select').forEach(s => s.value = 'Absent');
+            document.getElementById('excomModal').classList.remove('hidden');
+        };
+
         document.getElementById('excomMeetingDate').addEventListener('change', (e) => {
             const selectedDate = e.target.value;
             const btn = document.getElementById('saveExcomBtn');
