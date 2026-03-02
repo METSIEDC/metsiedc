@@ -594,22 +594,35 @@
 
     <!-- EXCOM LOG MODAL -->
     <div id="excomModal" class="fixed inset-0 bg-[#0f1115]/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-lg p-6 md:p-10 rounded-2xl h-[85vh] flex flex-col shadow-2xl border border-white/20">
-            <h2 class="text-xl md:text-2xl font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Log ExCom Meeting</h2>
-            <div class="space-y-4 md:space-y-5 mb-6">
-                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Meeting Topic</label><input type="text" id="excomMeetingTitle" class="glass-input w-full rounded py-3 md:py-4 px-4 text-sm font-light" placeholder="Agenda"></div>
-                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date</label><input type="date" id="excomMeetingDate" class="glass-input w-full rounded py-3 md:py-4 px-4 text-sm font-light"></div>
+        <div class="glass-panel w-full max-w-2xl p-6 md:p-10 rounded-2xl max-h-[90vh] h-full flex flex-col shadow-2xl border border-white/20">
+            <h2 class="text-xl md:text-2xl font-display font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4 shrink-0">Log ExCom Meeting</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 shrink-0">
+                <div>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Meeting Name / Topic</label>
+                    <input type="text" id="excomMeetingTitle" class="glass-input w-full rounded py-3 md:py-4 px-4 text-sm font-light" placeholder="e.g. Core Committee Sync">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date</label>
+                    <input type="date" id="excomMeetingDate" class="glass-input w-full rounded py-3 md:py-4 px-4 text-sm font-light">
+                </div>
             </div>
-            <label class="block text-[10px] font-bold text-white/50 mb-3 uppercase tracking-widest">Mark Attendance</label>
-            <div class="flex-grow overflow-x-auto mb-6 border border-white/10 rounded-xl bg-[#0a0c0f]">
-                <table class="w-full text-left min-w-[300px]">
-                    <thead class="bg-white/5 sticky top-0 border-b border-white/10 text-[10px] uppercase tracking-widest font-bold text-white/50">
-                        <tr><th class="px-4 py-3 text-center w-24 md:w-32">Status</th><th class="pl-4">Name</th></tr>
+            
+            <label class="block text-[10px] font-bold text-white/50 mb-3 uppercase tracking-widest shrink-0">Mark Attendance</label>
+            
+            <div class="flex-grow overflow-y-auto mb-6 border border-white/10 rounded-xl bg-[#0a0c0f]">
+                <table class="w-full text-left min-w-full">
+                    <thead class="bg-white/5 sticky top-0 border-b border-white/10 text-[10px] uppercase tracking-widest font-bold text-white/50 z-10">
+                        <tr>
+                            <th class="px-6 py-4 w-40 text-left">Status</th>
+                            <th class="px-6 py-4">Name</th>
+                        </tr>
                     </thead>
                     <tbody id="excomAttendanceList" class="divide-y divide-white/5"></tbody>
                 </table>
             </div>
-            <div class="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2">
+            
+            <div class="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 shrink-0">
                 <button onclick="document.getElementById('excomModal').classList.add('hidden')" class="w-full sm:flex-1 bg-transparent hover:bg-white/5 border border-white/20 text-white py-3 md:py-4 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Close</button>
                 <button id="saveExcomBtn" onclick="submitExcomAttendance()" class="w-full sm:flex-1 bg-white hover:bg-gray-200 text-[#0f1115] py-3 md:py-4 rounded text-[10px] font-bold uppercase tracking-widest transition-colors">Save Log</button>
             </div>
@@ -747,15 +760,15 @@
                         excomHtml += `<div class="flex justify-between items-center bg-white/5 border border-white/10 p-3 md:p-4 rounded-xl mb-2"><span class="font-bold text-xs md:text-sm text-white">${displayHtmlName}</span><span class="text-[8px] md:text-[9px] font-bold uppercase tracking-[0.2em] text-white/50 border border-white/10 px-2 py-1 rounded">ExCom</span></div>`;
                         
                         excomModalHtml += `
-                        <tr class="border-b border-white/5">
-                            <td class="px-2 md:px-4 py-3 text-center">
-                                <select class="excom-status-select glass-input text-[9px] md:text-[10px] uppercase font-bold py-1.5 px-1 md:px-2 rounded cursor-pointer w-full text-center" data-id="${id}" data-name="${displayHtmlName}">
+                        <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-3">
+                                <select class="excom-status-select glass-input text-xs uppercase font-bold py-2 px-3 rounded cursor-pointer w-full text-center" data-id="${id}" data-name="${displayHtmlName}">
                                     <option value="Absent" class="text-red-500">Absent</option>
                                     <option value="Present" class="text-green-500">Present</option>
                                     <option value="Informed" class="text-yellow-500">Informed</option>
                                 </select>
                             </td>
-                            <td class="text-xs md:text-sm font-bold text-white pl-2 md:pl-4 whitespace-nowrap">${displayHtmlName}</td>
+                            <td class="text-sm font-bold text-white px-6 whitespace-nowrap">${displayHtmlName}</td>
                         </tr>`;
                     }
                 } catch(err) {
@@ -897,7 +910,7 @@
         window.submitExcomAttendance = async () => {
             const title = document.getElementById('excomMeetingTitle').value.trim();
             const date = document.getElementById('excomMeetingDate').value;
-            if(!title || !date) return alert("Please provide a meeting topic and date.");
+            if(!title || !date) return alert("Please provide a meeting name and date.");
             
             if(excomMeetingsData.some(m => m.date === date)) return alert("A meeting is already logged for this date.");
 
@@ -963,7 +976,7 @@
                 <body>
                     <h2>ExCom Meeting Attendance</h2>
                     <div class="meta">
-                        <p><strong>Topic:</strong> ${m.title || 'General Meeting'}</p>
+                        <p><strong>Name / Topic:</strong> ${m.title || 'General Meeting'}</p>
                         <p><strong>Date:</strong> ${m.date}</p>
                         <p><strong>Logged By:</strong> ${m.loggedBy || 'System Admin'}</p>
                     </div>
