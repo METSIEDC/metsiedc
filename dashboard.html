@@ -119,439 +119,463 @@
             margin: 0 auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Card Hover */
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-3px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
     </style>
 </head>
-<body class="font-sans antialiased relative selection:bg-coach-primary selection:text-white flex h-screen overflow-hidden">
+<body class="font-sans antialiased relative selection:bg-coach-primary selection:text-white flex h-screen overflow-hidden p-0 md:p-4 lg:p-6">
 
-    <!-- Transparent Floating Sidebar (Desktop) -->
-    <aside class="w-64 flex-shrink-0 hidden md:flex flex-col h-full z-20 pt-8 px-4 pb-6 bg-transparent">
-        <div class="px-4 flex items-center gap-3 mb-10">
-            <span class="text-2xl font-bold text-coach-textDark tracking-tight">IEDC<span class="text-coach-primary">Hub</span></span>
-        </div>
+    <!-- Main App Container (Floating Window Effect) -->
+    <div class="bg-white md:rounded-[2rem] w-full h-full flex overflow-hidden shadow-2xl border border-white relative">
 
-        <nav class="flex-grow space-y-1 overflow-y-auto pr-2">
-            <button onclick="showTab('dashboardOverview')" id="nav-dashboardOverview" class="sidebar-link active w-full flex items-center gap-4 px-4 py-3.5 text-sm">
-                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
-            </button>
-            <button onclick="showTab('profile')" id="nav-profile" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
-                <i data-lucide="user" class="w-5 h-5"></i> Profile
-            </button>
-            <button onclick="showTab('joinIedc')" id="nav-joinIedc" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
-                <i data-lucide="users" class="w-5 h-5"></i> Join IEDC
-            </button>
-            <button onclick="showTab('trackStatus')" id="nav-trackStatus" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
-                <i data-lucide="activity" class="w-5 h-5"></i> Status
-            </button>
-            <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
-                <i data-lucide="calendar" class="w-5 h-5"></i> Attendance
-            </button>
-            <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
-                <i data-lucide="award" class="w-5 h-5"></i> Certificates
-            </button>
-            
-            <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-coach-textMuted uppercase tracking-wider">Submissions</div>
-            
-            <button onclick="showTab('submitProject')" id="nav-submitProject" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
-                <i data-lucide="rocket" class="w-5 h-5"></i> Submit Project
-            </button>
-            <button onclick="showTab('submitIdea')" id="nav-submitIdea" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
-                <i data-lucide="lightbulb" class="w-5 h-5"></i> Pitch Idea
-            </button>
-            <button onclick="showTab('submitEvent')" id="nav-submitEvent" class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 text-sm">
-                <i data-lucide="calendar-plus" class="w-5 h-5"></i> Propose Event
-            </button>
-        </nav>
+        <!-- Sidebar (Desktop) -->
+        <aside class="w-64 border-r border-gray-100 flex-shrink-0 hidden md:flex flex-col h-full z-20 bg-white/80 backdrop-blur-xl">
+            <div class="p-8 pb-4 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-coach-primary flex items-center justify-center text-white font-bold text-lg">
+                    <i data-lucide="zap" class="w-4 h-4"></i>
+                </div>
+                <span class="text-xl font-display font-bold tracking-tight text-coach-textDark">IEDC.io</span>
+            </div>
 
-        <div class="mt-auto pt-6">
-            <button id="logoutBtn" class="w-full bg-white/50 hover:bg-white text-coach-textMuted hover:text-red-500 py-3.5 rounded-2xl text-sm font-semibold transition-all shadow-sm flex items-center justify-center gap-3">
-                <i data-lucide="log-out" class="w-4 h-4"></i> Logout
-            </button>
-        </div>
-    </aside>
+            <!-- "Create New Pitch" Style Button -->
+            <div class="px-6 py-6">
+                <button onclick="showTab('submitIdea')" class="w-full flex items-center justify-between bg-white border border-gray-100 shadow-sm hover:shadow-md px-2 py-2 rounded-full transition-all group">
+                    <span class="text-[11px] font-bold text-gray-700 leading-tight pl-3 text-left">Create<br>New Idea</span>
+                    <div class="w-10 h-10 rounded-full bg-coach-primary text-white flex items-center justify-center group-hover:bg-coach-primaryDark transition-colors">
+                        <i data-lucide="plus" class="w-5 h-5"></i>
+                    </div>
+                </button>
+            </div>
 
-    <!-- Main Content Area -->
-    <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10">
-        
-        <!-- Header -->
-        <header class="h-28 flex items-center justify-between px-6 md:px-8 lg:px-10 shrink-0 w-full pt-4">
-            <div class="flex items-start gap-4">
-                <button id="mobile-menu-toggle" class="md:hidden text-coach-textDark p-2 bg-white/50 rounded-xl"><i data-lucide="menu" class="w-6 h-6"></i></button>
-                <div class="hidden sm:block">
-                    <p class="text-sm font-semibold text-coach-primary mb-0.5">Welcome back, <span id="headerWelcomeName">Student</span>👋</p>
-                    <h1 class="text-4xl font-bold text-coach-textDark tracking-tight" id="headerTitle">Dashboard</h1>
+            <nav class="flex-grow px-4 py-2 space-y-1.5 overflow-y-auto">
+                <button onclick="showTab('dashboardOverview')" id="nav-dashboardOverview" class="sidebar-link active w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </button>
+                <button onclick="showTab('joinIedc')" id="nav-joinIedc" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm">
+                    <i data-lucide="users" class="w-5 h-5"></i> Join IEDC
+                </button>
+                <button onclick="showTab('trackStatus')" id="nav-trackStatus" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm">
+                    <i data-lucide="settings" class="w-5 h-5"></i> Status
+                </button>
+                <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm">
+                    <i data-lucide="calendar" class="w-5 h-5"></i> Attendance
+                </button>
+                <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm">
+                    <i data-lucide="award" class="w-5 h-5"></i> Certificates
+                </button>
+                
+                <div class="pt-4 pb-2 px-4 text-xs font-semibold text-coach-textMuted/60 uppercase tracking-wider">Actions</div>
+                <button onclick="showTab('submitProject')" id="nav-submitProject" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm">
+                    <i data-lucide="folder-plus" class="w-5 h-5"></i> Submit Project
+                </button>
+                <button onclick="showTab('submitEvent')" id="nav-submitEvent" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm">
+                    <i data-lucide="calendar-plus" class="w-5 h-5"></i> Propose Event
+                </button>
+            </nav>
+
+            <!-- PRO Promo Style Card for Help/Logout -->
+            <div class="p-6 mt-auto">
+                <div class="bg-coach-bgStart rounded-2xl p-5 text-center relative overflow-hidden border border-coach-primary/10">
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center mx-auto mb-3 shadow-sm text-coach-primary">
+                        <i data-lucide="headphones" class="w-6 h-6"></i>
+                    </div>
+                    <p class="text-xs text-coach-textDark font-medium mb-1">Need assistance?</p>
+                    <p class="text-[10px] text-coach-textMuted mb-4 leading-relaxed">Contact admin for help.</p>
+                    <button id="logoutBtn" class="w-full bg-coach-primary hover:bg-coach-primaryDark text-white py-2.5 rounded-lg text-xs font-bold transition-colors shadow-sm flex items-center justify-center gap-2">
+                        <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Logout
+                    </button>
                 </div>
             </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10 bg-transparent">
             
-            <!-- Top Right Utilities -->
-            <div class="flex items-center gap-5">
-                <div class="hidden md:flex items-center gap-3">
-                    <button class="w-10 h-10 rounded-full bg-white/50 hover:bg-white text-coach-textMuted flex items-center justify-center transition-all shadow-sm">
-                        <i data-lucide="search" class="w-5 h-5"></i>
-                    </button>
-                    <button class="w-10 h-10 rounded-full bg-white/50 hover:bg-white text-coach-textMuted flex items-center justify-center transition-all shadow-sm relative">
-                        <i data-lucide="bell" class="w-5 h-5"></i>
-                        <span class="absolute top-2 right-2.5 w-2 h-2 bg-coach-iconPink rounded-full"></span>
-                    </button>
+            <!-- Header -->
+            <header class="h-28 flex items-center justify-between px-6 md:px-8 lg:px-10 shrink-0 w-full pt-4 relative">
+                <div class="flex items-start gap-4">
+                    <button id="mobile-menu-toggle" class="md:hidden text-coach-textDark p-2 bg-white/50 rounded-xl"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                    <div class="hidden sm:block">
+                        <p class="text-sm font-semibold text-coach-primary mb-0.5">Welcome back, <span id="headerWelcomeName">Student</span>👋</p>
+                        <h1 class="text-4xl font-bold text-coach-textDark tracking-tight" id="headerTitle">Dashboard</h1>
+                    </div>
                 </div>
                 
-                <div class="flex items-center gap-3 pl-2 md:pl-4 border-l border-coach-textMuted/20">
-                    <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-coach-bgPurple flex items-center justify-center text-coach-primary font-bold" id="userAvatarHeader">
-                        S
+                <!-- Top Right Utilities -->
+                <div class="flex items-center gap-3 md:gap-5">
+                    <div class="hidden md:flex items-center gap-3 relative">
+                        
+                        <!-- Search Bar Toggle -->
+                        <div id="searchContainer" class="hidden absolute right-12 top-1/2 -translate-y-1/2 w-64 transition-all z-20">
+                            <input type="text" id="notificationSearchInput" placeholder="Search notifications..." class="coach-input w-full py-2 px-4 pr-10 text-xs shadow-md">
+                            <button onclick="toggleSearch()" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        
+                        <button onclick="toggleSearch()" class="w-10 h-10 rounded-full bg-white/50 hover:bg-white text-coach-textMuted flex items-center justify-center transition-all shadow-sm z-10">
+                            <i data-lucide="search" class="w-5 h-5"></i>
+                        </button>
+                        
+                        <!-- Notifications Dropdown -->
+                        <div class="relative">
+                            <button onclick="toggleNotifications()" class="w-10 h-10 rounded-full bg-white/50 hover:bg-white text-coach-textMuted flex items-center justify-center transition-all shadow-sm relative z-10">
+                                <i data-lucide="bell" class="w-5 h-5"></i>
+                                <span id="notificationBadge" class="absolute top-2 right-2.5 w-2 h-2 bg-coach-iconPink rounded-full hidden"></span>
+                            </button>
+                            
+                            <!-- Notification Panel -->
+                            <div id="notificationPanel" class="hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden flex-col">
+                                <div class="bg-gray-50 border-b border-gray-100 p-4 flex justify-between items-center">
+                                    <h3 class="text-sm font-bold text-coach-textDark">Notifications</h3>
+                                    <span class="text-[10px] text-coach-primary font-bold bg-coach-bgStart px-2 py-1 rounded">New</span>
+                                </div>
+                                <div id="notificationList" class="max-h-80 overflow-y-auto divide-y divide-gray-50">
+                                    <div class="p-8 text-center text-sm text-gray-400 font-medium">Loading messages...</div>
+                                </div>
+                                <div class="p-3 border-t border-gray-50 text-center bg-gray-50/50 hover:bg-gray-100 transition-colors cursor-pointer text-xs font-semibold text-coach-primary" onclick="toggleNotifications()">
+                                    Close
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                    <p class="text-sm font-semibold text-coach-textDark hidden sm:block" id="userEmailHeader">Loading...</p>
-                </div>
-            </div>
-        </header>
 
-        <!-- Dynamic Content -->
-        <main class="flex-grow overflow-y-auto px-4 md:px-8 lg:px-10 pb-10 w-full">
-            
-            <!-- Dashboard Overview (Replicating CoachPro Grid) -->
-            <div id="dashboardOverviewSection" class="tab-content w-full h-full">
-                <!-- Mobile Header Title (Visible only on mobile) -->
-                <div class="sm:hidden mb-6">
-                    <p class="text-xs font-semibold text-coach-primary mb-1">Welcome back 👋</p>
-                    <h1 class="text-3xl font-bold text-coach-textDark tracking-tight">Dashboard</h1>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 w-full">
+                    <!-- Settings Button -->
+                    <button onclick="showTab('settings')" title="Account Settings" class="w-10 h-10 rounded-full bg-white/50 hover:bg-white text-coach-textMuted flex items-center justify-center transition-all shadow-sm">
+                        <i data-lucide="settings" class="w-5 h-5"></i>
+                    </button>
                     
-                    <!-- Left Column (Wider) -->
-                    <div class="lg:col-span-7 flex flex-col gap-6 md:gap-8">
-                        
-                        <!-- "Next Game" Style Card -> Upcoming Activities -->
-                        <div class="coach-card p-6 md:p-8">
-                            <div class="flex justify-between items-center mb-6">
-                                <h3 class="text-lg font-bold text-coach-textDark">Active Announcements</h3>
-                                <a href="announcement.html" class="text-xs font-semibold text-coach-primary hover:underline">View all</a>
-                            </div>
-                            
-                            <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
-                                <div class="flex flex-col items-center md:items-start text-center md:text-left">
-                                    <span class="text-xs font-bold text-coach-iconBlue uppercase tracking-wider mb-2 flex items-center gap-1.5"><i data-lucide="bell" class="w-3.5 h-3.5"></i> Notice</span>
-                                    <h4 class="text-xl font-bold text-coach-textDark">IEDC Registrations Open</h4>
-                                    <p class="text-sm text-coach-textMuted mt-1">Join the community today.</p>
-                                </div>
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-full bg-coach-bgPurple text-coach-iconPurple flex items-center justify-center text-xl shadow-sm"><i data-lucide="users"></i></div>
-                                    <span class="text-sm font-bold text-gray-300">VS</span>
-                                    <div class="w-12 h-12 rounded-full bg-coach-bgPink text-coach-iconPink flex items-center justify-center text-xl shadow-sm"><i data-lucide="rocket"></i></div>
-                                </div>
-                            </div>
+                    <div class="flex items-center gap-3 pl-2 md:pl-4 border-l border-coach-textMuted/20">
+                        <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-coach-bgPurple flex items-center justify-center text-coach-primary font-bold" id="userAvatarHeader">
+                            S
                         </div>
-
-                        <!-- "Standings" Style Card -> Recent Submissions -->
-                        <div class="coach-card p-6 md:p-8 flex-grow">
-                            <div class="flex justify-between items-center mb-6">
-                                <h3 class="text-lg font-bold text-coach-textDark">Recent Submissions</h3>
-                                <button onclick="showTab('trackStatus')" class="text-xs font-semibold text-coach-primary hover:underline">View all</button>
-                            </div>
-                            
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left">
-                                    <thead class="text-[10px] uppercase font-bold text-coach-textMuted tracking-wider border-b border-gray-100">
-                                        <tr>
-                                            <th class="pb-4 font-semibold">Title</th>
-                                            <th class="pb-4 font-semibold">Type</th>
-                                            <th class="pb-4 font-semibold text-right">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="dashboardSubmissionsList" class="divide-y divide-gray-50">
-                                        <tr><td colspan="3" class="py-8 text-center text-sm text-gray-400">Loading submissions...</td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right Column (Narrower) -->
-                    <div class="lg:col-span-5 flex flex-col gap-6 md:gap-8">
-                        
-                        <!-- 4 Squares Grid -->
-                        <div class="grid grid-cols-2 gap-4 md:gap-6">
-                            
-                            <!-- Square 1 -->
-                            <div onclick="showTab('joinIedc')" class="coach-card p-6 flex flex-col justify-between cursor-pointer hover:-translate-y-1 transition-transform">
-                                <div class="w-12 h-12 rounded-2xl bg-coach-bgPurple text-coach-iconPurple flex items-center justify-center mb-4">
-                                    <i data-lucide="users" class="w-6 h-6"></i>
-                                </div>
-                                <div>
-                                    <p class="text-[10px] font-bold text-coach-textMuted uppercase tracking-wider mb-0.5">Membership</p>
-                                    <h4 class="text-lg font-bold text-coach-textDark">Join IEDC</h4>
-                                </div>
-                            </div>
-
-                            <!-- Square 2 -->
-                            <div onclick="showTab('submitProject')" class="coach-card p-6 flex flex-col justify-between cursor-pointer hover:-translate-y-1 transition-transform">
-                                <div class="w-12 h-12 rounded-2xl bg-coach-bgPink text-coach-iconPink flex items-center justify-center mb-4">
-                                    <i data-lucide="rocket" class="w-6 h-6"></i>
-                                </div>
-                                <div>
-                                    <p class="text-[10px] font-bold text-coach-textMuted uppercase tracking-wider mb-0.5">Incubation</p>
-                                    <h4 class="text-lg font-bold text-coach-textDark">Add Project</h4>
-                                </div>
-                            </div>
-
-                            <!-- Square 3 -->
-                            <div onclick="showTab('submitIdea')" class="coach-card p-6 flex flex-col justify-between cursor-pointer hover:-translate-y-1 transition-transform">
-                                <div class="w-12 h-12 rounded-2xl bg-coach-bgOrange text-coach-iconOrange flex items-center justify-center mb-4">
-                                    <i data-lucide="lightbulb" class="w-6 h-6"></i>
-                                </div>
-                                <div>
-                                    <p class="text-[10px] font-bold text-coach-textMuted uppercase tracking-wider mb-0.5">Pitch Deck</p>
-                                    <h4 class="text-lg font-bold text-coach-textDark">Share Idea</h4>
-                                </div>
-                            </div>
-
-                            <!-- Square 4 -->
-                            <div onclick="showTab('certificates')" class="coach-card p-6 flex flex-col justify-between cursor-pointer hover:-translate-y-1 transition-transform">
-                                <div class="w-12 h-12 rounded-2xl bg-coach-bgBlue text-coach-iconBlue flex items-center justify-center mb-4">
-                                    <i data-lucide="award" class="w-6 h-6"></i>
-                                </div>
-                                <div>
-                                    <p class="text-[10px] font-bold text-coach-textMuted uppercase tracking-wider mb-0.5">Achievements</p>
-                                    <h4 class="text-lg font-bold text-coach-textDark">Certificates</h4>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Bottom Promo Banner (Exact match to image style) -->
-                        <div class="coach-card bg-gradient-to-r from-coach-primaryDark to-coach-primary border-none p-8 flex flex-col justify-center relative overflow-hidden flex-grow shadow-lg shadow-coach-primary/30 min-h-[160px]">
-                            <!-- Decorative 3D elements placeholder -->
-                            <div class="absolute -right-4 -bottom-4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-                            <div class="absolute right-10 top-4 w-12 h-12 bg-coach-yellow rounded-lg rotate-12 opacity-80 shadow-lg"></div>
-                            <div class="absolute right-4 bottom-8 w-8 h-8 rounded-full bg-white opacity-80 shadow-lg"></div>
-                            
-                            <div class="relative z-10 w-2/3">
-                                <p class="text-xs font-bold text-white/80 uppercase tracking-wider mb-2">Explore Now</p>
-                                <h3 class="text-xl font-bold text-white mb-4 leading-tight">Check out the latest IEDC events.</h3>
-                                <a href="event.html" class="inline-block bg-white text-coach-primary font-bold text-xs px-5 py-2.5 rounded-xl hover:shadow-md transition-shadow">
-                                    View Events
-                                </a>
-                            </div>
-                        </div>
-
+                        <p class="text-sm font-semibold text-coach-textDark hidden sm:block" id="userEmailHeader">Loading...</p>
                     </div>
                 </div>
-            </div>
+            </header>
 
-            <!-- TEMPLATES FOR OTHER TABS (Restyled to match CoachPro) -->
-            <style>
-                .cp-form-card { @apply coach-card p-6 md:p-10 max-w-3xl mx-auto w-full; }
-                .cp-form-header { @apply mb-8 border-b border-gray-100 pb-6; }
-                .cp-form-title { @apply text-2xl font-bold text-coach-textDark mb-1; }
-                .cp-form-subtitle { @apply text-coach-textMuted text-sm font-medium; }
-                .cp-label { @apply block text-xs font-bold text-coach-textMuted mb-2 uppercase tracking-wider; }
-                .cp-btn { @apply w-full bg-coach-primary hover:bg-coach-primaryDark text-white font-bold py-3.5 rounded-xl text-sm transition-all shadow-md shadow-coach-primary/30 flex justify-center items-center gap-2; }
-            </style>
+            <!-- Dynamic Content -->
+            <main class="flex-grow overflow-y-auto px-4 md:px-8 lg:px-10 pb-10 w-full">
+                
+                <!-- Dashboard Overview -->
+                <div id="dashboardOverviewSection" class="tab-content space-y-10 max-w-6xl w-full mx-auto">
+                    <!-- Mobile Header Title -->
+                    <div class="sm:hidden mb-6">
+                        <p class="text-xs font-semibold text-coach-primary mb-1">Welcome back 👋</p>
+                        <h1 class="text-3xl font-bold text-coach-textDark tracking-tight">Dashboard</h1>
+                    </div>
 
-            <!-- Profile -->
-            <div id="profileSection" class="tab-content hidden max-w-5xl mx-auto w-full space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
-                    <!-- Profile Card -->
-                    <div class="coach-card p-8 flex flex-col items-center text-center h-fit">
-                        <div class="relative group cursor-pointer mb-6" onclick="document.getElementById('profileImageInput').click()">
-                            <div class="w-32 h-32 rounded-full bg-coach-bgPurple overflow-hidden border-4 border-white shadow-md relative flex items-center justify-center">
-                                <img id="profileImagePreview" src="https://ui-avatars.com/api/?name=User&background=249387&color=fff" alt="Profile" class="w-full h-full object-cover">
-                            </div>
-                            <div class="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="camera" class="w-6 h-6 text-white"></i></div>
-                            <input type="file" id="profileImageInput" class="hidden" accept="image/*" onchange="handleImageUpload(event)">
+                    <!-- Welcome Banner -->
+                    <div class="bg-brand-primaryLight rounded-3xl p-8 md:p-12 flex justify-between items-center relative overflow-hidden shadow-sm border border-indigo-50">
+                        <div class="relative z-10">
+                            <h2 class="text-3xl md:text-4xl font-display font-bold text-brand-textDark mb-3 tracking-tight">Hi, <span id="displayNameBanner">Student</span></h2>
+                            <p class="text-brand-textDark/70 text-sm md:text-base max-w-md leading-relaxed font-medium">Ready to start your day? Access your certificates, join programs, and explore new opportunities.</p>
                         </div>
-                        <h2 class="text-xl font-bold text-coach-textDark mb-1" id="profileCardName">Student Name</h2>
-                        <p class="text-coach-primary text-xs font-bold mb-6">Student Innovator</p>
+                        <!-- Decorative Illustration -->
+                        <div class="absolute right-0 bottom-0 opacity-20 md:opacity-100 transform translate-x-10 md:translate-x-0 w-64 md:w-80 pointer-events-none">
+                            <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="200" cy="150" r="100" fill="#5d55d0" opacity="0.05"/>
+                                <rect x="150" y="100" width="160" height="120" rx="12" fill="#5d55d0" opacity="0.1"/>
+                                <path d="M120 180 L180 120 M140 200 L200 140" stroke="#5d55d0" stroke-width="4" stroke-linecap="round" opacity="0.2"/>
+                                <circle cx="100" cy="80" r="15" fill="#f46393" opacity="0.2"/>
+                                <circle cx="320" cy="220" r="25" fill="#fec85a" opacity="0.2"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions Grid -->
+                    <div>
+                        <h3 class="text-sm font-semibold text-brand-textGray mb-4 px-2 md:px-0">Quick Actions</h3>
                         
-                        <div class="w-full space-y-3 text-left">
-                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-coach-primary shadow-sm"><i data-lucide="phone" class="w-4 h-4"></i></div>
-                                <div>
-                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Contact</p>
-                                    <p class="text-coach-textDark text-sm font-semibold" id="profileCardContact">--</p>
-                                </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                            <!-- Yellow Card -->
+                            <div onclick="showTab('joinIedc')" class="bg-brand-yellow p-6 rounded-2xl flex flex-col items-center justify-center text-white cursor-pointer hover:-translate-y-1 transition-transform shadow-sm">
+                                <i data-lucide="users" class="w-6 h-6 mb-2 opacity-90"></i>
+                                <h3 class="text-2xl font-bold">Join</h3>
+                                <p class="text-[10px] uppercase tracking-wider font-medium opacity-90 mt-1">IEDC Member</p>
                             </div>
-                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-coach-primary shadow-sm"><i data-lucide="mail" class="w-4 h-4"></i></div>
-                                <div class="overflow-hidden">
-                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Email</p>
-                                    <p class="text-coach-textDark text-sm font-semibold truncate" id="profileCardEmail">--</p>
-                                </div>
+                            <!-- Purple Card -->
+                            <div onclick="showTab('submitProject')" class="bg-brand-primary p-6 rounded-2xl flex flex-col items-center justify-center text-white cursor-pointer hover:-translate-y-1 transition-transform shadow-sm shadow-indigo-200/50">
+                                <i data-lucide="rocket" class="w-6 h-6 mb-2 opacity-90"></i>
+                                <h3 class="text-2xl font-bold">Project</h3>
+                                <p class="text-[10px] uppercase tracking-wider font-medium opacity-90 mt-1">Submit Work</p>
+                            </div>
+                            <!-- Pink Card -->
+                            <div onclick="showTab('certificates')" class="bg-brand-pink p-6 rounded-2xl flex flex-col items-center justify-center text-white cursor-pointer hover:-translate-y-1 transition-transform shadow-sm shadow-pink-200/50">
+                                <i data-lucide="award" class="w-6 h-6 mb-2 opacity-90"></i>
+                                <h3 class="text-2xl font-bold">Awards</h3>
+                                <p class="text-[10px] uppercase tracking-wider font-medium opacity-90 mt-1">Certificates</p>
+                            </div>
+                            <!-- Light Gray/Purple Card -->
+                            <div onclick="showTab('trackStatus')" class="bg-brand-grayCard p-6 rounded-2xl flex flex-col items-center justify-center text-brand-textDark cursor-pointer hover:-translate-y-1 transition-transform shadow-sm">
+                                <i data-lucide="activity" class="w-6 h-6 mb-2 text-brand-textGray"></i>
+                                <h3 class="text-2xl font-bold">Status</h3>
+                                <p class="text-[10px] uppercase tracking-wider font-medium text-brand-textGray mt-1">Track Progress</p>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Bottom Promo Banner -->
+                    <div class="coach-card bg-gradient-to-r from-coach-primaryDark to-coach-primary border-none p-8 flex flex-col justify-center relative overflow-hidden shadow-lg shadow-coach-primary/30 min-h-[160px]">
+                        <div class="absolute -right-4 -bottom-4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                        <div class="absolute right-10 top-4 w-12 h-12 bg-coach-yellow rounded-lg rotate-12 opacity-80 shadow-lg"></div>
+                        <div class="absolute right-4 bottom-8 w-8 h-8 rounded-full bg-white opacity-80 shadow-lg"></div>
+                        
+                        <div class="relative z-10 w-2/3">
+                            <p class="text-xs font-bold text-white/80 uppercase tracking-wider mb-2">Explore Now</p>
+                            <h3 class="text-xl font-bold text-white mb-4 leading-tight">Check out the latest IEDC events.</h3>
+                            <a href="event.html" class="inline-block bg-white text-coach-primary font-bold text-xs px-5 py-2.5 rounded-xl hover:shadow-md transition-shadow">
+                                View Events
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- TEMPLATES FOR OTHER TABS -->
+                <style>
+                    .cp-form-card { @apply coach-card p-6 md:p-10 max-w-3xl mx-auto w-full; }
+                    .cp-form-header { @apply mb-8 border-b border-gray-100 pb-6; }
+                    .cp-form-title { @apply text-2xl font-bold text-coach-textDark mb-1; }
+                    .cp-form-subtitle { @apply text-coach-textMuted text-sm font-medium; }
+                    .cp-label { @apply block text-xs font-bold text-coach-textMuted mb-2 uppercase tracking-wider; }
+                    .cp-btn { @apply w-full bg-coach-primary hover:bg-coach-primaryDark text-white font-bold py-3.5 rounded-xl text-sm transition-all shadow-md shadow-coach-primary/30 flex justify-center items-center gap-2; }
+                </style>
+
+                <!-- Settings (Formerly Profile) -->
+                <div id="settingsSection" class="tab-content hidden max-w-5xl mx-auto w-full space-y-6">
+                    <h2 class="text-2xl font-display font-bold text-coach-textDark">Account Settings</h2>
                     
-                    <!-- Edit Form -->
-                    <div class="lg:col-span-2">
-                        <div class="coach-card p-6 md:p-10">
-                            <div class="flex justify-between items-center border-b border-gray-100 pb-5 mb-6">
-                                <h3 class="text-lg font-bold text-coach-textDark">Edit Details</h3>
-                                <div id="profileStatusMessage" class="hidden text-xs px-3 py-1.5 rounded-lg font-bold bg-green-50 text-green-700"></div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+                        <!-- Profile Summary Card -->
+                        <div class="coach-card p-8 flex flex-col items-center text-center h-fit">
+                            <div class="relative group cursor-pointer mb-6" onclick="document.getElementById('profileImageInput').click()">
+                                <div class="w-32 h-32 rounded-full bg-coach-bgPurple overflow-hidden border-4 border-white shadow-md relative flex items-center justify-center">
+                                    <img id="profileImagePreview" src="https://ui-avatars.com/api/?name=User&background=249387&color=fff" alt="Profile" class="w-full h-full object-cover">
+                                </div>
+                                <div class="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="camera" class="w-6 h-6 text-white"></i></div>
+                                <input type="file" id="profileImageInput" class="hidden" accept="image/*" onchange="handleImageUpload(event)">
                             </div>
-                            <form id="profileForm" class="space-y-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <h2 class="text-xl font-bold text-coach-textDark mb-1" id="profileCardName">Student Name</h2>
+                            <p class="text-coach-primary text-xs font-bold mb-6">Student Innovator</p>
+                            
+                            <div class="w-full space-y-3 text-left">
+                                <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-coach-primary shadow-sm"><i data-lucide="phone" class="w-4 h-4"></i></div>
                                     <div>
-                                        <label class="cp-label">Full Name</label>
-                                        <input type="text" id="profileName" class="coach-input w-full py-3 px-4 text-sm" placeholder="John Doe">
-                                    </div>
-                                    <div>
-                                        <label class="cp-label">Contact Number</label>
-                                        <input type="tel" id="profileContact" class="coach-input w-full py-3 px-4 text-sm" placeholder="+91">
+                                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Contact</p>
+                                        <p class="text-coach-textDark text-sm font-semibold" id="profileCardContact">--</p>
                                     </div>
                                 </div>
-                                <div>
-                                    <label class="cp-label">Bio</label>
-                                    <textarea id="profileBio" rows="4" class="coach-input w-full py-3 px-4 text-sm" placeholder="Tell us about your skills..."></textarea>
+                                <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-coach-primary shadow-sm"><i data-lucide="mail" class="w-4 h-4"></i></div>
+                                    <div class="overflow-hidden">
+                                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Email</p>
+                                        <p class="text-coach-textDark text-sm font-semibold truncate" id="profileCardEmail">--</p>
+                                    </div>
                                 </div>
-                                <div class="pt-4 flex justify-end">
-                                    <button type="submit" class="bg-coach-primary hover:bg-coach-primaryDark text-white font-bold py-3 px-8 rounded-xl text-sm transition-colors shadow-md shadow-coach-primary/30 flex items-center gap-2">
-                                        <i data-lucide="save" class="w-4 h-4"></i> Save Changes
-                                    </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Column (Forms) -->
+                        <div class="lg:col-span-2 space-y-6">
+                            
+                            <!-- Edit Details Form -->
+                            <div class="coach-card p-6 md:p-10">
+                                <div class="flex justify-between items-center border-b border-gray-100 pb-5 mb-6">
+                                    <h3 class="text-lg font-bold text-coach-textDark">Edit Profile Details</h3>
+                                    <div id="profileStatusMessage" class="hidden text-xs px-3 py-1.5 rounded-lg font-bold bg-green-50 text-green-700"></div>
                                 </div>
-                            </form>
+                                <form id="profileForm" class="space-y-6">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label class="cp-label">Full Name</label>
+                                            <input type="text" id="profileName" class="coach-input w-full py-3 px-4 text-sm" placeholder="John Doe">
+                                        </div>
+                                        <div>
+                                            <label class="cp-label">Contact Number</label>
+                                            <input type="tel" id="profileContact" class="coach-input w-full py-3 px-4 text-sm" placeholder="+91">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="cp-label">Bio</label>
+                                        <textarea id="profileBio" rows="4" class="coach-input w-full py-3 px-4 text-sm" placeholder="Tell us about your skills..."></textarea>
+                                    </div>
+                                    <div class="pt-4 flex justify-end">
+                                        <button type="submit" class="bg-coach-primary hover:bg-coach-primaryDark text-white font-bold py-3 px-8 rounded-xl text-sm transition-colors shadow-md shadow-coach-primary/30 flex items-center gap-2">
+                                            <i data-lucide="save" class="w-4 h-4"></i> Save Changes
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Update Password Form -->
+                            <div class="coach-card p-6 md:p-10">
+                                <div class="flex justify-between items-center border-b border-gray-100 pb-5 mb-6">
+                                    <h3 class="text-lg font-bold text-coach-textDark">Security</h3>
+                                    <div id="passwordStatusMessage" class="hidden text-xs px-3 py-1.5 rounded-lg font-bold bg-green-50 text-green-700"></div>
+                                </div>
+                                <form id="passwordForm" class="space-y-6">
+                                    <div>
+                                        <label class="cp-label">New Password</label>
+                                        <input type="password" id="newPasswordInput" class="coach-input w-full py-3 px-4 text-sm" placeholder="Enter new password (min 6 characters)" required minlength="6">
+                                    </div>
+                                    <div class="pt-4 flex justify-end">
+                                        <button type="submit" class="bg-coach-textDark hover:bg-black text-white font-bold py-3 px-8 rounded-xl text-sm transition-colors shadow-md flex items-center gap-2">
+                                            <i data-lucide="lock" class="w-4 h-4"></i> Update Password
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Join IEDC -->
-            <div id="joinIedcSection" class="tab-content hidden w-full">
-                <div id="membershipStatusCard" class="hidden cp-form-card text-center">
-                    <div class="w-20 h-20 bg-coach-bgStart rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i data-lucide="clock" class="w-10 h-10 text-coach-primary" id="memStatusIcon"></i>
+                <!-- Join IEDC -->
+                <div id="joinIedcSection" class="tab-content hidden w-full">
+                    <div id="membershipStatusCard" class="hidden cp-form-card text-center">
+                        <div class="w-20 h-20 bg-coach-bgStart rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="clock" class="w-10 h-10 text-coach-primary" id="memStatusIcon"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-coach-textDark mb-2" id="memStatusTitle">Application Pending</h2>
+                        <p class="text-coach-textMuted text-sm max-w-md mx-auto leading-relaxed" id="memStatusDesc">We have received your request to join MET'S IEDC. We are reviewing your details.</p>
                     </div>
-                    <h2 class="text-2xl font-bold text-coach-textDark mb-2" id="memStatusTitle">Application Pending</h2>
-                    <p class="text-coach-textMuted text-sm max-w-md mx-auto leading-relaxed" id="memStatusDesc">We have received your request to join MET'S IEDC. We are reviewing your details.</p>
+                    
+                    <div id="membershipFormCard" class="cp-form-card">
+                        <div class="cp-form-header">
+                            <h2 class="cp-form-title">Join IEDC</h2>
+                            <p class="cp-form-subtitle">Fill in the details to join the community.</p>
+                        </div>
+                        <form id="joinIedcForm" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div><label class="cp-label">Full Name</label><input type="text" id="memName" class="coach-input w-full py-3 px-4 text-sm font-semibold" disabled></div>
+                                <div><label class="cp-label">Email</label><input type="email" id="memEmail" class="coach-input w-full py-3 px-4 text-sm font-semibold" disabled></div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div><label class="cp-label">Phone Number</label><input type="tel" id="memPhone" class="coach-input w-full py-3 px-4 text-sm" placeholder="+91 9876543210" required></div>
+                                <div><label class="cp-label">Gender</label><select id="memGender" class="coach-input w-full py-3 px-4 text-sm"><option>Male</option><option>Female</option><option>Other</option></select></div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div><label class="cp-label">Batch / Year</label><select id="memYear" class="coach-input w-full py-3 px-4 text-sm"><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></div>
+                                <div><label class="cp-label">Department</label><select id="memDept" class="coach-input w-full py-3 px-4 text-sm"><option>CSE</option><option>ECE</option><option>EEE</option><option>ME</option><option>CE</option><option>BT</option><option>RA</option></select></div>
+                            </div>
+                            <div><label class="cp-label">Primary Interest</label><select id="memDomain" class="coach-input w-full py-3 px-4 text-sm"><option>Web Development</option><option>App Development</option><option>UI/UX Design</option><option>IoT & Robotics</option><option>Marketing & Management</option><option>Other</option></select></div>
+                            <div><label class="cp-label">Why do you want to join?</label><textarea id="memReason" rows="3" class="coach-input w-full py-3 px-4 text-sm" placeholder="Tell us what motivates you..."></textarea></div>
+                            <div class="pt-4"><button type="submit" class="cp-btn">Submit Application</button></div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Submit Project -->
+                <div id="submitProjectSection" class="tab-content hidden w-full">
+                    <div class="cp-form-card">
+                        <div class="cp-form-header">
+                            <h2 class="cp-form-title">Submit Project</h2>
+                            <p class="cp-form-subtitle">Share your project details for mentorship or review.</p>
+                        </div>
+                        <div id="projectStatusMessage" class="hidden mb-6 p-4 rounded-xl text-sm font-bold text-center bg-green-50 text-green-700"></div>
+                        <form id="projectForm" class="space-y-6">
+                            <div><label class="cp-label">Project Name</label><input type="text" id="projectName" class="coach-input w-full py-3 px-4 text-sm" required></div>
+                            <div><label class="cp-label">Detailed Description</label><textarea id="projectDescription" rows="4" class="coach-input w-full py-3 px-4 text-sm" required></textarea></div>
+                            <div><label class="cp-label">Team Members</label><input type="text" id="projectTeamMembers" class="coach-input w-full py-3 px-4 text-sm" placeholder="Names / Emails"></div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div><label class="cp-label">Tech Stack</label><input type="text" id="projectTechnologyStack" class="coach-input w-full py-3 px-4 text-sm" placeholder="e.g. React, Node.js"></div>
+                                <div><label class="cp-label">Link (Optional)</label><input type="url" id="projectLink" class="coach-input w-full py-3 px-4 text-sm" placeholder="GitHub / Drive Link"></div>
+                            </div>
+                            <div class="pt-4"><button type="submit" class="cp-btn">Submit for Review</button></div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Submit Idea -->
+                <div id="submitIdeaSection" class="tab-content hidden w-full">
+                    <div class="cp-form-card">
+                        <div class="cp-form-header">
+                            <h2 class="cp-form-title">Submit Idea</h2>
+                            <p class="cp-form-subtitle">Share your innovative concept for incubation.</p>
+                        </div>
+                        <div id="ideaStatusMessage" class="hidden mb-6 p-4 rounded-xl text-sm font-bold text-center bg-green-50 text-green-700"></div>
+                        <form id="ideaForm" class="space-y-6">
+                            <div><label class="cp-label">Idea Title</label><input type="text" id="ideaName" class="coach-input w-full py-3 px-4 text-sm" required></div>
+                            <div><label class="cp-label">Problem & Solution</label><textarea id="ideaDescription" rows="5" class="coach-input w-full py-3 px-4 text-sm" required placeholder="What problem does this solve?"></textarea></div>
+                            <div><label class="cp-label">Category</label><select id="ideaCategory" class="coach-input w-full py-3 px-4 text-sm"><option>Healthcare</option><option>Education</option><option>Fintech</option><option>Agriculture</option><option>SaaS</option><option>Other</option></select></div>
+                            <div class="pt-4"><button type="submit" class="cp-btn">Submit Idea</button></div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Propose Event -->
+                <div id="submitEventSection" class="tab-content hidden w-full">
+                    <div class="cp-form-card">
+                        <div class="cp-form-header">
+                            <h2 class="cp-form-title">Propose Event</h2>
+                            <p class="cp-form-subtitle">Suggest an activity, competition, or workshop.</p>
+                        </div>
+                        <div id="eventStatusMessage" class="hidden mb-6 p-4 rounded-xl text-sm font-bold text-center bg-green-50 text-green-700"></div>
+                        <form id="eventForm" class="space-y-6">
+                            <div><label class="cp-label">Event Title</label><input type="text" id="eventName" class="coach-input w-full py-3 px-4 text-sm" required></div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div><label class="cp-label">Proposed Date</label><input type="date" id="eventDate" class="coach-input w-full py-3 px-4 text-sm" required></div>
+                                <div><label class="cp-label">Duration / Time</label><input type="time" id="eventTime" class="coach-input w-full py-3 px-4 text-sm" required></div>
+                            </div>
+                            <div><label class="cp-label">Description & Requirements</label><textarea id="eventDescription" rows="4" class="coach-input w-full py-3 px-4 text-sm" required placeholder="Target audience, resources needed, etc."></textarea></div>
+                            <div class="pt-4"><button type="submit" class="cp-btn">Submit Proposal</button></div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Track Status (List View Style) -->
+                <div id="trackStatusSection" class="tab-content hidden max-w-5xl mx-auto w-full">
+                    <div class="flex justify-between items-end mb-6">
+                        <h2 class="text-2xl font-bold text-coach-textDark">My Submissions</h2>
+                        <button onclick="fetchMySubmissions()" class="text-xs font-bold text-coach-primary bg-coach-bgStart border border-coach-primary/20 px-4 py-2 rounded-xl transition hover:bg-coach-primary hover:text-white flex items-center gap-2">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh
+                        </button>
+                    </div>
+                    <div id="mySubmissionsGridList" class="space-y-4">
+                        <div class="coach-card p-12 text-center"><div class="spinner"></div></div>
+                    </div>
+                </div>
+
+                <!-- Attendance -->
+                <div id="attendanceSection" class="tab-content hidden max-w-5xl mx-auto w-full">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-coach-textDark">My Attendance</h2>
+                    </div>
+                    <div id="myAttendanceList" class="space-y-4">
+                        <div class="coach-card p-12 text-center"><div class="spinner"></div></div>
+                    </div>
+                </div>
+
+                <!-- Certificates -->
+                <div id="certificatesSection" class="tab-content hidden max-w-5xl mx-auto w-full">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-coach-textDark">My Certificates</h2>
+                    </div>
+                    <div id="certificatesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="col-span-full coach-card p-12 text-center"><div class="spinner"></div></div>
+                    </div>
                 </div>
                 
-                <div id="membershipFormCard" class="cp-form-card">
-                    <div class="cp-form-header">
-                        <h2 class="cp-form-title">Join IEDC</h2>
-                        <p class="cp-form-subtitle">Fill in the details to join the community.</p>
-                    </div>
-                    <form id="joinIedcForm" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="cp-label">Full Name</label><input type="text" id="memName" class="coach-input w-full py-3 px-4 text-sm font-semibold" disabled></div>
-                            <div><label class="cp-label">Email</label><input type="email" id="memEmail" class="coach-input w-full py-3 px-4 text-sm font-semibold" disabled></div>
+                <!-- Payments -->
+                <div id="paymentsSection" class="tab-content hidden max-w-2xl mx-auto w-full">
+                    <div class="coach-card p-12 text-center flex flex-col items-center justify-center min-h-[400px]">
+                        <div class="w-20 h-20 bg-coach-bgOrange rounded-full flex items-center justify-center mb-6">
+                            <i data-lucide="credit-card" class="w-10 h-10 text-coach-iconOrange"></i>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="cp-label">Phone Number</label><input type="tel" id="memPhone" class="coach-input w-full py-3 px-4 text-sm" placeholder="+91 9876543210" required></div>
-                            <div><label class="cp-label">Gender</label><select id="memGender" class="coach-input w-full py-3 px-4 text-sm"><option>Male</option><option>Female</option><option>Other</option></select></div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="cp-label">Batch / Year</label><select id="memYear" class="coach-input w-full py-3 px-4 text-sm"><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></div>
-                            <div><label class="cp-label">Department</label><select id="memDept" class="coach-input w-full py-3 px-4 text-sm"><option>CSE</option><option>ECE</option><option>EEE</option><option>ME</option><option>CE</option><option>BT</option><option>RA</option></select></div>
-                        </div>
-                        <div><label class="cp-label">Primary Interest</label><select id="memDomain" class="coach-input w-full py-3 px-4 text-sm"><option>Web Development</option><option>App Development</option><option>UI/UX Design</option><option>IoT & Robotics</option><option>Marketing & Management</option><option>Other</option></select></div>
-                        <div><label class="cp-label">Why do you want to join?</label><textarea id="memReason" rows="3" class="coach-input w-full py-3 px-4 text-sm" placeholder="Tell us what motivates you..."></textarea></div>
-                        <div class="pt-4"><button type="submit" class="cp-btn">Submit Application</button></div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Submit Project -->
-            <div id="submitProjectSection" class="tab-content hidden w-full">
-                <div class="cp-form-card">
-                    <div class="cp-form-header">
-                        <h2 class="cp-form-title">Submit Project</h2>
-                        <p class="cp-form-subtitle">Share your project details for mentorship or review.</p>
+                        <h2 class="text-3xl font-bold text-coach-textDark mb-3">Coming Soon</h2>
+                        <p class="text-coach-textMuted max-w-md mx-auto leading-relaxed text-sm">
+                            We are integrating a secure payment gateway. Soon you'll pay fees and download receipts here.
+                        </p>
                     </div>
-                    <div id="projectStatusMessage" class="hidden mb-6 p-4 rounded-xl text-sm font-bold text-center bg-green-50 text-green-700"></div>
-                    <form id="projectForm" class="space-y-6">
-                        <div><label class="cp-label">Project Name</label><input type="text" id="projectName" class="coach-input w-full py-3 px-4 text-sm" required></div>
-                        <div><label class="cp-label">Detailed Description</label><textarea id="projectDescription" rows="4" class="coach-input w-full py-3 px-4 text-sm" required></textarea></div>
-                        <div><label class="cp-label">Team Members</label><input type="text" id="projectTeamMembers" class="coach-input w-full py-3 px-4 text-sm" placeholder="Names / Emails"></div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="cp-label">Tech Stack</label><input type="text" id="projectTechnologyStack" class="coach-input w-full py-3 px-4 text-sm" placeholder="e.g. React, Node.js"></div>
-                            <div><label class="cp-label">Link (Optional)</label><input type="url" id="projectLink" class="coach-input w-full py-3 px-4 text-sm" placeholder="GitHub / Drive Link"></div>
-                        </div>
-                        <div class="pt-4"><button type="submit" class="cp-btn">Submit for Review</button></div>
-                    </form>
                 </div>
-            </div>
 
-            <!-- Submit Idea -->
-            <div id="submitIdeaSection" class="tab-content hidden w-full">
-                <div class="cp-form-card">
-                    <div class="cp-form-header">
-                        <h2 class="cp-form-title">Submit Idea</h2>
-                        <p class="cp-form-subtitle">Share your innovative concept for incubation.</p>
-                    </div>
-                    <div id="ideaStatusMessage" class="hidden mb-6 p-4 rounded-xl text-sm font-bold text-center bg-green-50 text-green-700"></div>
-                    <form id="ideaForm" class="space-y-6">
-                        <div><label class="cp-label">Idea Title</label><input type="text" id="ideaName" class="coach-input w-full py-3 px-4 text-sm" required></div>
-                        <div><label class="cp-label">Problem & Solution</label><textarea id="ideaDescription" rows="5" class="coach-input w-full py-3 px-4 text-sm" required placeholder="What problem does this solve?"></textarea></div>
-                        <div><label class="cp-label">Category</label><select id="ideaCategory" class="coach-input w-full py-3 px-4 text-sm"><option>Healthcare</option><option>Education</option><option>Fintech</option><option>Agriculture</option><option>SaaS</option><option>Other</option></select></div>
-                        <div class="pt-4"><button type="submit" class="cp-btn">Submit Idea</button></div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Propose Event -->
-            <div id="submitEventSection" class="tab-content hidden w-full">
-                <div class="cp-form-card">
-                    <div class="cp-form-header">
-                        <h2 class="cp-form-title">Propose Event</h2>
-                        <p class="cp-form-subtitle">Suggest an activity, competition, or workshop.</p>
-                    </div>
-                    <div id="eventStatusMessage" class="hidden mb-6 p-4 rounded-xl text-sm font-bold text-center bg-green-50 text-green-700"></div>
-                    <form id="eventForm" class="space-y-6">
-                        <div><label class="cp-label">Event Title</label><input type="text" id="eventName" class="coach-input w-full py-3 px-4 text-sm" required></div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="cp-label">Proposed Date</label><input type="date" id="eventDate" class="coach-input w-full py-3 px-4 text-sm" required></div>
-                            <div><label class="cp-label">Duration / Time</label><input type="time" id="eventTime" class="coach-input w-full py-3 px-4 text-sm" required></div>
-                        </div>
-                        <div><label class="cp-label">Description & Requirements</label><textarea id="eventDescription" rows="4" class="coach-input w-full py-3 px-4 text-sm" required placeholder="Target audience, resources needed, etc."></textarea></div>
-                        <div class="pt-4"><button type="submit" class="cp-btn">Submit Proposal</button></div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Track Status -->
-            <div id="trackStatusSection" class="tab-content hidden max-w-5xl mx-auto w-full">
-                <div class="flex justify-between items-end mb-6">
-                    <h2 class="text-2xl font-bold text-coach-textDark">My Submissions</h2>
-                    <button onclick="fetchMySubmissions()" class="text-xs font-bold text-coach-primary bg-coach-bgStart border border-coach-primary/20 px-4 py-2 rounded-xl transition hover:bg-coach-primary hover:text-white flex items-center gap-2">
-                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh
-                    </button>
-                </div>
-                <div id="mySubmissionsGridList" class="space-y-4">
-                    <div class="coach-card p-12 text-center"><div class="spinner"></div></div>
-                </div>
-            </div>
-
-            <!-- Attendance -->
-            <div id="attendanceSection" class="tab-content hidden max-w-5xl mx-auto w-full">
-                <div class="mb-6">
-                    <h2 class="text-2xl font-bold text-coach-textDark">My Attendance</h2>
-                </div>
-                <div id="myAttendanceList" class="space-y-4">
-                    <div class="coach-card p-12 text-center"><div class="spinner"></div></div>
-                </div>
-            </div>
-
-            <!-- Certificates -->
-            <div id="certificatesSection" class="tab-content hidden max-w-5xl mx-auto w-full">
-                <div class="mb-6">
-                    <h2 class="text-2xl font-bold text-coach-textDark">My Certificates</h2>
-                </div>
-                <div id="certificatesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="col-span-full coach-card p-12 text-center"><div class="spinner"></div></div>
-                </div>
-            </div>
-            
-            <!-- Payments -->
-            <div id="paymentsSection" class="tab-content hidden max-w-2xl mx-auto w-full">
-                <div class="coach-card p-12 text-center flex flex-col items-center justify-center min-h-[400px]">
-                    <div class="w-20 h-20 bg-coach-bgOrange rounded-full flex items-center justify-center mb-6">
-                        <i data-lucide="credit-card" class="w-10 h-10 text-coach-iconOrange"></i>
-                    </div>
-                    <h2 class="text-3xl font-bold text-coach-textDark mb-3">Coming Soon</h2>
-                    <p class="text-coach-textMuted max-w-md mx-auto leading-relaxed text-sm">
-                        We are integrating a secure payment gateway. Soon you'll pay fees and download receipts here.
-                    </p>
-                </div>
-            </div>
-
-        </main>
+            </main>
+        </div>
     </div>
 
     <!-- Mobile Sidebar Overlay -->
@@ -559,10 +583,14 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signOut, onAuthStateChanged, updatePassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where, orderBy, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
+
+        // Dynamically set date in header
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('headerDate').textContent = new Date().toLocaleDateString('en-US', dateOptions);
 
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygN6dZebvmijxVTVLcneuCOl9BbQmTuMzId36L4dQw_PfGNvfzFabNgtJOr43nUEzw/exec"; 
 
@@ -628,9 +656,83 @@
                 window.checkMembershipStatus();
                 window.fetchCertificates();
                 window.fetchMyAttendance();
+                listenForNotifications(); // Start listening for updates
             } else {
                 window.location.href = 'login.html';
             }
+        });
+
+        // --- NOTIFICATIONS & SEARCH LOGIC ---
+        let allNotifications = [];
+        
+        window.toggleSearch = function() {
+            const searchContainer = document.getElementById('searchContainer');
+            if (searchContainer.classList.contains('hidden')) {
+                searchContainer.classList.remove('hidden');
+                document.getElementById('notificationSearchInput').focus();
+            } else {
+                searchContainer.classList.add('hidden');
+                document.getElementById('notificationSearchInput').value = '';
+                renderNotifications(); // Reset list
+            }
+        };
+
+        window.toggleNotifications = function() {
+            const panel = document.getElementById('notificationPanel');
+            panel.classList.toggle('hidden');
+            if (!panel.classList.contains('hidden')) {
+                document.getElementById('notificationBadge').classList.add('hidden'); // clear badge when opened
+            }
+        };
+
+        function listenForNotifications() {
+            const q = query(collection(db, "announcements"), orderBy("timestamp", "desc"));
+            onSnapshot(q, (snapshot) => {
+                allNotifications = [];
+                snapshot.forEach((doc) => {
+                    allNotifications.push({ id: doc.id, ...doc.data() });
+                });
+                
+                if (allNotifications.length > 0) {
+                    document.getElementById('notificationBadge').classList.remove('hidden');
+                }
+                renderNotifications();
+            });
+        }
+
+        function renderNotifications(filterText = '') {
+            const list = document.getElementById('notificationList');
+            const filtered = allNotifications.filter(n => 
+                (n.title || '').toLowerCase().includes(filterText.toLowerCase()) || 
+                (n.description || '').toLowerCase().includes(filterText.toLowerCase())
+            );
+
+            if (filtered.length === 0) {
+                list.innerHTML = `<div class="p-8 text-center text-sm text-gray-400 font-medium">No new notifications.</div>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(n => {
+                const dateStr = n.date || new Date(n.timestamp).toLocaleDateString();
+                const cat = n.category || 'Update';
+                html += `
+                    <div class="p-4 hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-[9px] font-bold uppercase tracking-wider text-coach-primary bg-coach-bgStart px-2 py-0.5 rounded">${cat}</span>
+                            <span class="text-[10px] text-gray-400 font-medium">${dateStr}</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-coach-textDark mb-1 leading-tight">${n.title}</h4>
+                        <p class="text-xs text-coach-textMuted line-clamp-2">${n.description}</p>
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
+        }
+
+        document.getElementById('notificationSearchInput').addEventListener('input', (e) => {
+            document.getElementById('notificationPanel').classList.remove('hidden'); // Ensure panel is open when searching
+            renderNotifications(e.target.value);
         });
 
         // Dashboard Submissions Overview & Track Status View
@@ -674,7 +776,7 @@
                                     <p class="text-xs text-coach-textMuted line-clamp-1 max-w-sm">${data.description}</p>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-4 mt-2 md:mt-0">
                                 <span class="text-xs text-gray-400 hidden md:inline font-medium">${new Date(data.timestamp).toLocaleDateString()}</span>
                                 <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${statusColor}">
                                     <i data-lucide="${icon}" class="w-3.5 h-3.5"></i><span class="text-[10px] font-bold uppercase tracking-wider">${data.status || 'Pending'}</span>
@@ -816,11 +918,88 @@
             } catch(e) { alert("Error: " + e.message); btn.disabled = false; btn.innerHTML = `Submit Application`; }
         });
 
+        // Image Upload
+        window.handleImageUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file || file.size > 500 * 1024) return alert("Image too large (Max 500KB)");
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image(); img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
+                    const scaleSize = 300 / img.width; canvas.width = 300; canvas.height = img.height * scaleSize;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    currentProfileImageBase64 = canvas.toDataURL('image/jpeg', 0.8);
+                    document.getElementById('profileImagePreview').src = currentProfileImageBase64;
+                };
+            };
+            reader.readAsDataURL(file);
+        };
+
+        // Save Profile Logic (Updated for Settings Area)
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button'); const origText = btn.innerHTML; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Saving...`; btn.disabled = true; lucide.createIcons();
+            try {
+                const profileData = { name: document.getElementById('profileName').value, contact: document.getElementById('profileContact').value, bio: document.getElementById('profileBio').value };
+                if (currentProfileImageBase64) profileData.profileImage = currentProfileImageBase64;
+                await setDoc(doc(db, "users", currentUserId, "profile", "userProfile"), profileData, { merge: true });
+                
+                await setDoc(doc(db, "users", currentUserId), { 
+                    name: profileData.name,
+                    email: auth.currentUser.email,
+                    role: 'student'
+                }, { merge: true });
+                
+                document.getElementById('profileCardName').textContent = profileData.name;
+                document.getElementById('profileCardContact').textContent = profileData.contact || '--';
+                document.getElementById('displayNameBanner').textContent = profileData.name.split(' ')[0];
+                document.getElementById('userEmailHeader').textContent = profileData.name.split(' ')[0];
+                document.getElementById('headerWelcomeName').textContent = profileData.name.split(' ')[0];
+                
+                const statusMsg = document.getElementById('profileStatusMessage');
+                statusMsg.classList.remove('hidden'); 
+                statusMsg.textContent = "Saved Successfully!";
+                setTimeout(() => statusMsg.classList.add('hidden'), 3000);
+
+                if(profileData.profileImage) {
+                    document.getElementById('userAvatarHeader').innerHTML = `<img src="${profileData.profileImage}" class="w-full h-full rounded-full object-cover">`;
+                }
+            } catch(e) { alert("Error: " + e.message); }
+            btn.innerHTML = origText; btn.disabled = false; lucide.createIcons();
+        });
+
+        // Password Reset form logic
+        document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button'); 
+            const origText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Updating...`; 
+            btn.disabled = true; 
+            lucide.createIcons();
+            
+            try {
+                const newPassword = document.getElementById('newPasswordInput').value;
+                await updatePassword(auth.currentUser, newPassword);
+                const statusMsg = document.getElementById('passwordStatusMessage');
+                statusMsg.classList.remove('hidden');
+                statusMsg.textContent = "Password Updated!";
+                e.target.reset();
+                setTimeout(() => statusMsg.classList.add('hidden'), 3000);
+            } catch(error) {
+                alert("Error: " + error.message + " (You may need to log out and log back in to verify your identity before changing your password).");
+            } finally {
+                btn.innerHTML = origText;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        });
+
         // Generic Submission
         const submitGeneric = async (formId, type, statusId) => {
             document.getElementById(formId).addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const btn = e.target.querySelector('button'); const origText = btn.innerText; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Processing...`; btn.disabled = true; lucide.createIcons();
+                const btn = e.target.querySelector('button'); const origText = btn.innerHTML; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Processing...`; btn.disabled = true; lucide.createIcons();
                 const inputs = e.target.querySelectorAll('input, textarea, select');
                 const data = { type: type, status: 'pending', userId: auth.currentUser.uid, userEmail: auth.currentUser.email, userName: document.getElementById('profileName').value || 'Student', timestamp: Date.now() };
                 inputs.forEach(i => data[i.id.replace(type, '').toLowerCase()] = i.value); 
@@ -960,11 +1139,17 @@
         // Tabs Logic
         window.showTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(tabId + 'Section').classList.remove('hidden');
+            
+            // Map settings to profile section logically if tab is settings
+            const targetSectionId = (tabId === 'settings') ? 'settingsSection' : tabId + 'Section';
+            const targetSection = document.getElementById(targetSectionId);
+            if(targetSection) targetSection.classList.remove('hidden');
             
             document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
-            const activeDesktop = document.getElementById('nav-'+tabId);
-            if(activeDesktop) activeDesktop.classList.add('active');
+            if(tabId !== 'settings') {
+                const activeDesktop = document.getElementById('nav-'+tabId);
+                if(activeDesktop) activeDesktop.classList.add('active');
+            }
             
             // Map tabId to sidebar button text for title
             let title = "Dashboard";
@@ -973,6 +1158,7 @@
             else if(tabId === 'submitIdea') title = "Submit Idea";
             else if(tabId === 'submitEvent') title = "Propose Event";
             else if(tabId === 'trackStatus') title = "My Submissions";
+            else if(tabId === 'settings') title = "Account Settings";
             else title = tabId.charAt(0).toUpperCase() + tabId.slice(1);
             
             document.getElementById('headerTitle').textContent = title;
