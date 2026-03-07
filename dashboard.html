@@ -189,64 +189,64 @@
                 <div class="flex items-start gap-4">
                     <button id="mobile-menu-toggle" class="md:hidden text-brand-textDark p-2 bg-white/50 rounded-xl"><i data-lucide="menu" class="w-6 h-6"></i></button>
                     <div class="hidden sm:block">
-                        <p class="text-sm font-semibold text-brand-primary mb-0.5">Welcome back, <span id="headerWelcomeName">Student</span>👋</p>
-                        <h1 class="text-4xl font-bold text-brand-textDark tracking-tight" id="headerTitle">Dashboard</h1>
-                    </div>
+                <p class="text-sm font-semibold text-brand-primary mb-0.5">Welcome back, <span id="headerWelcomeName">Student</span>👋</p>
+                <h1 class="text-4xl font-bold text-brand-textDark tracking-tight" id="headerTitle">Dashboard</h1>
+            </div>
+        </div>
+        
+        <!-- Utilities -->
+        <div class="flex items-center gap-3 md:gap-5">
+            <div class="flex items-center gap-1 md:gap-3 relative">
+                
+                <div id="searchContainer" class="hidden absolute right-0 top-12 md:right-12 md:top-1/2 md:-translate-y-1/2 w-56 md:w-64 transition-all z-50">
+                    <input type="text" id="notificationSearchInput" placeholder="Search notices..." class="brand-input w-full py-2.5 px-4 pr-10 text-sm shadow-sm rounded-full">
+                    <button onclick="toggleSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
                 </div>
                 
-                <!-- Utilities -->
-                <div class="flex items-center gap-3 md:gap-5">
-                    <div class="hidden md:flex items-center gap-3 relative">
-                        
-                        <div id="searchContainer" class="hidden absolute right-12 top-1/2 -translate-y-1/2 w-64 transition-all z-20">
-                            <input type="text" id="notificationSearchInput" placeholder="Search notices..." class="brand-input w-full py-2.5 px-4 pr-10 text-sm shadow-sm rounded-full">
-                            <button onclick="toggleSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1">
-                                <i data-lucide="x" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                        
-                        <button onclick="toggleSearch()" title="Search" class="w-10 h-10 rounded-full text-brand-textGray hover:bg-white/50 flex items-center justify-center transition-all z-10 relative">
-                            <i data-lucide="search" class="w-5 h-5"></i>
-                        </button>
-                        
-                        <!-- Notifications -->
-                        <div class="relative">
-                            <button onclick="toggleNotifications()" title="Alerts & Announcements" class="w-10 h-10 rounded-full text-brand-textGray hover:bg-white/50 flex items-center justify-center transition-all shadow-sm relative z-10 bg-white/50">
-                                <i data-lucide="bell" class="w-5 h-5"></i>
-                                <span id="notificationBadge" class="absolute top-2 right-2.5 w-2 h-2 bg-brand-iconPink rounded-full hidden border border-[#f0f4f8]"></span>
-                            </button>
-                            
-                            <div id="notificationPanel" class="hidden absolute right-0 mt-3 w-80 brand-card z-50 overflow-hidden flex-col !rounded-2xl">
-                                <div class="bg-gray-50/50 border-b border-gray-100 p-4 flex justify-between items-center">
-                                    <h3 class="text-sm font-bold text-brand-textDark">Notifications</h3>
-                                    <span class="text-[10px] text-brand-primary font-bold bg-white shadow-sm px-2 py-1 rounded-md">Live</span>
-                                </div>
-                                <div id="notificationList" class="max-h-80 overflow-y-auto divide-y divide-gray-50">
-                                    <div class="p-8 text-center text-sm text-gray-400 font-medium">Loading messages...</div>
-                                </div>
-                                <div class="p-3 border-t border-gray-50 text-center bg-gray-50/50 hover:bg-gray-100 transition-colors cursor-pointer text-xs font-semibold text-brand-primary" onclick="toggleNotifications()">
-                                    Close Panel
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Settings Button -->
-                    <button onclick="showTab('settings')" title="Account Settings" class="w-10 h-10 rounded-full bg-white/50 hover:bg-white text-brand-textGray flex items-center justify-center transition-all shadow-sm">
-                        <i data-lucide="settings" class="w-5 h-5"></i>
+                <button onclick="toggleSearch()" title="Search" class="w-8 h-8 md:w-10 md:h-10 rounded-full text-brand-textGray hover:bg-white/50 flex items-center justify-center transition-all z-10 relative">
+                    <i data-lucide="search" class="w-4 h-4 md:w-5 md:h-5"></i>
+                </button>
+                
+                <!-- Notifications -->
+                <div class="relative">
+                    <button onclick="toggleNotifications()" title="Alerts & Announcements" class="w-8 h-8 md:w-10 md:h-10 rounded-full text-brand-textGray hover:bg-white/50 flex items-center justify-center transition-all shadow-sm relative z-10 bg-white/50">
+                        <i data-lucide="bell" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        <span id="notificationBadge" class="absolute top-1.5 right-1.5 md:top-2 md:right-2.5 w-2 h-2 bg-brand-iconPink rounded-full hidden border border-[#f0f4f8]"></span>
                     </button>
                     
-                    <div onclick="showTab('settings')" class="flex items-center gap-3 pl-2 md:pl-4 border-l border-brand-textGray/20 cursor-pointer group">
-                        <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-brand-bgPurple flex items-center justify-center text-brand-primary font-bold group-hover:shadow-md transition-shadow">
-                            <img id="userAvatarHeader" src="https://ui-avatars.com/api/?name=User&background=249387&color=fff" class="w-full h-full object-cover">
+                    <div id="notificationPanel" class="hidden absolute right-0 mt-3 w-72 md:w-80 brand-card z-50 overflow-hidden flex-col !rounded-2xl">
+                        <div class="bg-gray-50/50 border-b border-gray-100 p-4 flex justify-between items-center">
+                            <h3 class="text-sm font-bold text-brand-textDark">Notifications</h3>
+                            <span class="text-[10px] text-brand-primary font-bold bg-white shadow-sm px-2 py-1 rounded-md">Live</span>
                         </div>
-                        <div class="hidden sm:flex flex-col">
-                            <p class="text-sm font-bold text-brand-textDark leading-none group-hover:text-brand-primary transition-colors" id="userEmailHeader">Loading...</p>
-                            <p class="text-[10px] text-brand-textGray font-semibold uppercase mt-1 leading-none">Member</p>
+                        <div id="notificationList" class="max-h-80 overflow-y-auto divide-y divide-gray-50">
+                            <div class="p-8 text-center text-sm text-gray-400 font-medium">Loading messages...</div>
+                        </div>
+                        <div class="p-3 border-t border-gray-50 text-center bg-gray-50/50 hover:bg-gray-100 transition-colors cursor-pointer text-xs font-semibold text-brand-primary" onclick="toggleNotifications()">
+                            Close Panel
                         </div>
                     </div>
                 </div>
-            </header>
+            </div>
+
+            <!-- Settings Button -->
+            <button onclick="showTab('settings')" title="Account Settings" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/50 hover:bg-white text-brand-textGray flex items-center justify-center transition-all shadow-sm">
+                <i data-lucide="settings" class="w-4 h-4 md:w-5 md:h-5"></i>
+            </button>
+            
+            <div onclick="showTab('settings')" class="flex items-center gap-2 md:gap-3 pl-2 md:pl-4 border-l border-brand-textGray/20 cursor-pointer group">
+                <div class="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-brand-bgPurple flex items-center justify-center text-brand-primary font-bold group-hover:shadow-md transition-shadow">
+                    <img id="userAvatarHeader" src="https://ui-avatars.com/api/?name=User&background=249387&color=fff" class="w-full h-full object-cover">
+                </div>
+                <div class="hidden sm:flex flex-col">
+                    <p class="text-sm font-bold text-brand-textDark leading-none group-hover:text-brand-primary transition-colors" id="userEmailHeader">Loading...</p>
+                    <p class="text-[10px] text-brand-textGray font-semibold uppercase mt-1 leading-none">Member</p>
+                </div>
+            </div>
+        </div>
+    </header>
 
             <main class="flex-grow overflow-y-auto px-4 md:px-8 lg:px-10 pb-10 w-full">
                 
@@ -1114,14 +1114,16 @@
         window.toggleMobileSidebar = function() {
             const mobileMenu = document.getElementById('mobile-sidebar');
             const overlay = document.getElementById('mobile-sidebar-overlay');
-            if (mobileMenu && mobileMenu.classList.contains('hidden')) { 
-                mobileMenu.classList.remove('hidden'); 
+            if (mobileMenu && mobileMenu.classList.contains('-translate-x-full')) { 
+                mobileMenu.classList.remove('-translate-x-full'); 
                 if(overlay) overlay.classList.remove('hidden'); 
             } else if (mobileMenu) { 
-                mobileMenu.classList.add('hidden'); 
+                mobileMenu.classList.add('-translate-x-full'); 
                 if(overlay) overlay.classList.add('hidden'); 
             }
         };
+        const mobileBtn = document.getElementById('mobile-menu-toggle');
+        if(mobileBtn) mobileBtn.addEventListener('click', toggleMobileSidebar);
 
         window.showTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
