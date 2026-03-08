@@ -1,17 +1,16 @@
-// CHANGE THIS VERSION NUMBER EVERY TIME YOU UPDATE YOUR SITE (e.g., v2, v3, v4)
-const CACHE_NAME = 'mets-iedc-v2'; 
+// Version bumped to v3 to trigger an update for your users
+const CACHE_NAME = 'mets-iedc-v3'; 
 
 const urlsToCache = [
   './',
   './index.html',
+  './offline.html', // <-- This ensures the offline page is downloaded immediately
   './manifest.json',
-  // Add your other pages here
+  // Add your other core pages here
 ];
 
 // 1. Install Phase
 self.addEventListener('install', event => {
-  // self.skipWaiting() forces the new app version to install immediately 
-  // without waiting for the user to close all open tabs of your app.
   self.skipWaiting(); 
   
   event.waitUntil(
@@ -25,10 +24,8 @@ self.addEventListener('install', event => {
 
 // 2. Activate Phase (Clean up old versions)
 self.addEventListener('activate', event => {
-  // clients.claim() tells the new service worker to take control immediately
   event.waitUntil(self.clients.claim()); 
   
-  // This deletes any old versions of your app from the user's phone
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
@@ -43,26 +40,37 @@ self.addEventListener('activate', event => {
   );
 });
 
-// 3. Fetch Phase (Stale-While-Revalidate Strategy)
+// 3. Fetch Phase (Smart Offline Routing)
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      const fetchPromise = fetch(event.request).then(networkResponse => {
-        // Update the cache with the fresh network response in the background
-        if (networkResponse && networkResponse.status === 200) {
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, networkResponse.clone());
-          });
-        }
-        return networkResponse;
-      }).catch(() => {
-        // If network fails (offline), just rely on the cache
-        console.log("Network fetch failed, serving from cache.");
-      });
+  // Check if the request is for a new HTML page
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).catch(() => {
+        // If the network fails (offline), try the cache first
+        return caches.match(event.request).then(response => {
+          // If the page isn't in the cache, show the cinematic offline.html
+          return response || caches.match('./offline.html');
+        });
+      })
+    );
+  } else {
+    // For all other requests (images, CSS, JS), use your Stale-While-Revalidate strategy
+    event.respondWith(
+      caches.match(event.request).then(cachedResponse => {
+        const fetchPromise = fetch(event.request).then(networkResponse => {
+          if (networkResponse && networkResponse.status === 200) {
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(event.request, networkResponse.clone());
+            });
+          }
+          return networkResponse;
+        }).catch(() => {
+          // Silent fail for assets; they just won't load if offline and not cached
+          console.log("Network fetch failed for asset.");
+        });
 
-      // Return the cached response immediately if we have it, 
-      // otherwise wait for the network response.
-      return cachedResponse || fetchPromise;
-    })
-  );
+        return cachedResponse || fetchPromise;
+      })
+    );
+  }
 });
