@@ -1,13 +1,19 @@
-const CACHE_NAME = 'mets-iedc-v1';
+// CHANGE THIS VERSION NUMBER EVERY TIME YOU UPDATE YOUR SITE (e.g., v2, v3, v4)
+const CACHE_NAME = 'mets-iedc-v2'; 
+
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
-  // Use './' for any other files too
+  // Add your other pages here
 ];
 
-// Install the service worker and cache files
+// 1. Install Phase
 self.addEventListener('install', event => {
+  // self.skipWaiting() forces the new app version to install immediately 
+  // without waiting for the user to close all open tabs of your app.
+  self.skipWaiting(); 
+  
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -17,28 +23,18 @@ self.addEventListener('install', event => {
   );
 });
 
-// Intercept network requests and serve from cache if available
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
-      })
-  );
-});
-
-// Update the service worker and remove old caches
+// 2. Activate Phase (Clean up old versions)
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
+  // clients.claim() tells the new service worker to take control immediately
+  event.waitUntil(self.clients.claim()); 
+  
+  // This deletes any old versions of your app from the user's phone
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
+          if (cacheName !== CACHE_NAME) {
+            console.log('Deleting old cache version:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -47,50 +43,26 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Listen for push events from the server
-self.addEventListener('push', event => {
-    let body = "New update from MET'S IEDC!";
-    
-    // If the server sent a specific message payload, use it
-    if (event.data) {
-        body = event.data.text();
-    }
+// 3. Fetch Phase (Stale-While-Revalidate Strategy)
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(cachedResponse => {
+      const fetchPromise = fetch(event.request).then(networkResponse => {
+        // Update the cache with the fresh network response in the background
+        if (networkResponse && networkResponse.status === 200) {
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, networkResponse.clone());
+          });
+        }
+        return networkResponse;
+      }).catch(() => {
+        // If network fails (offline), just rely on the cache
+        console.log("Network fetch failed, serving from cache.");
+      });
 
-    const options = {
-        body: body,
-        icon: 'assets/icons/icon-192x192.png',
-        badge: 'assets/icons/icon-192x192.png',
-        vibrate: [100, 50, 100],
-        data: {
-            dateOfArrival: Date.now(),
-            primaryKey: '1'
-        },
-        // Actions allow users to interact directly from the notification popup
-        actions: [
-            { action: 'explore', title: 'View Event Details' },
-            { action: 'close', title: 'Dismiss' }
-        ]
-    };
-
-    // Show the notification
-    event.waitUntil(
-        self.registration.showNotification("MET'S IEDC Innovation Hub", options)
-    );
-});
-
-// Handle what happens when the user clicks the notification
-self.addEventListener('notificationclick', event => {
-    event.notification.close();
-
-    if (event.action === 'explore') {
-        // Open the events page if they click the specific "View Event Details" action button
-        event.waitUntil(
-            clients.openWindow('/event.html')
-        );
-    } else {
-        // Open the main site if they click the general body of the notification
-        event.waitUntil(
-            clients.openWindow('/')
-        );
-    }
+      // Return the cached response immediately if we have it, 
+      // otherwise wait for the network response.
+      return cachedResponse || fetchPromise;
+    })
+  );
 });
