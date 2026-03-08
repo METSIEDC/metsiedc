@@ -1,0 +1,25 @@
+{
+  "name": "MET'S IEDC | Innovation Hub",
+  "short_name": "MET'S IEDC",
+  "description": "Fostering a culture of innovation and entrepreneurship.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0f1115",
+  "theme_color": "#0f1115",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/images/logos/MSEM.jpg",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/images/logos/MSEM.jpg",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
+
