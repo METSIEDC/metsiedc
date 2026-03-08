@@ -528,6 +528,40 @@
                     });
             });
         }
+            function requestNotificationPermission() {
+    // Check if the browser supports notifications
+    if (!('Notification' in window)) {
+        console.log('This browser does not support desktop notifications.');
+        return;
+    }
+    
+    // Ask the user for permission
+    Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+            console.log('Notification permission granted.');
+            // In a full setup, you would subscribe the user to your server here.
+            // For now, let's just show a test notification!
+            showTestNotification();
+        } else {
+            console.log('Notification permission denied.');
+        }
+    });
+}
+
+// A quick function to test the local UI
+function showTestNotification() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(registration => {
+            registration.showNotification("MET'S IEDC", {
+                body: 'You are now subscribed to innovation hub updates!',
+                icon: 'assets/icons/icon-192x192.png',
+                badge: 'assets/icons/icon-192x192.png', // Small monochrome icon for Android status bar
+                vibrate: [200, 100, 200]
+            });
+        });
+    }
+}
+
     </script>
     <style>
         /* Custom Pagination Dots override for dark theme */
