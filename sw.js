@@ -1,9 +1,9 @@
 const CACHE_NAME = 'mets-iedc-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  // Add other local pages here like '/events.html', '/about.html'
+  './',
+  './index.html',
+  './manifest.json',
+  // Use './' for any other files too
 ];
 
 // Install the service worker and cache files
