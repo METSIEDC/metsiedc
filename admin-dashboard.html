@@ -155,29 +155,27 @@
         </div>
     </aside>
 
-    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[100] hidden md:hidden transition-opacity" onclick="toggleMobileSidebar()"></div>
-    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-white z-[200] transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
+    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-40 hidden md:hidden transition-opacity"></div>
+    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-white z-50 transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
         <div class="p-6 flex items-center justify-between border-b border-gray-100">
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-lg bg-brand-primary flex items-center justify-center text-white font-bold shadow-sm">P</div>
                 <span class="text-lg font-bold text-gray-800">IEDC.io</span>
             </div>
-            <button onclick="toggleMobileSidebar()" class="text-gray-400 hover:text-gray-800 p-2 cursor-pointer relative z-[300]">
-                <i data-lucide="x" class="w-6 h-6 pointer-events-none"></i>
-            </button>
+            <button id="close-mobile-sidebar" class="text-gray-400 hover:text-gray-800 p-2"><i data-lucide="x" class="pointer-events-none"></i></button>
         </div>
-        <nav class="flex-grow px-4 py-6 space-y-1 overflow-y-auto text-gray-500">
-            <button onclick="showTab('overview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</button>
-            <button onclick="showTab('users'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="users" class="w-5 h-5"></i> Users</button>
-            <button onclick="showTab('inventory'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="box" class="w-5 h-5"></i> Inventory</button>
-            <button onclick="showTab('logs'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="activity" class="w-5 h-5"></i> Logs</button>
-            <button onclick="showTab('excom'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="shield" class="w-5 h-5"></i> ExCom</button>
-            <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="clipboard-check" class="w-5 h-5"></i> Attendance</button>
-            <button onclick="showTab('certificates'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="award" class="w-5 h-5"></i> Certificates</button>
+        <nav class="flex-grow px-4 py-6 space-y-1 overflow-y-auto text-gray-500" id="mobile-nav-links">
+            <button onclick="showTab('overview')" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</button>
+            <button onclick="showTab('users')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="users" class="w-5 h-5"></i> Users</button>
+            <button onclick="showTab('inventory')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="box" class="w-5 h-5"></i> Inventory</button>
+            <button onclick="showTab('logs')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="activity" class="w-5 h-5"></i> Logs</button>
+            <button onclick="showTab('excom')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="shield" class="w-5 h-5"></i> ExCom</button>
+            <button onclick="showTab('attendance')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="clipboard-check" class="w-5 h-5"></i> Attendance</button>
+            <button onclick="showTab('certificates')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="award" class="w-5 h-5"></i> Certificates</button>
             <div class="h-px bg-gray-100 my-4 mx-4"></div>
-            <button onclick="showTab('eventForms'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="file-plus" class="w-5 h-5"></i> Forms</button>
-            <button onclick="showTab('news'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="newspaper" class="w-5 h-5"></i> Post News</button>
-            <button onclick="showTab('announcements'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="bell" class="w-5 h-5"></i> Post Updates</button>
+            <button onclick="showTab('eventForms')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="file-plus" class="w-5 h-5"></i> Forms</button>
+            <button onclick="showTab('news')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="newspaper" class="w-5 h-5"></i> Post News</button>
+            <button onclick="showTab('announcements')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="bell" class="w-5 h-5"></i> Post Updates</button>
             
             <div class="mt-8 px-4">
                 <button id="adminLogoutBtnMobile" class="w-full bg-red-50 hover:bg-red-100 text-red-600 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2">
@@ -187,25 +185,25 @@
         </nav>
     </div>
 
-    <div class="flex-grow flex flex-col h-full overflow-hidden relative w-full bg-brand-bg">
+    <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10 w-full bg-brand-bg">
         
-        <header class="h-20 flex items-center justify-between px-6 md:px-10 shrink-0 w-full bg-brand-bg relative z-[60]">
+        <header class="h-20 flex items-center justify-between px-6 md:px-10 shrink-0 w-full bg-brand-bg border-b border-gray-200/50 md:border-none relative z-[30]">
             <div class="flex items-center gap-4">
-                <button id="mobile-menu-toggle" onclick="toggleMobileSidebar()" class="md:hidden text-gray-500 p-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer relative z-[100]">
+                <button id="mobile-menu-toggle" class="md:hidden text-gray-500 p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer">
                     <i data-lucide="menu" class="w-6 h-6 pointer-events-none"></i>
                 </button>
                 <div>
                     <h1 class="text-xl font-bold text-gray-800" id="headerTitle">Dashboard</h1>
-                    <p class="text-xs text-gray-500 font-medium" id="headerSubtitle">Overview & Statistics</p>
+                    <p class="text-xs text-gray-500 font-medium hidden sm:block" id="headerSubtitle">Overview & Statistics</p>
                 </div>
             </div>
             <div class="flex items-center gap-6">
-                <button class="text-gray-400 hover:text-brand-primary transition-colors"><i data-lucide="mail" class="w-5 h-5"></i></button>
+                <button class="text-gray-400 hover:text-brand-primary transition-colors hidden sm:block"><i data-lucide="mail" class="w-5 h-5"></i></button>
                 <button class="text-gray-400 hover:text-brand-primary transition-colors relative">
                     <i data-lucide="bell" class="w-5 h-5"></i>
                     <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
                 </button>
-                <div class="h-6 w-px bg-gray-300"></div>
+                <div class="h-6 w-px bg-gray-300 hidden sm:block"></div>
                 <div class="flex items-center gap-3">
                     <div class="text-right hidden sm:block">
                         <p class="text-sm font-bold text-gray-800" id="adminEmailDisplay">Admin User</p>
@@ -217,10 +215,9 @@
             </div>
         </header>
 
-        <main class="flex-grow overflow-y-auto p-4 md:p-10 w-full pb-24 md:pb-10 z-10">
+        <main class="flex-grow overflow-y-auto p-4 md:p-10 w-full pb-24 md:pb-10">
             
             <div id="overviewSection" class="tab-content space-y-8 max-w-7xl mx-auto w-full">
-                
                 <div class="bg-brand-primaryLight rounded-2xl p-8 md:p-10 flex justify-between items-center shadow-sm border border-indigo-50">
                     <div>
                         <h2 class="text-2xl md:text-3xl font-bold text-brand-primary mb-3">Hi, Admin 👋</h2>
@@ -712,6 +709,132 @@
         </div>
     </div>
 
+    <script>
+        // GLOBAL UI LOGIC - Must be outside type="module" to be accessible by inline HTML onclicks
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggleBtn = document.getElementById('mobile-menu-toggle');
+            const closeBtn = document.getElementById('close-mobile-sidebar');
+            
+            // Attach strictly via Javascript listeners instead of inline to prevent module scope issues
+            if(menuToggleBtn) {
+                menuToggleBtn.addEventListener('click', window.toggleMobileSidebar);
+            }
+            if(closeBtn) {
+                closeBtn.addEventListener('click', window.toggleMobileSidebar);
+            }
+        });
+
+        window.toggleMobileSidebar = function() {
+            const menu = document.getElementById('mobile-sidebar');
+            const overlay = document.getElementById('mobile-sidebar-overlay');
+            if (menu && menu.classList.contains('-translate-x-full')) { 
+                menu.classList.remove('-translate-x-full'); 
+                if(overlay) overlay.classList.remove('hidden'); 
+            } else if(menu) { 
+                menu.classList.add('-translate-x-full'); 
+                if(overlay) overlay.classList.add('hidden'); 
+            }
+        };
+
+        // Tab Switching Logic
+        window.showTab = (t) => { 
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); 
+            document.getElementById(t+'Section').classList.remove('hidden'); 
+            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active')); 
+            
+            const activeDesktop = document.getElementById('nav-'+t);
+            if(activeDesktop) activeDesktop.classList.add('active');
+
+            // Set Title dynamically
+            let title = t.charAt(0).toUpperCase() + t.slice(1);
+            if(t === 'eventForms') title = "Forms";
+            if(t === 'excom') title = "ExCom";
+            document.getElementById('headerTitle').textContent = title;
+            
+            // Close mobile menu if open
+            const menu = document.getElementById('mobile-sidebar');
+            if(menu && !menu.classList.contains('-translate-x-full')) {
+                window.toggleMobileSidebar();
+            }
+        };
+
+        // Modal toggles
+        window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
+        window.toggleEditUserModal = (s) => document.getElementById('editUserModal').classList.toggle('hidden', !s);
+        window.toggleAttCheck = (id) => { const c = document.getElementById('att-'+id); c.checked = !c.checked; };
+        
+        // Print Functions
+        window.printLogs = () => {
+            const logsTableContent = document.getElementById('logsListBody').innerHTML;
+            if (!logsTableContent || logsTableContent.trim() === '') {
+                alert("No logs available to print.");
+                return;
+            }
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>System Logs - MET'S IEDC</title>
+                    <style>
+                        body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; padding: 40px; color: #333; }
+                        h2 { text-transform: uppercase; letter-spacing: 2px; color: #111; border-bottom: 2px solid #111; padding-bottom: 10px; margin-bottom: 5px; }
+                        .meta { font-size: 12px; color: #666; margin-bottom: 30px; font-style: italic; }
+                        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+                        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+                        th { background-color: #f1f5f9; font-weight: bold; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; color: #475569; }
+                        * { color: #000 !important; background: transparent !important; }
+                        th { background-color: #eee !important; }
+                    </style>
+                </head>
+                <body>
+                    <h2>Admin System Logs</h2>
+                    <p class="meta">Generated on: ${new Date().toLocaleString()}</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                                <th>Admin User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${logsTableContent}
+                        </tbody>
+                    </table>
+                    <script>
+                        window.onload = () => { window.print(); setTimeout(() => window.close(), 500); };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        };
+
+        // Helper functions
+        function getSafeText(val) {
+            if (val === null || val === undefined) return "Unknown";
+            return String(val);
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag));
+        }
+
+        function safeSetText(id, text) { const el = document.getElementById(id); if (el) el.textContent = text; }
+        
+        function generateId() { 
+            return Math.random().toString(36).substr(2, 9); 
+        }
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -736,17 +859,12 @@
         let formCoverImageFile = null;
 
         // --- FORM BUILDER STATE & LOGIC ---
-        // Pre-loaded with standard Google Form style questions
         let formBuilderFields = [
             { id: generateId(), label: 'Full Name', type: 'text', required: true, options: [] },
             { id: generateId(), label: 'Email Address', type: 'email', required: true, options: [] },
             { id: generateId(), label: 'Mobile Number', type: 'tel', required: true, options: [] },
             { id: generateId(), label: 'Gender', type: 'select', required: true, options: ['Male', 'Female', 'Other'] }
         ];
-
-        function generateId() { 
-            return Math.random().toString(36).substr(2, 9); 
-        }
 
         window.handleFormCoverImage = (e) => { 
             formCoverImageFile = e.target.files[0]; 
@@ -755,12 +873,12 @@
 
         window.addQuestionField = () => {
             formBuilderFields.push({ id: generateId(), label: '', type: 'text', required: false, options: [] });
-            renderFormBuilderFields();
+            window.renderFormBuilderFields();
         };
 
         window.removeQuestionField = (id) => {
             formBuilderFields = formBuilderFields.filter(f => f.id !== id);
-            renderFormBuilderFields();
+            window.renderFormBuilderFields();
         };
 
         window.updateField = (id, key, value) => {
@@ -768,11 +886,10 @@
             if (field) {
                 field[key] = value;
                 if (key === 'type') {
-                    // Initialize options array if transitioning to a choice-based type
                     if (['radio', 'checkbox', 'select'].includes(value) && (!field.options || field.options.length === 0)) {
                         field.options = ['Option 1'];
                     }
-                    renderFormBuilderFields();
+                    window.renderFormBuilderFields();
                 }
             }
         };
@@ -782,7 +899,7 @@
             if (field) {
                 if(!field.options) field.options = [];
                 field.options.push(`Option ${field.options.length + 1}`);
-                renderFormBuilderFields();
+                window.renderFormBuilderFields();
             }
         };
 
@@ -790,7 +907,7 @@
             const field = formBuilderFields.find(f => f.id === id);
             if (field && field.options) {
                 field.options.splice(optIndex, 1);
-                renderFormBuilderFields();
+                window.renderFormBuilderFields();
             }
         };
 
@@ -874,37 +991,6 @@
             lucide.createIcons();
         };
 
-        // Mobile Menu Logic (UPDATED globally)
-        window.toggleMobileSidebar = function() {
-            const menu = document.getElementById('mobile-sidebar');
-            const overlay = document.getElementById('mobile-sidebar-overlay');
-            if (menu && menu.classList.contains('-translate-x-full')) { 
-                menu.classList.remove('-translate-x-full'); 
-                if(overlay) overlay.classList.remove('hidden'); 
-            } else if(menu) { 
-                menu.classList.add('-translate-x-full'); 
-                if(overlay) overlay.classList.add('hidden'); 
-            }
-        };
-
-        // HELPER: ESCAPE STRINGS FOR HTML RENDERING
-        function getSafeText(val) {
-            if (val === null || val === undefined) return "Unknown";
-            return String(val);
-        }
-
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, tag => ({
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                "'": '&#39;',
-                '"': '&quot;'
-            }[tag] || tag));
-        }
-
-        function safeSetText(id, text) { const el = document.getElementById(id); if (el) el.textContent = text; }
-
         // --- AUTH ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -914,7 +1000,7 @@
                         currentUserEmail = user.email;
                         safeSetText('adminEmailDisplay', user.email || 'Admin');
                         initSync();
-                        renderFormBuilderFields(); // Initial render for form builder
+                        window.renderFormBuilderFields(); 
                     } else { 
                         alert("Unauthorized. Admin access required."); signOut(auth).then(() => window.location.href = 'admin.html');
                     }
@@ -982,7 +1068,7 @@
                 }
             });
 
-            renderUserTable(allUsersData);
+            window.renderUserTable(allUsersData);
             
             if(document.getElementById('certUserListBody')) document.getElementById('certUserListBody').innerHTML = certHtml;
             if(document.getElementById('attendanceListBody')) document.getElementById('attendanceListBody').innerHTML = attHtml;
@@ -1103,62 +1189,6 @@
             lucide.createIcons();
         };
 
-        document.getElementById('excomMeetingDate').addEventListener('change', (e) => {
-            const selectedDate = e.target.value;
-            const btn = document.getElementById('saveExcomBtn');
-            const existing = excomMeetingsData.find(m => m.date === selectedDate);
-            
-            if (existing) {
-                alert("A meeting is already logged for this date. You cannot overwrite it.");
-                btn.disabled = true;
-                btn.classList.add('opacity-50', 'cursor-not-allowed');
-                btn.innerHTML = '<i data-lucide="lock" class="w-4 h-4"></i> Date Locked';
-            } else {
-                btn.disabled = false;
-                btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log';
-            }
-            lucide.createIcons();
-        });
-
-        window.submitExcomAttendance = async () => {
-            const title = document.getElementById('excomMeetingTitle').value.trim();
-            const date = document.getElementById('excomMeetingDate').value;
-            if(!title || !date) return alert("Please provide a meeting name and date.");
-            
-            if(excomMeetingsData.some(m => m.date === date)) return alert("A meeting is already logged for this date.");
-
-            const attendanceRecords = Array.from(document.querySelectorAll('.excom-status-select')).map(sel => ({
-                id: sel.dataset.id,
-                name: sel.dataset.name,
-                status: sel.value
-            }));
-
-            const btn = document.getElementById('saveExcomBtn');
-            btn.disabled = true; 
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Saving...`;
-            lucide.createIcons();
-
-            try {
-                await addDoc(collection(db, "excom_meetings"), { 
-                    title: title, 
-                    date: date, 
-                    attendance: attendanceRecords, 
-                    timestamp: Date.now(),
-                    loggedBy: currentUserEmail
-                }); 
-                await logActivity("ExCom Logged", `Meeting: ${date}`);
-                alert("Meeting Logged Successfully!"); 
-                document.getElementById('excomModal').classList.add('hidden');
-            } catch(e) {
-                alert(e.message);
-            } finally {
-                btn.disabled = false; 
-                btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log';
-                lucide.createIcons();
-            }
-        };
-
         window.printExcomMeeting = (meetingId) => {
             const m = excomMeetingsData.find(x => x.id === meetingId);
             if(!m) return alert("Meeting not found.");
@@ -1209,54 +1239,6 @@
                         </thead>
                         <tbody>
                             ${rows || '<tr><td colspan="2" style="padding:20px;text-align:center;color:#999;">No detailed records found.</td></tr>'}
-                        </tbody>
-                    </table>
-                    <script>
-                        window.onload = () => { window.print(); setTimeout(() => window.close(), 500); };
-                    <\/script>
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
-        };
-
-        window.printLogs = () => {
-            const logsTableContent = document.getElementById('logsListBody').innerHTML;
-            if (!logsTableContent || logsTableContent.trim() === '') {
-                alert("No logs available to print.");
-                return;
-            }
-
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>System Logs - MET'S IEDC</title>
-                    <style>
-                        body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; padding: 40px; color: #333; }
-                        h2 { text-transform: uppercase; letter-spacing: 2px; color: #111; border-bottom: 2px solid #111; padding-bottom: 10px; margin-bottom: 5px; }
-                        .meta { font-size: 12px; color: #666; margin-bottom: 30px; font-style: italic; }
-                        table { width: 100%; border-collapse: collapse; font-size: 12px; }
-                        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-                        th { background-color: #f1f5f9; font-weight: bold; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; color: #475569; }
-                        * { color: #000 !important; background: transparent !important; }
-                        th { background-color: #eee !important; }
-                    </style>
-                </head>
-                <body>
-                    <h2>Admin System Logs</h2>
-                    <p class="meta">Generated on: ${new Date().toLocaleString()}</p>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Timestamp</th>
-                                <th>Action</th>
-                                <th>Details</th>
-                                <th>Admin User</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${logsTableContent}
                         </tbody>
                     </table>
                     <script>
@@ -1319,15 +1301,6 @@
             const tbody = document.getElementById('userListBody');
             if(tbody) tbody.innerHTML = uHtml || '<tr><td colspan="4" class="text-center py-10 text-gray-400 text-sm font-medium tracking-wide">No users found.</td></tr>';
             lucide.createIcons();
-        };
-
-        window.filterUsers = () => {
-            const term = document.getElementById('userSearchInput').value.toLowerCase();
-            renderUserTable(allUsersData.filter(u => {
-                const n = String(u.name || "Unknown").toLowerCase();
-                const e = String(u.email || "").toLowerCase();
-                return n.includes(term) || e.includes(term);
-            }));
         };
 
         window.deleteUser = async (id, name) => {
@@ -1502,7 +1475,7 @@
                     { id: generateId(), label: 'Mobile Number', type: 'tel', required: true, options: [] },
                     { id: generateId(), label: 'Gender', type: 'select', required: true, options: ['Male', 'Female', 'Other'] }
                 ];
-                renderFormBuilderFields();
+                window.renderFormBuilderFields();
             } catch (error) {
                 console.error(error);
                 alert("Error saving form: " + error.message);
@@ -1557,6 +1530,12 @@
             if(t === 'eventForms') title = "Forms";
             if(t === 'excom') title = "ExCom";
             document.getElementById('headerTitle').textContent = title;
+            
+            // Close mobile menu if open
+            const menu = document.getElementById('mobile-sidebar');
+            if(menu && !menu.classList.contains('-translate-x-full')) {
+                window.toggleMobileSidebar();
+            }
         };
 
         window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
@@ -1585,7 +1564,7 @@
                 console.error("Failed to write logout log:", e);
             }
             
-            signOut(auth).then(()=>window.location.href='admin.html');
+            signOut(auth).then(()=>window.location.href='login.html');
         });
         
         // Mobile Logout Handler
@@ -1607,53 +1586,7 @@
                     console.error("Failed to write logout log:", e);
                 }
                 
-                signOut(auth).then(()=>window.location.href='admin.html');
-            });
-        }
-        
-        // Final failsafe to attach click listeners if the inline onclick fails
-        setTimeout(() => {
-            const mBtn = document.getElementById('mobile-menu-toggle');
-            if(mBtn) mBtn.addEventListener('click', window.toggleMobileSidebar);
-        }, 500);
-    </script>
-
-    <script>
-        let newWorker;
-        const updateBanner = document.getElementById('pwa-update-banner');
-        const refreshBtn = document.getElementById('pwa-refresh-btn');
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').then(registration => {
-                    console.log('ServiceWorker registered');
-
-                    registration.addEventListener('updatefound', () => {
-                        newWorker = registration.installing;
-                        newWorker.addEventListener('statechange', () => {
-                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                updateBanner.classList.remove('hidden');
-                                updateBanner.classList.add('flex');
-                            }
-                        });
-                    });
-                });
-
-                let refreshing;
-                navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    if (refreshing) return;
-                    refreshing = true;
-                    window.location.reload();
-                });
-            });
-        }
-
-        if (refreshBtn) {
-            refreshBtn.addEventListener('click', () => {
-                if (newWorker) {
-                    newWorker.postMessage({ action: 'skipWaiting' });
-                }
-                updateBanner.classList.add('hidden'); 
+                signOut(auth).then(()=>window.location.href='login.html');
             });
         }
     </script>
