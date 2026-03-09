@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#e4f6f4">
+    <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -121,9 +124,23 @@
 </head>
 <body class="font-sans antialiased relative selection:bg-brand-primary selection:text-white flex h-screen overflow-hidden p-0 md:p-4 lg:p-6">
 
+    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                <i class="fas fa-cloud-download-alt"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-white text-sm font-semibold">Update Available</span>
+                <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
+            </div>
+        </div>
+        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+            Refresh
+        </button>
+    </div>
+
     <div class="bg-white md:rounded-[2rem] w-full h-full flex overflow-hidden app-window border border-white relative">
 
-        <!-- Sidebar -->
         <aside class="w-64 border-r border-brand-borderGray flex-shrink-0 hidden md:flex flex-col h-full z-20 bg-white/80 backdrop-blur-xl">
             <div class="p-8 pb-4 flex items-center gap-3">
                 <div class="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center text-white font-bold text-lg">
@@ -181,76 +198,70 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10 bg-transparent">
             
-            <!-- Header -->
             <header class="h-28 flex items-center justify-between px-6 md:px-8 lg:px-10 shrink-0 w-full pt-4 relative">
                 <div class="flex items-start gap-4">
                     <button id="mobile-menu-toggle" class="md:hidden text-brand-textDark p-2 bg-white/50 rounded-xl"><i data-lucide="menu" class="w-6 h-6"></i></button>
                     <div class="hidden sm:block">
-                <p class="text-sm font-semibold text-brand-primary mb-0.5">Welcome back, <span id="headerWelcomeName">Student</span>👋</p>
-                <h1 class="text-4xl font-bold text-brand-textDark tracking-tight" id="headerTitle">Dashboard</h1>
-            </div>
-        </div>
-        
-        <!-- Utilities -->
-        <div class="flex items-center gap-3 md:gap-5">
-            <div class="flex items-center gap-1 md:gap-3 relative">
-                
-                <div id="searchContainer" class="hidden absolute right-0 top-12 md:right-12 md:top-1/2 md:-translate-y-1/2 w-56 md:w-64 transition-all z-50">
-                    <input type="text" id="notificationSearchInput" placeholder="Search notices..." class="brand-input w-full py-2.5 px-4 pr-10 text-sm shadow-sm rounded-full">
-                    <button onclick="toggleSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1">
-                        <i data-lucide="x" class="w-4 h-4"></i>
-                    </button>
+                        <p class="text-sm font-semibold text-brand-primary mb-0.5">Welcome back, <span id="headerWelcomeName">Student</span>👋</p>
+                        <h1 class="text-4xl font-bold text-brand-textDark tracking-tight" id="headerTitle">Dashboard</h1>
+                    </div>
                 </div>
-                
-                <button onclick="toggleSearch()" title="Search" class="w-8 h-8 md:w-10 md:h-10 rounded-full text-brand-textGray hover:bg-white/50 flex items-center justify-center transition-all z-10 relative">
-                    <i data-lucide="search" class="w-4 h-4 md:w-5 md:h-5"></i>
-                </button>
-                
-                <!-- Notifications -->
-                <div class="relative">
-                    <button onclick="toggleNotifications()" title="Alerts & Announcements" class="w-8 h-8 md:w-10 md:h-10 rounded-full text-brand-textGray hover:bg-white/50 flex items-center justify-center transition-all shadow-sm relative z-10 bg-white/50">
-                        <i data-lucide="bell" class="w-4 h-4 md:w-5 md:h-5"></i>
-                        <span id="notificationBadge" class="absolute top-1.5 right-1.5 md:top-2 md:right-2.5 w-2 h-2 bg-brand-iconPink rounded-full hidden border border-[#f0f4f8]"></span>
+        
+                <div class="flex items-center gap-3 md:gap-5">
+                    <div class="flex items-center gap-1 md:gap-3 relative">
+                        
+                        <div id="searchContainer" class="hidden absolute right-0 top-12 md:right-12 md:top-1/2 md:-translate-y-1/2 w-56 md:w-64 transition-all z-50">
+                            <input type="text" id="notificationSearchInput" placeholder="Search notices..." class="brand-input w-full py-2.5 px-4 pr-10 text-sm shadow-sm rounded-full">
+                            <button onclick="toggleSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        
+                        <button onclick="toggleSearch()" title="Search" class="w-8 h-8 md:w-10 md:h-10 rounded-full text-brand-textGray hover:bg-white/50 flex items-center justify-center transition-all z-10 relative">
+                            <i data-lucide="search" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        </button>
+                        
+                        <div class="relative">
+                            <button onclick="toggleNotifications()" title="Alerts & Announcements" class="w-8 h-8 md:w-10 md:h-10 rounded-full text-brand-textGray hover:bg-white/50 flex items-center justify-center transition-all shadow-sm relative z-10 bg-white/50">
+                                <i data-lucide="bell" class="w-4 h-4 md:w-5 md:h-5"></i>
+                                <span id="notificationBadge" class="absolute top-1.5 right-1.5 md:top-2 md:right-2.5 w-2 h-2 bg-brand-iconPink rounded-full hidden border border-[#f0f4f8]"></span>
+                            </button>
+                            
+                            <div id="notificationPanel" class="hidden absolute right-0 mt-3 w-72 md:w-80 brand-card z-50 overflow-hidden flex-col !rounded-2xl">
+                                <div class="bg-gray-50/50 border-b border-gray-100 p-4 flex justify-between items-center">
+                                    <h3 class="text-sm font-bold text-brand-textDark">Notifications</h3>
+                                    <span class="text-[10px] text-brand-primary font-bold bg-white shadow-sm px-2 py-1 rounded-md">Live</span>
+                                </div>
+                                <div id="notificationList" class="max-h-80 overflow-y-auto divide-y divide-gray-50">
+                                    <div class="p-8 text-center text-sm text-gray-400 font-medium">Loading messages...</div>
+                                </div>
+                                <div class="p-3 border-t border-gray-50 text-center bg-gray-50/50 hover:bg-gray-100 transition-colors cursor-pointer text-xs font-semibold text-brand-primary" onclick="toggleNotifications()">
+                                    Close Panel
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="showTab('settings')" title="Account Settings" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/50 hover:bg-white text-brand-textGray flex items-center justify-center transition-all shadow-sm">
+                        <i data-lucide="settings" class="w-4 h-4 md:w-5 md:h-5"></i>
                     </button>
                     
-                    <div id="notificationPanel" class="hidden absolute right-0 mt-3 w-72 md:w-80 brand-card z-50 overflow-hidden flex-col !rounded-2xl">
-                        <div class="bg-gray-50/50 border-b border-gray-100 p-4 flex justify-between items-center">
-                            <h3 class="text-sm font-bold text-brand-textDark">Notifications</h3>
-                            <span class="text-[10px] text-brand-primary font-bold bg-white shadow-sm px-2 py-1 rounded-md">Live</span>
+                    <div onclick="showTab('settings')" class="flex items-center gap-2 md:gap-3 pl-2 md:pl-4 border-l border-brand-textGray/20 cursor-pointer group">
+                        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-brand-bgPurple flex items-center justify-center text-brand-primary font-bold group-hover:shadow-md transition-shadow">
+                            <img id="userAvatarHeader" src="https://ui-avatars.com/api/?name=User&background=249387&color=fff" class="w-full h-full object-cover">
                         </div>
-                        <div id="notificationList" class="max-h-80 overflow-y-auto divide-y divide-gray-50">
-                            <div class="p-8 text-center text-sm text-gray-400 font-medium">Loading messages...</div>
-                        </div>
-                        <div class="p-3 border-t border-gray-50 text-center bg-gray-50/50 hover:bg-gray-100 transition-colors cursor-pointer text-xs font-semibold text-brand-primary" onclick="toggleNotifications()">
-                            Close Panel
+                        <div class="hidden sm:flex flex-col">
+                            <p class="text-sm font-bold text-brand-textDark leading-none group-hover:text-brand-primary transition-colors" id="userEmailHeader">Loading...</p>
+                            <p class="text-[10px] text-brand-textGray font-semibold uppercase mt-1 leading-none">Member</p>
                         </div>
                     </div>
                 </div>
-            </div>
+            </header>
 
-            <!-- Settings Button -->
-            <button onclick="showTab('settings')" title="Account Settings" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/50 hover:bg-white text-brand-textGray flex items-center justify-center transition-all shadow-sm">
-                <i data-lucide="settings" class="w-4 h-4 md:w-5 md:h-5"></i>
-            </button>
-            
-            <div onclick="showTab('settings')" class="flex items-center gap-2 md:gap-3 pl-2 md:pl-4 border-l border-brand-textGray/20 cursor-pointer group">
-                <div class="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-brand-bgPurple flex items-center justify-center text-brand-primary font-bold group-hover:shadow-md transition-shadow">
-                    <img id="userAvatarHeader" src="https://ui-avatars.com/api/?name=User&background=249387&color=fff" class="w-full h-full object-cover">
-                </div>
-                <div class="hidden sm:flex flex-col">
-                    <p class="text-sm font-bold text-brand-textDark leading-none group-hover:text-brand-primary transition-colors" id="userEmailHeader">Loading...</p>
-                    <p class="text-[10px] text-brand-textGray font-semibold uppercase mt-1 leading-none">Member</p>
-                </div>
-            </div>
-        </div>
-    </header>
-
-            <main class="flex-grow overflow-y-auto px-4 md:px-8 lg:px-10 pb-10 w-full">
+            <main class="flex-grow overflow-y-auto px-4 md:px-8 lg:px-10 pb-24 md:pb-10 w-full">
                 
-                <!-- Dashboard Overview -->
                 <div id="dashboardOverviewSection" class="tab-content space-y-10 max-w-6xl w-full mx-auto">
                     <div class="sm:hidden mb-6">
                         <p class="text-xs font-semibold text-brand-primary mb-1">Welcome back 👋</p>
@@ -336,7 +347,6 @@
                     .cp-btn { @apply w-full bg-brand-primary hover:bg-brand-primaryDark text-white font-bold py-3.5 rounded-xl text-sm transition-all shadow-md shadow-brand-primary/30 flex justify-center items-center gap-2; }
                 </style>
 
-                <!-- Settings -->
                 <div id="settingsSection" class="tab-content hidden max-w-5xl mx-auto w-full space-y-6">
                     <div class="flex justify-between items-end mb-6">
                         <h2 class="text-3xl font-bold text-brand-textDark">Account Settings</h2>
@@ -412,7 +422,6 @@
                     </div>
                 </div>
 
-                <!-- Forms -->
                 <div id="joinIedcSection" class="tab-content hidden w-full">
                     <div id="membershipStatusCard" class="hidden cp-form-card text-center">
                         <div class="w-20 h-20 bg-brand-bgStart rounded-full flex items-center justify-center mx-auto mb-6 border border-brand-primary/20">
@@ -502,7 +511,6 @@
                     </div>
                 </div>
 
-                <!-- Data Grids -->
                 <div id="trackStatusSection" class="tab-content hidden max-w-5xl mx-auto w-full">
                     <div class="flex justify-between items-end mb-8">
                         <h2 class="text-3xl font-bold text-brand-textDark">My Submissions</h2>
@@ -534,69 +542,89 @@
                 </div>
 
             </main>
-    </div>
+        </div>
 
-    <!-- Mobile Sidebar Overlay -->
-    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[100] hidden md:hidden transition-opacity" onclick="toggleMobileSidebar()"></div>
-
-    <!-- Mobile Sidebar -->
-    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-white z-[200] transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
-        <div class="p-6 flex items-center justify-between border-b border-gray-100">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-lg bg-brand-primary flex items-center justify-center text-white font-bold shadow-sm">
-                    <i data-lucide="zap" class="w-4 h-4"></i>
-                </div>
-                <span class="text-xl font-bold text-brand-textDark tracking-tight">IEDC.io</span>
+        <div class="fixed bottom-0 left-0 w-full bg-[#0a0c0f]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
+            <div class="flex justify-around items-center px-2 py-3">
+                <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                    <i class="fas fa-home text-lg"></i>
+                    <span class="text-[9px] uppercase tracking-wider font-medium">Home</span>
+                </a>
+                <a href="event.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                    <i class="far fa-calendar-alt text-lg"></i>
+                    <span class="text-[9px] uppercase tracking-wider font-medium">Events</span>
+                </a>
+                <a href="initiatives.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                    <i class="fas fa-rocket text-lg"></i>
+                    <span class="text-[9px] uppercase tracking-wider font-medium">Initiatives</span>
+                </a>
+                <a href="login.html" class="flex flex-col items-center gap-1 text-white">
+                    <i class="far fa-user text-lg"></i>
+                    <span class="text-[9px] uppercase tracking-wider font-medium">Profile</span>
+                </a>
             </div>
-            <button onclick="toggleMobileSidebar()" class="text-gray-400 hover:text-gray-800"><i data-lucide="x" class="w-6 h-6"></i></button>
         </div>
-        
-        <div class="px-6 py-6">
-            <button onclick="showTab('submitIdea'); toggleMobileSidebar()" class="w-full flex items-center justify-between bg-white border border-gray-100 shadow-sm hover:shadow-md px-2 py-2 rounded-full transition-all group">
-                <span class="text-[11px] font-bold text-gray-700 leading-tight pl-3 text-left">Create<br>New Idea</span>
-                <div class="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center group-hover:bg-brand-primaryDark transition-colors">
-                    <i data-lucide="plus" class="w-5 h-5"></i>
+
+        <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[100] hidden md:hidden transition-opacity" onclick="toggleMobileSidebar()"></div>
+
+        <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-white z-[200] transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
+            <div class="p-6 flex items-center justify-between border-b border-gray-100">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-brand-primary flex items-center justify-center text-white font-bold shadow-sm">
+                        <i data-lucide="zap" class="w-4 h-4"></i>
+                    </div>
+                    <span class="text-xl font-bold text-brand-textDark tracking-tight">IEDC.io</span>
                 </div>
-            </button>
-        </div>
+                <button onclick="toggleMobileSidebar()" class="text-gray-400 hover:text-gray-800"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            
+            <div class="px-6 py-6">
+                <button onclick="showTab('submitIdea'); toggleMobileSidebar()" class="w-full flex items-center justify-between bg-white border border-gray-100 shadow-sm hover:shadow-md px-2 py-2 rounded-full transition-all group">
+                    <span class="text-[11px] font-bold text-gray-700 leading-tight pl-3 text-left">Create<br>New Idea</span>
+                    <div class="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center group-hover:bg-brand-primaryDark transition-colors">
+                        <i data-lucide="plus" class="w-5 h-5"></i>
+                    </div>
+                </button>
+            </div>
 
-        <nav class="flex-grow px-4 py-2 space-y-1.5 overflow-y-auto">
-            <button onclick="showTab('dashboardOverview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
-            </button>
-            <button onclick="showTab('joinIedc'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                <i data-lucide="users" class="w-5 h-5"></i> Join IEDC
-            </button>
-            <button onclick="showTab('trackStatus'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                <i data-lucide="activity" class="w-5 h-5"></i> Status
-            </button>
-            <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                <i data-lucide="calendar" class="w-5 h-5"></i> Attendance
-            </button>
-            <button onclick="showTab('certificates'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                <i data-lucide="award" class="w-5 h-5"></i> Certificates
-            </button>
-            
-            <div class="pt-4 pb-2 px-5 text-[10px] font-bold text-brand-textMuted uppercase tracking-wider">Actions</div>
-            
-            <button onclick="showTab('submitProject'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                <i data-lucide="rocket" class="w-5 h-5"></i> Submit Project
-            </button>
-            <button onclick="showTab('submitEvent'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                <i data-lucide="calendar-plus" class="w-5 h-5"></i> Propose Event
-            </button>
+            <nav class="flex-grow px-4 py-2 space-y-1.5 overflow-y-auto">
+                <button onclick="showTab('dashboardOverview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </button>
+                <button onclick="showTab('joinIedc'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                    <i data-lucide="users" class="w-5 h-5"></i> Join IEDC
+                </button>
+                <button onclick="showTab('trackStatus'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                    <i data-lucide="activity" class="w-5 h-5"></i> Status
+                </button>
+                <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                    <i data-lucide="calendar" class="w-5 h-5"></i> Attendance
+                </button>
+                <button onclick="showTab('certificates'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                    <i data-lucide="award" class="w-5 h-5"></i> Certificates
+                </button>
+                
+                <div class="pt-4 pb-2 px-5 text-[10px] font-bold text-brand-textMuted uppercase tracking-wider">Actions</div>
+                
+                <button onclick="showTab('submitProject'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                    <i data-lucide="rocket" class="w-5 h-5"></i> Submit Project
+                </button>
+                <button onclick="showTab('submitEvent'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                    <i data-lucide="calendar-plus" class="w-5 h-5"></i> Propose Event
+                </button>
 
-            <div class="pt-4 pb-2 px-5 text-[10px] font-bold text-brand-textMuted uppercase tracking-wider">Account</div>
+                <div class="pt-4 pb-2 px-5 text-[10px] font-bold text-brand-textMuted uppercase tracking-wider">Account</div>
+                
+                <button onclick="showTab('settings'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                    <i data-lucide="settings" class="w-5 h-5"></i> Settings
+                </button>
+            </nav>
             
-            <button onclick="showTab('settings'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                <i data-lucide="settings" class="w-5 h-5"></i> Settings
-            </button>
-        </nav>
-        
-        <div class="p-6 mt-auto">
-            <button id="mobileLogoutBtn" class="w-full bg-brand-bgStart hover:bg-brand-primary text-brand-primary hover:text-white border border-brand-primary/20 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2">
-                <i data-lucide="log-out" class="w-4 h-4"></i> Logout
-            </button>
+            <div class="p-6 mt-auto">
+                <button id="mobileLogoutBtn" class="w-full bg-brand-bgStart hover:bg-brand-primary text-brand-primary hover:text-white border border-brand-primary/20 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1153,6 +1181,46 @@
             if (tabId === 'certificates') window.fetchCertificates();
             if (tabId === 'attendance') window.fetchMyAttendance();
         };
+    </script>
+
+    <script>
+        let newWorker;
+        const updateBanner = document.getElementById('pwa-update-banner');
+        const refreshBtn = document.getElementById('pwa-refresh-btn');
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(registration => {
+                    console.log('ServiceWorker registered');
+
+                    registration.addEventListener('updatefound', () => {
+                        newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                updateBanner.classList.remove('hidden');
+                                updateBanner.classList.add('flex');
+                            }
+                        });
+                    });
+                });
+
+                let refreshing;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (refreshing) return;
+                    refreshing = true;
+                    window.location.reload();
+                });
+            });
+        }
+
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                if (newWorker) {
+                    newWorker.postMessage({ action: 'skipWaiting' });
+                }
+                updateBanner.classList.add('hidden'); 
+            });
+        }
     </script>
 </body>
 </html>
