@@ -6,10 +6,10 @@
     <title>Admin Portal | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f1115">
+    <meta name="theme-color" content="#050505">
     <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -17,7 +17,34 @@
                 extend: {
                     fontFamily: { 
                         sans: ['Inter', 'sans-serif'],
-                        display: ['Montserrat', 'sans-serif']
+                        display: ['Plus Jakarta Sans', 'sans-serif']
+                    },
+                    colors: {
+                        dark: {
+                            base: '#050505',
+                            panel: 'rgba(20, 20, 25, 0.6)',
+                            border: 'rgba(255, 255, 255, 0.08)'
+                        },
+                        glow: {
+                            purple: '#9333ea',
+                            orange: '#ea580c',
+                            blue: '#2563eb',
+                            red: '#dc2626'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.2' },
+                            '50%': { opacity: '0.5' },
+                        }
                     }
                 }
             }
@@ -26,21 +53,29 @@
 
     <style>
         body { 
-            background-color: #0f1115; /* Deep cinematic dark */
-            color: #ffffff; 
+            background-color: #050505; 
+            color: #e2e8f0; 
             overflow-x: hidden; 
         }
 
-        /* Monochromatic Glassmorphism */
+        /* Glassmorphism Utilities */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.02);
+            background: linear-gradient(145deg, rgba(30, 30, 35, 0.8) 0%, rgba(15, 15, 20, 0.6) 100%);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            border-left: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.5);
-            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02), 0 20px 50px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            z-index: 1;
         }
 
         /* Input styling */
@@ -53,12 +88,28 @@
         }
         .glass-input:focus {
             background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.4);
+            border-color: rgba(220, 38, 38, 0.5); /* Red glow for admin */
             outline: none;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.2);
         }
         .glass-input::placeholder {
             color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Button Styling */
+        .btn-light {
+            background: #ffffff;
+            color: #050505;
+            transition: all 0.3s ease;
+        }
+        .btn-light:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
+        }
+        .btn-light:disabled {
+            opacity: 0.7;
+            transform: none;
+            cursor: not-allowed;
         }
 
         /* Loading Spinner */
@@ -71,13 +122,23 @@
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
     </style>
 </head>
-<body class="font-sans antialiased relative min-h-screen flex items-center justify-center selection:bg-white selection:text-black pb-20 md:pb-0">
+<body class="font-sans antialiased relative min-h-screen flex items-center justify-center selection:bg-red-500/30 selection:text-white pb-20 md:pb-0">
 
-    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
+    <div class="fixed top-[10%] right-[-10%] w-[40vw] h-[40vw] bg-glow-red/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow"></div>
+    <div class="fixed bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-glow-purple/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow" style="animation-delay: 2s;"></div>
+    <div class="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 z-0 pointer-events-none"></div>
+
+    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] glass-panel rounded-full px-5 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300 border border-glow-red/50 shadow-[0_0_20px_rgba(220,38,38,0.3)]">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+            <div class="w-8 h-8 rounded-full bg-glow-red/20 flex items-center justify-center text-glow-red">
                 <i class="fas fa-cloud-download-alt"></i>
             </div>
             <div class="flex flex-col">
@@ -85,47 +146,44 @@
                 <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
             </div>
         </div>
-        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+        <button id="pwa-refresh-btn" class="ml-auto btn-light text-xs font-bold px-4 py-2 rounded-full transition-colors">
             Refresh
         </button>
-    </div>
-
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
-        <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
     </div>
 
     <div class="w-full max-w-md px-4 relative z-10 flex flex-col items-center">
         
         <div class="text-center mb-10">
             <a href="index.html" class="inline-block mb-6 group">
-                <div class="w-20 h-20 rounded-2xl bg-[#0a0c0f] border border-white/20 shadow-2xl flex items-center justify-center mx-auto overflow-hidden group-hover:border-white/40 transition-colors">
+                <div class="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.8)] flex items-center justify-center mx-auto overflow-hidden group-hover:border-glow-red/50 group-hover:shadow-[0_0_30px_rgba(220,38,38,0.2)] transition-all duration-300 relative z-10">
                     <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="w-full h-full object-cover grayscale opacity-80" onerror="this.src='https://ui-avatars.com/api/?name=MI&background=0f1115&color=fff'">
                 </div>
             </a>
-            <h1 class="text-3xl font-display font-bold text-white tracking-widest uppercase mb-2">Admin Portal</h1>
+            <h1 class="text-3xl md:text-4xl font-display font-bold text-white tracking-widest uppercase mb-2">Admin Portal</h1>
             <p class="text-white/40 text-[10px] uppercase tracking-[0.2em] font-bold">MET'S IEDC Workspace</p>
         </div>
 
-        <div class="glass-panel w-full p-8 md:p-10 border-t border-t-white/30">
+        <div class="glass-panel w-full p-8 md:p-10 rounded-3xl animate-float relative">
             
-            <div class="flex justify-center mb-8">
-                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold uppercase tracking-widest">
+            <div class="absolute -right-10 -top-10 w-32 h-32 bg-glow-red/20 blur-2xl rounded-full pointer-events-none"></div>
+            
+            <div class="flex justify-center mb-8 relative z-10">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-[10px] font-bold uppercase tracking-widest shadow-[0_0_15px_rgba(220,38,38,0.15)]">
                     <i class="fas fa-lock"></i> Restricted Access
                 </span>
             </div>
 
-            <div id="loginError" class="hidden mb-8 p-4 rounded text-xs tracking-wide text-center border font-medium bg-red-500/10 border-red-500/20 text-red-400 flex items-center justify-center gap-3">
+            <div id="loginError" class="hidden mb-8 p-4 rounded-xl text-xs tracking-wide text-center border font-medium bg-red-500/10 border-red-500/30 text-red-400 flex items-center justify-center gap-3 relative z-10 shadow-lg">
                 <i class="fas fa-exclamation-circle"></i>
                 <span id="loginErrorText">Invalid credentials</span>
             </div>
 
-            <form id="adminLoginForm" class="space-y-6">
+            <form id="adminLoginForm" class="space-y-6 relative z-10">
                 <div>
                     <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Admin ID / Email</label>
                     <div class="relative">
                         <i class="fas fa-user-shield absolute left-4 top-1/2 transform -translate-y-1/2 text-white/30"></i>
-                        <input type="email" id="adminEmail" placeholder="admin@metsiedc.in" class="glass-input w-full rounded py-4 pl-12 pr-4 text-sm font-light">
+                        <input type="email" id="adminEmail" placeholder="admin@metsiedc.in" class="glass-input w-full rounded-xl py-3.5 pl-11 pr-4 text-sm font-light">
                     </div>
                 </div>
 
@@ -133,7 +191,7 @@
                     <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Security Key</label>
                     <div class="relative">
                         <i class="fas fa-key absolute left-4 top-1/2 transform -translate-y-1/2 text-white/30"></i>
-                        <input type="password" id="adminPassword" placeholder="••••••••••••" class="glass-input w-full rounded py-4 pl-12 pr-12 text-sm font-light">
+                        <input type="password" id="adminPassword" placeholder="••••••••••••" class="glass-input w-full rounded-xl py-3.5 pl-11 pr-12 text-sm font-light">
                         <button type="button" class="toggle-password absolute right-4 top-1/2 transform -translate-y-1/2 text-white/30 hover:text-white transition-colors">
                             <i class="fas fa-eye"></i>
                         </button>
@@ -141,7 +199,7 @@
                 </div>
 
                 <div class="pt-4">
-                    <button type="submit" id="loginBtn" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded text-[10px] uppercase tracking-widest transition-all shadow-xl flex justify-center items-center gap-3">
+                    <button type="submit" id="loginBtn" class="w-full btn-light font-bold py-4 rounded-xl text-[10px] uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(255,255,255,0.15)] flex justify-center items-center gap-3">
                         <span id="loginBtnText">Access Dashboard</span>
                         <div id="loginSpinner" class="spinner hidden"></div>
                         <i id="loginIcon" class="fas fa-arrow-right"></i>
@@ -149,20 +207,20 @@
                 </div>
             </form>
 
-            <div class="mt-8 pt-6 border-t border-white/10 text-center">
+            <div class="mt-8 pt-6 border-t border-white/10 text-center relative z-10">
                 <a href="index.html" class="text-[9px] uppercase tracking-[0.2em] font-bold text-white/30 hover:text-white transition-colors flex items-center justify-center gap-2">
                     <i class="fas fa-arrow-left"></i> Return to Main Site
                 </a>
             </div>
         </div>
 
-        <p class="text-center text-white/30 text-[9px] uppercase tracking-widest mt-10 leading-relaxed max-w-xs">
+        <p class="text-center text-white/30 text-[9px] uppercase tracking-widest mt-10 leading-relaxed max-w-xs font-mono opacity-60">
             System monitored.<br>Unauthorized access is prohibited.<br>
-            &copy; 2026 MET'S IEDC.
+            &copy; <span id="year">2026</span> MET'S IEDC.
         </p>
     </div>
 
-    <div class="fixed bottom-0 left-0 w-full bg-[#0a0c0f]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
+    <div class="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-xl border-t border-white/10 z-[100] md:hidden pb-safe">
         <div class="flex justify-around items-center px-2 py-3">
             <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
                 <i class="fas fa-home text-lg"></i>
@@ -182,6 +240,10 @@
             </a>
         </div>
     </div>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -323,7 +385,6 @@
     </script>
 
     <script>
-        // Enhanced PWA Service Worker Registration & Update Logic
         let newWorker;
         const updateBanner = document.getElementById('pwa-update-banner');
         const refreshBtn = document.getElementById('pwa-refresh-btn');
@@ -331,15 +392,10 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').then(registration => {
-                    console.log('ServiceWorker registered');
-
-                    // Check if there is an update waiting
                     registration.addEventListener('updatefound', () => {
                         newWorker = registration.installing;
                         newWorker.addEventListener('statechange', () => {
-                            // If the new worker is installed and there's a previous worker, it's an update
                             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                // Show the update banner
                                 updateBanner.classList.remove('hidden');
                                 updateBanner.classList.add('flex');
                             }
@@ -347,7 +403,6 @@
                     });
                 });
 
-                // Listen for the controlling service worker to change, then reload the page
                 let refreshing;
                 navigator.serviceWorker.addEventListener('controllerchange', () => {
                     if (refreshing) return;
@@ -357,13 +412,12 @@
             });
         }
 
-        // Tell the new service worker to take over when the user clicks Refresh
         if (refreshBtn) {
             refreshBtn.addEventListener('click', () => {
                 if (newWorker) {
                     newWorker.postMessage({ action: 'skipWaiting' });
                 }
-                updateBanner.classList.add('hidden'); // Hide banner immediately
+                updateBanner.classList.add('hidden'); 
             });
         }
     </script>
