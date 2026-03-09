@@ -25,6 +25,10 @@
                             base: '#0f1115',
                             card: '#181b21',
                             accent: '#2a2e37'
+                        },
+                        brand: {
+                            primary: '#249387',
+                            primaryHover: '#1a6f65'
                         }
                     }
                 }
@@ -149,6 +153,10 @@
         .skeleton-wrapper.loaded img {
             opacity: 1;
         }
+        
+        /* Custom Pagination Dots override for dark theme */
+        .swiper-pagination-bullet { background: rgba(255,255,255,0.3); opacity: 1; }
+        .swiper-pagination-bullet-active { background: #fff; }
     </style>
 </head>
 
@@ -167,6 +175,22 @@
         <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
             Refresh
         </button>
+    </div>
+
+    <div id="push-permission-banner" class="hidden fixed bottom-24 left-4 right-4 md:left-auto md:right-10 md:w-96 bg-[#181b21] border border-brand-primary/50 shadow-2xl shadow-black rounded-2xl p-5 z-[90] transform transition-transform translate-y-full">
+        <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-brand-primary/20 flex items-center justify-center text-brand-primary shrink-0">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="flex-grow">
+                <h4 class="text-white text-sm font-bold mb-1">Stay Updated!</h4>
+                <p class="text-white/50 text-[10px] leading-relaxed mb-4">Enable push notifications to never miss an important IEDC event or announcement.</p>
+                <div class="flex gap-3">
+                    <button id="dismiss-push-btn" class="flex-1 px-4 py-2 rounded-lg border border-white/10 text-white/50 text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-colors">Not Now</button>
+                    <button id="enable-push-btn" class="flex-1 px-4 py-2 rounded-lg bg-brand-primary hover:bg-brand-primaryHover text-white text-[10px] font-bold uppercase tracking-widest transition-colors shadow-md shadow-brand-primary/20">Enable</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="imagePopup" class="popup-overlay" onclick="closePopup(event)">
@@ -464,21 +488,6 @@
             </a>
         </div>
     </div>
-    <div id="push-permission-banner" class="hidden fixed bottom-24 left-4 right-4 md:left-auto md:right-10 md:w-96 bg-[#181b21] border border-brand-primary/50 shadow-2xl shadow-black rounded-2xl p-5 z-[90] transform transition-transform translate-y-full">
-        <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-full bg-brand-primary/20 flex items-center justify-center text-brand-primary shrink-0">
-                <i class="fas fa-bell"></i>
-            </div>
-            <div class="flex-grow">
-                <h4 class="text-white text-sm font-bold mb-1">Stay Updated!</h4>
-                <p class="text-white/50 text-[10px] leading-relaxed mb-4">Enable push notifications to never miss an important IEDC event or announcement.</p>
-                <div class="flex gap-3">
-                    <button id="dismiss-push-btn" class="flex-1 px-4 py-2 rounded-lg border border-white/10 text-white/50 text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-colors">Not Now</button>
-                    <button id="enable-push-btn" class="flex-1 px-4 py-2 rounded-lg bg-brand-primary hover:bg-brand-primaryHover text-white text-[10px] font-bold uppercase tracking-widest transition-colors shadow-md shadow-brand-primary/20">Enable</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
@@ -638,37 +647,8 @@
         });
     }
 
-        // Notification Logic
-        function requestNotificationPermission() {
-            if (!('Notification' in window)) {
-                console.log('This browser does not support desktop notifications.');
-                return;
-            }
-            
-            Notification.requestPermission().then(permission => {
-                if (permission === 'granted') {
-                    console.log('Notification permission granted.');
-                    showTestNotification();
-                } else {
-                    console.log('Notification permission denied.');
-                }
-            });
-        }
-
-        function showTestNotification() {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.ready.then(registration => {
-                    registration.showNotification("MET'S IEDC", {
-                        body: 'You are now subscribed to innovation hub updates!',
-                        icon: 'assets/icons/icon-192x192.png',
-                        badge: 'assets/icons/icon-192x192.png', 
-                        vibrate: [200, 100, 200]
-                    });
-                });
-            }
-        }
     </script>
-<script type="module">
+    <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-messaging.js";
@@ -689,24 +669,67 @@
         const db = getFirestore(app);
         const messaging = getMessaging(app);
 
-        async function requestGuestNotificationPermission() {
+        const pushBanner = document.getElementById('push-permission-banner');
+        const enableBtn = document.getElementById('enable-push-btn');
+        const dismissBtn = document.getElementById('dismiss-push-btn');
+
+        // Check if we should show the custom banner
+        function checkPushBannerStatus() {
+            // If they already dismissed it, or already granted permission, don't show it again
+            if (localStorage.getItem('pushPrompted') === 'true' || Notification.permission === 'granted') {
+                return;
+            }
+
+            // Wait 3 seconds, then slide the banner up
+            setTimeout(() => {
+                pushBanner.classList.remove('hidden');
+                // Small delay to allow CSS transition to happen
+                setTimeout(() => {
+                    pushBanner.classList.remove('translate-y-full');
+                }, 50);
+            }, 3000);
+        }
+
+        // Hide banner function
+        function hidePushBanner() {
+            pushBanner.classList.add('translate-y-full');
+            setTimeout(() => {
+                pushBanner.classList.add('hidden');
+            }, 300);
+        }
+
+        // Handle Dismiss
+        dismissBtn.addEventListener('click', () => {
+            localStorage.setItem('pushPrompted', 'true');
+            hidePushBanner();
+        });
+
+        // Handle Enable (This user interaction satisfies mobile browser security!)
+        enableBtn.addEventListener('click', async () => {
+            hidePushBanner();
+            localStorage.setItem('pushPrompted', 'true');
+
+            // 1. Check if the browser even supports it
+            if (!('Notification' in window)) {
+                alert("Your mobile browser does not support Web Push Notifications.");
+                return;
+            }
+
             try {
-                // Wait for the service worker to be ready
-                const registration = await navigator.serviceWorker.ready;
-                
+                // Request native permission
                 const permission = await Notification.requestPermission();
+                
                 if (permission === 'granted') {
                     console.log('Notification permission granted.');
                     
-                    // Grab the token using your VAPID key and the sw.js file
+                    const registration = await navigator.serviceWorker.ready;
+                    
                     const currentToken = await getToken(messaging, { 
                         vapidKey: 'BLAXirXbhUCSrlOF1tdyvLbqhrCBvRJV4xvemvkMzdsM3Fh_DS-Pr_SCliI2Bbl-jIpE6Ugkm9-htU_-FhVWXCE', 
                         serviceWorkerRegistration: registration 
                     });
                     
                     if (currentToken) {
-                        // Save the token to a general "subscribers" list
-                        // We use the token itself as the ID so we don't save duplicates
                         await setDoc(doc(db, "subscribers", currentToken), {
                             token: currentToken,
                             platform: navigator.userAgent,
@@ -715,29 +738,21 @@
                         
                         console.log("Guest subscribed successfully!");
                     }
+                } else if (permission === 'denied') {
+                    alert("Notifications are blocked. Please allow them in your browser settings.");
                 }
             } catch (error) {
-                console.error('Error getting guest notification permission:', error);
+                console.error('Error asking for permission: ' + error.message);
             }
-        }
-
-        // Trigger the permission request a few seconds after the page loads 
-        // so it doesn't instantly block the user's view
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                requestGuestNotificationPermission();
-            }, 3000); // Waits 3 seconds
         });
+
+        // Run the check when page loads
+        window.addEventListener('load', checkPushBannerStatus);
 
         // Listen for messages if the user is currently looking at index.html
         onMessage(messaging, (payload) => {
             alert(`📢 MET'S IEDC UPDATE:\n${payload.notification.title}\n${payload.notification.body}`);
         });
     </script>
-    <style>
-        /* Custom Pagination Dots override for dark theme */
-        .swiper-pagination-bullet { background: rgba(255,255,255,0.3); opacity: 1; }
-        .swiper-pagination-bullet-active { background: #fff; }
-    </style>
 </body>
 </html>
