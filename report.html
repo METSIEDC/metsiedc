@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Past Events | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f1115">
+    <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Immersive Theme Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -71,15 +73,28 @@
         ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
     </style>
 </head>
-<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-white selection:text-black">
+<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-white selection:text-black pb-20 md:pb-0">
 
-    <!-- Subtle Monochromatic Atmospheric Lighting -->
+    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                <i class="fas fa-cloud-download-alt"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-white text-sm font-semibold">Update Available</span>
+                <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
+            </div>
+        </div>
+        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+            Refresh
+        </button>
+    </div>
+
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
         <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
     </div>
 
-    <!-- Frosted Glass Navbar -->
     <header id="navbar" class="h-20 px-6 md:px-10 fixed top-0 w-full z-50 transition-all duration-300 py-4 glass-nav">
         <div class="max-w-[95%] mx-auto h-full flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -90,7 +105,6 @@
                 </a>
             </div>
 
-            <!-- Desktop Links -->
             <div class="hidden lg:flex items-center space-x-8 bg-white/5 backdrop-blur-md px-8 py-3 rounded-full border border-white/10 shadow-lg">
                 <a href="index.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Home</a>
                 <a href="event.html" class="text-white text-[10px] uppercase tracking-[0.2em] font-bold transition-colors">Events</a>
@@ -105,7 +119,6 @@
                     <i class="fas fa-user-circle"></i> Login
                 </a>
                 
-                <!-- Mobile Menu Button -->
                 <button id="mobile-menu-button" class="lg:hidden w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white backdrop-blur-md">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
@@ -113,7 +126,6 @@
         </div>
     </header>
 
-    <!-- Glass Mobile Menu -->
     <div id="mobile-menu" class="fixed top-0 right-0 w-full h-screen glass-menu z-[200] overflow-y-auto transform translate-x-full transition-transform duration-500 ease-in-out">
         <div class="flex justify-between items-center p-8">
             <span class="text-xl font-display font-bold text-white tracking-widest">MENU</span>
@@ -139,7 +151,6 @@
 
     <main class="flex-grow pt-40 pb-24 relative z-10">
         
-        <!-- List View -->
         <div id="listView">
             <div class="text-center px-4 mb-24">
                 <div class="inline-flex items-center px-5 py-2 rounded-full glass-panel text-[10px] uppercase tracking-[0.2em] font-bold text-white/70 mb-8">
@@ -153,7 +164,6 @@
                     Explore our history of workshops, hackathons, and seminars. Relive the moments and access detailed event reports.
                 </p>
                 
-                <!-- Sub-nav for Events -->
                 <div class="flex justify-center mt-12 gap-4">
                     <a href="event.html" class="px-6 py-3 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 hover:text-white transition-colors border border-transparent hover:border-white/10">Active Events</a>
                     <a href="past-events.html" class="px-6 py-3 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold text-white bg-white/10 border border-white/20">Past Events</a>
@@ -165,7 +175,6 @@
             </div>
         </div>
 
-        <!-- Detail View -->
         <div id="detailView" class="hidden px-4 max-w-5xl mx-auto">
             <button onclick="closeDetails()" class="mb-10 flex items-center gap-3 text-xs uppercase tracking-widest text-white/50 hover:text-white transition group">
                 <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i> Back to Archive
@@ -194,8 +203,7 @@
                             Event Gallery <i data-lucide="image" class="w-4 h-4 text-white/50"></i>
                         </h3>
                         <div id="detailGallery" class="grid grid-cols-2 gap-4">
-                            <!-- Images populated dynamically -->
-                        </div>
+                            </div>
                     </div>
                 </div>
 
@@ -229,7 +237,6 @@
 
     </main>
 
-    <!-- Cinematic Glass Footer -->
     <footer class="glass-panel rounded-none border-x-0 border-b-0 pt-20 pb-10 relative z-10 mt-10">
         <div class="max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
@@ -246,7 +253,7 @@
                     <h3 class="text-[10px] font-bold text-white mb-6 uppercase tracking-[0.2em]">Navigation</h3>
                     <ul class="space-y-4 text-sm font-light text-white/50 tracking-wide">
                         <li><a href="about.html" class="hover:text-white transition-colors">About Story</a></li>
-                        <li><a href="event.html" class="hover:text-white transition-colors">Latest Events</a></li>
+                        <li><a href="event.html" class="text-white transition-colors">Latest Events</a></li>
                         <li><a href="initiatives.html" class="hover:text-white transition-colors">Our Initiatives</a></li>
                         <li><a href="https://startupmission.kerala.gov.in/" target="_blank" class="hover:text-white transition-colors">Kerala Startup Mission</a></li>
                     </ul>
@@ -276,6 +283,27 @@
             </div>
         </div>
     </footer>
+
+    <div class="fixed bottom-0 left-0 w-full bg-[#0a0c0f]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
+        <div class="flex justify-around items-center px-2 py-3">
+            <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Home</span>
+            </a>
+            <a href="event.html" class="flex flex-col items-center gap-1 text-white">
+                <i class="far fa-calendar-alt text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Events</span>
+            </a>
+            <a href="initiatives.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-rocket text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Initiatives</span>
+            </a>
+            <a href="login.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="far fa-user text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Profile</span>
+            </a>
+        </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -476,6 +504,46 @@
 
         // Load on start
         loadPastEvents();
+    </script>
+
+    <script>
+        let newWorker;
+        const updateBanner = document.getElementById('pwa-update-banner');
+        const refreshBtn = document.getElementById('pwa-refresh-btn');
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(registration => {
+                    console.log('ServiceWorker registered');
+
+                    registration.addEventListener('updatefound', () => {
+                        newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                updateBanner.classList.remove('hidden');
+                                updateBanner.classList.add('flex');
+                            }
+                        });
+                    });
+                });
+
+                let refreshing;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (refreshing) return;
+                    refreshing = true;
+                    window.location.reload();
+                });
+            });
+        }
+
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                if (newWorker) {
+                    newWorker.postMessage({ action: 'skipWaiting' });
+                }
+                updateBanner.classList.add('hidden'); 
+            });
+        }
     </script>
 </body>
 </html>
