@@ -1,28 +1,26 @@
-// Version bumped to v8 to trigger the clean update
-const CACHE_NAME = 'mets-iedc-v8'; 
+// Bumped to v9 for a fresh install
+const CACHE_NAME = 'mets-iedc-v9'; 
 
 const urlsToCache = [
   './',
   './index.html',
-  './offline.html', 
+  './offline.html',
   './manifest.json'
 ];
 
-// 1. Install Phase (Correctly formatted without skipWaiting so the Banner works)
+// 1. Install Phase
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache => {
+      console.log('Opened cache');
+      return cache.addAll(urlsToCache);
+    })
   );
 });
 
-// 2. Activate Phase (Clean up old versions)
+// 2. Activate Phase
 self.addEventListener('activate', event => {
   event.waitUntil(self.clients.claim()); 
-  
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
@@ -37,26 +35,26 @@ self.addEventListener('activate', event => {
   );
 });
 
-// 3. Fetch Phase (Smart Offline Routing & Fixed Clone Error)
+// 3. Fetch Phase
 self.addEventListener('fetch', event => {
-  // Check if the request is for a new HTML page
+  // Only intercept standard GET requests (ignores POST requests like form submissions)
+  if (event.request.method !== 'GET') return;
+
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request).catch(() => {
-        // If the network fails (offline), try the cache first
         return caches.match(event.request).then(response => {
-          // If the page isn't in the cache, show the cinematic offline.html
           return response || caches.match('./offline.html');
         });
       })
     );
   } else {
-    // For all other requests (images, CSS, JS), use Stale-While-Revalidate
     event.respondWith(
       caches.match(event.request).then(cachedResponse => {
         const fetchPromise = fetch(event.request).then(networkResponse => {
+          // Safety check: Only cache valid, successful responses
           if (networkResponse && networkResponse.status === 200) {
-            // FIX: Clone the response synchronously BEFORE opening the cache
+            // Clone synchronously BEFORE passing to the cache
             const responseToCache = networkResponse.clone();
             
             caches.open(CACHE_NAME).then(cache => {
@@ -64,8 +62,8 @@ self.addEventListener('fetch', event => {
             });
           }
           return networkResponse;
-        }).catch(() => {
-          console.log("Network fetch failed for asset.");
+        }).catch(error => {
+          console.log("Network fetch failed, asset skipped.", error);
         });
 
         return cachedResponse || fetchPromise;
@@ -74,7 +72,7 @@ self.addEventListener('fetch', event => {
   }
 });
 
-// 4. Message Phase (Listens for the PWA "Refresh" button)
+// 4. Message Phase (For the Update Banner)
 self.addEventListener('message', event => {
   if (event.data && event.data.action === 'skipWaiting') {
     self.skipWaiting();
