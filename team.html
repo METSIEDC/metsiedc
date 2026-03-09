@@ -6,10 +6,10 @@
     <title>Our Team | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f1115">
+    <meta name="theme-color" content="#050505">
     <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -19,7 +19,28 @@
                 extend: {
                     fontFamily: { 
                         sans: ['Inter', 'sans-serif'],
-                        display: ['Montserrat', 'sans-serif']
+                        display: ['Plus Jakarta Sans', 'sans-serif']
+                    },
+                    colors: {
+                        dark: {
+                            base: '#050505',
+                            panel: 'rgba(20, 20, 25, 0.6)',
+                            border: 'rgba(255, 255, 255, 0.08)'
+                        },
+                        glow: {
+                            purple: '#9333ea',
+                            orange: '#ea580c',
+                            blue: '#2563eb'
+                        }
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.3' },
+                            '50%': { opacity: '0.6' },
+                        }
                     }
                 }
             }
@@ -28,22 +49,39 @@
 
     <style>
         body { 
-            background-color: #0f1115; /* Deep cinematic dark */
-            color: #ffffff; 
+            background-color: #050505; 
+            color: #e2e8f0; 
             overflow-x: hidden; 
         }
 
+        /* Glassmorphism Utilities */
         .glass-nav {
-            background: rgba(15, 17, 21, 0.6);
+            background: rgba(15, 15, 20, 0.4);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
-        .glass-menu {
-            background: rgba(10, 12, 15, 0.85);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(30, 30, 35, 0.8) 0%, rgba(15, 15, 20, 0.6) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02), 0 20px 40px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Button Styling */
+        .btn-light {
+            background: #ffffff;
+            color: #050505;
+            transition: all 0.3s ease;
+        }
+        .btn-light:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
         }
 
         /* Outline Text (Exact match to reference image) */
@@ -57,7 +95,7 @@
             }
         }
 
-        /* Cutout Image Masking (Fades the bottom slightly so it blends into the footer) */
+        /* Cutout Image Masking */
         .cutout-image {
             mask-image: linear-gradient(to top, transparent 0%, black 15%);
             -webkit-mask-image: linear-gradient(to top, transparent 0%, black 15%);
@@ -82,19 +120,30 @@
             font-size: 1rem !important;
             font-weight: bold;
         }
+        
+        .swiper-pagination-bullet { background: rgba(255,255,255,0.3); opacity: 1; }
+        .swiper-pagination-bullet-active { background: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.8);}
+
+        /* Mobile Menu */
+        .mobile-menu { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mobile-menu.open { transform: translateX(0); }
 
         /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0f1115; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
     </style>
 </head>
-<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-white selection:text-black pb-20 md:pb-0">
+<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-glow-purple selection:text-white pb-20 md:pb-0">
 
-    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
+    <div class="fixed top-[10%] right-[-10%] w-[40vw] h-[40vw] bg-glow-blue/10 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow"></div>
+    <div class="fixed bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-glow-purple/10 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow" style="animation-delay: 2s;"></div>
+    <div class="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 z-0 pointer-events-none"></div>
+
+    <div id="pwa-update-banner" class="hidden fixed top-24 left-1/2 transform -translate-x-1/2 z-[9999] glass-panel rounded-full px-5 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300 border border-glow-blue/50 shadow-[0_0_20px_rgba(37,99,235,0.3)]">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+            <div class="w-8 h-8 rounded-full bg-glow-blue/20 flex items-center justify-center text-glow-blue">
                 <i class="fas fa-cloud-download-alt"></i>
             </div>
             <div class="flex flex-col">
@@ -102,65 +151,56 @@
                 <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
             </div>
         </div>
-        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+        <button id="pwa-refresh-btn" class="ml-auto bg-white text-black text-xs font-bold px-4 py-2 rounded-full transition-colors hover:bg-gray-200">
             Refresh
         </button>
     </div>
 
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
-        <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
-    </div>
-
-    <header id="navbar" class="h-20 px-6 md:px-10 fixed top-0 w-full z-50 transition-all duration-300 py-4 glass-nav">
-        <div class="max-w-[95%] mx-auto h-full flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <a href="index.html" class="flex items-center group">
-                    <span class="text-xl font-display font-bold tracking-tight text-white group-hover:opacity-80 transition-opacity uppercase">
-                        MET'S IEDC
-                    </span>
-                </a>
-            </div>
-
-            <div class="hidden lg:flex items-center space-x-8 bg-white/5 backdrop-blur-md px-8 py-3 rounded-full border border-white/10 shadow-lg">
-                <a href="index.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Home</a>
-                <a href="event.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Events</a>
-                <a href="initiatives.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Initiatives</a>
-                <a href="report.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Reports</a>
-                <a href="team.html" class="text-white text-[10px] uppercase tracking-[0.2em] font-bold transition-colors">Ex-Com</a>
-                <a href="contact.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Contact</a>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <a href="login.html" class="hidden md:flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-white transition-all bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-3 rounded-full">
-                    <i class="fas fa-user-circle"></i> Login
-                </a>
-                
-                <button id="mobile-menu-button" class="lg:hidden w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white backdrop-blur-md">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
-            </div>
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl z-50 glass-nav rounded-full px-2 py-2 flex justify-between items-center transition-all duration-300" id="navbar">
+        <a href="index.html" class="flex items-center pl-4 group">
+            <span class="text-base font-display font-bold tracking-wider text-white">
+                MET'S IEDC
+            </span>
+        </a>
+        
+        <div class="hidden md:flex items-center space-x-1 bg-white/5 rounded-full px-2 py-1">
+            <a href="index.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Home</a>
+            <a href="event.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Events</a>
+            <a href="initiatives.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Initiatives</a>
+            <a href="about.html" class="px-4 py-2 rounded-full bg-white/10 text-white text-xs font-semibold transition-colors">Story</a>
         </div>
-    </header>
 
-    <div id="mobile-menu" class="fixed top-0 right-0 w-full h-screen glass-menu z-[200] overflow-y-auto transform translate-x-full transition-transform duration-500 ease-in-out">
-        <div class="flex justify-between items-center p-8">
-            <span class="text-xl font-display font-bold text-white tracking-widest">MENU</span>
-            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <div class="hidden md:flex items-center gap-3 pr-2">
+            <a href="login.html" class="text-white/70 hover:text-white text-xs font-semibold px-2 transition-colors">Log In</a>
+            <a href="login.html" class="btn-light px-5 py-2 rounded-full text-xs font-bold tracking-wide">
+                Portal
+            </a>
+        </div>
+
+        <button id="mobile-menu-button" class="md:hidden text-white p-2 pr-4">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+    </nav>
+
+    <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-2xl z-[200] overflow-y-auto border-l border-white/10">
+        <div class="flex justify-between items-center p-8 border-b border-white/10">
+            <span class="text-xl font-display font-bold text-white tracking-widest">NAVIGATION</span>
+            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors">
+                <i class="fas fa-times text-lg"></i>
             </button>
         </div>
-        <nav class="flex flex-col space-y-8 px-8 py-12 text-center">
-            <a href="index.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Home</a>
-            <a href="announcement.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Announcement</a>
-            <a href="event.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Events</a>
-            <a href="initiatives.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Initiatives</a>
-            <a href="report.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Reports</a>
-            <a href="team.html" class="text-2xl font-display font-bold text-white tracking-[0.2em] uppercase transition-colors">Ex-Com</a>
-            <a href="contact.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Contact</a>
-            <div class="pt-8 mt-8 border-t border-white/10">
-                <a href="login.html" class="text-sm font-display font-bold text-white tracking-[0.2em] uppercase flex items-center justify-center gap-3 py-4 rounded-xl bg-white/5 border border-white/10">
-                    <i class="fas fa-user-circle"></i> Portal Login
+        <nav class="flex flex-col space-y-6 px-8 py-10 text-left">
+            <a href="index.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-home w-8 text-white/40"></i> Home</a>
+            <a href="event.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="far fa-calendar-alt w-8 text-white/40"></i> Events</a>
+            <a href="initiatives.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-rocket w-8 text-white/40"></i> Initiatives</a>
+            <a href="report.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-chart-bar w-8 text-white/40"></i> Reports</a>
+            <a href="team.html" class="text-3xl font-display font-medium text-white flex items-center gap-4"><i class="fas fa-users w-8 text-glow-purple"></i> Ex-Com</a>
+            <a href="announcement.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-bullhorn w-8 text-white/40"></i> Notices</a>
+            <a href="news.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-newspaper w-8 text-white/40"></i> News</a>
+            
+            <div class="pt-8 mt-8 border-t border-white/10 flex flex-col gap-4">
+                <a href="login.html" class="btn-light text-center py-4 rounded-xl text-sm font-bold uppercase tracking-widest">
+                    Portal Login
                 </a>
             </div>
         </nav>
@@ -171,7 +211,6 @@
             <div class="swiper-wrapper">
 
                 <div class="swiper-slide relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
-                    
                     <div class="absolute inset-0 flex flex-col items-center justify-center z-0 w-full pointer-events-none pb-20 md:pb-32" data-swiper-parallax="-300">
                         <p class="text-white/60 text-xs md:text-sm font-medium mb-2 tracking-widest uppercase">👋, meet Muhammed Shahil and he is our dedicated</p>
                         <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-white tracking-tighter uppercase">CHIEF</h1>
@@ -182,16 +221,16 @@
                         <img src="assets/images/team/1000193375-removebg-preview.png" alt="Muhammed Shahil" class="cutout-image h-[50vh] md:h-[75vh] object-contain object-bottom pointer-events-auto grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop&bg=transparent'">
                     </div>
 
-                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#0f1115] via-[#0f1115]/80 to-transparent z-10"></div>
+                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent z-10"></div>
 
-                    <div class="absolute bottom-10 w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
+                    <div class="absolute bottom-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
                         <div class="hidden md:block text-left">
-                            <p class="text-white/70 text-sm font-medium tracking-wider">Mr. Muhammed Shahil</p>
-                            <p class="text-white/40 text-xs mt-1">based in Kerala, India.</p>
+                            <p class="text-white/90 text-base font-display font-bold tracking-wider">Mr. Muhammed Shahil</p>
+                            <p class="text-white/50 text-xs mt-1">based in Kerala, India.</p>
                         </div>
                         <div class="flex gap-4 mt-6 md:mt-0">
-                            <a href="https://www.linkedin.com/in/mohd-shahil-90b220340?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
-                            <a href="https://www.instagram.com/_zhahil_?igsh=djFiMHVsZTF4bGJ1" target="_blank" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
+                            <a href="https://www.linkedin.com/in/mohd-shahil-90b220340?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="px-6 py-4 rounded-xl btn-light font-bold text-[10px] md:text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(255,255,255,0.2)]">LinkedIn Profile</a>
+                            <a href="https://www.instagram.com/_zhahil_?igsh=djFiMHVsZTF4bGJ1" target="_blank" class="px-6 py-4 rounded-xl border border-white/20 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors backdrop-blur-md">Instagram</a>
                         </div>
                     </div>
                 </div>
@@ -204,19 +243,19 @@
                     </div>
                     
                     <div class="absolute bottom-0 w-full flex justify-center z-10 pointer-events-none" data-swiper-parallax="-100">
-                        <img src="assets/images/team/1000284515-removebg-preview.png" alt="Deena Abbas" class="cutout-image h-[50vh] md:h-[75vh] object-contain object-bottom pointer-events-auto grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800'">
+                        <img src="assets/images/team/1000284515-removebg-preview.png" alt="Manna Mariyam" class="cutout-image h-[50vh] md:h-[75vh] object-contain object-bottom pointer-events-auto grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800'">
                     </div>
 
-                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#0f1115] via-[#0f1115]/80 to-transparent z-10"></div>
+                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent z-10"></div>
 
-                    <div class="absolute bottom-10 w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
+                    <div class="absolute bottom-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
                         <div class="hidden md:block text-left">
-                            <p class="text-white/70 text-sm font-medium tracking-wider">Ms. Manna Mariyam Jany</p>
-                            <p class="text-white/40 text-xs mt-1">based in Kerala, India.</p>
+                            <p class="text-white/90 text-base font-display font-bold tracking-wider">Ms. Manna Mariyam Jany</p>
+                            <p class="text-white/50 text-xs mt-1">based in Kerala, India.</p>
                         </div>
                         <div class="flex gap-4 mt-6 md:mt-0">
-                            <a href="https://www.linkedin.com/in/manna-mariyam-jany-0783a4393?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
-                            <a href="https://www.instagram.com/__ma_riyam__?igsh=OTByam00Y20wNDNw" target="_blank" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
+                            <a href="https://www.linkedin.com/in/manna-mariyam-jany-0783a4393?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="px-6 py-4 rounded-xl btn-light font-bold text-[10px] md:text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(255,255,255,0.2)]">LinkedIn Profile</a>
+                            <a href="https://www.instagram.com/__ma_riyam__?igsh=OTByam00Y20wNDNw" target="_blank" class="px-6 py-4 rounded-xl border border-white/20 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors backdrop-blur-md">Instagram</a>
                         </div>
                     </div>
                 </div>
@@ -232,16 +271,16 @@
                         <img src="assets/images/team/1000225890-removebg-preview.png" alt="Gokul" class="cutout-image h-[50vh] md:h-[75vh] object-contain object-bottom pointer-events-auto grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=800'">
                     </div>
 
-                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#0f1115] via-[#0f1115]/80 to-transparent z-10"></div>
+                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent z-10"></div>
 
-                    <div class="absolute bottom-10 w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
+                    <div class="absolute bottom-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
                         <div class="hidden md:block text-left">
-                            <p class="text-white/70 text-sm font-medium tracking-wider">Mr. Gokul K K</p>
-                            <p class="text-white/40 text-xs mt-1">based in Kerala, India.</p>
+                            <p class="text-white/90 text-base font-display font-bold tracking-wider">Mr. Gokul K K</p>
+                            <p class="text-white/50 text-xs mt-1">based in Kerala, India.</p>
                         </div>
                         <div class="flex gap-4 mt-6 md:mt-0">
-                            <a href="https://www.linkedin.com/in/gokul-k-k-73011331b?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
-                            <a href="https://www.instagram.com/_goku_leyyyy?igsh=ZHR3MmZhYTh2NG93" target="_blank" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
+                            <a href="https://www.linkedin.com/in/gokul-k-k-73011331b?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="px-6 py-4 rounded-xl btn-light font-bold text-[10px] md:text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(255,255,255,0.2)]">LinkedIn Profile</a>
+                            <a href="https://www.instagram.com/_goku_leyyyy?igsh=ZHR3MmZhYTh2NG93" target="_blank" class="px-6 py-4 rounded-xl border border-white/20 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors backdrop-blur-md">Instagram</a>
                         </div>
                     </div>
                 </div>
@@ -257,16 +296,16 @@
                         <img src="assets/images/team/1000284678-removebg-preview.png" alt="Nafla A S" class="cutout-image h-[50vh] md:h-[75vh] object-contain object-bottom pointer-events-auto grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=800'">
                     </div>
 
-                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#0f1115] via-[#0f1115]/80 to-transparent z-10"></div>
+                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent z-10"></div>
 
-                    <div class="absolute bottom-10 w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
+                    <div class="absolute bottom-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
                         <div class="hidden md:block text-left">
-                            <p class="text-white/70 text-sm font-medium tracking-wider">Ms. Nafla A S</p>
-                            <p class="text-white/40 text-xs mt-1">based in Kerala, India.</p>
+                            <p class="text-white/90 text-base font-display font-bold tracking-wider">Ms. Nafla A S</p>
+                            <p class="text-white/50 text-xs mt-1">based in Kerala, India.</p>
                         </div>
                         <div class="flex gap-4 mt-6 md:mt-0">
-                            <a href="#" target="_blank" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
-                            <a href="#" target="_blank" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
+                            <a href="#" target="_blank" class="px-6 py-4 rounded-xl btn-light font-bold text-[10px] md:text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(255,255,255,0.2)]">LinkedIn Profile</a>
+                            <a href="#" target="_blank" class="px-6 py-4 rounded-xl border border-white/20 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors backdrop-blur-md">Instagram</a>
                         </div>
                     </div>
                 </div>
@@ -282,16 +321,16 @@
                         <img src="assets/images/team/" alt="Tom Varghese Anto" class="cutout-image h-[50vh] md:h-[75vh] object-contain object-bottom pointer-events-auto grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=800'">
                     </div>
 
-                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#0f1115] via-[#0f1115]/80 to-transparent z-10"></div>
+                    <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent z-10"></div>
 
-                    <div class="absolute bottom-10 w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
+                    <div class="absolute bottom-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
                         <div class="hidden md:block text-left">
-                            <p class="text-white/70 text-sm font-medium tracking-wider">Mr. Tom Varghese Anto</p>
-                            <p class="text-white/40 text-xs mt-1">based in Kerala, India.</p>
+                            <p class="text-white/90 text-base font-display font-bold tracking-wider">Mr. Tom Varghese Anto</p>
+                            <p class="text-white/50 text-xs mt-1">based in Kerala, India.</p>
                         </div>
                         <div class="flex gap-4 mt-6 md:mt-0">
-                            <a href="#" target="_blank" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
-                            <a href="#" target="_blank" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
+                            <a href="#" target="_blank" class="px-6 py-4 rounded-xl btn-light font-bold text-[10px] md:text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(255,255,255,0.2)]">LinkedIn Profile</a>
+                            <a href="#" target="_blank" class="px-6 py-4 rounded-xl border border-white/20 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors backdrop-blur-md">Instagram</a>
                         </div>
                     </div>
                 </div>
@@ -305,7 +344,7 @@
         </div>
     </main>
 
-    <footer class="bg-[#0a0c0f] border-t border-white/5 pt-16 pb-10 relative z-10">
+    <footer class="bg-dark-base border-t border-white/5 pt-16 pb-10 relative z-10">
         <div class="max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
                 <div class="md:col-span-5">
@@ -347,7 +386,7 @@
         </div>
     </footer>
 
-    <div class="fixed bottom-0 left-0 w-full bg-[#0a0c0f]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
+    <div class="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-xl border-t border-white/10 z-[100] md:hidden pb-safe">
         <div class="flex justify-around items-center px-2 py-3">
             <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
                 <i class="fas fa-home text-lg"></i>
@@ -426,10 +465,21 @@
             
             // Initialize Lucide Icons
             lucide.createIcons();
-        });
-    </script>
 
-    <script>
+            // Navbar Scroll Effect
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('navbar');
+                if (window.scrollY > 20) {
+                    nav.classList.add('shadow-lg');
+                    nav.classList.remove('py-4');
+                } else {
+                    nav.classList.remove('shadow-lg');
+                    nav.classList.add('py-4');
+                }
+            });
+        });
+
+        // PWA Updates Logic
         let newWorker;
         const updateBanner = document.getElementById('pwa-update-banner');
         const refreshBtn = document.getElementById('pwa-refresh-btn');
@@ -437,8 +487,6 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').then(registration => {
-                    console.log('ServiceWorker registered');
-
                     registration.addEventListener('updatefound', () => {
                         newWorker = registration.installing;
                         newWorker.addEventListener('statechange', () => {
