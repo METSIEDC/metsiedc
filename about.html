@@ -9,98 +9,133 @@
     <meta name="theme-color" content="#050505">
     <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
+                    fontFamily: { 
                         sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif']
                     },
+                    colors: {
+                        dark: {
+                            base: '#050505',
+                            panel: 'rgba(20, 20, 25, 0.6)',
+                            border: 'rgba(255, 255, 255, 0.08)'
+                        },
+                        glow: {
+                            purple: '#9333ea',
+                            orange: '#ea580c',
+                            blue: '#2563eb'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.3' },
+                            '50%': { opacity: '0.6' },
+                        }
+                    }
                 }
             }
         }
     </script>
 
     <style>
-        body {
-            background-color: #050505;
-            color: #ffffff;
-            overflow-x: hidden;
+        body { 
+            background-color: #050505; 
+            color: #e2e8f0; 
+            overflow-x: hidden; 
         }
 
-        /* Glassmorphism Classes (Same as Home Page) */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-
+        /* Glassmorphism Utilities */
         .glass-nav {
-            background: rgba(5, 5, 5, 0.7);
+            background: rgba(15, 15, 20, 0.4);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
-        .glass-hover {
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(30, 30, 35, 0.8) 0%, rgba(15, 15, 20, 0.6) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02), 0 20px 40px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            z-index: 1;
+        }
+
+        .glass-panel:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 30px 50px rgba(0,0,0,0.8);
+        }
+
+        .glass-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Text Gradients */
+        .text-gradient-purple {
+            background: linear-gradient(to right, #d8b4fe, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Button Styling */
+        .btn-light {
+            background: #ffffff;
+            color: #050505;
             transition: all 0.3s ease;
         }
-        .glass-hover:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-            transform: translateY(-5px);
-        }
-
-        .gradient-accent {
-            background: linear-gradient(90deg, #4f46e5 0%, #9333ea 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        /* Background Blobs */
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.4;
-            animation: blob-bounce 10s infinite ease;
-        }
-        .blob-1 { top: 10%; left: -10%; width: 500px; height: 500px; background: #4f46e5; }
-        .blob-2 { top: 40%; right: -10%; width: 400px; height: 400px; background: #9333ea; }
-        .blob-3 { bottom: 10%; left: 20%; width: 600px; height: 600px; background: #2563eb; }
-
-        @keyframes blob-bounce {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(20px, -20px) scale(1.1); }
+        .btn-light:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
         }
 
         /* Mobile Menu */
-        .mobile-menu {
-            transform: translateX(100%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .mobile-menu.open {
-            transform: translateX(0);
-        }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
+        .mobile-menu { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mobile-menu.open { transform: translateX(0); }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
     </style>
 </head>
-<body class="font-sans antialiased relative selection:bg-indigo-500 selection:text-white pb-20 md:pb-0">
+<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-glow-purple selection:text-white pb-20 md:pb-0">
 
-    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
+    <div class="fixed top-[10%] left-[-10%] w-[40vw] h-[40vw] bg-glow-purple/10 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-glow-blue/10 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow" style="animation-delay: 2s;"></div>
+    <div class="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 z-0 pointer-events-none"></div>
+
+    <div id="pwa-update-banner" class="hidden fixed top-24 left-1/2 transform -translate-x-1/2 z-[9999] glass-panel rounded-full px-5 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300 border border-glow-purple/50 shadow-[0_0_20px_rgba(147,51,234,0.3)]">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+            <div class="w-8 h-8 rounded-full bg-glow-purple/20 flex items-center justify-center text-glow-purple">
                 <i class="fas fa-cloud-download-alt"></i>
             </div>
             <div class="flex flex-col">
@@ -108,250 +143,279 @@
                 <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
             </div>
         </div>
-        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+        <button id="pwa-refresh-btn" class="ml-auto bg-white text-black text-xs font-bold px-4 py-2 rounded-full transition-colors hover:bg-gray-200">
             Refresh
         </button>
     </div>
 
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
-
-    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center">
-                    <a href="index.html" class="flex items-center space-x-3 group">
-                        <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
-                        <span class="text-2xl font-bold tracking-tight text-white">MET'S <span class="text-indigo-400">IEDC</span></span>
-                    </a>
-                    <div class="hidden md:ml-12 md:flex md:space-x-8">
-                        <a href="announcement.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Announcements</a>
-                        <a href="event.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Events</a>
-                        <a href="team.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Ex-Com</a>
-                        <a href="events.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Gallery</a>
-                        <a href="initiatives.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Initiatives</a>
-                        <a href="news.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">News</a>
-                        <a href="contact.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Contact</a>
-                    </div>
-                </div>
-                <div class="hidden md:flex items-center">
-                    <a href="login.html" class="glass-card glass-hover text-white px-6 py-2.5 rounded-full text-sm font-medium border border-white/10">
-                        Log in
-                    </a>
-                </div>
-                <button id="mobile-menu-button" class="md:hidden text-white p-2">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
-            </div>
-        </div>
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl z-50 glass-nav rounded-full px-2 py-2 flex justify-between items-center transition-all duration-300" id="navbar">
+        <a href="index.html" class="flex items-center pl-4 group">
+            <span class="text-base font-display font-bold tracking-wider text-white">
+                MET'S IEDC
+            </span>
+        </a>
         
-        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-xl z-50">
-            <div class="flex justify-end p-6">
-                <button id="close-mobile-menu" class="text-white p-2">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <nav class="flex flex-col space-y-6 px-8 mt-10 text-center">
-                <a href="announcement.html" class="text-2xl font-light text-white hover:text-indigo-400">Announcements</a>
-                <a href="event.html" class="text-2xl font-light text-white hover:text-indigo-400">Events</a>
-                <a href="team.html" class="text-2xl font-light text-white hover:text-indigo-400">Ex-Com</a>
-                <a href="events.html" class="text-2xl font-light text-white hover:text-indigo-400">Gallery</a>
-                <a href="initiatives.html" class="text-2xl font-light text-white hover:text-indigo-400">Initiatives</a>
-                <a href="news.html" class="text-2xl font-light text-white hover:text-indigo-400">News</a>
-                <a href="contact.html" class="text-2xl font-light text-white hover:text-indigo-400">Contact</a>
-                <a href="login.html" class="mt-8 py-4 bg-indigo-600 rounded-full text-white font-medium">Login</a>
-            </nav>
+        <div class="hidden md:flex items-center space-x-1 bg-white/5 rounded-full px-2 py-1">
+            <a href="index.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Home</a>
+            <a href="event.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Events</a>
+            <a href="initiatives.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Initiatives</a>
+            <a href="about.html" class="px-4 py-2 rounded-full bg-white/10 text-white text-xs font-semibold transition-colors">Story</a>
         </div>
+
+        <div class="hidden md:flex items-center gap-3 pr-2">
+            <a href="login.html" class="text-white/70 hover:text-white text-xs font-semibold px-2 transition-colors">Log In</a>
+            <a href="login.html" class="btn-light px-5 py-2 rounded-full text-xs font-bold tracking-wide">
+                Portal
+            </a>
+        </div>
+
+        <button id="mobile-menu-button" class="md:hidden text-white p-2 pr-4">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
     </nav>
 
-    <div class="pt-32 pb-16 lg:pt-48 lg:pb-24 text-center px-4">
-        <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-            About <span class="gradient-accent">Us</span>
-        </h1>
-        <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            At MET’S IEDC, we nurture student ideas with mentorship, resources, and real-world opportunities — transforming creativity into impactful startups and solutions.
-        </p>
+    <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-2xl z-[200] overflow-y-auto border-l border-white/10">
+        <div class="flex justify-between items-center p-8 border-b border-white/10">
+            <span class="text-xl font-display font-bold text-white tracking-widest">NAVIGATION</span>
+            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+        <nav class="flex flex-col space-y-6 px-8 py-10 text-left">
+            <a href="index.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-home w-8 text-white/40"></i> Home</a>
+            <a href="event.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="far fa-calendar-alt w-8 text-white/40"></i> Events</a>
+            <a href="initiatives.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-rocket w-8 text-white/40"></i> Initiatives</a>
+            <a href="report.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-chart-bar w-8 text-white/40"></i> Reports</a>
+            <a href="team.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-users w-8 text-white/40"></i> Ex-Com</a>
+            <a href="announcement.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-bullhorn w-8 text-white/40"></i> Notices</a>
+            <a href="news.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-newspaper w-8 text-white/40"></i> News</a>
+            
+            <div class="pt-8 mt-8 border-t border-white/10 flex flex-col gap-4">
+                <a href="login.html" class="btn-light text-center py-4 rounded-xl text-sm font-bold uppercase tracking-widest">
+                    Portal Login
+                </a>
+            </div>
+        </nav>
     </div>
 
-    <div class="pb-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="glass-card p-2 rounded-2xl glass-hover group">
-                    <div class="aspect-[4/5] rounded-xl overflow-hidden relative">
-                        <img src="assets/images/team/NODAL OFFICER.jpg" alt="Nodal Officer" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
-                            <span class="text-sm font-semibold text-white">Nodal Officer</span>
+    <main class="flex-grow pt-40 pb-24 relative z-10">
+        
+        <div class="text-center px-4 mb-20 md:mb-24 relative">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-glow-purple/20 blur-[80px] rounded-full pointer-events-none"></div>
+            <div class="glass-badge inline-flex items-center px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest font-bold text-white mb-6 relative z-10">
+                <span class="w-1.5 h-1.5 rounded-full bg-glow-purple mr-2 animate-pulse"></span> Our Story
+            </div>
+            <h1 class="text-5xl md:text-7xl lg:text-[5.5rem] font-display font-bold mb-6 tracking-tight leading-tight relative z-10">
+                <span class="text-white">About</span> <span class="text-gradient-purple">MET'S IEDC</span>
+            </h1>
+            <p class="text-white/50 max-w-2xl mx-auto font-light text-base md:text-lg leading-relaxed relative z-10">
+                We nurture student ideas with mentorship, resources, and real-world opportunities — transforming creativity into impactful startups and solutions.
+            </p>
+        </div>
+
+        <div class="pb-24 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-end mb-10">
+                <h2 class="text-2xl font-display font-bold text-white uppercase tracking-widest">Core <span class="text-white/50">Team</span></h2>
+                <a href="team.html" class="text-[10px] font-bold text-glow-purple uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2">View All <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                <div class="glass-panel p-3 rounded-3xl group">
+                    <div class="aspect-[4/5] rounded-2xl overflow-hidden relative">
+                        <img src="assets/images/team/NODAL OFFICER.jpg" alt="Nodal Officer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://ui-avatars.com/api/?name=NO&background=111&color=fff'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent flex flex-col justify-end p-4 md:p-6 opacity-80 group-hover:opacity-100 transition-opacity">
+                            <span class="text-sm md:text-base font-display font-bold text-white tracking-wide">Nodal Officer</span>
+                            <span class="text-[9px] uppercase tracking-widest text-glow-purple mt-1">Leadership</span>
                         </div>
                     </div>
                 </div>
-                <div class="glass-card p-2 rounded-2xl glass-hover group">
-                    <div class="aspect-[4/5] rounded-xl overflow-hidden relative">
-                        <img src="assets/images/team/CHRISS.jpg" alt="Chriss" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
-                            <span class="text-sm font-semibold text-white">Chriss</span>
+                <div class="glass-panel p-3 rounded-3xl group">
+                    <div class="aspect-[4/5] rounded-2xl overflow-hidden relative">
+                        <img src="assets/images/team/CHRISS.jpg" alt="Chriss" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://ui-avatars.com/api/?name=CH&background=111&color=fff'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent flex flex-col justify-end p-4 md:p-6 opacity-80 group-hover:opacity-100 transition-opacity">
+                            <span class="text-sm md:text-base font-display font-bold text-white tracking-wide">Chriss</span>
+                            <span class="text-[9px] uppercase tracking-widest text-white/50 mt-1">Ex-Com</span>
                         </div>
                     </div>
                 </div>
-                <div class="glass-card p-2 rounded-2xl glass-hover group">
-                    <div class="aspect-[4/5] rounded-xl overflow-hidden relative">
-                        <img src="assets/images/team/DEENA.jpg" alt="Deena" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
-                            <span class="text-sm font-semibold text-white">Deena</span>
+                <div class="glass-panel p-3 rounded-3xl group">
+                    <div class="aspect-[4/5] rounded-2xl overflow-hidden relative">
+                        <img src="assets/images/team/DEENA.jpg" alt="Deena" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://ui-avatars.com/api/?name=DE&background=111&color=fff'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent flex flex-col justify-end p-4 md:p-6 opacity-80 group-hover:opacity-100 transition-opacity">
+                            <span class="text-sm md:text-base font-display font-bold text-white tracking-wide">Deena</span>
+                            <span class="text-[9px] uppercase tracking-widest text-white/50 mt-1">Ex-Com</span>
                         </div>
                     </div>
                 </div>
-                <div class="glass-card p-2 rounded-2xl glass-hover group">
-                    <div class="aspect-[4/5] rounded-xl overflow-hidden relative">
-                        <img src="assets/images/team/HABEEB.jpg" alt="Habeeb" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
-                            <span class="text-sm font-semibold text-white">Habeeb</span>
+                <div class="glass-panel p-3 rounded-3xl group">
+                    <div class="aspect-[4/5] rounded-2xl overflow-hidden relative">
+                        <img src="assets/images/team/HABEEB.jpg" alt="Habeeb" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://ui-avatars.com/api/?name=HA&background=111&color=fff'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent flex flex-col justify-end p-4 md:p-6 opacity-80 group-hover:opacity-100 transition-opacity">
+                            <span class="text-sm md:text-base font-display font-bold text-white tracking-wide">Habeeb</span>
+                            <span class="text-[9px] uppercase tracking-widest text-white/50 mt-1">Ex-Com</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <section class="py-20 bg-white/5 border-y border-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
-                We make sure your ideas & <br>
-                <span class="text-indigo-400">innovations are nurtured properly</span>
-            </h2>
-            
-            <div class="glass-card rounded-3xl p-8 md:p-12">
-                <div class="grid md:grid-cols-2 gap-12 text-gray-300 text-lg leading-relaxed">
-                    <div>
-                        <p class="mb-6">
-                            At MET’S IEDC, we foster creativity, innovation, and entrepreneurship among students. Our mission is to build a vibrant ecosystem where ideas turn into impactful projects and startups.
-                        </p>
-                        <p>
-                            Through mentorship, workshops, and real-world experiences, we empower innovators to explore their potential and shape the future.
-                        </p>
-                    </div>
-                    <div class="border-l border-white/10 pl-0 md:pl-12">
-                        <p>
-                            Every idea matters. We provide the right environment, mentorship, and resources to transform student creativity into impactful projects.
-                        </p>
-                        <p class="mt-6">
-                            From concept to execution, we ensure that innovations are guided with care, collaboration, and a strong support system.
-                        </p>
+        <section class="py-24 relative border-t border-white/5 bg-dark-base">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-5xl font-display font-bold text-white tracking-tight leading-tight mb-4">
+                        We make sure your ideas & <br>
+                        <span class="text-gradient-purple">innovations are nurtured.</span>
+                    </h2>
+                </div>
+                
+                <div class="glass-panel rounded-3xl p-8 md:p-14 border-glow-purple/20">
+                    <div class="grid md:grid-cols-2 gap-12 md:gap-20 text-white/60 text-sm md:text-base leading-relaxed font-light">
+                        <div>
+                            <p class="mb-6">
+                                At MET’S IEDC, we foster creativity, innovation, and entrepreneurship among students. Our mission is to build a vibrant ecosystem where ideas turn into impactful projects and startups.
+                            </p>
+                            <p>
+                                Through mentorship, workshops, and real-world experiences, we empower innovators to explore their potential and shape the future.
+                            </p>
+                        </div>
+                        <div class="border-l border-white/10 pl-0 md:pl-12 relative">
+                            <i data-lucide="quote" class="absolute -left-4 md:left-8 top-0 w-8 h-8 text-white/10 opacity-50"></i>
+                            <p class="mb-6">
+                                Every idea matters. We provide the right environment, mentorship, and resources to transform student creativity into impactful projects.
+                            </p>
+                            <p>
+                                From concept to execution, we ensure that innovations are guided with care, collaboration, and a strong support system.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div>
-                    <div class="glass-card p-2 rounded-2xl mb-8">
-                        <div class="rounded-xl overflow-hidden shadow-2xl">
-                            <iframe class="w-full aspect-video" 
-                                src="https://www.youtube.com/embed/D0dDqpdMMn4" 
-                                title="METS IEDC Mission Video" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                            </iframe>
+        <section class="py-24 relative z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    
+                    <div class="order-2 lg:order-1">
+                        <div class="glass-badge inline-flex items-center px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest font-bold text-white mb-6">
+                            Our Vision
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-display font-bold mb-6 text-white tracking-tight leading-tight">We empower student innovators & entrepreneurs.</h2>
+                        <p class="text-white/50 text-base mb-8 leading-relaxed font-light">
+                            Our mission is to inspire and empower students to think beyond academics. By fostering entrepreneurial skills, encouraging innovation, and providing real-world exposure, MET’S IEDC helps future leaders create solutions that make a difference.
+                        </p>
+                        <blockquote class="text-lg text-white font-medium border-l-2 border-glow-purple pl-6 py-2 bg-gradient-to-r from-glow-purple/10 to-transparent rounded-r-xl">
+                            “Innovation is not just about ideas, it’s about making them happen — and at MET’S IEDC, we help you do exactly that.”
+                        </blockquote>
+                    </div>
+
+                    <div class="order-1 lg:order-2">
+                        <div class="glass-panel p-3 rounded-3xl mb-6 relative group">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-glow-purple to-glow-blue rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+                            <div class="rounded-2xl overflow-hidden relative shadow-2xl bg-[#0a0a0c]">
+                                <iframe class="w-full aspect-video" 
+                                    src="https://www.youtube.com/embed/D0dDqpdMMn4" 
+                                    title="METS IEDC Mission Video" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between px-4 text-white/50 text-xs font-medium tracking-widest uppercase">
+                            <span>MET'S IEDC Official</span>
+                            <span class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div> Watch Video</span>
                         </div>
                     </div>
-                    <div class="glass-card p-6 rounded-xl border-l-4 border-l-indigo-500">
-                        <p class="text-lg italic text-gray-300">"Making an impact, together"</p>
-                        <span class="block mt-2 text-sm font-semibold text-indigo-400">- METSIEDC Founder</span>
-                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 border-t border-white/5 relative z-10 bg-dark-base/50 backdrop-blur-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center mb-16">
+                    <h3 class="text-3xl md:text-4xl font-display font-bold text-white mb-4 tracking-tight">We help innovators grow</h3>
+                    <p class="text-white/50 max-w-2xl mx-auto font-light">Creating an ecosystem where student entrepreneurs accelerate their growth.</p>
                 </div>
 
-                <div>
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6">We empower student innovators & entrepreneurs</h2>
-                    <p class="text-gray-400 text-lg mb-8 leading-relaxed">
-                        Our mission is to inspire and empower students to think beyond academics. By fostering entrepreneurial skills, encouraging innovation, and providing real-world exposure, MET’S IEDC helps future leaders create solutions that make a difference.
+                <div class="grid md:grid-cols-3 gap-6 md:gap-8">
+                    <div class="glass-panel p-8 md:p-10 rounded-3xl text-center group">
+                        <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/70 mx-auto mb-8 group-hover:text-glow-purple group-hover:bg-glow-purple/10 group-hover:border-glow-purple/30 transition-all shadow-lg">
+                            <i data-lucide="target" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="text-xl font-display font-bold text-white mb-4 tracking-tight">Target Oriented</h4>
+                        <p class="text-white/50 text-sm leading-relaxed font-light">We guide students with a clear vision and strategic approach to innovation and entrepreneurship.</p>
+                    </div>
+
+                    <div class="glass-panel p-8 md:p-10 rounded-3xl text-center group">
+                        <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/70 mx-auto mb-8 group-hover:text-glow-orange group-hover:bg-glow-orange/10 group-hover:border-glow-orange/30 transition-all shadow-lg">
+                            <i data-lucide="award" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="text-xl font-display font-bold text-white mb-4 tracking-tight">Success Driven</h4>
+                        <p class="text-white/50 text-sm leading-relaxed font-light">With structured mentorship and institutional support, we ensure projects have a strong path toward success.</p>
+                    </div>
+
+                    <div class="glass-panel p-8 md:p-10 rounded-3xl text-center group">
+                        <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/70 mx-auto mb-8 group-hover:text-glow-blue group-hover:bg-glow-blue/10 group-hover:border-glow-blue/30 transition-all shadow-lg">
+                            <i data-lucide="share-2" class="w-8 h-8"></i>
+                        </div>
+                        <h4 class="text-xl font-display font-bold text-white mb-4 tracking-tight">Connected Ecosystem</h4>
+                        <p class="text-white/50 text-sm leading-relaxed font-light">MET’S IEDC links students with mentors, industry experts, and opportunities that help ideas grow.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="glass-panel rounded-none border-x-0 border-b-0 pt-20 pb-10 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+                <div class="md:col-span-5">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="text-2xl font-display font-bold text-white tracking-widest uppercase">MET'S IEDC.</span>
+                    </div>
+                    <p class="text-white/50 text-sm leading-relaxed max-w-sm font-light tracking-wide">
+                        Fostering a culture of innovation and entrepreneurship among students at MET'S School of Engineering. Supported by Kerala Startup Mission.
                     </p>
-                    <blockquote class="text-xl text-white font-light border-l-2 border-indigo-500 pl-6 py-2">
-                        “Innovation is not just about ideas, it’s about making them happen — and at MET’S IEDC, we help you do exactly that.”
-                    </blockquote>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-20 pb-32">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="text-center mb-16">
-                <h3 class="text-3xl font-bold text-white mb-4">We help innovators grow</h3>
-                <p class="text-gray-400 max-w-2xl mx-auto">Creating an ecosystem where student entrepreneurs accelerate their growth.</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="glass-card p-8 rounded-3xl glass-hover text-center group">
-                    <div class="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 mx-auto group-hover:bg-indigo-500 group-hover:text-white transition-all">
-                        <i class="fas fa-search-location text-2xl"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-4">Target Oriented</h4>
-                    <p class="text-gray-400 text-sm leading-relaxed">We guide students with a clear vision and strategic approach to innovation and entrepreneurship.</p>
-                </div>
-
-                <div class="glass-card p-8 rounded-3xl glass-hover text-center group">
-                    <div class="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 mx-auto group-hover:bg-indigo-500 group-hover:text-white transition-all">
-                        <i class="fas fa-award text-2xl"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-4">Success Driven</h4>
-                    <p class="text-gray-400 text-sm leading-relaxed">With structured mentorship and institutional support, we ensure projects have a strong path toward success.</p>
-                </div>
-
-                <div class="glass-card p-8 rounded-3xl glass-hover text-center group">
-                    <div class="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 mx-auto group-hover:bg-indigo-500 group-hover:text-white transition-all">
-                        <i class="fas fa-network-wired text-2xl"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-4">Connected Ecosystem</h4>
-                    <p class="text-gray-400 text-sm leading-relaxed">MET’S IEDC links students with mentors, industry experts, and opportunities that help ideas grow.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="border-t border-white/5 bg-[#020202] pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                <div class="lg:col-span-2">
-                    <span class="text-2xl font-bold text-white">MET'S IEDC</span>
-                    <p class="text-gray-500 mt-4 text-sm leading-relaxed max-w-md">
-                        Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.
-                    </p>
-                </div>
-
-                <div>
-                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h3>
-                    <ul class="space-y-3 text-sm text-gray-500">
-                        <li><a href="index.html" class="hover:text-indigo-400 transition-colors">Home</a></li>
-                        <li><a href="about.html" class="hover:text-indigo-400 transition-colors">About Us</a></li>
-                        <li><a href="events.html" class="hover:text-indigo-400 transition-colors">Events</a></li>
-                        <li><a href="news.html" class="hover:text-indigo-400 transition-colors">News</a></li>
+                
+                <div class="md:col-span-3">
+                    <h3 class="text-[10px] font-bold text-white/80 mb-6 uppercase tracking-[0.2em]">Navigation</h3>
+                    <ul class="space-y-4 text-sm font-light text-white/50 tracking-wide">
+                        <li><a href="about.html" class="text-white">About Story</a></li>
+                        <li><a href="event.html" class="hover:text-white transition-colors">Latest Events</a></li>
+                        <li><a href="initiatives.html" class="hover:text-white transition-colors">Our Initiatives</a></li>
+                        <li><a href="https://startupmission.kerala.gov.in/" target="_blank" class="hover:text-white transition-colors">Kerala Startup Mission</a></li>
                     </ul>
                 </div>
-
-                <div>
-                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contact</h3>
-                    <div class="space-y-3 text-sm text-gray-500">
-                        <p class="flex items-center"><i class="fas fa-envelope mr-3 text-indigo-500"></i>metsenggiedc@gmail.com</p>
-                        <p class="flex items-center"><i class="fas fa-phone mr-3 text-indigo-500"></i>+91 7306226875</p>
+                
+                <div class="md:col-span-4">
+                    <h3 class="text-[10px] font-bold text-white/80 mb-6 uppercase tracking-[0.2em]">Connect</h3>
+                    <div class="space-y-4 text-sm font-light text-white/50 tracking-wide mb-8">
+                        <p>MET'S School of Engineering,<br>Mala, Thrissur, Kerala</p>
+                        <p class="hover:text-white transition-colors cursor-pointer">+91 7306226875</p>
+                        <p class="hover:text-white transition-colors cursor-pointer">metsenggiedc@gmail.com</p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/MetsIedc" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
             </div>
             
-            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
-                <p>© 2026 IEDC MET'S SCHOOL OF ENGINEERING.</p>
-                <p>Designed for Innovation</p>
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-light text-white/40 tracking-widest uppercase">
+                <p>© <span id="year">2026</span> MET'S IEDC. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms</a>
+                </div>
             </div>
         </div>
     </footer>
 
-    <div class="fixed bottom-0 left-0 w-full bg-[#050505]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
+    <div class="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-xl border-t border-white/10 z-[100] md:hidden pb-safe">
         <div class="flex justify-around items-center px-2 py-3">
             <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
                 <i class="fas fa-home text-lg"></i>
@@ -374,33 +438,53 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Update Copyright Year
+            document.getElementById('year').textContent = new Date().getFullYear();
+
             // Mobile Menu Logic
             const btn = document.getElementById('mobile-menu-button');
             const menu = document.getElementById('mobile-menu');
             const closeBtn = document.getElementById('close-mobile-menu');
 
-            function toggleMenu() {
-                menu.classList.toggle('open');
-                document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+            function toggleMobileMenu() {
+                if(menu.classList.contains('translate-x-full')) {
+                    menu.classList.remove('translate-x-full');
+                    menu.classList.add('translate-x-0');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    menu.classList.add('translate-x-full');
+                    menu.classList.remove('translate-x-0');
+                    document.body.style.overflow = '';
+                }
             }
-
-            btn.addEventListener('click', toggleMenu);
-            closeBtn.addEventListener('click', toggleMenu);
             
+            if(btn) btn.addEventListener('click', toggleMobileMenu);
+            if(closeBtn) closeBtn.addEventListener('click', toggleMobileMenu);
+
+            const menuLinks = menu.querySelectorAll('#mobile-menu a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!menu.classList.contains('translate-x-full')) {
+                        toggleMobileMenu();
+                    }
+                });
+            });
+
+            // Initialize Lucide Icons
+            lucide.createIcons();
+
             // Navbar Scroll Effect
             window.addEventListener('scroll', () => {
-                const nav = document.querySelector('nav');
+                const nav = document.getElementById('navbar');
                 if (window.scrollY > 20) {
                     nav.classList.add('shadow-lg');
-                    nav.style.background = 'rgba(5, 5, 5, 0.9)';
                 } else {
                     nav.classList.remove('shadow-lg');
-                    nav.style.background = 'rgba(5, 5, 5, 0.7)';
                 }
             });
         });
 
-        // Enhanced PWA Service Worker Registration & Update Logic
+        // PWA Updates Logic
         let newWorker;
         const updateBanner = document.getElementById('pwa-update-banner');
         const refreshBtn = document.getElementById('pwa-refresh-btn');
@@ -408,15 +492,10 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').then(registration => {
-                    console.log('ServiceWorker registered');
-
-                    // Check if there is an update waiting
                     registration.addEventListener('updatefound', () => {
                         newWorker = registration.installing;
                         newWorker.addEventListener('statechange', () => {
-                            // If the new worker is installed and there's a previous worker, it's an update
                             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                // Show the update banner
                                 updateBanner.classList.remove('hidden');
                                 updateBanner.classList.add('flex');
                             }
@@ -424,7 +503,6 @@
                     });
                 });
 
-                // Listen for the controlling service worker to change, then reload the page
                 let refreshing;
                 navigator.serviceWorker.addEventListener('controllerchange', () => {
                     if (refreshing) return;
@@ -434,13 +512,12 @@
             });
         }
 
-        // Tell the new service worker to take over when the user clicks Refresh
         if (refreshBtn) {
             refreshBtn.addEventListener('click', () => {
                 if (newWorker) {
                     newWorker.postMessage({ action: 'skipWaiting' });
                 }
-                updateBanner.classList.add('hidden'); // Hide banner immediately
+                updateBanner.classList.add('hidden'); 
             });
         }
     </script>
