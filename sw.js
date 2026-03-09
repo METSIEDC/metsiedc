@@ -1,18 +1,15 @@
-// Version bumped to v3 to trigger an update for your users
-const CACHE_NAME = 'mets-iedc-v7'; 
+// Version bumped to v8 to trigger the clean update
+const CACHE_NAME = 'mets-iedc-v8'; 
 
 const urlsToCache = [
   './',
   './index.html',
-  './offline.html', // <-- This ensures the offline page is downloaded immediately
-  './manifest.json',
-  // Add your other core pages here
+  './offline.html', 
+  './manifest.json'
 ];
 
-// 1. Install Phase
+// 1. Install Phase (Correctly formatted without skipWaiting so the Banner works)
 self.addEventListener('install', event => {
-  self.skipWaiting(); 
-  
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -40,7 +37,7 @@ self.addEventListener('activate', event => {
   );
 });
 
-// 3. Fetch Phase (Smart Offline Routing)
+// 3. Fetch Phase (Smart Offline Routing & Fixed Clone Error)
 self.addEventListener('fetch', event => {
   // Check if the request is for a new HTML page
   if (event.request.mode === 'navigate') {
@@ -54,18 +51,20 @@ self.addEventListener('fetch', event => {
       })
     );
   } else {
-    // For all other requests (images, CSS, JS), use your Stale-While-Revalidate strategy
+    // For all other requests (images, CSS, JS), use Stale-While-Revalidate
     event.respondWith(
       caches.match(event.request).then(cachedResponse => {
         const fetchPromise = fetch(event.request).then(networkResponse => {
           if (networkResponse && networkResponse.status === 200) {
+            // FIX: Clone the response synchronously BEFORE opening the cache
+            const responseToCache = networkResponse.clone();
+            
             caches.open(CACHE_NAME).then(cache => {
-              cache.put(event.request, networkResponse.clone());
+              cache.put(event.request, responseToCache);
             });
           }
           return networkResponse;
         }).catch(() => {
-          // Silent fail for assets; they just won't load if offline and not cached
           console.log("Network fetch failed for asset.");
         });
 
@@ -74,16 +73,8 @@ self.addEventListener('fetch', event => {
     );
   }
 });
-// Remove self.skipWaiting() from here
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        return cache.addAll(urlsToCache);
-      })
-  );
-});
-// Listen for the signal from the Update Banner to skip waiting and activate immediately
+
+// 4. Message Phase (Listens for the PWA "Refresh" button)
 self.addEventListener('message', event => {
   if (event.data && event.data.action === 'skipWaiting') {
     self.skipWaiting();
