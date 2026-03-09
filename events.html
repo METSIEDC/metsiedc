@@ -5,13 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050505">
+    <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        body { background-color: #050505; color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        body { 
+            background-color: #050505; 
+            color: #ffffff; 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; 
+        }
         
-        .glass-nav { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-nav { 
+            background: rgba(5, 5, 5, 0.8); 
+            backdrop-filter: blur(20px); 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+        }
         
         /* Gallery Card */
         .photo-card { 
@@ -47,7 +73,7 @@
         
         /* Lightbox */
         .lightbox { 
-            position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100; 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 200; 
             display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
         }
         .lightbox.active { opacity: 1; }
@@ -55,33 +81,96 @@
         .masonry { column-count: 1; gap: 24px; }
         @media (min-width: 640px) { .masonry { column-count: 2; } }
         @media (min-width: 1024px) { .masonry { column-count: 3; } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
     </style>
 </head>
-<body>
+<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white pb-20 md:pb-0">
 
-    <nav class="glass-nav fixed top-0 w-full z-50">
-        <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <img src="assets/images/logos/MSEM.jpg" alt="Logo" class="h-10 w-10 rounded-full border border-white/20">
-                <span class="text-xl font-bold tracking-tight">MET'S <span class="text-indigo-500">IEDC</span></span>
+    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                <i class="fas fa-cloud-download-alt"></i>
             </div>
-            <a href="index.html" class="text-gray-300 hover:text-white text-sm font-bold transition-colors">Home</a>
+            <div class="flex flex-col">
+                <span class="text-white text-sm font-semibold">Update Available</span>
+                <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
+            </div>
+        </div>
+        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+            Refresh
+        </button>
+    </div>
+
+    <div class="fixed inset-0 bg-gradient-to-b from-[#181b21] to-[#050505] z-0 pointer-events-none"></div>
+
+    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-[95%] mx-auto px-4 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
+                    <span class="text-xl font-bold tracking-tight text-white">MET'S <span class="text-indigo-400">IEDC</span></span>
+                </a>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-10 relative z-10">
+                <a href="index.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Home</a>
+                <a href="event.html" class="text-white text-[11px] uppercase tracking-[0.15em] font-bold transition-colors border-b border-indigo-500 pb-1">Events & Gallery</a>
+                <a href="initiatives.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Initiatives</a>
+                <a href="report.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Reports</a>
+                <a href="team.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Ex-Com</a>
+                <a href="contact.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Contact</a>
+            </div>
+
+            <div class="hidden md:flex items-center relative z-10">
+                <a href="login.html" class="bg-white/10 hover:bg-white/20 text-white px-6 py-2.5 rounded-full text-[11px] uppercase tracking-[0.15em] font-bold border border-white/10 transition-colors">
+                    Log in
+                </a>
+            </div>
+
+            <button id="mobile-menu-button" class="md:hidden text-white p-2 relative z-10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
         </div>
     </nav>
 
-    <div class="pt-36 pb-12 text-center px-4">
-        <h1 class="text-5xl md:text-6xl font-bold mb-4 tracking-tight">Event Gallery</h1>
-        <p class="text-gray-400 max-w-lg mx-auto text-lg">Capturing moments of innovation, collaboration, and success.</p>
+    <div id="mobile-menu" class="fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-xl z-[100] transform translate-x-full transition-transform duration-300 ease-in-out">
+        <div class="flex justify-end p-6">
+            <button id="close-mobile-menu" class="text-white p-2">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <nav class="flex flex-col space-y-6 px-8 mt-10 text-center">
+            <a href="index.html" class="text-2xl font-light text-white hover:text-indigo-400 uppercase tracking-widest">Home</a>
+            <a href="announcement.html" class="text-2xl font-light text-white hover:text-indigo-400 uppercase tracking-widest">Announcements</a>
+            <a href="event.html" class="text-2xl font-bold text-white uppercase tracking-widest">Events</a>
+            <a href="initiatives.html" class="text-2xl font-light text-white hover:text-indigo-400 uppercase tracking-widest">Initiatives</a>
+            <a href="report.html" class="text-2xl font-light text-white hover:text-indigo-400 uppercase tracking-widest">Reports</a>
+            <a href="team.html" class="text-2xl font-light text-white hover:text-indigo-400 uppercase tracking-widest">Ex-Com</a>
+            <a href="contact.html" class="text-2xl font-light text-white hover:text-indigo-400 uppercase tracking-widest">Contact</a>
+            <a href="login.html" class="mt-8 py-4 bg-indigo-600 rounded-full text-white font-medium uppercase tracking-widest text-sm">Portal Login</a>
+        </nav>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 pb-32">
-        <div id="loader" class="text-center py-20">
-            <i data-lucide="loader-2" class="w-10 h-10 text-indigo-500 animate-spin mx-auto mb-4"></i>
-            <p class="text-gray-500">Loading photos...</p>
+    <main class="flex-grow relative z-10">
+        <div class="pt-36 pb-12 text-center px-4">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4 tracking-tight">Event Gallery</h1>
+            <p class="text-gray-400 max-w-lg mx-auto text-lg">Capturing moments of innovation, collaboration, and success.</p>
         </div>
-        <div id="galleryGrid" class="masonry hidden"></div>
-        <div id="emptyState" class="hidden text-center py-20 text-gray-500">No photos uploaded yet.</div>
-    </div>
+
+        <div class="max-w-7xl mx-auto px-4 pb-32">
+            <div id="loader" class="text-center py-20">
+                <i data-lucide="loader-2" class="w-10 h-10 text-indigo-500 animate-spin mx-auto mb-4"></i>
+                <p class="text-gray-500">Loading photos...</p>
+            </div>
+            <div id="galleryGrid" class="masonry hidden"></div>
+            <div id="emptyState" class="hidden text-center py-20 text-gray-500">No photos uploaded yet.</div>
+        </div>
+    </main>
 
     <div id="lightbox" class="lightbox" onclick="closeLightbox()">
         <button class="absolute top-6 right-6 text-white/50 hover:text-white transition"><i data-lucide="x" class="w-10 h-10"></i></button>
@@ -89,45 +178,123 @@
         <div id="lightboxCaption" class="absolute bottom-10 text-center w-full text-white/90 font-medium text-lg px-4"></div>
     </div>
 
+    <footer class="bg-[#020202] pt-16 pb-8 border-t border-white/5 relative z-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div class="lg:col-span-2">
+                    <span class="text-2xl font-bold text-white">MET'S IEDC</span>
+                    <p class="text-gray-500 mt-4 text-sm leading-relaxed max-w-md">
+                        Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h3>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="index.html" class="hover:text-indigo-400 transition-colors">Home</a></li>
+                        <li><a href="about.html" class="hover:text-indigo-400 transition-colors">About Us</a></li>
+                        <li><a href="event.html" class="hover:text-indigo-400 transition-colors">Events & Gallery</a></li>
+                        <li><a href="news.html" class="hover:text-indigo-400 transition-colors">News</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contact</h3>
+                    <div class="space-y-3 text-sm text-gray-500">
+                        <p class="flex items-center"><i class="fas fa-envelope mr-3 text-indigo-500"></i>metsenggiedc@gmail.com</p>
+                        <p class="flex items-center"><i class="fas fa-phone mr-3 text-indigo-500"></i>+91 7306226875</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
+                <p>© 2026 IEDC MET'S SCHOOL OF ENGINEERING.</p>
+                <p>Designed for Innovation</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="fixed bottom-0 left-0 w-full bg-[#0a0c0f]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
+        <div class="flex justify-around items-center px-2 py-3">
+            <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Home</span>
+            </a>
+            <a href="event.html" class="flex flex-col items-center gap-1 text-white">
+                <i class="far fa-calendar-alt text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Events</span>
+            </a>
+            <a href="initiatives.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-rocket text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Initiatives</span>
+            </a>
+            <a href="login.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="far fa-user text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Logic
+            const btn = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+            const closeBtn = document.getElementById('close-mobile-menu');
+
+            function toggleMenu() {
+                if(menu.classList.contains('translate-x-full')) {
+                    menu.classList.remove('translate-x-full');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    menu.classList.add('translate-x-full');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            if(btn) btn.addEventListener('click', toggleMenu);
+            if(closeBtn) closeBtn.addEventListener('click', toggleMenu);
+            
+            // Close menu when a link is clicked
+            const menuLinks = menu.querySelectorAll('a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!menu.classList.contains('translate-x-full')) toggleMenu();
+                });
+            });
+        });
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
         lucide.createIcons();
 
-        // --- PASTE FIREBASE CONFIG HERE ---
-     const firebaseConfig = {
-  apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
-  authDomain: "metsiedc-3010e.firebaseapp.com",
-  databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
-  projectId: "metsiedc-3010e",
-  storageBucket: "metsiedc-3010e.firebasestorage.app",
-  messagingSenderId: "954403413150",
-  appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
-  measurementId: "G-6E7EK0D7JG"
-};
-        // ----------------------------------
+        const firebaseConfig = {
+          apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+          authDomain: "metsiedc-3010e.firebaseapp.com",
+          databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+          projectId: "metsiedc-3010e",
+          storageBucket: "metsiedc-3010e.firebasestorage.app",
+          messagingSenderId: "954403413150",
+          appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+          measurementId: "G-6E7EK0D7JG"
+        };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- CRITICAL FIX: Convert Drive Links to Public Image format ---
+        // Convert Drive Links to Public Image format
         function getOptimizedDriveUrl(url) {
             if (!url) return null;
-            
-            // Extract File ID from "uc?export=view&id=..." or "/file/d/.../"
             let fileId = null;
             if (url.includes('id=')) {
                 fileId = url.split('id=')[1].split('&')[0];
             } else if (url.includes('/d/')) {
                 fileId = url.split('/d/')[1].split('/')[0];
             }
-
-            // If we found an ID, return the robust 'lh3' link
             if (fileId) {
-                return `https://lh3.googleusercontent.com/d/${fileId}`;
+                return `https://lh3.googleusercontent.com/d/$${fileId}`;
             }
-            return url; // Return original if pattern doesn't match
+            return url; 
         }
 
         async function fetchGallery() {
@@ -150,10 +317,8 @@
                 snap.forEach(doc => {
                     const data = doc.data();
                     
-                    // SKIP if no URL
                     if (!data.imageUrl) return;
 
-                    // CONVERT URL
                     const safeUrl = getOptimizedDriveUrl(data.imageUrl);
 
                     const item = document.createElement('div');
@@ -201,6 +366,46 @@
         };
 
         fetchGallery();
+    </script>
+
+    <script>
+        let newWorker;
+        const updateBanner = document.getElementById('pwa-update-banner');
+        const refreshBtn = document.getElementById('pwa-refresh-btn');
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(registration => {
+                    console.log('ServiceWorker registered');
+
+                    registration.addEventListener('updatefound', () => {
+                        newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                updateBanner.classList.remove('hidden');
+                                updateBanner.classList.add('flex');
+                            }
+                        });
+                    });
+                });
+
+                let refreshing;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (refreshing) return;
+                    refreshing = true;
+                    window.location.reload();
+                });
+            });
+        }
+
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                if (newWorker) {
+                    newWorker.postMessage({ action: 'skipWaiting' });
+                }
+                updateBanner.classList.add('hidden'); 
+            });
+        }
     </script>
 </body>
 </html>
