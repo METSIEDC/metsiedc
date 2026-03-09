@@ -154,6 +154,21 @@
 
 <body class="font-sans antialiased selection:bg-white selection:text-black relative pb-20 md:pb-0">
 
+    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                <i class="fas fa-cloud-download-alt"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-white text-sm font-semibold">Update Available</span>
+                <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
+            </div>
+        </div>
+        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+            Refresh
+        </button>
+    </div>
+
     <div id="imagePopup" class="popup-overlay" onclick="closePopup(event)">
         <div class="popup-content relative max-w-4xl w-[90%] md:w-auto mx-auto bg-dark-card p-1 rounded-xl shadow-2xl border border-white/10">
             <button onclick="closePopup(event)" class="absolute -top-5 -right-5 w-10 h-10 bg-white rounded-full flex items-center justify-center text-black hover:bg-gray-200 transition-colors z-20 shadow-xl">
@@ -564,17 +579,49 @@
             }, 1000);
         });
 
-        // PWA Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                    }, err => {
-                        console.log('ServiceWorker registration failed: ', err);
+       // Enhanced PWA Service Worker Registration & Update Logic
+    let newWorker;
+    const updateBanner = document.getElementById('pwa-update-banner');
+    const refreshBtn = document.getElementById('pwa-refresh-btn');
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js').then(registration => {
+                console.log('ServiceWorker registered');
+
+                // Check if there is an update waiting
+                registration.addEventListener('updatefound', () => {
+                    newWorker = registration.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        // If the new worker is installed and there's a previous worker, it's an update
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // Show the update banner
+                            updateBanner.classList.remove('hidden');
+                            updateBanner.classList.add('flex');
+                        }
                     });
+                });
             });
-        }
+
+            // Listen for the controlling service worker to change, then reload the page
+            let refreshing;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (refreshing) return;
+                refreshing = true;
+                window.location.reload();
+            });
+        });
+    }
+
+    // Tell the new service worker to take over when the user clicks Refresh
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => {
+            if (newWorker) {
+                newWorker.postMessage({ action: 'skipWaiting' });
+            }
+            updateBanner.classList.add('hidden'); // Hide banner immediately
+        });
+    }
 
         // Notification Logic
         function requestNotificationPermission() {
