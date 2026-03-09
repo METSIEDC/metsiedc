@@ -83,3 +83,9 @@ self.addEventListener('install', event => {
       })
   );
 });
+// Listen for the signal from the Update Banner to skip waiting and activate immediately
+self.addEventListener('message', event => {
+  if (event.data && event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
+});
