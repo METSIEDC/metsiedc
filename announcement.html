@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Announcements | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f1115">
+    <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Immersive Theme Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -113,15 +115,28 @@
         ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
     </style>
 </head>
-<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-white selection:text-black">
+<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-white selection:text-black pb-20 md:pb-0">
 
-    <!-- Subtle Atmospheric Lighting -->
+    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                <i class="fas fa-cloud-download-alt"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-white text-sm font-semibold">Update Available</span>
+                <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
+            </div>
+        </div>
+        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+            Refresh
+        </button>
+    </div>
+
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
         <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
     </div>
 
-    <!-- Frosted Glass Navbar -->
     <header id="navbar" class="h-20 px-6 md:px-10 fixed top-0 w-full z-50 transition-all duration-300 py-4 glass-nav">
         <div class="max-w-[95%] mx-auto h-full flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -132,7 +147,6 @@
                 </a>
             </div>
 
-            <!-- Desktop Links -->
             <div class="hidden lg:flex items-center space-x-8 bg-white/5 backdrop-blur-md px-8 py-3 rounded-full border border-white/10 shadow-lg">
                 <a href="index.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Home</a>
                 <a href="event.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Events</a>
@@ -147,7 +161,6 @@
                     <i class="fas fa-user-circle"></i> Login
                 </a>
                 
-                <!-- Mobile Menu Button -->
                 <button id="mobile-menu-button" class="lg:hidden w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white backdrop-blur-md">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
@@ -155,7 +168,6 @@
         </div>
     </header>
 
-    <!-- Glass Mobile Menu -->
     <div id="mobile-menu" class="fixed top-0 right-0 w-full h-screen glass-menu z-[200] overflow-y-auto transform translate-x-full transition-transform duration-500 ease-in-out">
         <div class="flex justify-between items-center p-8">
             <span class="text-xl font-display font-bold text-white tracking-widest">MENU</span>
@@ -181,7 +193,6 @@
 
     <main class="flex-grow pt-40 pb-24 relative z-10">
         
-        <!-- Hero Section -->
         <div class="text-center px-4 mb-16">
             <div class="inline-flex items-center px-5 py-2 rounded-full glass-panel text-[10px] uppercase tracking-[0.2em] font-bold text-white/70 mb-8">
                 <span class="w-1.5 h-1.5 rounded-full bg-white mr-3 animate-pulse"></span> Notice Board
@@ -191,7 +202,6 @@
             </h1>
             <div class="h-[1px] w-24 bg-white/20 mx-auto mb-10"></div>
             
-            <!-- Search Bar -->
             <div class="max-w-2xl mx-auto mt-8">
                 <div class="relative">
                     <input type="text" id="searchInput" placeholder="Search notices, updates..." class="w-full glass-input rounded-full py-5 pl-14 pr-6 text-white placeholder-white/30 text-sm tracking-wide font-light">
@@ -200,7 +210,6 @@
             </div>
         </div>
 
-        <!-- Filter Tabs -->
         <div class="container mx-auto px-4 mb-16 relative z-10">
             <div class="flex justify-center gap-2 bg-white/5 backdrop-blur-md p-1.5 rounded-full border border-white/10 w-fit mx-auto">
                 <button class="tab-button active px-6 py-2.5 rounded-full text-[10px] uppercase tracking-widest font-bold" onclick="filterAnnouncements('all')">All</button>
@@ -209,10 +218,8 @@
             </div>
         </div>
 
-        <!-- Announcements Feed -->
         <section class="px-4 max-w-4xl mx-auto">
             <div id="announcements-list" class="space-y-6">
-                <!-- Spinner while loading -->
                 <div class="glass-panel p-10 flex justify-center">
                     <div class="spinner"></div>
                 </div>
@@ -221,7 +228,6 @@
 
     </main>
 
-    <!-- Cinematic Glass Footer -->
     <footer class="glass-panel rounded-none border-x-0 border-b-0 pt-20 pb-10 relative z-10 mt-10">
         <div class="max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
@@ -268,6 +274,27 @@
             </div>
         </div>
     </footer>
+
+    <div class="fixed bottom-0 left-0 w-full bg-[#0f1115]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
+        <div class="flex justify-around items-center px-2 py-3">
+            <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Home</span>
+            </a>
+            <a href="event.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="far fa-calendar-alt text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Events</span>
+            </a>
+            <a href="initiatives.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-rocket text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Initiatives</span>
+            </a>
+            <a href="login.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="far fa-user text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Profile</span>
+            </a>
+        </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -403,14 +430,12 @@
 
                 const itemHtml = `
                     <div class="glass-panel p-8 md:p-10 glass-hover flex flex-col md:flex-row gap-8 items-start group">
-                        <!-- Date Block -->
                         <div class="flex-shrink-0 w-full md:w-auto flex md:flex-col items-center justify-center md:justify-start gap-1 bg-[#0a0c0f] border border-white/10 rounded-xl p-5 min-w-[120px] group-hover:border-white/30 transition-colors">
                             <span class="text-3xl font-display font-bold text-white">${dateDay}</span>
                             <span class="text-[10px] uppercase tracking-[0.2em] text-white/50 font-bold">${dateMonth}</span>
                             <span class="text-[10px] text-white/30 hidden md:block mt-1">${dateYear}</span>
                         </div>
                         
-                        <!-- Content Block -->
                         <div class="flex-grow flex flex-col">
                             <div class="flex items-center gap-3 mb-4">
                                 <span class="px-3 py-1 rounded text-[9px] uppercase font-bold tracking-[0.2em] border border-white/20 text-white/70 group-hover:text-white transition-colors">
@@ -450,6 +475,46 @@
         fetchAnnouncements();
         document.getElementById('year').textContent = new Date().getFullYear();
 
+    </script>
+
+    <script>
+        let newWorker;
+        const updateBanner = document.getElementById('pwa-update-banner');
+        const refreshBtn = document.getElementById('pwa-refresh-btn');
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(registration => {
+                    console.log('ServiceWorker registered');
+
+                    registration.addEventListener('updatefound', () => {
+                        newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                updateBanner.classList.remove('hidden');
+                                updateBanner.classList.add('flex');
+                            }
+                        });
+                    });
+                });
+
+                let refreshing;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (refreshing) return;
+                    refreshing = true;
+                    window.location.reload();
+                });
+            });
+        }
+
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                if (newWorker) {
+                    newWorker.postMessage({ action: 'skipWaiting' });
+                }
+                updateBanner.classList.add('hidden'); 
+            });
+        }
     </script>
 </body>
 </html>
