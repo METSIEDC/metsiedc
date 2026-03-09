@@ -1,5 +1,44 @@
-// Bumped to v10 for a fresh install
-const CACHE_NAME = 'mets-iedc-v10'; 
+// Import Firebase scripts for the Service Worker
+importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js');
+
+// Initialize Firebase in the background
+firebase.initializeApp({
+    apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+    authDomain: "metsiedc-3010e.firebaseapp.com",
+    projectId: "metsiedc-3010e",
+    storageBucket: "metsiedc-3010e.firebasestorage.app",
+    messagingSenderId: "954403413150",
+    appId: "1:954403413150:web:2523a3377f15a3d6002f8f"
+});
+
+const messaging = firebase.messaging();
+
+// Handle background messages
+messaging.onBackgroundMessage((payload) => {
+    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+    
+    const notificationTitle = payload.notification.title;
+    const notificationOptions = {
+        body: payload.notification.body,
+        icon: './assets/images/logos/MSEM.jpg',
+        badge: './assets/images/logos/MSEM.jpg',
+        data: { url: payload.data ? payload.data.click_action : '/' }
+    };
+
+    self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+// Handle clicking the notification
+self.addEventListener('notificationclick', function(event) {
+    event.notification.close();
+    event.waitUntil(
+        clients.openWindow(event.notification.data.url)
+    );
+});
+
+// Bumped to v11 for a fresh install
+const CACHE_NAME = 'mets-iedc-v11'; 
 
 const urlsToCache = [
   './',
