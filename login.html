@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Login | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f1115">
+    <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Immersive Theme Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -125,15 +126,28 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-white selection:text-black">
+<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-white selection:text-black pb-20 md:pb-0">
 
-    <!-- Subtle Atmospheric Lighting -->
+    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                <i class="fas fa-cloud-download-alt"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-white text-sm font-semibold">Update Available</span>
+                <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
+            </div>
+        </div>
+        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+            Refresh
+        </button>
+    </div>
+
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
         <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
     </div>
 
-    <!-- Frosted Glass Navbar -->
     <header id="navbar" class="h-20 px-6 md:px-10 fixed top-0 w-full z-50 transition-all duration-300 py-4 glass-nav">
         <div class="max-w-[95%] mx-auto h-full flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -144,7 +158,6 @@
                 </a>
             </div>
 
-            <!-- Desktop Links -->
             <div class="hidden lg:flex items-center space-x-8 bg-white/5 backdrop-blur-md px-8 py-3 rounded-full border border-white/10 shadow-lg">
                 <a href="index.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Home</a>
                 <a href="event.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Events</a>
@@ -155,7 +168,6 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <!-- Mobile Menu Button -->
                 <button id="mobile-menu-button" class="lg:hidden w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white backdrop-blur-md">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
@@ -163,7 +175,6 @@
         </div>
     </header>
 
-    <!-- Glass Mobile Menu -->
     <div id="mobile-menu" class="fixed top-0 right-0 w-full h-screen glass-menu z-[200] overflow-y-auto transform translate-x-full transition-transform duration-500 ease-in-out">
         <div class="flex justify-between items-center p-8">
             <span class="text-xl font-display font-bold text-white tracking-widest">MENU</span>
@@ -173,15 +184,15 @@
         </div>
         <nav class="flex flex-col space-y-8 px-8 py-12 text-center">
             <a href="index.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Home</a>
+            <a href="announcement.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Announcement</a>
             <a href="event.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Events</a>
             <a href="initiatives.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Initiatives</a>
-            <a href="news.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">News</a>
+            <a href="report.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Reports</a>
             <a href="team.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Ex-Com</a>
             <a href="contact.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Contact</a>
         </nav>
     </div>
 
-    <!-- Main Content -->
     <main class="flex-grow flex items-center justify-center px-4 pt-32 pb-12 relative z-10 w-full">
         <div class="glass-panel p-8 md:p-12 w-full max-w-md relative flex flex-col">
             
@@ -190,7 +201,6 @@
                 <p class="text-white/50 text-xs font-light tracking-wide">Enter your credentials to continue</p>
             </div>
 
-            <!-- Tab Switcher -->
             <div class="flex p-1.5 bg-[#0a0c0f] border border-white/10 rounded-xl mb-8">
                 <button id="loginTabBtn" class="tab-btn active w-1/2 py-3 rounded-lg text-[10px] uppercase tracking-widest font-bold" onclick="switchAuthMode('login')">Login</button>
                 <button id="signupTabBtn" class="tab-btn w-1/2 py-3 rounded-lg text-[10px] uppercase tracking-widest font-bold" onclick="switchAuthMode('signup')">Sign Up</button>
@@ -198,10 +208,8 @@
 
             <div id="statusMessage" class="hidden mb-6 p-4 rounded-lg text-xs text-center border font-medium tracking-wide"></div>
             
-            <!-- Recaptcha Container -->
             <div id="recaptcha-container"></div>
 
-            <!-- LOGIN FORM (Email/Password) -->
             <div id="loginSection">
                 <div class="space-y-5">
                     <div>
@@ -232,15 +240,12 @@
                 </div>
             </div>
 
-            <!-- SIGNUP FORM (OTP Based) -->
             <div id="signupSection" class="hidden">
-                <!-- Method Toggle -->
                 <div class="flex mb-8 border-b border-white/10">
                     <button id="methodEmail" class="method-btn active" onclick="switchSignupMethod('email')">Email OTP</button>
                     <button id="methodPhone" class="method-btn" onclick="switchSignupMethod('phone')">Phone OTP</button>
                 </div>
 
-                <!-- Email OTP Signup -->
                 <div id="emailSignupFlow">
                     <div id="emailStep1">
                         <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Email Address</label>
@@ -277,7 +282,6 @@
                     </div>
                 </div>
 
-                <!-- Phone OTP Signup -->
                 <div id="phoneSignupFlow" class="hidden">
                     <div id="phoneStep1">
                         <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Mobile Number</label>
@@ -300,26 +304,44 @@
                 </div>
             </div>
 
-            <!-- Divider -->
             <div class="relative flex py-8 items-center">
                 <div class="flex-grow border-t border-white/10"></div>
                 <span class="flex-shrink-0 mx-4 text-white/30 text-[9px] uppercase tracking-[0.2em] font-bold">Or continue with</span>
                 <div class="flex-grow border-t border-white/10"></div>
             </div>
 
-            <!-- Google Button -->
             <button id="googleBtn" class="w-full flex items-center justify-center gap-4 py-3.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-xs font-bold uppercase tracking-widest text-white">
                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-4 h-4" alt="Google">
                 Google
             </button>
 
-            <!-- Admin Link -->
             <div class="mt-8 text-center border-t border-white/5 pt-6">
                 <a href="admin.html" class="text-[9px] uppercase tracking-[0.2em] font-bold text-white/30 hover:text-white transition-colors">Staff / Admin Login</a>
             </div>
 
         </div>
     </main>
+
+    <div class="fixed bottom-0 left-0 w-full bg-[#0a0c0f]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
+        <div class="flex justify-around items-center px-2 py-3">
+            <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Home</span>
+            </a>
+            <a href="event.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="far fa-calendar-alt text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Events</span>
+            </a>
+            <a href="initiatives.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-rocket text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Initiatives</span>
+            </a>
+            <a href="login.html" class="flex flex-col items-center gap-1 text-white">
+                <i class="fas fa-user-circle text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Profile</span>
+            </a>
+        </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -418,7 +440,7 @@
 
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
-                window.location.href = 'dashboard.html';
+                window.location.href = 'student-dashboard.html';
             } catch(e) {
                 showMessage("Login Failed: Incorrect credentials.");
                 btn.disabled = false; spinner.classList.add('hidden'); text.textContent = "Sign In";
@@ -491,7 +513,7 @@
                     authProvider: 'email',
                     createdAt: serverTimestamp()
                 });
-                window.location.href = 'dashboard.html';
+                window.location.href = 'student-dashboard.html';
             } catch(e) { showMessage(e.message); }
         });
 
@@ -538,7 +560,7 @@
                         createdAt: serverTimestamp()
                     });
                 }
-                window.location.href = 'dashboard.html';
+                window.location.href = 'student-dashboard.html';
             } catch (error) {
                 showMessage("Invalid SMS Code");
             }
@@ -559,7 +581,7 @@
                         createdAt: serverTimestamp() 
                     });
                 }
-                window.location.href = 'dashboard.html';
+                window.location.href = 'student-dashboard.html';
             } catch(e) { showMessage(e.message); }
         });
 
@@ -604,9 +626,49 @@
 
         // Auth State Listener
         onAuthStateChanged(auth, (user) => {
-            if (user) window.location.href = 'dashboard.html';
+            if (user) window.location.href = 'student-dashboard.html';
         });
 
+    </script>
+
+    <script>
+        let newWorker;
+        const updateBanner = document.getElementById('pwa-update-banner');
+        const refreshBtn = document.getElementById('pwa-refresh-btn');
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(registration => {
+                    console.log('ServiceWorker registered');
+
+                    registration.addEventListener('updatefound', () => {
+                        newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                updateBanner.classList.remove('hidden');
+                                updateBanner.classList.add('flex');
+                            }
+                        });
+                    });
+                });
+
+                let refreshing;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (refreshing) return;
+                    refreshing = true;
+                    window.location.reload();
+                });
+            });
+        }
+
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                if (newWorker) {
+                    newWorker.postMessage({ action: 'skipWaiting' });
+                }
+                updateBanner.classList.add('hidden'); 
+            });
+        }
     </script>
 </body>
 </html>
