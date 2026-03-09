@@ -806,12 +806,19 @@
         window.currentUserEmailStr = null;
         let currentProfileImageBase64 = "";
 
-        async function requestNotificationPermission(userId) {
+     async function requestNotificationPermission(userId) {
             try {
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
                     console.log('Notification permission granted.');
-                    const currentToken = await getToken(messaging, { vapidKey: 'BLAXirXbhUCSrlOF1tdyvLbqhrCBvRJV4xvemvkMzdsM3Fh_DS-Pr_SCliI2Bbl-jIpE6Ugkm9-htU_-FhVWXCE' });
+                    
+                    // 👇 THIS REGISTRATION LINE FIXES THE 404 ERROR 👇
+                    const registration = await navigator.serviceWorker.ready;
+                    
+                    const currentToken = await getToken(messaging, { 
+                        vapidKey: 'BLAXirXbhUCSrlOF1tdyvLbqhrCBvRJV4xvemvkMzdsM3Fh_DS-Pr_SCliI2Bbl-jIpE6Ugkm9-htU_-FhVWXCE',
+                        serviceWorkerRegistration: registration // <-- And this line
+                    });
                     
                     if (currentToken) {
                         await setDoc(doc(db, "users", userId), {
