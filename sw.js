@@ -37,8 +37,8 @@ self.addEventListener('notificationclick', function(event) {
     );
 });
 
-// Bumped to v12 for a fresh install
-const CACHE_NAME = 'mets-iedc-v12'; 
+// Bumped to v13 for a fresh install
+const CACHE_NAME = 'mets-iedc-v13'; 
 
 const urlsToCache = [
   './',
