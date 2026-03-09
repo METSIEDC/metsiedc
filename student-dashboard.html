@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | MET'S IEDC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050505">
+    <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif']
+                    },
+                    colors: {
+                        dark: {
+                            base: '#050505',
+                            panel: 'rgba(20, 20, 25, 0.6)',
+                            border: 'rgba(255, 255, 255, 0.08)'
+                        },
+                        glow: {
+                            purple: '#9333ea',
+                            orange: '#ea580c',
+                            blue: '#2563eb',
+                            green: '#22c55e'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.2' },
+                            '50%': { opacity: '0.5' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            background-color: #050505; 
+            color: #e2e8f0; 
+            overflow-x: hidden; 
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(30, 30, 35, 0.8) 0%, rgba(15, 15, 20, 0.6) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02), 0 20px 40px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            z-index: 1;
+        }
+
+        .glass-card-hover:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05), 0 30px 50px rgba(0,0,0,0.8);
+        }
+
+        /* Sidebar Links */
+        .sidebar-link { 
+            transition: all 0.3s ease; 
+            cursor: pointer; 
+            font-weight: 500;
+            color: rgba(255,255,255,0.5);
+            border-radius: 1rem;
+            margin-bottom: 0.25rem;
+            border: 1px solid transparent;
+        }
+        .sidebar-link:hover:not(.active) { 
+            color: #ffffff; 
+            background-color: rgba(255,255,255,0.05); 
+        }
+        .sidebar-link.active { 
+            color: #ffffff; 
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.1);
+            box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
+            font-weight: 600;
+        }
+
+        /* Input styling */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border-radius: 1rem;
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.4);
+            outline: none;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+        .glass-input::placeholder { color: rgba(255, 255, 255, 0.3); font-weight: 400; }
+        select.glass-input option { color: #1c2833; background: white; }
+
+        /* Buttons */
+        .btn-light {
+            background: #ffffff;
+            color: #050505;
+            transition: all 0.3s ease;
+        }
+        .btn-light:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
+        }
+
+        /* Forms */
+        .cp-label { @apply block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; } 
+        ::-webkit-scrollbar-track { background: transparent; } 
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #fff;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="font-sans antialiased relative selection:bg-white/20 selection:text-white flex h-screen overflow-hidden p-0 md:p-4 lg:p-6">
+
+    <div class="fixed top-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-glow-purple/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow"></div>
+    <div class="fixed bottom-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-glow-blue/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow" style="animation-delay: 2s;"></div>
+    <div class="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 z-0 pointer-events-none"></div>
+
+    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] glass-panel rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white">
+                <i class="fas fa-cloud-download-alt"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-white text-sm font-semibold">Update Available</span>
+                <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
+            </div>
+        </div>
+        <button id="pwa-refresh-btn" class="ml-auto btn-light text-xs font-bold px-4 py-2 rounded-full transition-colors">
+            Refresh
+        </button>
+    </div>
+
+    <div class="w-full h-full flex overflow-hidden relative z-10 md:rounded-[2.5rem] border border-white/10 glass-panel shadow-2xl backdrop-blur-2xl bg-[#050505]/60">
+
+        <aside class="w-64 border-r border-white/10 flex-shrink-0 hidden md:flex flex-col h-full z-20 bg-[#0a0a0c]/50 backdrop-blur-xl">
+            <div class="p-8 pb-4 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-xl bg-glow-purple/20 border border-glow-purple/50 flex items-center justify-center text-glow-purple font-bold text-lg shadow-[0_0_15px_rgba(147,51,234,0.3)]">
+                    <i data-lucide="zap" class="w-4 h-4"></i>
+                </div>
+                <span class="text-xl font-display font-bold tracking-widest text-white uppercase">IEDC.io</span>
+            </div>
+
+            <div class="px-6 py-6">
+                <button onclick="showTab('submitIdea')" class="w-full flex items-center justify-between bg-white/5 border border-white/10 hover:border-glow-purple/50 shadow-sm hover:shadow-[0_0_15px_rgba(147,51,234,0.2)] px-2 py-2 rounded-full transition-all group">
+                    <span class="text-[11px] font-bold text-white/80 uppercase tracking-widest leading-tight pl-3 text-left">Pitch<br>Idea</span>
+                    <div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center transition-colors">
+                        <i data-lucide="plus" class="w-5 h-5"></i>
+                    </div>
+                </button>
+            </div>
+
+            <nav class="flex-grow px-4 py-2 space-y-1.5 overflow-y-auto">
+                <button onclick="showTab('dashboardOverview')" id="nav-dashboardOverview" class="sidebar-link active w-full flex items-center gap-4 px-4 py-3 text-sm">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+                </button>
+                <button onclick="showTab('joinIedc')" id="nav-joinIedc" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 text-sm">
+                    <i data-lucide="users" class="w-4 h-4"></i> Join IEDC
+                </button>
+                <button onclick="showTab('trackStatus')" id="nav-trackStatus" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 text-sm">
+                    <i data-lucide="activity" class="w-4 h-4"></i> Status
+                </button>
+                <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 text-sm">
+                    <i data-lucide="calendar" class="w-4 h-4"></i> Attendance
+                </button>
+                <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 text-sm">
+                    <i data-lucide="award" class="w-4 h-4"></i> Certificates
+                </button>
+                
+                <div class="pt-4 pb-2 px-4 text-[10px] font-bold text-white/30 uppercase tracking-widest">Actions</div>
+                <button onclick="showTab('submitProject')" id="nav-submitProject" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 text-sm">
+                    <i data-lucide="folder-plus" class="w-4 h-4"></i> Submit Project
+                </button>
+                <button onclick="showTab('submitEvent')" id="nav-submitEvent" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 text-sm">
+                    <i data-lucide="calendar-plus" class="w-4 h-4"></i> Propose Event
+                </button>
+            </nav>
+
+            <div class="p-6 mt-auto">
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-5 text-center relative overflow-hidden">
+                    <div class="w-10 h-10 bg-white/10 border border-white/20 rounded-xl flex items-center justify-center mx-auto mb-3 text-white">
+                        <i data-lucide="headphones" class="w-5 h-5"></i>
+                    </div>
+                    <p class="text-xs text-white font-bold mb-1">Need Help?</p>
+                    <p class="text-[10px] text-white/40 mb-4 font-light">Contact admin for support.</p>
+                    <button id="logoutBtn" class="w-full btn-light py-2.5 rounded-xl text-[10px] uppercase tracking-widest font-bold transition-all shadow-sm flex items-center justify-center gap-2">
+                        <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10 bg-transparent">
+            
+            <header class="h-28 flex items-center justify-between px-6 md:px-8 lg:px-10 shrink-0 w-full pt-4 relative border-b border-white/5">
+                <div class="flex items-start gap-4">
+                    <button id="mobile-menu-toggle" class="md:hidden text-white p-2 bg-white/5 border border-white/10 rounded-xl"><i data-lucide="menu" class="w-5 h-5"></i></button>
+                    <div class="hidden sm:block">
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">Welcome back, <span id="headerWelcomeName" class="text-white">Student</span></p>
+                        <h1 class="text-3xl font-display font-bold text-white tracking-wide uppercase" id="headerTitle">Dashboard</h1>
+                    </div>
+                </div>
+        
+                <div class="flex items-center gap-3 md:gap-5">
+                    <div class="flex items-center gap-1 md:gap-3 relative">
+                        
+                        <div id="searchContainer" class="hidden absolute right-0 top-12 md:right-12 md:top-1/2 md:-translate-y-1/2 w-56 md:w-64 transition-all z-50">
+                            <input type="text" id="notificationSearchInput" placeholder="Search notices..." class="glass-input w-full py-2.5 px-4 pr-10 text-sm shadow-xl">
+                            <button onclick="toggleSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white p-1">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        
+                        <button onclick="toggleSearch()" title="Search" class="w-10 h-10 rounded-full text-white/60 hover:text-white hover:bg-white/10 flex items-center justify-center transition-all z-10 relative border border-transparent hover:border-white/10">
+                            <i data-lucide="search" class="w-4 h-4"></i>
+                        </button>
+                        
+                        <div class="relative">
+                            <button onclick="toggleNotifications()" title="Alerts & Announcements" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 flex items-center justify-center transition-all relative z-10">
+                                <i data-lucide="bell" class="w-4 h-4"></i>
+                                <span id="notificationBadge" class="absolute top-2 right-2.5 w-2 h-2 bg-glow-orange rounded-full hidden shadow-[0_0_10px_rgba(234,88,12,0.8)]"></span>
+                            </button>
+                            
+                            <div id="notificationPanel" class="hidden absolute right-0 mt-3 w-72 md:w-80 glass-panel z-50 overflow-hidden flex-col !rounded-2xl border-glow-purple/30 shadow-[0_10px_40px_rgba(0,0,0,0.8)]">
+                                <div class="bg-white/5 border-b border-white/10 p-4 flex justify-between items-center">
+                                    <h3 class="text-xs font-bold uppercase tracking-widest text-white">Notifications</h3>
+                                    <span class="text-[9px] text-black font-bold bg-white px-2 py-1 rounded">Live</span>
+                                </div>
+                                <div id="notificationList" class="max-h-80 overflow-y-auto divide-y divide-white/5">
+                                    <div class="p-8 text-center text-xs text-white/40 font-medium tracking-widest uppercase">Loading messages...</div>
+                                </div>
+                                <div class="p-3 border-t border-white/5 text-center bg-black/40 hover:bg-white/5 transition-colors cursor-pointer text-[10px] font-bold uppercase tracking-widest text-white/60" onclick="toggleNotifications()">
+                                    Close Panel
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="showTab('settings')" title="Account Settings" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 flex items-center justify-center transition-all">
+                        <i data-lucide="settings" class="w-4 h-4"></i>
+                    </button>
+                    
+                    <div onclick="showTab('settings')" class="flex items-center gap-3 pl-4 border-l border-white/10 cursor-pointer group">
+                        <div class="w-10 h-10 rounded-full overflow-hidden border border-white/20 shadow-lg bg-[#111] flex items-center justify-center text-white font-bold group-hover:border-glow-purple/50 transition-colors">
+                            <img id="userAvatarHeader" src="https://ui-avatars.com/api/?name=User&background=0a0c0f&color=fff" class="w-full h-full object-cover">
+                        </div>
+                        <div class="hidden sm:flex flex-col">
+                            <p class="text-sm font-display font-bold text-white leading-none group-hover:text-glow-purple transition-colors" id="userEmailHeader">Loading...</p>
+                            <p class="text-[9px] text-white/50 font-bold uppercase tracking-widest mt-1.5 leading-none">Member</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-grow overflow-y-auto px-4 md:px-8 lg:px-10 pb-10 w-full relative">
+                
+                <div id="dashboardOverviewSection" class="tab-content space-y-8 max-w-6xl w-full mx-auto pt-6">
+                    <div class="sm:hidden mb-2">
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">Welcome back 👋</p>
+                        <h1 class="text-3xl font-display font-bold text-white tracking-wide uppercase">Dashboard</h1>
+                    </div>
+
+                    <div class="glass-panel rounded-3xl p-8 md:p-12 flex justify-between items-center relative overflow-hidden border-glow-blue/20">
+                        <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-glow-blue/20 blur-3xl rounded-full pointer-events-none"></div>
+                        <div class="relative z-10">
+                            <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-4 tracking-tight">Hi, <span id="displayNameBanner" class="text-gradient-blue">Student</span></h2>
+                            <p class="text-white/60 text-sm md:text-base max-w-md font-light leading-relaxed">Ready to build the future? Access your workspace, track projects, and explore new tech opportunities.</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-4 px-2 md:px-0">Workspace Actions</h3>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                            <div onclick="showTab('joinIedc')" class="glass-panel p-6 flex flex-col items-center justify-center cursor-pointer glass-card-hover group">
+                                <div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 text-white group-hover:text-glow-blue transition-colors group-hover:shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+                                    <i data-lucide="users" class="w-6 h-6"></i>
+                                </div>
+                                <h3 class="text-sm font-display font-bold text-white uppercase tracking-wider">Join IEDC</h3>
+                                <p class="text-[9px] uppercase tracking-[0.2em] font-bold text-white/40 mt-1.5">Membership</p>
+                            </div>
+                            
+                            <div onclick="showTab('submitProject')" class="glass-panel p-6 flex flex-col items-center justify-center cursor-pointer glass-card-hover group">
+                                <div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 text-white group-hover:text-glow-purple transition-colors group-hover:shadow-[0_0_15px_rgba(147,51,234,0.3)]">
+                                    <i data-lucide="rocket" class="w-6 h-6"></i>
+                                </div>
+                                <h3 class="text-sm font-display font-bold text-white uppercase tracking-wider">Project</h3>
+                                <p class="text-[9px] uppercase tracking-[0.2em] font-bold text-white/40 mt-1.5">Submit Work</p>
+                            </div>
+                            
+                            <div onclick="showTab('submitIdea')" class="glass-panel p-6 flex flex-col items-center justify-center cursor-pointer glass-card-hover group">
+                                <div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 text-white group-hover:text-glow-orange transition-colors group-hover:shadow-[0_0_15px_rgba(234,88,12,0.3)]">
+                                    <i data-lucide="lightbulb" class="w-6 h-6"></i>
+                                </div>
+                                <h3 class="text-sm font-display font-bold text-white uppercase tracking-wider">Pitch Idea</h3>
+                                <p class="text-[9px] uppercase tracking-[0.2em] font-bold text-white/40 mt-1.5">Incubation</p>
+                            </div>
+                            
+                            <div onclick="showTab('certificates')" class="glass-panel p-6 flex flex-col items-center justify-center cursor-pointer glass-card-hover group">
+                                <div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 text-white group-hover:text-glow-green transition-colors group-hover:shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+                                    <i data-lucide="award" class="w-6 h-6"></i>
+                                </div>
+                                <h3 class="text-sm font-display font-bold text-white uppercase tracking-wider">Awards</h3>
+                                <p class="text-[9px] uppercase tracking-[0.2em] font-bold text-white/40 mt-1.5">Certificates</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-8 md:p-10 flex flex-col justify-center relative overflow-hidden min-h-[160px] border-white/20 group cursor-pointer" onclick="window.location.href='event.html'">
+                        <div class="absolute inset-0 bg-gradient-to-r from-glow-purple/20 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="absolute -right-10 top-1/2 -translate-y-1/2 w-40 h-40 bg-glow-purple/30 blur-[50px] rounded-full"></div>
+                        
+                        <div class="relative z-10 w-full md:w-2/3">
+                            <p class="text-[10px] font-bold text-glow-purple uppercase tracking-[0.2em] mb-2">Explore Now</p>
+                            <h3 class="text-2xl md:text-3xl font-display font-bold text-white mb-6 leading-tight tracking-tight">Discover the latest<br>IEDC events & hackathons.</h3>
+                            <div class="inline-flex items-center gap-3 btn-light text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                                View Schedule <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <style>
+                    /* Dynamic form styling overides for Glass theme */
+                    .cp-form-card { @apply glass-panel p-8 md:p-12 max-w-3xl mx-auto w-full mt-6; }
+                    .cp-form-header { @apply mb-10 border-b border-white/10 pb-6 text-center; }
+                    .cp-form-title { @apply text-3xl font-display font-bold text-white mb-2 uppercase tracking-widest; }
+                    .cp-form-subtitle { @apply text-white/50 text-sm font-light; }
+                    .cp-btn { @apply w-full btn-light font-bold py-4 rounded-xl text-xs uppercase tracking-widest transition-all mt-4 flex justify-center items-center gap-2; }
+                </style>
+
+                <div id="settingsSection" class="tab-content hidden max-w-5xl mx-auto w-full space-y-6 pt-6">
+                    <div class="flex justify-between items-end mb-6">
+                        <h2 class="text-3xl font-display font-bold text-white uppercase tracking-widest">Settings</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+                        <div class="glass-panel p-8 flex flex-col items-center text-center h-fit border-glow-purple/20">
+                            <div class="relative group cursor-pointer mb-6" onclick="document.getElementById('profileImageInput').click()">
+                                <div class="w-32 h-32 rounded-full overflow-hidden border-2 border-white/20 shadow-[0_0_30px_rgba(147,51,234,0.3)] bg-[#111] relative flex items-center justify-center">
+                                    <img id="profileImagePreview" src="https://ui-avatars.com/api/?name=User&background=0a0a0c&color=fff" class="w-full h-full object-cover">
+                                </div>
+                                <div class="absolute inset-0 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <i data-lucide="camera" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <input type="file" id="profileImageInput" class="hidden" accept="image/*" onchange="handleImageUpload(event)">
+                            </div>
+                            <h2 class="text-xl font-display font-bold text-white mb-1" id="profileCardName">Student Name</h2>
+                            <p class="text-glow-purple text-[10px] font-bold mb-8 uppercase tracking-[0.2em]">Member</p>
+                            
+                            <div class="w-full space-y-3 text-left">
+                                <div class="p-4 bg-white/5 rounded-xl border border-white/10 flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white"><i data-lucide="phone" class="w-4 h-4"></i></div>
+                                    <div>
+                                        <p class="text-[9px] text-white/40 font-bold uppercase tracking-[0.2em]">Contact</p>
+                                        <p class="text-white text-sm font-medium mt-1" id="profileCardContact">--</p>
+                                    </div>
+                                </div>
+                                <div class="p-4 bg-white/5 rounded-xl border border-white/10 flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white"><i data-lucide="mail" class="w-4 h-4"></i></div>
+                                    <div class="overflow-hidden">
+                                        <p class="text-[9px] text-white/40 font-bold uppercase tracking-[0.2em]">Email</p>
+                                        <p class="text-white text-sm font-medium mt-1 truncate" id="profileCardEmail">--</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-2 space-y-6">
+                            
+                            <div class="glass-panel p-8 md:p-10">
+                                <div class="flex justify-between items-center border-b border-white/10 pb-5 mb-8">
+                                    <h3 class="text-lg font-display font-bold text-white uppercase tracking-widest">Edit Details</h3>
+                                    <div id="profileStatusMessage" class="hidden text-[10px] px-3 py-1.5 rounded bg-green-500/10 text-green-400 border border-green-500/30 uppercase tracking-widest font-bold"></div>
+                                </div>
+                                <form id="profileForm" class="space-y-6">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div><label class="cp-label">Full Name</label><input type="text" id="profileName" class="glass-input w-full py-3.5 px-4 text-sm" placeholder="John Doe"></div>
+                                        <div><label class="cp-label">Contact Number</label><input type="tel" id="profileContact" class="glass-input w-full py-3.5 px-4 text-sm" placeholder="+91"></div>
+                                    </div>
+                                    <div><label class="cp-label">Bio</label><textarea id="profileBio" rows="4" class="glass-input w-full py-3.5 px-4 text-sm" placeholder="Tell us about your skills..."></textarea></div>
+                                    <div class="pt-4 flex justify-end">
+                                        <button type="submit" class="btn-light font-bold py-3.5 px-8 rounded-xl text-[10px] uppercase tracking-[0.2em] transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                                            <i data-lucide="save" class="w-4 h-4"></i> Save Details
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="glass-panel p-8 md:p-10">
+                                <div class="flex justify-between items-center border-b border-white/10 pb-5 mb-8">
+                                    <h3 class="text-lg font-display font-bold text-white uppercase tracking-widest">Security</h3>
+                                    <div id="passwordStatusMessage" class="hidden text-[10px] px-3 py-1.5 rounded bg-green-500/10 text-green-400 border border-green-500/30 uppercase tracking-widest font-bold"></div>
+                                </div>
+                                <form id="passwordForm" class="space-y-6">
+                                    <div><label class="cp-label">New Password</label><input type="password" id="newPasswordInput" class="glass-input w-full py-3.5 px-4 text-sm" placeholder="Enter new password (min 6 characters)" required minlength="6"></div>
+                                    <div class="pt-2 flex justify-end">
+                                        <button type="submit" class="bg-white/10 hover:bg-white text-white hover:text-black border border-white/20 font-bold py-3.5 px-8 rounded-xl text-[10px] uppercase tracking-[0.2em] transition-all flex items-center gap-2">
+                                            <i data-lucide="lock" class="w-4 h-4"></i> Update Password
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="joinIedcSection" class="tab-content hidden w-full pt-6">
+                    <div id="membershipStatusCard" class="hidden cp-form-card text-center">
+                        <div class="w-24 h-24 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl">
+                            <i data-lucide="clock" class="w-10 h-10 text-white" id="memStatusIcon"></i>
+                        </div>
+                        <h2 class="text-3xl font-display font-bold text-white mb-4 uppercase tracking-widest" id="memStatusTitle">Pending</h2>
+                        <p class="text-white/50 text-sm max-w-md mx-auto leading-relaxed font-light" id="memStatusDesc">We have received your request to join MET'S IEDC. We are reviewing your details.</p>
+                    </div>
+                    
+                    <div id="membershipFormCard" class="cp-form-card">
+                        <div class="cp-form-header">
+                            <h2 class="cp-form-title">Join IEDC</h2>
+                            <p class="cp-form-subtitle">Fill in the details to join the community.</p>
+                        </div>
+                        <form id="joinIedcForm" class="space-y-6 relative z-10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div><label class="cp-label">Full Name</label><input type="text" id="memName" class="glass-input w-full py-3.5 px-4 text-sm" disabled></div>
+                                <div><label class="cp-label">Email</label><input type="email" id="memEmail" class="glass-input w-full py-3.5 px-4 text-sm" disabled></div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div><label class="cp-label">Phone Number</label><input type="tel" id="memPhone" class="glass-input w-full py-3.5 px-4 text-sm" placeholder="+91 9876543210" required></div>
+                                <div><label class="cp-label">Gender</label><select id="memGender" class="glass-input w-full py-3.5 px-4 text-sm"><option>Male</option><option>Female</option><option>Other</option></select></div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div><label class="cp-label">Batch / Year</label><select id="memYear" class="glass-input w-full py-3.5 px-4 text-sm"><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></div>
+                                <div><label class="cp-label">Department</label><select id="memDept" class="glass-input w-full py-3.5 px-4 text-sm"><option>CSE</option><option>ECE</option><option>EEE</option><option>ME</option><option>CE</option><option>BT</option><option>RA</option></select></div>
+                            </div>
+                            <div><label class="cp-label">Primary Interest</label><select id="memDomain" class="glass-input w-full py-3.5 px-4 text-sm"><option>Web Development</option><option>App Development</option><option>UI/UX Design</option><option>IoT & Robotics</option><option>Marketing & Management</option><option>Other</option></select></div>
+                            <div><label class="cp-label">Why do you want to join?</label><textarea id="memReason" rows="3" class="glass-input w-full py-3.5 px-4 text-sm" placeholder="Tell us what motivates you..."></textarea></div>
+                            <div class="pt-4"><button type="submit" class="cp-btn">Submit Application</button></div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="submitProjectSection" class="tab-content hidden w-full pt-6">
+                    <div class="cp-form-card">
+                        <div class="cp-form-header">
+                            <h2 class="cp-form-title">Submit Project</h2>
+                            <p class="cp-form-subtitle">Share your project details for mentorship or review.</p>
+                        </div>
+                        <div id="projectStatusMessage" class="hidden mb-6 p-4 rounded-xl text-[10px] uppercase tracking-widest font-bold text-center bg-green-500/10 text-green-400 border border-green-500/30"></div>
+                        <form id="projectForm" class="space-y-6">
+                            <div><label class="cp-label">Project Name</label><input type="text" id="projectName" class="glass-input w-full py-3.5 px-4 text-sm" required></div>
+                            <div><label class="cp-label">Detailed Description</label><textarea id="projectDescription" rows="4" class="glass-input w-full py-3.5 px-4 text-sm" required></textarea></div>
+                            <div><label class="cp-label">Team Members</label><input type="text" id="projectTeamMembers" class="glass-input w-full py-3.5 px-4 text-sm" placeholder="Names / Emails"></div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div><label class="cp-label">Tech Stack</label><input type="text" id="projectTechnologyStack" class="glass-input w-full py-3.5 px-4 text-sm" placeholder="e.g. React, Node.js"></div>
+                                <div><label class="cp-label">Link (Optional)</label><input type="url" id="projectLink" class="glass-input w-full py-3.5 px-4 text-sm" placeholder="GitHub / Drive Link"></div>
+                            </div>
+                            <div class="pt-4"><button type="submit" class="cp-btn">Submit for Review</button></div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="submitIdeaSection" class="tab-content hidden w-full pt-6">
+                    <div class="cp-form-card">
+                        <div class="cp-form-header">
+                            <h2 class="cp-form-title">Pitch Idea</h2>
+                            <p class="cp-form-subtitle">Share your innovative concept for incubation.</p>
+                        </div>
+                        <div id="ideaStatusMessage" class="hidden mb-6 p-4 rounded-xl text-[10px] uppercase tracking-widest font-bold text-center bg-green-500/10 text-green-400 border border-green-500/30"></div>
+                        <form id="ideaForm" class="space-y-6">
+                            <div><label class="cp-label">Idea Title</label><input type="text" id="ideaName" class="glass-input w-full py-3.5 px-4 text-sm" required></div>
+                            <div><label class="cp-label">Problem & Solution</label><textarea id="ideaDescription" rows="5" class="glass-input w-full py-3.5 px-4 text-sm" required placeholder="What problem does this solve?"></textarea></div>
+                            <div><label class="cp-label">Category</label><select id="ideaCategory" class="glass-input w-full py-3.5 px-4 text-sm"><option>Healthcare</option><option>Education</option><option>Fintech</option><option>Agriculture</option><option>SaaS</option><option>Other</option></select></div>
+                            <div class="pt-4"><button type="submit" class="cp-btn">Submit Idea</button></div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="submitEventSection" class="tab-content hidden w-full pt-6">
+                    <div class="cp-form-card">
+                        <div class="cp-form-header">
+                            <h2 class="cp-form-title">Propose Event</h2>
+                            <p class="cp-form-subtitle">Suggest an activity, competition, or workshop.</p>
+                        </div>
+                        <div id="eventStatusMessage" class="hidden mb-6 p-4 rounded-xl text-[10px] uppercase tracking-widest font-bold text-center bg-green-500/10 text-green-400 border border-green-500/30"></div>
+                        <form id="eventForm" class="space-y-6">
+                            <div><label class="cp-label">Event Title</label><input type="text" id="eventName" class="glass-input w-full py-3.5 px-4 text-sm" required></div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div><label class="cp-label">Proposed Date</label><input type="date" id="eventDate" class="glass-input w-full py-3.5 px-4 text-sm" required></div>
+                                <div><label class="cp-label">Duration / Time</label><input type="time" id="eventTime" class="glass-input w-full py-3.5 px-4 text-sm" required></div>
+                            </div>
+                            <div><label class="cp-label">Description & Requirements</label><textarea id="eventDescription" rows="4" class="glass-input w-full py-3.5 px-4 text-sm" required placeholder="Target audience, resources needed, etc."></textarea></div>
+                            <div class="pt-4"><button type="submit" class="cp-btn">Submit Proposal</button></div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="trackStatusSection" class="tab-content hidden max-w-5xl mx-auto w-full pt-6">
+                    <div class="flex justify-between items-end mb-8 border-b border-white/10 pb-6">
+                        <h2 class="text-3xl font-display font-bold text-white uppercase tracking-widest">Submissions</h2>
+                        <button onclick="fetchMySubmissions()" class="text-[10px] uppercase tracking-[0.2em] font-bold text-white bg-white/5 border border-white/20 px-4 py-2.5 rounded-lg transition hover:bg-white hover:text-black flex items-center gap-2">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh
+                        </button>
+                    </div>
+                    <div id="mySubmissionsGridList" class="space-y-4">
+                        <div class="glass-panel p-12 text-center"><div class="spinner"></div></div>
+                    </div>
+                </div>
+
+                <div id="attendanceSection" class="tab-content hidden max-w-5xl mx-auto w-full pt-6">
+                    <div class="mb-8 border-b border-white/10 pb-6">
+                        <h2 class="text-3xl font-display font-bold text-white uppercase tracking-widest">Attendance</h2>
+                    </div>
+                    <div id="myAttendanceList" class="space-y-4">
+                        <div class="glass-panel p-12 text-center"><div class="spinner"></div></div>
+                    </div>
+                </div>
+
+                <div id="certificatesSection" class="tab-content hidden max-w-5xl mx-auto w-full pt-6">
+                    <div class="mb-8 border-b border-white/10 pb-6">
+                        <h2 class="text-3xl font-display font-bold text-white uppercase tracking-widest">Certificates</h2>
+                    </div>
+                    <div id="certificatesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="col-span-full glass-panel p-12 text-center"><div class="spinner"></div></div>
+                    </div>
+                </div>
+
+            </main>
+    </div>
+
+    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-[#050505]/80 backdrop-blur-sm z-[100] hidden md:hidden transition-opacity" onclick="toggleMobileSidebar()"></div>
+
+    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-[#0a0a0c]/95 backdrop-blur-2xl z-[200] transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col border-r border-white/10 shadow-2xl">
+        <div class="p-6 flex items-center justify-between border-b border-white/10">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-glow-purple/20 border border-glow-purple/50 flex items-center justify-center text-glow-purple font-bold">
+                    <i data-lucide="zap" class="w-4 h-4"></i>
+                </div>
+                <span class="text-xl font-display font-bold text-white tracking-widest uppercase">IEDC.io</span>
+            </div>
+            <button onclick="toggleMobileSidebar()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+        </div>
+        
+        <div class="px-6 py-6 border-b border-white/5">
+            <button onclick="showTab('submitIdea'); toggleMobileSidebar()" class="w-full flex items-center justify-between bg-white text-black px-4 py-3 rounded-xl transition-all font-bold text-xs uppercase tracking-widest">
+                <span>Pitch Idea</span>
+                <i data-lucide="plus" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <nav class="flex-grow px-4 py-4 space-y-2 overflow-y-auto">
+            <button onclick="showTab('dashboardOverview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-4 px-5 py-3.5 text-xs uppercase tracking-widest">
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+            </button>
+            <button onclick="showTab('joinIedc'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3.5 text-xs uppercase tracking-widest">
+                <i data-lucide="users" class="w-4 h-4"></i> Join IEDC
+            </button>
+            <button onclick="showTab('trackStatus'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3.5 text-xs uppercase tracking-widest">
+                <i data-lucide="activity" class="w-4 h-4"></i> Status
+            </button>
+            <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3.5 text-xs uppercase tracking-widest">
+                <i data-lucide="calendar" class="w-4 h-4"></i> Attendance
+            </button>
+            <button onclick="showTab('certificates'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3.5 text-xs uppercase tracking-widest">
+                <i data-lucide="award" class="w-4 h-4"></i> Certificates
+            </button>
+            
+            <div class="pt-4 pb-2 px-5 text-[9px] font-bold text-white/30 uppercase tracking-[0.2em]">Actions</div>
+            
+            <button onclick="showTab('submitProject'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3.5 text-xs uppercase tracking-widest">
+                <i data-lucide="folder-plus" class="w-4 h-4"></i> Submit Project
+            </button>
+            <button onclick="showTab('submitEvent'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3.5 text-xs uppercase tracking-widest">
+                <i data-lucide="calendar-plus" class="w-4 h-4"></i> Propose Event
+            </button>
+
+            <div class="pt-4 pb-2 px-5 text-[9px] font-bold text-white/30 uppercase tracking-[0.2em]">Account</div>
+            
+            <button onclick="showTab('settings'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3.5 text-xs uppercase tracking-widest">
+                <i data-lucide="settings" class="w-4 h-4"></i> Settings
+            </button>
+        </nav>
+        
+        <div class="p-6 mt-auto border-t border-white/5">
+            <button id="mobileLogoutBtn" class="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 py-3.5 rounded-xl text-xs uppercase tracking-widest font-bold transition-colors flex items-center justify-center gap-2">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged, updatePassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where, orderBy, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-messaging.js"; 
+
+        lucide.createIcons();
+
+        const safeSetText = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+        const safeSetValue = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+
+        // Fetching definitions defined BEFORE auth listener to prevent async fetching issues
+        window.fetchMySubmissions = async function() {
+            const gridList = document.getElementById('mySubmissionsGridList'); 
+            if(!gridList || !window.currentUserId) return;
+            try {
+                const q = query(collection(window.db, "submissions"), where("userId", "==", window.currentUserId), orderBy("timestamp", "desc"));
+                const snap = await getDocs(q);
+                
+                if (snap.empty) { 
+                    gridList.innerHTML = `<div class="glass-panel p-12 text-center text-white/40 text-xs font-bold uppercase tracking-widest">No submissions yet.</div>`; 
+                    return; 
+                }
+                
+                let htmlList = '';
+                snap.forEach((doc) => {
+                    const data = doc.data();
+                    let statusColor = "text-white/50 bg-white/5 border border-white/10"; let icon = "clock";
+                    if (data.status === 'approved') { statusColor = "text-green-400 bg-green-500/10 border border-green-500/30"; icon = "check-circle"; }
+                    else if (data.status === 'rejected') { statusColor = "text-red-400 bg-red-500/10 border border-red-500/30"; icon = "x-circle"; }
+                    
+                    htmlList += `
+                        <div class="glass-panel p-5 flex items-center justify-between transition hover:-translate-y-1 group">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white/70 group-hover:text-white transition-colors"><i data-lucide="file-text"></i></div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-white mb-1">${data.title} <span class="text-[9px] bg-white/10 text-white/60 px-2 py-0.5 rounded ml-2">${(data.type||'').replace('_', ' ')}</span></h3>
+                                    <p class="text-[10px] uppercase tracking-widest text-white/40 font-mono">${new Date(data.timestamp).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-[0.2em] ${statusColor}"><i data-lucide="${icon}" class="w-3.5 h-3.5"></i> ${data.status || 'Pending'}</span>
+                        </div>`;
+                });
+                gridList.innerHTML = htmlList; 
+                lucide.createIcons();
+            } catch (e) {
+                console.error(e);
+                if(gridList) gridList.innerHTML = `<div class="glass-panel p-8 text-center text-red-400 text-xs font-bold uppercase tracking-widest">Error: ${e.message}</div>`;
+            }
+        };
+
+        window.fetchMyAttendance = async function() {
+            const list = document.getElementById('myAttendanceList');
+            if(!list || !window.currentUserEmailStr) return;
+            try {
+                const qPresent = query(collection(window.db, "attendance"), where("presentEmails", "array-contains", window.currentUserEmailStr));
+                const qAbsent = query(collection(window.db, "attendance"), where("absentEmails", "array-contains", window.currentUserEmailStr));
+                const [snapPresent, snapAbsent] = await Promise.all([getDocs(qPresent), getDocs(qAbsent)]);
+                let records = [];
+                snapPresent.forEach(doc => { records.push({ id: doc.id, ...doc.data(), status: 'Present' }); });
+                snapAbsent.forEach(doc => { records.push({ id: doc.id, ...doc.data(), status: 'Absent' }); });
+                records.sort((a, b) => b.timestamp - a.timestamp);
+
+                if (records.length === 0) {
+                    list.innerHTML = `<div class="glass-panel p-12 text-center text-white/40 text-xs font-bold uppercase tracking-widest">No attendance records found.</div>`;
+                    return;
+                }
+
+                let html = '';
+                records.forEach(d => {
+                    let statusBadge = d.status === 'Present' ? `<span class="px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-green-400 bg-green-500/10 border border-green-500/30 rounded-lg">Present</span>` : `<span class="px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-red-400 bg-red-500/10 border border-red-500/30 rounded-lg">Absent</span>`;
+                    html += `
+                        <div class="glass-panel p-5 flex items-center justify-between group hover:-translate-y-1 transition-all">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white/70 group-hover:text-glow-blue transition-colors"><i data-lucide="calendar"></i></div>
+                                <div><h3 class="text-sm font-bold text-white mb-1">${d.eventName}</h3><p class="text-[10px] uppercase tracking-widest font-mono text-white/40">${d.date}</p></div>
+                            </div>
+                            ${statusBadge}
+                        </div>`;
+                });
+                list.innerHTML = html;
+                lucide.createIcons();
+            } catch(e) {
+                console.error(e);
+            }
+        };
+
+        window.fetchCertificates = async function() {
+            const grid = document.getElementById('certificatesGrid');
+            if(!grid || !window.currentUserId) return;
+            try {
+                const q = query(collection(window.db, "certificates"), where("userId", "==", window.currentUserId));
+                const snap = await getDocs(q);
+                if (snap.empty) {
+                    grid.innerHTML = `<div class="col-span-full glass-panel p-12 text-center text-white/40 text-xs font-bold uppercase tracking-widest">No certificates issued yet.</div>`;
+                    return;
+                }
+                let html = '';
+                snap.forEach((doc) => {
+                    const data = doc.data();
+                    html += `
+                    <div class="glass-panel p-4 flex flex-col group hover:-translate-y-1 transition-transform">
+                        <div class="h-40 bg-[#050505] border border-white/10 rounded-2xl relative overflow-hidden mb-4"><img src="${data.templateUrl}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="px-2 pb-2">
+                            <h3 class="text-sm font-bold text-white mb-1 line-clamp-1">${data.eventName}</h3>
+                            <p class="text-[9px] text-white/40 font-bold mb-4 uppercase tracking-[0.2em] font-mono">Issued: ${new Date(data.date).toLocaleDateString()}</p>
+                            <button onclick="generateAndDownloadCert('${data.templateUrl}', '${data.userName}', '${data.eventName}')" class="w-full btn-light text-xs font-bold uppercase tracking-widest py-3 rounded-xl transition-colors">Download</button>
+                        </div>
+                    </div>`;
+                });
+                grid.innerHTML = html;
+                lucide.createIcons();
+            } catch (e) {
+                console.error(e);
+            }
+        };
+
+        window.checkMembershipStatus = async function() {
+            if(!window.currentUserId) return;
+            try {
+                const q = query(collection(window.db, "submissions"), where("userId", "==", window.currentUserId), where("type", "==", "membership_application"));
+                const snap = await getDocs(q);
+                if(!snap.empty) {
+                    const data = snap.docs[0].data();
+                    const formCard = document.getElementById('membershipFormCard');
+                    const statusCard = document.getElementById('membershipStatusCard');
+                    if(formCard) formCard.classList.add('hidden');
+                    if(statusCard) statusCard.classList.remove('hidden');
+                    
+                    if(data.status === 'approved') {
+                        safeSetText('memStatusTitle', "Approved!");
+                        const titleEl = document.getElementById('memStatusTitle');
+                        if(titleEl) titleEl.classList.replace('text-white', 'text-green-400');
+                        safeSetText('memStatusDesc', "Welcome to the IEDC community. You are now an official member.");
+                        
+                        const iconContainer = document.getElementById('memStatusIconContainer'); // Doesn't exist by ID in HTML, relying on direct DOM below if needed. But let's fix the HTML structure it expects:
+                        const iconWrapper = statusCard.querySelector('.rounded-full');
+                        if(iconWrapper) iconWrapper.className = "w-24 h-24 bg-green-500/10 border border-green-500/30 rounded-full flex items-center justify-center mx-auto mb-8 shadow-[0_0_30px_rgba(34,197,94,0.2)]";
+                        const iconEl = document.getElementById('memStatusIcon');
+                        if(iconEl) {
+                            iconEl.className = "w-10 h-10 text-green-400";
+                            iconEl.innerHTML = `<polyline points="20 6 9 17 4 12"></polyline>`;
+                        }
+                    }
+                    lucide.createIcons();
+                }
+            } catch(e) {}
+        };
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+            authDomain: "metsiedc-3010e.firebaseapp.com",
+            databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+            projectId: "metsiedc-3010e",
+            storageBucket: "metsiedc-3010e.firebasestorage.app",
+            messagingSenderId: "954403413150",
+            appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+            measurementId: "G-6E7EK0D7JG"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const messaging = getMessaging(app); 
+        
+        window.db = db;
+        window.currentUserId = null;
+        window.currentUserEmailStr = null;
+        let currentProfileImageBase64 = "";
+
+        async function requestNotificationPermission(userId) {
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                    const currentToken = await getToken(messaging, { vapidKey: 'BLAXirXbhUCSrlOF1tdyvLbqhrCBvRJV4xvemvkMzdsM3Fh_DS-Pr_SCliI2Bbl-jIpE6Ugkm9-htU_-FhVWXCE' });
+                    
+                    if (currentToken) {
+                        await setDoc(doc(db, "users", userId), {
+                            fcmToken: currentToken
+                        }, { merge: true });
+                        console.log("Push notification token saved to database!");
+                    } else {
+                        console.log('No registration token available.');
+                    }
+                } else {
+                    console.log('Unable to get permission to notify.');
+                }
+            } catch (error) {
+                console.error('Error getting notification permission:', error);
+            }
+        }
+
+        // Auth Logic
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                window.currentUserId = user.uid;
+                window.currentUserEmailStr = user.email || null;
+                
+                const initialName = user.displayName || (user.email ? user.email.split('@')[0] : "Student");
+                const firstNameOnly = initialName.split(' ')[0];
+                
+                safeSetText('userEmailHeader', firstNameOnly);
+                safeSetText('headerWelcomeName', firstNameOnly);
+                safeSetText('displayNameBanner', firstNameOnly);
+                safeSetText('profileCardEmail', user.email || 'No email attached');
+                safeSetValue('memEmail', user.email || '');
+                
+                try {
+                    const docSnap = await getDoc(doc(db, "users", user.uid, "profile", "userProfile"));
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        safeSetValue('profileName', data.name || '');
+                        safeSetValue('profileContact', data.contact || '');
+                        safeSetValue('profileBio', data.bio || '');
+                        safeSetValue('memName', data.name || '');
+                        safeSetText('profileCardName', data.name || 'Student');
+                        
+                        const firstName = (data.name || initialName).split(' ')[0];
+                        safeSetText('headerWelcomeName', firstName);
+                        safeSetText('userEmailHeader', firstName);
+                        safeSetText('displayNameBanner', firstName);
+
+                        if (data.profileImage) {
+                            const imgHeader = document.getElementById('userAvatarHeader');
+                            const imgPreview = document.getElementById('profileImagePreview');
+                            if(imgHeader) imgHeader.innerHTML = `<img src="${data.profileImage}" class="w-full h-full object-cover">`;
+                            if(imgPreview) imgPreview.src = data.profileImage;
+                        }
+                    } else {
+                        const rootDoc = await getDoc(doc(db, "users", user.uid));
+                        if (rootDoc.exists() && rootDoc.data().name) {
+                            const rootName = rootDoc.data().name;
+                            safeSetValue('profileName', rootName);
+                            safeSetValue('memName', rootName);
+                            safeSetText('profileCardName', rootName);
+                            safeSetText('displayNameBanner', rootName.split(' ')[0]);
+                            safeSetText('headerWelcomeName', rootName.split(' ')[0]);
+                            safeSetText('userEmailHeader', rootName.split(' ')[0]);
+                        } else if (user.displayName) {
+                            safeSetValue('profileName', user.displayName);
+                            safeSetValue('memName', user.displayName);
+                            safeSetText('profileCardName', user.displayName);
+                        }
+                    }
+                } catch(e) {
+                    console.error("Profile loading error: ", e);
+                }
+
+                window.fetchMySubmissions();
+                window.checkMembershipStatus();
+                window.fetchCertificates();
+                window.fetchMyAttendance();
+                listenForNotifications();
+                
+                requestNotificationPermission(user.uid);
+
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        onMessage(messaging, (payload) => {
+            alert(`📢 ${payload.notification.title}\n${payload.notification.body}`);
+            listenForNotifications(); 
+        });
+
+        // Notifications
+        let allNotifications = [];
+        window.toggleSearch = function() {
+            const cont = document.getElementById('searchContainer');
+            const inp = document.getElementById('notificationSearchInput');
+            if (cont && cont.classList.contains('hidden')) {
+                cont.classList.remove('hidden'); if(inp) inp.focus();
+            } else if(cont) {
+                cont.classList.add('hidden'); if(inp) inp.value = '';
+                renderNotifications();
+            }
+        };
+
+        window.toggleNotifications = function() {
+            const panel = document.getElementById('notificationPanel');
+            if(panel) panel.classList.toggle('hidden');
+            const badge = document.getElementById('notificationBadge');
+            if (panel && !panel.classList.contains('hidden') && badge) badge.classList.add('hidden'); 
+        };
+
+        function listenForNotifications() {
+            const q = query(collection(db, "notifications"), orderBy("timestamp", "desc"));
+            onSnapshot(q, (snapshot) => {
+                allNotifications = [];
+                snapshot.forEach((doc) => { allNotifications.push({ id: doc.id, ...doc.data() }); });
+                const badge = document.getElementById('notificationBadge');
+                if (allNotifications.length > 0 && badge) badge.classList.remove('hidden');
+                renderNotifications();
+            });
+        }
+
+        function renderNotifications(filterText = '') {
+            const list = document.getElementById('notificationList');
+            if(!list) return;
+            const filtered = allNotifications.filter(n => (n.title || '').toLowerCase().includes(filterText.toLowerCase()) || (n.message || '').toLowerCase().includes(filterText.toLowerCase()));
+
+            if (filtered.length === 0) {
+                list.innerHTML = `<div class="p-8 text-center text-xs text-white/40 font-bold uppercase tracking-widest">No messages.</div>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(n => {
+                const dateStr = new Date(n.timestamp).toLocaleDateString();
+                const cat = n.category || 'Alert';
+                html += `
+                    <div class="p-5 hover:bg-white/5 transition-colors border-b border-white/5 last:border-0">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-[9px] font-bold uppercase tracking-widest text-glow-blue bg-glow-blue/10 border border-glow-blue/20 px-2 py-0.5 rounded">${cat}</span>
+                            <span class="text-[9px] text-white/40 font-mono tracking-wider">${dateStr}</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-1">${n.title}</h4>
+                        <p class="text-xs text-white/60 line-clamp-2">${n.message}</p>
+                    </div>`;
+            });
+            list.innerHTML = html;
+        }
+
+        const searchInputEl = document.getElementById('notificationSearchInput');
+        if (searchInputEl) {
+            searchInputEl.addEventListener('input', (e) => {
+                const panel = document.getElementById('notificationPanel');
+                if(panel) panel.classList.remove('hidden');
+                renderNotifications(e.target.value);
+            });
+        }
+
+        // Form Submit Listeners
+        const joinForm = document.getElementById('joinIedcForm');
+        if (joinForm) {
+            joinForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('button'); btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Processing...`; btn.disabled = true; lucide.createIcons();
+                
+                const formData = {
+                    name: document.getElementById('memName').value,
+                    email: document.getElementById('memEmail').value,
+                    phone: document.getElementById('memPhone').value,
+                    gender: document.getElementById('memGender').value,
+                    year: document.getElementById('memYear').value,
+                    dept: document.getElementById('memDept').value,
+                    domain: document.getElementById('memDomain').value,
+                    reason: document.getElementById('memReason').value
+                };
+
+                try {
+                    await addDoc(collection(db, "submissions"), {
+                        ...formData,
+                        title: "Membership Application",
+                        description: `${formData.dept} - ${formData.year}`,
+                        type: "membership_application",
+                        status: "pending",
+                        userId: window.currentUserId,
+                        userEmail: window.currentUserEmailStr,
+                        userName: formData.name,
+                        timestamp: Date.now()
+                    });
+                    window.checkMembershipStatus();
+                } catch(e) { alert("Error: " + e.message); btn.disabled = false; btn.innerHTML = `Submit Application`; }
+            });
+        }
+
+        // Image Upload
+        window.handleImageUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file || file.size > 500 * 1024) return alert("Image too large (Max 500KB)");
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image(); img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
+                    const scaleSize = 300 / img.width; canvas.width = 300; canvas.height = img.height * scaleSize;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    currentProfileImageBase64 = canvas.toDataURL('image/jpeg', 0.8);
+                    const profilePreview = document.getElementById('profileImagePreview');
+                    if(profilePreview) profilePreview.src = currentProfileImageBase64;
+                };
+            };
+            reader.readAsDataURL(file);
+        };
+
+        // Save Profile Logic
+        const profileForm = document.getElementById('profileForm');
+        if (profileForm) {
+            profileForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('button'); const origText = btn.innerHTML; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Saving...`; btn.disabled = true; lucide.createIcons();
+                try {
+                    const profileData = { name: document.getElementById('profileName').value, contact: document.getElementById('profileContact').value, bio: document.getElementById('profileBio').value };
+                    if (currentProfileImageBase64) profileData.profileImage = currentProfileImageBase64;
+                    await setDoc(doc(db, "users", window.currentUserId, "profile", "userProfile"), profileData, { merge: true });
+                    
+                    await setDoc(doc(db, "users", window.currentUserId), { 
+                        name: profileData.name || "Student",
+                        email: window.currentUserEmailStr || "",
+                        role: 'student'
+                    }, { merge: true });
+                    
+                    safeSetText('profileCardName', profileData.name);
+                    safeSetText('profileCardContact', profileData.contact || '--');
+                    safeSetText('userEmailHeader', profileData.name.split(' ')[0]);
+                    safeSetText('headerWelcomeName', profileData.name.split(' ')[0]);
+                    
+                    const statusMsg = document.getElementById('profileStatusMessage');
+                    if(statusMsg) {
+                        statusMsg.classList.remove('hidden'); 
+                        statusMsg.textContent = "Saved Successfully!";
+                        setTimeout(() => statusMsg.classList.add('hidden'), 3000);
+                    }
+
+                    if(profileData.profileImage) {
+                        const avatarHeader = document.getElementById('userAvatarHeader');
+                        if(avatarHeader) avatarHeader.innerHTML = `<img src="${profileData.profileImage}" class="w-full h-full rounded-full object-cover">`;
+                    }
+                } catch(e) { console.error(e); alert("Error: " + e.message); }
+                btn.innerHTML = origText; btn.disabled = false; lucide.createIcons();
+            });
+        }
+
+        // Password Reset form logic
+        const passwordForm = document.getElementById('passwordForm');
+        if (passwordForm) {
+            passwordForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('button'); 
+                const origText = btn.innerHTML;
+                btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Updating...`; 
+                btn.disabled = true; 
+                lucide.createIcons();
+                
+                try {
+                    const newPassword = document.getElementById('newPasswordInput').value;
+                    await updatePassword(auth.currentUser, newPassword);
+                    const statusMsg = document.getElementById('passwordStatusMessage');
+                    if(statusMsg) {
+                        statusMsg.classList.remove('hidden');
+                        statusMsg.textContent = "Password Updated!";
+                        e.target.reset();
+                        setTimeout(() => statusMsg.classList.add('hidden'), 3000);
+                    }
+                } catch(error) {
+                    alert("Error: " + error.message + " (You may need to log out and log back in to verify your identity before changing your password).");
+                } finally {
+                    btn.innerHTML = origText;
+                    btn.disabled = false;
+                    lucide.createIcons();
+                }
+            });
+        }
+
+        // Generic Submission
+        const submitGeneric = async (formId, type, statusId) => {
+            const formObj = document.getElementById(formId);
+            if (!formObj) return;
+
+            formObj.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('button'); const origText = btn.innerHTML; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Processing...`; btn.disabled = true; lucide.createIcons();
+                const inputs = e.target.querySelectorAll('input, textarea, select');
+                const data = { type: type, status: 'pending', userId: window.currentUserId, userEmail: window.currentUserEmailStr, userName: document.getElementById('profileName').value || 'Student', timestamp: Date.now() };
+                inputs.forEach(i => data[i.id.replace(type, '').toLowerCase()] = i.value); 
+                if(type === 'project') { data.title = document.getElementById('projectName').value; data.description = document.getElementById('projectDescription').value; data.teamMembers = document.getElementById('projectTeamMembers').value; data.stack = document.getElementById('projectTechnologyStack').value; data.link = document.getElementById('projectLink').value; }
+                else if(type === 'idea') { data.title = document.getElementById('ideaName').value; data.description = document.getElementById('ideaDescription').value; data.category = document.getElementById('ideaCategory').value; }
+                else if(type === 'event_proposal') { data.title = document.getElementById('eventName').value; data.description = document.getElementById('eventDescription').value; data.date = document.getElementById('eventDate').value; data.time = document.getElementById('eventTime').value; }
+                
+                try { 
+                    await addDoc(collection(db, "submissions"), data); 
+                    const statusMsg = document.getElementById(statusId);
+                    if(statusMsg) {
+                        statusMsg.textContent = "Submitted successfully!";
+                        statusMsg.classList.remove('hidden');
+                        e.target.reset(); 
+                        window.fetchMySubmissions(); 
+                        setTimeout(() => statusMsg.classList.add('hidden'), 4000);
+                    }
+                } 
+                catch(e) { alert(e.message); } finally { btn.innerHTML = origText; btn.disabled = false; lucide.createIcons(); }
+            });
+        };
+        submitGeneric('projectForm', 'project', 'projectStatusMessage');
+        submitGeneric('ideaForm', 'idea', 'ideaStatusMessage');
+        submitGeneric('eventForm', 'event_proposal', 'eventStatusMessage');
+
+        // Generate and Download Cert
+        window.generateAndDownloadCert = function(templateUrl, studentName, eventName) {
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin inline"></i> Wait...`;
+            btn.disabled = true;
+            lucide.createIcons();
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.crossOrigin = "anonymous"; 
+            img.src = templateUrl;
+
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+
+                const fontSize = Math.floor(canvas.width / 30); 
+                ctx.font = `bold ${fontSize}px 'Plus Jakarta Sans', sans-serif`;
+                ctx.fillStyle = "#000000"; 
+                ctx.textAlign = "center";
+                
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                ctx.fillText(studentName, centerX, centerY);
+
+                const link = document.createElement('a');
+                link.download = `${eventName}_Certificate_${studentName}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                lucide.createIcons();
+            };
+
+            img.onerror = () => {
+                alert("Could not load certificate template.");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                lucide.createIcons();
+            };
+        };
+
+        // Logout
+        const handleLogout = async () => { await signOut(auth); window.location.href = 'login.html'; };
+        document.getElementById('logoutBtn')?.addEventListener('click', handleLogout);
+        document.getElementById('mobileLogoutBtn')?.addEventListener('click', handleLogout);
+
+        // Sidebar & Menu Logic
+        window.toggleMobileSidebar = function() {
+            const mobileMenu = document.getElementById('mobile-sidebar');
+            const overlay = document.getElementById('mobile-sidebar-overlay');
+            if (mobileMenu && mobileMenu.classList.contains('-translate-x-full')) { 
+                mobileMenu.classList.remove('-translate-x-full'); 
+                if(overlay) overlay.classList.remove('hidden'); 
+            } else if (mobileMenu) { 
+                mobileMenu.classList.add('-translate-x-full'); 
+                if(overlay) overlay.classList.add('hidden'); 
+            }
+        };
+        const mobileBtn = document.getElementById('mobile-menu-toggle');
+        if(mobileBtn) mobileBtn.addEventListener('click', toggleMobileSidebar);
+
+        window.showTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            const targetSectionId = (tabId === 'settings') ? 'settingsSection' : tabId + 'Section';
+            const targetSection = document.getElementById(targetSectionId);
+            if(targetSection) targetSection.classList.remove('hidden');
+            
+            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
+            if(tabId !== 'settings') {
+                const activeDesktop = document.getElementById('nav-'+tabId);
+                if(activeDesktop) activeDesktop.classList.add('active');
+            }
+            
+            let title = "Dashboard";
+            if(tabId === 'joinIedc') title = "Join IEDC";
+            else if(tabId === 'submitProject') title = "Submit Project";
+            else if(tabId === 'submitIdea') title = "Pitch Idea";
+            else if(tabId === 'submitEvent') title = "Propose Event";
+            else if(tabId === 'trackStatus') title = "Status";
+            else if(tabId === 'settings') title = "Settings";
+            else title = tabId.charAt(0).toUpperCase() + tabId.slice(1);
+            
+            safeSetText('headerTitle', title);
+
+            if (tabId === 'trackStatus') window.fetchMySubmissions();
+            if (tabId === 'certificates') window.fetchCertificates();
+            if (tabId === 'attendance') window.fetchMyAttendance();
+        };
+    </script>
+
+    <script>
+        let newWorker;
+        const updateBanner = document.getElementById('pwa-update-banner');
+        const refreshBtn = document.getElementById('pwa-refresh-btn');
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(registration => {
+                    registration.addEventListener('updatefound', () => {
+                        newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                updateBanner.classList.remove('hidden');
+                                updateBanner.classList.add('flex');
+                            }
+                        });
+                    });
+                });
+
+                let refreshing;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (refreshing) return;
+                    refreshing = true;
+                    window.location.reload();
+                });
+            });
+        }
+
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                if (newWorker) {
+                    newWorker.postMessage({ action: 'skipWaiting' });
+                }
+                updateBanner.classList.add('hidden'); 
+            });
+        }
+    </script>
+</body>
+</html>
