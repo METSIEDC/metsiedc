@@ -6,10 +6,10 @@
     <title>Portal Login | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f1115">
+    <meta name="theme-color" content="#050505">
     <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -20,7 +20,33 @@
                 extend: {
                     fontFamily: { 
                         sans: ['Inter', 'sans-serif'],
-                        display: ['Montserrat', 'sans-serif']
+                        display: ['Plus Jakarta Sans', 'sans-serif']
+                    },
+                    colors: {
+                        dark: {
+                            base: '#050505',
+                            panel: 'rgba(20, 20, 25, 0.6)',
+                            border: 'rgba(255, 255, 255, 0.08)'
+                        },
+                        glow: {
+                            purple: '#9333ea',
+                            orange: '#ea580c',
+                            blue: '#2563eb'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.3' },
+                            '50%': { opacity: '0.6' },
+                        }
                     }
                 }
             }
@@ -29,34 +55,37 @@
 
     <style>
         body { 
-            background-color: #0f1115; /* Deep cinematic dark */
-            color: #ffffff; 
+            background-color: #050505; 
+            color: #e2e8f0; 
             overflow-x: hidden; 
         }
 
-        /* Monochromatic Glassmorphism */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            border-left: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.5);
-            border-radius: 24px;
-        }
-
+        /* Glassmorphism Utilities */
         .glass-nav {
-            background: rgba(15, 17, 21, 0.6);
+            background: rgba(15, 15, 20, 0.4);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
-        .glass-menu {
-            background: rgba(10, 12, 15, 0.85);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(30, 30, 35, 0.8) 0%, rgba(15, 15, 20, 0.6) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02), 0 20px 40px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            z-index: 1;
         }
 
         /* Input styling */
@@ -69,9 +98,9 @@
         }
         .glass-input:focus {
             background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.4);
+            border-color: rgba(147, 51, 234, 0.5); /* Purple glow */
             outline: none;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 15px rgba(147, 51, 234, 0.2);
         }
         .glass-input:disabled { opacity: 0.5; cursor: not-allowed; }
 
@@ -86,8 +115,8 @@
         }
         .tab-btn.active {
             background-color: #ffffff;
-            color: #0f1115;
-            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+            color: #050505;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
         }
 
         /* Signup Method Tabs */
@@ -107,7 +136,23 @@
         .method-btn.active {
             color: #ffffff;
             border-bottom-color: #ffffff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
+
+        /* Button Styling */
+        .btn-light {
+            background: #ffffff;
+            color: #050505;
+            transition: all 0.3s ease;
+        }
+        .btn-light:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mobile-menu.open { transform: translateX(0); }
 
         /* Loading Spinner */
         .spinner {
@@ -124,13 +169,23 @@
             border-top: 2px solid #fff;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
     </style>
 </head>
-<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-white selection:text-black pb-20 md:pb-0">
+<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-glow-purple selection:text-white pb-20 md:pb-0">
 
-    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
+    <div class="fixed top-[10%] right-[-10%] w-[40vw] h-[40vw] bg-glow-purple/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow"></div>
+    <div class="fixed bottom-[10%] left-[-10%] w-[50vw] h-[50vw] bg-glow-blue/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow" style="animation-delay: 2s;"></div>
+    <div class="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 z-0 pointer-events-none"></div>
+
+    <div id="pwa-update-banner" class="hidden fixed top-24 left-1/2 transform -translate-x-1/2 z-[9999] glass-panel rounded-full px-5 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300 border border-glow-purple/50 shadow-[0_0_20px_rgba(147,51,234,0.3)]">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+            <div class="w-8 h-8 rounded-full bg-glow-purple/20 flex items-center justify-center text-glow-purple">
                 <i class="fas fa-cloud-download-alt"></i>
             </div>
             <div class="flex flex-col">
@@ -138,94 +193,98 @@
                 <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
             </div>
         </div>
-        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+        <button id="pwa-refresh-btn" class="ml-auto bg-white text-black text-xs font-bold px-4 py-2 rounded-full transition-colors hover:bg-gray-200">
             Refresh
         </button>
     </div>
 
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
-        <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
-    </div>
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl z-50 glass-nav rounded-full px-2 py-2 flex justify-between items-center transition-all duration-300" id="navbar">
+        <a href="index.html" class="flex items-center pl-4 group">
+            <span class="text-base font-display font-bold tracking-wider text-white">
+                MET'S IEDC
+            </span>
+        </a>
+        
+        <div class="hidden md:flex items-center space-x-1 bg-white/5 rounded-full px-2 py-1">
+            <a href="index.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Home</a>
+            <a href="event.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Events</a>
+            <a href="initiatives.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Initiatives</a>
+            <a href="about.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Story</a>
+        </div>
 
-    <header id="navbar" class="h-20 px-6 md:px-10 fixed top-0 w-full z-50 transition-all duration-300 py-4 glass-nav">
-        <div class="max-w-[95%] mx-auto h-full flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <a href="index.html" class="flex items-center group">
-                    <span class="text-xl font-display font-bold tracking-tight text-white group-hover:opacity-80 transition-opacity uppercase">
-                        MET'S IEDC
-                    </span>
-                </a>
-            </div>
-
-            <div class="hidden lg:flex items-center space-x-8 bg-white/5 backdrop-blur-md px-8 py-3 rounded-full border border-white/10 shadow-lg">
-                <a href="index.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Home</a>
-                <a href="event.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Events</a>
-                <a href="initiatives.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Initiatives</a>
-                <a href="news.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">News</a>
-                <a href="team.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Ex-Com</a>
-                <a href="contact.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Contact</a>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <button id="mobile-menu-button" class="lg:hidden w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white backdrop-blur-md">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
+        <div class="hidden md:flex items-center pr-2">
+            <div class="bg-white/10 px-5 py-2 rounded-full text-white text-xs font-bold tracking-wide flex items-center gap-2 border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                <i data-lucide="lock" class="w-3.5 h-3.5"></i> Portal
             </div>
         </div>
-    </header>
 
-    <div id="mobile-menu" class="fixed top-0 right-0 w-full h-screen glass-menu z-[200] overflow-y-auto transform translate-x-full transition-transform duration-500 ease-in-out">
-        <div class="flex justify-between items-center p-8">
-            <span class="text-xl font-display font-bold text-white tracking-widest">MENU</span>
-            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <button id="mobile-menu-button" class="md:hidden text-white p-2 pr-4">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+    </nav>
+
+    <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-2xl z-[200] overflow-y-auto border-l border-white/10">
+        <div class="flex justify-between items-center p-8 border-b border-white/10">
+            <span class="text-xl font-display font-bold text-white tracking-widest">NAVIGATION</span>
+            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors">
+                <i class="fas fa-times text-lg"></i>
             </button>
         </div>
-        <nav class="flex flex-col space-y-8 px-8 py-12 text-center">
-            <a href="index.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Home</a>
-            <a href="announcement.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Announcement</a>
-            <a href="event.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Events</a>
-            <a href="initiatives.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Initiatives</a>
-            <a href="report.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Reports</a>
-            <a href="team.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Ex-Com</a>
-            <a href="contact.html" class="text-2xl font-display font-light text-white/50 hover:text-white tracking-[0.2em] uppercase transition-colors">Contact</a>
+        <nav class="flex flex-col space-y-6 px-8 py-10 text-left">
+            <a href="index.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-home w-8 text-white/40"></i> Home</a>
+            <a href="event.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="far fa-calendar-alt w-8 text-white/40"></i> Events</a>
+            <a href="initiatives.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-rocket w-8 text-white/40"></i> Initiatives</a>
+            <a href="report.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-chart-bar w-8 text-white/40"></i> Reports</a>
+            <a href="team.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-users w-8 text-white/40"></i> Ex-Com</a>
+            <a href="announcement.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-bullhorn w-8 text-white/40"></i> Notices</a>
+            
+            <div class="pt-8 mt-8 border-t border-white/10 flex flex-col gap-4">
+                <div class="btn-light text-center py-4 rounded-xl text-sm font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                    <i class="fas fa-lock mr-2"></i> Portal Access
+                </div>
+            </div>
         </nav>
     </div>
 
     <main class="flex-grow flex items-center justify-center px-4 pt-32 pb-12 relative z-10 w-full">
-        <div class="glass-panel p-8 md:p-12 w-full max-w-md relative flex flex-col">
+        
+        <div class="glass-panel p-8 md:p-12 w-full max-w-md relative flex flex-col animate-float">
             
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-display font-bold text-white mb-2 uppercase tracking-tight">Portal Access</h2>
+            <div class="absolute -right-10 -top-10 w-32 h-32 bg-glow-purple/20 blur-2xl rounded-full pointer-events-none"></div>
+            
+            <div class="text-center mb-8 relative z-10">
+                <div class="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white mx-auto mb-4 shadow-sm">
+                    <i data-lucide="fingerprint" class="w-8 h-8 opacity-80"></i>
+                </div>
+                <h2 class="text-3xl font-display font-bold text-white mb-2 tracking-tight">Portal Access</h2>
                 <p class="text-white/50 text-xs font-light tracking-wide">Enter your credentials to continue</p>
             </div>
 
-            <div class="flex p-1.5 bg-[#0a0c0f] border border-white/10 rounded-xl mb-8">
+            <div class="flex p-1.5 bg-[#0a0a0c]/80 border border-white/10 rounded-xl mb-8 relative z-10 backdrop-blur-sm shadow-inner">
                 <button id="loginTabBtn" class="tab-btn active w-1/2 py-3 rounded-lg text-[10px] uppercase tracking-widest font-bold" onclick="switchAuthMode('login')">Login</button>
                 <button id="signupTabBtn" class="tab-btn w-1/2 py-3 rounded-lg text-[10px] uppercase tracking-widest font-bold" onclick="switchAuthMode('signup')">Sign Up</button>
             </div>
 
-            <div id="statusMessage" class="hidden mb-6 p-4 rounded-lg text-xs text-center border font-medium tracking-wide"></div>
+            <div id="statusMessage" class="hidden mb-6 p-4 rounded-xl text-xs text-center border font-medium tracking-wide relative z-10 shadow-lg"></div>
             
-            <div id="recaptcha-container"></div>
+            <div id="recaptcha-container" class="relative z-10"></div>
 
-            <div id="loginSection">
+            <div id="loginSection" class="relative z-10">
                 <div class="space-y-5">
                     <div>
                         <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Email Address</label>
                         <div class="relative">
-                            <i class="fas fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-white/30"></i>
+                            <i data-lucide="mail" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/30 w-4 h-4"></i>
                             <input type="email" id="loginEmail" placeholder="student@example.com" class="glass-input w-full rounded-xl py-3.5 pl-12 pr-4 text-sm font-light">
                         </div>
                     </div>
                     <div>
                         <div class="flex justify-between items-center mb-2">
                             <label class="block text-[10px] font-bold text-white/50 uppercase tracking-widest">Password</label>
-                            <a href="#" id="forgotPasswordLink" class="text-[9px] uppercase tracking-widest text-white/40 hover:text-white transition-colors">Forgot?</a>
+                            <a href="#" id="forgotPasswordLink" class="text-[9px] uppercase tracking-widest text-glow-purple hover:text-white transition-colors font-bold">Forgot?</a>
                         </div>
                         <div class="relative">
-                            <i class="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-white/30"></i>
+                            <i data-lucide="lock" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/30 w-4 h-4"></i>
                             <input type="password" id="loginPassword" placeholder="••••••••" class="glass-input w-full rounded-xl py-3.5 pl-12 pr-12 text-sm font-light">
                             <button type="button" class="toggle-password absolute right-4 top-1/2 transform -translate-y-1/2 text-white/30 hover:text-white transition-colors">
                                 <i class="fas fa-eye"></i>
@@ -233,14 +292,14 @@
                         </div>
                     </div>
                     
-                    <button id="loginBtn" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded-xl text-xs uppercase tracking-widest transition-all mt-4 flex justify-center items-center">
+                    <button id="loginBtn" class="w-full btn-light font-bold py-4 rounded-xl text-xs uppercase tracking-widest transition-all mt-6 flex justify-center items-center shadow-[0_0_20px_rgba(255,255,255,0.15)]">
                         <span id="loginBtnText">Sign In</span>
                         <div id="loginSpinner" class="spinner ml-3 hidden"></div>
                     </button>
                 </div>
             </div>
 
-            <div id="signupSection" class="hidden">
+            <div id="signupSection" class="hidden relative z-10">
                 <div class="flex mb-8 border-b border-white/10">
                     <button id="methodEmail" class="method-btn active" onclick="switchSignupMethod('email')">Email OTP</button>
                     <button id="methodPhone" class="method-btn" onclick="switchSignupMethod('phone')">Phone OTP</button>
@@ -250,9 +309,12 @@
                     <div id="emailStep1">
                         <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Email Address</label>
                         <div class="flex gap-2">
-                            <input type="email" id="signupEmailInput" placeholder="student@example.com" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm font-light">
-                            <button id="sendEmailOtpBtn" class="bg-white hover:bg-gray-200 text-[#0f1115] text-[10px] font-bold px-5 rounded-xl uppercase tracking-widest transition whitespace-nowrap">
-                                Send Code
+                            <div class="relative flex-grow">
+                                <i data-lucide="mail" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/30 w-4 h-4"></i>
+                                <input type="email" id="signupEmailInput" placeholder="student@example.com" class="glass-input w-full rounded-xl py-3.5 pl-11 pr-4 text-sm font-light">
+                            </div>
+                            <button id="sendEmailOtpBtn" class="btn-light text-[#050505] text-[10px] font-bold px-5 rounded-xl uppercase tracking-widest transition whitespace-nowrap">
+                                Send
                             </button>
                         </div>
                     </div>
@@ -261,22 +323,25 @@
                         <div>
                             <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Verification Code</label>
                             <input type="text" id="emailOtpInput" placeholder="000000" class="glass-input w-full rounded-xl py-4 px-4 text-center tracking-[0.5em] font-mono text-lg mb-4">
-                            <button id="verifyEmailOtpBtn" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] text-[10px] font-bold py-4 uppercase tracking-widest rounded-xl transition">Verify Code</button>
+                            <button id="verifyEmailOtpBtn" class="w-full btn-light text-[#050505] text-[10px] font-bold py-4 uppercase tracking-widest rounded-xl transition">Verify Code</button>
                         </div>
                     </div>
 
                     <div id="emailStep3" class="hidden mt-6 space-y-5">
-                         <div class="p-3 bg-white/10 border border-white/20 rounded-lg text-center text-[10px] font-bold tracking-widest uppercase text-white">Email Verified</div>
+                         <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-xl text-center text-[10px] font-bold tracking-widest uppercase text-green-400 flex items-center justify-center gap-2">
+                             <i data-lucide="check-circle" class="w-4 h-4"></i> Email Verified
+                         </div>
                          <div>
                             <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Set Password</label>
                              <div class="relative">
-                                <input type="password" id="newPassword" placeholder="Min 8 characters" class="glass-input w-full rounded-xl py-3.5 px-4 pr-12 text-sm font-light">
+                                <i data-lucide="lock" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/30 w-4 h-4"></i>
+                                <input type="password" id="newPassword" placeholder="Min 8 characters" class="glass-input w-full rounded-xl py-3.5 pl-11 pr-12 text-sm font-light">
                                 <button type="button" class="toggle-password absolute right-4 top-1/2 transform -translate-y-1/2 text-white/30 hover:text-white transition-colors">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
                         </div>
-                        <button id="createEmailAccountBtn" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded-xl text-[10px] uppercase tracking-widest transition-all">
+                        <button id="createEmailAccountBtn" class="w-full btn-light text-[#050505] font-bold py-4 rounded-xl text-[10px] uppercase tracking-widest transition-all mt-2">
                             Create Account
                         </button>
                     </div>
@@ -286,10 +351,10 @@
                     <div id="phoneStep1">
                         <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Mobile Number</label>
                         <div class="relative">
-                            <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/50 font-mono">+91</span>
-                            <input type="tel" id="phoneNumberInput" placeholder="9876543210" class="glass-input w-full rounded-xl py-3.5 pl-14 pr-4 text-sm font-mono tracking-wider" maxlength="10">
+                            <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/50 font-mono text-sm border-r border-white/10 pr-3">+91</span>
+                            <input type="tel" id="phoneNumberInput" placeholder="9876543210" class="glass-input w-full rounded-xl py-3.5 pl-16 pr-4 text-sm font-mono tracking-wider" maxlength="10">
                         </div>
-                        <button id="sendPhoneOtpBtn" class="w-full mt-6 bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded-xl text-[10px] uppercase tracking-widest transition-all">
+                        <button id="sendPhoneOtpBtn" class="w-full mt-6 btn-light text-[#050505] font-bold py-4 rounded-xl text-[10px] uppercase tracking-widest transition-all">
                             Send SMS Code
                         </button>
                     </div>
@@ -297,32 +362,34 @@
                     <div id="phoneStep2" class="hidden mt-6">
                         <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Enter SMS Code</label>
                         <input type="text" id="phoneOtpInput" placeholder="000000" class="glass-input w-full rounded-xl py-4 px-4 text-center text-lg font-mono tracking-[0.5em] mb-4" maxlength="6">
-                        <button id="verifyPhoneOtpBtn" class="w-full bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded-xl text-[10px] uppercase tracking-widest transition-all">
+                        <button id="verifyPhoneOtpBtn" class="w-full btn-light text-[#050505] font-bold py-4 rounded-xl text-[10px] uppercase tracking-widest transition-all">
                             Verify & Create Account
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div class="relative flex py-8 items-center">
+            <div class="relative flex py-8 items-center z-10">
                 <div class="flex-grow border-t border-white/10"></div>
                 <span class="flex-shrink-0 mx-4 text-white/30 text-[9px] uppercase tracking-[0.2em] font-bold">Or continue with</span>
                 <div class="flex-grow border-t border-white/10"></div>
             </div>
 
-            <button id="googleBtn" class="w-full flex items-center justify-center gap-4 py-3.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-xs font-bold uppercase tracking-widest text-white">
+            <button id="googleBtn" class="relative z-10 w-full flex items-center justify-center gap-3 py-3.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-xs font-bold uppercase tracking-widest text-white shadow-sm">
                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-4 h-4" alt="Google">
                 Google
             </button>
 
-            <div class="mt-8 text-center border-t border-white/5 pt-6">
-                <a href="admin.html" class="text-[9px] uppercase tracking-[0.2em] font-bold text-white/30 hover:text-white transition-colors">Staff / Admin Login</a>
+            <div class="mt-8 text-center border-t border-white/5 pt-6 relative z-10">
+                <a href="admin.html" class="text-[9px] uppercase tracking-[0.2em] font-bold text-white/30 hover:text-white transition-colors flex items-center justify-center gap-2">
+                    <i data-lucide="shield" class="w-3 h-3"></i> Staff / Admin Login
+                </a>
             </div>
 
         </div>
     </main>
 
-    <div class="fixed bottom-0 left-0 w-full bg-[#0a0c0f]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
+    <div class="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-xl border-t border-white/10 z-[100] md:hidden pb-safe no-print">
         <div class="flex justify-around items-center px-2 py-3">
             <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
                 <i class="fas fa-home text-lg"></i>
@@ -336,9 +403,9 @@
                 <i class="fas fa-rocket text-lg"></i>
                 <span class="text-[9px] uppercase tracking-wider font-medium">Initiatives</span>
             </a>
-            <a href="login.html" class="flex flex-col items-center gap-1 text-white">
+            <a href="login.html" class="flex flex-col items-center gap-1 text-glow-purple">
                 <i class="fas fa-user-circle text-lg"></i>
-                <span class="text-[9px] uppercase tracking-wider font-medium">Profile</span>
+                <span class="text-[9px] uppercase tracking-wider font-bold">Profile</span>
             </a>
         </div>
     </div>
@@ -385,13 +452,13 @@
         // GLOBALS
         let generatedEmailOtp = null;
         let verifiedEmailAddress = null;
-        window.confirmationResult = null; // For phone auth
+        window.confirmationResult = null; 
 
         // --- UTILS ---
         function showMessage(msg, type = 'error') {
             const el = document.getElementById('statusMessage');
             el.textContent = msg;
-            el.className = `mb-6 p-4 rounded text-xs tracking-wide text-center border font-medium ${type === 'error' ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-white/10 border-white/20 text-white'}`;
+            el.className = `mb-6 p-4 rounded-xl text-xs tracking-wide text-center border font-medium relative z-10 shadow-lg ${type === 'error' ? 'bg-red-500/10 border-red-500/30 text-red-400' : 'bg-green-500/10 border-green-500/30 text-green-400'}`;
             el.classList.remove('hidden');
         }
 
@@ -440,7 +507,7 @@
 
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
-                window.location.href = 'dashboard.html';
+                window.location.href = 'student-dashboard.html';
             } catch(e) {
                 showMessage("Login Failed: Incorrect credentials.");
                 btn.disabled = false; spinner.classList.add('hidden'); text.textContent = "Sign In";
@@ -457,7 +524,7 @@
 
             try {
                 await sendPasswordResetEmail(auth, email);
-                showMessage("Password reset email sent! Check your inbox.", "success");
+                showMessage("Password reset link sent! Check your inbox.", "success");
             } catch (error) {
                 showMessage("Error: " + error.message, "error");
             }
@@ -469,7 +536,7 @@
             if(!email.includes('@')) return showMessage("Invalid Email Address");
             
             const btn = document.getElementById('sendEmailOtpBtn');
-            btn.disabled = true; btn.textContent = "Sending...";
+            btn.disabled = true; btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i>`;
 
             generatedEmailOtp = Math.floor(100000 + Math.random() * 900000).toString();
             
@@ -505,6 +572,11 @@
             const pass = document.getElementById('newPassword').value;
             if(pass.length < 8) return showMessage("Password must be at least 8 characters.");
             
+            const btn = document.getElementById('createEmailAccountBtn');
+            const origText = btn.innerHTML;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Creating...`;
+            btn.disabled = true;
+
             try {
                 const cred = await createUserWithEmailAndPassword(auth, verifiedEmailAddress, pass);
                 await setDoc(doc(db, "users", cred.user.uid), {
@@ -513,8 +585,12 @@
                     authProvider: 'email',
                     createdAt: serverTimestamp()
                 });
-                window.location.href = 'dashboard.html';
-            } catch(e) { showMessage(e.message); }
+                window.location.href = 'student-dashboard.html';
+            } catch(e) { 
+                showMessage(e.message); 
+                btn.innerHTML = origText;
+                btn.disabled = false;
+            }
         });
 
         // --- PHONE OTP SIGNUP LOGIC ---
@@ -547,6 +623,10 @@
 
         document.getElementById('verifyPhoneOtpBtn').addEventListener('click', async () => {
             const code = document.getElementById('phoneOtpInput').value;
+            
+            const btn = document.getElementById('verifyPhoneOtpBtn');
+            btn.disabled = true; btn.textContent = "Verifying...";
+
             try {
                 const result = await window.confirmationResult.confirm(code);
                 const user = result.user;
@@ -563,11 +643,17 @@
                 window.location.href = 'student-dashboard.html';
             } catch (error) {
                 showMessage("Invalid SMS Code");
+                btn.disabled = false; btn.textContent = "Verify & Create Account";
             }
         });
 
         // --- GOOGLE AUTH ---
         document.getElementById('googleBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('googleBtn');
+            const origHTML = btn.innerHTML;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Connecting...`;
+            btn.disabled = true;
+
             try {
                 const result = await signInWithPopup(auth, new GoogleAuthProvider());
                 const user = result.user;
@@ -581,8 +667,12 @@
                         createdAt: serverTimestamp() 
                     });
                 }
-                window.location.href = 'dashboard.html';
-            } catch(e) { showMessage(e.message); }
+                window.location.href = 'student-dashboard.html';
+            } catch(e) { 
+                showMessage(e.message); 
+                btn.innerHTML = origHTML;
+                btn.disabled = false;
+            }
         });
 
         // --- MISC UI/UX ---
@@ -595,43 +685,57 @@
             });
         });
 
-        // Mobile Menu Logic
-        const menuBtn = document.getElementById('mobile-menu-button');
-        const menu = document.getElementById('mobile-menu');
-        const closeMenuBtn = document.getElementById('close-mobile-menu');
+        // Auth State Listener
+        onAuthStateChanged(auth, (user) => {
+            if (user) window.location.href = 'student-dashboard.html';
+        });
+    </script>
 
-        function toggleMobileMenu() {
-            if(menu.classList.contains('translate-x-full')) {
-                menu.classList.remove('translate-x-full');
-                menu.classList.add('translate-x-0');
-                document.body.style.overflow = 'hidden';
-            } else {
-                menu.classList.add('translate-x-full');
-                menu.classList.remove('translate-x-0');
-                document.body.style.overflow = '';
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Logic
+            const menuBtn = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+            const closeMenuBtn = document.getElementById('close-mobile-menu');
+
+            function toggleMobileMenu() {
+                if(menu.classList.contains('translate-x-full')) {
+                    menu.classList.remove('translate-x-full');
+                    menu.classList.add('translate-x-0');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    menu.classList.add('translate-x-full');
+                    menu.classList.remove('translate-x-0');
+                    document.body.style.overflow = '';
+                }
             }
-        }
-        
-        if(menuBtn) menuBtn.addEventListener('click', toggleMobileMenu);
-        if(closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMobileMenu);
+            
+            if(menuBtn) menuBtn.addEventListener('click', toggleMobileMenu);
+            if(closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMobileMenu);
 
-        const menuLinks = menu.querySelectorAll('#mobile-menu a');
-        menuLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (!menu.classList.contains('translate-x-full')) {
-                    toggleMobileMenu();
+            const menuLinks = menu.querySelectorAll('#mobile-menu a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!menu.classList.contains('translate-x-full')) {
+                        toggleMobileMenu();
+                    }
+                });
+            });
+
+            // Navbar Scroll
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('navbar');
+                if (window.scrollY > 20) { 
+                    nav.classList.add('scrolled-nav');
+                    nav.classList.remove('py-4');
+                } else { 
+                    nav.classList.remove('scrolled-nav');
+                    nav.classList.add('py-4');
                 }
             });
         });
 
-        // Auth State Listener
-        onAuthStateChanged(auth, (user) => {
-            if (user) window.location.href = 'dashboard.html';
-        });
-
-    </script>
-
-    <script>
+        // PWA Updates Logic
         let newWorker;
         const updateBanner = document.getElementById('pwa-update-banner');
         const refreshBtn = document.getElementById('pwa-refresh-btn');
@@ -639,8 +743,6 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').then(registration => {
-                    console.log('ServiceWorker registered');
-
                     registration.addEventListener('updatefound', () => {
                         newWorker = registration.installing;
                         newWorker.addEventListener('statechange', () => {
