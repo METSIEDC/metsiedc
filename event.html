@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Registration | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f1115">
+    <meta name="theme-color" content="#050505">
     <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
@@ -18,13 +18,32 @@
                 extend: {
                     fontFamily: { 
                         sans: ['Inter', 'sans-serif'],
-                        display: ['Montserrat', 'sans-serif']
+                        display: ['Plus Jakarta Sans', 'sans-serif']
                     },
                     colors: {
                         dark: {
-                            base: '#0f1115',
-                            card: '#181b21',
-                            accent: '#2a2e37'
+                            base: '#050505',
+                            panel: 'rgba(20, 20, 25, 0.6)',
+                            border: 'rgba(255, 255, 255, 0.08)'
+                        },
+                        glow: {
+                            purple: '#9333ea',
+                            orange: '#ea580c',
+                            blue: '#2563eb'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.3' },
+                            '50%': { opacity: '0.6' },
                         }
                     }
                 }
@@ -34,31 +53,88 @@
 
     <style>
         body { 
-            background-color: #0f1115; /* Deep cinematic dark */
+            background-color: #050505; 
             color: #e2e8f0; 
             overflow-x: hidden; 
         }
+
+        /* Glassmorphism Utilities */
+        .glass-nav {
+            background: rgba(15, 15, 20, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(30, 30, 35, 0.8) 0%, rgba(15, 15, 20, 0.6) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02), 0 20px 40px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            z-index: 1;
+        }
+
+        .glass-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Input Styles */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(37, 99, 235, 0.5); /* Blue glow */
+            outline: none;
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.2);
+        }
         
-        /* Card & Input Styles */
-        .glass-input { 
-            background: #0a0c0f; 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            color: white; 
-            transition: all 0.3s ease; 
+        select.glass-input option { color: #1c2833; background: white; }
+
+        /* Text Gradients */
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .glass-input:focus { 
-            background: #12141a; 
-            border-color: rgba(255, 255, 255, 0.5); 
-            outline: none; 
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+        .text-gradient-blue {
+            background: linear-gradient(to right, #93c5fd, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        
-        .card-hover { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.5);
-            border-color: rgba(255, 255, 255, 0.15);
+
+        /* Button Styling */
+        .btn-light {
+            background: #ffffff;
+            color: #000000;
+            transition: all 0.3s ease;
         }
+        .btn-light:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mobile-menu.open { transform: translateX(0); }
 
         /* Ticket Styles */
         .ticket-cut {
@@ -66,31 +142,37 @@
             position: relative;
         }
         .ticket-cut::before, .ticket-cut::after {
-            content: ''; position: absolute; top: -10px; width: 20px; height: 20px; background-color: #0f1115; border-radius: 50%;
+            content: ''; position: absolute; top: -10px; width: 20px; height: 20px; background-color: #050505; border-radius: 50%;
         }
         .ticket-cut::before { left: -10px; }
         .ticket-cut::after { right: -10px; }
 
         /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0f1115; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
 
         @media print {
-            body * { visibility: hidden; }
+            body * { visibility: hidden; background: white !important; }
             #ticketView, #ticketView * { visibility: visible; }
-            #ticketView { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; background: white; color: black; border: 2px solid black; }
+            #ticketView { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; }
             .no-print { display: none !important; }
             .ticket-cut::before, .ticket-cut::after { background-color: white !important; border: 1px solid black; }
+            .ambient-glow { display: none !important; }
         }
     </style>
 </head>
-<body class="font-sans antialiased relative min-h-screen flex flex-col pb-20 md:pb-0">
 
-    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300 no-print">
+<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-glow-blue selection:text-white pb-20 md:pb-0">
+
+    <div class="ambient-glow fixed top-[10%] right-[-10%] w-[40vw] h-[40vw] bg-glow-blue/10 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow"></div>
+    <div class="ambient-glow fixed bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-glow-purple/10 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow" style="animation-delay: 2s;"></div>
+    <div class="ambient-glow fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 z-0 pointer-events-none"></div>
+
+    <div id="pwa-update-banner" class="hidden fixed top-24 left-1/2 transform -translate-x-1/2 z-[9999] glass-panel rounded-full px-5 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300 border border-glow-blue/50 shadow-[0_0_20px_rgba(37,99,235,0.3)] no-print">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+            <div class="w-8 h-8 rounded-full bg-glow-blue/20 flex items-center justify-center text-glow-blue">
                 <i class="fas fa-cloud-download-alt"></i>
             </div>
             <div class="flex flex-col">
@@ -98,128 +180,149 @@
                 <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
             </div>
         </div>
-        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+        <button id="pwa-refresh-btn" class="ml-auto bg-white text-black text-xs font-bold px-4 py-2 rounded-full transition-colors hover:bg-gray-200">
             Refresh
         </button>
     </div>
 
-    <header class="h-20 px-6 md:px-10 border-b border-white/5 bg-[#0f1115]/90 backdrop-blur-xl sticky top-0 z-50 no-print">
-        <div class="max-w-[95%] mx-auto h-full flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <a href="index.html" class="flex items-center group">
-                    <span class="text-xl font-display font-bold tracking-tight text-white group-hover:opacity-80 transition-opacity">
-                        MET'S IEDC
-                    </span>
-                </a>
-            </div>
-
-            <div class="hidden lg:flex items-center space-x-10">
-                <a href="index.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Home</a>
-                <a href="event.html" class="text-white text-[11px] uppercase tracking-[0.15em] font-bold transition-colors">Events</a>
-                <a href="initiatives.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Initiatives</a>
-                <a href="report.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Reports</a>
-                <a href="team.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Ex-Com</a>
-                <a href="contact.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Contact</a>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <button onclick="toggleHistoryModal()" class="flex items-center gap-2 text-[10px] md:text-xs uppercase tracking-[0.2em] text-white/80 hover:text-white transition-colors border border-white/20 hover:border-white/40 px-4 py-2.5 rounded">
-                    <i data-lucide="ticket" class="w-4 h-4"></i> <span class="hidden sm:inline">My Tickets</span>
-                </button>
-                
-                <button id="mobile-menu-button" class="lg:hidden text-white p-2">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
-            </div>
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl z-50 glass-nav rounded-full px-2 py-2 flex justify-between items-center transition-all duration-300 no-print" id="navbar">
+        <a href="index.html" class="flex items-center pl-4 group">
+            <span class="text-base font-display font-bold tracking-wider text-white">
+                MET'S IEDC
+            </span>
+        </a>
+        
+        <div class="hidden md:flex items-center space-x-1 bg-white/5 rounded-full px-2 py-1">
+            <a href="index.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Home</a>
+            <a href="event.html" class="px-4 py-2 rounded-full bg-white/10 text-white text-xs font-semibold transition-colors">Events</a>
+            <a href="initiatives.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Initiatives</a>
+            <a href="about.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Story</a>
         </div>
-    </header>
 
-    <div id="mobile-menu" class="fixed top-0 right-0 w-full h-screen bg-[#0f1115]/95 backdrop-blur-xl z-[200] overflow-y-auto transform translate-x-full transition-transform duration-400 ease-in-out no-print">
-        <div class="flex justify-between items-center p-8">
-            <span class="text-xl font-display font-bold text-white">MENU</span>
-            <button id="close-mobile-menu" class="text-white/70 hover:text-white p-2">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <div class="hidden md:flex items-center gap-3 pr-2">
+            <button onclick="toggleHistoryModal()" class="text-white/70 hover:text-white text-xs font-semibold px-4 py-2 flex items-center gap-2 transition-colors border border-transparent hover:border-white/10 rounded-full bg-white/5">
+                <i data-lucide="ticket" class="w-4 h-4"></i> My Tickets
+            </button>
+            <a href="login.html" class="btn-light px-5 py-2 rounded-full text-xs font-bold tracking-wide">
+                Log In
+            </a>
+        </div>
+
+        <div class="md:hidden flex items-center gap-2 pr-2">
+            <button onclick="toggleHistoryModal()" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white">
+                <i data-lucide="ticket" class="w-4 h-4"></i>
+            </button>
+            <button id="mobile-menu-button" class="text-white p-2">
+                <i class="fas fa-bars text-xl"></i>
             </button>
         </div>
-        <nav class="flex flex-col space-y-8 px-8 py-12 text-center">
-            <a href="index.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Home</a>
-            <a href="announcement.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Announcement</a>
-            <a href="event.html" class="text-2xl font-display font-bold text-white tracking-widest uppercase">Events</a>
-            <a href="initiatives.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Initiatives</a>
-            <a href="report.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Reports</a>
-            <a href="team.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Ex-Com</a>
-            <a href="contact.html" class="text-2xl font-display font-light text-white/70 hover:text-white tracking-widest uppercase">Contact</a>
+    </nav>
+
+    <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-2xl z-[200] overflow-y-auto border-l border-white/10 no-print">
+        <div class="flex justify-between items-center p-8 border-b border-white/10">
+            <span class="text-xl font-display font-bold text-white tracking-widest">NAVIGATION</span>
+            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+        <nav class="flex flex-col space-y-6 px-8 py-10 text-left">
+            <a href="index.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-home w-8 text-white/40"></i> Home</a>
+            <a href="event.html" class="text-3xl font-display font-medium text-white flex items-center gap-4"><i class="far fa-calendar-alt w-8 text-glow-blue"></i> Events</a>
+            <a href="initiatives.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-rocket w-8 text-white/40"></i> Initiatives</a>
+            <a href="report.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-chart-bar w-8 text-white/40"></i> Reports</a>
+            <a href="team.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-users w-8 text-white/40"></i> Ex-Com</a>
+            <a href="announcement.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-bullhorn w-8 text-white/40"></i> Notices</a>
+            
+            <div class="pt-8 mt-8 border-t border-white/10 flex flex-col gap-4">
+                <button onclick="toggleHistoryModal(); document.getElementById('close-mobile-menu').click();" class="text-sm font-display font-bold text-white tracking-[0.2em] uppercase flex items-center justify-center gap-3 py-4 rounded-xl bg-white/5 border border-white/10">
+                    <i data-lucide="ticket"></i> View My Tickets
+                </button>
+                <a href="login.html" class="btn-light text-center py-4 rounded-xl text-sm font-bold uppercase tracking-widest">
+                    Portal Login
+                </a>
+            </div>
         </nav>
     </div>
 
-    <main class="flex-grow container mx-auto px-4 py-16">
+    <main class="flex-grow container mx-auto px-4 pt-40 pb-16 relative z-10">
         
         <div id="eventListView" class="max-w-6xl mx-auto">
-            <div class="text-center mb-20">
-                <span class="text-white/40 font-semibold tracking-[0.2em] text-xs uppercase mb-4 block">Select an Event</span>
-                <h1 class="text-4xl md:text-6xl font-display font-bold mb-6 text-white tracking-tight uppercase">Registration</h1>
-                <div class="h-[1px] w-24 bg-white/20 mx-auto"></div>
+            <div class="text-center mb-16 relative">
+                <div class="glass-badge inline-flex items-center px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest font-bold text-white mb-6">
+                    <span class="w-1.5 h-1.5 rounded-full bg-glow-blue mr-2 animate-pulse"></span> Live Registrations
+                </div>
+                <h1 class="text-5xl md:text-7xl font-display font-bold mb-6 text-white tracking-tight uppercase">
+                    Upcoming <span class="text-gradient-blue">Events</span>
+                </h1>
+                <p class="text-sm md:text-base text-white/50 max-w-2xl mx-auto font-light leading-relaxed tracking-wide">
+                    Discover and secure your spot at our latest workshops, hackathons, and tech talks.
+                </p>
             </div>
-            <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 <div class="col-span-full text-center py-20 text-white/40 uppercase tracking-widest text-sm animate-pulse">Loading active events...</div>
             </div>
         </div>
 
-        <div id="formView" class="hidden max-w-2xl mx-auto no-print">
-            <button onclick="goBack()" class="mb-8 flex items-center gap-3 text-xs uppercase tracking-widest text-white/50 hover:text-white transition group">
+        <div id="formView" class="hidden max-w-2xl mx-auto no-print relative">
+            <button onclick="goBack()" class="mb-8 flex items-center gap-3 text-xs uppercase tracking-widest text-white/50 hover:text-white transition-all group w-fit bg-white/5 px-4 py-2 rounded-full border border-white/10">
                 <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i> Back to Events
             </button>
-            <div class="bg-dark-card p-8 md:p-14 rounded-xl border border-white/10 relative overflow-hidden shadow-2xl">
-                <div class="mb-10 text-center">
-                    <span class="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-white/80 text-[10px] font-bold tracking-[0.2em] uppercase mb-6">
-                        <span class="w-2 h-2 rounded-full bg-white inline-block mr-2 animate-pulse"></span> Open
-                    </span>
-                    <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4 uppercase tracking-tight" id="formTitleDisplay">Event Name</h2>
+            
+            <div class="glass-panel p-8 md:p-12 rounded-3xl">
+                <div class="mb-10 text-center relative z-10">
+                    <div class="w-16 h-16 rounded-full bg-glow-blue/20 border border-glow-blue/30 flex items-center justify-center text-glow-blue mx-auto mb-6 shadow-[0_0_20px_rgba(37,99,235,0.3)]">
+                        <i data-lucide="file-text" class="w-8 h-8"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-3 uppercase tracking-tight" id="formTitleDisplay">Event Name</h2>
                     <p class="text-sm text-white/50 font-light">Please fill in the details below to secure your entry.</p>
                 </div>
-                <form id="dynamicForm" class="space-y-6">
+                
+                <form id="dynamicForm" class="space-y-6 relative z-10">
                     </form>
-                <div id="submissionStatus" class="hidden mt-6 p-4 rounded text-center text-sm font-medium"></div>
+                
+                <div id="submissionStatus" class="hidden mt-6 p-4 rounded-xl border border-glow-blue/50 bg-glow-blue/10 text-glow-blue text-center text-sm font-bold uppercase tracking-widest relative z-10"></div>
             </div>
         </div>
 
-        <div id="ticketView" class="hidden max-w-md mx-auto transform transition-all mt-8">
-            <div class="bg-[#e2e8f0] text-black rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative">
-                <div class="bg-[#0a0c0f] p-8 text-white text-center border-b border-white/10">
-                    <h2 class="text-2xl font-display font-bold uppercase tracking-[0.3em]">Pass</h2>
-                    <p class="text-[9px] uppercase tracking-[0.2em] text-white/50 mt-2">MET'S IEDC OFFICIAL ENTRY</p>
+        <div id="ticketView" class="hidden max-w-md mx-auto transform transition-all mt-8 relative z-20">
+            <div class="bg-[#f8fafc] text-black rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-white/20 relative">
+                <div class="bg-gradient-to-r from-[#0a0c0f] to-[#1a1c23] p-8 text-white text-center border-b border-white/10 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-glow-blue/20 blur-2xl rounded-full"></div>
+                    <h2 class="text-2xl font-display font-bold uppercase tracking-[0.3em] relative z-10">Pass</h2>
+                    <p class="text-[9px] uppercase tracking-[0.2em] text-white/50 mt-2 relative z-10">MET'S IEDC OFFICIAL ENTRY</p>
                 </div>
                 
-                <div class="p-8 text-center bg-white">
-                    <h1 class="text-2xl font-display font-bold mb-2 leading-tight uppercase tracking-tight text-[#0a0c0f]" id="ticketEventName">Event Name</h1>
+                <div class="p-8 text-center bg-white relative">
+                    <h1 class="text-2xl font-display font-bold mb-2 leading-tight uppercase tracking-tight text-[#050505]" id="ticketEventName">Event Name</h1>
                     <p class="text-xs uppercase tracking-widest text-gray-500 mb-8 font-semibold" id="ticketDate">Date: --</p>
                     
-                    <div class="w-48 h-48 bg-white mx-auto mb-8 flex items-center justify-center border border-gray-200 p-2 shadow-sm">
-                        <img id="ticketQR" src="" alt="QR Code" class="w-full h-full opacity-90">
+                    <div class="w-48 h-48 bg-white mx-auto mb-8 flex items-center justify-center border-2 border-gray-100 rounded-xl p-2 shadow-sm relative z-10">
+                        <img id="ticketQR" src="" alt="QR Code" class="w-full h-full object-contain">
                     </div>
 
                     <div class="space-y-1 mb-6">
                         <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold">Attendee</p>
-                        <p class="text-xl font-display font-bold uppercase tracking-wide text-[#0a0c0f]" id="ticketAttendee">Guest User</p>
+                        <p class="text-xl font-display font-bold uppercase tracking-wide text-[#050505]" id="ticketAttendee">Guest User</p>
                     </div>
 
                     <div class="space-y-1">
                         <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold">Ticket ID</p>
-                        <p class="font-mono text-black font-bold tracking-widest text-lg" id="ticketID">#IEDC-0000</p>
+                        <p class="font-mono text-[#050505] font-bold tracking-widest text-lg" id="ticketID">#IEDC-0000</p>
                     </div>
                 </div>
 
-                <div class="p-5 bg-gray-100 ticket-cut flex justify-between items-center">
+                <div class="p-6 bg-gray-50 ticket-cut flex justify-between items-center border-t border-gray-200">
                     <span class="text-[9px] uppercase tracking-[0.2em] text-gray-400 font-bold">Admit One</span>
                     <span class="text-[9px] uppercase tracking-[0.2em] text-gray-400 font-bold">Non-Transferable</span>
                 </div>
             </div>
 
             <div class="mt-8 flex gap-4 no-print">
-                <button onclick="window.print()" class="flex-1 bg-white text-black font-bold py-4 rounded text-xs uppercase tracking-widest hover:bg-gray-200 transition flex justify-center items-center gap-2">
-                    <i data-lucide="printer" class="w-4 h-4"></i> Save
+                <button onclick="window.print()" class="flex-1 btn-light font-bold py-4 rounded-xl text-xs uppercase tracking-widest flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                    <i data-lucide="printer" class="w-4 h-4"></i> Save Ticket
                 </button>
-                <button onclick="closeTicket()" class="flex-1 border border-white/20 text-white font-bold py-4 rounded text-xs uppercase tracking-widest hover:bg-white/10 transition">
+                <button onclick="closeTicket()" class="flex-1 border border-white/20 text-white font-bold py-4 rounded-xl text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">
                     Close
                 </button>
             </div>
@@ -227,25 +330,33 @@
 
     </main>
 
-    <div id="historyModal" class="fixed inset-0 bg-[#0f1115]/95 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4 no-print transition-opacity">
-        <div class="bg-dark-card border border-white/10 w-full max-w-md p-8 rounded-xl relative shadow-2xl">
-            <button onclick="toggleHistoryModal()" class="absolute top-6 right-6 text-white/40 hover:text-white transition-colors"><i data-lucide="x"></i></button>
-            <h2 class="text-xl font-display font-bold text-white mb-8 tracking-wide uppercase">My Bookings</h2>
+    <div id="historyModal" class="fixed inset-0 bg-[#050505]/95 backdrop-blur-xl z-[100] hidden flex items-center justify-center p-4 no-print transition-opacity">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl relative shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+            <button onclick="toggleHistoryModal()" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 rounded-full bg-glow-purple/20 flex items-center justify-center text-glow-purple border border-glow-purple/30">
+                    <i data-lucide="ticket" class="w-5 h-5"></i>
+                </div>
+                <h2 class="text-xl font-display font-bold text-white tracking-wide uppercase">My Bookings</h2>
+            </div>
+            
             <div id="historyList" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
                 <p class="text-center text-white/40 text-xs tracking-widest uppercase py-8">No tickets found on this device.</p>
             </div>
         </div>
     </div>
 
-    <div class="fixed bottom-0 left-0 w-full bg-[#0a0c0f]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe no-print">
+    <div class="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-xl border-t border-white/10 z-[100] md:hidden pb-safe no-print">
         <div class="flex justify-around items-center px-2 py-3">
             <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
                 <i class="fas fa-home text-lg"></i>
                 <span class="text-[9px] uppercase tracking-wider font-medium">Home</span>
             </a>
-            <a href="event.html" class="flex flex-col items-center gap-1 text-white">
+            <a href="event.html" class="flex flex-col items-center gap-1 text-glow-blue">
                 <i class="far fa-calendar-alt text-lg"></i>
-                <span class="text-[9px] uppercase tracking-wider font-medium">Events</span>
+                <span class="text-[9px] uppercase tracking-wider font-bold">Events</span>
             </a>
             <a href="initiatives.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
                 <i class="fas fa-rocket text-lg"></i>
@@ -296,17 +407,19 @@
                 snap.forEach(doc => {
                     const data = doc.data();
                     const card = document.createElement('div');
-                    card.className = "bg-dark-card border border-white/10 p-8 rounded-xl flex flex-col justify-between min-h-[200px] card-hover";
+                    // Upgraded Card Style
+                    card.className = "glass-panel p-8 rounded-3xl flex flex-col justify-between min-h-[200px] group hover:border-glow-blue/50";
                     card.innerHTML = `
-                        <div>
+                        <div class="absolute -right-10 -top-10 w-32 h-32 bg-glow-blue/20 blur-3xl rounded-full pointer-events-none transition-opacity group-hover:opacity-100 opacity-0"></div>
+                        <div class="relative z-10">
                             <div class="flex justify-between items-start mb-6">
-                                <div class="w-10 h-10 border border-white/10 bg-[#0a0c0f] rounded flex items-center justify-center text-white"><i data-lucide="calendar" class="w-4 h-4"></i></div>
-                                <span class="text-[10px] uppercase tracking-widest text-white/40">${new Date(data.createdAt).toLocaleDateString()}</span>
+                                <div class="w-10 h-10 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white/70 group-hover:text-glow-blue transition-colors shadow-sm"><i data-lucide="calendar" class="w-4 h-4"></i></div>
+                                <span class="text-[10px] uppercase tracking-widest text-white/40 font-semibold bg-black/50 px-2 py-1 rounded">${new Date(data.createdAt).toLocaleDateString()}</span>
                             </div>
-                            <h3 class="text-2xl font-display font-bold text-white mb-3 uppercase tracking-tight">${data.title}</h3>
-                            <p class="text-xs font-light tracking-wide text-white/50 line-clamp-2">Secure your spot.</p>
+                            <h3 class="text-2xl font-display font-bold text-white mb-3 uppercase tracking-tight leading-tight">${data.title}</h3>
+                            <p class="text-xs font-light tracking-wide text-white/50 line-clamp-2">Secure your spot for this event.</p>
                         </div>
-                        <button class="mt-8 w-full py-4 border border-white/20 hover:border-white hover:bg-white hover:text-black text-white font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 rounded">
+                        <button class="mt-8 w-full py-3.5 bg-white/5 hover:bg-white text-white hover:text-black font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 rounded-xl border border-white/10 relative z-10 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]">
                             Register <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </button>
                     `;
@@ -335,20 +448,25 @@
                 const label = document.createElement('label');
                 label.className = "block text-[10px] font-bold text-white/50 tracking-[0.2em] mb-2 uppercase";
                 label.innerText = q.label;
+                
                 let input = document.createElement(q.type === 'textarea' ? 'textarea' : 'input');
                 if(q.type !== 'textarea') input.type = q.type || 'text'; else input.rows = 4;
-                input.className = "glass-input w-full rounded py-4 px-4 text-sm font-light";
+                // Upgraded Input Style
+                input.className = "glass-input w-full rounded-xl py-3.5 px-4 text-sm font-light";
                 input.required = true;
                 input.dataset.label = q.label; 
+                
                 div.appendChild(label); div.appendChild(input); form.appendChild(div);
             });
 
             const submitBtn = document.createElement('button');
             submitBtn.type = "submit";
-            submitBtn.className = "w-full bg-white hover:bg-gray-200 text-[#0f1115] font-bold py-4 rounded text-xs uppercase tracking-widest transition-all mt-8 flex items-center justify-center gap-3";
+            // Upgraded Button Style
+            submitBtn.className = "w-full btn-light font-bold py-4 rounded-xl text-xs uppercase tracking-widest transition-all mt-8 flex items-center justify-center gap-3";
             submitBtn.innerHTML = `Confirm Entry <i data-lucide="check" class="w-4 h-4"></i>`;
             form.appendChild(submitBtn);
             lucide.createIcons();
+            window.scrollTo(0,0);
         };
 
         // 3. Handle Submission & Generate Ticket
@@ -374,7 +492,8 @@
             const payload = { eventName: currentEventData.title, userName: userName, userEmail: "Guest", responses: responses, ticketID: ticketID };
 
             btn.disabled = true;
-            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> PROCESSING`;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> PROCESSING`;
+            lucide.createIcons();
 
             try {
                 // Post to Google Sheet
@@ -415,6 +534,7 @@
             
             // Generate QR Code (using Google Charts API for simplicity)
             document.getElementById('ticketQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${id}`;
+            window.scrollTo(0,0);
         }
 
         window.closeTicket = () => {
@@ -428,6 +548,7 @@
             document.getElementById('formView').classList.add('hidden');
             document.getElementById('eventListView').classList.remove('hidden');
             document.getElementById('dynamicForm').reset();
+            window.scrollTo(0,0);
         };
 
         // 5. Local Storage History Logic
@@ -443,7 +564,6 @@
             
             if (modal.classList.contains('hidden')) {
                 modal.classList.remove('hidden');
-                // Small delay to allow display:block before fading in (if using opacity transition)
                 setTimeout(() => modal.classList.remove('opacity-0'), 10);
                 
                 const history = JSON.parse(localStorage.getItem('iedc_bookings') || '[]');
@@ -454,7 +574,7 @@
                     list.innerHTML = '';
                     history.forEach(t => {
                         const div = document.createElement('div');
-                        div.className = "border border-white/10 bg-[#0a0c0f] p-4 rounded cursor-pointer hover:border-white/30 transition-all flex justify-between items-center group";
+                        div.className = "border border-white/10 bg-white/5 p-4 rounded-xl cursor-pointer hover:bg-white/10 hover:border-white/30 transition-all flex justify-between items-center group";
                         div.innerHTML = `
                             <div>
                                 <h4 class="font-display font-bold text-white text-sm uppercase tracking-wide mb-1">${t.eventName}</h4>
@@ -505,6 +625,18 @@
                 }
             });
         });
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) { 
+                nav.classList.add('scrolled-nav');
+                nav.classList.remove('py-4');
+            } else { 
+                nav.classList.remove('scrolled-nav');
+                nav.classList.add('py-4');
+            }
+        });
     </script>
 
     <script>
@@ -515,8 +647,6 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').then(registration => {
-                    console.log('ServiceWorker registered');
-
                     registration.addEventListener('updatefound', () => {
                         newWorker = registration.installing;
                         newWorker.addEventListener('statechange', () => {
