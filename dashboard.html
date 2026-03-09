@@ -124,21 +124,6 @@
 </head>
 <body class="font-sans antialiased relative selection:bg-brand-primary selection:text-white flex h-screen overflow-hidden p-0 md:p-4 lg:p-6">
 
-    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
-                <i class="fas fa-cloud-download-alt"></i>
-            </div>
-            <div class="flex flex-col">
-                <span class="text-white text-sm font-semibold">Update Available</span>
-                <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
-            </div>
-        </div>
-        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
-            Refresh
-        </button>
-    </div>
-
     <div class="bg-white md:rounded-[2rem] w-full h-full flex overflow-hidden app-window border border-white relative">
 
         <aside class="w-64 border-r border-brand-borderGray flex-shrink-0 hidden md:flex flex-col h-full z-20 bg-white/80 backdrop-blur-xl">
@@ -260,7 +245,7 @@
                 </div>
             </header>
 
-            <main class="flex-grow overflow-y-auto px-4 md:px-8 lg:px-10 pb-24 md:pb-10 w-full">
+            <main class="flex-grow overflow-y-auto px-4 md:px-8 lg:px-10 pb-10 w-full">
                 
                 <div id="dashboardOverviewSection" class="tab-content space-y-10 max-w-6xl w-full mx-auto">
                     <div class="sm:hidden mb-6">
@@ -542,89 +527,67 @@
                 </div>
 
             </main>
-        </div>
+    </div>
 
-        <div class="fixed bottom-0 left-0 w-full bg-[#0a0c0f]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
-            <div class="flex justify-around items-center px-2 py-3">
-                <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
-                    <i class="fas fa-home text-lg"></i>
-                    <span class="text-[9px] uppercase tracking-wider font-medium">Home</span>
-                </a>
-                <a href="event.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
-                    <i class="far fa-calendar-alt text-lg"></i>
-                    <span class="text-[9px] uppercase tracking-wider font-medium">Events</span>
-                </a>
-                <a href="initiatives.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
-                    <i class="fas fa-rocket text-lg"></i>
-                    <span class="text-[9px] uppercase tracking-wider font-medium">Initiatives</span>
-                </a>
-                <a href="login.html" class="flex flex-col items-center gap-1 text-white">
-                    <i class="far fa-user text-lg"></i>
-                    <span class="text-[9px] uppercase tracking-wider font-medium">Profile</span>
-                </a>
-            </div>
-        </div>
+    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[100] hidden md:hidden transition-opacity" onclick="toggleMobileSidebar()"></div>
 
-        <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[100] hidden md:hidden transition-opacity" onclick="toggleMobileSidebar()"></div>
-
-        <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-white z-[200] transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
-            <div class="p-6 flex items-center justify-between border-b border-gray-100">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-brand-primary flex items-center justify-center text-white font-bold shadow-sm">
-                        <i data-lucide="zap" class="w-4 h-4"></i>
-                    </div>
-                    <span class="text-xl font-bold text-brand-textDark tracking-tight">IEDC.io</span>
+    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-white z-[200] transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
+        <div class="p-6 flex items-center justify-between border-b border-gray-100">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-brand-primary flex items-center justify-center text-white font-bold shadow-sm">
+                    <i data-lucide="zap" class="w-4 h-4"></i>
                 </div>
-                <button onclick="toggleMobileSidebar()" class="text-gray-400 hover:text-gray-800"><i data-lucide="x" class="w-6 h-6"></i></button>
+                <span class="text-xl font-bold text-brand-textDark tracking-tight">IEDC.io</span>
             </div>
-            
-            <div class="px-6 py-6">
-                <button onclick="showTab('submitIdea'); toggleMobileSidebar()" class="w-full flex items-center justify-between bg-white border border-gray-100 shadow-sm hover:shadow-md px-2 py-2 rounded-full transition-all group">
-                    <span class="text-[11px] font-bold text-gray-700 leading-tight pl-3 text-left">Create<br>New Idea</span>
-                    <div class="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center group-hover:bg-brand-primaryDark transition-colors">
-                        <i data-lucide="plus" class="w-5 h-5"></i>
-                    </div>
-                </button>
-            </div>
+            <button onclick="toggleMobileSidebar()" class="text-gray-400 hover:text-gray-800"><i data-lucide="x" class="w-6 h-6"></i></button>
+        </div>
+        
+        <div class="px-6 py-6">
+            <button onclick="showTab('submitIdea'); toggleMobileSidebar()" class="w-full flex items-center justify-between bg-white border border-gray-100 shadow-sm hover:shadow-md px-2 py-2 rounded-full transition-all group">
+                <span class="text-[11px] font-bold text-gray-700 leading-tight pl-3 text-left">Create<br>New Idea</span>
+                <div class="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center group-hover:bg-brand-primaryDark transition-colors">
+                    <i data-lucide="plus" class="w-5 h-5"></i>
+                </div>
+            </button>
+        </div>
 
-            <nav class="flex-grow px-4 py-2 space-y-1.5 overflow-y-auto">
-                <button onclick="showTab('dashboardOverview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
-                </button>
-                <button onclick="showTab('joinIedc'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                    <i data-lucide="users" class="w-5 h-5"></i> Join IEDC
-                </button>
-                <button onclick="showTab('trackStatus'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                    <i data-lucide="activity" class="w-5 h-5"></i> Status
-                </button>
-                <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                    <i data-lucide="calendar" class="w-5 h-5"></i> Attendance
-                </button>
-                <button onclick="showTab('certificates'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                    <i data-lucide="award" class="w-5 h-5"></i> Certificates
-                </button>
-                
-                <div class="pt-4 pb-2 px-5 text-[10px] font-bold text-brand-textMuted uppercase tracking-wider">Actions</div>
-                
-                <button onclick="showTab('submitProject'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                    <i data-lucide="rocket" class="w-5 h-5"></i> Submit Project
-                </button>
-                <button onclick="showTab('submitEvent'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                    <i data-lucide="calendar-plus" class="w-5 h-5"></i> Propose Event
-                </button>
-
-                <div class="pt-4 pb-2 px-5 text-[10px] font-bold text-brand-textMuted uppercase tracking-wider">Account</div>
-                
-                <button onclick="showTab('settings'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
-                    <i data-lucide="settings" class="w-5 h-5"></i> Settings
-                </button>
-            </nav>
+        <nav class="flex-grow px-4 py-2 space-y-1.5 overflow-y-auto">
+            <button onclick="showTab('dashboardOverview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+            </button>
+            <button onclick="showTab('joinIedc'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                <i data-lucide="users" class="w-5 h-5"></i> Join IEDC
+            </button>
+            <button onclick="showTab('trackStatus'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                <i data-lucide="activity" class="w-5 h-5"></i> Status
+            </button>
+            <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                <i data-lucide="calendar" class="w-5 h-5"></i> Attendance
+            </button>
+            <button onclick="showTab('certificates'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                <i data-lucide="award" class="w-5 h-5"></i> Certificates
+            </button>
             
-            <div class="p-6 mt-auto">
-                <button id="mobileLogoutBtn" class="w-full bg-brand-bgStart hover:bg-brand-primary text-brand-primary hover:text-white border border-brand-primary/20 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2">
-                    <i data-lucide="log-out" class="w-4 h-4"></i> Logout
-                </button>
-            </div>
+            <div class="pt-4 pb-2 px-5 text-[10px] font-bold text-brand-textMuted uppercase tracking-wider">Actions</div>
+            
+            <button onclick="showTab('submitProject'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                <i data-lucide="rocket" class="w-5 h-5"></i> Submit Project
+            </button>
+            <button onclick="showTab('submitEvent'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                <i data-lucide="calendar-plus" class="w-5 h-5"></i> Propose Event
+            </button>
+
+            <div class="pt-4 pb-2 px-5 text-[10px] font-bold text-brand-textMuted uppercase tracking-wider">Account</div>
+            
+            <button onclick="showTab('settings'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-sm font-medium">
+                <i data-lucide="settings" class="w-5 h-5"></i> Settings
+            </button>
+        </nav>
+        
+        <div class="p-6 mt-auto">
+            <button id="mobileLogoutBtn" class="w-full bg-brand-bgStart hover:bg-brand-primary text-brand-primary hover:text-white border border-brand-primary/20 py-3 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+            </button>
         </div>
     </div>
 
@@ -632,6 +595,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged, updatePassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, addDoc, collection, query, where, orderBy, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-messaging.js"; // <-- NEW
 
         lucide.createIcons();
 
@@ -789,12 +753,40 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const messaging = getMessaging(app); // <-- NEW
         
         // Export to window for access inside functions
         window.db = db;
         window.currentUserId = null;
         window.currentUserEmailStr = null;
         let currentProfileImageBase64 = "";
+
+        // Function to request permission and save token
+        async function requestNotificationPermission(userId) {
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                    // Get the device token
+                    // Note: User needs to replace 'YOUR_VAPID_KEY_HERE'
+                    const currentToken = await getToken(messaging, { vapidKey: 'BLAXirXbhUCSrlOF1tdyvLbqhrCBvRJV4xvemvkMzdsM3Fh_DS-Pr_SCliI2Bbl-jIpE6Ugkm9-htU_-FhVWXCE' });
+                    
+                    if (currentToken) {
+                        // Save this token to the user's document in Firestore
+                        await setDoc(doc(db, "users", userId), {
+                            fcmToken: currentToken
+                        }, { merge: true });
+                        console.log("Push notification token saved to database!");
+                    } else {
+                        console.log('No registration token available. Request permission to generate one.');
+                    }
+                } else {
+                    console.log('Unable to get permission to notify.');
+                }
+            } catch (error) {
+                console.error('Error getting notification permission:', error);
+            }
+        }
 
         // Auth Logic
         onAuthStateChanged(auth, async (user) => {
@@ -859,9 +851,28 @@
                 window.fetchCertificates();
                 window.fetchMyAttendance();
                 listenForNotifications();
+                
+                // --- NEW: Request Push Notification Permission ---
+                requestNotificationPermission(user.uid);
+
             } else {
                 window.location.href = 'login.html';
             }
+        });
+
+        // Listen for messages while the app is OPEN on the screen
+        onMessage(messaging, (payload) => {
+            console.log('Message received while app is open: ', payload);
+            
+            // Show a visual alert to the student
+            const notificationTitle = payload.notification.title;
+            const notificationOptions = payload.notification.body;
+            
+            // You can trigger your custom panel or a browser alert
+            alert(`📢 ${notificationTitle}\n${notificationOptions}`);
+            
+            // Also refresh the local notifications panel
+            listenForNotifications(); 
         });
 
         // Notifications
@@ -1181,46 +1192,6 @@
             if (tabId === 'certificates') window.fetchCertificates();
             if (tabId === 'attendance') window.fetchMyAttendance();
         };
-    </script>
-
-    <script>
-        let newWorker;
-        const updateBanner = document.getElementById('pwa-update-banner');
-        const refreshBtn = document.getElementById('pwa-refresh-btn');
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').then(registration => {
-                    console.log('ServiceWorker registered');
-
-                    registration.addEventListener('updatefound', () => {
-                        newWorker = registration.installing;
-                        newWorker.addEventListener('statechange', () => {
-                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                updateBanner.classList.remove('hidden');
-                                updateBanner.classList.add('flex');
-                            }
-                        });
-                    });
-                });
-
-                let refreshing;
-                navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    if (refreshing) return;
-                    refreshing = true;
-                    window.location.reload();
-                });
-            });
-        }
-
-        if (refreshBtn) {
-            refreshBtn.addEventListener('click', () => {
-                if (newWorker) {
-                    newWorker.postMessage({ action: 'skipWaiting' });
-                }
-                updateBanner.classList.add('hidden'); 
-            });
-        }
     </script>
 </body>
 </html>
