@@ -653,6 +653,72 @@
             }
         }
     </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-messaging.js";
+
+        // Your Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+            authDomain: "metsiedc-3010e.firebaseapp.com",
+            databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+            projectId: "metsiedc-3010e",
+            storageBucket: "metsiedc-3010e.firebasestorage.app",
+            messagingSenderId: "954403413150",
+            appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+            measurementId: "G-6E7EK0D7JG"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const messaging = getMessaging(app);
+
+        async function requestGuestNotificationPermission() {
+            try {
+                // Wait for the service worker to be ready
+                const registration = await navigator.serviceWorker.ready;
+                
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                    
+                    // Grab the token using your VAPID key and the sw.js file
+                    const currentToken = await getToken(messaging, { 
+                        vapidKey: 'YOUR_VAPID_KEY_HERE', 
+                        serviceWorkerRegistration: registration 
+                    });
+                    
+                    if (currentToken) {
+                        // Save the token to a general "subscribers" list
+                        // We use the token itself as the ID so we don't save duplicates
+                        await setDoc(doc(db, "subscribers", currentToken), {
+                            token: currentToken,
+                            platform: navigator.userAgent,
+                            subscribedAt: Date.now()
+                        }, { merge: true });
+                        
+                        console.log("Guest subscribed successfully!");
+                    }
+                }
+            } catch (error) {
+                console.error('Error getting guest notification permission:', error);
+            }
+        }
+
+        // Trigger the permission request a few seconds after the page loads 
+        // so it doesn't instantly block the user's view
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                requestGuestNotificationPermission();
+            }, 3000); // Waits 3 seconds
+        });
+
+        // Listen for messages if the user is currently looking at index.html
+        onMessage(messaging, (payload) => {
+            alert(`📢 MET'S IEDC UPDATE:\n${payload.notification.title}\n${payload.notification.body}`);
+        });
+    </script>
     <style>
         /* Custom Pagination Dots override for dark theme */
         .swiper-pagination-bullet { background: rgba(255,255,255,0.3); opacity: 1; }
