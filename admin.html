@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Portal | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f1115">
+    <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Immersive Theme Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
 
     <script>
@@ -71,9 +73,23 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="font-sans antialiased relative min-h-screen flex items-center justify-center selection:bg-white selection:text-black">
+<body class="font-sans antialiased relative min-h-screen flex items-center justify-center selection:bg-white selection:text-black pb-20 md:pb-0">
 
-    <!-- Subtle Atmospheric Lighting -->
+    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                <i class="fas fa-cloud-download-alt"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-white text-sm font-semibold">Update Available</span>
+                <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
+            </div>
+        </div>
+        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+            Refresh
+        </button>
+    </div>
+
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
         <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
@@ -81,7 +97,6 @@
 
     <div class="w-full max-w-md px-4 relative z-10 flex flex-col items-center">
         
-        <!-- Logo & Header -->
         <div class="text-center mb-10">
             <a href="index.html" class="inline-block mb-6 group">
                 <div class="w-20 h-20 rounded-2xl bg-[#0a0c0f] border border-white/20 shadow-2xl flex items-center justify-center mx-auto overflow-hidden group-hover:border-white/40 transition-colors">
@@ -147,12 +162,32 @@
         </p>
     </div>
 
+    <div class="fixed bottom-0 left-0 w-full bg-[#0a0c0f]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
+        <div class="flex justify-around items-center px-2 py-3">
+            <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Home</span>
+            </a>
+            <a href="event.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="far fa-calendar-alt text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Events</span>
+            </a>
+            <a href="initiatives.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-rocket text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Initiatives</span>
+            </a>
+            <a href="login.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="far fa-user text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Profile</span>
+            </a>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- PASTE YOUR FIREBASE CONFIGURATION HERE ---
         const firebaseConfig = {
             apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
             authDomain: "metsiedc-3010e.firebaseapp.com",
@@ -163,9 +198,7 @@
             appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
             measurementId: "G-6E7EK0D7JG"
         };
-        // ----------------------------------------------
 
-        // Initialize
         let app, auth, db;
         try {
             app = initializeApp(firebaseConfig);
@@ -184,7 +217,6 @@
         const loginError = document.getElementById('loginError');
         const loginErrorText = document.getElementById('loginErrorText');
 
-        // Toggle Password Visibility
         document.querySelectorAll('.toggle-password').forEach(btn => {
             btn.addEventListener('click', function() {
                 const input = this.parentElement.querySelector('input');
@@ -194,14 +226,12 @@
             });
         });
 
-        // Check Login Status
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Keep session open but do nothing automatically to prevent false bypasses.
+                // Keep session open but do nothing automatically
             }
         });
 
-        // Handle Login Submission
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -213,7 +243,6 @@
                 return;
             }
 
-            // Update UI
             loginBtn.disabled = true;
             loginBtnText.textContent = "Verifying...";
             if(loginSpinner) loginSpinner.classList.remove('hidden');
@@ -224,7 +253,6 @@
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
-                // CHECK ADMIN ROLE IN FIRESTORE
                 const userDocRef = doc(db, "users", user.uid);
                 const userDoc = await getDoc(userDocRef);
                 
@@ -232,7 +260,6 @@
                     const userData = userDoc.data();
 
                     if (userData.role === 'admin') {
-                        // LOG SUCCESSFUL ADMIN LOGIN
                         try {
                             await addDoc(collection(db, "logs"), {
                                 action: "Admin Login",
@@ -244,7 +271,6 @@
 
                         window.location.href = 'admin-dashboard.html'; 
                     } else {
-                        // LOG UNAUTHORIZED NON-ADMIN
                         try {
                             await addDoc(collection(db, "logs"), {
                                 action: "Unauthorized Access",
@@ -257,7 +283,6 @@
                         throw new Error("Access Denied: Your account does not have the 'admin' role.");
                     }
                 } else {
-                    // LOG UNKNOWN USER
                     try {
                         await addDoc(collection(db, "logs"), {
                             action: "Unauthorized Access",
@@ -273,7 +298,6 @@
             } catch (error) {
                 console.error("Login Error:", error);
                 
-                // If it was a permission error, sign them out
                 if (error.message.includes("Access Denied")) {
                     await signOut(auth);
                 }
@@ -285,7 +309,6 @@
                 
                 showError(msg);
                 
-                // Reset Button
                 loginBtn.disabled = false;
                 loginBtnText.textContent = "Access Dashboard";
                 if(loginSpinner) loginSpinner.classList.add('hidden');
@@ -296,6 +319,52 @@
         function showError(msg) {
             loginErrorText.textContent = msg;
             loginError.classList.remove('hidden');
+        }
+    </script>
+
+    <script>
+        // Enhanced PWA Service Worker Registration & Update Logic
+        let newWorker;
+        const updateBanner = document.getElementById('pwa-update-banner');
+        const refreshBtn = document.getElementById('pwa-refresh-btn');
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(registration => {
+                    console.log('ServiceWorker registered');
+
+                    // Check if there is an update waiting
+                    registration.addEventListener('updatefound', () => {
+                        newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            // If the new worker is installed and there's a previous worker, it's an update
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // Show the update banner
+                                updateBanner.classList.remove('hidden');
+                                updateBanner.classList.add('flex');
+                            }
+                        });
+                    });
+                });
+
+                // Listen for the controlling service worker to change, then reload the page
+                let refreshing;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (refreshing) return;
+                    refreshing = true;
+                    window.location.reload();
+                });
+            });
+        }
+
+        // Tell the new service worker to take over when the user clicks Refresh
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                if (newWorker) {
+                    newWorker.postMessage({ action: 'skipWaiting' });
+                }
+                updateBanner.classList.add('hidden'); // Hide banner immediately
+            });
         }
     </script>
 </body>
