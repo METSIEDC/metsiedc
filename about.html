@@ -98,406 +98,20 @@
 </head>
 <body class="font-sans antialiased relative selection:bg-indigo-500 selection:text-white pb-20 md:pb-0">
 
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
+    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                <i class="fas fa-cloud-download-alt"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-white text-sm font-semibold">Update Available</span>
+                <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
+            </div>
+        </div>
+        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+            Refresh
+        </button>
     </div>
-
-    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center">
-                    <a href="index.html" class="flex items-center space-x-3 group">
-                        <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
-                        <span class="text-2xl font-bold tracking-tight text-white">MET'S <span class="text-indigo-400">IEDC</span></span>
-                    </a>
-                    <div class="hidden md:ml-12 md:flex md:space-x-8">
-                        <a href="announcement.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Announcements</a>
-                        <a href="event.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Events</a>
-                        <a href="team.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Ex-Com</a>
-                        <a href="events.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Gallery</a>
-                        <a href="initiatives.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Initiatives</a>
-                        <a href="news.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">News</a>
-                        <a href="contact.html" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition-colors">Contact</a>
-                    </div>
-                </div>
-                <div class="hidden md:flex items-center">
-                    <a href="login.html" class="glass-card glass-hover text-white px-6 py-2.5 rounded-full text-sm font-medium border border-white/10">
-                        Log in
-                    </a>
-                </div>
-                <button id="mobile-menu-button" class="md:hidden text-white p-2">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
-            </div>
-        </div>
-        
-        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-xl z-50">
-            <div class="flex justify-end p-6">
-                <button id="close-mobile-menu" class="text-white p-2">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <nav class="flex flex-col space-y-6 px-8 mt-10 text-center">
-                <a href="announcement.html" class="text-2xl font-light text-white hover:text-indigo-400">Announcements</a>
-                <a href="event.html" class="text-2xl font-light text-white hover:text-indigo-400">Events</a>
-                <a href="team.html" class="text-2xl font-light text-white hover:text-indigo-400">Ex-Com</a>
-                <a href="events.html" class="text-2xl font-light text-white hover:text-indigo-400">Gallery</a>
-                <a href="initiatives.html" class="text-2xl font-light text-white hover:text-indigo-400">Initiatives</a>
-                <a href="news.html" class="text-2xl font-light text-white hover:text-indigo-400">News</a>
-                <a href="contact.html" class="text-2xl font-light text-white hover:text-indigo-400">Contact</a>
-                <a href="login.html" class="mt-8 py-4 bg-indigo-600 rounded-full text-white font-medium">Login</a>
-            </nav>
-        </div>
-    </nav>
-
-    <div class="pt-32 pb-16 lg:pt-48 lg:pb-24 text-center px-4">
-        <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-            About <span class="gradient-accent">Us</span>
-        </h1>
-        <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            At MET’S IEDC, we nurture student ideas with mentorship, resources, and real-world opportunities — transforming creativity into impactful startups and solutions.
-        </p>
-    </div>
-
-    <div class="pb-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="glass-card p-2 rounded-2xl glass-hover group">
-                    <div class="aspect-[4/5] rounded-xl overflow-hidden relative">
-                        <img src="assets/images/team/NODAL OFFICER.jpg" alt="Nodal Officer" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
-                            <span class="text-sm font-semibold text-white">Nodal Officer</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-card p-2 rounded-2xl glass-hover group">
-                    <div class="aspect-[4/5] rounded-xl overflow-hidden relative">
-                        <img src="assets/images/team/CHRISS.jpg" alt="Chriss" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
-                            <span class="text-sm font-semibold text-white">Chriss</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-card p-2 rounded-2xl glass-hover group">
-                    <div class="aspect-[4/5] rounded-xl overflow-hidden relative">
-                        <img src="assets/images/team/DEENA.jpg" alt="Deena" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
-                            <span class="text-sm font-semibold text-white">Deena</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-card p-2 rounded-2xl glass-hover group">
-                    <div class="aspect-[4/5] rounded-xl overflow-hidden relative">
-                        <img src="assets/images/team/HABEEB.jpg" alt="Habeeb" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
-                            <span class="text-sm font-semibold text-white">Habeeb</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <section class="py-20 bg-white/5 border-y border-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
-                We make sure your ideas & <br>
-                <span class="text-indigo-400">innovations are nurtured properly</span>
-            </h2>
-            
-            <div class="glass-card rounded-3xl p-8 md:p-12">
-                <div class="grid md:grid-cols-2 gap-12 text-gray-300 text-lg leading-relaxed">
-                    <div>
-                        <p class="mb-6">
-                            At MET’S IEDC, we foster creativity, innovation, and entrepreneurship among students. Our mission is to build a vibrant ecosystem where ideas turn into impactful projects and startups.
-                        </p>
-                        <p>
-                            Through mentorship, workshops, and real-world experiences, we empower innovators to explore their potential and shape the future.
-                        </p>
-                    </div>
-                    <div class="border-l border-white/10 pl-0 md:pl-12">
-                        <p>
-                            Every idea matters. We provide the right environment, mentorship, and resources to transform student creativity into impactful projects.
-                        </p>
-                        <p class="mt-6">
-                            From concept to execution, we ensure that innovations are guided with care, collaboration, and a strong support system.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div>
-                    <div class="glass-card p-2 rounded-2xl mb-8">
-                        <div class="rounded-xl overflow-hidden shadow-2xl">
-                            <iframe class="w-full aspect-video" 
-                                src="https://www.youtube.com/embed/D0dDqpdMMn4" 
-                                title="METS IEDC Mission Video" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                            </iframe>
-                        </div>
-                    </div>
-                    <div class="glass-card p-6 rounded-xl border-l-4 border-l-indigo-500">
-                        <p class="text-lg italic text-gray-300">"Making an impact, together"</p>
-                        <span class="block mt-2 text-sm font-semibold text-indigo-400">- METSIEDC Founder</span>
-                    </div>
-                </div>
-
-                <div>
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6">We empower student innovators & entrepreneurs</h2>
-                    <p class="text-gray-400 text-lg mb-8 leading-relaxed">
-                        Our mission is to inspire and empower students to think beyond academics. By fostering entrepreneurial skills, encouraging innovation, and providing real-world exposure, MET’S IEDC helps future leaders create solutions that make a difference.
-                    </p>
-                    <blockquote class="text-xl text-white font-light border-l-2 border-indigo-500 pl-6 py-2">
-                        “Innovation is not just about ideas, it’s about making them happen — and at MET’S IEDC, we help you do exactly that.”
-                    </blockquote>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-20 pb-32">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="text-center mb-16">
-                <h3 class="text-3xl font-bold text-white mb-4">We help innovators grow</h3>
-                <p class="text-gray-400 max-w-2xl mx-auto">Creating an ecosystem where student entrepreneurs accelerate their growth.</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="glass-card p-8 rounded-3xl glass-hover text-center group">
-                    <div class="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 mx-auto group-hover:bg-indigo-500 group-hover:text-white transition-all">
-                        <i class="fas fa-search-location text-2xl"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-4">Target Oriented</h4>
-                    <p class="text-gray-400 text-sm leading-relaxed">We guide students with a clear vision and strategic approach to innovation and entrepreneurship.</p>
-                </div>
-
-                <div class="glass-card p-8 rounded-3xl glass-hover text-center group">
-                    <div class="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 mx-auto group-hover:bg-indigo-500 group-hover:text-white transition-all">
-                        <i class="fas fa-award text-2xl"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-4">Success Driven</h4>
-                    <p class="text-gray-400 text-sm leading-relaxed">With structured mentorship and institutional support, we ensure projects have a strong path toward success.</p>
-                </div>
-
-                <div class="glass-card p-8 rounded-3xl glass-hover text-center group">
-                    <div class="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 mx-auto group-hover:bg-indigo-500 group-hover:text-white transition-all">
-                        <i class="fas fa-network-wired text-2xl"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-4">Connected Ecosystem</h4>
-                    <p class="text-gray-400 text-sm leading-relaxed">MET’S IEDC links students with mentors, industry experts, and opportunities that help ideas grow.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="border-t border-white/5 bg-[#020202] pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                <div class="lg:col-span-2">
-                    <span class="text-2xl font-bold text-white">MET'S IEDC</span>
-                    <p class="text-gray-500 mt-4 text-sm leading-relaxed max-w-md">
-                        Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.
-                    </p>
-                </div>
-
-                <div>
-                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h3>
-                    <ul class="space-y-3 text-sm text-gray-500">
-                        <li><a href="index.html" class="hover:text-indigo-400 transition-colors">Home</a></li>
-                        <li><a href="about.html" class="hover:text-indigo-400 transition-colors">About Us</a></li>
-                        <li><a href="events.html" class="hover:text-indigo-400 transition-colors">Events</a></li>
-                        <li><a href="news.html" class="hover:text-indigo-400 transition-colors">News</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contact</h3>
-                    <div class="space-y-3 text-sm text-gray-500">
-                        <p class="flex items-center"><i class="fas fa-envelope mr-3 text-indigo-500"></i>metsenggiedc@gmail.com</p>
-                        <p class="flex items-center"><i class="fas fa-phone mr-3 text-indigo-500"></i>+91 7306226875</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
-                <p>© 2026 IEDC MET'S SCHOOL OF ENGINEERING.</p>
-                <p>Designed for Innovation</p>
-            </div>
-        </div>
-    </footer>
-
-    <div class="fixed bottom-0 left-0 w-full bg-[#050505]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
-        <div class="flex justify-around items-center px-2 py-3">
-            <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
-                <i class="fas fa-home text-lg"></i>
-                <span class="text-[9px] uppercase tracking-wider font-medium">Home</span>
-            </a>
-            <a href="event.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
-                <i class="far fa-calendar-alt text-lg"></i>
-                <span class="text-[9px] uppercase tracking-wider font-medium">Events</span>
-            </a>
-            <a href="initiatives.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
-                <i class="fas fa-rocket text-lg"></i>
-                <span class="text-[9px] uppercase tracking-wider font-medium">Initiatives</span>
-            </a>
-            <a href="login.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
-                <i class="far fa-user text-lg"></i>
-                <span class="text-[9px] uppercase tracking-wider font-medium">Profile</span>
-            </a>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Mobile Menu Logic
-            const btn = document.getElementById('mobile-menu-button');
-            const menu = document.getElementById('mobile-menu');
-            const closeBtn = document.getElementById('close-mobile-menu');
-
-            function toggleMenu() {
-                menu.classList.toggle('open');
-                document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
-            }
-
-            btn.addEventListener('click', toggleMenu);
-            closeBtn.addEventListener('click', toggleMenu);
-            
-            // Navbar Scroll Effect
-            window.addEventListener('scroll', () => {
-                const nav = document.querySelector('nav');
-                if (window.scrollY > 20) {
-                    nav.classList.add('shadow-lg');
-                    nav.style.background = 'rgba(5, 5, 5, 0.9)';
-                } else {
-                    nav.classList.remove('shadow-lg');
-                    nav.style.background = 'rgba(5, 5, 5, 0.7)';
-                }
-            });
-        });
-
-        // NEW: PWA Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful');
-                    }, err => {
-                        console.log('ServiceWorker registration failed: ', err);
-                    });
-            });
-        }
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | MET'S IEDC</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#050505">
-    <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-
-    <style>
-        body {
-            background-color: #050505;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
-
-        /* Glassmorphism Classes (Same as Home Page) */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .glass-nav {
-            background: rgba(5, 5, 5, 0.7);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .glass-hover {
-            transition: all 0.3s ease;
-        }
-        .glass-hover:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-            transform: translateY(-5px);
-        }
-
-        .gradient-accent {
-            background: linear-gradient(90deg, #4f46e5 0%, #9333ea 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        /* Background Blobs */
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.4;
-            animation: blob-bounce 10s infinite ease;
-        }
-        .blob-1 { top: 10%; left: -10%; width: 500px; height: 500px; background: #4f46e5; }
-        .blob-2 { top: 40%; right: -10%; width: 400px; height: 400px; background: #9333ea; }
-        .blob-3 { bottom: 10%; left: 20%; width: 600px; height: 600px; background: #2563eb; }
-
-        @keyframes blob-bounce {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(20px, -20px) scale(1.1); }
-        }
-
-        /* Mobile Menu */
-        .mobile-menu {
-            transform: translateX(100%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .mobile-menu.open {
-            transform: translateX(0);
-        }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
-    </style>
-</head>
-<body class="font-sans antialiased relative selection:bg-indigo-500 selection:text-white pb-20 md:pb-0">
 
     <div class="fixed inset-0 overflow-hidden pointer-events-none">
         <div class="blob blob-1"></div>
@@ -786,18 +400,49 @@
             });
         });
 
-        // NEW: PWA Service Worker Registration
+        // Enhanced PWA Service Worker Registration & Update Logic
+        let newWorker;
+        const updateBanner = document.getElementById('pwa-update-banner');
+        const refreshBtn = document.getElementById('pwa-refresh-btn');
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful');
-                    }, err => {
-                        console.log('ServiceWorker registration failed: ', err);
+                navigator.serviceWorker.register('./sw.js').then(registration => {
+                    console.log('ServiceWorker registered');
+
+                    // Check if there is an update waiting
+                    registration.addEventListener('updatefound', () => {
+                        newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            // If the new worker is installed and there's a previous worker, it's an update
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // Show the update banner
+                                updateBanner.classList.remove('hidden');
+                                updateBanner.classList.add('flex');
+                            }
+                        });
                     });
+                });
+
+                // Listen for the controlling service worker to change, then reload the page
+                let refreshing;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (refreshing) return;
+                    refreshing = true;
+                    window.location.reload();
+                });
+            });
+        }
+
+        // Tell the new service worker to take over when the user clicks Refresh
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                if (newWorker) {
+                    newWorker.postMessage({ action: 'skipWaiting' });
+                }
+                updateBanner.classList.add('hidden'); // Hide banner immediately
             });
         }
     </script>
 </body>
 </html>
-
