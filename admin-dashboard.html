@@ -155,14 +155,16 @@
         </div>
     </aside>
 
-    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-40 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
-    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-white z-50 transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
+    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[100] hidden md:hidden transition-opacity" onclick="toggleMobileSidebar()"></div>
+    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-white z-[200] transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
         <div class="p-6 flex items-center justify-between border-b border-gray-100">
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-lg bg-brand-primary flex items-center justify-center text-white font-bold shadow-sm">P</div>
                 <span class="text-lg font-bold text-gray-800">IEDC.io</span>
             </div>
-            <button onclick="toggleMobileSidebar()" class="text-gray-400 hover:text-gray-800"><i data-lucide="x"></i></button>
+            <button onclick="toggleMobileSidebar()" class="text-gray-400 hover:text-gray-800 p-2 cursor-pointer relative z-[300]">
+                <i data-lucide="x" class="w-6 h-6 pointer-events-none"></i>
+            </button>
         </div>
         <nav class="flex-grow px-4 py-6 space-y-1 overflow-y-auto text-gray-500">
             <button onclick="showTab('overview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</button>
@@ -185,11 +187,13 @@
         </nav>
     </div>
 
-    <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10 w-full bg-brand-bg">
+    <div class="flex-grow flex flex-col h-full overflow-hidden relative w-full bg-brand-bg">
         
-        <header class="h-20 flex items-center justify-between px-6 md:px-10 shrink-0 w-full bg-brand-bg">
+        <header class="h-20 flex items-center justify-between px-6 md:px-10 shrink-0 w-full bg-brand-bg relative z-[60]">
             <div class="flex items-center gap-4">
-                <button id="mobile-menu-toggle" class="md:hidden text-gray-500 p-2 hover:bg-gray-100 rounded-lg transition-colors"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                <button id="mobile-menu-toggle" onclick="toggleMobileSidebar()" class="md:hidden text-gray-500 p-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer relative z-[100]">
+                    <i data-lucide="menu" class="w-6 h-6 pointer-events-none"></i>
+                </button>
                 <div>
                     <h1 class="text-xl font-bold text-gray-800" id="headerTitle">Dashboard</h1>
                     <p class="text-xs text-gray-500 font-medium" id="headerSubtitle">Overview & Statistics</p>
@@ -213,7 +217,7 @@
             </div>
         </header>
 
-        <main class="flex-grow overflow-y-auto p-4 md:p-10 w-full pb-24 md:pb-10">
+        <main class="flex-grow overflow-y-auto p-4 md:p-10 w-full pb-24 md:pb-10 z-10">
             
             <div id="overviewSection" class="tab-content space-y-8 max-w-7xl mx-auto w-full">
                 
@@ -566,44 +570,7 @@
                 </div>
             </div>
 
-            <div id="pastEventsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
-                <div class="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-gray-100">
-                    <div class="border-b border-gray-100 pb-5 mb-6">
-                        <h2 class="text-xl font-bold text-gray-800 mb-1">Archive Past Event</h2>
-                        <p class="text-gray-500 text-sm">Move an event to the public archive.</p>
-                    </div>
-                    <form id="pastEventForm" class="space-y-5">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Title</label><input type="text" id="peTitle" class="light-input w-full rounded-xl py-3 px-4 text-sm" placeholder="Event Title"></div>
-                            <div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Date</label><input type="date" id="peDate" class="light-input w-full rounded-xl py-3 px-4 text-sm"></div>
-                        </div>
-                        <button type="submit" id="savePastEventBtn" class="w-full bg-brand-primary hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 py-3 rounded-xl text-sm font-bold transition-all mt-2">Save to Archive</button>
-                    </form>
-                </div>
-            </div>
-
         </main>
-    </div>
-
-    <div class="fixed bottom-0 left-0 w-full bg-[#0a0c0f]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
-        <div class="flex justify-around items-center px-2 py-3">
-            <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
-                <i class="fas fa-home text-lg"></i>
-                <span class="text-[9px] uppercase tracking-wider font-medium">Home</span>
-            </a>
-            <a href="event.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
-                <i class="far fa-calendar-alt text-lg"></i>
-                <span class="text-[9px] uppercase tracking-wider font-medium">Events</span>
-            </a>
-            <a href="initiatives.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
-                <i class="fas fa-rocket text-lg"></i>
-                <span class="text-[9px] uppercase tracking-wider font-medium">Initiatives</span>
-            </a>
-            <a href="login.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
-                <i class="far fa-user text-lg"></i>
-                <span class="text-[9px] uppercase tracking-wider font-medium">Profile</span>
-            </a>
-        </div>
     </div>
 
     <div id="editUserModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -907,18 +874,16 @@
             lucide.createIcons();
         };
 
-        // Mobile Menu Logic
-        const btn = document.getElementById('mobile-menu-toggle');
-        const menu = document.getElementById('mobile-sidebar');
-        const overlay = document.getElementById('mobile-sidebar-overlay');
-
+        // Mobile Menu Logic (UPDATED globally)
         window.toggleMobileSidebar = function() {
-            if (menu.classList.contains('-translate-x-full')) { 
+            const menu = document.getElementById('mobile-sidebar');
+            const overlay = document.getElementById('mobile-sidebar-overlay');
+            if (menu && menu.classList.contains('-translate-x-full')) { 
                 menu.classList.remove('-translate-x-full'); 
-                overlay.classList.remove('hidden'); 
-            } else { 
+                if(overlay) overlay.classList.remove('hidden'); 
+            } else if(menu) { 
                 menu.classList.add('-translate-x-full'); 
-                overlay.classList.add('hidden'); 
+                if(overlay) overlay.classList.add('hidden'); 
             }
         };
 
@@ -1645,6 +1610,12 @@
                 signOut(auth).then(()=>window.location.href='admin.html');
             });
         }
+        
+        // Final failsafe to attach click listeners if the inline onclick fails
+        setTimeout(() => {
+            const mBtn = document.getElementById('mobile-menu-toggle');
+            if(mBtn) mBtn.addEventListener('click', window.toggleMobileSidebar);
+        }, 500);
     </script>
 
     <script>
