@@ -1,5 +1,5 @@
 // Version bumped to v3 to trigger an update for your users
-const CACHE_NAME = 'mets-iedc-v6'; 
+const CACHE_NAME = 'mets-iedc-v7'; 
 
 const urlsToCache = [
   './',
