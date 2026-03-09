@@ -1,5 +1,5 @@
-// Bumped to v9 for a fresh install
-const CACHE_NAME = 'mets-iedc-v9'; 
+// Bumped to v10 for a fresh install
+const CACHE_NAME = 'mets-iedc-v10'; 
 
 const urlsToCache = [
   './',
