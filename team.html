@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Team | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f1115">
+    <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Immersive Theme Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
-    <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -89,15 +90,28 @@
         ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
     </style>
 </head>
-<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-white selection:text-black">
+<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-white selection:text-black pb-20 md:pb-0">
 
-    <!-- Subtle Atmospheric Lighting -->
+    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                <i class="fas fa-cloud-download-alt"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-white text-sm font-semibold">Update Available</span>
+                <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
+            </div>
+        </div>
+        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+            Refresh
+        </button>
+    </div>
+
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-white/5 filter blur-[120px]"></div>
         <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-white/5 filter blur-[150px]"></div>
     </div>
 
-    <!-- Frosted Glass Navbar -->
     <header id="navbar" class="h-20 px-6 md:px-10 fixed top-0 w-full z-50 transition-all duration-300 py-4 glass-nav">
         <div class="max-w-[95%] mx-auto h-full flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -108,7 +122,6 @@
                 </a>
             </div>
 
-            <!-- Desktop Links -->
             <div class="hidden lg:flex items-center space-x-8 bg-white/5 backdrop-blur-md px-8 py-3 rounded-full border border-white/10 shadow-lg">
                 <a href="index.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Home</a>
                 <a href="event.html" class="text-white/60 hover:text-white text-[10px] uppercase tracking-[0.2em] font-semibold transition-colors">Events</a>
@@ -123,7 +136,6 @@
                     <i class="fas fa-user-circle"></i> Login
                 </a>
                 
-                <!-- Mobile Menu Button -->
                 <button id="mobile-menu-button" class="lg:hidden w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white backdrop-blur-md">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
@@ -131,7 +143,6 @@
         </div>
     </header>
 
-    <!-- Glass Mobile Menu -->
     <div id="mobile-menu" class="fixed top-0 right-0 w-full h-screen glass-menu z-[200] overflow-y-auto transform translate-x-full transition-transform duration-500 ease-in-out">
         <div class="flex justify-between items-center p-8">
             <span class="text-xl font-display font-bold text-white tracking-widest">MENU</span>
@@ -155,46 +166,36 @@
         </nav>
     </div>
 
-    <!-- Main Fullscreen Team Slider -->
     <main class="flex-grow relative z-10 w-full">
         <div class="swiper mySwiper w-full h-screen">
             <div class="swiper-wrapper">
 
-                <!-- Member 1: Shahil -->
                 <div class="swiper-slide relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
                     
-                    <!-- Background Typography Layer -->
                     <div class="absolute inset-0 flex flex-col items-center justify-center z-0 w-full pointer-events-none pb-20 md:pb-32" data-swiper-parallax="-300">
                         <p class="text-white/60 text-xs md:text-sm font-medium mb-2 tracking-widest uppercase">👋, meet Muhammed Shahil and he is our dedicated</p>
-                        <!-- Solid Text -->
                         <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-white tracking-tighter uppercase">CHIEF</h1>
-                        <!-- Outlined Text -->
                         <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-outline tracking-tighter uppercase">EXECUTIVE OFFICER</h1>
                     </div>
                     
-                    <!-- Cutout Image Layer (Overlapping the text) -->
-                    <!-- Note: For best results, use a transparent PNG image for the team members -->
                     <div class="absolute bottom-0 w-full flex justify-center z-10 pointer-events-none" data-swiper-parallax="-100">
                         <img src="assets/images/team/1000193375-removebg-preview.png" alt="Muhammed Shahil" class="cutout-image h-[50vh] md:h-[75vh] object-contain object-bottom pointer-events-auto grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop&bg=transparent'">
                     </div>
 
-                    <!-- Bottom Gradient to ensure text readability -->
                     <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#0f1115] via-[#0f1115]/80 to-transparent z-10"></div>
 
-                    <!-- Foreground Details / Buttons -->
                     <div class="absolute bottom-10 w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center md:items-end z-20">
                         <div class="hidden md:block text-left">
                             <p class="text-white/70 text-sm font-medium tracking-wider">Mr. Muhammed Shahil</p>
                             <p class="text-white/40 text-xs mt-1">based in Kerala, India.</p>
                         </div>
                         <div class="flex gap-4 mt-6 md:mt-0">
-                            <a href="https://www.linkedin.com/in/mohd-shahil-90b220340?utm_source=share_via&utm_content=profile&utm_medium=member_android" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
+                            <a href="https://www.linkedin.com/in/mohd-shahil-90b220340?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
                             <a href="https://www.instagram.com/_zhahil_?igsh=djFiMHVsZTF4bGJ1" target="_blank" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Member 2: Manna -->
                 <div class="swiper-slide relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
                     <div class="absolute inset-0 flex flex-col items-center justify-center z-0 w-full pointer-events-none pb-20 md:pb-32" data-swiper-parallax="-300">
                         <p class="text-white/60 text-xs md:text-sm font-medium mb-2 tracking-widest uppercase">✨, meet Manna Mariyam Jany and she is our dedicated</p>
@@ -220,7 +221,6 @@
                     </div>
                 </div>
 
-                <!-- Member 3: Gokul -->
                 <div class="swiper-slide relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
                     <div class="absolute inset-0 flex flex-col items-center justify-center z-0 w-full pointer-events-none pb-20 md:pb-32" data-swiper-parallax="-300">
                         <p class="text-white/60 text-xs md:text-sm font-medium mb-2 tracking-widest uppercase">🚀, meet Gokul and he is our dedicated</p>
@@ -229,7 +229,7 @@
                     </div>
                     
                     <div class="absolute bottom-0 w-full flex justify-center z-10 pointer-events-none" data-swiper-parallax="-100">
-                        <img src="assets/images/team/1000225890-removebg-preview.png" alt="Gokul " class="cutout-image h-[50vh] md:h-[75vh] object-contain object-bottom pointer-events-auto grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=800'">
+                        <img src="assets/images/team/1000225890-removebg-preview.png" alt="Gokul" class="cutout-image h-[50vh] md:h-[75vh] object-contain object-bottom pointer-events-auto grayscale hover:grayscale-0 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=800'">
                     </div>
 
                     <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#0f1115] via-[#0f1115]/80 to-transparent z-10"></div>
@@ -240,16 +240,15 @@
                             <p class="text-white/40 text-xs mt-1">based in Kerala, India.</p>
                         </div>
                         <div class="flex gap-4 mt-6 md:mt-0">
-                            <a href="https://www.linkedin.com/in/gokul-k-k-73011331b?utm_source=share_via&utm_content=profile&utm_medium=member_android" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
-                            <a href="https://www.instagram.com/_goku_leyyyy?igsh=ZHR3MmZhYTh2NG93" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
+                            <a href="https://www.linkedin.com/in/gokul-k-k-73011331b?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
+                            <a href="https://www.instagram.com/_goku_leyyyy?igsh=ZHR3MmZhYTh2NG93" target="_blank" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Member 4: Nafla -->
                 <div class="swiper-slide relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
                     <div class="absolute inset-0 flex flex-col items-center justify-center z-0 w-full pointer-events-none pb-20 md:pb-32" data-swiper-parallax="-300">
-                        <p class="text-white/60 text-xs md:text-sm font-medium mb-2 tracking-widest uppercase">💡, meet Nafla and he is our dedicated</p>
+                        <p class="text-white/60 text-xs md:text-sm font-medium mb-2 tracking-widest uppercase">💡, meet Nafla and she is our dedicated</p>
                         <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-white tracking-tighter uppercase">Co Lead</h1>
                         <h1 class="text-[18vw] md:text-[15vw] font-display font-black leading-[0.85] text-outline tracking-tighter uppercase">CCO</h1>
                     </div>
@@ -266,13 +265,12 @@
                             <p class="text-white/40 text-xs mt-1">based in Kerala, India.</p>
                         </div>
                         <div class="flex gap-4 mt-6 md:mt-0">
-                            <a href="#" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
-                            <a href="#" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
+                            <a href="#" target="_blank" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
+                            <a href="#" target="_blank" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
                         </div>
                     </div>
                 </div>
 
-                 <!-- Member 5:  Tom -->
                  <div class="swiper-slide relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
                     <div class="absolute inset-0 flex flex-col items-center justify-center z-0 w-full pointer-events-none pb-20 md:pb-32" data-swiper-parallax="-300">
                         <p class="text-white/60 text-xs md:text-sm font-medium mb-2 tracking-widest uppercase">📈, meet Tom and he is our dedicated</p>
@@ -292,24 +290,21 @@
                             <p class="text-white/40 text-xs mt-1">based in Kerala, India.</p>
                         </div>
                         <div class="flex gap-4 mt-6 md:mt-0">
-                            <a href="#" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
-                            <a href="#" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
+                            <a href="#" target="_blank" class="px-6 py-4 rounded bg-white text-black font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors">LinkedIn Profile</a>
+                            <a href="#" target="_blank" class="px-6 py-4 rounded border border-white/30 text-white font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">Instagram</a>
                         </div>
                     </div>
                 </div>
 
             </div>
 
-            <!-- Custom Navigation Arrows -->
             <div class="swiper-button-next hidden md:flex"></div>
             <div class="swiper-button-prev hidden md:flex"></div>
             
-            <!-- Custom Pagination -->
             <div class="swiper-pagination !bottom-24 md:!bottom-12"></div>
         </div>
     </main>
 
-    <!-- Cinematic Glass Footer (Pushed below the fold) -->
     <footer class="bg-[#0a0c0f] border-t border-white/5 pt-16 pb-10 relative z-10">
         <div class="max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
@@ -352,7 +347,27 @@
         </div>
     </footer>
 
-    <!-- Swiper JS -->
+    <div class="fixed bottom-0 left-0 w-full bg-[#0a0c0f]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
+        <div class="flex justify-around items-center px-2 py-3">
+            <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Home</span>
+            </a>
+            <a href="event.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="far fa-calendar-alt text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Events</span>
+            </a>
+            <a href="initiatives.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-rocket text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Initiatives</span>
+            </a>
+            <a href="login.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="far fa-user text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Profile</span>
+            </a>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -412,6 +427,46 @@
             // Initialize Lucide Icons
             lucide.createIcons();
         });
+    </script>
+
+    <script>
+        let newWorker;
+        const updateBanner = document.getElementById('pwa-update-banner');
+        const refreshBtn = document.getElementById('pwa-refresh-btn');
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(registration => {
+                    console.log('ServiceWorker registered');
+
+                    registration.addEventListener('updatefound', () => {
+                        newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                updateBanner.classList.remove('hidden');
+                                updateBanner.classList.add('flex');
+                            }
+                        });
+                    });
+                });
+
+                let refreshing;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (refreshing) return;
+                    refreshing = true;
+                    window.location.reload();
+                });
+            });
+        }
+
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                if (newWorker) {
+                    newWorker.postMessage({ action: 'skipWaiting' });
+                }
+                updateBanner.classList.add('hidden'); 
+            });
+        }
     </script>
 </body>
 </html>
