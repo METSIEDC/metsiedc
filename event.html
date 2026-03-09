@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Registration | MET'S IEDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f1115">
+    <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Immersive Theme Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -84,9 +86,23 @@
         }
     </style>
 </head>
-<body class="font-sans antialiased relative min-h-screen flex flex-col">
+<body class="font-sans antialiased relative min-h-screen flex flex-col pb-20 md:pb-0">
 
-    <!-- Minimalist Navbar -->
+    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300 no-print">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                <i class="fas fa-cloud-download-alt"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-white text-sm font-semibold">Update Available</span>
+                <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
+            </div>
+        </div>
+        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+            Refresh
+        </button>
+    </div>
+
     <header class="h-20 px-6 md:px-10 border-b border-white/5 bg-[#0f1115]/90 backdrop-blur-xl sticky top-0 z-50 no-print">
         <div class="max-w-[95%] mx-auto h-full flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -97,7 +113,6 @@
                 </a>
             </div>
 
-            <!-- Desktop Links -->
             <div class="hidden lg:flex items-center space-x-10">
                 <a href="index.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Home</a>
                 <a href="event.html" class="text-white text-[11px] uppercase tracking-[0.15em] font-bold transition-colors">Events</a>
@@ -112,7 +127,6 @@
                     <i data-lucide="ticket" class="w-4 h-4"></i> <span class="hidden sm:inline">My Tickets</span>
                 </button>
                 
-                <!-- Mobile Menu Button -->
                 <button id="mobile-menu-button" class="lg:hidden text-white p-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
@@ -120,7 +134,6 @@
         </div>
     </header>
 
-    <!-- Mobile Menu -->
     <div id="mobile-menu" class="fixed top-0 right-0 w-full h-screen bg-[#0f1115]/95 backdrop-blur-xl z-[200] overflow-y-auto transform translate-x-full transition-transform duration-400 ease-in-out no-print">
         <div class="flex justify-between items-center p-8">
             <span class="text-xl font-display font-bold text-white">MENU</span>
@@ -141,7 +154,6 @@
 
     <main class="flex-grow container mx-auto px-4 py-16">
         
-        <!-- Events List View -->
         <div id="eventListView" class="max-w-6xl mx-auto">
             <div class="text-center mb-20">
                 <span class="text-white/40 font-semibold tracking-[0.2em] text-xs uppercase mb-4 block">Select an Event</span>
@@ -153,7 +165,6 @@
             </div>
         </div>
 
-        <!-- Registration Form View -->
         <div id="formView" class="hidden max-w-2xl mx-auto no-print">
             <button onclick="goBack()" class="mb-8 flex items-center gap-3 text-xs uppercase tracking-widest text-white/50 hover:text-white transition group">
                 <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i> Back to Events
@@ -167,22 +178,18 @@
                     <p class="text-sm text-white/50 font-light">Please fill in the details below to secure your entry.</p>
                 </div>
                 <form id="dynamicForm" class="space-y-6">
-                    <!-- Form fields will be injected here -->
-                </form>
+                    </form>
                 <div id="submissionStatus" class="hidden mt-6 p-4 rounded text-center text-sm font-medium"></div>
             </div>
         </div>
 
-        <!-- Digital Ticket View -->
         <div id="ticketView" class="hidden max-w-md mx-auto transform transition-all mt-8">
             <div class="bg-[#e2e8f0] text-black rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative">
-                <!-- Ticket Header -->
                 <div class="bg-[#0a0c0f] p-8 text-white text-center border-b border-white/10">
                     <h2 class="text-2xl font-display font-bold uppercase tracking-[0.3em]">Pass</h2>
                     <p class="text-[9px] uppercase tracking-[0.2em] text-white/50 mt-2">MET'S IEDC OFFICIAL ENTRY</p>
                 </div>
                 
-                <!-- Ticket Body -->
                 <div class="p-8 text-center bg-white">
                     <h1 class="text-2xl font-display font-bold mb-2 leading-tight uppercase tracking-tight text-[#0a0c0f]" id="ticketEventName">Event Name</h1>
                     <p class="text-xs uppercase tracking-widest text-gray-500 mb-8 font-semibold" id="ticketDate">Date: --</p>
@@ -202,14 +209,12 @@
                     </div>
                 </div>
 
-                <!-- Ticket Footer (Tear line) -->
                 <div class="p-5 bg-gray-100 ticket-cut flex justify-between items-center">
                     <span class="text-[9px] uppercase tracking-[0.2em] text-gray-400 font-bold">Admit One</span>
                     <span class="text-[9px] uppercase tracking-[0.2em] text-gray-400 font-bold">Non-Transferable</span>
                 </div>
             </div>
 
-            <!-- Actions -->
             <div class="mt-8 flex gap-4 no-print">
                 <button onclick="window.print()" class="flex-1 bg-white text-black font-bold py-4 rounded text-xs uppercase tracking-widest hover:bg-gray-200 transition flex justify-center items-center gap-2">
                     <i data-lucide="printer" class="w-4 h-4"></i> Save
@@ -222,7 +227,6 @@
 
     </main>
 
-    <!-- Ticket History Modal -->
     <div id="historyModal" class="fixed inset-0 bg-[#0f1115]/95 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4 no-print transition-opacity">
         <div class="bg-dark-card border border-white/10 w-full max-w-md p-8 rounded-xl relative shadow-2xl">
             <button onclick="toggleHistoryModal()" class="absolute top-6 right-6 text-white/40 hover:text-white transition-colors"><i data-lucide="x"></i></button>
@@ -230,6 +234,27 @@
             <div id="historyList" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
                 <p class="text-center text-white/40 text-xs tracking-widest uppercase py-8">No tickets found on this device.</p>
             </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 w-full bg-[#0a0c0f]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe no-print">
+        <div class="flex justify-around items-center px-2 py-3">
+            <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Home</span>
+            </a>
+            <a href="event.html" class="flex flex-col items-center gap-1 text-white">
+                <i class="far fa-calendar-alt text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Events</span>
+            </a>
+            <a href="initiatives.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-rocket text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Initiatives</span>
+            </a>
+            <a href="login.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="far fa-user text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Profile</span>
+            </a>
         </div>
     </div>
 
@@ -480,6 +505,46 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        let newWorker;
+        const updateBanner = document.getElementById('pwa-update-banner');
+        const refreshBtn = document.getElementById('pwa-refresh-btn');
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(registration => {
+                    console.log('ServiceWorker registered');
+
+                    registration.addEventListener('updatefound', () => {
+                        newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                updateBanner.classList.remove('hidden');
+                                updateBanner.classList.add('flex');
+                            }
+                        });
+                    });
+                });
+
+                let refreshing;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (refreshing) return;
+                    refreshing = true;
+                    window.location.reload();
+                });
+            });
+        }
+
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                if (newWorker) {
+                    newWorker.postMessage({ action: 'skipWaiting' });
+                }
+                updateBanner.classList.add('hidden'); 
+            });
+        }
     </script>
 </body>
 </html>
