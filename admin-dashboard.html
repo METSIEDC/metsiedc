@@ -155,14 +155,16 @@
         </div>
     </aside>
 
-    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-40 hidden md:hidden transition-opacity"></div>
-    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-white z-50 transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
+    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[100] hidden md:hidden transition-opacity"></div>
+    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-white z-[200] transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
         <div class="p-6 flex items-center justify-between border-b border-gray-100">
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-lg bg-brand-primary flex items-center justify-center text-white font-bold shadow-sm">P</div>
                 <span class="text-lg font-bold text-gray-800">IEDC.io</span>
             </div>
-            <button id="close-mobile-sidebar" class="text-gray-400 hover:text-gray-800 p-2"><i data-lucide="x" class="pointer-events-none"></i></button>
+            <button id="close-mobile-sidebar" class="text-gray-400 hover:text-gray-800 p-2 cursor-pointer relative z-[300]">
+                <i data-lucide="x" class="pointer-events-none w-6 h-6"></i>
+            </button>
         </div>
         <nav class="flex-grow px-4 py-6 space-y-1 overflow-y-auto text-gray-500" id="mobile-nav-links">
             <button onclick="showTab('overview')" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-r-xl text-sm font-medium"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</button>
@@ -187,9 +189,9 @@
 
     <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10 w-full bg-brand-bg">
         
-        <header class="h-20 flex items-center justify-between px-6 md:px-10 shrink-0 w-full bg-brand-bg border-b border-gray-200/50 md:border-none relative z-[30]">
+        <header class="h-20 flex items-center justify-between px-6 md:px-10 shrink-0 w-full bg-brand-bg relative z-[60]">
             <div class="flex items-center gap-4">
-                <button id="mobile-menu-toggle" class="md:hidden text-gray-500 p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer">
+                <button id="mobile-menu-toggle" class="md:hidden text-gray-500 p-2 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer relative z-[100]">
                     <i data-lucide="menu" class="w-6 h-6 pointer-events-none"></i>
                 </button>
                 <div>
@@ -1189,404 +1191,153 @@
             lucide.createIcons();
         };
 
-        window.printExcomMeeting = (meetingId) => {
-            const m = excomMeetingsData.find(x => x.id === meetingId);
-            if(!m) return alert("Meeting not found.");
-
-            let rows = '';
-            if(m.attendance && Array.isArray(m.attendance)) {
-                m.attendance.forEach(a => {
-                    let color = a.status === 'Present' ? '#16a34a' : a.status === 'Informed' ? '#d97706' : '#dc2626';
-                    let bg = a.status === 'Present' ? '#f0fdf4' : a.status === 'Informed' ? '#fffbeb' : '#fef2f2';
-                    rows += `<tr style="border-bottom:1px solid #eee;">
-                        <td style="padding:12px; font-weight:600;">${a.name}</td>
-                        <td style="padding:12px; text-align:right;">
-                            <span style="color:${color}; background:${bg}; padding:4px 8px; border-radius:4px; font-weight:bold; text-transform:uppercase; font-size:10px; letter-spacing:1px; border:1px solid ${color}30;">${a.status}</span>
-                        </td>
-                    </tr>`;
-                });
-            }
-
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>ExCom Meeting Report</title>
-                    <style>
-                        body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; padding: 40px; color: #333; max-width:800px; margin:0 auto; }
-                        h2 { text-transform: uppercase; letter-spacing: 2px; color: #111; border-bottom: 2px solid #111; padding-bottom: 10px; margin-bottom: 20px; font-size: 24px; }
-                        .meta { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #eaeaea; font-size: 13px; color: #555; margin-bottom: 30px; }
-                        .meta p { margin: 5px 0; }
-                        table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top:20px; border: 1px solid #eaeaea; }
-                        th { background-color: #f1f5f9; font-weight: bold; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; color: #64748b; padding:15px 12px; text-align:left; border-bottom: 2px solid #e2e8f0; }
-                        td { border-bottom: 1px solid #f1f5f9; }
-                    </style>
-                </head>
-                <body>
-                    <h2>ExCom Attendance Report</h2>
-                    <div class="meta">
-                        <p><strong>Meeting Topic:</strong> <span style="color:#000; font-weight:bold;">${m.title || 'General Meeting'}</span></p>
-                        <p><strong>Date of Meeting:</strong> ${m.date}</p>
-                        <p><strong>Recorded By:</strong> ${m.loggedBy || 'System Admin'}</p>
-                        <p><strong>Generated On:</strong> ${new Date().toLocaleString()}</p>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Committee Member</th>
-                                <th style="text-align:right;">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${rows || '<tr><td colspan="2" style="padding:20px;text-align:center;color:#999;">No detailed records found.</td></tr>'}
-                        </tbody>
-                    </table>
-                    <script>
-                        window.onload = () => { window.print(); setTimeout(() => window.close(), 500); };
-                    <\/script>
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
-        };
-
-        window.renderUserTable = (users) => {
-            let uHtml = '';
-            users.forEach(u => {
-                try {
-                    const displayHtmlName = escapeHTML(getSafeText(u.name));
-                    const safeEmail = escapeHTML(getSafeText(u.email));
-                    const safeRole = u.role || "student";
-                    const safeProvider = u.authProvider || "email";
-                    
-                    let roleBadge = '';
-                    if(safeRole === 'admin') roleBadge = 'text-brand-primary bg-indigo-100 border-indigo-200';
-                    else if(safeRole === 'excom') roleBadge = 'text-brand-yellow bg-yellow-50 border-yellow-200';
-                    else roleBadge = 'text-gray-500 bg-gray-100 border-gray-200';
-
-                    let authBadge = '';
-                    if(safeProvider === 'google') {
-                        authBadge = '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200"><i class="fab fa-google"></i> Google</span>';
-                    } else if(safeProvider === 'phone') {
-                        authBadge = '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200"><i data-lucide="smartphone" class="w-3 h-3"></i> Phone</span>';
-                    } else {
-                        authBadge = '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200"><i data-lucide="mail" class="w-3 h-3"></i> Email</span>';
-                    }
-
-                    uHtml += `<tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
-                        <td class="px-6 py-5 text-sm font-bold text-gray-800 whitespace-nowrap">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold text-xs uppercase">${displayHtmlName.charAt(0)}</div>
-                                ${displayHtmlName}
-                            </div>
-                        </td>
-                        <td class="py-4 px-6">
-                            <div class="flex flex-col items-start gap-1.5">
-                                <span class="text-xs text-gray-500 font-medium">${safeEmail}</span>
-                                ${authBadge}
-                            </div>
-                        </td>
-                        <td class="px-6"><span class="uppercase text-[9px] tracking-wider font-bold px-3 py-1.5 rounded-md border ${roleBadge}">${safeRole}</span></td>
-                        <td class="text-center py-4 px-6">
-                            <div class="flex items-center justify-center gap-3">
-                                <button class="edit-user-btn bg-white border border-gray-200 text-gray-500 hover:text-brand-primary hover:border-brand-primaryLight hover:bg-brand-primaryLight transition-all p-2 rounded-lg shadow-sm" data-id="${u.id}" data-name="${displayHtmlName}" data-role="${safeRole}"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                                <button class="delete-user-btn bg-white border border-gray-200 text-red-400 hover:text-red-600 hover:bg-red-50 hover:border-red-100 transition-all p-2 rounded-lg shadow-sm" data-id="${u.id}" data-name="${displayHtmlName}"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                            </div>
-                        </td>
-                    </tr>`;
-                } catch(err) {
-                    console.error("Failed to render user row:", err);
-                }
-            });
-            const tbody = document.getElementById('userListBody');
-            if(tbody) tbody.innerHTML = uHtml || '<tr><td colspan="4" class="text-center py-10 text-gray-400 text-sm font-medium tracking-wide">No users found.</td></tr>';
-            lucide.createIcons();
-        };
-
-        window.deleteUser = async (id, name) => {
-            if(!confirm(`Delete user: ${name}?`)) return;
-            try { await deleteDoc(doc(db, "users", id)); await logActivity("Deleted User", `Removed ${name}`); } catch(e){ alert(e.message); }
-        };
-
-        document.getElementById('userListBody').addEventListener('click', (e) => {
-            const editBtn = e.target.closest('.edit-user-btn');
-            if (editBtn) {
-                document.getElementById('editUserId').value = editBtn.getAttribute('data-id'); 
-                const txt = document.createElement('textarea');
-                txt.innerHTML = editBtn.getAttribute('data-name');
-                document.getElementById('editUserName').value = txt.value; 
-                document.getElementById('editUserRoleSelect').value = editBtn.getAttribute('data-role'); 
-                document.getElementById('editUserModal').classList.remove('hidden'); 
-            }
-
-            const delBtn = e.target.closest('.delete-user-btn');
-            if (delBtn) {
-                const txt = document.createElement('textarea');
-                txt.innerHTML = delBtn.getAttribute('data-name');
-                window.deleteUser(delBtn.getAttribute('data-id'), txt.value);
-            }
-        });
-
-        window.switchAddMode = (mode) => {
-            document.getElementById('addUserMode').value = mode;
-            if(mode === 'create') {
-                document.getElementById('tabCreateNew').className = "flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-md bg-white shadow-sm text-brand-primary transition-all";
-                document.getElementById('tabSyncExisting').className = "flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-md text-gray-500 hover:text-gray-800 transition-all";
-                document.getElementById('passwordFieldGroup').classList.remove('hidden');
-                document.getElementById('newUserPassword').required = true;
-                document.getElementById('uidFieldGroup').classList.add('hidden');
-                document.getElementById('newUserUid').required = false;
-                document.getElementById('submitAddUserBtn').innerText = "Create User";
+        document.getElementById('excomMeetingDate').addEventListener('change', (e) => {
+            const selectedDate = e.target.value;
+            const btn = document.getElementById('saveExcomBtn');
+            const existing = excomMeetingsData.find(m => m.date === selectedDate);
+            
+            if (existing) {
+                alert("A meeting is already logged for this date. You cannot overwrite it.");
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.innerHTML = '<i data-lucide="lock" class="w-4 h-4"></i> Date Locked';
             } else {
-                document.getElementById('tabSyncExisting').className = "flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-md bg-white shadow-sm text-brand-primary transition-all";
-                document.getElementById('tabCreateNew').className = "flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-md text-gray-500 hover:text-gray-800 transition-all";
-                document.getElementById('passwordFieldGroup').classList.add('hidden');
-                document.getElementById('newUserPassword').required = false;
-                document.getElementById('uidFieldGroup').classList.remove('hidden');
-                document.getElementById('newUserUid').required = true;
-                document.getElementById('submitAddUserBtn').innerText = "Sync User";
-            }
-        };
-
-        document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submitAddUserBtn');
-            const mode = document.getElementById('addUserMode').value;
-            const email = document.getElementById('newUserEmail').value.trim();
-            const name = document.getElementById('newUserName').value.trim();
-            
-            btn.disabled = true; 
-            btn.innerText = "Processing...";
-
-            try {
-                if (mode === 'create') {
-                    const secondaryApp = initializeApp(firebaseConfig, "SecondaryApp-" + Date.now());
-                    const secondaryAuth = getAuth(secondaryApp);
-                    const uc = await createUserWithEmailAndPassword(secondaryAuth, email, document.getElementById('newUserPassword').value);
-                    await setDoc(doc(db, "users", uc.user.uid), { name: name, email: email, role: 'student', createdAt: Date.now(), authProvider: 'email' });
-                    await logActivity("Created User", `Added ${email}`);
-                    await signOut(secondaryAuth);
-                    alert("User Created Successfully!");
-                } else if (mode === 'sync') {
-                    const uid = document.getElementById('newUserUid').value.trim();
-                    if(!uid) throw new Error("UID is required for syncing existing users.");
-                    await setDoc(doc(db, "users", uid), { name: name, email: email, role: 'student', createdAt: Date.now() }, { merge: true });
-                    await logActivity("Synced Existing User", `Added DB profile for ${email}`);
-                    alert("User Synced Successfully!");
-                }
-                
-                toggleAddUserModal(false); 
-                e.target.reset();
-                switchAddMode('create');
-            } catch (err) { 
-                alert(err.message); 
-            } finally { 
-                btn.disabled = false; 
-                btn.innerText = mode === 'create' ? "Create User" : "Sync User"; 
-            }
-        });
-
-        document.getElementById('addItemForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            try {
-                await addDoc(collection(db, "inventory"), { name: document.getElementById('invName').value, category: document.getElementById('invCategory').value, status: 'Available', holder: '', createdAt: Date.now() });
-                alert("Asset Added!"); document.getElementById('addItemModal').classList.add('hidden'); e.target.reset();
-            } catch(e) { alert(e.message); }
-        });
-
-        window.toggleItemStatus = async (id, status) => {
-            let holder = '';
-            if(status === 'Borrowed') { holder = prompt("Who is borrowing this asset?"); if(!holder) return; }
-            await updateDoc(doc(db, "inventory", id), { status, holder });
-        };
-
-        async function logActivity(action, details) { await addDoc(collection(db, "logs"), { action, details, admin: currentUserEmail, timestamp: Date.now() }); }
-        
-        document.getElementById('editUserRoleForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('updateUserBtn');
-            btn.disabled = true;
-            btn.innerText = "Updating...";
-            
-            try { 
-                await setDoc(doc(db, "users", document.getElementById('editUserId').value), { 
-                    role: document.getElementById('editUserRoleSelect').value,
-                    name: document.getElementById('editUserName').value
-                }, { merge: true }); 
-                alert("User Updated Successfully!"); 
-                toggleEditUserModal(false); 
-            } catch(e){ 
-                alert(e.message); 
-            } finally {
                 btn.disabled = false;
-                btn.innerText = "Update";
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log';
             }
+            lucide.createIcons();
         });
 
+        window.submitExcomAttendance = async () => {
+            const title = document.getElementById('excomMeetingTitle').value.trim();
+            const date = document.getElementById('excomMeetingDate').value;
+            if(!title || !date) return alert("Please provide a meeting name and date.");
+            
+            if(excomMeetingsData.some(m => m.date === date)) return alert("A meeting is already logged for this date.");
+
+            const attendanceRecords = Array.from(document.querySelectorAll('.excom-status-select')).map(sel => ({
+                id: sel.dataset.id,
+                name: sel.dataset.name,
+                status: sel.value
+            }));
+
+            const btn = document.getElementById('saveExcomBtn');
+            btn.disabled = true; 
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Saving...`;
+            lucide.createIcons();
+
+            try {
+                await addDoc(collection(db, "excom_meetings"), { 
+                    title: title, 
+                    date: date, 
+                    attendance: attendanceRecords, 
+                    timestamp: Date.now(),
+                    loggedBy: currentUserEmail
+                }); 
+                await logActivity("ExCom Logged", `Meeting: ${date}`);
+                alert("Meeting Logged Successfully!"); 
+                document.getElementById('excomModal').classList.add('hidden');
+            } catch(e) {
+                alert(e.message);
+            } finally {
+                btn.disabled = false; 
+                btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log';
+                lucide.createIcons();
+            }
+        };
+
+        // --- FIXED SUBMISSION LISTENERS ---
         document.getElementById('newsForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); const btn=document.getElementById('postNewsBtn'); btn.disabled=true; btn.innerText="Publishing...";
-            try { let url = newsImageFile ? await uploadToDrive(newsImageFile) : ""; await addDoc(collection(db, "news"), { title: document.getElementById('newsTitle').value, content: document.getElementById('newsContent').value, date: document.getElementById('newsDate').value, imageUrl: url, timestamp: Date.now() }); await logActivity("Posted News", document.getElementById('newsTitle').value); alert("News Published!"); e.target.reset(); document.getElementById('newsFileName').innerHTML = '<i class="fas fa-upload mr-2"></i> Browse Image';} catch(e){alert(e.message);} finally{btn.disabled=false; btn.innerText="Publish";}
+            e.preventDefault(); 
+            const btn = document.getElementById('postNewsBtn'); 
+            btn.disabled = true; 
+            btn.innerText = "Publishing...";
+            try { 
+                let url = newsImageFile ? await uploadToDrive(newsImageFile) : ""; 
+                await addDoc(collection(db, "news"), { 
+                    title: document.getElementById('newsTitle').value, 
+                    description: document.getElementById('newsContent').value, // FIXED FIELD NAME
+                    date: document.getElementById('newsDate').value, 
+                    imageUrl: url, 
+                    timestamp: Date.now() 
+                }); 
+                await logActivity("Posted News", document.getElementById('newsTitle').value); 
+                alert("News Published!"); 
+                e.target.reset(); 
+                document.getElementById('newsFileName').innerHTML = '<i class="fas fa-upload mr-2"></i> Browse Image';
+            } catch(e) {
+                alert(e.message);
+            } finally {
+                btn.disabled = false; 
+                btn.innerText = "Publish News";
+            }
         });
 
         document.getElementById('announcementForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, content: document.getElementById('annContent').value, timestamp: Date.now() }); await logActivity("Posted Update", document.getElementById('annTitle').value); alert("Update Broadcasted!"); e.target.reset();
-        });
-
-        // ADVANCED FORM BUILDER SUBMISSION
-        document.getElementById('formBuilderForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const title = document.getElementById('formTitle').value.trim();
-            const desc = document.getElementById('formDescription').value.trim();
-            const webhook = document.getElementById('formWebhook').value.trim();
-
-            if (formBuilderFields.length === 0) return alert("Please add at least one question to the form.");
-
-            const btn = document.getElementById('saveFormBtn');
+            e.preventDefault(); 
+            const btn = e.target.querySelector('button');
+            const origText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Broadcasting...`;
             btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Creating...`;
             lucide.createIcons();
 
-            let coverUrl = "";
-
             try {
-                if (formCoverImageFile) {
-                    coverUrl = await uploadToDrive(formCoverImageFile);
-                }
-
-                await addDoc(collection(db, "eventForms"), { 
-                    title: title, 
-                    description: desc,
-                    coverImage: coverUrl,
-                    webhook: webhook, 
-                    questions: formBuilderFields,
-                    createdAt: Date.now() 
+                await addDoc(collection(db, "announcements"), { 
+                    title: document.getElementById('annTitle').value, 
+                    description: document.getElementById('annContent').value, // FIXED FIELD NAME
+                    timestamp: Date.now() 
                 }); 
-                alert("Form Created Successfully!"); 
+                await logActivity("Posted Update", document.getElementById('annTitle').value); 
+                alert("Update Broadcasted!"); 
                 e.target.reset();
-                
-                // Reset builder fields to default state
-                formCoverImageFile = null;
-                document.getElementById('formCoverFileName').innerHTML = '<i class="fas fa-image mr-2"></i> Browse Image';
-                
-                formBuilderFields = [
-                    { id: generateId(), label: 'Full Name', type: 'text', required: true, options: [] },
-                    { id: generateId(), label: 'Email Address', type: 'email', required: true, options: [] },
-                    { id: generateId(), label: 'Mobile Number', type: 'tel', required: true, options: [] },
-                    { id: generateId(), label: 'Gender', type: 'select', required: true, options: ['Male', 'Female', 'Other'] }
-                ];
-                window.renderFormBuilderFields();
-            } catch (error) {
-                console.error(error);
-                alert("Error saving form: " + error.message);
+            } catch (e) {
+                alert(e.message);
             } finally {
+                btn.innerHTML = origText;
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="save" class="w-4 h-4"></i> Publish Form`;
-                lucide.createIcons();
             }
         });
+        // ------------------------------------
 
-        window.submitAttendance = async () => {
-            const attendees = Array.from(document.querySelectorAll('.att-checkbox:checked')).map(c => c.value);
-            if(attendees.length === 0) return alert("Please select at least one student.");
-            await addDoc(collection(db, "attendance"), { eventName: document.getElementById('attendanceEventName').value, date: document.getElementById('attendanceDate').value, attendees, timestamp: Date.now() }); alert("Attendance Logged Successfully!");
-        };
+    </script>
 
-        window.issueCertificates = async () => {
-            const eventName = document.getElementById('certEventName').value;
-            const date = document.getElementById('certDate').value;
-            const selected = document.querySelectorAll('.cert-checkbox:checked');
-            if(!eventName || !certTemplateBase64 || selected.length === 0) return alert("Please fill all fields and select recipients.");
-            const btn = document.getElementById('certBtn'); btn.disabled=true; btn.innerText="Processing...";
-            
-            try {
-                for (const box of selected) {
-                    await addDoc(collection(db, "certificates"), { userId: box.value, userName: box.getAttribute('data-name'), eventName, date, templateUrl: certTemplateBase64, issuedAt: Date.now() });
-                }
-                alert("Certificates Issued to Students!");
-            } catch(e){alert(e.message);} finally { btn.disabled=false; btn.innerText="Issue Certificates"; }
-        };
+    <script>
+        let newWorker;
+        const updateBanner = document.getElementById('pwa-update-banner');
+        const refreshBtn = document.getElementById('pwa-refresh-btn');
 
-        async function uploadToDrive(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = async (e) => {
-                    const base64 = e.target.result.split(',')[1];
-                    try { const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ base64, type: file.type, name: file.name })}); const json = await res.json(); if(json.url) resolve(json.url); else reject("Upload failed"); } catch(e) { reject(e); }
-                }; reader.readAsDataURL(file);
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(registration => {
+                    console.log('ServiceWorker registered');
+
+                    registration.addEventListener('updatefound', () => {
+                        newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                updateBanner.classList.remove('hidden');
+                                updateBanner.classList.add('flex');
+                            }
+                        });
+                    });
+                });
+
+                let refreshing;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (refreshing) return;
+                    refreshing = true;
+                    window.location.reload();
+                });
             });
         }
 
-        window.showTab = (t) => { 
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); 
-            document.getElementById(t+'Section').classList.remove('hidden'); 
-            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active')); 
-            
-            const activeDesktop = document.getElementById('nav-'+t);
-            if(activeDesktop) activeDesktop.classList.add('active');
-
-            // Set Title dynamically
-            let title = t.charAt(0).toUpperCase() + t.slice(1);
-            if(t === 'eventForms') title = "Forms";
-            if(t === 'excom') title = "ExCom";
-            document.getElementById('headerTitle').textContent = title;
-            
-            // Close mobile menu if open
-            const menu = document.getElementById('mobile-sidebar');
-            if(menu && !menu.classList.contains('-translate-x-full')) {
-                window.toggleMobileSidebar();
-            }
-        };
-
-        window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
-        window.toggleEditUserModal = (s) => document.getElementById('editUserModal').classList.toggle('hidden', !s);
-        window.handleNewsImage = (e) => { newsImageFile = e.target.files[0]; document.getElementById('newsFileName').textContent = newsImageFile.name; };
-        window.handleGalleryImages = (e) => { galleryImages = e.target.files; document.getElementById('galleryFileName').textContent = `${galleryImages.length} Files Selected`; };
-        window.handleCertTemplate = (e) => { const reader = new FileReader(); reader.onload = (ev) => { certTemplateBase64 = ev.target.result; document.getElementById('certFileName').textContent = "Template Loaded Successfully"; }; reader.readAsDataURL(e.target.files[0]); };
-        window.toggleAttCheck = (id) => { const c = document.getElementById('att-'+id); c.checked = !c.checked; };
-        
-        window.deleteDoc = deleteDoc; window.doc = doc; window.db = db; // Global for onclick
-
-        document.getElementById('adminLogoutBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('adminLogoutBtn');
-            btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Logging Out...`;
-            lucide.createIcons();
-            
-            try {
-                await addDoc(collection(db, "logs"), {
-                    action: "Admin Logout",
-                    details: "Admin securely logged out",
-                    admin: currentUserEmail || "Unknown Admin",
-                    timestamp: Date.now()
-                });
-            } catch(e) {
-                console.error("Failed to write logout log:", e);
-            }
-            
-            signOut(auth).then(()=>window.location.href='login.html');
-        });
-        
-        // Mobile Logout Handler
-        if (document.getElementById('adminLogoutBtnMobile')) {
-            document.getElementById('adminLogoutBtnMobile').addEventListener('click', async () => {
-                const btn = document.getElementById('adminLogoutBtnMobile');
-                btn.disabled = true;
-                btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Logging Out...`;
-                lucide.createIcons();
-                
-                try {
-                    await addDoc(collection(db, "logs"), {
-                        action: "Admin Logout",
-                        details: "Admin securely logged out",
-                        admin: currentUserEmail || "Unknown Admin",
-                        timestamp: Date.now()
-                    });
-                } catch(e) {
-                    console.error("Failed to write logout log:", e);
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                if (newWorker) {
+                    newWorker.postMessage({ action: 'skipWaiting' });
                 }
-                
-                signOut(auth).then(()=>window.location.href='login.html');
+                updateBanner.classList.add('hidden'); 
             });
         }
     </script>
