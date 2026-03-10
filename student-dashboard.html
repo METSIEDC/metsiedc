@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard | MET'S IEDC</title>
-      <link rel="icon" type="image/png" href="assets/images/logos/MSEM-removebg-preview.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050505">
- <link rel="apple-touch-icon" href="assets/images/logos/MSEM-removebg-preview.png">
+    <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
+    <link rel="icon" type="image/jpeg" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -68,13 +68,13 @@
         #qrcode img { margin: 0 auto; border-radius: 8px; border: 4px solid white; }
     </style>
 </head>
-<body class="font-sans antialiased relative min-h-screen flex items-center justify-center selection:bg-glow-blue selection:text-white pb-20 md:pb-0">
+<body class="font-sans antialiased relative min-h-screen flex items-start md:items-center justify-center selection:bg-glow-blue selection:text-white bg-[#050505]">
 
     <div class="fixed top-[10%] right-[-10%] w-[40vw] h-[40vw] bg-glow-blue/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow"></div>
     <div class="fixed bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-glow-purple/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow" style="animation-delay: 2s;"></div>
     <div class="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 z-0 pointer-events-none"></div>
 
-    <div class="w-full h-full flex overflow-hidden relative z-10 md:rounded-[2.5rem] border border-white/10 glass-panel shadow-2xl backdrop-blur-2xl bg-[#050505]/60">
+    <div class="w-full h-[100dvh] md:h-[95vh] md:w-[95vw] md:max-w-[1400px] flex overflow-hidden relative z-10 md:rounded-[2.5rem] border-none md:border border-white/10 glass-panel shadow-2xl backdrop-blur-2xl bg-[#050505]/60">
 
         <aside class="w-64 border-r border-white/10 flex-shrink-0 hidden md:flex flex-col h-full z-20 bg-[#0a0a0c]/50 backdrop-blur-xl">
             <div class="p-8 pb-4 flex items-center gap-3">
@@ -440,7 +440,7 @@
                     </div>`;
                 });
                 container.innerHTML = html; lucide.createIcons();
-            } catch(e) { container.innerHTML = `<div class="text-red-400 text-xs col-span-full">Error loading projects.</div>`; }
+            } catch(e) { container.innerHTML = `<div class="text-red-400 text-xs col-span-full">Error loading projects. Ensure Firestore rules are updated!</div>`; }
         };
 
         // --- FETCH MY ATTENDANCE ---
@@ -459,7 +459,7 @@
                     html += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors"><td class="px-6 py-4 font-medium text-white">${data.eventName}</td><td class="px-6 py-4 text-right text-white/50 font-mono text-xs">${dateStr}</td></tr>`;
                 });
                 list.innerHTML = html;
-            } catch(e) { list.innerHTML = `<tr><td colspan="2" class="text-red-400 text-xs text-center py-6">Error loading records.</td></tr>`; }
+            } catch(e) { list.innerHTML = `<tr><td colspan="2" class="text-red-400 text-xs text-center py-6">Error loading records. Ensure Firestore rules are updated!</td></tr>`; }
         };
 
         // --- FETCH MY CERTIFICATES ---
@@ -487,7 +487,7 @@
                     </div>`;
                 });
                 container.innerHTML = html; lucide.createIcons();
-            } catch(e) { container.innerHTML = `<div class="text-red-400 text-xs col-span-full">Error loading certificates.</div>`; }
+            } catch(e) { container.innerHTML = `<div class="text-red-400 text-xs col-span-full">Error loading certificates. Ensure Firestore rules are updated!</div>`; }
         };
 
         // --- FORM SUBMISSIONS ---
