@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | MET'S IEDC</title>
+    <link rel="icon" type="image/jpeg" href="assets/images/logos/MSEM.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050505">
@@ -797,6 +798,17 @@
         window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
         window.toggleEditUserModal = (s) => document.getElementById('editUserModal').classList.toggle('hidden', !s);
         window.toggleAttCheck = (id) => { const c = document.getElementById('att-'+id); c.checked = !c.checked; };
+
+      window.openExcomAttendanceModal = () => {
+            document.getElementById('excomMeetingTitle').value = '';
+            document.getElementById('excomMeetingDate').value = '';
+            const btn = document.getElementById('saveExcomBtn');
+            btn.disabled = false;
+            btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log';
+            document.querySelectorAll('.excom-status-select').forEach(s => s.value = 'Absent');
+            document.getElementById('excomModal').classList.remove('hidden');
+            lucide.createIcons();
+        };
         
         window.switchAddMode = (mode) => {
             document.getElementById('addUserMode').value = mode;
