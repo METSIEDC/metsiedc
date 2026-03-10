@@ -753,7 +753,8 @@
         </div>
     </div>
 
-    <script>
+  <script>
+        // GLOBAL UI LOGIC
         document.addEventListener('DOMContentLoaded', () => {
             const menuToggleBtn = document.getElementById('mobile-menu-toggle');
             const closeBtn = document.getElementById('close-mobile-sidebar');
@@ -835,6 +836,7 @@
                 alert("No logs available to print.");
                 return;
             }
+
             const printWindow = window.open('', '_blank');
             printWindow.document.write(`
                 <html>
@@ -853,8 +855,12 @@
                 <body>
                     <h2>Admin System Logs</h2>
                     <p class="meta">Generated on: ${new Date().toLocaleString()}</p>
-                    <table><thead><tr><th>Timestamp</th><th>Action</th><th>Details</th><th>Admin User</th></tr></thead>
-                    <tbody>${logsTableContent}</tbody></table>
+                    <table>
+                        <thead>
+                            <tr><th>Timestamp</th><th>Action</th><th>Details</th><th>Admin User</th></tr>
+                        </thead>
+                        <tbody>${logsTableContent}</tbody>
+                    </table>
                     <script>window.onload = () => { window.print(); setTimeout(() => window.close(), 500); };<\/script>
                 </body>
                 </html>
@@ -892,7 +898,7 @@
         import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, orderBy, onSnapshot, limit, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHmJ0B9qP2ND2YD0-lQxW2ZgL-m2siOYSHSpSrdgSD6v53i3iD9gGx9_bxrr_Wa6oalQ/exec"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhv5--AImomPzvUOw1-fsnBom_YN5jDQq-8wd-L0xPg1J7AZAJumfBeXAEku4zd6I-/exec"; 
         const firebaseConfig = { apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8", authDomain: "metsiedc-3010e.firebaseapp.com", projectId: "metsiedc-3010e", storageBucket: "metsiedc-3010e.firebasestorage.app", messagingSenderId: "954403413150", appId: "1:954403413150:web:2523a3377f15a3d6002f8f" };
 
         const app = initializeApp(firebaseConfig);
