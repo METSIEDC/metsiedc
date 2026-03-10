@@ -1,24 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery | MET'S IEDC</title>
+    <link rel="icon" type="image/jpeg" href="assets/images/logos/MSEM.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050505">
     <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { 
                         sans: ['Inter', 'sans-serif'],
-                        display: ['Inter', 'sans-serif']
+                        display: ['Plus Jakarta Sans', 'sans-serif']
+                    },
+                    colors: {
+                        dark: {
+                            base: '#050505',
+                            panel: 'rgba(20, 20, 25, 0.6)',
+                            border: 'rgba(255, 255, 255, 0.08)'
+                        },
+                        glow: {
+                            purple: '#9333ea',
+                            orange: '#ea580c',
+                            blue: '#2563eb'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.3' },
+                            '50%': { opacity: '0.6' },
+                        }
                     }
                 }
             }
@@ -28,72 +55,85 @@
     <style>
         body { 
             background-color: #050505; 
-            color: #ffffff; 
-            font-family: 'Inter', sans-serif; 
+            color: #e2e8f0; 
             overflow-x: hidden; 
         }
-        
-        .glass-nav { 
-            background: rgba(5, 5, 5, 0.8); 
-            backdrop-filter: blur(20px); 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+
+        /* Glassmorphism Utilities */
+        .glass-nav {
+            background: rgba(15, 15, 20, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
-        
-        /* Gallery Card */
-        .photo-card { 
-            break-inside: avoid; 
-            margin-bottom: 24px; 
-            position: relative; 
-            overflow: hidden; 
-            border-radius: 16px; 
-            background: #1a1a1a; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            cursor: zoom-in;
-            border: 1px solid rgba(255,255,255,0.05);
+
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(30, 30, 35, 0.8) 0%, rgba(15, 15, 20, 0.6) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02), 0 20px 40px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        
-        .photo-card img { 
-            width: 100%; 
-            display: block; 
-            transition: transform 0.5s ease; 
-            min-height: 200px; 
-            object-fit: cover; 
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            z-index: 1;
         }
-        
-        .photo-card:hover img { transform: scale(1.05); }
-        
-        .photo-overlay { 
-            position: absolute; bottom: 0; left: 0; width: 100%; 
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 100%); 
-            padding: 24px 20px 16px; 
-            opacity: 0; transform: translateY(10px); 
-            transition: all 0.3s ease; 
+
+        .glass-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
-        .photo-card:hover .photo-overlay { opacity: 1; transform: translateY(0); }
-        
-        /* Lightbox */
-        .lightbox { 
-            position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 200; 
-            display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
+
+        /* Text Gradients */
+        .text-gradient-orange {
+            background: linear-gradient(to right, #fdba74, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .lightbox.active { opacity: 1; }
-        
-        .masonry { column-count: 1; gap: 24px; }
-        @media (min-width: 640px) { .masonry { column-count: 2; } }
-        @media (min-width: 1024px) { .masonry { column-count: 3; } }
+
+        /* Button Styling */
+        .btn-light {
+            background: #ffffff;
+            color: #050505;
+            transition: all 0.3s ease;
+        }
+        .btn-light:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mobile-menu.open { transform: translateX(0); }
 
         /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
+
+        /* Modal Image Viewer */
+        #imageModal { backdrop-filter: blur(15px); }
     </style>
 </head>
-<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white pb-20 md:pb-0">
+<body class="font-sans antialiased relative min-h-screen flex flex-col selection:bg-glow-orange selection:text-white pb-20 md:pb-0">
 
-    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-[#181b21] border border-indigo-500/50 shadow-2xl shadow-black/50 rounded-full px-4 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300">
+    <div class="fixed top-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-glow-orange/10 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow"></div>
+    <div class="fixed bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-glow-blue/10 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow" style="animation-delay: 2s;"></div>
+    <div class="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 z-0 pointer-events-none"></div>
+
+    <div id="pwa-update-banner" class="hidden fixed top-24 left-1/2 transform -translate-x-1/2 z-[9999] glass-panel rounded-full px-5 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300 border border-glow-orange/50 shadow-[0_0_20px_rgba(234,88,12,0.3)]">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+            <div class="w-8 h-8 rounded-full bg-glow-orange/20 flex items-center justify-center text-glow-orange">
                 <i class="fas fa-cloud-download-alt"></i>
             </div>
             <div class="flex flex-col">
@@ -101,129 +141,151 @@
                 <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
             </div>
         </div>
-        <button id="pwa-refresh-btn" class="ml-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+        <button id="pwa-refresh-btn" class="ml-auto bg-white text-black text-xs font-bold px-4 py-2 rounded-full transition-colors hover:bg-gray-200">
             Refresh
         </button>
     </div>
 
-    <div class="fixed inset-0 bg-gradient-to-b from-[#181b21] to-[#050505] z-0 pointer-events-none"></div>
-
-    <nav class="glass-nav fixed top-0 w-full z-50 transition-all duration-300">
-        <div class="max-w-[95%] mx-auto px-4 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <a href="index.html" class="flex items-center space-x-3 group">
-                    <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="h-10 w-10 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
-                    <span class="text-xl font-bold tracking-tight text-white">MET'S <span class="text-indigo-400">IEDC</span></span>
-                </a>
-            </div>
-            
-            <div class="hidden md:flex items-center space-x-10 relative z-10">
-                <a href="index.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Home</a>
-                <a href="event.html" class="text-white text-[11px] uppercase tracking-[0.15em] font-bold transition-colors border-b border-indigo-500 pb-1">Events & Gallery</a>
-                <a href="initiatives.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Initiatives</a>
-                <a href="report.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Reports</a>
-                <a href="team.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Ex-Com</a>
-                <a href="contact.html" class="text-white/80 hover:text-white text-[11px] uppercase tracking-[0.15em] font-medium transition-colors">Contact</a>
-            </div>
-
-            <div class="hidden md:flex items-center relative z-10">
-                <a href="login.html" class="bg-white/10 hover:bg-white/20 text-white px-6 py-2.5 rounded-full text-[11px] uppercase tracking-[0.15em] font-bold border border-white/10 transition-colors">
-                    Log in
-                </a>
-            </div>
-
-            <button id="mobile-menu-button" class="md:hidden text-white p-2 relative z-10">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl z-50 glass-nav rounded-full px-2 py-2 flex justify-between items-center transition-all duration-300" id="navbar">
+        <a href="index.html" class="flex items-center pl-4 group">
+            <span class="text-base font-display font-bold tracking-wider text-white">
+                MET'S IEDC
+            </span>
+        </a>
+        
+        <div class="hidden md:flex items-center space-x-1 bg-white/5 rounded-full px-2 py-1">
+            <a href="index.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Home</a>
+            <a href="event.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Events</a>
+            <a href="initiatives.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Initiatives</a>
+            <a href="events.html" class="px-4 py-2 rounded-full bg-white/10 text-white text-xs font-semibold transition-colors">Gallery</a>
         </div>
+
+        <div class="hidden md:flex items-center gap-3 pr-2">
+            <a href="login.html" class="text-white/70 hover:text-white text-xs font-semibold px-2 transition-colors">Log In</a>
+            <a href="login.html" class="btn-light px-5 py-2 rounded-full text-xs font-bold tracking-wide">
+                Portal
+            </a>
+        </div>
+
+        <button id="mobile-menu-button" class="md:hidden text-white p-2 pr-4">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
     </nav>
 
-    <div id="mobile-menu" class="fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-xl z-[100] transform translate-x-full transition-transform duration-300 ease-in-out">
-        <div class="flex justify-end p-6">
-            <button id="close-mobile-menu" class="text-white p-2">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-2xl z-[200] overflow-y-auto border-l border-white/10">
+        <div class="flex justify-between items-center p-8 border-b border-white/10">
+            <span class="text-xl font-display font-bold text-white tracking-widest">NAVIGATION</span>
+            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors">
+                <i class="fas fa-times text-lg"></i>
             </button>
         </div>
-        <nav class="flex flex-col space-y-6 px-8 mt-10 text-center">
-            <a href="index.html" class="text-2xl font-light text-white hover:text-indigo-400 uppercase tracking-widest">Home</a>
-            <a href="announcement.html" class="text-2xl font-light text-white hover:text-indigo-400 uppercase tracking-widest">Announcements</a>
-            <a href="event.html" class="text-2xl font-bold text-white uppercase tracking-widest">Events</a>
-            <a href="initiatives.html" class="text-2xl font-light text-white hover:text-indigo-400 uppercase tracking-widest">Initiatives</a>
-            <a href="report.html" class="text-2xl font-light text-white hover:text-indigo-400 uppercase tracking-widest">Reports</a>
-            <a href="team.html" class="text-2xl font-light text-white hover:text-indigo-400 uppercase tracking-widest">Ex-Com</a>
-            <a href="contact.html" class="text-2xl font-light text-white hover:text-indigo-400 uppercase tracking-widest">Contact</a>
-            <a href="login.html" class="mt-8 py-4 bg-indigo-600 rounded-full text-white font-medium uppercase tracking-widest text-sm">Portal Login</a>
+        <nav class="flex flex-col space-y-6 px-8 py-10 text-left">
+            <a href="index.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-home w-8 text-white/40"></i> Home</a>
+            <a href="event.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="far fa-calendar-alt w-8 text-white/40"></i> Events</a>
+            <a href="initiatives.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-rocket w-8 text-white/40"></i> Initiatives</a>
+            <a href="events.html" class="text-3xl font-display font-medium text-white flex items-center gap-4"><i class="fas fa-image w-8 text-glow-orange"></i> Gallery</a>
+            <a href="report.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-chart-bar w-8 text-white/40"></i> Reports</a>
+            <a href="team.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-users w-8 text-white/40"></i> Ex-Com</a>
+            <a href="news.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-newspaper w-8 text-white/40"></i> News</a>
+            
+            <div class="pt-8 mt-8 border-t border-white/10 flex flex-col gap-4">
+                <a href="login.html" class="btn-light text-center py-4 rounded-xl text-sm font-bold uppercase tracking-widest">
+                    Portal Login
+                </a>
+            </div>
         </nav>
     </div>
 
-    <main class="flex-grow relative z-10">
-        <div class="pt-36 pb-12 text-center px-4">
-            <h1 class="text-5xl md:text-6xl font-bold mb-4 tracking-tight">Event Gallery</h1>
-            <p class="text-gray-400 max-w-lg mx-auto text-lg">Capturing moments of innovation, collaboration, and success.</p>
+    <main class="flex-grow pt-40 pb-24 relative z-10 container mx-auto px-4 md:px-8">
+        
+        <div class="text-center mb-20 md:mb-24 relative">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-glow-orange/20 blur-[80px] rounded-full pointer-events-none"></div>
+            <div class="glass-badge inline-flex items-center px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest font-bold text-white mb-6 relative z-10">
+                <span class="w-1.5 h-1.5 rounded-full bg-glow-orange mr-2 animate-pulse"></span> Memories & Milestones
+            </div>
+            <h1 class="text-5xl md:text-7xl lg:text-[5.5rem] font-display font-bold mb-6 tracking-tight leading-tight relative z-10">
+                <span class="text-white">Our</span> <span class="text-gradient-orange">Gallery</span>
+            </h1>
+            <p class="text-white/50 max-w-2xl mx-auto font-light text-base md:text-lg leading-relaxed relative z-10">
+                Take a look back at our past events, hackathons, and the vibrant IEDC community in action.
+            </p>
         </div>
 
-        <div class="max-w-7xl mx-auto px-4 pb-32">
-            <div id="loader" class="text-center py-20">
-                <i data-lucide="loader-2" class="w-10 h-10 text-indigo-500 animate-spin mx-auto mb-4"></i>
-                <p class="text-gray-500">Loading photos...</p>
+        <div id="galleryContainer" class="max-w-7xl mx-auto relative z-10">
+            <div class="text-center py-20">
+                <i data-lucide="loader-2" class="w-10 h-10 text-white/30 animate-spin mx-auto mb-4"></i>
+                <p class="text-white/40 text-xs font-bold uppercase tracking-widest">Loading Albums...</p>
             </div>
-            <div id="galleryGrid" class="masonry hidden"></div>
-            <div id="emptyState" class="hidden text-center py-20 text-gray-500">No photos uploaded yet.</div>
         </div>
+
     </main>
 
-    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-        <button class="absolute top-6 right-6 text-white/50 hover:text-white transition"><i data-lucide="x" class="w-10 h-10"></i></button>
-        <img id="lightboxImg" class="max-h-[85vh] max-w-[90vw] object-contain rounded-lg shadow-2xl border border-white/10">
-        <div id="lightboxCaption" class="absolute bottom-10 text-center w-full text-white/90 font-medium text-lg px-4"></div>
+    <div id="imageModal" class="fixed inset-0 z-[999] hidden flex items-center justify-center p-4 bg-black/90 opacity-0 transition-opacity duration-300">
+        <button onclick="closeImageModal()" class="absolute top-6 right-6 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors z-10 border border-white/20">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+        <img id="modalImage" src="" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl border border-white/10 transform scale-95 transition-transform duration-300">
     </div>
 
-    <footer class="bg-[#020202] pt-16 pb-8 border-t border-white/5 relative z-10 mt-auto">
+    <footer class="glass-panel rounded-none border-x-0 border-b-0 pt-20 pb-10 relative z-10 mt-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                <div class="lg:col-span-2">
-                    <span class="text-2xl font-bold text-white">MET'S IEDC</span>
-                    <p class="text-gray-500 mt-4 text-sm leading-relaxed max-w-md">
-                        Fostering innovation and entrepreneurship among students, supported by Kerala Startup Mission.
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+                <div class="md:col-span-5">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="text-2xl font-display font-bold text-white tracking-widest uppercase">MET'S IEDC.</span>
+                    </div>
+                    <p class="text-white/50 text-sm leading-relaxed max-w-sm font-light tracking-wide">
+                        Fostering a culture of innovation and entrepreneurship among students at MET'S School of Engineering.
                     </p>
                 </div>
-                <div>
-                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h3>
-                    <ul class="space-y-3 text-sm text-gray-500">
-                        <li><a href="index.html" class="hover:text-indigo-400 transition-colors">Home</a></li>
-                        <li><a href="about.html" class="hover:text-indigo-400 transition-colors">About Us</a></li>
-                        <li><a href="event.html" class="hover:text-indigo-400 transition-colors">Events & Gallery</a></li>
-                        <li><a href="news.html" class="hover:text-indigo-400 transition-colors">News</a></li>
+                
+                <div class="md:col-span-3">
+                    <h3 class="text-[10px] font-bold text-white/80 mb-6 uppercase tracking-[0.2em]">Navigation</h3>
+                    <ul class="space-y-4 text-sm font-light text-white/50 tracking-wide">
+                        <li><a href="about.html" class="hover:text-white transition-colors">About Story</a></li>
+                        <li><a href="event.html" class="hover:text-white transition-colors">Latest Events</a></li>
+                        <li><a href="initiatives.html" class="hover:text-white transition-colors">Our Initiatives</a></li>
+                        <li><a href="https://startupmission.kerala.gov.in/" target="_blank" class="hover:text-white transition-colors">Kerala Startup Mission</a></li>
                     </ul>
                 </div>
-                <div>
-                    <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contact</h3>
-                    <div class="space-y-3 text-sm text-gray-500">
-                        <p class="flex items-center"><i class="fas fa-envelope mr-3 text-indigo-500"></i>metsenggiedc@gmail.com</p>
-                        <p class="flex items-center"><i class="fas fa-phone mr-3 text-indigo-500"></i>+91 7306226875</p>
+                
+                <div class="md:col-span-4">
+                    <h3 class="text-[10px] font-bold text-white/80 mb-6 uppercase tracking-[0.2em]">Connect</h3>
+                    <div class="space-y-4 text-sm font-light text-white/50 tracking-wide mb-8">
+                        <p>MET'S School of Engineering<br>Mala, Thrissur</p>
+                        <p class="hover:text-white transition-colors cursor-pointer">+91 7306226875</p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/MetsIedc" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600">
-                <p>© 2026 IEDC MET'S SCHOOL OF ENGINEERING.</p>
-                <p>Designed for Innovation</p>
+            
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-light text-white/40 tracking-widest uppercase">
+                <p>© <span id="year">2026</span> MET'S IEDC. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms</a>
+                </div>
             </div>
         </div>
     </footer>
 
-    <div class="fixed bottom-0 left-0 w-full bg-[#0a0c0f]/90 backdrop-blur-lg border-t border-white/10 z-[100] md:hidden pb-safe">
+    <div class="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-xl border-t border-white/10 z-[100] md:hidden pb-safe">
         <div class="flex justify-around items-center px-2 py-3">
             <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
                 <i class="fas fa-home text-lg"></i>
                 <span class="text-[9px] uppercase tracking-wider font-medium">Home</span>
             </a>
-            <a href="event.html" class="flex flex-col items-center gap-1 text-white">
+            <a href="event.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
                 <i class="far fa-calendar-alt text-lg"></i>
                 <span class="text-[9px] uppercase tracking-wider font-medium">Events</span>
             </a>
-            <a href="initiatives.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
-                <i class="fas fa-rocket text-lg"></i>
-                <span class="text-[9px] uppercase tracking-wider font-medium">Initiatives</span>
+            <a href="events.html" class="flex flex-col items-center gap-1 text-glow-orange">
+                <i class="fas fa-image text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-bold">Gallery</span>
             </a>
             <a href="login.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
                 <i class="far fa-user text-lg"></i>
@@ -234,178 +296,156 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('year').textContent = new Date().getFullYear();
+
             // Mobile Menu Logic
             const btn = document.getElementById('mobile-menu-button');
             const menu = document.getElementById('mobile-menu');
             const closeBtn = document.getElementById('close-mobile-menu');
 
-            function toggleMenu() {
+            function toggleMobileMenu() {
                 if(menu.classList.contains('translate-x-full')) {
                     menu.classList.remove('translate-x-full');
+                    menu.classList.add('translate-x-0');
                     document.body.style.overflow = 'hidden';
                 } else {
                     menu.classList.add('translate-x-full');
+                    menu.classList.remove('translate-x-0');
                     document.body.style.overflow = '';
                 }
             }
-
-            if(btn) btn.addEventListener('click', toggleMenu);
-            if(closeBtn) closeBtn.addEventListener('click', toggleMenu);
             
-            // Close menu when a link is clicked
-            const menuLinks = menu.querySelectorAll('a');
-            menuLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    if (!menu.classList.contains('translate-x-full')) toggleMenu();
-                });
+            if(btn) btn.addEventListener('click', toggleMobileMenu);
+            if(closeBtn) closeBtn.addEventListener('click', toggleMobileMenu);
+
+            // Navbar Scroll
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('navbar');
+                if (window.scrollY > 50) { 
+                    nav.classList.add('scrolled-nav');
+                } else { 
+                    nav.classList.remove('scrolled-nav');
+                }
             });
+
+            lucide.createIcons();
         });
+
+        // Image Modal Logic
+        function openImageModal(imgSrc) {
+            const modal = document.getElementById('imageModal');
+            const img = document.getElementById('modalImage');
+            img.src = imgSrc;
+            modal.classList.remove('hidden');
+            
+            // Trigger animation
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                img.classList.remove('scale-95');
+                img.classList.add('scale-100');
+            }, 10);
+            
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            const img = document.getElementById('modalImage');
+            
+            modal.classList.add('opacity-0');
+            img.classList.remove('scale-100');
+            img.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                img.src = '';
+                document.body.style.overflow = '';
+            }, 300); // Matches transition duration
+        }
     </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        
-        lucide.createIcons();
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
-          apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
-          authDomain: "metsiedc-3010e.firebaseapp.com",
-          databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
-          projectId: "metsiedc-3010e",
-          storageBucket: "metsiedc-3010e.firebasestorage.app",
-          messagingSenderId: "954403413150",
-          appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
-          measurementId: "G-6E7EK0D7JG"
+            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+            authDomain: "metsiedc-3010e.firebaseapp.com",
+            databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+            projectId: "metsiedc-3010e",
+            storageBucket: "metsiedc-3010e.firebasestorage.app",
+            messagingSenderId: "954403413150",
+            appId: "1:954403413150:web:2523a3377f15a3d6002f8f"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Convert Drive Links to Public Image format
-        function getOptimizedDriveUrl(url) {
-            if (!url) return null;
-            let fileId = null;
-            if (url.includes('id=')) {
-                fileId = url.split('id=')[1].split('&')[0];
-            } else if (url.includes('/d/')) {
-                fileId = url.split('/d/')[1].split('/')[0];
-            }
-            if (fileId) {
-                return `https://lh3.googleusercontent.com/d/$${fileId}`;
-            }
-            return url; 
-        }
-
-        async function fetchGallery() {
+        async function loadGallery() {
+            const container = document.getElementById('galleryContainer');
             try {
                 const q = query(collection(db, "gallery"), orderBy("timestamp", "desc"));
                 const snap = await getDocs(q);
                 
-                const grid = document.getElementById('galleryGrid');
-                const loader = document.getElementById('loader');
-                
-                if (snap.empty) {
-                    loader.classList.add('hidden');
-                    document.getElementById('emptyState').classList.remove('hidden');
+                if(snap.empty) {
+                    container.innerHTML = '<div class="text-center text-white/40 py-20 text-xs uppercase tracking-widest font-bold border border-dashed border-white/10 rounded-3xl mx-4">No gallery albums found.</div>';
                     return;
                 }
                 
-                grid.innerHTML = "";
-                let hasValidImages = false;
-
+                let html = '';
                 snap.forEach(doc => {
                     const data = doc.data();
                     
-                    if (!data.imageUrl) return;
+                    // The script uploads images as an array of URLs
+                    if(!data.images || data.images.length === 0) return;
+                    
+                    let imagesHtml = '';
+                    data.images.forEach(url => {
+                        imagesHtml += `
+                            <div class="aspect-square rounded-2xl overflow-hidden relative group cursor-pointer border border-white/10 bg-black/50" onclick="openImageModal('${url}')">
+                                <img src="${url}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Image+Error&background=111&color=fff'">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                    <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 transform scale-50 group-hover:scale-100 transition-transform duration-300 delay-100">
+                                        <i data-lucide="maximize-2" class="w-5 h-5 text-white"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
 
-                    const safeUrl = getOptimizedDriveUrl(data.imageUrl);
+                    const albumDate = data.date ? new Date(data.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) : 'Recent Event';
 
-                    const item = document.createElement('div');
-                    item.className = "photo-card group";
-                    item.innerHTML = `
-                        <img src="${safeUrl}" loading="lazy" alt="${data.title || 'Photo'}" 
-                             onerror="this.parentElement.style.display='none';">
-                        <div class="photo-overlay">
-                            <h3 class="text-white font-bold text-lg">${data.title || 'Event Photo'}</h3>
-                            <p class="text-sm text-indigo-300 font-medium mt-1">${data.date || ''}</p>
+                    html += `
+                        <div class="mb-16 glass-panel p-6 md:p-10 border-glow-orange/20 group">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 border-b border-white/10 pb-5 gap-4">
+                                <div>
+                                    <h3 class="text-2xl md:text-3xl font-display font-bold text-white tracking-tight uppercase">${data.title}</h3>
+                                    <p class="text-white/40 text-[10px] uppercase tracking-widest font-bold mt-2 flex items-center gap-2">
+                                        <i data-lucide="calendar" class="w-3 h-3"></i> ${albumDate}
+                                    </p>
+                                </div>
+                                <span class="px-4 py-1.5 bg-white/5 border border-white/10 rounded-xl text-[10px] text-white/70 uppercase tracking-widest font-bold shadow-inner">
+                                    ${data.images.length} Photos
+                                </span>
+                            </div>
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                                ${imagesHtml}
+                            </div>
                         </div>
                     `;
-                    
-                    item.onclick = () => {
-                        const lb = document.getElementById('lightbox');
-                        document.getElementById('lightboxImg').src = safeUrl;
-                        document.getElementById('lightboxCaption').textContent = data.title || '';
-                        lb.style.display = "flex";
-                        setTimeout(() => lb.classList.add('active'), 10);
-                    };
-
-                    grid.appendChild(item);
-                    hasValidImages = true;
                 });
                 
-                loader.classList.add('hidden');
+                container.innerHTML = html;
+                lucide.createIcons();
                 
-                if (hasValidImages) {
-                    grid.classList.remove('hidden');
-                } else {
-                    document.getElementById('emptyState').classList.remove('hidden');
-                    document.getElementById('emptyState').innerText = "No valid photos found.";
-                }
-
             } catch(e) {
-                console.error("Gallery Error:", e);
-                document.getElementById('loader').innerText = "Error loading gallery.";
+                console.error(e);
+                container.innerHTML = '<div class="text-center text-red-400 py-20 text-xs uppercase tracking-widest font-bold">Error loading gallery.</div>';
             }
         }
 
-        window.closeLightbox = () => {
-            const lb = document.getElementById('lightbox');
-            lb.classList.remove('active');
-            setTimeout(() => lb.style.display = "none", 300);
-        };
-
-        fetchGallery();
-    </script>
-
-    <script>
-        let newWorker;
-        const updateBanner = document.getElementById('pwa-update-banner');
-        const refreshBtn = document.getElementById('pwa-refresh-btn');
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').then(registration => {
-                    console.log('ServiceWorker registered');
-
-                    registration.addEventListener('updatefound', () => {
-                        newWorker = registration.installing;
-                        newWorker.addEventListener('statechange', () => {
-                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                updateBanner.classList.remove('hidden');
-                                updateBanner.classList.add('flex');
-                            }
-                        });
-                    });
-                });
-
-                let refreshing;
-                navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    if (refreshing) return;
-                    refreshing = true;
-                    window.location.reload();
-                });
-            });
-        }
-
-        if (refreshBtn) {
-            refreshBtn.addEventListener('click', () => {
-                if (newWorker) {
-                    newWorker.postMessage({ action: 'skipWaiting' });
-                }
-                updateBanner.classList.add('hidden'); 
-            });
-        }
+        // Initialize fetching
+        loadGallery();
     </script>
 </body>
 </html>
