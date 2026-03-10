@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | MET'S IEDC</title>
-  <link rel="icon" type="image/png" href="assets/images/logos/MSEM-removebg-preview.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050505">
-    <link rel="apple-touch-icon" href="assets/images/logos/MSEM-removebg-preview.png">
+    <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
+    <link rel="icon" type="image/jpeg" href="assets/images/logos/MSEM.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         tailwind.config = {
@@ -32,7 +34,8 @@
                             orange: '#ea580c',
                             blue: '#2563eb',
                             green: '#22c55e',
-                            red: '#ef4444'
+                            red: '#ef4444',
+                            gold: '#fbbf24'
                         }
                     },
                     animation: {
@@ -61,6 +64,7 @@
             overflow-x: hidden; 
         }
 
+        /* Glassmorphism Utilities */
         .glass-panel {
             background: linear-gradient(145deg, rgba(30, 30, 35, 0.8) 0%, rgba(15, 15, 20, 0.6) 100%);
             backdrop-filter: blur(24px);
@@ -72,6 +76,7 @@
             border-radius: 24px;
         }
 
+        /* Input styling */
         .glass-input {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -88,8 +93,18 @@
         .glass-input::placeholder { color: rgba(255, 255, 255, 0.3); font-weight: 400; }
         select.glass-input option { color: #1c2833; background: white; }
 
-        .sidebar-link { transition: all 0.2s ease; border-left: 3px solid transparent; cursor: pointer; font-weight: 500; color: rgba(255,255,255,0.5);}
-        .sidebar-link:hover { color: #ffffff; background: rgba(255,255,255,0.05); }
+        /* Sidebar Links */
+        .sidebar-link { 
+            transition: all 0.2s ease; 
+            border-left: 3px solid transparent; 
+            cursor: pointer; 
+            font-weight: 500; 
+            color: rgba(255,255,255,0.5);
+        }
+        .sidebar-link:hover { 
+            color: #ffffff; 
+            background: rgba(255,255,255,0.05); 
+        }
         .sidebar-link.active { 
             color: #ffffff; 
             background-color: rgba(147, 51, 234, 0.15);
@@ -97,17 +112,31 @@
             box-shadow: inset 0 0 20px rgba(147, 51, 234, 0.1);
         }
 
-        .btn-light { background: #ffffff; color: #050505; transition: all 0.3s ease; }
-        .btn-light:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(255,255,255,0.2); }
+        /* Buttons */
+        .btn-light {
+            background: #ffffff;
+            color: #050505;
+            transition: all 0.3s ease;
+        }
+        .btn-light:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
+        }
         .btn-light:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         
         .btn-primary {
             background: linear-gradient(135deg, #9333ea 0%, #4f46e5 100%);
-            color: #ffffff; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
+            color: #ffffff;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
         }
-        .btn-primary:hover { box-shadow: 0 0 20px rgba(147, 51, 234, 0.5); transform: translateY(-2px); }
+        .btn-primary:hover {
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
+            transform: translateY(-2px);
+        }
         .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
 
+        /* Custom Checkbox */
         .custom-checkbox { 
             appearance: none; background-color: rgba(255,255,255,0.05); width: 1.25em; height: 1.25em; 
             border: 1px solid rgba(255,255,255,0.2); border-radius: 0.25em; cursor: pointer; 
@@ -116,6 +145,7 @@
         .custom-checkbox:checked { background-color: #9333ea; border-color: #9333ea; }
         .custom-checkbox:checked::before { content: "✔"; color: #ffffff; font-size: 0.8em; font-weight: bold; }
 
+        /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; } 
         ::-webkit-scrollbar-track { background: transparent; } 
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
@@ -124,6 +154,15 @@
         .spinner { border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 50%; border-top: 2px solid #fff; width: 16px; height: 16px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        /* QR Scanner Overrides */
+        #qr-reader { border: none !important; border-radius: 1rem; overflow: hidden; }
+        #qr-reader__scan_region { background: #000; }
+        #qr-reader__dashboard_section_csr button { 
+            background: #2563eb !important; color: white !important; padding: 8px 16px; 
+            border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; 
+        }
+
+        /* Print formatting */
         @media print {
             body { background: white !important; color: black !important; }
             * { color: black !important; background: transparent !important; text-shadow: none !important; box-shadow: none !important; }
@@ -138,21 +177,6 @@
     <div class="ambient-glow fixed bottom-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-glow-blue/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow" style="animation-delay: 2s;"></div>
     <div class="ambient-glow fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 z-0 pointer-events-none"></div>
 
-    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] glass-panel rounded-full px-5 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300 border border-glow-purple/50 shadow-[0_0_20px_rgba(147,51,234,0.3)] no-print">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-glow-purple/20 flex items-center justify-center text-glow-purple">
-                <i class="fas fa-cloud-download-alt"></i>
-            </div>
-            <div class="flex flex-col">
-                <span class="text-white text-sm font-semibold">Update Available</span>
-                <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
-            </div>
-        </div>
-        <button id="pwa-refresh-btn" class="ml-auto bg-white text-black text-xs font-bold px-4 py-2 rounded-full transition-colors hover:bg-gray-200">
-            Refresh
-        </button>
-    </div>
-
     <aside class="w-64 border-r border-white/10 flex-shrink-0 hidden md:flex flex-col h-full z-20 bg-[#0a0a0c]/50 backdrop-blur-xl">
         <div class="p-6 flex items-center gap-3">
             <div class="w-8 h-8 rounded-xl bg-glow-purple/20 border border-glow-purple/50 flex items-center justify-center text-glow-purple font-bold shadow-[0_0_15px_rgba(147,51,234,0.3)]">
@@ -161,31 +185,49 @@
             <span class="text-xl font-display font-bold text-white tracking-widest uppercase">Admin</span>
         </div>
 
-        <div class="px-6 py-4">
-            <button onclick="toggleAddUserModal(true)" class="w-full flex items-center justify-between btn-primary px-4 py-3 rounded-xl text-sm font-bold tracking-wider uppercase transition-colors">
-                Add User
-                <div class="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center">
-                    <i data-lucide="plus" class="w-4 h-4"></i>
-                </div>
-            </button>
-        </div>
-
         <nav class="flex-grow px-4 py-2 space-y-1 overflow-y-auto">
-            <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
-            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="users" class="w-4 h-4"></i> Users</button>
-            <button onclick="showTab('inventory')" id="nav-inventory" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="box" class="w-4 h-4"></i> Inventory</button>
-            <button onclick="showTab('logs')" id="nav-logs" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="activity" class="w-4 h-4"></i> Activity Logs</button>
-            <button onclick="showTab('excom')" id="nav-excom" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="shield" class="w-4 h-4"></i> ExCom Tracking</button>
-            <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="clipboard-check" class="w-4 h-4"></i> Attendance</button>
-            <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="award" class="w-4 h-4"></i> Certificates</button>
+            <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+            </button>
+            <button onclick="showTab('scanner')" id="nav-scanner" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-green font-bold">
+                <i data-lucide="scan-line" class="w-4 h-4"></i> QR Scanner
+            </button>
+            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="users" class="w-4 h-4"></i> Users & Points
+            </button>
+            <button onclick="showTab('inventory')" id="nav-inventory" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="box" class="w-4 h-4"></i> Inventory
+            </button>
+            <button onclick="showTab('logs')" id="nav-logs" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="activity" class="w-4 h-4"></i> Activity Logs
+            </button>
+            <button onclick="showTab('excom')" id="nav-excom" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="shield" class="w-4 h-4"></i> ExCom Tracking
+            </button>
+            <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="clipboard-check" class="w-4 h-4"></i> Attendance
+            </button>
+            <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="award" class="w-4 h-4"></i> Certificates
+            </button>
             
             <div class="pt-4 pb-2 px-4 text-[10px] font-bold text-white/30 uppercase tracking-widest">Publish Content</div>
             
-            <button onclick="showTab('notifications')" id="nav-notifications" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-purple font-bold"><i data-lucide="bell-ring" class="w-4 h-4"></i> Send Alert</button>
-            <button onclick="showTab('announcements')" id="nav-announcements" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="bell" class="w-4 h-4"></i> Circulars</button>
-            <button onclick="showTab('news')" id="nav-news" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="newspaper" class="w-4 h-4"></i> News Article</button>
-            <button onclick="showTab('eventForms')" id="nav-eventForms" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="file-plus" class="w-4 h-4"></i> Event Form</button>
-            <button onclick="showTab('gallery')" id="nav-gallery" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="image" class="w-4 h-4"></i> Gallery</button>
+            <button onclick="showTab('notifications')" id="nav-notifications" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-purple font-bold">
+                <i data-lucide="bell-ring" class="w-4 h-4"></i> Send Alert
+            </button>
+            <button onclick="showTab('announcements')" id="nav-announcements" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="bell" class="w-4 h-4"></i> Circulars
+            </button>
+            <button onclick="showTab('news')" id="nav-news" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="newspaper" class="w-4 h-4"></i> News Article
+            </button>
+            <button onclick="showTab('eventForms')" id="nav-eventForms" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="file-plus" class="w-4 h-4"></i> Event Form
+            </button>
+            <button onclick="showTab('gallery')" id="nav-gallery" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="image" class="w-4 h-4"></i> Gallery
+            </button>
         </nav>
 
         <div class="p-6 mt-auto border-t border-white/5">
@@ -208,6 +250,7 @@
         </div>
         <nav class="flex-grow px-4 py-6 space-y-1 overflow-y-auto" id="mobile-nav-links">
             <button onclick="showTab('overview')" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
+            <button onclick="showTab('scanner')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-glow-green font-bold"><i data-lucide="scan-line" class="w-4 h-4"></i> Scanner</button>
             <button onclick="showTab('users')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="users" class="w-4 h-4"></i> Users</button>
             <button onclick="showTab('inventory')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="box" class="w-4 h-4"></i> Inventory</button>
             <button onclick="showTab('logs')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="activity" class="w-4 h-4"></i> Logs</button>
@@ -262,7 +305,7 @@
                     <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-glow-purple/20 blur-3xl rounded-full pointer-events-none"></div>
                     <div class="relative z-10">
                         <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-3 tracking-tight">System <span class="text-gradient-purple">Active</span></h2>
-                        <p class="text-white/50 text-sm md:text-base max-w-md leading-relaxed font-light">Monitor real-time statistics, manage users, and deploy resources across the IEDC platform.</p>
+                        <p class="text-white/50 text-sm md:text-base max-w-md leading-relaxed font-light">Monitor real-time statistics, demographics, and active resources across the IEDC platform.</p>
                     </div>
                 </div>
 
@@ -288,46 +331,79 @@
                         <h3 class="text-4xl md:text-5xl font-display font-bold text-white relative z-10" id="activeFormsCount">0</h3>
                     </div>
                 </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                    <div class="lg:col-span-2 glass-panel p-6 rounded-3xl">
+                        <h3 class="text-xs font-bold text-white/50 uppercase tracking-widest mb-6">Recent Scans & Activity</h3>
+                        <div class="w-full h-64">
+                            <canvas id="activityChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-6 rounded-3xl flex flex-col items-center">
+                        <h3 class="text-xs font-bold text-white/50 uppercase tracking-widest w-full text-left mb-6">User Demographics</h3>
+                        <div class="w-full max-w-[200px] flex-grow flex items-center justify-center">
+                            <canvas id="roleChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="scannerSection" class="tab-content hidden space-y-6 max-w-3xl mx-auto w-full">
+                <div class="glass-panel p-8 md:p-10 rounded-3xl border-glow-green/30">
+                    <div class="flex justify-between items-center border-b border-white/10 pb-5 mb-8">
+                        <div>
+                            <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase flex items-center gap-3">
+                                <i data-lucide="scan" class="text-glow-green w-6 h-6"></i> Digital ID Scanner
+                            </h2>
+                            <p class="text-white/50 text-sm font-light mt-1">Scan student QR codes to log attendance and automatically award +50 points.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Select Event to Log</label>
+                        <input type="text" id="scannerEventName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. CodeSprint 2026 Day 1" required>
+                    </div>
+
+                    <div id="qr-reader" class="w-full bg-black/50 border-2 border-dashed border-white/20 mb-6 min-h-[300px]"></div>
+
+                    <div id="scannerStatus" class="hidden p-4 rounded-xl text-center font-bold text-sm tracking-widest uppercase"></div>
+
+                    <div class="flex gap-4">
+                        <button onclick="startScanner()" id="btnStartScan" class="flex-1 btn-primary py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">Start Camera</button>
+                        <button onclick="stopScanner()" id="btnStopScan" class="hidden flex-1 bg-white/10 hover:bg-white/20 text-white py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">Stop Camera</button>
+                    </div>
+                </div>
             </div>
 
             <div id="usersSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
                 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                     <div>
                         <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">User Directory</h2>
-                        <p class="text-white/50 text-xs font-light tracking-wide flex items-center gap-3 mt-1">
-                            <span class="inline-flex items-center justify-center px-3 py-1 bg-white/10 border border-white/20 rounded-full text-white text-[9px] font-bold uppercase tracking-widest">
-                                Total: <span id="manageUsersTotalCount" class="ml-1 text-glow-purple">0</span>
-                            </span>
-                        </p>
                     </div>
                     <div class="flex gap-3 w-full lg:w-auto">
                         <div class="relative flex-grow">
                             <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search Name or Email..." class="glass-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-light">
                             <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40"></i>
                         </div>
-                        <button onclick="forceRefreshUsers(this)" class="flex-shrink-0 bg-white/5 hover:bg-white/10 border border-white/20 text-white px-4 py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
-                            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                        </button>
                         <button onclick="toggleAddUserModal(true)" class="flex-shrink-0 btn-primary px-5 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold flex items-center gap-2">
                             <i data-lucide="user-plus" class="w-4 h-4"></i> Add
                         </button>
                     </div>
                 </div>
 
-                <div class="p-4 bg-glow-blue/10 border border-glow-blue/30 rounded-xl flex items-start gap-3">
-                    <i data-lucide="info" class="w-5 h-5 text-glow-blue mt-0.5 flex-shrink-0"></i>
-                    <p class="text-[10px] md:text-xs text-white/80 font-light leading-relaxed">
-                        <strong>Missing users?</strong> Click "Add" and use the <strong>Sync Existing</strong> tab to link an Auth UID manually.
-                    </p>
-                </div>
-
                 <div class="glass-panel rounded-2xl overflow-x-auto w-full">
-                    <table class="w-full text-left min-w-[600px]">
+                    <table class="w-full text-left min-w-[700px]">
                         <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50">
-                            <tr><th class="px-6 py-5">Name</th><th class="px-6">Email / Method</th><th class="px-6">Role</th><th class="text-center px-6">Actions</th></tr>
+                            <tr>
+                                <th class="px-6 py-5">Name</th>
+                                <th class="px-6">Email</th>
+                                <th class="px-6 text-center">Points</th>
+                                <th class="px-6">Role</th>
+                                <th class="text-center px-6">Actions</th>
+                            </tr>
                         </thead>
                         <tbody id="userListBody" class="divide-y divide-white/5 text-sm font-light text-white/90">
-                            <tr><td colspan="4" class="text-center py-8 text-white/30 text-xs tracking-widest uppercase font-bold">Loading users...</td></tr>
+                            <tr><td colspan="5" class="text-center py-8 text-white/30 text-xs tracking-widest uppercase font-bold">Loading users...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -372,7 +448,7 @@
                         <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10">
                             <tr><th class="px-6 py-5">Timestamp</th><th class="px-6">Action</th><th class="px-6">Details</th><th class="px-6">Admin</th></tr>
                         </thead>
-                        <tbody id="logsListBody" class="divide-y divide-white/5 text-white/80"></tbody>
+                        <tbody id="logsListBody" class="divide-y divide-white/5 text-white/80 text-sm"></tbody>
                     </table>
                 </div>
             </div>
@@ -398,7 +474,7 @@
 
             <div id="attendanceSection" class="tab-content hidden space-y-6 max-w-5xl mx-auto w-full">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Attendance</h2>
+                    <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Manual Attendance</h2>
                     <div class="flex gap-3">
                         <button onclick="document.getElementById('reportsModal').classList.remove('hidden')" class="bg-white/10 border border-white/20 text-white px-5 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold hover:bg-white/20">Reports</button>
                         <button onclick="submitAttendance()" class="btn-primary px-5 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold">Save List</button>
@@ -494,10 +570,62 @@
                             <textarea id="alertContent" rows="4" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Provide the details..." required></textarea>
                         </div>
                         <div class="pt-4">
-                            <button type="submit" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                            <button type="submit" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">
                                 Broadcast Alert
                             </button>
                         </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
+                <div class="glass-panel p-8 md:p-10 rounded-3xl">
+                    <div class="border-b border-white/10 pb-5 mb-8">
+                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Post Circular</h2>
+                        <p class="text-white/50 text-sm font-light">Posts a public text announcement to the main website.</p>
+                    </div>
+                    <form id="announcementForm" class="space-y-6">
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Subject</label>
+                            <input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Important Notice" required>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Details</label>
+                            <textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Information goes here..." required></textarea>
+                        </div>
+                        <button type="submit" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all mt-2">Publish Circular</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
+                <div class="glass-panel p-8 md:p-10 rounded-3xl">
+                    <div class="border-b border-white/10 pb-5 mb-8">
+                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Post News</h2>
+                    </div>
+                    <form id="newsForm" class="space-y-6">
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Headline</label>
+                            <input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Major Announcement" required>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Content</label>
+                            <textarea id="newsContent" rows="5" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm leading-relaxed" placeholder="Write the full story here..." required></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Publish Date</label>
+                                <input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" required>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Cover Image</label>
+                                <label class="glass-input w-full rounded-xl py-3.5 px-4 text-sm text-center cursor-pointer block border-dashed hover:bg-white/5 transition-colors">
+                                    <span id="newsFileName" class="text-white/50"><i class="fas fa-upload mr-2"></i> Browse File</span>
+                                    <input type="file" id="newsImageInput" class="hidden" onchange="handleNewsImage(event)">
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" id="postNewsBtn" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all mt-4">Publish News</button>
                     </form>
                 </div>
             </div>
@@ -554,52 +682,21 @@
                 </div>
             </div>
 
-            <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
-                <div class="glass-panel p-8 md:p-10 rounded-3xl">
-                    <div class="border-b border-white/10 pb-5 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Post News</h2>
-                    </div>
-                    <form id="newsForm" class="space-y-6">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Headline</label><input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Major Announcement" required></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Content</label><textarea id="newsContent" rows="5" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm leading-relaxed" placeholder="Write the full story here..." required></textarea></div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Publish Date</label><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" required></div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Cover Image</label>
-                                <label class="glass-input w-full rounded-xl py-3.5 px-4 text-sm text-center cursor-pointer block border-dashed hover:bg-white/5 transition-colors">
-                                    <span id="newsFileName" class="text-white/50"><i class="fas fa-upload mr-2"></i> Browse File</span>
-                                    <input type="file" id="newsImageInput" class="hidden" onchange="handleNewsImage(event)">
-                                </label>
-                            </div>
-                        </div>
-                        <button type="submit" id="postNewsBtn" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all mt-4">Publish News</button>
-                    </form>
-                </div>
-            </div>
-
-            <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
-                <div class="glass-panel p-8 md:p-10 rounded-3xl">
-                    <div class="border-b border-white/10 pb-5 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Post Circular</h2>
-                        <p class="text-white/50 text-sm font-light">Posts a public text announcement to the main website.</p>
-                    </div>
-                    <form id="announcementForm" class="space-y-6">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Subject</label><input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Important Notice" required></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Details</label><textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Information goes here..." required></textarea></div>
-                        <button type="submit" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all mt-2">Publish Circular</button>
-                    </form>
-                </div>
-            </div>
-
             <div id="gallerySection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
                     <div class="border-b border-white/10 pb-5 mb-8">
                         <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Upload Gallery</h2>
                     </div>
                     <form id="galleryForm" class="space-y-6">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Album Title</label><input type="text" id="galleryTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Event Name"></div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Album Title</label>
+                            <input type="text" id="galleryTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Event Name" required>
+                        </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Date</label><input type="date" id="galleryDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm"></div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Date</label>
+                                <input type="date" id="galleryDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm">
+                            </div>
                             <div>
                                 <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Batch Upload</label>
                                 <label class="glass-input w-full rounded-xl py-3.5 px-4 text-sm text-center cursor-pointer block border-dashed hover:bg-white/5 transition-colors">
@@ -677,8 +774,14 @@
             <form id="adminAddUserForm" class="space-y-5">
                 <input type="hidden" id="addUserMode" value="create">
                 
-                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Full Name</label><input type="text" id="newUserName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="John Doe" required></div>
-                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Email Address</label><input type="email" id="newUserEmail" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="student@example.com" required></div>
+                <div>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Full Name</label>
+                    <input type="text" id="newUserName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="John Doe" required>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Email Address</label>
+                    <input type="email" id="newUserEmail" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="student@example.com" required>
+                </div>
                 
                 <div id="passwordFieldGroup">
                     <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Temp Password</label>
@@ -754,12 +857,36 @@
         </div>
     </div>
 
-  <script>
-        // GLOBAL UI LOGIC
+    <div id="awardPointsModal" class="fixed inset-0 bg-[#050505]/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl border-glow-gold/30">
+            <h2 class="text-xl font-bold text-white mb-2 uppercase tracking-wider">Award Points</h2>
+            <p class="text-[10px] text-white/50 uppercase tracking-widest mb-6 border-b border-white/10 pb-4">To: <span id="awardUserNameDisplay" class="text-glow-gold font-bold">Student</span></p>
+            
+            <form id="awardPointsForm" class="space-y-6">
+                <input type="hidden" id="awardUserId">
+                <div>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Points to Add</label>
+                    <input type="number" id="pointsAmount" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm font-display font-bold text-glow-gold" placeholder="e.g. 500" required>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Reason / Event Name</label>
+                    <input type="text" id="pointsReason" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="e.g. Hackathon Winner" required>
+                </div>
+                
+                <div id="awardStatus" class="hidden text-[10px] text-center p-3 rounded-lg font-bold uppercase"></div>
+
+                <div class="pt-4 flex gap-3">
+                    <button type="button" onclick="document.getElementById('awardPointsModal').classList.add('hidden')" class="flex-1 bg-white/5 hover:bg-white/10 text-white py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button>
+                    <button type="submit" id="submitAwardBtn" class="flex-1 bg-glow-gold hover:bg-yellow-400 text-black py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors shadow-[0_0_15px_rgba(251,191,36,0.4)]">Award Points</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const menuToggleBtn = document.getElementById('mobile-menu-toggle');
             const closeBtn = document.getElementById('close-mobile-sidebar');
-            
             if(menuToggleBtn) menuToggleBtn.addEventListener('click', window.toggleMobileSidebar);
             if(closeBtn) closeBtn.addEventListener('click', window.toggleMobileSidebar);
         });
@@ -778,53 +905,47 @@
 
         window.showTab = (t) => { 
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); 
-            document.getElementById(t+'Section').classList.remove('hidden'); 
-            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active')); 
+            const sec = document.getElementById(t+'Section');
+            if(sec) sec.classList.remove('hidden'); 
             
+            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active')); 
             const activeDesktop = document.getElementById('nav-'+t);
             if(activeDesktop) activeDesktop.classList.add('active');
 
             let title = t.charAt(0).toUpperCase() + t.slice(1);
+            if(t === 'users') title = "Users & Points";
             if(t === 'eventForms') title = "Forms";
             if(t === 'excom') title = "ExCom";
             document.getElementById('headerTitle').textContent = title;
             
             const menu = document.getElementById('mobile-sidebar');
-            if(menu && !menu.classList.contains('-translate-x-full')) {
-                window.toggleMobileSidebar();
+            if(menu && !menu.classList.contains('-translate-x-full')) { 
+                window.toggleMobileSidebar(); 
+            }
+            if(t !== 'scanner' && window.html5QrcodeScanner) { 
+                window.stopScanner(); 
             }
         };
 
         window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
         window.toggleEditUserModal = (s) => document.getElementById('editUserModal').classList.toggle('hidden', !s);
         window.toggleAttCheck = (id) => { const c = document.getElementById('att-'+id); c.checked = !c.checked; };
-
-      window.openExcomAttendanceModal = () => {
-            document.getElementById('excomMeetingTitle').value = '';
-            document.getElementById('excomMeetingDate').value = '';
-            const btn = document.getElementById('saveExcomBtn');
-            btn.disabled = false;
-            btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log';
-            document.querySelectorAll('.excom-status-select').forEach(s => s.value = 'Absent');
-            document.getElementById('excomModal').classList.remove('hidden');
-            lucide.createIcons();
-        };
         
         window.switchAddMode = (mode) => {
             document.getElementById('addUserMode').value = mode;
             if(mode === 'create') {
                 document.getElementById('tabCreateNew').className = "flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg bg-white/10 text-white transition-all";
                 document.getElementById('tabSyncExisting').className = "flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg text-white/40 hover:text-white transition-all";
-                document.getElementById('passwordFieldGroup').classList.remove('hidden');
+                document.getElementById('passwordFieldGroup').classList.remove('hidden'); 
                 document.getElementById('uidFieldGroup').classList.add('hidden');
-                document.getElementById('newUserPassword').required = true;
+                document.getElementById('newUserPassword').required = true; 
                 document.getElementById('newUserUid').required = false;
             } else {
                 document.getElementById('tabSyncExisting').className = "flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg bg-white/10 text-white transition-all";
                 document.getElementById('tabCreateNew').className = "flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg text-white/40 hover:text-white transition-all";
-                document.getElementById('passwordFieldGroup').classList.add('hidden');
+                document.getElementById('passwordFieldGroup').classList.add('hidden'); 
                 document.getElementById('uidFieldGroup').classList.remove('hidden');
-                document.getElementById('newUserPassword').required = false;
+                document.getElementById('newUserPassword').required = false; 
                 document.getElementById('newUserUid').required = true;
             }
         };
@@ -842,38 +963,39 @@
             }
         };
 
+        window.prepareAwardPoints = (id, name) => {
+            document.getElementById('awardUserId').value = id;
+            document.getElementById('awardUserNameDisplay').textContent = name;
+            document.getElementById('pointsAmount').value = '';
+            document.getElementById('pointsReason').value = '';
+            document.getElementById('awardStatus').classList.add('hidden');
+            document.getElementById('awardPointsModal').classList.remove('hidden');
+        };
+
         window.printLogs = () => {
             const logsTableContent = document.getElementById('logsListBody').innerHTML;
-            if (!logsTableContent || logsTableContent.trim() === '') {
-                alert("No logs available to print.");
-                return;
+            if (!logsTableContent || logsTableContent.trim() === '') { 
+                alert("No logs available to print."); return; 
             }
-
             const printWindow = window.open('', '_blank');
             printWindow.document.write(`
                 <html>
                 <head>
-                    <title>System Logs - MET'S IEDC</title>
+                    <title>System Logs</title>
                     <style>
-                        body { font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; padding: 40px; color: #000; background: #fff;}
-                        h2 { text-transform: uppercase; letter-spacing: 2px; color: #000; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 5px; }
-                        .meta { font-size: 12px; color: #444; margin-bottom: 30px; font-style: italic; }
-                        table { width: 100%; border-collapse: collapse; font-size: 12px; }
-                        th, td { border: 1px solid #ccc; padding: 12px; text-align: left; color: #000; }
-                        th { background-color: #eee; font-weight: bold; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; color: #000; }
-                        * { color: #000 !important; background: transparent !important; text-shadow: none !important;}
+                        body{font-family:sans-serif;padding:40px;}
+                        table{width:100%;border-collapse:collapse;font-size:12px;}
+                        th,td{border:1px solid #ccc;padding:8px;text-align:left;}
+                        th{background:#eee;}
                     </style>
                 </head>
                 <body>
-                    <h2>Admin System Logs</h2>
-                    <p class="meta">Generated on: ${new Date().toLocaleString()}</p>
+                    <h2>System Logs</h2>
                     <table>
-                        <thead>
-                            <tr><th>Timestamp</th><th>Action</th><th>Details</th><th>Admin User</th></tr>
-                        </thead>
+                        <thead><tr><th>Time</th><th>Action</th><th>Details</th><th>Admin</th></tr></thead>
                         <tbody>${logsTableContent}</tbody>
                     </table>
-                    <script>window.onload = () => { window.print(); setTimeout(() => window.close(), 500); };<\/script>
+                    <script>window.onload=()=>{window.print();setTimeout(()=>window.close(),500)};<\/script>
                 </body>
                 </html>
             `);
@@ -884,16 +1006,30 @@
             const meeting = window.excomMeetingsData.find(m => m.id === id);
             if(!meeting) return;
             const printWindow = window.open('', '_blank');
-            let rows = '';
-            meeting.attendance.forEach(a => { rows += `<tr><td>${a.name}</td><td>${a.status}</td></tr>`; });
+            let rows = ''; 
+            meeting.attendance.forEach(a => { 
+                rows += `<tr><td>${a.name}</td><td>${a.status}</td></tr>`; 
+            });
             printWindow.document.write(`
-                <html><head><title>ExCom Meeting - ${meeting.title}</title>
-                <style>body{font-family:sans-serif; padding:40px;} table{width:100%; border-collapse:collapse;} th,td{border:1px solid #ccc; padding:10px; text-align:left;}</style>
-                </head><body>
-                <h2>${meeting.title}</h2><p>Date: ${meeting.date}</p><p>Logged by: ${meeting.loggedBy}</p>
-                <table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>
-                <script>window.onload=()=>{window.print(); setTimeout(()=>window.close(), 500);};<\/script>
-                </body></html>
+                <html>
+                <head>
+                    <title>Meeting - ${meeting.title}</title>
+                    <style>
+                        body{font-family:sans-serif;padding:40px;}
+                        table{width:100%;border-collapse:collapse;}
+                        th,td{border:1px solid #ccc;padding:10px;text-align:left;}
+                    </style>
+                </head>
+                <body>
+                    <h2>${meeting.title}</h2>
+                    <p>${meeting.date}</p>
+                    <table>
+                        <thead><tr><th>Name</th><th>Status</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                    <script>window.onload=()=>{window.print();setTimeout(()=>window.close(),500)};<\/script>
+                </body>
+                </html>
             `);
             printWindow.document.close();
         };
@@ -902,31 +1038,13 @@
         function escapeHTML(str) { return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)); }
         function safeSetText(id, text) { const el = document.getElementById(id); if (el) el.textContent = text; }
         function generateId() { return Math.random().toString(36).substr(2, 9); }
+
+        Chart.defaults.color = 'rgba(255, 255, 255, 0.5)';
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.05)';
+        Chart.defaults.font.family = "'Inter', sans-serif";
     </script>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, orderBy, onSnapshot, limit, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        lucide.createIcons();
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxkRlHy9nlI54YxlStOCDyzR6X4bXC5VihvQSNngdqn1Tk6H7bEw8d58ko_K6ICp5Kn/exec"; 
-        const firebaseConfig = { apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8", authDomain: "metsiedc-3010e.firebaseapp.com", projectId: "metsiedc-3010e", storageBucket: "metsiedc-3010e.firebasestorage.app", messagingSenderId: "954403413150", appId: "1:954403413150:web:2523a3377f15a3d6002f8f" };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // STATE
-        let newsImageFile = null;
-        let galleryImages = [];
-        let certTemplateBase64 = null;
-        let currentUserEmail = "";
-        let allUsersData = [];
-        window.excomMeetingsData = [];
-        let formCoverImageFile = null;
-
-        // --- FORM BUILDER ---
+    <script>
         let formBuilderFields = [
             { id: generateId(), label: 'Full Name', type: 'text', required: true, options: [] },
             { id: generateId(), label: 'Email Address', type: 'email', required: true, options: [] },
@@ -935,64 +1053,62 @@
         ];
 
         window.handleFormCoverImage = (e) => { 
-            formCoverImageFile = e.target.files[0]; 
-            document.getElementById('formCoverFileName').innerHTML = `<i class="fas fa-check text-green-400 mr-2"></i> ` + formCoverImageFile.name; 
+            window.formCoverImageFile = e.target.files[0]; 
+            document.getElementById('formCoverFileName').innerHTML = `<i class="fas fa-check text-green-400 mr-2"></i> ` + window.formCoverImageFile.name; 
         };
 
-        window.addQuestionField = () => {
-            formBuilderFields.push({ id: generateId(), label: '', type: 'text', required: false, options: [] });
-            window.renderFormBuilderFields();
+        window.addQuestionField = () => { 
+            formBuilderFields.push({ id: generateId(), label: '', type: 'text', required: false, options: [] }); 
+            window.renderFormBuilderFields(); 
         };
-
-        window.removeQuestionField = (id) => {
-            formBuilderFields = formBuilderFields.filter(f => f.id !== id);
-            window.renderFormBuilderFields();
+        
+        window.removeQuestionField = (id) => { 
+            formBuilderFields = formBuilderFields.filter(f => f.id !== id); 
+            window.renderFormBuilderFields(); 
         };
-
-        window.updateField = (id, key, value) => {
-            const field = formBuilderFields.find(f => f.id === id);
-            if (field) {
-                field[key] = value;
-                if (key === 'type') {
-                    if (['radio', 'checkbox', 'select'].includes(value) && (!field.options || field.options.length === 0)) {
-                        field.options = ['Option 1'];
-                    }
-                    window.renderFormBuilderFields();
-                }
-            }
+        
+        window.updateField = (id, key, value) => { 
+            const field = formBuilderFields.find(f => f.id === id); 
+            if (field) { 
+                field[key] = value; 
+                if (key === 'type') { 
+                    if (['radio', 'checkbox', 'select'].includes(value) && (!field.options || field.options.length === 0)) { 
+                        field.options = ['Option 1']; 
+                    } 
+                    window.renderFormBuilderFields(); 
+                } 
+            } 
         };
-
-        window.addFieldOption = (id) => {
-            const field = formBuilderFields.find(f => f.id === id);
-            if (field) {
-                if(!field.options) field.options = [];
-                field.options.push(`Option ${field.options.length + 1}`);
-                window.renderFormBuilderFields();
-            }
+        
+        window.addFieldOption = (id) => { 
+            const field = formBuilderFields.find(f => f.id === id); 
+            if (field) { 
+                if(!field.options) field.options = []; 
+                field.options.push(`Option ${field.options.length + 1}`); 
+                window.renderFormBuilderFields(); 
+            } 
         };
-
-        window.removeFieldOption = (id, optIndex) => {
-            const field = formBuilderFields.find(f => f.id === id);
-            if (field && field.options) {
-                field.options.splice(optIndex, 1);
-                window.renderFormBuilderFields();
-            }
+        
+        window.removeFieldOption = (id, optIndex) => { 
+            const field = formBuilderFields.find(f => f.id === id); 
+            if (field && field.options) { 
+                field.options.splice(optIndex, 1); 
+                window.renderFormBuilderFields(); 
+            } 
         };
-
-        window.updateFieldOption = (id, optIndex, value) => {
-            const field = formBuilderFields.find(f => f.id === id);
-            if (field && field.options) field.options[optIndex] = value;
+        
+        window.updateFieldOption = (id, optIndex, value) => { 
+            const field = formBuilderFields.find(f => f.id === id); 
+            if (field && field.options) field.options[optIndex] = value; 
         };
 
         window.renderFormBuilderFields = () => {
             const container = document.getElementById('questionsContainer');
             if(!container) return;
-            
             container.innerHTML = '';
             
             formBuilderFields.forEach((field, index) => {
                 let optionsHtml = '';
-                
                 if (['radio', 'checkbox', 'select'].includes(field.type)) {
                     let opts = '';
                     if(field.options && field.options.length > 0) {
@@ -1002,36 +1118,40 @@
                                 <div class="flex items-center gap-3 mt-2">
                                     <i data-lucide="${iconType}" class="w-4 h-4 text-white/30 flex-shrink-0"></i>
                                     <input type="text" class="glass-input w-full rounded-lg py-2.5 px-3 text-sm" value="${escapeHTML(opt)}" oninput="updateFieldOption('${field.id}', ${optIdx}, this.value)" placeholder="Option text">
-                                    <button type="button" onclick="removeFieldOption('${field.id}', ${optIdx})" class="text-red-400 hover:text-red-500 transition-colors p-1"><i data-lucide="x" class="w-4 h-4"></i></button>
+                                    <button type="button" onclick="removeFieldOption('${field.id}', ${optIdx})" class="text-red-400 hover:text-red-500 p-1">
+                                        <i data-lucide="x" class="w-4 h-4"></i>
+                                    </button>
                                 </div>
                             `;
                         });
                     }
-                    
                     optionsHtml = `
                         <div class="mt-4 pl-4 border-l-2 border-white/10">
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-wider">Answer Options</label>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Answer Options</label>
                             ${opts}
-                            <button type="button" onclick="addFieldOption('${field.id}')" class="mt-3 text-[10px] uppercase tracking-widest text-glow-blue font-bold flex items-center gap-1.5 hover:text-white transition-colors"><i data-lucide="plus" class="w-3 h-3"></i> Add Option</button>
+                            <button type="button" onclick="addFieldOption('${field.id}')" class="mt-3 text-[10px] uppercase text-glow-blue font-bold flex items-center gap-1.5">
+                                <i data-lucide="plus" class="w-3 h-3"></i> Add Option
+                            </button>
                         </div>
                     `;
                 }
 
                 container.innerHTML += `
-                    <div class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 relative group shadow-sm">
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 relative shadow-sm">
                         <div class="flex justify-between items-center border-b border-white/10 pb-3 mb-4">
-                            <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Question ${index + 1}</span>
-                            <button type="button" onclick="removeQuestionField('${field.id}')" class="text-white/40 hover:text-red-400 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <span class="text-[10px] font-bold text-white/40 uppercase">Question ${index + 1}</span>
+                            <button type="button" onclick="removeQuestionField('${field.id}')" class="text-white/40 hover:text-red-400">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
                         </div>
-                        
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div class="md:col-span-2">
-                                <label class="block text-[10px] font-bold text-white/50 mb-1 uppercase tracking-wider">Question Title</label>
-                                <input type="text" class="glass-input w-full rounded-lg py-3 px-3 text-sm font-medium" value="${escapeHTML(field.label)}" oninput="updateField('${field.id}', 'label', this.value)" placeholder="e.g. What is your department?">
+                                <label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Question Title</label>
+                                <input type="text" class="glass-input w-full rounded-lg py-3 px-3 text-sm" value="${escapeHTML(field.label)}" oninput="updateField('${field.id}', 'label', this.value)">
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-1 uppercase tracking-wider">Answer Type</label>
-                                <select class="glass-input w-full rounded-lg py-3 px-3 text-sm font-medium" onchange="updateField('${field.id}', 'type', this.value)">
+                                <label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Answer Type</label>
+                                <select class="glass-input w-full rounded-lg py-3 px-3 text-sm" onchange="updateField('${field.id}', 'type', this.value)">
                                     <option value="text" ${field.type === 'text' ? 'selected' : ''}>Short Answer</option>
                                     <option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Paragraph</option>
                                     <option value="email" ${field.type === 'email' ? 'selected' : ''}>Email Address</option>
@@ -1043,11 +1163,9 @@
                                 </select>
                             </div>
                         </div>
-                        
                         ${optionsHtml}
-
                         <div class="mt-5 flex items-center justify-end gap-3 border-t border-white/5 pt-4">
-                            <label class="text-[10px] font-bold text-white/60 uppercase tracking-widest cursor-pointer select-none" for="req-${field.id}">Required</label>
+                            <label class="text-[10px] font-bold text-white/60 uppercase cursor-pointer" for="req-${field.id}">Required</label>
                             <input type="checkbox" id="req-${field.id}" class="custom-checkbox" ${field.required ? 'checked' : ''} onchange="updateField('${field.id}', 'required', this.checked)">
                         </div>
                     </div>
@@ -1055,440 +1173,207 @@
             });
             lucide.createIcons();
         };
+    </script>
 
-        // --- AUTH ---
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, orderBy, onSnapshot, limit, getDocs, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        lucide.createIcons();
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhv5--AImomPzvUOw1-fsnBom_YN5jDQq-8wd-L0xPg1J7AZAJumfBeXAEku4zd6I-/exec"; 
+        const firebaseConfig = { apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8", authDomain: "metsiedc-3010e.firebaseapp.com", projectId: "metsiedc-3010e", storageBucket: "metsiedc-3010e.firebasestorage.app", messagingSenderId: "954403413150", appId: "1:954403413150:web:2523a3377f15a3d6002f8f" };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        window.newsImageFile = null;
+        window.galleryImages = [];
+        window.certTemplateBase64 = null;
+        window.currentUserEmail = "";
+        window.allUsersData = [];
+        window.excomMeetingsData = [];
+        window.formCoverImageFile = null;
+        window.db = db;
+
+        let roleChartInstance = null;
+        let activityChartInstance = null;
+
+        // AUTH
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                getDoc(doc(db, "users", user.uid)).then((snapshot) => {
-                    const userData = snapshot.data();
-                    if (snapshot.exists() && userData.role === 'admin') {
-                        currentUserEmail = user.email;
-                        safeSetText('adminEmailDisplay', user.email || 'Admin');
-                        initSync();
-                        window.renderFormBuilderFields(); 
-                    } else { 
-                        alert("Unauthorized. Admin access required."); signOut(auth).then(() => window.location.href = 'admin.html');
-                    }
-                }).catch((err) => console.error(err));
+                const snapshot = await getDoc(doc(db, "users", user.uid));
+                if (snapshot.exists() && snapshot.data().role === 'admin') {
+                    window.currentUserEmail = user.email;
+                    document.getElementById('adminEmailDisplay').textContent = user.email;
+                    initSync();
+                    window.renderFormBuilderFields();
+                } else { 
+                    alert("Unauthorized."); signOut(auth).then(() => window.location.href = 'admin.html');
+                }
             } else { window.location.href = 'admin.html'; }
         });
 
-        document.getElementById('adminLogoutBtn').addEventListener('click', () => signOut(auth));
-        document.getElementById('adminLogoutBtnMobile').addEventListener('click', () => signOut(auth));
-
-        // --- CORE SYNC ---
-        let unsubscribeUsers = null;
-
-        function processAndRenderUsers(snap) {
-            safeSetText('totalUsersCount', snap.size);
-            safeSetText('manageUsersTotalCount', snap.size);
-            
-            allUsersData = [];
-            let certHtml = '', excomHtml = '', attHtml = '', excomModalHtml = '';
-
-            snap.forEach(docSnap => {
-                if (docSnap.id) allUsersData.push({ id: docSnap.id, ...docSnap.data() });
-            });
-
-            allUsersData.sort((a, b) => {
-                const getMs = (val) => {
-                    try {
-                        if (!val) return 0; 
-                        if (typeof val.toMillis === 'function') return val.toMillis();
-                        if (val.seconds) return val.seconds * 1000;
-                        if (typeof val === 'number') return val;
-                        const parsed = new Date(val).getTime();
-                        return isNaN(parsed) ? 0 : parsed;
-                    } catch(e) { return 0; }
-                };
-                return getMs(b.createdAt) - getMs(a.createdAt);
-            });
-
-            allUsersData.forEach(u => {
-                try {
-                    const id = u.id;
-                    const displayHtmlName = escapeHTML(getSafeText(u.name));
-                    const safeRole = u.role || 'student';
-
-                    if(safeRole === 'student' || safeRole === 'excom') {
-                        certHtml += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors"><td class="px-6 py-4 text-center"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${id}" data-name="${displayHtmlName}"></td><td class="text-sm font-medium text-white whitespace-nowrap">${displayHtmlName}</td></tr>`;
-                        attHtml += `<tr class="hover:bg-white/5 cursor-pointer border-b border-white/5 transition-colors" onclick="toggleAttCheck('${id}')"><td class="px-6 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${id}" value="${id}"></td><td class="text-sm font-bold text-white whitespace-nowrap">${displayHtmlName}</td><td class="text-xs text-white/50">${escapeHTML(u.email || '')}</td></tr>`;
-                    }
-                    if(safeRole === 'excom') {
-                        excomHtml += `<div class="flex justify-between items-center bg-white/5 border border-white/10 p-4 rounded-xl mb-3"><span class="font-bold text-sm text-white">${displayHtmlName}</span><span class="text-[9px] font-bold uppercase tracking-[0.2em] text-glow-purple border border-glow-purple/30 bg-glow-purple/10 px-3 py-1.5 rounded-md">ExCom</span></div>`;
-                        
-                        excomModalHtml += `
-                        <tr class="hover:bg-white/5 transition-colors">
-                            <td class="px-6 py-3 border-r border-white/10 text-center">
-                                <select class="excom-status-select glass-input text-[10px] uppercase font-bold py-2.5 px-3 rounded-lg cursor-pointer w-full text-center">
-                                    <option value="Absent" class="text-red-400">Absent</option>
-                                    <option value="Present" class="text-green-400">Present</option>
-                                    <option value="Informed" class="text-yellow-400">Informed</option>
-                                </select>
-                            </td>
-                            <td class="text-sm font-bold text-white px-6 whitespace-nowrap">${displayHtmlName}</td>
-                        </tr>`;
-                    }
-                } catch(err) { console.error("Error processing user row data:", err); }
-            });
-
-            // For full users table
-            let uHtml = '';
-            allUsersData.forEach(u => {
-                const id = u.id;
-                const safeName = escapeHTML(getSafeText(u.name));
-                const safeEmail = escapeHTML(u.email || u.phone || "No Contact Info");
-                const authProv = u.authProvider ? `<span class="ml-2 px-2 py-0.5 rounded text-[9px] uppercase tracking-widest bg-white/10 text-white/50">${u.authProvider}</span>` : '';
-                
-                let roleBadge = `<span class="px-3 py-1 inline-flex text-[9px] leading-5 font-bold rounded-md bg-white/10 text-white/60 border border-white/20 uppercase tracking-widest">Student</span>`;
-                if(u.role === 'admin') roleBadge = `<span class="px-3 py-1 inline-flex text-[9px] leading-5 font-bold rounded-md bg-red-500/10 text-red-400 border border-red-500/30 uppercase tracking-widest">Admin</span>`;
-                else if(u.role === 'excom') roleBadge = `<span class="px-3 py-1 inline-flex text-[9px] leading-5 font-bold rounded-md bg-glow-purple/10 text-glow-purple border border-glow-purple/30 uppercase tracking-widest">ExCom</span>`;
-
-                uHtml += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors"><td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${safeName}</td><td class="px-6 py-4 whitespace-nowrap text-sm text-white/50">${safeEmail} ${authProv}</td><td class="px-6 py-4 whitespace-nowrap">${roleBadge}</td><td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium"><button onclick="prepareEditUser('${id}', '${safeName}', '${u.role||'student'}')" class="text-glow-blue hover:text-white transition-colors bg-white/5 p-2 rounded-lg"><i data-lucide="edit-2" class="w-4 h-4"></i></button></td></tr>`;
-            });
-            const tBody = document.getElementById('userListBody');
-            if(tBody) tBody.innerHTML = uHtml;
-
-            if(document.getElementById('certUserListBody')) document.getElementById('certUserListBody').innerHTML = certHtml;
-            if(document.getElementById('attendanceListBody')) document.getElementById('attendanceListBody').innerHTML = attHtml;
-            if(document.getElementById('excomMembersList')) document.getElementById('excomMembersList').innerHTML = excomHtml || '<p class="text-white/30 text-xs italic py-4 text-center tracking-wider">No ExCom members configured.</p>';
-            if(document.getElementById('excomAttendanceList')) document.getElementById('excomAttendanceList').innerHTML = excomModalHtml;
-            lucide.createIcons();
-        }
-
-        window.prepareEditUser = (id, name, role) => {
-            document.getElementById('editUserId').value = id;
-            document.getElementById('editUserName').value = name;
-            document.getElementById('editUserRoleSelect').value = role;
-            window.toggleEditUserModal(true);
-        };
-
-        window.toggleItemStatus = async (id, status) => {
-            try {
-                await updateDoc(doc(db, "inventory", id), { status: status });
-                await logActivity("Inventory Update", `Changed item status to ${status}`);
-            } catch(e) { alert(e.message); }
-        };
-
-        window.submitAttendance = async () => {
-            const eventName = document.getElementById('attendanceEventName').value;
-            const date = document.getElementById('attendanceDate').value;
-            if(!eventName || !date) return alert("Enter event name and date.");
-            
-            const presentEmails = [];
-            const absentEmails = [];
-            
-            document.querySelectorAll('.att-checkbox').forEach(cb => {
-                const userEmail = cb.closest('tr').querySelectorAll('td')[2].textContent;
-                if(cb.checked) presentEmails.push(userEmail);
-                else absentEmails.push(userEmail);
-            });
-
-            try {
-                await addDoc(collection(db, "attendance"), {
-                    eventName, date, presentEmails, absentEmails, timestamp: Date.now()
-                });
-                await logActivity("Marked Attendance", `For ${eventName}`);
-                alert("Attendance Saved!");
-                document.querySelectorAll('.att-checkbox').forEach(cb => cb.checked = false);
-                document.getElementById('attendanceEventName').value = '';
-                document.getElementById('attendanceDate').value = '';
-            } catch(e) { alert(e.message); }
-        };
-
-        document.getElementById('editUserRoleForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('editUserId').value;
-            const role = document.getElementById('editUserRoleSelect').value;
-            const btn = document.getElementById('updateUserBtn');
-            btn.disabled = true; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Updating...`; lucide.createIcons();
-            try {
-                await updateDoc(doc(db, "users", id), { role: role });
-                await logActivity("Changed Role", `Updated ${document.getElementById('editUserName').value} to ${role}`);
-                window.toggleEditUserModal(false);
-            } catch(err) { alert(err.message); } finally { btn.disabled = false; btn.innerText = "Update"; }
-        });
-
-        function fetchUsersListener() {
-            if (unsubscribeUsers) unsubscribeUsers();
-            unsubscribeUsers = onSnapshot(collection(db, "users"), (snap) => processAndRenderUsers(snap), (error) => console.error("Error fetching users:", error));
-        }
-
-        window.forceRefreshUsers = async (btn) => {
-            const icon = btn ? btn.querySelector('i') : null;
-            if(icon) icon.classList.add('animate-spin');
-            if(btn) btn.disabled = true;
-            try {
-                const snap = await getDocs(collection(db, "users"));
-                processAndRenderUsers(snap);
-                fetchUsersListener();
-            } catch(e) { console.error(e); } finally {
-                if(btn) { btn.disabled = false; if(icon) icon.classList.remove('animate-spin'); }
-            }
-        };
-
+        // SYNC DATA (Includes Users, Logs, Inventory, ExCom, Forms, and Charts)
         function initSync() {
-            fetchUsersListener();
+            // Users & Charts
+            onSnapshot(collection(db, "users"), (snap) => {
+                let uHtml = '', certHtml = '', attHtml = '', excomModalHtml = '', excomHtml = '';
+                let usersList = [];
+                let studentCount = 0, excomCount = 0, adminCount = 0;
+                
+                document.getElementById('totalUsersCount').textContent = snap.size;
 
-            onSnapshot(query(collection(db, "logs"), orderBy("timestamp", "desc"), limit(50)), (snap) => {
-                let h = '';
                 snap.forEach(d => {
-                    const l = d.data();
-                    const date = new Date(l.timestamp).toLocaleString();
-                    h += `<tr class="hover:bg-white/5 border-b border-white/5 transition-colors text-sm"><td class="px-6 py-4 text-white/50 font-mono whitespace-nowrap">${date}</td><td class="text-white font-bold uppercase text-[10px] tracking-wider px-6">${l.action}</td><td class="text-white/70 px-6 min-w-[200px]">${l.details}</td><td class="text-white/40 font-mono px-6 text-[10px] break-all">${l.admin}</td></tr>`;
+                    const data = d.data();
+                    usersList.push({ id: d.id, ...data });
+                    if(data.role === 'admin') adminCount++; else if(data.role === 'excom') excomCount++; else studentCount++;
                 });
-                if(document.getElementById('logsListBody')) document.getElementById('logsListBody').innerHTML = h;
+                
+                if(roleChartInstance) roleChartInstance.destroy();
+                const ctxRole = document.getElementById('roleChart');
+                if(ctxRole) {
+                    roleChartInstance = new Chart(ctxRole, {
+                        type: 'doughnut', 
+                        data: { 
+                            labels: ['Students', 'ExCom', 'Admins'], 
+                            datasets: [{ 
+                                data: [studentCount, excomCount, adminCount], 
+                                backgroundColor: ['#2563eb', '#9333ea', '#ef4444'], 
+                                borderWidth: 0 
+                            }] 
+                        }, 
+                        options: { cutout: '75%', plugins: { legend: { position: 'bottom' } } } 
+                    });
+                }
+
+                usersList.sort((a,b) => (b.points || 0) - (a.points || 0));
+
+                usersList.forEach(u => {
+                    const safeName = escapeHTML(u.name || "Unknown");
+                    const safeEmail = escapeHTML(u.email || "No Email");
+                    const points = u.points || 0;
+                    
+                    let roleBadge = `<span class="px-2 py-1 bg-white/10 text-[9px] rounded-md uppercase">Student</span>`;
+                    if(u.role === 'admin') roleBadge = `<span class="px-2 py-1 bg-red-500/10 text-red-400 text-[9px] rounded-md uppercase">Admin</span>`;
+                    else if(u.role === 'excom') roleBadge = `<span class="px-2 py-1 bg-glow-purple/10 text-glow-purple text-[9px] rounded-md uppercase">ExCom</span>`;
+
+                    uHtml += `
+                        <tr class="border-b border-white/5 hover:bg-white/5">
+                            <td class="px-6 py-4 text-sm font-medium text-white">${safeName}</td>
+                            <td class="px-6 py-4 text-sm text-white/50">${safeEmail}</td>
+                            <td class="px-6 py-4 text-center text-glow-gold font-bold text-lg">${points}</td>
+                            <td class="px-6 py-4">${roleBadge}</td>
+                            <td class="px-6 py-4 text-center flex justify-center gap-2">
+                                <button onclick="prepareAwardPoints('${u.id}', '${safeName}')" class="text-glow-gold hover:text-white bg-glow-gold/10 p-2 rounded-lg">
+                                    <i data-lucide="gift" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="prepareEditUser('${u.id}', '${safeName}', '${u.role||'student'}')" class="text-glow-blue hover:text-white bg-white/5 p-2 rounded-lg">
+                                    <i data-lucide="edit-2" class="w-4 h-4"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+
+                    if(u.role === 'student' || u.role === 'excom') {
+                        certHtml += `<tr class="border-b border-white/5 hover:bg-white/5"><td class="px-6 py-4 text-center"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${u.id}" data-name="${safeName}"></td><td class="text-sm font-medium text-white">${safeName}</td></tr>`;
+                        attHtml += `<tr class="border-b border-white/5 hover:bg-white/5 cursor-pointer" onclick="toggleAttCheck('${u.id}')"><td class="px-6 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${u.id}" value="${u.id}"></td><td class="text-sm font-bold text-white">${safeName}</td><td class="text-xs text-white/50">${safeEmail}</td></tr>`;
+                    }
+                    if(u.role === 'excom') {
+                        excomHtml += `<div class="flex justify-between items-center bg-white/5 border border-white/10 p-4 rounded-xl mb-3"><span class="font-bold text-sm text-white">${safeName}</span><span class="text-[9px] font-bold text-glow-purple border border-glow-purple/30 bg-glow-purple/10 px-3 py-1.5 rounded-md">ExCom</span></div>`;
+                        excomModalHtml += `<tr class="hover:bg-white/5"><td class="px-6 py-3 border-r border-white/10 text-center"><select class="excom-status-select glass-input text-[10px] uppercase font-bold py-2.5 px-3 rounded-lg w-full text-center" data-id="${u.id}" data-name="${safeName}"><option value="Absent" class="text-red-400">Absent</option><option value="Present" class="text-green-400">Present</option><option value="Informed" class="text-yellow-400">Informed</option></select></td><td class="text-sm font-bold text-white px-6">${safeName}</td></tr>`;
+                    }
+                });
+                
+                if(document.getElementById('userListBody')) document.getElementById('userListBody').innerHTML = uHtml;
+                if(document.getElementById('certUserListBody')) document.getElementById('certUserListBody').innerHTML = certHtml;
+                if(document.getElementById('attendanceListBody')) document.getElementById('attendanceListBody').innerHTML = attHtml;
+                if(document.getElementById('excomMembersList')) document.getElementById('excomMembersList').innerHTML = excomHtml;
+                if(document.getElementById('excomAttendanceList')) document.getElementById('excomAttendanceList').innerHTML = excomModalHtml;
+                lucide.createIcons();
             });
 
+            // Activity Chart (Scans)
+            onSnapshot(query(collection(db, "attendance"), orderBy("timestamp", "desc"), limit(50)), (snap) => {
+                let activityLog = []; snap.forEach(d => activityLog.push(d.data()));
+                let chartDataMap = {};
+                activityLog.reverse().forEach(log => {
+                    if(log.timestamp) { 
+                        const dateString = new Date(log.timestamp).toLocaleDateString(undefined, {month: 'short', day:'numeric'}); 
+                        chartDataMap[dateString] = (chartDataMap[dateString] || 0) + 1; 
+                    }
+                });
+                const labels = Object.keys(chartDataMap); const dataPoints = Object.values(chartDataMap);
+
+                if(activityChartInstance) activityChartInstance.destroy();
+                const ctxAct = document.getElementById('activityChart');
+                if(ctxAct && labels.length > 0) {
+                    activityChartInstance = new Chart(ctxAct, {
+                        type: 'line', 
+                        data: { 
+                            labels: labels, 
+                            datasets: [{ 
+                                data: dataPoints, 
+                                borderColor: '#2563eb', 
+                                backgroundColor: 'rgba(37, 99, 235, 0.2)', 
+                                borderWidth: 3, fill: true, tension: 0.4 
+                            }] 
+                        }, 
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } }
+                    });
+                }
+            });
+
+            // Inventory
             onSnapshot(collection(db, "inventory"), (snap) => {
                 let h='', total=0, avail=0, borrowed=0;
                 snap.forEach(d => {
                     const id = d.id; const item = d.data();
                     total++; if(item.status === 'Available') avail++; else borrowed++;
-                    const btn = item.status === 'Available' ? `<button onclick="toggleItemStatus('${id}', 'Borrowed')" class="bg-white/5 hover:bg-white/10 border border-white/20 text-white px-4 py-2 rounded-lg text-[9px] uppercase tracking-widest font-bold transition-all shadow-sm">Lend</button>` : `<button onclick="toggleItemStatus('${id}', 'Available')" class="bg-white text-black px-4 py-2 rounded-lg text-[9px] uppercase tracking-widest font-bold transition-all">Return</button>`;
-                    const statusBadge = item.status === 'Available' ? `<span class="text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded border border-green-500/30 text-green-400 bg-green-500/10">${item.status}</span>` : `<span class="text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded border border-red-500/30 text-red-400 bg-red-500/10">${item.status}</span>`;
-                    h += `<tr class="hover:bg-white/5 border-b border-white/5 transition-colors"><td class="px-6 py-4 text-sm font-bold text-white whitespace-nowrap">${item.name}</td><td class="text-[10px] text-white/50 uppercase tracking-widest font-bold px-6">${item.category}</td><td class="px-6">${statusBadge}</td><td class="text-sm text-white/60 font-medium px-6">${item.holder||'-'}</td><td class="text-center flex items-center justify-center gap-4 py-4 px-6">${btn}<button onclick="deleteDoc(doc(db,'inventory','${id}'))" class="text-red-400 hover:text-red-500 transition-colors p-2 bg-red-500/10 rounded-lg"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
+                    const btn = item.status === 'Available' ? `<button onclick="toggleItemStatus('${id}', 'Borrowed')" class="bg-white/5 border border-white/20 px-4 py-2 rounded-lg text-[9px] uppercase font-bold text-white">Lend</button>` : `<button onclick="toggleItemStatus('${id}', 'Available')" class="bg-white text-black px-4 py-2 rounded-lg text-[9px] uppercase font-bold">Return</button>`;
+                    const statusBadge = item.status === 'Available' ? `<span class="text-[9px] uppercase px-3 py-1.5 rounded border border-green-500/30 text-green-400 bg-green-500/10">${item.status}</span>` : `<span class="text-[9px] uppercase px-3 py-1.5 rounded border border-red-500/30 text-red-400 bg-red-500/10">${item.status}</span>`;
+                    h += `<tr class="border-b border-white/5 hover:bg-white/5"><td class="px-6 py-4 text-sm font-bold text-white">${item.name}</td><td class="text-[10px] text-white/50 uppercase px-6">${item.category}</td><td class="px-6">${statusBadge}</td><td class="text-sm text-white/60 px-6">${item.holder||'-'}</td><td class="text-center flex justify-center gap-4 py-4 px-6">${btn}<button onclick="deleteDoc(doc(window.db,'inventory','${id}'))" class="text-red-400 hover:text-red-500 bg-red-500/10 p-2 rounded-lg"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
                 });
                 if(document.getElementById('inventoryListBody')) document.getElementById('inventoryListBody').innerHTML = h;
                 safeSetText('invTotalOverview', total); safeSetText('invTotal', total); safeSetText('invAvail', avail); safeSetText('invBorrowed', borrowed);
                 lucide.createIcons();
             });
 
+            // Logs
+            onSnapshot(query(collection(db, "logs"), orderBy("timestamp", "desc"), limit(50)), (snap) => {
+                let h = ''; 
+                snap.forEach(d => { 
+                    const l = d.data(); 
+                    h += `<tr class="border-b border-white/5 hover:bg-white/5 text-sm"><td class="px-6 py-4 text-white/50 font-mono">${new Date(l.timestamp).toLocaleString()}</td><td class="text-white font-bold uppercase text-[10px] px-6">${l.action}</td><td class="text-white/70 px-6">${l.details}</td><td class="text-white/40 font-mono px-6 text-[10px]">${l.admin}</td></tr>`; 
+                });
+                if(document.getElementById('logsListBody')) document.getElementById('logsListBody').innerHTML = h;
+            });
+
+            // ExCom Meetings
             onSnapshot(query(collection(db, "excom_meetings"), orderBy("date", "desc")), (snap) => {
                 window.excomMeetingsData = []; let h = '';
                 snap.forEach(d => {
-                    const m = { id: d.id, ...d.data() };
-                    window.excomMeetingsData.push(m);
-                    h += `
-                    <div class="bg-white/5 border border-white/10 p-5 rounded-2xl mb-4 group">
-                        <div class="flex justify-between items-start mb-4">
-                            <h4 class="font-bold text-white text-sm uppercase tracking-wide">${escapeHTML(m.title)}</h4>
-                            <span class="text-[9px] text-white/50 bg-black/50 px-2 py-1 rounded border border-white/10 font-mono">${m.date}</span>
-                        </div>
-                        <button onclick="printExcomMeeting('${m.id}')" class="text-[10px] btn-light border border-white/20 px-4 py-3 rounded-xl uppercase tracking-widest font-bold transition-colors flex items-center justify-center gap-2 w-full shadow-sm"><i data-lucide="printer" class="w-3 h-3"></i> Print Report</button>
-                    </div>`;
+                    const m = { id: d.id, ...d.data() }; window.excomMeetingsData.push(m);
+                    h += `<div class="bg-white/5 border border-white/10 p-5 rounded-2xl mb-4"><div class="flex justify-between items-start mb-4"><h4 class="font-bold text-white text-sm uppercase">${m.title}</h4><span class="text-[9px] text-white/50 font-mono">${m.date}</span></div><button onclick="printExcomMeeting('${m.id}')" class="text-[10px] btn-light py-3 rounded-xl uppercase font-bold w-full flex justify-center gap-2"><i data-lucide="printer" class="w-3 h-3"></i> Print Report</button></div>`;
                 });
-                const list = document.getElementById('excomMeetingsList');
-                if(list) list.innerHTML = h || '<p class="text-white/40 text-xs tracking-widest uppercase font-bold py-4 text-center">No meetings logged yet.</p>';
+                if(document.getElementById('excomMeetingsList')) document.getElementById('excomMeetingsList').innerHTML = h;
                 lucide.createIcons();
             });
 
-            onSnapshot(collection(db, "announcements"), (s) => safeSetText('totalAnnouncementsCount', s.size));
-            
-            onSnapshot(collection(db, "eventForms"), (s) => {
-                safeSetText('activeFormsCount', s.size);
+            // Counts
+            onSnapshot(collection(db, "announcements"), s => document.getElementById('totalAnnouncementsCount').textContent = s.size);
+            onSnapshot(collection(db, "eventForms"), s => {
+                document.getElementById('activeFormsCount').textContent = s.size;
                 let h=''; 
-                s.forEach(d => {
-                    const docData = d.data();
-                    h += `<div class="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-4 shadow-sm group">
-                        <span class="text-sm font-bold text-white break-all flex items-center gap-3"><i data-lucide="file-text" class="w-5 h-5 text-glow-purple"></i> ${escapeHTML(docData.title)}</span>
-                        <button onclick="deleteDoc(doc(db,'eventForms','${d.id}'))" class="text-red-400 hover:text-white transition-colors flex items-center gap-2 bg-red-500/10 hover:bg-red-500 border border-red-500/20 px-4 py-2.5 rounded-xl text-[10px] uppercase font-bold tracking-widest w-full sm:w-auto justify-center"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete</button>
-                    </div>`;
+                s.forEach(d => { 
+                    h += `<div class="bg-white/5 border border-white/10 p-5 rounded-2xl flex justify-between items-center mb-3"><span class="text-sm font-bold text-white"><i data-lucide="file-text" class="w-4 h-4 inline mr-2 text-glow-purple"></i> ${d.data().title}</span><button onclick="deleteDoc(doc(window.db,'eventForms','${d.id}'))" class="text-red-400 bg-red-500/10 px-4 py-2 rounded-lg text-[10px] font-bold uppercase"><i data-lucide="trash-2" class="w-3 h-3 inline"></i> Delete</button></div>`; 
                 });
-                if(document.getElementById('activeFormsList')) document.getElementById('activeFormsList').innerHTML = h;
-                lucide.createIcons();
+                if(document.getElementById('activeFormsList')) document.getElementById('activeFormsList').innerHTML = h; lucide.createIcons();
             });
         }
 
-        // --- SUBMISSIONS LOGIC ---
-        document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const mode = document.getElementById('addUserMode').value;
-            const name = document.getElementById('newUserName').value;
-            const email = document.getElementById('newUserEmail').value;
-            const btn = document.getElementById('submitAddUserBtn');
-            const status = document.getElementById('addUserStatus');
-            
-            btn.disabled = true; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Processing...`;
-            status.classList.remove('hidden'); 
-            status.className = "text-[10px] text-center p-3 rounded-lg font-bold uppercase tracking-wider border border-blue-500/30 bg-blue-500/10 text-blue-400";
-            status.textContent = "Processing request...";
-            lucide.createIcons();
-
-            try {
-                if (mode === 'create') {
-                    status.className = "text-[10px] text-center p-3 rounded-lg font-bold uppercase tracking-wider border border-yellow-500/30 bg-yellow-500/10 text-yellow-400";
-                    status.textContent = "Please use the 'Sync Existing' tab. Creating a new auth user from the client side logs out the Admin.";
-                } else {
-                    const uid = document.getElementById('newUserUid').value;
-                    if(!uid) throw new Error("UID is required for syncing.");
-                    
-                    await setDoc(doc(db, "users", uid), {
-                        name: name,
-                        email: email,
-                        role: "student",
-                        createdAt: Date.now()
-                    });
-                    await logActivity("Synced User", `Synced ${email}`);
-                    status.className = "text-[10px] text-center p-3 rounded-lg font-bold uppercase tracking-wider border border-green-500/30 bg-green-500/10 text-green-400";
-                    status.textContent = "User Synced Successfully!";
-                    e.target.reset();
-                    setTimeout(()=> window.toggleAddUserModal(false), 2000);
-                }
-            } catch(err) {
-                status.className = "text-[10px] text-center p-3 rounded-lg font-bold uppercase tracking-wider border border-red-500/30 bg-red-500/10 text-red-400";
-                status.textContent = err.message;
-            } finally {
-                btn.disabled = false; btn.innerHTML = "Create User";
-            }
-        });
-
-        document.getElementById('addItemForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            try {
-                await addDoc(collection(db, "inventory"), {
-                    name: document.getElementById('invName').value,
-                    category: document.getElementById('invCategory').value,
-                    status: 'Available', holder: '', timestamp: Date.now()
-                });
-                await logActivity("Added Asset", document.getElementById('invName').value);
-                document.getElementById('addItemModal').classList.add('hidden');
-                e.target.reset();
-            } catch(err) { alert(err.message); }
-        });
-
-        document.getElementById('formBuilderForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('saveFormBtn');
-            const origText = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Publishing...`; lucide.createIcons();
-
-            try {
-                let coverUrl = "";
-                if (formCoverImageFile) coverUrl = await uploadToDrive(formCoverImageFile);
-
-                await addDoc(collection(db, "eventForms"), {
-                    title: document.getElementById('formTitle').value,
-                    description: document.getElementById('formDescription').value,
-                    webhook: document.getElementById('formWebhook').value,
-                    coverImage: coverUrl,
-                    questions: formBuilderFields,
-                    createdAt: Date.now()
-                });
-                await logActivity("Published Form", document.getElementById('formTitle').value);
-                alert("Form Published successfully!");
-                e.target.reset();
-                formBuilderFields = [];
-                window.renderFormBuilderFields();
-                document.getElementById('formCoverFileName').innerHTML = '<i class="fas fa-image mr-2"></i> Browse Image';
-                formCoverImageFile = null;
-            } catch(err) { alert(err.message); } finally { btn.innerHTML = origText; btn.disabled = false; }
-        });
-
-        document.getElementById('galleryForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('postGalleryBtn');
-            btn.disabled = true; btn.textContent = "Uploading (Please wait)...";
-            try {
-                const urls = [];
-                for (let file of galleryImages) {
-                    const url = await uploadToDrive(file);
-                    urls.push(url);
-                }
-                await addDoc(collection(db, "gallery"), {
-                    title: document.getElementById('galleryTitle').value,
-                    date: document.getElementById('galleryDate').value,
-                    images: urls,
-                    timestamp: Date.now()
-                });
-                await logActivity("Uploaded Gallery", document.getElementById('galleryTitle').value);
-                alert("Gallery Uploaded Successfully!");
-                e.target.reset();
-                document.getElementById('galleryFileName').innerHTML = '<i class="fas fa-images mr-2"></i> Select Photos';
-                galleryImages = [];
-            } catch(err) { alert(err.message); } finally { btn.disabled = false; btn.textContent = "Upload Photos"; }
-        });
-
-        document.getElementById('pushAlertForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const origText = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Sending...`;
-            btn.disabled = true;
-            lucide.createIcons();
-
-            try {
-                await addDoc(collection(db, "notifications"), {
-                    title: document.getElementById('alertTitle').value,
-                    category: document.getElementById('alertCategory').value,
-                    message: document.getElementById('alertContent').value,
-                    timestamp: Date.now()
-                });
-                await logActivity("Sent In-App Alert", document.getElementById('alertTitle').value);
-                alert("Alert Sent Successfully!");
-                e.target.reset();
-            } catch (e) {
-                alert(e.message);
-            } finally {
-                btn.innerHTML = origText;
-                btn.disabled = false;
-            }
-        });
-
-        document.getElementById('newsForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const btn = document.getElementById('postNewsBtn'); 
-            btn.disabled = true; 
-            btn.innerText = "Publishing...";
-            try { 
-                let url = newsImageFile ? await uploadToDrive(newsImageFile) : ""; 
-                await addDoc(collection(db, "news"), { 
-                    title: document.getElementById('newsTitle').value, 
-                    description: document.getElementById('newsContent').value, 
-                    date: document.getElementById('newsDate').value, 
-                    imageUrl: url, 
-                    timestamp: Date.now() 
-                }); 
-                await logActivity("Posted News", document.getElementById('newsTitle').value); 
-                alert("News Published!"); 
-                e.target.reset(); 
-                document.getElementById('newsFileName').innerHTML = '<i class="fas fa-upload mr-2"></i> Browse Image';
-            } catch(e) { alert(e.message); } finally { btn.disabled = false; btn.innerText = "Publish News"; }
-        });
-
-        document.getElementById('announcementForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const btn = e.target.querySelector('button');
-            const origText = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Broadcasting...`;
-            btn.disabled = true; lucide.createIcons();
-
-            try {
-                await addDoc(collection(db, "announcements"), { 
-                    title: document.getElementById('annTitle').value, 
-                    description: document.getElementById('annContent').value, 
-                    timestamp: Date.now() 
-                }); 
-                await logActivity("Posted Update", document.getElementById('annTitle').value); 
-                alert("Circular Broadcasted!"); 
-                e.target.reset();
-            } catch (e) { alert(e.message); } finally { btn.innerHTML = origText; btn.disabled = false; }
-        });
-
-        window.submitExcomAttendance = async () => {
-            const title = document.getElementById('excomMeetingTitle').value.trim();
-            const date = document.getElementById('excomMeetingDate').value;
-            if(!title || !date) return alert("Please provide a meeting name and date.");
-            if(window.excomMeetingsData.some(m => m.date === date)) return alert("A meeting is already logged for this date.");
-
-            const attendanceRecords = Array.from(document.querySelectorAll('.excom-status-select')).map(sel => ({
-                id: sel.dataset.id, name: sel.dataset.name, status: sel.value
-            }));
-
-            const btn = document.getElementById('saveExcomBtn');
-            btn.disabled = true; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Saving...`; lucide.createIcons();
-
-            try {
-                await addDoc(collection(db, "excom_meetings"), { 
-                    title: title, date: date, attendance: attendanceRecords, timestamp: Date.now(), loggedBy: currentUserEmail
-                }); 
-                await logActivity("ExCom Logged", `Meeting: ${date}`);
-                alert("Meeting Logged Successfully!"); 
-                document.getElementById('excomModal').classList.add('hidden');
-            } catch(e) { alert(e.message); } finally { btn.disabled = false; btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log'; lucide.createIcons(); }
-        };
-
-        // --- GOOGLE DRIVE UPLOAD LOGIC ---
+        // --- GOOGLE DRIVE UPLOAD FIX (CORS Bypass) ---
         async function uploadToDrive(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -1497,16 +1382,11 @@
                     try {
                         const res = await fetch(SCRIPT_URL, {
                             method: 'POST',
-                            body: JSON.stringify({
-                                filename: file.name,
-                                mimeType: file.type,
-                                data: base64Data,
-                                action: 'uploadImage'
-                            })
+                            headers: { "Content-Type": "text/plain;charset=utf-8" },
+                            body: JSON.stringify({ filename: file.name, mimeType: file.type, data: base64Data, action: 'uploadImage' })
                         });
                         const data = await res.json();
-                        if(data.url) resolve(data.url);
-                        else reject(new Error("Upload failed"));
+                        if(data.url) resolve(data.url); else reject(new Error("Upload failed"));
                     } catch(e) { reject(e); }
                 };
                 reader.onerror = () => reject(new Error("File read error"));
@@ -1514,101 +1394,241 @@
             });
         }
 
-        // --- FILE HANDLERS ---
-        window.handleNewsImage = (e) => {
-            newsImageFile = e.target.files[0];
-            document.getElementById('newsFileName').innerHTML = `<i class="fas fa-check text-green-400 mr-2"></i> ${newsImageFile.name}`;
+        // --- GLOBALLY EXPOSED FUNCTIONS ---
+        window.prepareEditUser = (id, name, role) => { 
+            document.getElementById('editUserId').value = id; 
+            document.getElementById('editUserName').value = name; 
+            document.getElementById('editUserRoleSelect').value = role; 
+            window.toggleEditUserModal(true); 
         };
-
-        window.handleGalleryImages = (e) => {
-            galleryImages = Array.from(e.target.files);
-            document.getElementById('galleryFileName').innerHTML = `<i class="fas fa-check text-green-400 mr-2"></i> ${galleryImages.length} files selected`;
+        
+        window.toggleItemStatus = async (id, status) => { 
+            await updateDoc(doc(db, "inventory", id), { status: status }); 
+            await logActivity("Inventory Update", `Changed item status to ${status}`); 
         };
+        
+        window.deleteDoc = deleteDoc;
+        window.doc = doc;
 
-        window.handleCertTemplate = (e) => {
-            const file = e.target.files[0];
-            if(!file) return;
-            document.getElementById('certFileName').innerHTML = `<i class="fas fa-check text-green-400 mr-2"></i> ${file.name}`;
-            const reader = new FileReader();
-            reader.onload = (event) => { certTemplateBase64 = event.target.result; };
-            reader.readAsDataURL(file);
-        };
-
-        // --- ISSUE CERTIFICATES LOGIC ---
-        window.issueCertificates = async () => {
-            const eventName = document.getElementById('certEventName').value;
-            const issueDate = document.getElementById('certDate').value;
-            const checkboxes = document.querySelectorAll('.cert-checkbox:checked');
-            const statusEl = document.getElementById('certStatus');
-            const btn = document.getElementById('certBtn');
-
-            if(!eventName || !issueDate || !certTemplateBase64) return alert("Please fill all details and upload a template.");
-            if(checkboxes.length === 0) return alert("Select at least one student.");
-
-            btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline"></i> Issuing...`;
+        window.openExcomAttendanceModal = () => {
+            document.getElementById('excomMeetingTitle').value = ''; 
+            document.getElementById('excomMeetingDate').value = '';
+            document.getElementById('saveExcomBtn').disabled = false; 
+            document.getElementById('saveExcomBtn').innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log';
+            document.querySelectorAll('.excom-status-select').forEach(s => s.value = 'Absent');
+            document.getElementById('excomModal').classList.remove('hidden'); 
             lucide.createIcons();
+        };
 
+        window.submitExcomAttendance = async () => {
+            const title = document.getElementById('excomMeetingTitle').value.trim(); 
+            const date = document.getElementById('excomMeetingDate').value;
+            if(!title || !date) return alert("Fill meeting name and date.");
+            const attendanceRecords = Array.from(document.querySelectorAll('.excom-status-select')).map(sel => ({ id: sel.dataset.id, name: sel.dataset.name, status: sel.value }));
+            const btn = document.getElementById('saveExcomBtn'); btn.disabled = true; btn.innerHTML = 'Saving...';
             try {
-                // 1. Upload template to Drive first
-                statusEl.classList.remove('hidden');
-                statusEl.textContent = "Uploading template to cloud...";
-                
-                const fileInput = document.querySelector('input[accept="image/*"]'); // Get the cert file
-                const fileObj = fileInput.files[0];
+                await addDoc(collection(db, "excom_meetings"), { title: title, date: date, attendance: attendanceRecords, timestamp: Date.now(), loggedBy: window.currentUserEmail }); 
+                await logActivity("ExCom Logged", `Meeting: ${date}`); alert("Saved!"); document.getElementById('excomModal').classList.add('hidden');
+            } catch(e) { alert(e.message); btn.disabled = false; }
+        };
+
+        window.submitAttendance = async () => {
+            const eventName = document.getElementById('attendanceEventName').value; 
+            const date = document.getElementById('attendanceDate').value;
+            if(!eventName || !date) return alert("Enter event name and date.");
+            const presentEmails = []; const absentEmails = [];
+            document.querySelectorAll('.att-checkbox').forEach(cb => { 
+                const userEmail = cb.closest('tr').querySelectorAll('td')[2].textContent; 
+                if(cb.checked) presentEmails.push(userEmail); else absentEmails.push(userEmail); 
+            });
+            try {
+                await addDoc(collection(db, "attendance"), { eventName, date, presentEmails, absentEmails, timestamp: Date.now() });
+                await logActivity("Marked Attendance", `For ${eventName}`); alert("Saved!");
+                document.querySelectorAll('.att-checkbox').forEach(cb => cb.checked = false); 
+                document.getElementById('attendanceEventName').value = ''; 
+                document.getElementById('attendanceDate').value = '';
+            } catch(e) { alert(e.message); }
+        };
+
+        window.issueCertificates = async () => {
+            const eventName = document.getElementById('certEventName').value; 
+            const issueDate = document.getElementById('certDate').value;
+            const checkboxes = document.querySelectorAll('.cert-checkbox:checked'); 
+            const statusEl = document.getElementById('certStatus'); 
+            const btn = document.getElementById('certBtn');
+            
+            if(!eventName || !issueDate || !window.certTemplateBase64) return alert("Fill all details and upload template.");
+            if(checkboxes.length === 0) return alert("Select at least one student.");
+            
+            btn.disabled = true; btn.innerHTML = `Issuing...`; statusEl.classList.remove('hidden'); statusEl.textContent = "Uploading template...";
+            
+            try {
+                const fileObj = document.querySelector('input[accept="image/*"]').files[0];
                 const templateUrl = await uploadToDrive(fileObj);
-
-                // 2. Assign to users
-                let count = 0;
-                statusEl.textContent = `Assigning to students...`;
-
-                for(let cb of checkboxes) {
-                    const userId = cb.value;
-                    const userName = cb.dataset.name;
-                    await addDoc(collection(db, "certificates"), {
-                        userId, userName, eventName, date: issueDate, templateUrl, timestamp: Date.now()
-                    });
-                    count++;
+                let count = 0; statusEl.textContent = `Assigning...`;
+                for(let cb of checkboxes) { 
+                    await addDoc(collection(db, "certificates"), { userId: cb.value, userName: cb.dataset.name, eventName, date: issueDate, templateUrl, timestamp: Date.now() }); 
+                    count++; 
                 }
-                
-                await logActivity("Issued Certificates", `Issued ${count} certs for ${eventName}`);
-                
-                statusEl.classList.replace('text-white', 'text-green-400');
-                statusEl.textContent = `Successfully issued ${count} certificates!`;
-                setTimeout(() => { 
-                    statusEl.classList.add('hidden'); 
-                    statusEl.classList.replace('text-green-400', 'text-white'); 
-                }, 4000);
-                
-                // Reset form
-                document.getElementById('certEventName').value = '';
-                document.getElementById('certDate').value = '';
-                document.getElementById('certFileName').innerHTML = 'Upload a clean image design';
-                certTemplateBase64 = null;
-                checkboxes.forEach(c => c.checked = false);
-
-            } catch(e) {
-                alert("Error: " + e.message);
-                statusEl.classList.add('hidden');
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "Issue Certificates";
+                await logActivity("Issued Certificates", `Issued ${count} for ${eventName}`);
+                statusEl.classList.replace('text-white', 'text-green-400'); statusEl.textContent = `Success!`;
+                setTimeout(() => { statusEl.classList.add('hidden'); statusEl.classList.replace('text-green-400', 'text-white'); }, 4000);
+                document.getElementById('certEventName').value = ''; document.getElementById('certDate').value = ''; document.getElementById('certFileName').innerHTML = 'Upload design'; window.certTemplateBase64 = null; checkboxes.forEach(c => c.checked = false);
+            } catch(e) { 
+                alert("Error: " + e.message); statusEl.classList.add('hidden'); 
+            } finally { 
+                btn.disabled = false; btn.innerText = "Issue Certificates"; 
             }
         };
 
-        // --- ACTIVITY LOGGER ---
-        async function logActivity(action, details) {
+        // --- SUBMIT LISTENERS ---
+        document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const mode = document.getElementById('addUserMode').value;
+            const name = document.getElementById('newUserName').value;
+            const email = document.getElementById('newUserEmail').value;
+            const btn = document.getElementById('submitAddUserBtn');
+            const status = document.getElementById('addUserStatus');
+            btn.disabled = true; status.classList.remove('hidden'); status.className = "text-[10px] text-center p-3 text-blue-400"; status.textContent = "Processing...";
+            try {
+                if (mode === 'create') { 
+                    status.className = "text-[10px] text-center p-3 text-yellow-400"; status.textContent = "Use 'Sync Existing' tab."; 
+                } else {
+                    const uid = document.getElementById('newUserUid').value;
+                    await setDoc(doc(db, "users", uid), { name: name, email: email, role: "student", createdAt: Date.now() });
+                    await logActivity("Synced User", `Synced ${email}`);
+                    status.className = "text-[10px] text-center p-3 text-green-400"; status.textContent = "Success!";
+                    e.target.reset(); setTimeout(()=> window.toggleAddUserModal(false), 2000);
+                }
+            } catch(err) { status.className = "text-[10px] text-center p-3 text-red-400"; status.textContent = err.message; } finally { btn.disabled = false; }
+        });
+
+        document.getElementById('editUserRoleForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            const id = document.getElementById('editUserId').value; 
+            const role = document.getElementById('editUserRoleSelect').value; 
+            const btn = document.getElementById('updateUserBtn');
+            btn.disabled = true; btn.innerHTML = `Updating...`;
             try { 
-                await addDoc(collection(db, "logs"), { 
-                    action, 
-                    details, 
-                    admin: currentUserEmail, 
-                    timestamp: Date.now() 
-                }); 
-            } catch(e) {
-                console.error("Failed to log activity:", e);
+                await updateDoc(doc(db, "users", id), { role: role }); 
+                await logActivity("Changed Role", `Updated to ${role}`); window.toggleEditUserModal(false); 
+            } catch(err) { alert(err.message); } finally { btn.disabled = false; btn.innerText = "Update"; }
+        });
+
+        document.getElementById('addItemForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try { 
+                await addDoc(collection(db, "inventory"), { name: document.getElementById('invName').value, category: document.getElementById('invCategory').value, status: 'Available', holder: '', timestamp: Date.now() }); 
+                await logActivity("Added Asset", document.getElementById('invName').value); document.getElementById('addItemModal').classList.add('hidden'); e.target.reset(); 
+            } catch(err) { alert(err.message); }
+        });
+
+        document.getElementById('formBuilderForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            const btn = document.getElementById('saveFormBtn'); const orig = btn.innerHTML; btn.disabled = true; btn.innerHTML = `Publishing...`;
+            try {
+                let coverUrl = window.formCoverImageFile ? await uploadToDrive(window.formCoverImageFile) : "";
+                await addDoc(collection(db, "eventForms"), { title: document.getElementById('formTitle').value, description: document.getElementById('formDescription').value, webhook: document.getElementById('formWebhook').value, coverImage: coverUrl, questions: formBuilderFields, createdAt: Date.now() });
+                await logActivity("Published Form", document.getElementById('formTitle').value); alert("Published!"); 
+                e.target.reset(); formBuilderFields = []; window.renderFormBuilderFields(); document.getElementById('formCoverFileName').innerHTML = 'Browse Image'; window.formCoverImageFile = null;
+            } catch(err) { alert(err.message); } finally { btn.innerHTML = orig; btn.disabled = false; }
+        });
+
+        document.getElementById('galleryForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); const btn = document.getElementById('postGalleryBtn'); btn.disabled = true; btn.textContent = "Uploading...";
+            try {
+                const urls = []; for (let file of window.galleryImages) { urls.push(await uploadToDrive(file)); }
+                await addDoc(collection(db, "gallery"), { title: document.getElementById('galleryTitle').value, date: document.getElementById('galleryDate').value, images: urls, timestamp: Date.now() });
+                await logActivity("Uploaded Gallery", document.getElementById('galleryTitle').value); alert("Uploaded!"); e.target.reset(); document.getElementById('galleryFileName').innerHTML = 'Select Photos'; window.galleryImages = [];
+            } catch(err) { alert(err.message); } finally { btn.disabled = false; btn.textContent = "Upload Photos"; }
+        });
+
+        document.getElementById('pushAlertForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); const btn = e.target.querySelector('button'); const orig = btn.innerHTML; btn.innerHTML = `Sending...`; btn.disabled = true;
+            try { 
+                await addDoc(collection(db, "notifications"), { title: document.getElementById('alertTitle').value, category: document.getElementById('alertCategory').value, message: document.getElementById('alertContent').value, timestamp: Date.now() }); 
+                await logActivity("Sent In-App Alert", document.getElementById('alertTitle').value); alert("Sent!"); e.target.reset(); 
+            } catch (err) { alert(err.message); } finally { btn.innerHTML = orig; btn.disabled = false; }
+        });
+
+        document.getElementById('newsForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); const btn = document.getElementById('postNewsBtn'); btn.disabled = true; btn.innerText = "Publishing...";
+            try { 
+                let url = window.newsImageFile ? await uploadToDrive(window.newsImageFile) : ""; 
+                await addDoc(collection(db, "news"), { title: document.getElementById('newsTitle').value, description: document.getElementById('newsContent').value, date: document.getElementById('newsDate').value, imageUrl: url, timestamp: Date.now() }); 
+                await logActivity("Posted News", document.getElementById('newsTitle').value); alert("Published!"); e.target.reset(); document.getElementById('newsFileName').innerHTML = 'Browse Image'; window.newsImageFile = null; 
+            } catch(err) { alert(err.message); } finally { btn.disabled = false; btn.innerText = "Publish News"; }
+        });
+
+        document.getElementById('announcementForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); const btn = e.target.querySelector('button'); const orig = btn.innerHTML; btn.innerHTML = `Broadcasting...`; btn.disabled = true;
+            try { 
+                await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, description: document.getElementById('annContent').value, timestamp: Date.now() }); 
+                await logActivity("Posted Update", document.getElementById('annTitle').value); alert("Broadcasted!"); e.target.reset(); 
+            } catch (err) { alert(err.message); } finally { btn.innerHTML = orig; btn.disabled = false; }
+        });
+
+        // AWARD POINTS LISTENER
+        document.getElementById('awardPointsForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            const btn = document.getElementById('submitAwardBtn'); 
+            const status = document.getElementById('awardStatus'); 
+            const uid = document.getElementById('awardUserId').value; 
+            const pts = parseInt(document.getElementById('pointsAmount').value); 
+            const reason = document.getElementById('pointsReason').value;
+            
+            btn.disabled = true; btn.innerHTML = 'Processing...';
+            try {
+                await updateDoc(doc(db, "users", uid), { points: increment(pts) });
+                await addDoc(collection(db, "logs"), { action: "Awarded Points", details: `Gave ${pts} pts to ${document.getElementById('awardUserNameDisplay').textContent} for ${reason}`, admin: window.currentUserEmail, timestamp: Date.now() });
+                status.textContent = `Awarded ${pts} points!`; status.className = "text-[10px] text-center p-3 text-green-400 block mb-4";
+                setTimeout(() => { document.getElementById('awardPointsModal').classList.add('hidden'); e.target.reset(); btn.disabled = false; btn.innerHTML = 'Award Points'; }, 1500);
+            } catch(error) { 
+                status.textContent = error.message; status.className = "text-[10px] text-center p-3 text-red-400 block mb-4"; btn.disabled = false; btn.innerHTML = 'Award Points'; 
             }
-        }
+        });
+
+        // FILE HANDLERS
+        window.handleNewsImage = (e) => { window.newsImageFile = e.target.files[0]; document.getElementById('newsFileName').innerHTML = window.newsImageFile.name; };
+        window.handleGalleryImages = (e) => { window.galleryImages = Array.from(e.target.files); document.getElementById('galleryFileName').innerHTML = `${window.galleryImages.length} files selected`; };
+        window.handleCertTemplate = (e) => { const file = e.target.files[0]; if(!file) return; document.getElementById('certFileName').innerHTML = file.name; const r = new FileReader(); r.onload = (ev) => { window.certTemplateBase64 = ev.target.result; }; r.readAsDataURL(file); };
+
+        // QR SCANNER LOGIC
+        window.html5QrcodeScanner = null; window.isScanningFlag = false;
+        window.startScanner = () => {
+            const eventName = document.getElementById('scannerEventName').value.trim();
+            if(!eventName) return alert('Enter an Event Name before scanning!');
+            document.getElementById('btnStartScan').classList.add('hidden'); document.getElementById('btnStopScan').classList.remove('hidden');
+            const statusEl = document.getElementById('scannerStatus'); statusEl.classList.remove('hidden'); statusEl.className = "p-4 text-center text-glow-blue mb-6"; statusEl.innerHTML = 'Camera Active. Point at ID.';
+            
+            window.html5QrcodeScanner = new Html5Qrcode("qr-reader");
+            window.html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } }, async (decodedText) => {
+                if(window.isScanningFlag) return; window.isScanningFlag = true; window.html5QrcodeScanner.pause();
+                try {
+                    const uid = decodedText; const qCheck = query(collection(db, "attendance"), where("uid", "==", uid), where("eventName", "==", eventName)); const snapCheck = await getDocs(qCheck);
+                    if(!snapCheck.empty) { 
+                        statusEl.className = "p-4 text-center text-yellow-400 mb-6"; statusEl.innerHTML = "⚠️ Already Scanned!"; 
+                    } else {
+                        const uDoc = await getDoc(doc(db, "users", uid)); const studentName = uDoc.exists() ? uDoc.data().name : "Unknown";
+                        await updateDoc(doc(db, "users", uid), { points: increment(50) });
+                        await addDoc(collection(db, "attendance"), { eventName: eventName, uid: uid, studentName: studentName, type: 'QR_Scan', timestamp: Date.now() });
+                        statusEl.className = "p-4 text-center text-green-400 mb-6"; statusEl.innerHTML = `✅ Success! +50 Pts to ${studentName}`;
+                    }
+                } catch(err) { statusEl.className = "p-4 text-center text-red-400 mb-6"; statusEl.innerHTML = `Error: Invalid QR`; }
+                
+                setTimeout(() => { window.isScanningFlag = false; statusEl.className = "p-4 text-center text-glow-blue mb-6"; statusEl.innerHTML = 'Ready for next scan...'; window.html5QrcodeScanner.resume(); }, 3000);
+            }, (err) => {}).catch((err) => { alert("Camera access denied."); stopScanner(); });
+        };
+
+        window.stopScanner = () => { 
+            if(window.html5QrcodeScanner) { window.html5QrcodeScanner.stop().then(() => { window.html5QrcodeScanner.clear(); window.html5QrcodeScanner = null; }); } 
+            document.getElementById('btnStartScan').classList.remove('hidden'); document.getElementById('btnStopScan').classList.add('hidden'); document.getElementById('scannerStatus').classList.add('hidden'); 
+        };
+
+        async function logActivity(action, details) { try { await addDoc(collection(db, "logs"), { action, details, admin: window.currentUserEmail, timestamp: Date.now() }); } catch(e) {} }
+
+        document.getElementById('adminLogoutBtn').addEventListener('click', () => signOut(auth));
+        document.getElementById('adminLogoutBtnMobile').addEventListener('click', () => signOut(auth));
     </script>
 </body>
 </html>
