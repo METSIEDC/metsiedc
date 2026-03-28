@@ -104,9 +104,7 @@
             <button onclick="showTab('excom')" id="nav-excom" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="shield" class="w-4 h-4"></i> ExCom Tracking</button>
             <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="clipboard-check" class="w-4 h-4"></i> Attendance</button>
             <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="award" class="w-4 h-4"></i> Certificates</button>
-            
             <div class="pt-4 pb-2 px-4 text-[10px] font-bold text-white/30 uppercase tracking-widest">Publish Content</div>
-            
             <button onclick="showTab('notifications')" id="nav-notifications" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-purple font-bold"><i data-lucide="bell-ring" class="w-4 h-4"></i> Send Alert</button>
             <button onclick="showTab('announcements')" id="nav-announcements" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="bell" class="w-4 h-4"></i> Circulars</button>
             <button onclick="showTab('news')" id="nav-news" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="newspaper" class="w-4 h-4"></i> News Article</button>
@@ -115,9 +113,7 @@
         </nav>
 
         <div class="p-6 mt-auto border-t border-white/5">
-            <button id="adminLogoutBtn" class="w-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors flex justify-center items-center gap-2">
-                <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
-            </button>
+            <button id="adminLogoutBtn" class="w-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors flex justify-center items-center gap-2"><i data-lucide="log-out" class="w-4 h-4"></i> Sign Out</button>
         </div>
     </aside>
 
@@ -595,10 +591,10 @@
                             opts += `<div class="flex items-center gap-3 mt-2"><i data-lucide="${iconType}" class="w-4 h-4 text-white/30 flex-shrink-0"></i><input type="text" class="glass-input w-full rounded-lg py-2.5 px-3 text-sm" value="${escapeHTML(opt)}" oninput="updateFieldOption('${field.id}', ${optIdx}, this.value)" placeholder="Option text"><button type="button" onclick="removeFieldOption('${field.id}', ${optIdx})" class="text-red-400 hover:text-red-500 p-1"><i data-lucide="x" class="w-4 h-4"></i></button></div>`;
                         });
                     }
-                    optionsHtml = `<div class="mt-4 pl-4 border-l-2 border-white/10"><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Answer Options</label>${opts}<button type="button" onclick="addFieldOption('${field.id}')" class="mt-3 text-[10px] uppercase text-glow-blue font-bold flex items-center gap-1.5"><i data-lucide="plus" class="w-3 h-3"></i> Add Option</button></div>`;
+                    optionsHtml = `<div class="mt-4 pl-4 border-l-2 border-white/10"><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Answer Options</label>${opts}<button type="button" onclick="addFieldOption('${field.id}')" class="mt-3 text-[10px] uppercase text-glow-blue font-bold flex items-center gap-1.5"><i data-lucide="plus" class="w-3 h-3"></i> Add Option</button></div>`;
                 }
 
-                container.innerHTML += `<div class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 relative shadow-sm"><div class="flex justify-between items-center border-b border-white/10 pb-3 mb-4"><span class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Question ${index + 1}</span><button type="button" onclick="removeQuestionField('${field.id}')" class="text-white/40 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div class="md:col-span-2"><label class="block text-[10px] font-bold text-white/50 mb-1 uppercase tracking-widest">Question Title</label><input type="text" class="glass-input w-full rounded-lg py-3 px-3 text-sm" value="${escapeHTML(field.label)}" oninput="updateField('${field.id}', 'label', this.value)"></div><div><label class="block text-[10px] font-bold text-white/50 mb-1 uppercase tracking-widest">Answer Type</label><select class="glass-input w-full rounded-lg py-3 px-3 text-sm" onchange="updateField('${field.id}', 'type', this.value)"><option value="text" ${field.type === 'text' ? 'selected' : ''}>Short Answer</option><option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Paragraph</option><option value="email" ${field.type === 'email' ? 'selected' : ''}>Email Address</option><option value="tel" ${field.type === 'tel' ? 'selected' : ''}>Phone Number</option><option value="radio" ${field.type === 'radio' ? 'selected' : ''}>Multiple Choice</option><option value="checkbox" ${field.type === 'checkbox' ? 'selected' : ''}>Checkboxes</option><option value="select" ${field.type === 'select' ? 'selected' : ''}>Dropdown</option><option value="date" ${field.type === 'date' ? 'selected' : ''}>Date</option></select></div></div>${optionsHtml}<div class="mt-5 flex items-center justify-end gap-3 border-t border-white/5 pt-4"><label class="text-[10px] font-bold text-white/60 uppercase tracking-widest cursor-pointer" for="req-${field.id}">Required</label><input type="checkbox" id="req-${field.id}" class="custom-checkbox" ${field.required ? 'checked' : ''} onchange="updateField('${field.id}', 'required', this.checked)"></div></div>`;
+                container.innerHTML += `<div class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 relative shadow-sm"><div class="flex justify-between items-center border-b border-white/10 pb-3 mb-4"><span class="text-[10px] font-bold text-white/40 uppercase">Question ${index + 1}</span><button type="button" onclick="removeQuestionField('${field.id}')" class="text-white/40 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div class="md:col-span-2"><label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Question Title</label><input type="text" class="glass-input w-full rounded-lg py-3 px-3 text-sm" value="${escapeHTML(field.label)}" oninput="updateField('${field.id}', 'label', this.value)"></div><div><label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Answer Type</label><select class="glass-input w-full rounded-lg py-3 px-3 text-sm" onchange="updateField('${field.id}', 'type', this.value)"><option value="text" ${field.type === 'text' ? 'selected' : ''}>Short Answer</option><option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Paragraph</option><option value="email" ${field.type === 'email' ? 'selected' : ''}>Email Address</option><option value="tel" ${field.type === 'tel' ? 'selected' : ''}>Phone Number</option><option value="radio" ${field.type === 'radio' ? 'selected' : ''}>Multiple Choice</option><option value="checkbox" ${field.type === 'checkbox' ? 'selected' : ''}>Checkboxes</option><option value="select" ${field.type === 'select' ? 'selected' : ''}>Dropdown</option><option value="date" ${field.type === 'date' ? 'selected' : ''}>Date</option></select></div></div>${optionsHtml}<div class="mt-5 flex items-center justify-end gap-3 border-t border-white/5 pt-4"><label class="text-[10px] font-bold text-white/60 uppercase cursor-pointer" for="req-${field.id}">Required</label><input type="checkbox" id="req-${field.id}" class="custom-checkbox" ${field.required ? 'checked' : ''} onchange="updateField('${field.id}', 'required', this.checked)"></div></div>`;
             });
             lucide.createIcons();
         };
@@ -684,7 +680,8 @@
                     uHtml += `<tr class="border-b border-white/5 hover:bg-white/5"><td class="px-6 py-4 text-sm font-medium text-white">${safeName}</td><td class="px-6 py-4 text-sm text-white/50">${safeEmail}</td><td class="px-6 py-4 text-center text-glow-gold font-bold text-lg">${points}</td><td class="px-6 py-4">${roleBadge}</td><td class="px-6 py-4 text-center flex justify-center gap-2"><button onclick="prepareAwardPoints('${u.id}', '${safeName}')" class="text-glow-gold hover:text-white bg-glow-gold/10 p-2 rounded-lg"><i data-lucide="gift" class="w-4 h-4"></i></button><button onclick="prepareEditUser('${u.id}', '${safeName}', '${u.role||'student'}')" class="text-glow-blue hover:text-white bg-white/5 p-2 rounded-lg"><i data-lucide="edit-2" class="w-4 h-4"></i></button></td></tr>`;
 
                     if(u.role === 'student' || u.role === 'excom') {
-                        certHtml += `<tr class="border-b border-white/5 hover:bg-white/5"><td class="px-6 py-4 text-center"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${u.id}" data-name="${safeName}"></td><td class="text-sm font-medium text-white">${safeName}</td></tr>`;
+                        // FIXED: ADDED DATA-EMAIL ATTRIBUTE FOR AUTOMATED EMAILS
+                        certHtml += `<tr class="border-b border-white/5 hover:bg-white/5"><td class="px-6 py-4 text-center"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${u.id}" data-name="${safeName}" data-email="${safeEmail}"></td><td class="text-sm font-medium text-white">${safeName}</td></tr>`;
                         attHtml += `<tr class="border-b border-white/5 hover:bg-white/5 cursor-pointer" onclick="toggleAttCheck('${u.id}')"><td class="px-6 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${u.id}" value="${u.id}" data-name="${safeName}"></td><td class="text-sm font-bold text-white">${safeName}</td><td class="text-xs text-white/50">${safeEmail}</td></tr>`;
                     }
                     if(u.role === 'excom') {
@@ -781,6 +778,35 @@
             });
         }
 
+        // --- AUTOMATED EMAIL HELPER (NEW PHASE 3) ---
+        async function sendAutomatedEmail(toEmail, studentName, eventName, certificateUrl) {
+            const emailHtml = `
+                <div style="font-family: Arial, sans-serif; max-w: 600px; margin: 0 auto; background: #050505; color: #ffffff; padding: 30px; border-radius: 15px; border: 1px solid #333;">
+                    <h2 style="color: #9333ea; text-align: center;">MET'S IEDC</h2>
+                    <h3 style="text-align: center;">Certificate of Participation</h3>
+                    <p>Hi ${studentName},</p>
+                    <p>Congratulations! Your certificate for <strong>${eventName}</strong> has been issued.</p>
+                    <p>You can view and download it from your IEDC Student Dashboard, or directly via the link below:</p>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="${certificateUrl}" style="background: #2563eb; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold;">View Certificate</a>
+                    </div>
+                    <p style="color: #888; font-size: 12px; text-align: center;">Keep innovating!<br>- The MET'S IEDC Team</p>
+                </div>
+            `;
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({
+                        action: 'sendEmail',
+                        to: toEmail,
+                        subject: `Your Certificate for ${eventName} | MET'S IEDC`,
+                        htmlBody: emailHtml
+                    })
+                });
+            } catch(e) { console.error("Email failed to send", e); }
+        }
+
         // --- GLOBALLY EXPOSED FUNCTIONS ---
         window.prepareEditUser = (id, name, role) => { document.getElementById('editUserId').value = id; document.getElementById('editUserName').value = name; document.getElementById('editUserRoleSelect').value = role; window.toggleEditUserModal(true); };
         window.toggleItemStatus = async (id, status) => { await updateDoc(doc(db, "inventory", id), { status: status }); await logActivity("Inventory Update", `Changed item status to ${status}`); };
@@ -794,59 +820,35 @@
             document.getElementById('excomModal').classList.remove('hidden'); lucide.createIcons();
         };
 
-        // --- BATCH WRITE ATTENDANCE (AUTO-ABSENT + POINTS) ---
+        // --- BATCH WRITE ATTENDANCE ---
         window.submitAttendance = async () => {
             const eventName = document.getElementById('attendanceEventName').value.trim(); 
             const date = document.getElementById('attendanceDate').value;
             if(!eventName || !date) return alert("Enter event name and date.");
-            
             const btn = document.getElementById('btnSaveAttendance');
             if(btn) { btn.disabled = true; btn.innerHTML = "Saving..."; }
-
             try {
                 const batch = writeBatch(db);
-                let presentCount = 0;
-                let absentCount = 0;
+                let presentCount = 0; let absentCount = 0;
 
                 document.querySelectorAll('.att-checkbox').forEach(cb => { 
-                    const uid = cb.value;
-                    const isPresent = cb.checked;
-                    const studentName = cb.dataset.name;
-                    
-                    // 1. Create individual student attendance records
+                    const uid = cb.value; const isPresent = cb.checked; const studentName = cb.dataset.name;
                     const attRef = doc(collection(db, "attendance"));
-                    batch.set(attRef, {
-                        eventName: eventName,
-                        date: date,
-                        uid: uid,
-                        studentName: studentName,
-                        status: isPresent ? 'Present' : 'Absent',
-                        timestamp: Date.now()
-                    });
+                    batch.set(attRef, { eventName: eventName, date: date, uid: uid, studentName: studentName, status: isPresent ? 'Present' : 'Absent', timestamp: Date.now() });
 
-                    // 2. Award 50 Points if present
                     if(isPresent) {
                         const userRef = doc(db, "users", uid);
                         batch.update(userRef, { points: increment(50) });
                         presentCount++;
-                    } else {
-                        absentCount++;
-                    }
+                    } else { absentCount++; }
                 });
 
                 await batch.commit();
                 await logActivity("Marked Attendance", `Event: ${eventName}. Present: ${presentCount}, Absent: ${absentCount}`); 
                 alert(`Success! Saved ${presentCount} Present and ${absentCount} Absent.`);
-                
-                // Reset Forms
                 document.querySelectorAll('.att-checkbox').forEach(cb => cb.checked = false); 
-                document.getElementById('attendanceEventName').value = ''; 
-                document.getElementById('attendanceDate').value = '';
-            } catch(e) { 
-                alert(e.message); 
-            } finally {
-                if(btn) { btn.disabled = false; btn.innerHTML = "Save List"; }
-            }
+                document.getElementById('attendanceEventName').value = ''; document.getElementById('attendanceDate').value = '';
+            } catch(e) { alert(e.message); } finally { if(btn) { btn.disabled = false; btn.innerHTML = "Save List"; } }
         };
 
         window.submitExcomAttendance = async () => {
@@ -860,19 +862,33 @@
             } catch(e) { alert(e.message); btn.disabled = false; }
         };
 
+        // --- UPDATED TO SEND AUTOMATED EMAILS ---
         window.issueCertificates = async () => {
             const eventName = document.getElementById('certEventName').value; const issueDate = document.getElementById('certDate').value;
             const checkboxes = document.querySelectorAll('.cert-checkbox:checked'); const statusEl = document.getElementById('certStatus'); const btn = document.getElementById('certBtn');
             if(!eventName || !issueDate || !window.certTemplateBase64) return alert("Fill all details and upload template.");
             if(checkboxes.length === 0) return alert("Select at least one student.");
+            
             btn.disabled = true; btn.innerHTML = `Issuing...`; statusEl.classList.remove('hidden'); statusEl.textContent = "Uploading template...";
+            
             try {
                 const fileObj = document.querySelector('input[accept="image/*"]').files[0];
                 const templateUrl = await uploadToDrive(fileObj);
-                let count = 0; statusEl.textContent = `Assigning...`;
-                for(let cb of checkboxes) { await addDoc(collection(db, "certificates"), { userId: cb.value, userName: cb.dataset.name, eventName, date: issueDate, templateUrl, timestamp: Date.now() }); count++; }
+                let count = 0; statusEl.textContent = `Assigning & Emailing...`;
+                
+                for(let cb of checkboxes) { 
+                    const userEmail = cb.dataset.email;
+                    await addDoc(collection(db, "certificates"), { userId: cb.value, userName: cb.dataset.name, eventName, date: issueDate, templateUrl, timestamp: Date.now() }); 
+                    
+                    // Trigger the Google Apps Script Email Engine
+                    if (userEmail && userEmail !== 'No Email') {
+                        await sendAutomatedEmail(userEmail, cb.dataset.name, eventName, templateUrl);
+                    }
+                    count++; 
+                }
+                
                 await logActivity("Issued Certificates", `Issued ${count} for ${eventName}`);
-                statusEl.classList.replace('text-white', 'text-green-400'); statusEl.textContent = `Success!`;
+                statusEl.classList.replace('text-white', 'text-green-400'); statusEl.textContent = `Success! Emails sent.`;
                 setTimeout(() => { statusEl.classList.add('hidden'); statusEl.classList.replace('text-green-400', 'text-white'); }, 4000);
                 document.getElementById('certEventName').value = ''; document.getElementById('certDate').value = ''; document.getElementById('certFileName').innerHTML = 'Upload design'; window.certTemplateBase64 = null; checkboxes.forEach(c => c.checked = false);
             } catch(e) { alert("Error: " + e.message); statusEl.classList.add('hidden'); } finally { btn.disabled = false; btn.innerText = "Issue Certificates"; }
