@@ -24,19 +24,8 @@
                         display: ['Plus Jakarta Sans', 'sans-serif']
                     },
                     colors: {
-                        dark: {
-                            base: '#050505',
-                            panel: 'rgba(20, 20, 25, 0.6)',
-                            border: 'rgba(255, 255, 255, 0.08)'
-                        },
-                        glow: {
-                            purple: '#9333ea',
-                            orange: '#ea580c',
-                            blue: '#2563eb',
-                            green: '#22c55e',
-                            red: '#ef4444',
-                            gold: '#fbbf24'
-                        }
+                        dark: { base: '#050505', panel: 'rgba(20, 20, 25, 0.6)', border: 'rgba(255, 255, 255, 0.08)' },
+                        glow: { purple: '#9333ea', orange: '#ea580c', blue: '#2563eb', green: '#22c55e', red: '#ef4444', gold: '#fbbf24' }
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
@@ -58,94 +47,43 @@
     </script>
 
     <style>
-        body { 
-            background-color: #050505; 
-            color: #e2e8f0; 
-            overflow-x: hidden; 
-        }
+        body { background-color: #050505; color: #e2e8f0; overflow-x: hidden; }
 
-        /* Glassmorphism Utilities */
         .glass-panel {
             background: linear-gradient(145deg, rgba(30, 30, 35, 0.8) 0%, rgba(15, 15, 20, 0.6) 100%);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02), 0 20px 40px rgba(0,0,0,0.6);
-            position: relative;
-            overflow: hidden;
-            border-radius: 24px;
+            position: relative; overflow: hidden; border-radius: 24px;
         }
 
-        /* Input styling */
         .glass-input {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white; backdrop-filter: blur(10px); transition: all 0.3s ease;
         }
         .glass-input:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(147, 51, 234, 0.5);
-            outline: none;
-            box-shadow: 0 0 15px rgba(147, 51, 234, 0.2);
+            background: rgba(255, 255, 255, 0.08); border-color: rgba(147, 51, 234, 0.5);
+            outline: none; box-shadow: 0 0 15px rgba(147, 51, 234, 0.2);
         }
         .glass-input::placeholder { color: rgba(255, 255, 255, 0.3); font-weight: 400; }
         select.glass-input option { color: #1c2833; background: white; }
 
-        /* Sidebar Links */
-        .sidebar-link { 
-            transition: all 0.2s ease; 
-            border-left: 3px solid transparent; 
-            cursor: pointer; 
-            font-weight: 500; 
-            color: rgba(255,255,255,0.5);
-        }
-        .sidebar-link:hover { 
-            color: #ffffff; 
-            background: rgba(255,255,255,0.05); 
-        }
-        .sidebar-link.active { 
-            color: #ffffff; 
-            background-color: rgba(147, 51, 234, 0.15);
-            border-left-color: #9333ea;
-            box-shadow: inset 0 0 20px rgba(147, 51, 234, 0.1);
-        }
+        .sidebar-link { transition: all 0.2s ease; border-left: 3px solid transparent; cursor: pointer; font-weight: 500; color: rgba(255,255,255,0.5); }
+        .sidebar-link:hover { color: #ffffff; background: rgba(255,255,255,0.05); }
+        .sidebar-link.active { color: #ffffff; background-color: rgba(147, 51, 234, 0.15); border-left-color: #9333ea; box-shadow: inset 0 0 20px rgba(147, 51, 234, 0.1); }
 
-        /* Buttons */
-        .btn-light {
-            background: #ffffff;
-            color: #050505;
-            transition: all 0.3s ease;
-        }
-        .btn-light:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
-        }
+        .btn-light { background: #ffffff; color: #050505; transition: all 0.3s ease; }
+        .btn-light:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(255,255,255,0.2); }
         .btn-light:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         
-        .btn-primary {
-            background: linear-gradient(135deg, #9333ea 0%, #4f46e5 100%);
-            color: #ffffff;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
-        }
-        .btn-primary:hover {
-            box-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
-            transform: translateY(-2px);
-        }
+        .btn-primary { background: linear-gradient(135deg, #9333ea 0%, #4f46e5 100%); color: #ffffff; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3); }
+        .btn-primary:hover { box-shadow: 0 0 20px rgba(147, 51, 234, 0.5); transform: translateY(-2px); }
         .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* Custom Checkbox */
-        .custom-checkbox { 
-            appearance: none; background-color: rgba(255,255,255,0.05); width: 1.25em; height: 1.25em; 
-            border: 1px solid rgba(255,255,255,0.2); border-radius: 0.25em; cursor: pointer; 
-            display: inline-grid; place-content: center; transition: all 0.2s;
-        }
+        .custom-checkbox { appearance: none; background-color: rgba(255,255,255,0.05); width: 1.25em; height: 1.25em; border: 1px solid rgba(255,255,255,0.2); border-radius: 0.25em; cursor: pointer; display: inline-grid; place-content: center; transition: all 0.2s; }
         .custom-checkbox:checked { background-color: #9333ea; border-color: #9333ea; }
         .custom-checkbox:checked::before { content: "✔"; color: #ffffff; font-size: 0.8em; font-weight: bold; }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; } 
         ::-webkit-scrollbar-track { background: transparent; } 
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
@@ -154,15 +92,10 @@
         .spinner { border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 50%; border-top: 2px solid #fff; width: 16px; height: 16px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* QR Scanner Overrides */
         #qr-reader { border: none !important; border-radius: 1rem; overflow: hidden; }
         #qr-reader__scan_region { background: #000; }
-        #qr-reader__dashboard_section_csr button { 
-            background: #2563eb !important; color: white !important; padding: 8px 16px; 
-            border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; 
-        }
+        #qr-reader__dashboard_section_csr button { background: #2563eb !important; color: white !important; padding: 8px 16px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
 
-        /* Print formatting */
         @media print {
             body { background: white !important; color: black !important; }
             * { color: black !important; background: transparent !important; text-shadow: none !important; box-shadow: none !important; }
@@ -179,61 +112,29 @@
 
     <aside class="w-64 border-r border-white/10 flex-shrink-0 hidden md:flex flex-col h-full z-20 bg-[#0a0a0c]/50 backdrop-blur-xl">
         <div class="p-6 flex items-center gap-3">
-            <div class="w-8 h-8 rounded-xl bg-glow-purple/20 border border-glow-purple/50 flex items-center justify-center text-glow-purple font-bold shadow-[0_0_15px_rgba(147,51,234,0.3)]">
-                P
-            </div>
+            <div class="w-8 h-8 rounded-xl bg-glow-purple/20 border border-glow-purple/50 flex items-center justify-center text-glow-purple font-bold shadow-[0_0_15px_rgba(147,51,234,0.3)]">P</div>
             <span class="text-xl font-display font-bold text-white tracking-widest uppercase">Admin</span>
         </div>
 
         <nav class="flex-grow px-4 py-2 space-y-1 overflow-y-auto">
-            <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
-                <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
-            </button>
-            <button onclick="showTab('scanner')" id="nav-scanner" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-green font-bold">
-                <i data-lucide="scan-line" class="w-4 h-4"></i> QR Scanner
-            </button>
-            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
-                <i data-lucide="users" class="w-4 h-4"></i> Users & Points
-            </button>
-            <button onclick="showTab('inventory')" id="nav-inventory" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
-                <i data-lucide="box" class="w-4 h-4"></i> Inventory
-            </button>
-            <button onclick="showTab('logs')" id="nav-logs" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
-                <i data-lucide="activity" class="w-4 h-4"></i> Activity Logs
-            </button>
-            <button onclick="showTab('excom')" id="nav-excom" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
-                <i data-lucide="shield" class="w-4 h-4"></i> ExCom Tracking
-            </button>
-            <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
-                <i data-lucide="clipboard-check" class="w-4 h-4"></i> Attendance
-            </button>
-            <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
-                <i data-lucide="award" class="w-4 h-4"></i> Certificates
-            </button>
-            
+            <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
+            <button onclick="showTab('scanner')" id="nav-scanner" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-green font-bold"><i data-lucide="scan-line" class="w-4 h-4"></i> QR Scanner</button>
+            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="users" class="w-4 h-4"></i> Users & Points</button>
+            <button onclick="showTab('inventory')" id="nav-inventory" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="box" class="w-4 h-4"></i> Inventory</button>
+            <button onclick="showTab('logs')" id="nav-logs" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="activity" class="w-4 h-4"></i> Activity Logs</button>
+            <button onclick="showTab('excom')" id="nav-excom" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="shield" class="w-4 h-4"></i> ExCom Tracking</button>
+            <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="clipboard-check" class="w-4 h-4"></i> Attendance</button>
+            <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="award" class="w-4 h-4"></i> Certificates</button>
             <div class="pt-4 pb-2 px-4 text-[10px] font-bold text-white/30 uppercase tracking-widest">Publish Content</div>
-            
-            <button onclick="showTab('notifications')" id="nav-notifications" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-purple font-bold">
-                <i data-lucide="bell-ring" class="w-4 h-4"></i> Send Alert
-            </button>
-            <button onclick="showTab('announcements')" id="nav-announcements" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
-                <i data-lucide="bell" class="w-4 h-4"></i> Circulars
-            </button>
-            <button onclick="showTab('news')" id="nav-news" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
-                <i data-lucide="newspaper" class="w-4 h-4"></i> News Article
-            </button>
-            <button onclick="showTab('eventForms')" id="nav-eventForms" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
-                <i data-lucide="file-plus" class="w-4 h-4"></i> Event Form
-            </button>
-            <button onclick="showTab('gallery')" id="nav-gallery" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
-                <i data-lucide="image" class="w-4 h-4"></i> Gallery
-            </button>
+            <button onclick="showTab('notifications')" id="nav-notifications" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-purple font-bold"><i data-lucide="bell-ring" class="w-4 h-4"></i> Send Alert</button>
+            <button onclick="showTab('announcements')" id="nav-announcements" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="bell" class="w-4 h-4"></i> Circulars</button>
+            <button onclick="showTab('news')" id="nav-news" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="newspaper" class="w-4 h-4"></i> News Article</button>
+            <button onclick="showTab('eventForms')" id="nav-eventForms" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="file-plus" class="w-4 h-4"></i> Event Form</button>
+            <button onclick="showTab('gallery')" id="nav-gallery" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="image" class="w-4 h-4"></i> Gallery</button>
         </nav>
 
         <div class="p-6 mt-auto border-t border-white/5">
-            <button id="adminLogoutBtn" class="w-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors flex justify-center items-center gap-2">
-                <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
-            </button>
+            <button id="adminLogoutBtn" class="w-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors flex justify-center items-center gap-2"><i data-lucide="log-out" class="w-4 h-4"></i> Sign Out</button>
         </div>
     </aside>
 
@@ -244,9 +145,7 @@
                 <div class="w-8 h-8 rounded-lg bg-glow-purple/20 border border-glow-purple/50 flex items-center justify-center text-glow-purple font-bold">P</div>
                 <span class="text-lg font-display font-bold text-white tracking-widest">ADMIN</span>
             </div>
-            <button id="close-mobile-sidebar" class="text-white/50 hover:text-white w-8 h-8 rounded-full bg-white/5 flex items-center justify-center relative z-[300]">
-                <i data-lucide="x" class="pointer-events-none w-4 h-4"></i>
-            </button>
+            <button id="close-mobile-sidebar" class="text-white/50 hover:text-white w-8 h-8 rounded-full bg-white/5 flex items-center justify-center relative z-[300]"><i data-lucide="x" class="pointer-events-none w-4 h-4"></i></button>
         </div>
         <nav class="flex-grow px-4 py-6 space-y-1 overflow-y-auto" id="mobile-nav-links">
             <button onclick="showTab('overview')" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
@@ -257,50 +156,34 @@
             <button onclick="showTab('excom')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="shield" class="w-4 h-4"></i> ExCom</button>
             <button onclick="showTab('attendance')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="clipboard-check" class="w-4 h-4"></i> Attendance</button>
             <button onclick="showTab('certificates')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="award" class="w-4 h-4"></i> Certificates</button>
-            
             <div class="h-px bg-white/10 my-4 mx-4"></div>
-            
             <button onclick="showTab('notifications')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-glow-purple font-bold"><i data-lucide="bell-ring" class="w-4 h-4"></i> Send Alert</button>
             <button onclick="showTab('announcements')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="bell" class="w-4 h-4"></i> Circulars</button>
             <button onclick="showTab('news')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="newspaper" class="w-4 h-4"></i> Post News</button>
             <button onclick="showTab('eventForms')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="file-plus" class="w-4 h-4"></i> Forms</button>
             <button onclick="showTab('gallery')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="image" class="w-4 h-4"></i> Gallery</button>
-            
             <div class="mt-8 px-4">
-                <button id="adminLogoutBtnMobile" class="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 py-3.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
-                    <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
-                </button>
+                <button id="adminLogoutBtnMobile" class="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 py-3.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-4 h-4"></i> Sign Out</button>
             </div>
         </nav>
     </div>
 
     <div class="flex-grow flex flex-col h-full overflow-hidden relative z-10 w-full bg-transparent">
-        
         <header class="h-20 flex items-center justify-between px-6 md:px-10 shrink-0 w-full relative z-[60] border-b border-white/5 bg-[#0a0a0c]/50 backdrop-blur-md">
             <div class="flex items-center gap-4">
-                <button id="mobile-menu-toggle" class="md:hidden text-white/50 p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer relative z-[100]">
-                    <i data-lucide="menu" class="w-6 h-6 pointer-events-none"></i>
-                </button>
-                <div>
-                    <h1 class="text-xl font-display font-bold text-white tracking-widest uppercase" id="headerTitle">Dashboard</h1>
-                </div>
+                <button id="mobile-menu-toggle" class="md:hidden text-white/50 p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer relative z-[100]"><i data-lucide="menu" class="w-6 h-6 pointer-events-none"></i></button>
+                <div><h1 class="text-xl font-display font-bold text-white tracking-widest uppercase" id="headerTitle">Dashboard</h1></div>
             </div>
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-3">
-                    <div class="text-right hidden sm:block">
-                        <p class="text-[10px] font-bold uppercase tracking-widest text-white/50" id="adminEmailDisplay">Admin User</p>
-                    </div>
-                    <div class="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white font-bold shadow-sm">
-                        <i data-lucide="shield-check" class="w-5 h-5"></i>
-                    </div>
+                    <div class="text-right hidden sm:block"><p class="text-[10px] font-bold uppercase tracking-widest text-white/50" id="adminEmailDisplay">Admin User</p></div>
+                    <div class="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white font-bold shadow-sm"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
                 </div>
             </div>
         </header>
 
         <main class="flex-grow overflow-y-auto p-4 md:p-8 w-full pb-24 md:pb-10 relative">
-            
             <div id="overviewSection" class="tab-content space-y-6 max-w-7xl mx-auto w-full">
-                
                 <div class="glass-panel rounded-3xl p-8 md:p-10 flex justify-between items-center shadow-2xl border-glow-purple/30">
                     <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-glow-purple/20 blur-3xl rounded-full pointer-events-none"></div>
                     <div class="relative z-10">
@@ -308,43 +191,15 @@
                         <p class="text-white/50 text-sm md:text-base max-w-md leading-relaxed font-light">Monitor real-time statistics, demographics, and active resources across the IEDC platform.</p>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                    <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group">
-                        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-glow-purple/20 blur-xl rounded-full group-hover:bg-glow-purple/40 transition-colors"></div>
-                        <p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Total Users</p>
-                        <h3 class="text-4xl md:text-5xl font-display font-bold text-white relative z-10" id="totalUsersCount">0</h3>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group">
-                        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-glow-blue/20 blur-xl rounded-full group-hover:bg-glow-blue/40 transition-colors"></div>
-                        <p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Inventory Assets</p>
-                        <h3 class="text-4xl md:text-5xl font-display font-bold text-white relative z-10" id="invTotalOverview">0</h3>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group">
-                        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-glow-orange/20 blur-xl rounded-full group-hover:bg-glow-orange/40 transition-colors"></div>
-                        <p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Announcements</p>
-                        <h3 class="text-4xl md:text-5xl font-display font-bold text-white relative z-10" id="totalAnnouncementsCount">0</h3>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group">
-                        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-glow-green/20 blur-xl rounded-full group-hover:bg-glow-green/40 transition-colors"></div>
-                        <p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Active Forms</p>
-                        <h3 class="text-4xl md:text-5xl font-display font-bold text-white relative z-10" id="activeFormsCount">0</h3>
-                    </div>
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group"><div class="absolute -right-4 -bottom-4 w-24 h-24 bg-glow-purple/20 blur-xl rounded-full group-hover:bg-glow-purple/40 transition-colors"></div><p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Total Users</p><h3 class="text-4xl md:text-5xl font-display font-bold text-white relative z-10" id="totalUsersCount">0</h3></div>
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group"><div class="absolute -right-4 -bottom-4 w-24 h-24 bg-glow-blue/20 blur-xl rounded-full group-hover:bg-glow-blue/40 transition-colors"></div><p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Inventory Assets</p><h3 class="text-4xl md:text-5xl font-display font-bold text-white relative z-10" id="invTotalOverview">0</h3></div>
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group"><div class="absolute -right-4 -bottom-4 w-24 h-24 bg-glow-orange/20 blur-xl rounded-full group-hover:bg-glow-orange/40 transition-colors"></div><p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Announcements</p><h3 class="text-4xl md:text-5xl font-display font-bold text-white relative z-10" id="totalAnnouncementsCount">0</h3></div>
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group"><div class="absolute -right-4 -bottom-4 w-24 h-24 bg-glow-green/20 blur-xl rounded-full group-hover:bg-glow-green/40 transition-colors"></div><p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Active Forms</p><h3 class="text-4xl md:text-5xl font-display font-bold text-white relative z-10" id="activeFormsCount">0</h3></div>
                 </div>
-
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-                    <div class="lg:col-span-2 glass-panel p-6 rounded-3xl">
-                        <h3 class="text-xs font-bold text-white/50 uppercase tracking-widest mb-6">Recent Scans & Activity</h3>
-                        <div class="w-full h-64">
-                            <canvas id="activityChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="glass-panel p-6 rounded-3xl flex flex-col items-center">
-                        <h3 class="text-xs font-bold text-white/50 uppercase tracking-widest w-full text-left mb-6">User Demographics</h3>
-                        <div class="w-full max-w-[200px] flex-grow flex items-center justify-center">
-                            <canvas id="roleChart"></canvas>
-                        </div>
-                    </div>
+                    <div class="lg:col-span-2 glass-panel p-6 rounded-3xl"><h3 class="text-xs font-bold text-white/50 uppercase tracking-widest mb-6">Recent Scans & Activity</h3><div class="w-full h-64"><canvas id="activityChart"></canvas></div></div>
+                    <div class="glass-panel p-6 rounded-3xl flex flex-col items-center"><h3 class="text-xs font-bold text-white/50 uppercase tracking-widest w-full text-left mb-6">User Demographics</h3><div class="w-full max-w-[200px] flex-grow flex items-center justify-center"><canvas id="roleChart"></canvas></div></div>
                 </div>
             </div>
 
@@ -352,22 +207,13 @@
                 <div class="glass-panel p-8 md:p-10 rounded-3xl border-glow-green/30">
                     <div class="flex justify-between items-center border-b border-white/10 pb-5 mb-8">
                         <div>
-                            <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase flex items-center gap-3">
-                                <i data-lucide="scan" class="text-glow-green w-6 h-6"></i> Digital ID Scanner
-                            </h2>
+                            <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase flex items-center gap-3"><i data-lucide="scan" class="text-glow-green w-6 h-6"></i> Digital ID Scanner</h2>
                             <p class="text-white/50 text-sm font-light mt-1">Scan student QR codes to log attendance and automatically award +50 points.</p>
                         </div>
                     </div>
-                    
-                    <div class="mb-6">
-                        <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Select Event to Log</label>
-                        <input type="text" id="scannerEventName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. CodeSprint 2026 Day 1" required>
-                    </div>
-
+                    <div class="mb-6"><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Select Event to Log</label><input type="text" id="scannerEventName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. CodeSprint 2026 Day 1" required></div>
                     <div id="qr-reader" class="w-full bg-black/50 border-2 border-dashed border-white/20 mb-6 min-h-[300px]"></div>
-
                     <div id="scannerStatus" class="hidden p-4 rounded-xl text-center font-bold text-sm tracking-widest uppercase"></div>
-
                     <div class="flex gap-4">
                         <button onclick="startScanner()" id="btnStartScan" class="flex-1 btn-primary py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">Start Camera</button>
                         <button onclick="stopScanner()" id="btnStopScan" class="hidden flex-1 bg-white/10 hover:bg-white/20 text-white py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">Stop Camera</button>
@@ -377,59 +223,36 @@
 
             <div id="usersSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
                 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-                    <div>
-                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">User Directory</h2>
-                    </div>
+                    <div><h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">User Directory</h2></div>
                     <div class="flex gap-3 w-full lg:w-auto">
                         <div class="relative flex-grow">
                             <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search Name or Email..." class="glass-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-light">
                             <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40"></i>
                         </div>
-                        <button onclick="toggleAddUserModal(true)" class="flex-shrink-0 btn-primary px-5 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold flex items-center gap-2">
-                            <i data-lucide="user-plus" class="w-4 h-4"></i> Add
-                        </button>
+                        <button onclick="toggleAddUserModal(true)" class="flex-shrink-0 btn-primary px-5 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold flex items-center gap-2"><i data-lucide="user-plus" class="w-4 h-4"></i> Add</button>
                     </div>
                 </div>
-
                 <div class="glass-panel rounded-2xl overflow-x-auto w-full">
                     <table class="w-full text-left min-w-[700px]">
-                        <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50">
-                            <tr>
-                                <th class="px-6 py-5">Name</th>
-                                <th class="px-6">Email</th>
-                                <th class="px-6 text-center">Points</th>
-                                <th class="px-6">Role</th>
-                                <th class="text-center px-6">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="userListBody" class="divide-y divide-white/5 text-sm font-light text-white/90">
-                            <tr><td colspan="5" class="text-center py-8 text-white/30 text-xs tracking-widest uppercase font-bold">Loading users...</td></tr>
-                        </tbody>
+                        <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50"><tr><th class="px-6 py-5">Name</th><th class="px-6">Email</th><th class="px-6 text-center">Points</th><th class="px-6">Role</th><th class="text-center px-6">Actions</th></tr></thead>
+                        <tbody id="userListBody" class="divide-y divide-white/5 text-sm font-light text-white/90"><tr><td colspan="5" class="text-center py-8 text-white/30 text-xs tracking-widest uppercase font-bold">Loading users...</td></tr></tbody>
                     </table>
                 </div>
             </div>
 
             <div id="inventorySection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Hardware Assets</h2>
-                    </div>
-                    <button onclick="document.getElementById('addItemModal').classList.remove('hidden')" class="btn-primary px-6 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold flex items-center gap-3 transition-colors">
-                        <i data-lucide="plus" class="w-4 h-4"></i> Add Asset
-                    </button>
+                    <div><h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Hardware Assets</h2></div>
+                    <button onclick="document.getElementById('addItemModal').classList.remove('hidden')" class="btn-primary px-6 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold flex items-center gap-3 transition-colors"><i data-lucide="plus" class="w-4 h-4"></i> Add Asset</button>
                 </div>
-                
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="glass-panel p-6 rounded-2xl flex justify-between items-center"><span class="text-white/50 text-[10px] font-bold uppercase tracking-widest">Total Assets</span><span class="text-2xl font-display font-bold text-white" id="invTotal">0</span></div>
                     <div class="glass-panel p-6 rounded-2xl flex justify-between items-center border-l-2 border-l-green-500"><span class="text-white/50 text-[10px] font-bold uppercase tracking-widest">Available</span><span class="text-2xl font-display font-bold text-green-400" id="invAvail">0</span></div>
                     <div class="glass-panel p-6 rounded-2xl flex justify-between items-center border-l-2 border-l-red-500"><span class="text-white/50 text-[10px] font-bold uppercase tracking-widest">Borrowed</span><span class="text-2xl font-display font-bold text-red-400" id="invBorrowed">0</span></div>
                 </div>
-                
                 <div class="glass-panel rounded-2xl overflow-x-auto w-full">
                     <table class="w-full text-left min-w-[600px]">
-                        <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50">
-                            <tr><th class="px-6 py-5">Item Name</th><th class="px-6">Category</th><th class="px-6">Status</th><th class="px-6">Holder</th><th class="text-center px-6">Action</th></tr>
-                        </thead>
+                        <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50"><tr><th class="px-6 py-5">Item Name</th><th class="px-6">Category</th><th class="px-6">Status</th><th class="px-6">Holder</th><th class="text-center px-6">Action</th></tr></thead>
                         <tbody id="inventoryListBody" class="divide-y divide-white/5 text-sm font-light text-white/90"></tbody>
                     </table>
                 </div>
@@ -438,16 +261,11 @@
             <div id="logsSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">System Logs</h2>
-                    <button onclick="printLogs()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-5 py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
-                        <i data-lucide="printer" class="w-4 h-4"></i>
-                        <span class="text-[10px] uppercase tracking-widest font-bold">Print</span>
-                    </button>
+                    <button onclick="printLogs()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-5 py-3 rounded-xl transition-colors flex items-center justify-center gap-2"><i data-lucide="printer" class="w-4 h-4"></i><span class="text-[10px] uppercase tracking-widest font-bold">Print</span></button>
                 </div>
                 <div class="glass-panel rounded-2xl overflow-x-auto w-full max-h-[600px] overflow-y-auto">
                     <table class="w-full text-left min-w-[500px]">
-                        <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10">
-                            <tr><th class="px-6 py-5">Timestamp</th><th class="px-6">Action</th><th class="px-6">Details</th><th class="px-6">Admin</th></tr>
-                        </thead>
+                        <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10"><tr><th class="px-6 py-5">Timestamp</th><th class="px-6">Action</th><th class="px-6">Details</th><th class="px-6">Admin</th></tr></thead>
                         <tbody id="logsListBody" class="divide-y divide-white/5 text-white/80 text-sm"></tbody>
                     </table>
                 </div>
@@ -456,19 +274,11 @@
             <div id="excomSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">ExCom Tracker</h2>
-                    <button onclick="openExcomAttendanceModal()" class="btn-primary px-6 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold flex items-center gap-2">
-                        <i data-lucide="clipboard-edit" class="w-4 h-4"></i> Log Meeting
-                    </button>
+                    <button onclick="openExcomAttendanceModal()" class="btn-primary px-6 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold flex items-center gap-2"><i data-lucide="clipboard-edit" class="w-4 h-4"></i> Log Meeting</button>
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="glass-panel p-6 rounded-2xl">
-                        <h3 class="text-xs font-bold text-white/50 mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Committee Members</h3>
-                        <div id="excomMembersList" class="space-y-2 max-h-80 overflow-y-auto"></div>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl flex flex-col">
-                        <h3 class="text-xs font-bold text-white/50 mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Recent Meetings</h3>
-                        <div id="excomMeetingsList" class="space-y-3 flex-grow overflow-y-auto"></div>
-                    </div>
+                    <div class="glass-panel p-6 rounded-2xl"><h3 class="text-xs font-bold text-white/50 mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Committee Members</h3><div id="excomMembersList" class="space-y-2 max-h-80 overflow-y-auto"></div></div>
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col"><h3 class="text-xs font-bold text-white/50 mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Recent Meetings</h3><div id="excomMeetingsList" class="space-y-3 flex-grow overflow-y-auto"></div></div>
                 </div>
             </div>
 
@@ -482,21 +292,13 @@
                 </div>
                 <div class="glass-panel p-6 mb-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Name</label>
-                            <input type="text" id="attendanceEventName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="E.g. Buildathon 2026">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date</label>
-                            <input type="date" id="attendanceDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm">
-                        </div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Name</label><input type="text" id="attendanceEventName" class="glass-input w-full rounded-xl py-3 px-4 text-sm" placeholder="E.g. Buildathon 2026"></div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date</label><input type="date" id="attendanceDate" class="glass-input w-full rounded-xl py-3 px-4 text-sm"></div>
                     </div>
                 </div>
                 <div class="glass-panel overflow-x-auto max-h-[500px] overflow-y-auto w-full">
                     <table class="w-full text-left min-w-[400px]">
-                        <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10">
-                            <tr><th class="px-6 py-5 w-16 text-center">Present</th><th>Name</th><th>Email</th></tr>
-                        </thead>
+                        <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10"><tr><th class="px-6 py-5 w-16 text-center">Present</th><th>Name</th><th>Email</th></tr></thead>
                         <tbody id="attendanceListBody" class="divide-y divide-white/5 text-white/80"></tbody>
                     </table>
                 </div>
@@ -504,95 +306,45 @@
 
             <div id="certificatesSection" class="tab-content hidden space-y-6 max-w-4xl mx-auto w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
-                    <div class="border-b border-white/10 pb-6 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Issue Certificates</h2>
-                    </div>
-                    
+                    <div class="border-b border-white/10 pb-6 mb-8"><h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Issue Certificates</h2></div>
                     <div id="certStatus" class="hidden mb-6 p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest text-center border border-glow-purple/50 bg-glow-purple/10 text-white"></div>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Name</label>
-                            <input type="text" id="certEventName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Event Name">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date of Issue</label>
-                            <input type="date" id="certDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm">
-                        </div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Name</label><input type="text" id="certEventName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Event Name"></div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date of Issue</label><input type="date" id="certDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm"></div>
                     </div>
-
                     <div class="mb-8 p-6 border border-white/10 rounded-2xl bg-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div>
-                            <p class="text-sm font-bold text-white mb-1">Certificate Template</p>
-                            <p class="text-[10px] text-white/50 uppercase tracking-widest font-bold" id="certFileName">Upload a clean image design</p>
-                        </div>
-                        <label class="btn-light px-6 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold cursor-pointer transition-colors w-full md:w-auto text-center">
-                            <span>Browse Image</span>
-                            <input type="file" onchange="handleCertTemplate(event)" class="hidden" accept="image/*">
-                        </label>
+                        <div><p class="text-sm font-bold text-white mb-1">Certificate Template</p><p class="text-[10px] text-white/50 uppercase tracking-widest font-bold" id="certFileName">Upload a clean image design</p></div>
+                        <label class="btn-light px-6 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold cursor-pointer transition-colors w-full md:w-auto text-center"><span>Browse Image</span><input type="file" onchange="handleCertTemplate(event)" class="hidden" accept="image/*"></label>
                     </div>
-
                     <label class="block text-[10px] font-bold text-white/50 mb-3 uppercase tracking-widest">Select Recipients</label>
                     <div class="border border-white/10 rounded-2xl overflow-x-auto max-h-72 overflow-y-auto mb-8 bg-black/30">
                         <table class="w-full text-left min-w-[300px]">
-                            <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10">
-                                <tr><th class="px-4 py-3 w-16 text-center"><i data-lucide="check-square" class="w-4 h-4 mx-auto"></i></th><th>Student Name</th></tr>
-                            </thead>
+                            <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10"><tr><th class="px-4 py-3 w-16 text-center"><i data-lucide="check-square" class="w-4 h-4 mx-auto"></i></th><th>Student Name</th></tr></thead>
                             <tbody id="certUserListBody" class="divide-y divide-white/5 text-white/80"></tbody>
                         </table>
                     </div>
-
                     <button onclick="issueCertificates()" id="certBtn" class="w-full btn-primary py-4 rounded-xl text-xs font-bold uppercase tracking-widest transition-all">Issue Certificates</button>
                 </div>
             </div>
 
             <div id="notificationsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
-                    <div class="border-b border-white/10 pb-5 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Send In-App Alert</h2>
-                        <p class="text-white/50 text-sm font-light">Pushes a notification directly to the student dashboard bell icon.</p>
-                    </div>
+                    <div class="border-b border-white/10 pb-5 mb-8"><h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Send In-App Alert</h2><p class="text-white/50 text-sm font-light">Pushes a notification directly to the student dashboard bell icon.</p></div>
                     <form id="pushAlertForm" class="space-y-6">
-                        <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Alert Title</label>
-                            <input type="text" id="alertTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. Meeting Room Changed" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Category</label>
-                            <select id="alertCategory" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm font-medium">
-                                <option value="Alert">Urgent Alert</option>
-                                <option value="Event">Event Update</option>
-                                <option value="Reminder">General Reminder</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Message Content</label>
-                            <textarea id="alertContent" rows="4" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Provide the details..." required></textarea>
-                        </div>
-                        <div class="pt-4">
-                            <button type="submit" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">
-                                Broadcast Alert
-                            </button>
-                        </div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Alert Title</label><input type="text" id="alertTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. Meeting Room Changed" required></div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Category</label><select id="alertCategory" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm font-medium"><option value="Alert">Urgent Alert</option><option value="Event">Event Update</option><option value="Reminder">General Reminder</option></select></div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Message Content</label><textarea id="alertContent" rows="4" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Provide the details..." required></textarea></div>
+                        <div class="pt-4"><button type="submit" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">Broadcast Alert</button></div>
                     </form>
                 </div>
             </div>
 
             <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
-                    <div class="border-b border-white/10 pb-5 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Post Circular</h2>
-                        <p class="text-white/50 text-sm font-light">Posts a public text announcement to the main website.</p>
-                    </div>
+                    <div class="border-b border-white/10 pb-5 mb-8"><h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Post Circular</h2><p class="text-white/50 text-sm font-light">Posts a public text announcement to the main website.</p></div>
                     <form id="announcementForm" class="space-y-6">
-                        <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Subject</label>
-                            <input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Important Notice" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Details</label>
-                            <textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Information goes here..." required></textarea>
-                        </div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Subject</label><input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Important Notice" required></div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Details</label><textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Information goes here..." required></textarea></div>
                         <button type="submit" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all mt-2">Publish Circular</button>
                     </form>
                 </div>
@@ -600,30 +352,13 @@
 
             <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
-                    <div class="border-b border-white/10 pb-5 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Post News</h2>
-                    </div>
+                    <div class="border-b border-white/10 pb-5 mb-8"><h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Post News</h2></div>
                     <form id="newsForm" class="space-y-6">
-                        <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Headline</label>
-                            <input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Major Announcement" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Content</label>
-                            <textarea id="newsContent" rows="5" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm leading-relaxed" placeholder="Write the full story here..." required></textarea>
-                        </div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Headline</label><input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Major Announcement" required></div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Content</label><textarea id="newsContent" rows="5" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm leading-relaxed" placeholder="Write the full story here..." required></textarea></div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Publish Date</label>
-                                <input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" required>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Cover Image</label>
-                                <label class="glass-input w-full rounded-xl py-3.5 px-4 text-sm text-center cursor-pointer block border-dashed hover:bg-white/5 transition-colors">
-                                    <span id="newsFileName" class="text-white/50"><i class="fas fa-upload mr-2"></i> Browse File</span>
-                                    <input type="file" id="newsImageInput" class="hidden" onchange="handleNewsImage(event)">
-                                </label>
-                            </div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Publish Date</label><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" required></div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Cover Image</label><label class="glass-input w-full rounded-xl py-3.5 px-4 text-sm text-center cursor-pointer block border-dashed hover:bg-white/5 transition-colors"><span id="newsFileName" class="text-white/50"><i class="fas fa-upload mr-2"></i> Browse File</span><input type="file" id="newsImageInput" class="hidden" onchange="handleNewsImage(event)"></label></div>
                         </div>
                         <button type="submit" id="postNewsBtn" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all mt-4">Publish News</button>
                     </form>
@@ -632,84 +367,34 @@
 
             <div id="eventFormsSection" class="tab-content hidden max-w-3xl mx-auto space-y-6 w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
-                    <div class="border-b border-white/10 pb-5 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Form Builder</h2>
-                        <p class="text-white/50 text-sm font-light">Create custom dynamic registration forms.</p>
-                    </div>
+                    <div class="border-b border-white/10 pb-5 mb-8"><h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Form Builder</h2><p class="text-white/50 text-sm font-light">Create custom dynamic registration forms.</p></div>
                     <form id="formBuilderForm" class="space-y-8">
                         <div class="space-y-6 bg-black/30 p-6 rounded-2xl border border-white/10">
-                            <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Form Cover Image</label>
-                                <label class="glass-input w-full rounded-xl py-4 px-4 text-sm text-center cursor-pointer block border-dashed hover:bg-white/5 transition-colors">
-                                    <span id="formCoverFileName" class="text-white/50"><i class="fas fa-image mr-2"></i> Browse Image</span>
-                                    <input type="file" id="formCoverImageInput" class="hidden" onchange="handleFormCoverImage(event)" accept="image/*">
-                                </label>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Form Title</label>
-                                <input type="text" id="formTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. Hackathon Registration" required>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Description</label>
-                                <textarea id="formDescription" rows="2" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Instructions..."></textarea>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Google Script URL (Optional)</label>
-                                <input type="url" id="formWebhook" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="https://script.google.com/...">
-                            </div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Form Cover Image</label><label class="glass-input w-full rounded-xl py-4 px-4 text-sm text-center cursor-pointer block border-dashed hover:bg-white/5 transition-colors"><span id="formCoverFileName" class="text-white/50"><i class="fas fa-image mr-2"></i> Browse Image</span><input type="file" id="formCoverImageInput" class="hidden" onchange="handleFormCoverImage(event)" accept="image/*"></label></div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Form Title</label><input type="text" id="formTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. Hackathon Registration" required></div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Description</label><textarea id="formDescription" rows="2" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Instructions..."></textarea></div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Google Script URL (Optional)</label><input type="url" id="formWebhook" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="https://script.google.com/..."></div>
                         </div>
-
-                        <div>
-                            <h3 class="text-xs font-bold text-white/50 mb-4 uppercase tracking-widest border-b border-white/10 pb-2">Form Questions</h3>
-                            <div id="questionsContainer" class="space-y-4"></div>
-                            
-                            <button type="button" onclick="addQuestionField()" class="mt-4 w-full border-2 border-dashed border-white/20 text-white/50 hover:text-white hover:border-white/50 hover:bg-white/5 py-4 rounded-2xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all">
-                                <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Question
-                            </button>
-                        </div>
-
-                        <div class="border-t border-white/10 pt-8">
-                            <button type="submit" id="saveFormBtn" class="w-full btn-primary py-4 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex justify-center items-center gap-2">
-                                <i data-lucide="save" class="w-4 h-4"></i> Publish Form
-                            </button>
-                        </div>
+                        <div><h3 class="text-xs font-bold text-white/50 mb-4 uppercase tracking-widest border-b border-white/10 pb-2">Form Questions</h3><div id="questionsContainer" class="space-y-4"></div><button type="button" onclick="addQuestionField()" class="mt-4 w-full border-2 border-dashed border-white/20 text-white/50 hover:text-white hover:border-white/50 hover:bg-white/5 py-4 rounded-2xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all"><i data-lucide="plus-circle" class="w-4 h-4"></i> Add Question</button></div>
+                        <div class="border-t border-white/10 pt-8"><button type="submit" id="saveFormBtn" class="w-full btn-primary py-4 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex justify-center items-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Publish Form</button></div>
                     </form>
                 </div>
-                
-                <div class="glass-panel p-6 rounded-3xl">
-                    <h3 class="text-xs font-bold text-white/50 mb-4 uppercase tracking-widest border-b border-white/10 pb-3">Active Forms List</h3>
-                    <div id="activeFormsList" class="space-y-3"></div>
-                </div>
+                <div class="glass-panel p-6 rounded-3xl"><h3 class="text-xs font-bold text-white/50 mb-4 uppercase tracking-widest border-b border-white/10 pb-3">Active Forms List</h3><div id="activeFormsList" class="space-y-3"></div></div>
             </div>
 
             <div id="gallerySection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
-                    <div class="border-b border-white/10 pb-5 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Upload Gallery</h2>
-                    </div>
+                    <div class="border-b border-white/10 pb-5 mb-8"><h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Upload Gallery</h2></div>
                     <form id="galleryForm" class="space-y-6">
-                        <div>
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Album Title</label>
-                            <input type="text" id="galleryTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Event Name" required>
-                        </div>
+                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Album Title</label><input type="text" id="galleryTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Event Name" required></div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Date</label>
-                                <input type="date" id="galleryDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Batch Upload</label>
-                                <label class="glass-input w-full rounded-xl py-3.5 px-4 text-sm text-center cursor-pointer block border-dashed hover:bg-white/5 transition-colors">
-                                    <span id="galleryFileName" class="text-white/50"><i class="fas fa-images mr-2"></i> Select Photos</span>
-                                    <input type="file" id="galleryImageInput" class="hidden" multiple onchange="handleGalleryImages(event)">
-                                </label>
-                            </div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Date</label><input type="date" id="galleryDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm"></div>
+                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Batch Upload</label><label class="glass-input w-full rounded-xl py-3.5 px-4 text-sm text-center cursor-pointer block border-dashed hover:bg-white/5 transition-colors"><span id="galleryFileName" class="text-white/50"><i class="fas fa-images mr-2"></i> Select Photos</span><input type="file" id="galleryImageInput" class="hidden" multiple onchange="handleGalleryImages(event)"></label></div>
                         </div>
                         <button type="submit" id="postGalleryBtn" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all mt-2">Upload Photos</button>
                     </form>
                 </div>
             </div>
-
         </main>
     </div>
 
@@ -718,22 +403,9 @@
             <h2 class="text-xl font-bold text-white mb-6 uppercase tracking-wider border-b border-white/10 pb-4">Edit Role</h2>
             <form id="editUserRoleForm" class="space-y-6">
                 <input type="hidden" id="editUserId">
-                <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">User Name</label>
-                    <input type="text" id="editUserName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" disabled>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Assign Role</label>
-                    <select id="editUserRoleSelect" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm font-semibold">
-                        <option value="student">Student</option>
-                        <option value="excom">ExCom Member</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <div class="pt-4 flex gap-3">
-                    <button type="button" onclick="toggleEditUserModal(false)" class="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button>
-                    <button type="submit" id="updateUserBtn" class="flex-1 btn-primary py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Update</button>
-                </div>
+                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">User Name</label><input type="text" id="editUserName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" disabled></div>
+                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Assign Role</label><select id="editUserRoleSelect" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm font-semibold"><option value="student">Student</option><option value="excom">ExCom Member</option><option value="admin">Admin</option></select></div>
+                <div class="pt-4 flex gap-3"><button type="button" onclick="toggleEditUserModal(false)" class="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button><button type="submit" id="updateUserBtn" class="flex-1 btn-primary py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Update</button></div>
             </form>
         </div>
     </div>
@@ -742,22 +414,9 @@
         <div class="glass-panel w-full max-w-md p-8 rounded-3xl relative">
             <h2 class="text-xl font-bold text-white mb-6 uppercase tracking-wider border-b border-white/10 pb-4">Add Asset</h2>
             <form id="addItemForm" class="space-y-6">
-                <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Item Name</label>
-                    <input type="text" id="invName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. Arduino Uno" required>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Category</label>
-                    <select id="invCategory" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm font-medium">
-                        <option value="Electronics">Electronics</option>
-                        <option value="Stationery">Stationery</option>
-                        <option value="Furniture">Furniture</option>
-                    </select>
-                </div>
-                <div class="pt-4 flex gap-3">
-                    <button type="button" onclick="document.getElementById('addItemModal').classList.add('hidden')" class="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button>
-                    <button type="submit" class="flex-1 btn-primary py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Add</button>
-                </div>
+                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Item Name</label><input type="text" id="invName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. Arduino Uno" required></div>
+                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Category</label><select id="invCategory" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm font-medium"><option value="Electronics">Electronics</option><option value="Stationery">Stationery</option><option value="Furniture">Furniture</option></select></div>
+                <div class="pt-4 flex gap-3"><button type="button" onclick="document.getElementById('addItemModal').classList.add('hidden')" class="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button><button type="submit" class="flex-1 btn-primary py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Add</button></div>
             </form>
         </div>
     </div>
@@ -765,41 +424,18 @@
     <div id="addUserModal" class="fixed inset-0 bg-[#050505]/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md p-8 rounded-3xl relative">
             <h2 class="text-xl font-bold text-white mb-4 uppercase tracking-wider border-b border-white/10 pb-4">Add User</h2>
-            
             <div class="flex mb-6 bg-black/40 p-1.5 rounded-xl border border-white/10">
                 <button type="button" id="tabCreateNew" class="flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg bg-white/10 text-white transition-all" onclick="switchAddMode('create')">Create New</button>
                 <button type="button" id="tabSyncExisting" class="flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg text-white/40 hover:text-white transition-all" onclick="switchAddMode('sync')">Sync Existing</button>
             </div>
-
             <form id="adminAddUserForm" class="space-y-5">
                 <input type="hidden" id="addUserMode" value="create">
-                
-                <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Full Name</label>
-                    <input type="text" id="newUserName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="John Doe" required>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Email Address</label>
-                    <input type="email" id="newUserEmail" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="student@example.com" required>
-                </div>
-                
-                <div id="passwordFieldGroup">
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Temp Password</label>
-                    <input type="text" id="newUserPassword" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Min 8 chars" required>
-                </div>
-
-                <div id="uidFieldGroup" class="hidden">
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">User UID</label>
-                    <input type="text" id="newUserUid" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Paste UID here...">
-                    <p class="text-white/30 text-[9px] mt-2 leading-relaxed uppercase tracking-wider">Paste the UID from Firebase Auth to link accounts.</p>
-                </div>
-
+                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Full Name</label><input type="text" id="newUserName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="John Doe" required></div>
+                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Email Address</label><input type="email" id="newUserEmail" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="student@example.com" required></div>
+                <div id="passwordFieldGroup"><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Temp Password</label><input type="text" id="newUserPassword" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Min 8 chars" required></div>
+                <div id="uidFieldGroup" class="hidden"><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">User UID</label><input type="text" id="newUserUid" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Paste UID here..."><p class="text-white/30 text-[9px] mt-2 leading-relaxed uppercase tracking-wider">Paste the UID from Firebase Auth to link accounts.</p></div>
                 <div id="addUserStatus" class="hidden text-[10px] text-center p-3 rounded-lg font-bold uppercase tracking-widest border border-white/20"></div>
-                
-                <div class="pt-4 flex gap-3">
-                    <button type="button" onclick="toggleAddUserModal(false)" class="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button>
-                    <button type="submit" id="submitAddUserBtn" class="flex-1 btn-primary py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Create User</button>
-                </div>
+                <div class="pt-4 flex gap-3"><button type="button" onclick="toggleAddUserModal(false)" class="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button><button type="submit" id="submitAddUserBtn" class="flex-1 btn-primary py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Create User</button></div>
             </form>
         </div>
     </div>
@@ -807,36 +443,18 @@
     <div id="excomModal" class="fixed inset-0 bg-[#050505]/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-3xl p-8 rounded-3xl max-h-[90vh] h-full flex flex-col border border-white/20">
             <h2 class="text-xl font-bold text-white mb-6 uppercase tracking-wider border-b border-white/10 pb-4 shrink-0">Log Meeting</h2>
-            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 shrink-0">
-                <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Topic</label>
-                    <input type="text" id="excomMeetingTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="e.g. Core Committee Sync">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date</label>
-                    <input type="date" id="excomMeetingDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm">
-                </div>
+                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Topic</label><input type="text" id="excomMeetingTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="e.g. Core Committee Sync"></div>
+                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date</label><input type="date" id="excomMeetingDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm"></div>
             </div>
-            
             <label class="block text-[10px] font-bold text-white/50 mb-3 uppercase tracking-widest shrink-0">Mark Attendance</label>
-            
             <div class="flex-grow overflow-y-auto mb-6 border border-white/10 rounded-2xl bg-black/40">
                 <table class="w-full text-left min-w-full">
-                    <thead class="bg-white/5 sticky top-0 border-b border-white/10 text-[10px] uppercase tracking-widest font-bold text-white/50 z-10">
-                        <tr>
-                            <th class="px-6 py-4 w-48 text-center border-r border-white/10">Status</th>
-                            <th class="px-6 py-4">Committee Member</th>
-                        </tr>
-                    </thead>
+                    <thead class="bg-white/5 sticky top-0 border-b border-white/10 text-[10px] uppercase tracking-widest font-bold text-white/50 z-10"><tr><th class="px-6 py-4 w-48 text-center border-r border-white/10">Status</th><th class="px-6 py-4">Committee Member</th></tr></thead>
                     <tbody id="excomAttendanceList" class="divide-y divide-white/5 text-white/80"></tbody>
                 </table>
             </div>
-            
-            <div class="flex justify-end gap-4 pt-4 shrink-0 border-t border-white/10">
-                <button onclick="document.getElementById('excomModal').classList.add('hidden')" class="px-8 bg-white/5 hover:bg-white/10 border border-white/10 text-white py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button>
-                <button id="saveExcomBtn" onclick="submitExcomAttendance()" class="px-8 btn-primary py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors flex gap-2 items-center"><i data-lucide="save" class="w-4 h-4"></i> Save Log</button>
-            </div>
+            <div class="flex justify-end gap-4 pt-4 shrink-0 border-t border-white/10"><button onclick="document.getElementById('excomModal').classList.add('hidden')" class="px-8 bg-white/5 hover:bg-white/10 border border-white/10 text-white py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button><button id="saveExcomBtn" onclick="submitExcomAttendance()" class="px-8 btn-primary py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors flex gap-2 items-center"><i data-lucide="save" class="w-4 h-4"></i> Save Log</button></div>
         </div>
     </div>
     
@@ -848,9 +466,7 @@
             </div>
             <div class="flex-grow overflow-y-auto p-6 md:p-8" id="reportEventsList">
                 <div class="flex flex-col items-center justify-center h-full text-center">
-                    <div class="w-16 h-16 bg-white/5 border border-white/10 text-white/50 rounded-full flex items-center justify-center mb-4">
-                        <i data-lucide="file-text" class="w-8 h-8"></i>
-                    </div>
+                    <div class="w-16 h-16 bg-white/5 border border-white/10 text-white/50 rounded-full flex items-center justify-center mb-4"><i data-lucide="file-text" class="w-8 h-8"></i></div>
                     <p class="text-white/40 text-[10px] tracking-widest uppercase font-bold">Select an event to view reports.</p>
                 </div>
             </div>
@@ -861,24 +477,12 @@
         <div class="glass-panel w-full max-w-md p-8 rounded-3xl border-glow-gold/30">
             <h2 class="text-xl font-bold text-white mb-2 uppercase tracking-wider">Award Points</h2>
             <p class="text-[10px] text-white/50 uppercase tracking-widest mb-6 border-b border-white/10 pb-4">To: <span id="awardUserNameDisplay" class="text-glow-gold font-bold">Student</span></p>
-            
             <form id="awardPointsForm" class="space-y-6">
                 <input type="hidden" id="awardUserId">
-                <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Points to Add</label>
-                    <input type="number" id="pointsAmount" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm font-display font-bold text-glow-gold" placeholder="e.g. 500" required>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Reason / Event Name</label>
-                    <input type="text" id="pointsReason" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="e.g. Hackathon Winner" required>
-                </div>
-                
+                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Points to Add</label><input type="number" id="pointsAmount" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm font-display font-bold text-glow-gold" placeholder="e.g. 500" required></div>
+                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Reason / Event Name</label><input type="text" id="pointsReason" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="e.g. Hackathon Winner" required></div>
                 <div id="awardStatus" class="hidden text-[10px] text-center p-3 rounded-lg font-bold uppercase"></div>
-
-                <div class="pt-4 flex gap-3">
-                    <button type="button" onclick="document.getElementById('awardPointsModal').classList.add('hidden')" class="flex-1 bg-white/5 hover:bg-white/10 text-white py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button>
-                    <button type="submit" id="submitAwardBtn" class="flex-1 bg-glow-gold hover:bg-yellow-400 text-black py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors shadow-[0_0_15px_rgba(251,191,36,0.4)]">Award Points</button>
-                </div>
+                <div class="pt-4 flex gap-3"><button type="button" onclick="document.getElementById('awardPointsModal').classList.add('hidden')" class="flex-1 bg-white/5 hover:bg-white/10 text-white py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors">Cancel</button><button type="submit" id="submitAwardBtn" class="flex-1 bg-glow-gold hover:bg-yellow-400 text-black py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors shadow-[0_0_15px_rgba(251,191,36,0.4)]">Award Points</button></div>
             </form>
         </div>
     </div>
@@ -919,12 +523,8 @@
             document.getElementById('headerTitle').textContent = title;
             
             const menu = document.getElementById('mobile-sidebar');
-            if(menu && !menu.classList.contains('-translate-x-full')) { 
-                window.toggleMobileSidebar(); 
-            }
-            if(t !== 'scanner' && window.html5QrcodeScanner) { 
-                window.stopScanner(); 
-            }
+            if(menu && !menu.classList.contains('-translate-x-full')) { window.toggleMobileSidebar(); }
+            if(t !== 'scanner' && window.html5QrcodeScanner) { window.stopScanner(); }
         };
 
         window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
@@ -936,17 +536,13 @@
             if(mode === 'create') {
                 document.getElementById('tabCreateNew').className = "flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg bg-white/10 text-white transition-all";
                 document.getElementById('tabSyncExisting').className = "flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg text-white/40 hover:text-white transition-all";
-                document.getElementById('passwordFieldGroup').classList.remove('hidden'); 
-                document.getElementById('uidFieldGroup').classList.add('hidden');
-                document.getElementById('newUserPassword').required = true; 
-                document.getElementById('newUserUid').required = false;
+                document.getElementById('passwordFieldGroup').classList.remove('hidden'); document.getElementById('uidFieldGroup').classList.add('hidden');
+                document.getElementById('newUserPassword').required = true; document.getElementById('newUserUid').required = false;
             } else {
                 document.getElementById('tabSyncExisting').className = "flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg bg-white/10 text-white transition-all";
                 document.getElementById('tabCreateNew').className = "flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg text-white/40 hover:text-white transition-all";
-                document.getElementById('passwordFieldGroup').classList.add('hidden'); 
-                document.getElementById('uidFieldGroup').classList.remove('hidden');
-                document.getElementById('newUserPassword').required = false; 
-                document.getElementById('newUserUid').required = true;
+                document.getElementById('passwordFieldGroup').classList.add('hidden'); document.getElementById('uidFieldGroup').classList.remove('hidden');
+                document.getElementById('newUserPassword').required = false; document.getElementById('newUserUid').required = true;
             }
         };
 
@@ -974,31 +570,9 @@
 
         window.printLogs = () => {
             const logsTableContent = document.getElementById('logsListBody').innerHTML;
-            if (!logsTableContent || logsTableContent.trim() === '') { 
-                alert("No logs available to print."); return; 
-            }
+            if (!logsTableContent || logsTableContent.trim() === '') { alert("No logs available to print."); return; }
             const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>System Logs</title>
-                    <style>
-                        body{font-family:sans-serif;padding:40px;}
-                        table{width:100%;border-collapse:collapse;font-size:12px;}
-                        th,td{border:1px solid #ccc;padding:8px;text-align:left;}
-                        th{background:#eee;}
-                    </style>
-                </head>
-                <body>
-                    <h2>System Logs</h2>
-                    <table>
-                        <thead><tr><th>Time</th><th>Action</th><th>Details</th><th>Admin</th></tr></thead>
-                        <tbody>${logsTableContent}</tbody>
-                    </table>
-                    <script>window.onload=()=>{window.print();setTimeout(()=>window.close(),500)};<\/script>
-                </body>
-                </html>
-            `);
+            printWindow.document.write(`<html><head><title>System Logs</title><style>body{font-family:sans-serif;padding:40px;}table{width:100%;border-collapse:collapse;font-size:12px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#eee;}</style></head><body><h2>System Logs</h2><table><thead><tr><th>Time</th><th>Action</th><th>Details</th><th>Admin</th></tr></thead><tbody>${logsTableContent}</tbody></table><script>window.onload=()=>{window.print();setTimeout(()=>window.close(),500)};<\/script></body></html>`);
             printWindow.document.close();
         };
 
@@ -1006,31 +580,8 @@
             const meeting = window.excomMeetingsData.find(m => m.id === id);
             if(!meeting) return;
             const printWindow = window.open('', '_blank');
-            let rows = ''; 
-            meeting.attendance.forEach(a => { 
-                rows += `<tr><td>${a.name}</td><td>${a.status}</td></tr>`; 
-            });
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>Meeting - ${meeting.title}</title>
-                    <style>
-                        body{font-family:sans-serif;padding:40px;}
-                        table{width:100%;border-collapse:collapse;}
-                        th,td{border:1px solid #ccc;padding:10px;text-align:left;}
-                    </style>
-                </head>
-                <body>
-                    <h2>${meeting.title}</h2>
-                    <p>${meeting.date}</p>
-                    <table>
-                        <thead><tr><th>Name</th><th>Status</th></tr></thead>
-                        <tbody>${rows}</tbody>
-                    </table>
-                    <script>window.onload=()=>{window.print();setTimeout(()=>window.close(),500)};<\/script>
-                </body>
-                </html>
-            `);
+            let rows = ''; meeting.attendance.forEach(a => { rows += `<tr><td>${a.name}</td><td>${a.status}</td></tr>`; });
+            printWindow.document.write(`<html><head><title>Meeting - ${meeting.title}</title><style>body{font-family:sans-serif;padding:40px;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ccc;padding:10px;text-align:left;}</style></head><body><h2>${meeting.title}</h2><p>${meeting.date}</p><table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table><script>window.onload=()=>{window.print();setTimeout(()=>window.close(),500)};<\/script></body></html>`);
             printWindow.document.close();
         };
 
@@ -1057,50 +608,12 @@
             document.getElementById('formCoverFileName').innerHTML = `<i class="fas fa-check text-green-400 mr-2"></i> ` + window.formCoverImageFile.name; 
         };
 
-        window.addQuestionField = () => { 
-            formBuilderFields.push({ id: generateId(), label: '', type: 'text', required: false, options: [] }); 
-            window.renderFormBuilderFields(); 
-        };
-        
-        window.removeQuestionField = (id) => { 
-            formBuilderFields = formBuilderFields.filter(f => f.id !== id); 
-            window.renderFormBuilderFields(); 
-        };
-        
-        window.updateField = (id, key, value) => { 
-            const field = formBuilderFields.find(f => f.id === id); 
-            if (field) { 
-                field[key] = value; 
-                if (key === 'type') { 
-                    if (['radio', 'checkbox', 'select'].includes(value) && (!field.options || field.options.length === 0)) { 
-                        field.options = ['Option 1']; 
-                    } 
-                    window.renderFormBuilderFields(); 
-                } 
-            } 
-        };
-        
-        window.addFieldOption = (id) => { 
-            const field = formBuilderFields.find(f => f.id === id); 
-            if (field) { 
-                if(!field.options) field.options = []; 
-                field.options.push(`Option ${field.options.length + 1}`); 
-                window.renderFormBuilderFields(); 
-            } 
-        };
-        
-        window.removeFieldOption = (id, optIndex) => { 
-            const field = formBuilderFields.find(f => f.id === id); 
-            if (field && field.options) { 
-                field.options.splice(optIndex, 1); 
-                window.renderFormBuilderFields(); 
-            } 
-        };
-        
-        window.updateFieldOption = (id, optIndex, value) => { 
-            const field = formBuilderFields.find(f => f.id === id); 
-            if (field && field.options) field.options[optIndex] = value; 
-        };
+        window.addQuestionField = () => { formBuilderFields.push({ id: generateId(), label: '', type: 'text', required: false, options: [] }); window.renderFormBuilderFields(); };
+        window.removeQuestionField = (id) => { formBuilderFields = formBuilderFields.filter(f => f.id !== id); window.renderFormBuilderFields(); };
+        window.updateField = (id, key, value) => { const field = formBuilderFields.find(f => f.id === id); if (field) { field[key] = value; if (key === 'type') { if (['radio', 'checkbox', 'select'].includes(value) && (!field.options || field.options.length === 0)) { field.options = ['Option 1']; } window.renderFormBuilderFields(); } } };
+        window.addFieldOption = (id) => { const field = formBuilderFields.find(f => f.id === id); if (field) { if(!field.options) field.options = []; field.options.push(`Option ${field.options.length + 1}`); window.renderFormBuilderFields(); } };
+        window.removeFieldOption = (id, optIndex) => { const field = formBuilderFields.find(f => f.id === id); if (field && field.options) { field.options.splice(optIndex, 1); window.renderFormBuilderFields(); } };
+        window.updateFieldOption = (id, optIndex, value) => { const field = formBuilderFields.find(f => f.id === id); if (field && field.options) field.options[optIndex] = value; };
 
         window.renderFormBuilderFields = () => {
             const container = document.getElementById('questionsContainer');
@@ -1114,62 +627,13 @@
                     if(field.options && field.options.length > 0) {
                         field.options.forEach((opt, optIdx) => {
                             const iconType = field.type === 'checkbox' ? 'square' : 'circle';
-                            opts += `
-                                <div class="flex items-center gap-3 mt-2">
-                                    <i data-lucide="${iconType}" class="w-4 h-4 text-white/30 flex-shrink-0"></i>
-                                    <input type="text" class="glass-input w-full rounded-lg py-2.5 px-3 text-sm" value="${escapeHTML(opt)}" oninput="updateFieldOption('${field.id}', ${optIdx}, this.value)" placeholder="Option text">
-                                    <button type="button" onclick="removeFieldOption('${field.id}', ${optIdx})" class="text-red-400 hover:text-red-500 p-1">
-                                        <i data-lucide="x" class="w-4 h-4"></i>
-                                    </button>
-                                </div>
-                            `;
+                            opts += `<div class="flex items-center gap-3 mt-2"><i data-lucide="${iconType}" class="w-4 h-4 text-white/30 flex-shrink-0"></i><input type="text" class="glass-input w-full rounded-lg py-2.5 px-3 text-sm" value="${escapeHTML(opt)}" oninput="updateFieldOption('${field.id}', ${optIdx}, this.value)" placeholder="Option text"><button type="button" onclick="removeFieldOption('${field.id}', ${optIdx})" class="text-red-400 hover:text-red-500 p-1"><i data-lucide="x" class="w-4 h-4"></i></button></div>`;
                         });
                     }
-                    optionsHtml = `
-                        <div class="mt-4 pl-4 border-l-2 border-white/10">
-                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Answer Options</label>
-                            ${opts}
-                            <button type="button" onclick="addFieldOption('${field.id}')" class="mt-3 text-[10px] uppercase text-glow-blue font-bold flex items-center gap-1.5">
-                                <i data-lucide="plus" class="w-3 h-3"></i> Add Option
-                            </button>
-                        </div>
-                    `;
+                    optionsHtml = `<div class="mt-4 pl-4 border-l-2 border-white/10"><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Answer Options</label>${opts}<button type="button" onclick="addFieldOption('${field.id}')" class="mt-3 text-[10px] uppercase text-glow-blue font-bold flex items-center gap-1.5"><i data-lucide="plus" class="w-3 h-3"></i> Add Option</button></div>`;
                 }
 
-                container.innerHTML += `
-                    <div class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 relative shadow-sm">
-                        <div class="flex justify-between items-center border-b border-white/10 pb-3 mb-4">
-                            <span class="text-[10px] font-bold text-white/40 uppercase">Question ${index + 1}</span>
-                            <button type="button" onclick="removeQuestionField('${field.id}')" class="text-white/40 hover:text-red-400">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="md:col-span-2">
-                                <label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Question Title</label>
-                                <input type="text" class="glass-input w-full rounded-lg py-3 px-3 text-sm" value="${escapeHTML(field.label)}" oninput="updateField('${field.id}', 'label', this.value)">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Answer Type</label>
-                                <select class="glass-input w-full rounded-lg py-3 px-3 text-sm" onchange="updateField('${field.id}', 'type', this.value)">
-                                    <option value="text" ${field.type === 'text' ? 'selected' : ''}>Short Answer</option>
-                                    <option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Paragraph</option>
-                                    <option value="email" ${field.type === 'email' ? 'selected' : ''}>Email Address</option>
-                                    <option value="tel" ${field.type === 'tel' ? 'selected' : ''}>Phone Number</option>
-                                    <option value="radio" ${field.type === 'radio' ? 'selected' : ''}>Multiple Choice</option>
-                                    <option value="checkbox" ${field.type === 'checkbox' ? 'selected' : ''}>Checkboxes</option>
-                                    <option value="select" ${field.type === 'select' ? 'selected' : ''}>Dropdown</option>
-                                    <option value="date" ${field.type === 'date' ? 'selected' : ''}>Date</option>
-                                </select>
-                            </div>
-                        </div>
-                        ${optionsHtml}
-                        <div class="mt-5 flex items-center justify-end gap-3 border-t border-white/5 pt-4">
-                            <label class="text-[10px] font-bold text-white/60 uppercase cursor-pointer" for="req-${field.id}">Required</label>
-                            <input type="checkbox" id="req-${field.id}" class="custom-checkbox" ${field.required ? 'checked' : ''} onchange="updateField('${field.id}', 'required', this.checked)">
-                        </div>
-                    </div>
-                `;
+                container.innerHTML += `<div class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 relative shadow-sm"><div class="flex justify-between items-center border-b border-white/10 pb-3 mb-4"><span class="text-[10px] font-bold text-white/40 uppercase">Question ${index + 1}</span><button type="button" onclick="removeQuestionField('${field.id}')" class="text-white/40 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div class="md:col-span-2"><label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Question Title</label><input type="text" class="glass-input w-full rounded-lg py-3 px-3 text-sm" value="${escapeHTML(field.label)}" oninput="updateField('${field.id}', 'label', this.value)"></div><div><label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Answer Type</label><select class="glass-input w-full rounded-lg py-3 px-3 text-sm" onchange="updateField('${field.id}', 'type', this.value)"><option value="text" ${field.type === 'text' ? 'selected' : ''}>Short Answer</option><option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Paragraph</option><option value="email" ${field.type === 'email' ? 'selected' : ''}>Email Address</option><option value="tel" ${field.type === 'tel' ? 'selected' : ''}>Phone Number</option><option value="radio" ${field.type === 'radio' ? 'selected' : ''}>Multiple Choice</option><option value="checkbox" ${field.type === 'checkbox' ? 'selected' : ''}>Checkboxes</option><option value="select" ${field.type === 'select' ? 'selected' : ''}>Dropdown</option><option value="date" ${field.type === 'date' ? 'selected' : ''}>Date</option></select></div></div>${optionsHtml}<div class="mt-5 flex items-center justify-end gap-3 border-t border-white/5 pt-4"><label class="text-[10px] font-bold text-white/60 uppercase cursor-pointer" for="req-${field.id}">Required</label><input type="checkbox" id="req-${field.id}" class="custom-checkbox" ${field.required ? 'checked' : ''} onchange="updateField('${field.id}', 'required', this.checked)"></div></div>`;
             });
             lucide.createIcons();
         };
@@ -1178,7 +642,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, orderBy, onSnapshot, limit, getDocs, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, where, orderBy, onSnapshot, limit, getDocs, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhv5--AImomPzvUOw1-fsnBom_YN5jDQq-8wd-L0xPg1J7AZAJumfBeXAEku4zd6I-/exec"; 
@@ -1215,7 +679,7 @@
             } else { window.location.href = 'admin.html'; }
         });
 
-        // SYNC DATA (Includes Users, Logs, Inventory, ExCom, Forms, and Charts)
+        // SYNC DATA
         function initSync() {
             // Users & Charts
             onSnapshot(collection(db, "users"), (snap) => {
@@ -1236,14 +700,7 @@
                 if(ctxRole) {
                     roleChartInstance = new Chart(ctxRole, {
                         type: 'doughnut', 
-                        data: { 
-                            labels: ['Students', 'ExCom', 'Admins'], 
-                            datasets: [{ 
-                                data: [studentCount, excomCount, adminCount], 
-                                backgroundColor: ['#2563eb', '#9333ea', '#ef4444'], 
-                                borderWidth: 0 
-                            }] 
-                        }, 
+                        data: { labels: ['Students', 'ExCom', 'Admins'], datasets: [{ data: [studentCount, excomCount, adminCount], backgroundColor: ['#2563eb', '#9333ea', '#ef4444'], borderWidth: 0 }] }, 
                         options: { cutout: '75%', plugins: { legend: { position: 'bottom' } } } 
                     });
                 }
@@ -1259,22 +716,7 @@
                     if(u.role === 'admin') roleBadge = `<span class="px-2 py-1 bg-red-500/10 text-red-400 text-[9px] rounded-md uppercase">Admin</span>`;
                     else if(u.role === 'excom') roleBadge = `<span class="px-2 py-1 bg-glow-purple/10 text-glow-purple text-[9px] rounded-md uppercase">ExCom</span>`;
 
-                    uHtml += `
-                        <tr class="border-b border-white/5 hover:bg-white/5">
-                            <td class="px-6 py-4 text-sm font-medium text-white">${safeName}</td>
-                            <td class="px-6 py-4 text-sm text-white/50">${safeEmail}</td>
-                            <td class="px-6 py-4 text-center text-glow-gold font-bold text-lg">${points}</td>
-                            <td class="px-6 py-4">${roleBadge}</td>
-                            <td class="px-6 py-4 text-center flex justify-center gap-2">
-                                <button onclick="prepareAwardPoints('${u.id}', '${safeName}')" class="text-glow-gold hover:text-white bg-glow-gold/10 p-2 rounded-lg">
-                                    <i data-lucide="gift" class="w-4 h-4"></i>
-                                </button>
-                                <button onclick="prepareEditUser('${u.id}', '${safeName}', '${u.role||'student'}')" class="text-glow-blue hover:text-white bg-white/5 p-2 rounded-lg">
-                                    <i data-lucide="edit-2" class="w-4 h-4"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `;
+                    uHtml += `<tr class="border-b border-white/5 hover:bg-white/5"><td class="px-6 py-4 text-sm font-medium text-white">${safeName}</td><td class="px-6 py-4 text-sm text-white/50">${safeEmail}</td><td class="px-6 py-4 text-center text-glow-gold font-bold text-lg">${points}</td><td class="px-6 py-4">${roleBadge}</td><td class="px-6 py-4 text-center flex justify-center gap-2"><button onclick="prepareAwardPoints('${u.id}', '${safeName}')" class="text-glow-gold hover:text-white bg-glow-gold/10 p-2 rounded-lg"><i data-lucide="gift" class="w-4 h-4"></i></button><button onclick="prepareEditUser('${u.id}', '${safeName}', '${u.role||'student'}')" class="text-glow-blue hover:text-white bg-white/5 p-2 rounded-lg"><i data-lucide="edit-2" class="w-4 h-4"></i></button></td></tr>`;
 
                     if(u.role === 'student' || u.role === 'excom') {
                         certHtml += `<tr class="border-b border-white/5 hover:bg-white/5"><td class="px-6 py-4 text-center"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${u.id}" data-name="${safeName}"></td><td class="text-sm font-medium text-white">${safeName}</td></tr>`;
@@ -1299,10 +741,7 @@
                 let activityLog = []; snap.forEach(d => activityLog.push(d.data()));
                 let chartDataMap = {};
                 activityLog.reverse().forEach(log => {
-                    if(log.timestamp) { 
-                        const dateString = new Date(log.timestamp).toLocaleDateString(undefined, {month: 'short', day:'numeric'}); 
-                        chartDataMap[dateString] = (chartDataMap[dateString] || 0) + 1; 
-                    }
+                    if(log.timestamp) { const dateString = new Date(log.timestamp).toLocaleDateString(undefined, {month: 'short', day:'numeric'}); chartDataMap[dateString] = (chartDataMap[dateString] || 0) + 1; }
                 });
                 const labels = Object.keys(chartDataMap); const dataPoints = Object.values(chartDataMap);
 
@@ -1310,17 +749,7 @@
                 const ctxAct = document.getElementById('activityChart');
                 if(ctxAct && labels.length > 0) {
                     activityChartInstance = new Chart(ctxAct, {
-                        type: 'line', 
-                        data: { 
-                            labels: labels, 
-                            datasets: [{ 
-                                data: dataPoints, 
-                                borderColor: '#2563eb', 
-                                backgroundColor: 'rgba(37, 99, 235, 0.2)', 
-                                borderWidth: 3, fill: true, tension: 0.4 
-                            }] 
-                        }, 
-                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } }
+                        type: 'line', data: { labels: labels, datasets: [{ data: dataPoints, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.2)', borderWidth: 3, fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } }
                     });
                 }
             });
@@ -1342,11 +771,7 @@
 
             // Logs
             onSnapshot(query(collection(db, "logs"), orderBy("timestamp", "desc"), limit(50)), (snap) => {
-                let h = ''; 
-                snap.forEach(d => { 
-                    const l = d.data(); 
-                    h += `<tr class="border-b border-white/5 hover:bg-white/5 text-sm"><td class="px-6 py-4 text-white/50 font-mono">${new Date(l.timestamp).toLocaleString()}</td><td class="text-white font-bold uppercase text-[10px] px-6">${l.action}</td><td class="text-white/70 px-6">${l.details}</td><td class="text-white/40 font-mono px-6 text-[10px]">${l.admin}</td></tr>`; 
-                });
+                let h = ''; snap.forEach(d => { const l = d.data(); h += `<tr class="border-b border-white/5 hover:bg-white/5 text-sm"><td class="px-6 py-4 text-white/50 font-mono">${new Date(l.timestamp).toLocaleString()}</td><td class="text-white font-bold uppercase text-[10px] px-6">${l.action}</td><td class="text-white/70 px-6">${l.details}</td><td class="text-white/40 font-mono px-6 text-[10px]">${l.admin}</td></tr>`; });
                 if(document.getElementById('logsListBody')) document.getElementById('logsListBody').innerHTML = h;
             });
 
@@ -1365,10 +790,7 @@
             onSnapshot(collection(db, "announcements"), s => document.getElementById('totalAnnouncementsCount').textContent = s.size);
             onSnapshot(collection(db, "eventForms"), s => {
                 document.getElementById('activeFormsCount').textContent = s.size;
-                let h=''; 
-                s.forEach(d => { 
-                    h += `<div class="bg-white/5 border border-white/10 p-5 rounded-2xl flex justify-between items-center mb-3"><span class="text-sm font-bold text-white"><i data-lucide="file-text" class="w-4 h-4 inline mr-2 text-glow-purple"></i> ${d.data().title}</span><button onclick="deleteDoc(doc(window.db,'eventForms','${d.id}'))" class="text-red-400 bg-red-500/10 px-4 py-2 rounded-lg text-[10px] font-bold uppercase"><i data-lucide="trash-2" class="w-3 h-3 inline"></i> Delete</button></div>`; 
-                });
+                let h=''; s.forEach(d => { h += `<div class="bg-white/5 border border-white/10 p-5 rounded-2xl flex justify-between items-center mb-3"><span class="text-sm font-bold text-white"><i data-lucide="file-text" class="w-4 h-4 inline mr-2 text-glow-purple"></i> ${d.data().title}</span><button onclick="deleteDoc(doc(window.db,'eventForms','${d.id}'))" class="text-red-400 bg-red-500/10 px-4 py-2 rounded-lg text-[10px] font-bold uppercase"><i data-lucide="trash-2" class="w-3 h-3 inline"></i> Delete</button></div>`; });
                 if(document.getElementById('activeFormsList')) document.getElementById('activeFormsList').innerHTML = h; lucide.createIcons();
             });
         }
@@ -1395,34 +817,20 @@
         }
 
         // --- GLOBALLY EXPOSED FUNCTIONS ---
-        window.prepareEditUser = (id, name, role) => { 
-            document.getElementById('editUserId').value = id; 
-            document.getElementById('editUserName').value = name; 
-            document.getElementById('editUserRoleSelect').value = role; 
-            window.toggleEditUserModal(true); 
-        };
-        
-        window.toggleItemStatus = async (id, status) => { 
-            await updateDoc(doc(db, "inventory", id), { status: status }); 
-            await logActivity("Inventory Update", `Changed item status to ${status}`); 
-        };
-        
+        window.prepareEditUser = (id, name, role) => { document.getElementById('editUserId').value = id; document.getElementById('editUserName').value = name; document.getElementById('editUserRoleSelect').value = role; window.toggleEditUserModal(true); };
+        window.toggleItemStatus = async (id, status) => { await updateDoc(doc(db, "inventory", id), { status: status }); await logActivity("Inventory Update", `Changed item status to ${status}`); };
         window.deleteDoc = deleteDoc;
         window.doc = doc;
 
         window.openExcomAttendanceModal = () => {
-            document.getElementById('excomMeetingTitle').value = ''; 
-            document.getElementById('excomMeetingDate').value = '';
-            document.getElementById('saveExcomBtn').disabled = false; 
-            document.getElementById('saveExcomBtn').innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log';
+            document.getElementById('excomMeetingTitle').value = ''; document.getElementById('excomMeetingDate').value = '';
+            document.getElementById('saveExcomBtn').disabled = false; document.getElementById('saveExcomBtn').innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log';
             document.querySelectorAll('.excom-status-select').forEach(s => s.value = 'Absent');
-            document.getElementById('excomModal').classList.remove('hidden'); 
-            lucide.createIcons();
+            document.getElementById('excomModal').classList.remove('hidden'); lucide.createIcons();
         };
 
         window.submitExcomAttendance = async () => {
-            const title = document.getElementById('excomMeetingTitle').value.trim(); 
-            const date = document.getElementById('excomMeetingDate').value;
+            const title = document.getElementById('excomMeetingTitle').value.trim(); const date = document.getElementById('excomMeetingDate').value;
             if(!title || !date) return alert("Fill meeting name and date.");
             const attendanceRecords = Array.from(document.querySelectorAll('.excom-status-select')).map(sel => ({ id: sel.dataset.id, name: sel.dataset.name, status: sel.value }));
             const btn = document.getElementById('saveExcomBtn'); btn.disabled = true; btn.innerHTML = 'Saving...';
@@ -1433,52 +841,33 @@
         };
 
         window.submitAttendance = async () => {
-            const eventName = document.getElementById('attendanceEventName').value; 
-            const date = document.getElementById('attendanceDate').value;
+            const eventName = document.getElementById('attendanceEventName').value; const date = document.getElementById('attendanceDate').value;
             if(!eventName || !date) return alert("Enter event name and date.");
             const presentEmails = []; const absentEmails = [];
-            document.querySelectorAll('.att-checkbox').forEach(cb => { 
-                const userEmail = cb.closest('tr').querySelectorAll('td')[2].textContent; 
-                if(cb.checked) presentEmails.push(userEmail); else absentEmails.push(userEmail); 
-            });
+            document.querySelectorAll('.att-checkbox').forEach(cb => { const userEmail = cb.closest('tr').querySelectorAll('td')[2].textContent; if(cb.checked) presentEmails.push(userEmail); else absentEmails.push(userEmail); });
             try {
                 await addDoc(collection(db, "attendance"), { eventName, date, presentEmails, absentEmails, timestamp: Date.now() });
                 await logActivity("Marked Attendance", `For ${eventName}`); alert("Saved!");
-                document.querySelectorAll('.att-checkbox').forEach(cb => cb.checked = false); 
-                document.getElementById('attendanceEventName').value = ''; 
-                document.getElementById('attendanceDate').value = '';
+                document.querySelectorAll('.att-checkbox').forEach(cb => cb.checked = false); document.getElementById('attendanceEventName').value = ''; document.getElementById('attendanceDate').value = '';
             } catch(e) { alert(e.message); }
         };
 
         window.issueCertificates = async () => {
-            const eventName = document.getElementById('certEventName').value; 
-            const issueDate = document.getElementById('certDate').value;
-            const checkboxes = document.querySelectorAll('.cert-checkbox:checked'); 
-            const statusEl = document.getElementById('certStatus'); 
-            const btn = document.getElementById('certBtn');
-            
+            const eventName = document.getElementById('certEventName').value; const issueDate = document.getElementById('certDate').value;
+            const checkboxes = document.querySelectorAll('.cert-checkbox:checked'); const statusEl = document.getElementById('certStatus'); const btn = document.getElementById('certBtn');
             if(!eventName || !issueDate || !window.certTemplateBase64) return alert("Fill all details and upload template.");
             if(checkboxes.length === 0) return alert("Select at least one student.");
-            
             btn.disabled = true; btn.innerHTML = `Issuing...`; statusEl.classList.remove('hidden'); statusEl.textContent = "Uploading template...";
-            
             try {
                 const fileObj = document.querySelector('input[accept="image/*"]').files[0];
                 const templateUrl = await uploadToDrive(fileObj);
                 let count = 0; statusEl.textContent = `Assigning...`;
-                for(let cb of checkboxes) { 
-                    await addDoc(collection(db, "certificates"), { userId: cb.value, userName: cb.dataset.name, eventName, date: issueDate, templateUrl, timestamp: Date.now() }); 
-                    count++; 
-                }
+                for(let cb of checkboxes) { await addDoc(collection(db, "certificates"), { userId: cb.value, userName: cb.dataset.name, eventName, date: issueDate, templateUrl, timestamp: Date.now() }); count++; }
                 await logActivity("Issued Certificates", `Issued ${count} for ${eventName}`);
                 statusEl.classList.replace('text-white', 'text-green-400'); statusEl.textContent = `Success!`;
                 setTimeout(() => { statusEl.classList.add('hidden'); statusEl.classList.replace('text-green-400', 'text-white'); }, 4000);
                 document.getElementById('certEventName').value = ''; document.getElementById('certDate').value = ''; document.getElementById('certFileName').innerHTML = 'Upload design'; window.certTemplateBase64 = null; checkboxes.forEach(c => c.checked = false);
-            } catch(e) { 
-                alert("Error: " + e.message); statusEl.classList.add('hidden'); 
-            } finally { 
-                btn.disabled = false; btn.innerText = "Issue Certificates"; 
-            }
+            } catch(e) { alert("Error: " + e.message); statusEl.classList.add('hidden'); } finally { btn.disabled = false; btn.innerText = "Issue Certificates"; }
         };
 
         // --- SUBMIT LISTENERS ---
@@ -1491,9 +880,7 @@
             const status = document.getElementById('addUserStatus');
             btn.disabled = true; status.classList.remove('hidden'); status.className = "text-[10px] text-center p-3 text-blue-400"; status.textContent = "Processing...";
             try {
-                if (mode === 'create') { 
-                    status.className = "text-[10px] text-center p-3 text-yellow-400"; status.textContent = "Use 'Sync Existing' tab."; 
-                } else {
+                if (mode === 'create') { status.className = "text-[10px] text-center p-3 text-yellow-400"; status.textContent = "Use 'Sync Existing' tab."; } else {
                     const uid = document.getElementById('newUserUid').value;
                     await setDoc(doc(db, "users", uid), { name: name, email: email, role: "student", createdAt: Date.now() });
                     await logActivity("Synced User", `Synced ${email}`);
@@ -1504,33 +891,22 @@
         });
 
         document.getElementById('editUserRoleForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const id = document.getElementById('editUserId').value; 
-            const role = document.getElementById('editUserRoleSelect').value; 
-            const btn = document.getElementById('updateUserBtn');
+            e.preventDefault(); const id = document.getElementById('editUserId').value; const role = document.getElementById('editUserRoleSelect').value; const btn = document.getElementById('updateUserBtn');
             btn.disabled = true; btn.innerHTML = `Updating...`;
-            try { 
-                await updateDoc(doc(db, "users", id), { role: role }); 
-                await logActivity("Changed Role", `Updated to ${role}`); window.toggleEditUserModal(false); 
-            } catch(err) { alert(err.message); } finally { btn.disabled = false; btn.innerText = "Update"; }
+            try { await updateDoc(doc(db, "users", id), { role: role }); await logActivity("Changed Role", `Updated to ${role}`); window.toggleEditUserModal(false); } catch(err) { alert(err.message); } finally { btn.disabled = false; btn.innerText = "Update"; }
         });
 
         document.getElementById('addItemForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            try { 
-                await addDoc(collection(db, "inventory"), { name: document.getElementById('invName').value, category: document.getElementById('invCategory').value, status: 'Available', holder: '', timestamp: Date.now() }); 
-                await logActivity("Added Asset", document.getElementById('invName').value); document.getElementById('addItemModal').classList.add('hidden'); e.target.reset(); 
-            } catch(err) { alert(err.message); }
+            try { await addDoc(collection(db, "inventory"), { name: document.getElementById('invName').value, category: document.getElementById('invCategory').value, status: 'Available', holder: '', timestamp: Date.now() }); await logActivity("Added Asset", document.getElementById('invName').value); document.getElementById('addItemModal').classList.add('hidden'); e.target.reset(); } catch(err) { alert(err.message); }
         });
 
         document.getElementById('formBuilderForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const btn = document.getElementById('saveFormBtn'); const orig = btn.innerHTML; btn.disabled = true; btn.innerHTML = `Publishing...`;
+            e.preventDefault(); const btn = document.getElementById('saveFormBtn'); const orig = btn.innerHTML; btn.disabled = true; btn.innerHTML = `Publishing...`;
             try {
                 let coverUrl = window.formCoverImageFile ? await uploadToDrive(window.formCoverImageFile) : "";
                 await addDoc(collection(db, "eventForms"), { title: document.getElementById('formTitle').value, description: document.getElementById('formDescription').value, webhook: document.getElementById('formWebhook').value, coverImage: coverUrl, questions: formBuilderFields, createdAt: Date.now() });
-                await logActivity("Published Form", document.getElementById('formTitle').value); alert("Published!"); 
-                e.target.reset(); formBuilderFields = []; window.renderFormBuilderFields(); document.getElementById('formCoverFileName').innerHTML = 'Browse Image'; window.formCoverImageFile = null;
+                await logActivity("Published Form", document.getElementById('formTitle').value); alert("Published!"); e.target.reset(); formBuilderFields = []; window.renderFormBuilderFields(); document.getElementById('formCoverFileName').innerHTML = 'Browse Image'; window.formCoverImageFile = null;
             } catch(err) { alert(err.message); } finally { btn.innerHTML = orig; btn.disabled = false; }
         });
 
@@ -1545,47 +921,29 @@
 
         document.getElementById('pushAlertForm').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn = e.target.querySelector('button'); const orig = btn.innerHTML; btn.innerHTML = `Sending...`; btn.disabled = true;
-            try { 
-                await addDoc(collection(db, "notifications"), { title: document.getElementById('alertTitle').value, category: document.getElementById('alertCategory').value, message: document.getElementById('alertContent').value, timestamp: Date.now() }); 
-                await logActivity("Sent In-App Alert", document.getElementById('alertTitle').value); alert("Sent!"); e.target.reset(); 
-            } catch (err) { alert(err.message); } finally { btn.innerHTML = orig; btn.disabled = false; }
+            try { await addDoc(collection(db, "notifications"), { title: document.getElementById('alertTitle').value, category: document.getElementById('alertCategory').value, message: document.getElementById('alertContent').value, timestamp: Date.now() }); await logActivity("Sent In-App Alert", document.getElementById('alertTitle').value); alert("Sent!"); e.target.reset(); } catch (err) { alert(err.message); } finally { btn.innerHTML = orig; btn.disabled = false; }
         });
 
         document.getElementById('newsForm').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn = document.getElementById('postNewsBtn'); btn.disabled = true; btn.innerText = "Publishing...";
-            try { 
-                let url = window.newsImageFile ? await uploadToDrive(window.newsImageFile) : ""; 
-                await addDoc(collection(db, "news"), { title: document.getElementById('newsTitle').value, description: document.getElementById('newsContent').value, date: document.getElementById('newsDate').value, imageUrl: url, timestamp: Date.now() }); 
-                await logActivity("Posted News", document.getElementById('newsTitle').value); alert("Published!"); e.target.reset(); document.getElementById('newsFileName').innerHTML = 'Browse Image'; window.newsImageFile = null; 
-            } catch(err) { alert(err.message); } finally { btn.disabled = false; btn.innerText = "Publish News"; }
+            try { let url = window.newsImageFile ? await uploadToDrive(window.newsImageFile) : ""; await addDoc(collection(db, "news"), { title: document.getElementById('newsTitle').value, description: document.getElementById('newsContent').value, date: document.getElementById('newsDate').value, imageUrl: url, timestamp: Date.now() }); await logActivity("Posted News", document.getElementById('newsTitle').value); alert("Published!"); e.target.reset(); document.getElementById('newsFileName').innerHTML = 'Browse Image'; window.newsImageFile = null; } catch(err) { alert(err.message); } finally { btn.disabled = false; btn.innerText = "Publish News"; }
         });
 
         document.getElementById('announcementForm').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn = e.target.querySelector('button'); const orig = btn.innerHTML; btn.innerHTML = `Broadcasting...`; btn.disabled = true;
-            try { 
-                await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, description: document.getElementById('annContent').value, timestamp: Date.now() }); 
-                await logActivity("Posted Update", document.getElementById('annTitle').value); alert("Broadcasted!"); e.target.reset(); 
-            } catch (err) { alert(err.message); } finally { btn.innerHTML = orig; btn.disabled = false; }
+            try { await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, description: document.getElementById('annContent').value, timestamp: Date.now() }); await logActivity("Posted Update", document.getElementById('annTitle').value); alert("Broadcasted!"); e.target.reset(); } catch (err) { alert(err.message); } finally { btn.innerHTML = orig; btn.disabled = false; }
         });
 
         // AWARD POINTS LISTENER
         document.getElementById('awardPointsForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const btn = document.getElementById('submitAwardBtn'); 
-            const status = document.getElementById('awardStatus'); 
-            const uid = document.getElementById('awardUserId').value; 
-            const pts = parseInt(document.getElementById('pointsAmount').value); 
-            const reason = document.getElementById('pointsReason').value;
-            
+            e.preventDefault(); const btn = document.getElementById('submitAwardBtn'); const status = document.getElementById('awardStatus'); const uid = document.getElementById('awardUserId').value; const pts = parseInt(document.getElementById('pointsAmount').value); const reason = document.getElementById('pointsReason').value;
             btn.disabled = true; btn.innerHTML = 'Processing...';
             try {
                 await updateDoc(doc(db, "users", uid), { points: increment(pts) });
                 await addDoc(collection(db, "logs"), { action: "Awarded Points", details: `Gave ${pts} pts to ${document.getElementById('awardUserNameDisplay').textContent} for ${reason}`, admin: window.currentUserEmail, timestamp: Date.now() });
                 status.textContent = `Awarded ${pts} points!`; status.className = "text-[10px] text-center p-3 text-green-400 block mb-4";
                 setTimeout(() => { document.getElementById('awardPointsModal').classList.add('hidden'); e.target.reset(); btn.disabled = false; btn.innerHTML = 'Award Points'; }, 1500);
-            } catch(error) { 
-                status.textContent = error.message; status.className = "text-[10px] text-center p-3 text-red-400 block mb-4"; btn.disabled = false; btn.innerHTML = 'Award Points'; 
-            }
+            } catch(error) { status.textContent = error.message; status.className = "text-[10px] text-center p-3 text-red-400 block mb-4"; btn.disabled = false; btn.innerHTML = 'Award Points'; }
         });
 
         // FILE HANDLERS
@@ -1593,37 +951,44 @@
         window.handleGalleryImages = (e) => { window.galleryImages = Array.from(e.target.files); document.getElementById('galleryFileName').innerHTML = `${window.galleryImages.length} files selected`; };
         window.handleCertTemplate = (e) => { const file = e.target.files[0]; if(!file) return; document.getElementById('certFileName').innerHTML = file.name; const r = new FileReader(); r.onload = (ev) => { window.certTemplateBase64 = ev.target.result; }; r.readAsDataURL(file); };
 
-        // QR SCANNER LOGIC
+        // --- QR SCANNER LOGIC (FIXED) ---
         window.html5QrcodeScanner = null; window.isScanningFlag = false;
         window.startScanner = () => {
             const eventName = document.getElementById('scannerEventName').value.trim();
             if(!eventName) return alert('Enter an Event Name before scanning!');
             document.getElementById('btnStartScan').classList.add('hidden'); document.getElementById('btnStopScan').classList.remove('hidden');
-            const statusEl = document.getElementById('scannerStatus'); statusEl.classList.remove('hidden'); statusEl.className = "p-4 text-center text-glow-blue mb-6"; statusEl.innerHTML = 'Camera Active. Point at ID.';
+            const statusEl = document.getElementById('scannerStatus'); statusEl.classList.remove('hidden'); statusEl.className = "p-4 text-center text-glow-blue mb-6 border border-glow-blue/30 bg-glow-blue/10 rounded-xl font-bold uppercase tracking-widest text-xs"; statusEl.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Camera Active. Point at ID.';
             
             window.html5QrcodeScanner = new Html5Qrcode("qr-reader");
             window.html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } }, async (decodedText) => {
                 if(window.isScanningFlag) return; window.isScanningFlag = true; window.html5QrcodeScanner.pause();
                 try {
-                    const uid = decodedText; const qCheck = query(collection(db, "attendance"), where("uid", "==", uid), where("eventName", "==", eventName)); const snapCheck = await getDocs(qCheck);
-                    if(!snapCheck.empty) { 
-                        statusEl.className = "p-4 text-center text-yellow-400 mb-6"; statusEl.innerHTML = "⚠️ Already Scanned!"; 
+                    const uid = decodedText; 
+                    
+                    // FIXED: Single query to prevent Firebase index errors!
+                    const qCheck = query(collection(db, "attendance"), where("uid", "==", uid)); 
+                    const snapCheck = await getDocs(qCheck);
+                    let alreadyScanned = false;
+                    snapCheck.forEach(doc => { if(doc.data().eventName === eventName) alreadyScanned = true; });
+
+                    if(alreadyScanned) { 
+                        statusEl.className = "p-4 text-center text-yellow-400 mb-6 border border-yellow-500/30 bg-yellow-500/10 rounded-xl font-bold uppercase tracking-widest text-xs"; statusEl.innerHTML = "⚠️ Already Scanned for this event!"; 
                     } else {
-                        const uDoc = await getDoc(doc(db, "users", uid)); const studentName = uDoc.exists() ? uDoc.data().name : "Unknown";
+                        const uDoc = await getDoc(doc(db, "users", uid)); 
+                        const studentName = uDoc.exists() ? uDoc.data().name : "Unknown Student";
                         await updateDoc(doc(db, "users", uid), { points: increment(50) });
                         await addDoc(collection(db, "attendance"), { eventName: eventName, uid: uid, studentName: studentName, type: 'QR_Scan', timestamp: Date.now() });
-                        statusEl.className = "p-4 text-center text-green-400 mb-6"; statusEl.innerHTML = `✅ Success! +50 Pts to ${studentName}`;
+                        statusEl.className = "p-4 text-center text-green-400 mb-6 border border-green-500/30 bg-green-500/10 rounded-xl font-bold uppercase tracking-widest text-xs"; statusEl.innerHTML = `✅ Success! +50 Pts to ${studentName}`;
                     }
-                } catch(err) { statusEl.className = "p-4 text-center text-red-400 mb-6"; statusEl.innerHTML = `Error: Invalid QR`; }
+                } catch(err) { 
+                    statusEl.className = "p-4 text-center text-red-400 mb-6 border border-red-500/30 bg-red-500/10 rounded-xl font-bold uppercase tracking-widest text-xs"; statusEl.innerHTML = `Error: Invalid QR Code`; 
+                }
                 
-                setTimeout(() => { window.isScanningFlag = false; statusEl.className = "p-4 text-center text-glow-blue mb-6"; statusEl.innerHTML = 'Ready for next scan...'; window.html5QrcodeScanner.resume(); }, 3000);
+                setTimeout(() => { window.isScanningFlag = false; statusEl.className = "p-4 text-center text-glow-blue mb-6 border border-glow-blue/30 bg-glow-blue/10 rounded-xl font-bold uppercase tracking-widest text-xs"; statusEl.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Ready for next scan...'; window.html5QrcodeScanner.resume(); }, 3000);
             }, (err) => {}).catch((err) => { alert("Camera access denied."); stopScanner(); });
         };
 
-        window.stopScanner = () => { 
-            if(window.html5QrcodeScanner) { window.html5QrcodeScanner.stop().then(() => { window.html5QrcodeScanner.clear(); window.html5QrcodeScanner = null; }); } 
-            document.getElementById('btnStartScan').classList.remove('hidden'); document.getElementById('btnStopScan').classList.add('hidden'); document.getElementById('scannerStatus').classList.add('hidden'); 
-        };
+        window.stopScanner = () => { if(window.html5QrcodeScanner) { window.html5QrcodeScanner.stop().then(() => { window.html5QrcodeScanner.clear(); window.html5QrcodeScanner = null; }); } document.getElementById('btnStartScan').classList.remove('hidden'); document.getElementById('btnStopScan').classList.add('hidden'); document.getElementById('scannerStatus').classList.add('hidden'); };
 
         async function logActivity(action, details) { try { await addDoc(collection(db, "logs"), { action, details, admin: window.currentUserEmail, timestamp: Date.now() }); } catch(e) {} }
 
