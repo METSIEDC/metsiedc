@@ -8,7 +8,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050505">
     <link rel="apple-touch-icon" href="assets/images/logos/MSEM-removebg-preview.png">
-  <link rel="icon" type="image/png" href="assets/images/logos/MSEM-removebg-preview.png">
+    <link rel="icon" type="image/png" href="assets/images/logos/MSEM-removebg-preview.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -100,6 +100,11 @@
                 <button onclick="showTab('leaderboard')" id="nav-leaderboard" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 text-sm text-glow-gold hover:text-yellow-400">
                     <i data-lucide="trophy" class="w-4 h-4"></i> Leaderboard
                 </button>
+
+                <button onclick="showTab('store')" id="nav-store" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 text-sm text-glow-purple hover:text-purple-400">
+                    <i data-lucide="ticket" class="w-4 h-4"></i> Event Tickets
+                </button>
+
                 <button onclick="showTab('joinIedc')" id="nav-joinIedc" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 text-sm">
                     <i data-lucide="users" class="w-4 h-4"></i> Join IEDC
                 </button>
@@ -154,9 +159,9 @@
                                 </div>
                             </div>
                             <div>
-                                <p class="text-xs text-white/60 mb-3"><i class="fas fa-arrow-up text-green-400 mr-1"></i> Keep participating to earn more!</p>
-                                <button onclick="showTab('leaderboard')" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-[10px] uppercase tracking-widest font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
-                                    <i data-lucide="trophy" class="w-3.5 h-3.5 text-glow-gold"></i> View Leaderboard
+                                <p class="text-xs text-white/60 mb-3"><i class="fas fa-arrow-up text-green-400 mr-1"></i> Redeem points for Event Passes!</p>
+                                <button onclick="showTab('store')" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-[10px] uppercase tracking-widest font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
+                                    <i data-lucide="ticket" class="w-3.5 h-3.5 text-glow-purple"></i> Get Tickets
                                 </button>
                             </div>
                         </div>
@@ -205,9 +210,9 @@
                                 <div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 text-white group-hover:text-glow-orange transition-colors"><i data-lucide="lightbulb" class="w-6 h-6"></i></div>
                                 <h3 class="text-sm font-display font-bold text-white uppercase tracking-wider">Pitch Idea</h3>
                             </div>
-                            <div onclick="showTab('certificates')" class="glass-panel p-6 flex flex-col items-center justify-center cursor-pointer glass-card-hover group">
-                                <div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 text-white group-hover:text-glow-green transition-colors"><i data-lucide="award" class="w-6 h-6"></i></div>
-                                <h3 class="text-sm font-display font-bold text-white uppercase tracking-wider">Awards</h3>
+                            <div onclick="showTab('store')" class="glass-panel p-6 flex flex-col items-center justify-center cursor-pointer glass-card-hover group">
+                                <div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 text-white group-hover:text-glow-green transition-colors"><i data-lucide="ticket" class="w-6 h-6"></i></div>
+                                <h3 class="text-sm font-display font-bold text-white uppercase tracking-wider">Passes</h3>
                             </div>
                         </div>
                     </div>
@@ -229,6 +234,66 @@
                                 <tr><td colspan="3" class="text-center py-10"><div class="spinner"></div></td></tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <div id="storeSection" class="tab-content hidden max-w-5xl mx-auto w-full pt-6">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6 border-b border-white/10 pb-6">
+                        <div>
+                            <h2 class="text-3xl md:text-4xl font-display font-bold text-white tracking-widest uppercase mb-2">Event Tickets</h2>
+                            <p class="text-white/50 text-sm font-light">Redeem your innovation points for exclusive event passes.</p>
+                        </div>
+                        <div class="bg-glow-gold/10 border border-glow-gold/30 px-6 py-4 rounded-2xl flex items-center gap-4">
+                            <i data-lucide="zap" class="w-6 h-6 text-glow-gold"></i>
+                            <div>
+                                <p class="text-[9px] uppercase tracking-widest text-glow-gold/70 font-bold mb-1">Your Balance</p>
+                                <p class="text-2xl font-display font-black text-glow-gold leading-none" id="storePointsDisplay">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="glass-panel rounded-3xl p-6 flex flex-col group border-white/10 hover:border-glow-blue/50 transition-colors">
+                            <div class="w-full h-48 bg-black/40 rounded-2xl mb-6 flex items-center justify-center border border-white/5">
+                                <i class="fas fa-ticket-alt text-6xl text-glow-blue/50 group-hover:scale-110 transition-transform shadow-glow-blue"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">Standard Workshop Pass</h3>
+                            <p class="text-sm text-white/50 mb-6 flex-grow">Free entry to any standard 1-day technical workshop hosted by MET'S IEDC.</p>
+                            <button onclick="redeemReward('Workshop Pass', 500)" class="w-full bg-white/5 hover:bg-glow-blue hover:text-white text-glow-blue border border-glow-blue/30 py-4 rounded-xl text-xs uppercase tracking-widest font-bold transition-all">Redeem • 500 Pts</button>
+                        </div>
+
+                        <div class="glass-panel rounded-3xl p-6 flex flex-col group border-white/10 hover:border-glow-purple/50 transition-colors">
+                            <div class="w-full h-48 bg-black/40 rounded-2xl mb-6 flex items-center justify-center border border-white/5">
+                                <i class="fas fa-laptop-code text-6xl text-glow-purple/50 group-hover:scale-110 transition-transform"></i>
+                            </div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-white">Premium Hackathon Entry</h3>
+                            </div>
+                            <p class="text-sm text-white/50 mb-6 flex-grow">Fast-track approval and guaranteed seating for flagship internal hackathons.</p>
+                            <button onclick="redeemReward('Hackathon Entry', 1000)" class="w-full bg-white/5 hover:bg-glow-purple hover:text-white text-glow-purple border border-glow-purple/30 py-4 rounded-xl text-xs uppercase tracking-widest font-bold transition-all">Redeem • 1,000 Pts</button>
+                        </div>
+
+                        <div class="glass-panel rounded-3xl p-6 flex flex-col group border-white/10 hover:border-glow-green/50 transition-colors">
+                            <div class="w-full h-48 bg-black/40 rounded-2xl mb-6 flex items-center justify-center border border-white/5">
+                                <i class="fas fa-id-badge text-6xl text-glow-green/50 group-hover:scale-110 transition-transform"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">Tech Conference VIP Pass</h3>
+                            <p class="text-sm text-white/50 mb-6 flex-grow">VIP seating, back-stage access, and premium lanyard for major campus tech conferences.</p>
+                            <button onclick="redeemReward('VIP Conference Pass', 2000)" class="w-full bg-white/5 hover:bg-glow-green hover:text-white text-glow-green border border-glow-green/30 py-4 rounded-xl text-xs uppercase tracking-widest font-bold transition-all">Redeem • 2,000 Pts</button>
+                        </div>
+
+                        <div class="glass-panel rounded-3xl p-6 flex flex-col group border-white/10 hover:border-glow-gold/50 transition-colors">
+                            <div class="absolute -right-10 -top-10 w-32 h-32 bg-glow-gold/20 blur-3xl rounded-full pointer-events-none"></div>
+                            <div class="w-full h-48 bg-black/40 rounded-2xl mb-6 flex items-center justify-center border border-white/5 relative overflow-hidden">
+                                <i class="fas fa-user-tie text-6xl text-glow-gold/50 group-hover:scale-110 transition-transform relative z-10"></i>
+                            </div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-white">Founders' Networking Dinner</h3>
+                                <span class="px-2 py-1 bg-glow-gold/20 text-glow-gold text-[9px] uppercase font-bold rounded">Exclusive</span>
+                            </div>
+                            <p class="text-sm text-white/50 mb-6 flex-grow">An exclusive invite-only dinner pass to network directly with industry speakers and alumni founders.</p>
+                            <button onclick="redeemReward('Founders Dinner Pass', 3000)" class="w-full bg-glow-gold hover:bg-yellow-400 text-black py-4 rounded-xl text-xs uppercase tracking-widest font-bold transition-all shadow-[0_0_20px_rgba(251,191,36,0.3)]">Redeem • 3,000 Pts</button>
+                        </div>
                     </div>
                 </div>
 
@@ -294,8 +359,8 @@
                         </form>
                     </div>
                 </div>
-                <div id="submitIdeaSection" class="tab-content hidden w-full pt-6">
-                    </div>
+                
+                <div id="submitIdeaSection" class="tab-content hidden w-full pt-6"></div>
 
                 <div id="trackStatusSection" class="tab-content hidden max-w-5xl mx-auto w-full pt-6">
                     <div class="flex justify-between items-end mb-8 border-b border-white/10 pb-6">
@@ -356,6 +421,7 @@
         <nav class="flex-grow px-4 py-4 space-y-2 overflow-y-auto">
             <button onclick="showTab('dashboardOverview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-4 px-5 py-3 text-xs uppercase tracking-widest"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
             <button onclick="showTab('leaderboard'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-xs uppercase tracking-widest text-glow-gold"><i data-lucide="trophy" class="w-4 h-4"></i> Leaderboard</button>
+            <button onclick="showTab('store'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-xs uppercase tracking-widest text-glow-purple"><i data-lucide="ticket" class="w-4 h-4"></i> Tickets</button>
             <button onclick="showTab('joinIedc'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-xs uppercase tracking-widest"><i data-lucide="users" class="w-4 h-4"></i> Join</button>
             <button onclick="showTab('trackStatus'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-xs uppercase tracking-widest"><i data-lucide="activity" class="w-4 h-4"></i> Status</button>
             <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-xs uppercase tracking-widest"><i data-lucide="calendar" class="w-4 h-4"></i> Logs</button>
@@ -369,7 +435,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, query, where, orderBy, getDocs, limit, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, query, where, orderBy, getDocs, limit, increment, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
 
@@ -384,6 +450,55 @@
         let qrCodeInstance = null;
 
         const safeSetText = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+
+        // --- NEW: REDEEM TICKETS LOGIC ---
+        window.redeemReward = async (itemName, cost) => {
+            if(!window.currentUserId) return;
+            
+            try {
+                // 1. Fetch exact current points
+                const userDoc = await getDoc(doc(db, "users", window.currentUserId));
+                const userData = userDoc.data();
+                const currentPts = userData.points || 0;
+
+                // 2. Check if they have enough
+                if(currentPts < cost) {
+                    alert(`Not enough points!\n\nYou need ${cost} points, but you only have ${currentPts}. Keep innovating to earn more!`);
+                    return;
+                }
+
+                // 3. Confirm Purchase
+                if(!confirm(`Are you sure you want to spend ${cost} points for the ${itemName}?`)) return;
+
+                // 4. Batch Write (Deduct points & add to Redemptions list)
+                const batch = writeBatch(db);
+                
+                batch.update(doc(db, "users", window.currentUserId), { points: increment(-cost) });
+                
+                const redRef = doc(collection(db, "redemptions"));
+                batch.set(redRef, {
+                    userId: window.currentUserId,
+                    userName: userData.name || "Student",
+                    userPhone: userData.phone || "No Phone",
+                    itemName: itemName,
+                    cost: cost,
+                    status: "Pending", 
+                    timestamp: Date.now()
+                });
+
+                await batch.commit();
+
+                // 5. Update UI visually
+                const newPts = currentPts - cost;
+                safeSetText('userPointsDisplay', newPts);
+                safeSetText('storePointsDisplay', newPts);
+                
+                alert(`🎉 Ticket Secured!\n\nYou have claimed the ${itemName}. The IEDC Admin will send your pass via WhatsApp shortly!`);
+
+            } catch(e) {
+                alert("Error connecting to server: " + e.message);
+            }
+        };
 
         // --- FETCH LEADERBOARD ---
         window.fetchLeaderboard = async () => {
@@ -440,7 +555,7 @@
                     </div>`;
                 });
                 container.innerHTML = html; lucide.createIcons();
-            } catch(e) { container.innerHTML = `<div class="text-red-400 text-xs col-span-full">Error loading projects. Ensure Firestore rules are updated!</div>`; }
+            } catch(e) { container.innerHTML = `<div class="text-red-400 text-xs col-span-full">Error loading projects.</div>`; }
         };
 
         // --- FETCH MY ATTENDANCE ---
@@ -459,7 +574,7 @@
                     html += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors"><td class="px-6 py-4 font-medium text-white">${data.eventName}</td><td class="px-6 py-4 text-right text-white/50 font-mono text-xs">${dateStr}</td></tr>`;
                 });
                 list.innerHTML = html;
-            } catch(e) { list.innerHTML = `<tr><td colspan="2" class="text-red-400 text-xs text-center py-6">Error loading records. Ensure Firestore rules are updated!</td></tr>`; }
+            } catch(e) { list.innerHTML = `<tr><td colspan="2" class="text-red-400 text-xs text-center py-6">Error loading records.</td></tr>`; }
         };
 
         // --- FETCH MY CERTIFICATES ---
@@ -487,11 +602,10 @@
                     </div>`;
                 });
                 container.innerHTML = html; lucide.createIcons();
-            } catch(e) { container.innerHTML = `<div class="text-red-400 text-xs col-span-full">Error loading certificates. Ensure Firestore rules are updated!</div>`; }
+            } catch(e) { container.innerHTML = `<div class="text-red-400 text-xs col-span-full">Error loading certificates.</div>`; }
         };
 
         // --- FORM SUBMISSIONS ---
-        // Join Form
         document.getElementById('joinIedcForm')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnJoinSubmit'); btn.disabled = true; btn.innerText = "Submitting...";
@@ -508,7 +622,6 @@
             } catch(error) { alert(error.message); } finally { btn.disabled = false; btn.innerText = "Submit Registration"; }
         });
 
-        // Project/Idea Form
         document.getElementById('submitProjectForm')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnProjectSubmit'); btn.disabled = true; btn.innerText = "Submitting...";
@@ -521,32 +634,29 @@
                     status: "Pending Review",
                     timestamp: Date.now()
                 });
-                // Auto-award 100 points!
                 await updateDoc(doc(db, "users", window.currentUserId), { points: increment(100) });
                 alert("Project Submitted! You earned +100 Innovation Points!");
                 e.target.reset();
-                showTab('trackStatus'); // Auto redirect to status tab
+                showTab('trackStatus'); 
                 
-                // Update local UI points immediately
                 const ptsEl = document.getElementById('userPointsDisplay');
-                ptsEl.textContent = parseInt(ptsEl.textContent) + 100;
+                const newPts = parseInt(ptsEl.textContent) + 100;
+                ptsEl.textContent = newPts;
+                safeSetText('storePointsDisplay', newPts);
             } catch(error) { alert(error.message); } finally { btn.disabled = false; btn.innerText = "Submit for Review"; }
         });
-
 
         // --- AUTH & DIGITAL ID LOAD ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 window.currentUserId = user.uid;
                 
-                // Generate QR
                 const qrContainer = document.getElementById("qrcode");
                 if (qrContainer) {
                     qrContainer.innerHTML = ""; 
                     qrCodeInstance = new QRCode(qrContainer, { text: user.uid, width: 100, height: 100, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H });
                 }
 
-                // Load User Data
                 safeSetText('idCardUID', user.uid);
                 safeSetText('idCardEmail', user.email);
                 
@@ -562,7 +672,8 @@
                     }
 
                     safeSetText('idCardName', nameToDisplay); safeSetText('idCardRole', roleToDisplay.toUpperCase());
-                    safeSetText('userPointsDisplay', pointsToDisplay); safeSetText('headerWelcomeName', nameToDisplay.split(' ')[0]);
+                    safeSetText('userPointsDisplay', pointsToDisplay); safeSetText('storePointsDisplay', pointsToDisplay);
+                    safeSetText('headerWelcomeName', nameToDisplay.split(' ')[0]);
                 } catch(e) { console.error(e); }
 
                 window.fetchLeaderboard();
@@ -571,7 +682,6 @@
 
         // UI Helpers
         window.showTab = function(tabId) {
-            // Handle shared forms
             if(tabId === 'submitIdea') tabId = 'submitProject'; 
 
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -586,12 +696,12 @@
             if (tabId === 'dashboardOverview') title = "Dashboard";
             if (tabId === 'submitProject') title = "Submit Project";
             if (tabId === 'trackStatus') title = "Submissions";
+            if (tabId === 'store') title = "Event Tickets";
             safeSetText('headerTitle', title);
 
             const menu = document.getElementById('mobile-sidebar');
             if(menu && !menu.classList.contains('-translate-x-full')) { window.toggleMobileSidebar(); }
 
-            // Fetch data based on tab clicked!
             if (tabId === 'leaderboard') window.fetchLeaderboard();
             if (tabId === 'trackStatus') window.fetchMySubmissions();
             if (tabId === 'attendance') window.fetchMyAttendance();
