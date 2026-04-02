@@ -99,6 +99,7 @@
         <nav class="flex-grow px-4 py-2 space-y-1 overflow-y-auto">
             <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
             <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="users" class="w-4 h-4"></i> Users & Points</button>
+            <button onclick="showTab('rewards')" id="nav-rewards" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-gold"><i data-lucide="ticket" class="w-4 h-4"></i> Ticket Orders</button>
             <button onclick="showTab('inventory')" id="nav-inventory" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="box" class="w-4 h-4"></i> Inventory</button>
             <button onclick="showTab('logs')" id="nav-logs" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="activity" class="w-4 h-4"></i> Activity Logs</button>
             <button onclick="showTab('excom')" id="nav-excom" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="shield" class="w-4 h-4"></i> ExCom Tracking</button>
@@ -129,6 +130,7 @@
         <nav class="flex-grow px-4 py-6 space-y-1 overflow-y-auto" id="mobile-nav-links">
             <button onclick="showTab('overview')" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
             <button onclick="showTab('users')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="users" class="w-4 h-4"></i> Users</button>
+            <button onclick="showTab('rewards')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-glow-gold"><i data-lucide="ticket" class="w-4 h-4"></i> Tickets</button>
             <button onclick="showTab('inventory')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="box" class="w-4 h-4"></i> Inventory</button>
             <button onclick="showTab('logs')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="activity" class="w-4 h-4"></i> Logs</button>
             <button onclick="showTab('excom')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"><i data-lucide="shield" class="w-4 h-4"></i> ExCom</button>
@@ -204,6 +206,22 @@
                     <div id="pendingProjectsList" class="space-y-4">
                         <div class="text-center py-4 text-white/30 text-[10px] uppercase tracking-widest font-bold">Loading projects...</div>
                     </div>
+                </div>
+            </div>
+
+            <div id="rewardsSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Ticket Orders</h2>
+                </div>
+                <div class="glass-panel rounded-3xl overflow-hidden border-glow-gold/30">
+                    <table class="w-full text-left">
+                        <thead class="bg-black/50 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50">
+                            <tr><th class="px-6 py-5">Student</th><th class="px-6">Pass Redeemed</th><th class="px-6">Date</th><th class="px-6">Status</th><th class="px-6 text-center">Action</th></tr>
+                        </thead>
+                        <tbody id="redemptionsList" class="divide-y divide-white/5 text-sm">
+                            <tr><td colspan="5" class="text-center py-10 text-white/30 text-xs tracking-widest uppercase font-bold"><div class="spinner mx-auto mb-3"></div> Loading Orders...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -298,9 +316,7 @@
             <div id="notificationsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
                     <div class="border-b border-white/10 pb-5 mb-8"><h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Send In-App Alert</h2><p class="text-white/50 text-sm font-light">Pushes a notification to the dashboard <span class="text-green-400 font-bold">and sends a WhatsApp broadcast</span> to all verified members.</p></div>
-                    
                     <div id="alertStatus" class="hidden mb-6 p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest text-center border border-glow-blue/50 bg-glow-blue/10 text-white"></div>
-                    
                     <form id="pushAlertForm" class="space-y-6">
                         <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Alert Title</label><input type="text" id="alertTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. Meeting Room Changed" required></div>
                         <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Category</label><select id="alertCategory" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm font-medium"><option value="Alert">Urgent Alert</option><option value="Event">Event Update</option><option value="Reminder">General Reminder</option></select></div>
@@ -374,9 +390,7 @@
             <button onclick="closeGlobalScanner()" class="absolute top-4 right-4 w-8 h-8 bg-white/10 hover:bg-white/20 transition-colors rounded-full flex items-center justify-center text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
             <h2 class="text-xl font-display font-bold text-white text-center mb-2 uppercase tracking-widest mt-2">Scan ID</h2>
             <p class="text-[10px] text-white/50 text-center mb-6 uppercase tracking-widest">Point camera at student QR code</p>
-            
             <div id="global-qr-reader" class="w-full bg-black/80 border-2 border-dashed border-white/20 rounded-xl overflow-hidden mb-4 min-h-[300px]"></div>
-            
             <div id="globalScannerToast" class="text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl hidden transition-all"></div>
         </div>
     </div>
@@ -491,6 +505,7 @@
             if(t === 'users') title = "Users & Points";
             if(t === 'eventForms') title = "Forms";
             if(t === 'excom') title = "ExCom";
+            if(t === 'rewards') title = "Ticket Orders";
             document.getElementById('headerTitle').textContent = title;
             
             const menu = document.getElementById('mobile-sidebar');
@@ -617,7 +632,6 @@
 
         lucide.createIcons();
         
-        // --- YOUR GOOGLE APPS SCRIPT URL ---
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhv5--AImomPzvUOw1-fsnBom_YN5jDQq-8wd-L0xPg1J7AZAJumfBeXAEku4zd6I-/exec"; 
         
         const firebaseConfig = { apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8", authDomain: "metsiedc-3010e.firebaseapp.com", projectId: "metsiedc-3010e", storageBucket: "metsiedc-3010e.firebasestorage.app", messagingSenderId: "954403413150", appId: "1:954403413150:web:2523a3377f15a3d6002f8f" };
@@ -638,7 +652,6 @@
         let roleChartInstance = null;
         let activityChartInstance = null;
 
-        // AUTH
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const snapshot = await getDoc(doc(db, "users", user.uid));
@@ -653,9 +666,7 @@
             } else { window.location.href = 'admin.html'; }
         });
 
-        // SYNC DATA
         function initSync() {
-            // Users & Charts
             onSnapshot(collection(db, "users"), (snap) => {
                 let uHtml = '', certHtml = '', attHtml = '', excomModalHtml = '', excomHtml = '';
                 let usersList = [];
@@ -669,7 +680,6 @@
                     if(data.role === 'admin') adminCount++; else if(data.role === 'excom') excomCount++; else studentCount++;
                 });
                 
-                // Store all user data globally so we can access phone numbers easily
                 window.allUsersData = usersList;
                 
                 if(roleChartInstance) roleChartInstance.destroy();
@@ -687,7 +697,6 @@
                 usersList.forEach(u => {
                     const safeName = escapeHTML(u.name || "Unknown");
                     const safeEmail = escapeHTML(u.email || "No Email");
-                    // Format phone to ensure it has 91 (for India Meta API testing)
                     let safePhone = u.phone ? escapeHTML(u.phone) : "No Phone";
                     if (safePhone !== "No Phone" && !safePhone.startsWith("91") && safePhone.length === 10) safePhone = "91" + safePhone;
 
@@ -697,11 +706,9 @@
                     if(u.role === 'admin') roleBadge = `<span class="px-2 py-1 bg-red-500/10 text-red-400 text-[9px] rounded-md uppercase">Admin</span>`;
                     else if(u.role === 'excom') roleBadge = `<span class="px-2 py-1 bg-glow-purple/10 text-glow-purple text-[9px] rounded-md uppercase">ExCom</span>`;
 
-                    // UPDATED USERS TABLE to show phone number under email
                     uHtml += `<tr class="border-b border-white/5 hover:bg-white/5"><td class="px-6 py-4 text-sm font-medium text-white">${safeName}</td><td class="px-6 py-4"><div class="text-sm text-white/80">${safeEmail}</div><div class="text-[10px] text-white/40 font-mono mt-1"><i class="fab fa-whatsapp mr-1 text-green-500/70"></i> ${safePhone}</div></td><td class="px-6 py-4 text-center text-glow-gold font-bold text-lg">${points}</td><td class="px-6 py-4">${roleBadge}</td><td class="px-6 py-4 text-center flex justify-center gap-2"><button onclick="prepareAwardPoints('${u.id}', '${safeName}')" class="text-glow-gold hover:text-white bg-glow-gold/10 p-2 rounded-lg"><i data-lucide="gift" class="w-4 h-4"></i></button><button onclick="prepareEditUser('${u.id}', '${safeName}', '${u.role||'student'}')" class="text-glow-blue hover:text-white bg-white/5 p-2 rounded-lg"><i data-lucide="edit-2" class="w-4 h-4"></i></button></td></tr>`;
 
                     if(u.role === 'student' || u.role === 'excom') {
-                        // Added data-phone to checkboxes for certificates
                         certHtml += `<tr class="border-b border-white/5 hover:bg-white/5"><td class="px-6 py-4 text-center"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${u.id}" data-name="${safeName}" data-email="${safeEmail}" data-phone="${safePhone}"></td><td class="text-sm font-medium text-white">${safeName}</td></tr>`;
                         attHtml += `<tr class="border-b border-white/5 hover:bg-white/5 cursor-pointer" onclick="toggleAttCheck('${u.id}')"><td class="px-6 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${u.id}" value="${u.id}" data-name="${safeName}"></td><td class="text-sm font-bold text-white">${safeName}</td><td class="text-xs text-white/50">${safeEmail}</td></tr>`;
                     }
@@ -719,13 +726,39 @@
                 lucide.createIcons();
             });
 
-            // ADDED: Project Submissions Sync (For WhatsApp Option 2)
+            onSnapshot(query(collection(db, "redemptions"), orderBy("timestamp", "desc")), (snap) => {
+                let h = '';
+                if(snap.empty) { h = '<tr><td colspan="5" class="text-center py-10 text-white/30 text-xs tracking-widest uppercase font-bold">No orders yet.</td></tr>'; }
+                snap.forEach(d => {
+                    const r = d.data();
+                    let badge = `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-yellow-500/30 bg-yellow-500/10 text-yellow-400">Pending</span>`;
+                    if(r.status === 'Fulfilled') badge = `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-green-500/30 bg-green-500/10 text-green-400">Approved</span>`;
+                    if(r.status === 'Refunded') badge = `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-red-500/30 bg-red-500/10 text-red-400">Refunded</span>`;
+
+                    let actions = '';
+                    if(r.status === 'Pending') {
+                        // Pass userId to fulfillReward so we know who to tie the ticket to
+                        actions = `<button onclick="fulfillReward('${d.id}', '${r.userPhone}', '${r.userName}', '${r.itemName}', '${r.userId}')" class="bg-green-500/20 text-green-400 p-2 rounded-lg hover:bg-green-500/40 transition-colors"><i class="fas fa-check w-4 h-4"></i></button><button onclick="refundReward('${d.id}', '${r.userId}', ${r.cost})" class="bg-red-500/20 text-red-400 p-2 rounded-lg hover:bg-red-500/40 transition-colors"><i class="fas fa-undo w-4 h-4"></i></button>`;
+                    } else if (r.status === 'Fulfilled' && r.ticketId) {
+                        actions = `<span class="text-[10px] text-white/50 font-mono">${r.ticketId}</span>`;
+                    }
+
+                    h += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors text-sm">
+                            <td class="px-6 py-4 text-white font-medium">${r.userName}</td>
+                            <td class="px-6 py-4 text-white/80">${r.itemName} <span class="text-glow-gold text-[10px] ml-1">(${r.cost} pts)</span></td>
+                            <td class="px-6 py-4 text-white/50 font-mono text-[10px]">${new Date(r.timestamp).toLocaleDateString()}</td>
+                            <td class="px-6 py-4">${badge}</td>
+                            <td class="px-6 py-4 flex gap-2 justify-center">${actions}</td>
+                          </tr>`;
+                });
+                if(document.getElementById('redemptionsList')) document.getElementById('redemptionsList').innerHTML = h;
+            });
+
             onSnapshot(query(collection(db, "projects"), where("status", "==", "Pending Review")), (snap) => {
                 let h = '';
                 if(snap.empty) { h = '<div class="text-center py-4 text-white/30 text-[10px] uppercase tracking-widest font-bold border border-dashed border-white/10 rounded-xl">No pending projects</div>'; }
                 snap.forEach(d => {
                     const p = d.data();
-                    // Find user phone number from global array
                     const user = window.allUsersData.find(u => u.id === p.uid);
                     let safePhone = "Unknown";
                     if(user && user.phone) { safePhone = user.phone.length === 10 ? "91" + user.phone : user.phone; }
@@ -745,7 +778,6 @@
                 if(document.getElementById('pendingProjectsList')) document.getElementById('pendingProjectsList').innerHTML = h;
             });
 
-            // Activity Chart (Scans)
             onSnapshot(query(collection(db, "attendance"), orderBy("timestamp", "desc"), limit(50)), (snap) => {
                 let activityLog = []; snap.forEach(d => activityLog.push(d.data()));
                 let chartDataMap = {};
@@ -763,7 +795,6 @@
                 }
             });
 
-            // Inventory
             onSnapshot(collection(db, "inventory"), (snap) => {
                 let h='', total=0, avail=0, borrowed=0;
                 snap.forEach(d => {
@@ -778,13 +809,11 @@
                 lucide.createIcons();
             });
 
-            // Logs
             onSnapshot(query(collection(db, "logs"), orderBy("timestamp", "desc"), limit(50)), (snap) => {
                 let h = ''; snap.forEach(d => { const l = d.data(); h += `<tr class="border-b border-white/5 hover:bg-white/5 text-sm"><td class="px-6 py-4 text-white/50 font-mono">${new Date(l.timestamp).toLocaleString()}</td><td class="text-white font-bold uppercase text-[10px] px-6">${l.action}</td><td class="text-white/70 px-6">${l.details}</td><td class="text-white/40 font-mono px-6 text-[10px]">${l.admin}</td></tr>`; });
                 if(document.getElementById('logsListBody')) document.getElementById('logsListBody').innerHTML = h;
             });
 
-            // ExCom Meetings
             onSnapshot(query(collection(db, "excom_meetings"), orderBy("date", "desc")), (snap) => {
                 window.excomMeetingsData = []; let h = '';
                 snap.forEach(d => {
@@ -795,7 +824,6 @@
                 lucide.createIcons();
             });
 
-            // Counts
             onSnapshot(collection(db, "announcements"), s => document.getElementById('totalAnnouncementsCount').textContent = s.size);
             onSnapshot(collection(db, "eventForms"), s => {
                 document.getElementById('activeFormsCount').textContent = s.size;
@@ -804,7 +832,6 @@
             });
         }
 
-        // --- GOOGLE DRIVE UPLOAD FIX (CORS Bypass) ---
         async function uploadToDrive(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -825,16 +852,12 @@
             });
         }
 
-        // --- AUTOMATED EMAIL HELPER ---
         async function sendAutomatedEmail(toEmail, studentName, eventName, certificateUrl) {
             const emailHtml = `<div style="font-family: Arial, sans-serif; max-w: 600px; margin: 0 auto; background: #050505; color: #ffffff; padding: 30px; border-radius: 15px; border: 1px solid #333;"><h2 style="color: #9333ea; text-align: center;">MET'S IEDC</h2><h3 style="text-align: center;">Certificate of Participation</h3><p>Hi ${studentName},</p><p>Congratulations! Your certificate for <strong>${eventName}</strong> has been issued.</p><p>You can view and download it from your IEDC Student Dashboard, or directly via the link below:</p><div style="text-align: center; margin: 30px 0;"><a href="${certificateUrl}" style="background: #2563eb; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold;">View Certificate</a></div><p style="color: #888; font-size: 12px; text-align: center;">Keep innovating!<br>- The MET'S IEDC Team</p></div>`;
             try { await fetch(SCRIPT_URL, { method: 'POST', headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: 'sendEmail', to: toEmail, subject: `Your Certificate for ${eventName} | MET'S IEDC`, htmlBody: emailHtml }) }); } catch(e) {}
         }
 
-        // --- NEW: AUTOMATED WHATSAPP HELPER ---
         async function sendAutomatedWhatsApp(phoneNumber, messageContent) {
-            // Note: In Meta Testing Mode, this will only actually deliver if the phoneNumber is verified in your Meta Dashboard
-            // AND if you have sent a message to the bot to open the 24 hour window.
             try {
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -848,7 +871,40 @@
             } catch(e) { console.error("WhatsApp failed to trigger", e); }
         }
 
-        // --- GLOBALLY EXPOSED FUNCTIONS ---
+        // --- NEW: GENERATE QR PASS ON FULFILL ---
+        window.fulfillReward = async (id, phone, name, item, userId) => {
+            if(!confirm("Approve this ticket and send the QR pass?")) return;
+            try {
+                // Generate a unique 6-character Ticket ID
+                const ticketId = "TKT-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+                
+                // Update Firestore
+                await updateDoc(doc(db, "redemptions", id), { 
+                    status: "Fulfilled",
+                    ticketId: ticketId
+                });
+                
+                await logActivity("Ticket Approved", `${name} got pass for ${item} (${ticketId})`);
+                
+                // Send WhatsApp
+                if(phone && phone !== "No Phone") {
+                    const msg = `*MET'S IEDC | Event Pass Ready!* 🎉\n\nHi ${name},\nYour ticket for *${item}* has been approved!\n\n🎫 *Ticket ID:* ${ticketId}\n\nCheck your IEDC Dashboard to view your scannable QR Code Pass. See you there!`;
+                    await sendAutomatedWhatsApp(phone, msg);
+                }
+            } catch(e) { alert(e.message); }
+        };
+
+        window.refundReward = async (id, userId, cost) => {
+            if(!confirm("Reject this order and refund their points?")) return;
+            try {
+                const batch = writeBatch(db);
+                batch.update(doc(db, "redemptions", id), { status: "Refunded" });
+                batch.update(doc(db, "users", userId), { points: increment(cost) });
+                await batch.commit();
+                await logActivity("Reward Refunded", `Refunded ${cost} pts for order ${id}`);
+            } catch(e) { alert(e.message); }
+        };
+
         window.prepareEditUser = (id, name, role) => { document.getElementById('editUserId').value = id; document.getElementById('editUserName').value = name; document.getElementById('editUserRoleSelect').value = role; window.toggleEditUserModal(true); };
         window.toggleItemStatus = async (id, status) => { await updateDoc(doc(db, "inventory", id), { status: status }); await logActivity("Inventory Update", `Changed item status to ${status}`); };
         window.deleteDoc = deleteDoc;
@@ -861,7 +917,6 @@
             document.getElementById('excomModal').classList.remove('hidden'); lucide.createIcons();
         };
 
-        // --- BATCH WRITE ATTENDANCE ---
         window.submitAttendance = async () => {
             const eventName = document.getElementById('attendanceEventName').value.trim(); 
             const date = document.getElementById('attendanceDate').value;
@@ -903,7 +958,6 @@
             } catch(e) { alert(e.message); btn.disabled = false; }
         };
 
-        // --- OPTION 3: CERTIFICATES + EMAIL + WHATSAPP ---
         window.issueCertificates = async () => {
             const eventName = document.getElementById('certEventName').value; const issueDate = document.getElementById('certDate').value;
             const checkboxes = document.querySelectorAll('.cert-checkbox:checked'); const statusEl = document.getElementById('certStatus'); const btn = document.getElementById('certBtn');
@@ -924,15 +978,11 @@
 
                     await addDoc(collection(db, "certificates"), { userId: cb.value, userName: userName, eventName, date: issueDate, templateUrl, timestamp: Date.now() }); 
                     
-                    // 1. Send Email
                     if (userEmail && userEmail !== 'No Email') { await sendAutomatedEmail(userEmail, userName, eventName, templateUrl); }
-                    
-                    // 2. Send WhatsApp
                     if (userPhone && userPhone !== "No Phone") {
                         const waMsg = `*MET'S IEDC | Certificate Issued* 🎓\n\nHi ${userName},\nCongratulations! Your certificate for *${eventName}* is ready.\n\nYou can view and download it directly from your IEDC Dashboard!`;
                         await sendAutomatedWhatsApp(userPhone, waMsg);
                     }
-                    
                     count++; 
                 }
                 
@@ -943,18 +993,13 @@
             } catch(e) { alert("Error: " + e.message); statusEl.classList.add('hidden'); } finally { btn.disabled = false; btn.innerText = "Issue Certificates"; }
         };
 
-        // --- OPTION 2: PROJECT APPROVALS + WHATSAPP ---
         window.approveProject = async (projectId, userId, userPhone, projectTitle) => {
             if(!confirm("Approve project and award 100 points?")) return;
             try {
-                // Update Project Status
                 await updateDoc(doc(db, "projects", projectId), { status: "Approved" });
-                // Award 100 Points
                 await updateDoc(doc(db, "users", userId), { points: increment(100) });
-                // Log it
                 await logActivity("Project Approved", `Approved: ${projectTitle}`);
                 
-                // Send WhatsApp Notification
                 if(userPhone && userPhone !== "Unknown") {
                     const waMsg = `*MET'S IEDC | Project Approved* 🚀\n\nGreat news! Your project pitch for *${projectTitle}* has been officially approved.\n\n⚡ *+100 Innovation Points* have been added to your dashboard!`;
                     await sendAutomatedWhatsApp(userPhone, waMsg);
@@ -970,7 +1015,6 @@
             try { await updateDoc(doc(db, "projects", projectId), { status: "Rejected" }); await logActivity("Project Rejected", `Rejected ID: ${projectId}`); } catch(err) { alert(err.message); }
         };
 
-        // --- SUBMIT LISTENERS ---
         document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const mode = document.getElementById('addUserMode').value;
@@ -1019,7 +1063,6 @@
             } catch(err) { alert(err.message); } finally { btn.disabled = false; btn.textContent = "Upload Photos"; }
         });
 
-        // --- OPTION 1: IN-APP ALERTS + WHATSAPP BROADCAST ---
         document.getElementById('pushAlertForm').addEventListener('submit', async (e) => {
             e.preventDefault(); 
             const btn = document.getElementById('btnBroadcastAlert'); 
@@ -1036,16 +1079,13 @@
                 const cat = document.getElementById('alertCategory').value;
                 const msg = document.getElementById('alertContent').value;
                 
-                // 1. Save to Dashboard
                 await addDoc(collection(db, "notifications"), { title: title, category: cat, message: msg, timestamp: Date.now() }); 
                 await logActivity("Sent Alert & WhatsApp", title); 
                 
-                // 2. Broadcast via WhatsApp to all valid users
                 statusEl.textContent = "Sending WhatsApp Broadcasts...";
                 let sentCount = 0;
                 const waMsg = `*MET'S IEDC | 🚨 ${cat.toUpperCase()} 🚨*\n\n*${title}*\n${msg}\n\n_Check your IEDC dashboard for details._`;
                 
-                // Loop through the global array of users we cached in initSync()
                 for(let user of window.allUsersData) {
                     if(user.phone) {
                         let phone = user.phone.length === 10 ? "91" + user.phone : user.phone;
@@ -1086,7 +1126,6 @@
             try { await addDoc(collection(db, "announcements"), { title: document.getElementById('annTitle').value, description: document.getElementById('annContent').value, timestamp: Date.now() }); await logActivity("Posted Update", document.getElementById('annTitle').value); alert("Broadcasted!"); e.target.reset(); } catch (err) { alert(err.message); } finally { btn.innerHTML = orig; btn.disabled = false; }
         });
 
-        // AWARD POINTS LISTENER
         document.getElementById('awardPointsForm').addEventListener('submit', async (e) => {
             e.preventDefault(); const btn = document.getElementById('submitAwardBtn'); const status = document.getElementById('awardStatus'); const uid = document.getElementById('awardUserId').value; const pts = parseInt(document.getElementById('pointsAmount').value); const reason = document.getElementById('pointsReason').value;
             btn.disabled = true; btn.innerHTML = 'Processing...';
@@ -1098,12 +1137,10 @@
             } catch(error) { status.textContent = error.message; status.className = "text-[10px] text-center p-3 text-red-400 block mb-4 border border-red-400/30 rounded-xl uppercase tracking-widest font-bold"; btn.disabled = false; btn.innerHTML = 'Award Points'; }
         });
 
-        // FILE HANDLERS
         window.handleNewsImage = (e) => { window.newsImageFile = e.target.files[0]; document.getElementById('newsFileName').innerHTML = window.newsImageFile.name; };
         window.handleGalleryImages = (e) => { window.galleryImages = Array.from(e.target.files); document.getElementById('galleryFileName').innerHTML = `${window.galleryImages.length} files selected`; };
         window.handleCertTemplate = (e) => { const file = e.target.files[0]; if(!file) return; document.getElementById('certFileName').innerHTML = file.name; const r = new FileReader(); r.onload = (ev) => { window.certTemplateBase64 = ev.target.result; }; r.readAsDataURL(file); };
 
-        // --- GLOBAL POPUP QR SCANNER LOGIC ---
         window.html5QrcodeScanner = null; window.isScanningFlag = false; window.currentScannerMode = null;
         
         window.openGlobalScanner = (mode) => {
