@@ -355,15 +355,17 @@
             btn.innerHTML = `<div class="spinner border-white/20 border-t-white w-4 h-4 mr-2"></div> AI Mentor is thinking...`;
 
             try {
-                // NEW DIRECT GEMINI API CALL using the supported v1beta API and preview model
-                const GEMINI_API_KEY = "AIzaSyBwBJRz8gZMirwqm9HM0642gHuAW5k8Wcw"; // Your actual Gemini Key
+                // By leaving the API key empty, the Canvas environment proxy will automatically inject
+                // the proper system key and route the request to the required model behind the scenes.
+                const GEMINI_API_KEY = ""; 
                 const prompt = `You are an expert startup mentor. Analyze this student idea: '${title}'. Description: '${desc}'. Provide a JSON response with exactly three fields: 'strengths' (array of 2 strings), 'challenges' (array of 2 strings), and 'techStack' (array of 3 strings). Keep it encouraging. Respond ONLY with raw valid JSON.`;
 
                 const aiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`, {
                     method: 'POST',
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }]
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { responseMimeType: "application/json" }
                     })
                 });
 
@@ -796,8 +798,7 @@
                 overlay.classList.add('hidden'); 
             }
         };
-
-        document.getElementById('mobile-menu-toggle')?.addEventListener('click', window.toggleMobileSidebar);
+., M        document.getElementById('mobile-menu-toggle')?.addEventListener('click', window.toggleMobileSidebar);
         
         // --- LOGOUT ---
         const handleLogout = async () => { 
