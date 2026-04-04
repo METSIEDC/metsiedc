@@ -355,29 +355,49 @@
             btn.innerHTML = `<div class="spinner border-white/20 border-t-white w-4 h-4 mr-2"></div> AI Mentor is thinking...`;
 
             try {
-                // By leaving the API key empty, the Canvas environment proxy will automatically inject
-                // the proper system key and route the request to the required model behind the scenes.
-                const GEMINI_API_KEY = ""; 
+                // IMPORTANT: If testing outside this chat (like on Firebase), paste your "AIzaSy..." key here!
+                const apiKey = ""; 
                 const prompt = `You are an expert startup mentor. Analyze this student idea: '${title}'. Description: '${desc}'. Provide a JSON response with exactly three fields: 'strengths' (array of 2 strings), 'challenges' (array of 2 strings), and 'techStack' (array of 3 strings). Keep it encouraging. Respond ONLY with raw valid JSON.`;
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: { responseMimeType: "application/json" }
+                };
 
-                const aiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`, {
-                    method: 'POST',
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
-                        generationConfig: { responseMimeType: "application/json" }
-                    })
-                });
+                let aiRes;
+                let success = false;
+                const delays = [1000, 2000, 4000, 8000, 16000];
 
-                if (!aiRes.ok) {
-                    const errDetails = await aiRes.text();
-                    throw new Error(`Google AI connection failed. Status: ${aiRes.status}. Details: ${errDetails}`);
+                // Exponential Backoff Retry Logic
+                for (let i = 0; i <= 5; i++) {
+                    try {
+                        aiRes = await fetch(url, {
+                            method: 'POST',
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(payload)
+                        });
+                        if (aiRes.ok) {
+                            success = true;
+                            break;
+                        }
+                    } catch (err) {
+                        // Network error, ignore and retry
+                    }
+                    if (i < 5) {
+                        await new Promise(resolve => setTimeout(resolve, delays[i]));
+                    }
+                }
+
+                if (!success || !aiRes) {
+                    throw new Error("Our AI Mentor is experiencing high traffic. Please try again in a moment.");
                 }
                 
                 const rawData = await aiRes.json();
-                let aiText = rawData.candidates[0].content.parts[0].text;
+                let aiText = rawData.candidates?.[0]?.content?.parts?.[0]?.text;
                 
-                // Manually clean standard Markdown JSON block
+                if (!aiText) throw new Error("Invalid response format from AI.");
+                
+                // Manually clean standard Markdown JSON block just in case
                 aiText = aiText.replace(/```json/gi, '').replace(/```/g, '').trim();
                 const aiData = JSON.parse(aiText);
 
@@ -410,7 +430,6 @@
                 safeSetText('storePointsDisplay', newPts);
 
             } catch(error) { 
-                console.error("AI Error:", error);
                 
                 try {
                     // Fallback if AI fails: Save project normally
@@ -422,9 +441,8 @@
                         status: "Pending Review", 
                         timestamp: Date.now() 
                     });
-                    alert("AI Mentor is currently busy, but your project was submitted successfully!");
+                    alert(error.message || "AI Mentor is currently busy, but your project was submitted successfully!");
                 } catch(firebaseError) {
-                    console.error("Firebase save failed:", firebaseError);
                     alert("Database connection error. Check your internet.");
                 }
                 
