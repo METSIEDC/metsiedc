@@ -356,7 +356,7 @@
 
             try {
                 // IMPORTANT: If testing outside this chat (like on Firebase), paste your "AIzaSy..." key here!
-                const apiKey = ""; 
+                const apiKey = "AIzaSyBwBJRz8gZMirwqm9HM0642gHuAW5k8Wcw"; 
                 const prompt = `You are an expert startup mentor. Analyze this student idea: '${title}'. Description: '${desc}'. Provide a JSON response with exactly three fields: 'strengths' (array of 2 strings), 'challenges' (array of 2 strings), and 'techStack' (array of 3 strings). Keep it encouraging. Respond ONLY with raw valid JSON.`;
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
                 const payload = {
