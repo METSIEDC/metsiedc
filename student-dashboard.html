@@ -83,6 +83,15 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         #qrcode img { margin: 0 auto; border-radius: 8px; border: 4px solid white; }
+
+        /* Print Styles for Resume Generation */
+        @media print {
+            body { background-color: white !important; color: black !important; margin: 0; padding: 0; }
+            body * { visibility: hidden; }
+            #resumePrintArea, #resumePrintArea * { visibility: visible; color: black !important; }
+            #resumePrintArea { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 20px; background: white !important; box-shadow: none !important; border-radius: 0 !important; }
+            .glass-panel, .tab-content { box-shadow: none !important; border: none !important; background: transparent !important; filter: none !important; }
+        }
     </style>
 </head>
 <body class="font-sans antialiased relative min-h-screen flex items-start md:items-center justify-center selection:bg-glow-blue selection:text-white bg-[#050505]">
@@ -113,6 +122,7 @@
             <nav class="flex-grow px-4 py-2 space-y-1.5 overflow-y-auto">
                 <button onclick="showTab('dashboardOverview')" id="nav-dashboardOverview" class="sidebar-link active w-full flex items-center gap-4 px-4 py-3 text-sm"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
                 <button onclick="showTab('leaderboard')" id="nav-leaderboard" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 text-sm text-glow-gold hover:text-yellow-400"><i data-lucide="trophy" class="w-4 h-4"></i> Leaderboard</button>
+                <button onclick="showTab('portfolio')" id="nav-portfolio" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 text-sm text-glow-orange hover:text-orange-400"><i data-lucide="briefcase" class="w-4 h-4"></i> Portfolio</button>
                 <button onclick="showTab('cofounder')" id="nav-cofounder" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 text-sm text-glow-blue hover:text-blue-400"><i data-lucide="network" class="w-4 h-4"></i> Matchmaker</button>
                 <button onclick="showTab('store')" id="nav-store" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 text-sm text-glow-purple hover:text-purple-400"><i data-lucide="ticket" class="w-4 h-4"></i> Event Tickets</button>
                 <button onclick="showTab('joinIedc')" id="nav-joinIedc" class="sidebar-link w-full flex items-center gap-4 px-4 py-3 text-sm"><i data-lucide="users" class="w-4 h-4"></i> Join IEDC</button>
@@ -177,13 +187,57 @@
 
                     <div>
                         <h3 class="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-4 px-2">Quick Actions</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                             <div onclick="showTab('joinIedc')" class="glass-panel p-6 flex flex-col items-center justify-center cursor-pointer glass-card-hover group"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 text-white group-hover:text-glow-blue transition-colors"><i data-lucide="users" class="w-6 h-6"></i></div><h3 class="text-sm font-display font-bold text-white uppercase tracking-wider">Join IEDC</h3></div>
                             <div onclick="showTab('submitProject')" class="glass-panel p-6 flex flex-col items-center justify-center cursor-pointer glass-card-hover group"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 text-white group-hover:text-glow-purple transition-colors"><i data-lucide="rocket" class="w-6 h-6"></i></div><h3 class="text-sm font-display font-bold text-white uppercase tracking-wider">Project</h3></div>
                             <div onclick="showTab('store')" class="glass-panel p-6 flex flex-col items-center justify-center cursor-pointer glass-card-hover group"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 text-white group-hover:text-glow-green transition-colors"><i data-lucide="ticket" class="w-6 h-6"></i></div><h3 class="text-sm font-display font-bold text-white uppercase tracking-wider">Passes</h3></div>
                             <div onclick="showTab('certificates')" class="glass-panel p-6 flex flex-col items-center justify-center cursor-pointer glass-card-hover group"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 text-white group-hover:text-glow-gold transition-colors"><i data-lucide="award" class="w-6 h-6"></i></div><h3 class="text-sm font-display font-bold text-white uppercase tracking-wider">Awards</h3></div>
                             <div onclick="showTab('cofounder')" class="glass-panel p-6 flex flex-col items-center justify-center cursor-pointer glass-card-hover group"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 text-white group-hover:text-glow-blue transition-colors"><i data-lucide="network" class="w-6 h-6"></i></div><h3 class="text-sm font-display font-bold text-white uppercase tracking-wider text-center">Match<br>maker</h3></div>
+                            <div onclick="showTab('portfolio')" class="glass-panel p-6 flex flex-col items-center justify-center cursor-pointer glass-card-hover group"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 text-white group-hover:text-glow-orange transition-colors"><i data-lucide="briefcase" class="w-6 h-6"></i></div><h3 class="text-sm font-display font-bold text-white uppercase tracking-wider text-center">Resume<br>Builder</h3></div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- INNOVATION PORTFOLIO / RESUME SECTION -->
+                <div id="portfolioSection" class="tab-content hidden w-full pt-6">
+                    <div class="flex flex-col md:flex-row gap-6 max-w-7xl mx-auto w-full">
+                        
+                        <!-- Settings Form -->
+                        <div class="glass-panel p-6 md:p-8 rounded-3xl w-full md:w-[40%] h-fit flex-shrink-0">
+                            <h2 class="text-xl font-display font-bold text-white tracking-widest uppercase mb-6 border-b border-white/10 pb-4">Resume Builder</h2>
+                            <form id="portfolioForm" class="space-y-5">
+                                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Full Name</label><input type="text" id="resName" class="glass-input w-full py-3.5 px-4 rounded-xl text-sm" placeholder="Your Name" required></div>
+                                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Phone Number</label><input type="tel" id="resPhone" class="glass-input w-full py-3.5 px-4 rounded-xl text-sm" placeholder="+91 0000000000"></div>
+                                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Professional Links</label><input type="text" id="resLinks" class="glass-input w-full py-3.5 px-4 rounded-xl text-sm" placeholder="github.com/user | linkedin.com/in/user"></div>
+                                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Professional Summary</label><textarea id="resBio" rows="3" class="glass-input w-full py-3.5 px-4 rounded-xl text-sm leading-relaxed" placeholder="A brief summary of your goals and passion..."></textarea></div>
+                                <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Technical Skills</label><textarea id="resSkills" rows="2" class="glass-input w-full py-3.5 px-4 rounded-xl text-sm leading-relaxed" placeholder="React, Python, CAD, Public Speaking..."></textarea></div>
+                                
+                                <div class="p-4 bg-glow-blue/10 border border-glow-blue/30 rounded-xl mt-4">
+                                    <p class="text-[9px] text-glow-blue uppercase font-bold tracking-widest mb-1"><i data-lucide="zap" class="w-3 h-3 inline"></i> Auto-Sync Activated</p>
+                                    <p class="text-[10px] text-white/70 leading-relaxed">Your IEDC Points, Certifications, and Approved AI Projects will be automatically attached to your resume.</p>
+                                </div>
+
+                                <button type="submit" id="btnGenerateResume" class="w-full btn-primary py-4 rounded-xl text-[10px] uppercase tracking-widest font-bold mt-4 flex items-center justify-center gap-2">
+                                    <i data-lucide="file-check-2" class="w-4 h-4"></i> Generate Preview
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Preview Area -->
+                        <div class="w-full md:w-[60%] flex-col hidden" id="resumePreviewContainer">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-sm font-bold text-white/50 uppercase tracking-widest">Document Preview</h3>
+                                <button onclick="window.print()" class="bg-white text-black px-6 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold flex items-center gap-2 hover:bg-gray-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                                    <i data-lucide="printer" class="w-4 h-4"></i> Save as PDF
+                                </button>
+                            </div>
+                            
+                            <!-- The printable area -->
+                            <div id="resumePrintArea" class="bg-white text-black p-8 md:p-12 rounded-2xl shadow-2xl flex-grow w-full min-h-[800px] font-sans">
+                                <!-- Injected by JS -->
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
 
@@ -352,6 +406,7 @@
         <nav class="flex-grow px-4 py-4 space-y-2 overflow-y-auto">
             <button onclick="showTab('dashboardOverview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-4 px-5 py-3 text-xs uppercase tracking-widest"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
             <button onclick="showTab('leaderboard'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-xs uppercase tracking-widest text-glow-gold"><i data-lucide="trophy" class="w-4 h-4"></i> Leaderboard</button>
+            <button onclick="showTab('portfolio'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-xs uppercase tracking-widest text-glow-orange"><i data-lucide="briefcase" class="w-4 h-4"></i> Portfolio</button>
             <button onclick="showTab('cofounder'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-xs uppercase tracking-widest text-glow-blue"><i data-lucide="network" class="w-4 h-4"></i> Matchmaker</button>
             <button onclick="showTab('store'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-xs uppercase tracking-widest text-glow-purple"><i data-lucide="ticket" class="w-4 h-4"></i> Tickets</button>
             <button onclick="showTab('submitProject'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-4 px-5 py-3 text-xs uppercase tracking-widest"><i data-lucide="rocket" class="w-4 h-4"></i> Pitch Idea</button>
@@ -394,6 +449,116 @@
             const el = document.getElementById(id); 
             if (el) el.textContent = text; 
         };
+
+        // --- FEATURE 5: INNOVATION PORTFOLIOS (RESUME GENERATOR) ---
+        document.getElementById('portfolioForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnGenerateResume');
+            btn.disabled = true;
+            btn.innerHTML = `<div class="spinner border-white/20 border-t-white w-4 h-4 mr-2"></div> Generating...`;
+
+            try {
+                // 1. Get Base User Data
+                const userDoc = await getDoc(doc(db, "users", window.currentUserId));
+                const userData = userDoc.exists() ? userDoc.data() : {};
+                const email = userData.email || "student@mets.edu";
+                const points = userData.points || 0;
+                const role = userData.role || "student";
+
+                // 2. Get Form Inputs
+                const name = document.getElementById('resName').value || userData.name || "Student Name";
+                const phone = document.getElementById('resPhone').value || userData.phone || "";
+                const links = document.getElementById('resLinks').value || "";
+                const bio = document.getElementById('resBio').value || "";
+                const skills = document.getElementById('resSkills').value || "";
+
+                // 3. Fetch Approved AI Projects
+                const qProjects = query(collection(db, "projects"), where("uid", "==", window.currentUserId), where("status", "==", "Approved"));
+                const snapProjects = await getDocs(qProjects);
+                let projectsHTML = "";
+                if (!snapProjects.empty) {
+                    snapProjects.forEach(d => {
+                        const p = d.data();
+                        projectsHTML += `
+                            <div style="margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+                                    <strong style="font-size: 15px; color: #111;">${p.title}</strong>
+                                    <span style="font-size: 11px; color: #555; background: #f1f5f9; padding: 3px 8px; border-radius: 6px; font-weight: bold;">${p.tech}</span>
+                                </div>
+                                <p style="font-size: 13px; color: #444; margin: 0; line-height: 1.5;">${p.desc}</p>
+                            </div>
+                        `;
+                    });
+                } else {
+                    projectsHTML = `<p style="font-size: 13px; color: #666; font-style: italic;">No approved projects logged yet.</p>`;
+                }
+
+                // 4. Fetch Certificates
+                const qCerts = query(collection(db, "certificates"), where("userId", "==", window.currentUserId));
+                const snapCerts = await getDocs(qCerts);
+                let certsHTML = "";
+                if (!snapCerts.empty) {
+                    snapCerts.forEach(d => {
+                        const c = d.data();
+                        certsHTML += `<li style="font-size: 13px; color: #333; margin-bottom: 6px;"><strong>${c.eventName}</strong> <span style="color:#777">(${c.date})</span></li>`;
+                    });
+                    certsHTML = `<ul style="padding-left: 20px; margin-top: 8px;">${certsHTML}</ul>`;
+                } else {
+                    certsHTML = `<p style="font-size: 13px; color: #666; font-style: italic;">No certificates earned yet.</p>`;
+                }
+
+                // 5. Construct Clean HTML for Print Area
+                const printArea = document.getElementById('resumePrintArea');
+                printArea.innerHTML = `
+                    <div style="text-align: center; border-bottom: 2px solid #2563eb; padding-bottom: 24px; margin-bottom: 30px;">
+                        <h1 style="font-size: 32px; font-weight: 900; color: #111; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 1px;">${name}</h1>
+                        <p style="font-size: 13px; color: #444; margin: 0;">${email} ${phone ? ' • ' + phone : ''} ${links ? ' • ' + links : ''}</p>
+                    </div>
+
+                    ${bio ? `
+                    <div style="margin-bottom: 30px;">
+                        <h2 style="font-size: 16px; font-weight: bold; color: #2563eb; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; margin-bottom: 12px;">Professional Profile</h2>
+                        <p style="font-size: 14px; color: #333; line-height: 1.6; margin: 0;">${bio.replace(/\n/g, '<br>')}</p>
+                    </div>` : ''}
+
+                    ${skills ? `
+                    <div style="margin-bottom: 30px;">
+                        <h2 style="font-size: 16px; font-weight: bold; color: #2563eb; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; margin-bottom: 12px;">Technical Skills</h2>
+                        <p style="font-size: 14px; color: #333; line-height: 1.6; margin: 0;">${skills}</p>
+                    </div>` : ''}
+
+                    <div style="margin-bottom: 30px;">
+                        <h2 style="font-size: 16px; font-weight: bold; color: #2563eb; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; margin-bottom: 16px;">Innovation & Projects</h2>
+                        
+                        <div style="background: #f8fafc; border-left: 4px solid #2563eb; padding: 16px; margin-bottom: 20px; border-radius: 0 8px 8px 0;">
+                            <p style="font-size: 13px; margin: 0 0 6px 0;"><strong>Institution:</strong> MET'S IEDC Innovation Center</p>
+                            <p style="font-size: 13px; margin: 0 0 6px 0;"><strong>Official Role:</strong> ${role.charAt(0).toUpperCase() + role.slice(1)}</p>
+                            <p style="font-size: 13px; margin: 0;"><strong>Innovation Points Earned:</strong> ${points} pts</p>
+                        </div>
+                        
+                        ${projectsHTML}
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <h2 style="font-size: 16px; font-weight: bold; color: #2563eb; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; margin-bottom: 12px;">Certifications & Training</h2>
+                        ${certsHTML}
+                    </div>
+                `;
+
+                // Show Preview Container
+                document.getElementById('resumePreviewContainer').classList.remove('hidden');
+                document.getElementById('resumePreviewContainer').classList.add('flex');
+
+            } catch (error) {
+                console.error(error);
+                alert("Error generating portfolio: " + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="file-check-2" class="w-4 h-4"></i> Generate Preview`;
+                lucide.createIcons(); 
+            }
+        });
+
 
         // --- FEATURE 4: CO-FOUNDER MATCHMAKER ---
         window.openMatchmakerModal = () => {
@@ -886,6 +1051,10 @@
                         if (data.name) nameToDisplay = data.name;
                         if (data.role) roleToDisplay = data.role;
                         if (data.points) pointsToDisplay = data.points;
+                        
+                        // Auto-fill Resume Name input if possible
+                        const resNameInput = document.getElementById('resName');
+                        if (resNameInput && !resNameInput.value) resNameInput.value = nameToDisplay;
                     }
 
                     safeSetText('idCardName', nameToDisplay); 
@@ -920,6 +1089,7 @@
             if (tabId === 'submitProject') title = "Submit Project";
             if (tabId === 'trackStatus') title = "Submissions";
             if (tabId === 'store') title = "Event Tickets";
+            if (tabId === 'portfolio') title = "Innovation Portfolio";
             if (tabId === 'cofounder') title = "Matchmaker";
             safeSetText('headerTitle', title);
 
