@@ -355,23 +355,28 @@
             btn.innerHTML = `<div class="spinner border-white/20 border-t-white w-4 h-4 mr-2"></div> AI Mentor is thinking...`;
 
             try {
-                // NEW DIRECT GEMINI API CALL (Bypassing Apps Script completely!)
+                // NEW DIRECT GEMINI API CALL using gemini-pro to avoid region 404 issues
                 const GEMINI_API_KEY = "AIzaSyBwBJRz8gZMirwqm9HM0642gHuAW5k8Wcw"; // Your actual Gemini Key
                 const prompt = `You are an expert startup mentor. Analyze this student idea: '${title}'. Description: '${desc}'. Provide a JSON response with exactly three fields: 'strengths' (array of 2 strings), 'challenges' (array of 2 strings), and 'techStack' (array of 3 strings). Keep it encouraging. Respond ONLY with raw valid JSON.`;
 
-                const aiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                const aiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`, {
                     method: 'POST',
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
-                        generationConfig: { responseMimeType: "application/json" } // This prevents format crashing!
+                        contents: [{ parts: [{ text: prompt }] }]
                     })
                 });
 
-                if (!aiRes.ok) throw new Error(`Google AI connection failed.`);
+                if (!aiRes.ok) {
+                    const errDetails = await aiRes.text();
+                    throw new Error(`Google AI connection failed. Status: ${aiRes.status}. Details: ${errDetails}`);
+                }
                 
                 const rawData = await aiRes.json();
-                const aiText = rawData.candidates[0].content.parts[0].text;
+                let aiText = rawData.candidates[0].content.parts[0].text;
+                
+                // Manually clean standard Markdown JSON block since gemini-pro doesn't natively enforce application/json
+                aiText = aiText.replace(/```json/gi, '').replace(/```/g, '').trim();
                 const aiData = JSON.parse(aiText);
 
                 // Show AI Feedback
