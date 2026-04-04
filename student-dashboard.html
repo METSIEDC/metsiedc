@@ -355,11 +355,11 @@
             btn.innerHTML = `<div class="spinner border-white/20 border-t-white w-4 h-4 mr-2"></div> AI Mentor is thinking...`;
 
             try {
-                // NEW DIRECT GEMINI API CALL using the stable v1 API and gemini-1.5-flash
+                // NEW DIRECT GEMINI API CALL using the supported v1beta API and preview model
                 const GEMINI_API_KEY = "AIzaSyBwBJRz8gZMirwqm9HM0642gHuAW5k8Wcw"; // Your actual Gemini Key
                 const prompt = `You are an expert startup mentor. Analyze this student idea: '${title}'. Description: '${desc}'. Provide a JSON response with exactly three fields: 'strengths' (array of 2 strings), 'challenges' (array of 2 strings), and 'techStack' (array of 3 strings). Keep it encouraging. Respond ONLY with raw valid JSON.`;
 
-                const aiRes = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                const aiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`, {
                     method: 'POST',
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -375,7 +375,7 @@
                 const rawData = await aiRes.json();
                 let aiText = rawData.candidates[0].content.parts[0].text;
                 
-                // Manually clean standard Markdown JSON block since gemini-pro doesn't natively enforce application/json
+                // Manually clean standard Markdown JSON block
                 aiText = aiText.replace(/```json/gi, '').replace(/```/g, '').trim();
                 const aiData = JSON.parse(aiText);
 
