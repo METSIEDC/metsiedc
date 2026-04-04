@@ -661,6 +661,12 @@
                 });
                 const aiData = await aiRes.json();
 
+                // Check if Apps Script or Gemini returned an error BEFORE mapping
+                if (aiData.error || !aiData.strengths || !aiData.challenges || !aiData.techStack) {
+                    console.warn("AI Backend Issue:", aiData);
+                    throw new Error("AI response was missing expected JSON structure.");
+                }
+
                 // Show AI Feedback
                 document.getElementById('aiFeedbackArea').classList.remove('hidden');
                 document.getElementById('aiStrengths').innerHTML = aiData.strengths.map(s => `<li>${s}</li>`).join('');
@@ -692,17 +698,24 @@
                 safeSetText('storePointsDisplay', newPts);
 
             } catch(error) { 
-                console.error(error);
-                // Fallback if AI fails: Save project normally
-                await addDoc(collection(db, "projects"), { 
-                    uid: window.currentUserId, 
-                    title: title, 
-                    desc: desc, 
-                    tech: tech, 
-                    status: "Pending Review", 
-                    timestamp: Date.now() 
-                });
-                alert("AI Mentor is currently busy, but your project was submitted successfully!");
+                console.error("AI Error Triggered Fallback:", error);
+                
+                try {
+                    // Fallback if AI fails: Save project normally
+                    await addDoc(collection(db, "projects"), { 
+                        uid: window.currentUserId, 
+                        title: title, 
+                        desc: desc, 
+                        tech: tech, 
+                        status: "Pending Review", 
+                        timestamp: Date.now() 
+                    });
+                    alert("AI Mentor is currently busy, but your project was submitted successfully!");
+                } catch(firebaseError) {
+                    console.error("Firebase save failed:", firebaseError);
+                    alert("Database connection error. Check your internet.");
+                }
+                
                 btn.innerHTML = `<span>Pitch Successful!</span> <i class="fas fa-check ml-2"></i>`;
             } finally { 
                 btn.disabled = false; 
