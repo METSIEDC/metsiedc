@@ -132,9 +132,17 @@
 </head>
 <body class="font-sans antialiased relative min-h-screen flex items-center justify-center selection:bg-red-500/30 selection:text-white pb-20 md:pb-0">
 
-    <div class="fixed top-[10%] right-[-10%] w-[40vw] h-[40vw] bg-glow-red/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow"></div>
-    <div class="fixed bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-glow-purple/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow" style="animation-delay: 2s;"></div>
-    <div class="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 z-0 pointer-events-none"></div>
+    <!-- FULLSCREEN ANIMATED CANVAS BACKGROUND -->
+    <div class="fixed inset-0 w-full h-full z-[-10] overflow-hidden bg-[#050505]">
+        <canvas id="bg-canvas" class="absolute top-0 left-0 w-full h-full opacity-60"></canvas>
+        <!-- Dark gradient overlay to ensure text readability -->
+        <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/70 to-[#050505]/40"></div>
+    </div>
+
+    <!-- Ambient Background Effects (Layered over the canvas for a cool tech effect) -->
+    <div class="fixed top-[10%] right-[-10%] w-[40vw] h-[40vw] bg-glow-red/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-[-5] animate-pulse-glow"></div>
+    <div class="fixed bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-glow-purple/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-[-5]" style="animation-delay: 2s;"></div>
+    <div class="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 z-[-5] pointer-events-none"></div>
 
     <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] glass-panel rounded-full px-5 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300 border border-glow-red/50 shadow-[0_0_20px_rgba(220,38,38,0.3)]">
         <div class="flex items-center gap-3">
@@ -155,7 +163,7 @@
         
         <div class="text-center mb-10">
             <a href="index.html" class="inline-block mb-6 group">
-                <div class="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.8)] flex items-center justify-center mx-auto overflow-hidden group-hover:border-glow-red/50 group-hover:shadow-[0_0_30px_rgba(220,38,38,0.2)] transition-all duration-300 relative z-10">
+                <div class="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.8)] flex items-center justify-center mx-auto overflow-hidden group-hover:border-glow-red/50 group-hover:shadow-[0_0_30px_rgba(220,38,38,0.2)] transition-all duration-300 relative z-10 backdrop-blur-md">
                     <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="w-full h-full object-cover grayscale opacity-80" onerror="this.src='https://ui-avatars.com/api/?name=MI&background=0f1115&color=fff'">
                 </div>
             </a>
@@ -163,7 +171,7 @@
             <p class="text-white/40 text-[10px] uppercase tracking-[0.2em] font-bold">MET'S IEDC Workspace</p>
         </div>
 
-        <div class="glass-panel w-full p-8 md:p-10 rounded-3xl animate-float relative">
+        <div class="glass-panel w-full p-8 md:p-10 rounded-3xl animate-float relative backdrop-blur-3xl bg-[#050505]/40">
             
             <div class="absolute -right-10 -top-10 w-32 h-32 bg-glow-red/20 blur-2xl rounded-full pointer-events-none"></div>
             
@@ -183,7 +191,7 @@
                     <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Admin ID / Email</label>
                     <div class="relative">
                         <i class="fas fa-user-shield absolute left-4 top-1/2 transform -translate-y-1/2 text-white/30"></i>
-                        <input type="email" id="adminEmail" placeholder="admin@metsiedc.in" class="glass-input w-full rounded-xl py-3.5 pl-11 pr-4 text-sm font-light">
+                        <input type="email" id="adminEmail" placeholder="admin@metsiedc.in" class="glass-input w-full rounded-xl py-3.5 pl-11 pr-4 text-sm font-light bg-black/20">
                     </div>
                 </div>
 
@@ -191,7 +199,7 @@
                     <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Security Key</label>
                     <div class="relative">
                         <i class="fas fa-key absolute left-4 top-1/2 transform -translate-y-1/2 text-white/30"></i>
-                        <input type="password" id="adminPassword" placeholder="••••••••••••" class="glass-input w-full rounded-xl py-3.5 pl-11 pr-12 text-sm font-light">
+                        <input type="password" id="adminPassword" placeholder="••••••••••••" class="glass-input w-full rounded-xl py-3.5 pl-11 pr-12 text-sm font-light bg-black/20">
                         <button type="button" class="toggle-password absolute right-4 top-1/2 transform -translate-y-1/2 text-white/30 hover:text-white transition-colors">
                             <i class="fas fa-eye"></i>
                         </button>
@@ -243,6 +251,82 @@
 
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // --- BACKGROUND CANVAS ANIMATION (Particle Network) ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 1.2;
+                this.vy = (Math.random() - 0.5) * 1.2;
+                this.radius = Math.random() * 2 + 0.5;
+                // IEDC Admin Theme Colors: Red, Purple, and Subtle White
+                const colors = ['#dc2626', '#9333ea', '#ffffff'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // Bounce off edges smoothly
+                if (this.x < 0 || this.x > width) this.vx = -this.vx;
+                if (this.y < 0 || this.y > height) this.vy = -this.vy;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.shadowBlur = 0; // Reset so lines don't get super blurry
+            }
+        }
+
+        // Generate fewer particles on mobile to save performance
+        const particleCount = window.innerWidth < 768 ? 40 : 100;
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                // Draw connecting tech lines
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < 130) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        // The closer they are, the more opaque the line
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 - (dist / 130) * 0.15})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
     </script>
 
     <script type="module">
