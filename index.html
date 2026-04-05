@@ -94,6 +94,15 @@
             color: #fff;
         }
 
+        /* 3D Tilt CSS */
+        .tilt-card {
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+        }
+        .tilt-content {
+            transform: translateZ(30px);
+        }
+
         /* Text Gradients */
         .text-gradient {
             background: linear-gradient(to right, #ffffff, #a1a1aa);
@@ -277,6 +286,7 @@
         </nav>
     </div>
 
+    <!-- HERO SECTION -->
     <div class="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden pt-20 z-10 px-4">
         
         <div class="text-center flex flex-col items-center max-w-4xl mx-auto z-20">
@@ -303,6 +313,7 @@
             </div>
         </div>
 
+        <!-- LIVE ACTIVITY & UPCOMING EVENTS GRID -->
         <div class="w-full max-w-6xl mx-auto mt-20 grid grid-cols-1 md:grid-cols-12 gap-6 z-20 px-4 relative">
             <div class="hidden md:block absolute left-1/2 top-1/2 w-32 h-[1px] bg-white/20 border-t border-dashed border-white/40 z-0"></div>
 
@@ -364,7 +375,53 @@
         </div>
     </div>
 
-    <div class="py-10 border-b border-white/5 relative z-10 bg-dark-base/50 backdrop-blur-md">
+    <!-- FEATURE 4: 3D TILT EFFECT CARDS SECTION -->
+    <section class="py-24 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-4 tracking-tight">The Innovation <span class="text-glow-blue">Toolkit</span></h2>
+                <p class="text-white/50 font-light text-sm max-w-2xl mx-auto">Everything you need to launch your next big idea, built right into the dashboard.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Tilt Card 1 -->
+                <div class="glass-panel p-8 rounded-3xl tilt-card cursor-pointer group">
+                    <div class="tilt-content flex flex-col items-center text-center">
+                        <div class="w-16 h-16 rounded-2xl bg-glow-blue/10 border border-glow-blue/30 flex items-center justify-center text-glow-blue mb-6 shadow-[0_0_20px_rgba(37,99,235,0.2)]">
+                            <i data-lucide="bot" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">AI Startup Mentor</h3>
+                        <p class="text-sm text-white/50 leading-relaxed">Pitch your ideas directly to our Gemini-powered AI. Get instant analysis on market challenges, strengths, and recommended tech stacks.</p>
+                    </div>
+                </div>
+
+                <!-- Tilt Card 2 -->
+                <div class="glass-panel p-8 rounded-3xl tilt-card cursor-pointer group">
+                    <div class="tilt-content flex flex-col items-center text-center">
+                        <div class="w-16 h-16 rounded-2xl bg-glow-purple/10 border border-glow-purple/30 flex items-center justify-center text-glow-purple mb-6 shadow-[0_0_20px_rgba(147,51,234,0.2)]">
+                            <i data-lucide="network" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Co-Founder Matchmaker</h3>
+                        <p class="text-sm text-white/50 leading-relaxed">Need a UI designer or a Backend dev? Browse through verified student profiles, check their skills, and connect instantly to build your dream team.</p>
+                    </div>
+                </div>
+
+                <!-- Tilt Card 3 -->
+                <div class="glass-panel p-8 rounded-3xl tilt-card cursor-pointer group">
+                    <div class="tilt-content flex flex-col items-center text-center">
+                        <div class="w-16 h-16 rounded-2xl bg-glow-orange/10 border border-glow-orange/30 flex items-center justify-center text-glow-orange mb-6 shadow-[0_0_20px_rgba(234,88,12,0.2)]">
+                            <i data-lucide="briefcase" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Automated Portfolios</h3>
+                        <p class="text-sm text-white/50 leading-relaxed">Every hackathon won, event attended, and point earned is automatically synced into a downloadable, professional PDF resume ready for recruiters.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARTNER LOGOS -->
+    <div class="py-10 border-y border-white/5 relative z-10 bg-dark-base/50 backdrop-blur-md">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-wrap justify-center gap-8 md:gap-16 items-center">
                 <img class="h-8 md:h-10 w-auto partner-logo" src="assets/images/logos/APJ_Abdul_Kalam_Technological_University_logo.png" alt="KTU" onerror="this.src='https://ui-avatars.com/api/?name=KTU&background=000&color=fff&font-size=0.4'">
@@ -375,7 +432,151 @@
         </div>
     </div>
 
-    <section class="py-32 relative bg-dark-base z-10 overflow-hidden">
+    <!-- FEATURE 1: LIVE IMPACT METRICS COUNTER -->
+    <section class="py-20 relative z-10 bg-gradient-to-b from-[#0a0a0c] to-[#050505]">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="glass-panel p-8 text-center rounded-2xl border-white/5 hover:border-glow-blue/30 transition-colors">
+                    <div class="text-4xl md:text-5xl font-display font-black text-glow-blue mb-2 count-up" data-target="15000">0</div>
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-white/50">Innovation Points</div>
+                </div>
+                <div class="glass-panel p-8 text-center rounded-2xl border-white/5 hover:border-glow-purple/30 transition-colors">
+                    <div class="text-4xl md:text-5xl font-display font-black text-glow-purple mb-2 count-up" data-target="500">0</div>
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-white/50">Active Innovators</div>
+                </div>
+                <div class="glass-panel p-8 text-center rounded-2xl border-white/5 hover:border-glow-orange/30 transition-colors">
+                    <div class="text-4xl md:text-5xl font-display font-black text-glow-orange mb-2 count-up" data-target="45">0</div>
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-white/50">Startups Incubated</div>
+                </div>
+                <div class="glass-panel p-8 text-center rounded-2xl border-white/5 hover:border-white/30 transition-colors">
+                    <div class="text-4xl md:text-5xl font-display font-black text-white mb-2 count-up" data-target="120">0</div>
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-white/50">Events Hosted</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURE 3: INNOVATION ROADMAP TIMELINE -->
+    <section class="py-24 relative z-10 overflow-hidden">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-4 tracking-tight">The 2026 <span class="text-glow-orange">Roadmap</span></h2>
+                <p class="text-white/50 font-light text-sm max-w-xl mx-auto">Track our upcoming flagship events and massive hackathons designed to push your limits.</p>
+            </div>
+
+            <!-- Vertical Line -->
+            <div class="absolute left-8 md:left-1/2 top-40 bottom-0 w-[2px] bg-gradient-to-b from-glow-orange via-glow-purple to-transparent -translate-x-1/2 z-0"></div>
+
+            <div class="space-y-12 relative z-10">
+                <!-- Roadmap Item 1 -->
+                <div class="flex flex-col md:flex-row items-center justify-between group">
+                    <div class="md:w-5/12 text-left md:text-right pl-16 md:pl-0 pr-4 w-full mb-4 md:mb-0">
+                        <span class="text-glow-orange text-[10px] font-bold uppercase tracking-widest block mb-2">Phase 1 • March 2026</span>
+                        <h3 class="text-xl font-bold text-white mb-2">Idea Pitching Canvas</h3>
+                        <p class="text-sm text-white/50">Submit your initial startup concepts. Top 50 ideas get fast-tracked for technical mentorship and prototype funding.</p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-[#050505] border-4 border-glow-orange absolute left-4 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center shadow-[0_0_15px_rgba(234,88,12,0.5)] group-hover:scale-125 transition-transform">
+                        <div class="w-2 h-2 bg-glow-orange rounded-full animate-ping"></div>
+                    </div>
+                    <div class="md:w-5/12 w-full hidden md:block"></div>
+                </div>
+
+                <!-- Roadmap Item 2 -->
+                <div class="flex flex-col md:flex-row-reverse items-center justify-between group">
+                    <div class="md:w-5/12 text-left pl-16 md:pl-0 pr-4 w-full mb-4 md:mb-0 md:pr-0 md:pl-4">
+                        <span class="text-glow-purple text-[10px] font-bold uppercase tracking-widest block mb-2">Phase 2 • April 2026</span>
+                        <h3 class="text-xl font-bold text-white mb-2">Hacker House Bootcamp</h3>
+                        <p class="text-sm text-white/50">A 48-hour intense coding and hardware bootcamp. Bring your sleeping bags; we provide the tech and the caffeine.</p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-[#050505] border-4 border-glow-purple absolute left-4 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center shadow-[0_0_15px_rgba(147,51,234,0.5)] group-hover:scale-125 transition-transform"></div>
+                    <div class="md:w-5/12 w-full hidden md:block"></div>
+                </div>
+
+                <!-- Roadmap Item 3 -->
+                <div class="flex flex-col md:flex-row items-center justify-between group">
+                    <div class="md:w-5/12 text-left md:text-right pl-16 md:pl-0 pr-4 w-full mb-4 md:mb-0">
+                        <span class="text-glow-blue text-[10px] font-bold uppercase tracking-widest block mb-2">Phase 3 • May 2026</span>
+                        <h3 class="text-xl font-bold text-white mb-2">PROTOSYNTH Finals</h3>
+                        <p class="text-sm text-white/50">The ultimate showcase. Present your final working prototypes to industry investors, KSUM officials, and our alumni network.</p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-[#050505] border-4 border-glow-blue absolute left-4 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center shadow-[0_0_15px_rgba(37,99,235,0.5)] group-hover:scale-125 transition-transform"></div>
+                    <div class="md:w-5/12 w-full hidden md:block"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURE 2: HALL OF FAME (TOP PROJECTS) -->
+    <section class="py-24 relative bg-[#0a0a0c] z-10 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-4 tracking-tight">Hall of <span class="text-glow-purple">Fame</span></h2>
+                    <p class="text-white/50 font-light text-sm max-w-xl">Top projects developed and incubated right here at MET'S IEDC.</p>
+                </div>
+                <a href="login.html" class="hidden md:inline-flex text-[10px] uppercase tracking-widest font-bold text-glow-purple hover:text-white transition-colors items-center gap-2">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Project 1 -->
+                <div class="glass-panel p-6 rounded-3xl border-white/5 hover:border-glow-blue/50 transition-colors group">
+                    <div class="w-full aspect-video bg-black/50 rounded-2xl mb-6 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <span class="px-2 py-1 bg-glow-blue text-white text-[9px] uppercase font-bold tracking-widest rounded mb-2 inline-block shadow-[0_0_10px_rgba(37,99,235,0.5)]">Winner 2025</span>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">NeuroSync AI</h3>
+                    <p class="text-sm text-white/50 leading-relaxed mb-6">A wearable mental health companion that detects stress spikes using bio-signals and triggers calming protocols automatically.</p>
+                    <div class="flex flex-wrap gap-2 border-t border-white/10 pt-4">
+                        <span class="text-[9px] px-2 py-1 bg-white/5 rounded text-white/60">Python</span>
+                        <span class="text-[9px] px-2 py-1 bg-white/5 rounded text-white/60">TensorFlow</span>
+                        <span class="text-[9px] px-2 py-1 bg-white/5 rounded text-white/60">IoT Hardware</span>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="glass-panel p-6 rounded-3xl border-white/5 hover:border-glow-orange/50 transition-colors group">
+                    <div class="w-full aspect-video bg-black/50 rounded-2xl mb-6 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1508614589041-895b88991e3e?q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <span class="px-2 py-1 bg-glow-orange text-white text-[9px] uppercase font-bold tracking-widest rounded mb-2 inline-block shadow-[0_0_10px_rgba(234,88,12,0.5)]">Incubated</span>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">AeroDrone AgriTech</h3>
+                    <p class="text-sm text-white/50 leading-relaxed mb-6">An autonomous surveillance drone system designed to detect crop diseases early using computer vision and multispectral imaging.</p>
+                    <div class="flex flex-wrap gap-2 border-t border-white/10 pt-4">
+                        <span class="text-[9px] px-2 py-1 bg-white/5 rounded text-white/60">C++</span>
+                        <span class="text-[9px] px-2 py-1 bg-white/5 rounded text-white/60">React Native</span>
+                        <span class="text-[9px] px-2 py-1 bg-white/5 rounded text-white/60">OpenCV</span>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="glass-panel p-6 rounded-3xl border-white/5 hover:border-glow-purple/50 transition-colors group">
+                    <div class="w-full aspect-video bg-black/50 rounded-2xl mb-6 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <span class="px-2 py-1 bg-glow-purple text-white text-[9px] uppercase font-bold tracking-widest rounded mb-2 inline-block shadow-[0_0_10px_rgba(147,51,234,0.5)]">Best Pitch '24</span>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">EcoGrid Smart Monitor</h3>
+                    <p class="text-sm text-white/50 leading-relaxed mb-6">A real-time energy consumption monitor that plugs directly into hostel power grids to gamify electricity saving among students.</p>
+                    <div class="flex flex-wrap gap-2 border-t border-white/10 pt-4">
+                        <span class="text-[9px] px-2 py-1 bg-white/5 rounded text-white/60">Node.js</span>
+                        <span class="text-[9px] px-2 py-1 bg-white/5 rounded text-white/60">Arduino</span>
+                        <span class="text-[9px] px-2 py-1 bg-white/5 rounded text-white/60">MongoDB</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY SECTION -->
+    <section class="py-32 relative bg-dark-base z-10 overflow-hidden border-t border-white/5">
         <div class="absolute left-0 top-1/2 -translate-y-1/2 w-64 h-64 bg-glow-purple/10 blur-[100px] rounded-full pointer-events-none"></div>
         <div class="container mx-auto px-4 relative z-10">
             <div class="text-center mb-16">
@@ -508,6 +709,55 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('year').textContent = new Date().getFullYear();
+
+            // 1. LIGHTWEIGHT 3D TILT EFFECT LOGIC
+            const tiltCards = document.querySelectorAll('.tilt-card');
+            tiltCards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -10; // Max 10 deg rotation
+                    const rotateY = ((x - centerX) / centerX) * 10;
+                    
+                    card.style.transition = 'none'; // Disable transition for instant tracking
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transition = 'transform 0.5s ease-out'; // Smooth snap back
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+                });
+            });
+
+            // 2. COUNT UP ANIMATION LOGIC
+            const counters = document.querySelectorAll('.count-up');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = +entry.target.getAttribute('data-target');
+                        const duration = 2000; // 2 seconds
+                        const increment = target / (duration / 16); // 60fps
+                        let current = 0;
+                        
+                        const updateCounter = () => {
+                            current += increment;
+                            if (current < target) {
+                                entry.target.innerText = Math.ceil(current).toLocaleString();
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                entry.target.innerText = target.toLocaleString() + (target > 100 ? '+' : '');
+                            }
+                        };
+                        updateCounter();
+                        observer.unobserve(entry.target); // Only animate once
+                    }
+                });
+            }, { threshold: 0.5 }); // Trigger when 50% visible
+            
+            counters.forEach(counter => observer.observe(counter));
 
             // Skeleton Loader
             const skeletonWrappers = document.querySelectorAll('.skeleton-wrapper');
@@ -653,7 +903,6 @@
         const enableBtn = document.getElementById('enable-push-btn');
         const dismissBtn = document.getElementById('dismiss-push-btn');
 
-        // Check if we should show the custom banner
         function checkPushBannerStatus() {
             if (localStorage.getItem('pushPrompted') === 'true' || Notification.permission === 'granted') {
                 return;
