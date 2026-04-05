@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <!-- Added missing Lucide script -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     
     <script>
         tailwind.config = {
@@ -749,6 +751,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('year').textContent = new Date().getFullYear();
+            
+            // Initialize Lucide Icons for everything on the page
+            lucide.createIcons();
 
             // 1. LIGHTWEIGHT 3D TILT EFFECT LOGIC
             const tiltCards = document.querySelectorAll('.tilt-card');
