@@ -31,22 +31,33 @@
                         glow: {
                             purple: '#9333ea',
                             orange: '#ea580c',
-                            blue: '#2563eb'
+                            blue: '#2563eb',
+                            green: '#22c55e'
                         }
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                         'float-delayed': 'float 6s ease-in-out 3s infinite',
                         'pulse-glow': 'pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'ticker': 'ticker 30s linear infinite',
+                        'marquee': 'marquee 25s linear infinite',
                     },
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
+                            '50%': { transform: 'translateY(-15px)' },
                         },
                         pulseGlow: {
                             '0%, 100%': { opacity: '0.4' },
                             '50%': { opacity: '0.8' },
+                        },
+                        ticker: {
+                            '0%': { transform: 'translateX(100%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
                         }
                     }
                 }
@@ -80,14 +91,6 @@
             overflow: hidden;
         }
 
-        .glass-panel::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            z-index: 1;
-        }
-
         .glass-badge {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -96,49 +99,78 @@
         }
 
         /* 3D Tilt CSS */
-        .tilt-card {
-            transform-style: preserve-3d;
-            transform: perspective(1000px);
+        .tilt-card { transform-style: preserve-3d; transform: perspective(1000px); }
+        .tilt-content { transform: translateZ(30px); }
+
+        /* 3D Flip Card CSS */
+        .flip-card { perspective: 1000px; }
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d;
         }
-        .tilt-content {
-            transform: translateZ(30px);
+        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 1.5rem;
+            top: 0; left: 0; right: 0; bottom: 0;
         }
+        .flip-card-back { transform: rotateY(180deg); display: flex; flex-direction: column; justify-content: center; }
 
         /* Text Gradients */
-        .text-gradient {
-            background: linear-gradient(to right, #ffffff, #a1a1aa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .text-gradient-purple {
-            background: linear-gradient(to right, #d8b4fe, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        .text-gradient { background: linear-gradient(to right, #ffffff, #a1a1aa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-gradient-purple { background: linear-gradient(to right, #d8b4fe, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         /* Button Styling */
         .btn-primary {
             background: linear-gradient(135deg, #1e1e24 0%, #0a0a0c 100%);
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
             transition: all 0.3s ease;
         }
         .btn-primary:hover {
-            border-color: rgba(147, 51, 234, 0.5);
-            box-shadow: 0 0 20px rgba(147, 51, 234, 0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+            border-color: rgba(147, 51, 234, 0.5); box-shadow: 0 0 20px rgba(147, 51, 234, 0.3), inset 0 1px 0 rgba(255,255,255,0.2);
             transform: translateY(-2px);
         }
+        .btn-light { background: #ffffff; color: #000000; transition: all 0.3s ease; }
+        .btn-light:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(255,255,255,0.2); }
 
-        .btn-light {
-            background: #ffffff;
-            color: #000000;
-            transition: all 0.3s ease;
+        /* Custom Range Slider */
+        input[type=range] { -webkit-appearance: none; background: rgba(255,255,255,0.1); height: 8px; border-radius: 8px; }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%;
+            background: #a855f7; cursor: pointer; box-shadow: 0 0 15px rgba(168,85,247,0.8);
+            transition: transform 0.1s;
         }
-        .btn-light:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+        /* ZIA ANIMATIONS */
+        @keyframes wave {
+            0% { transform: rotate(0deg); }
+            10% { transform: rotate(14deg); }
+            20% { transform: rotate(-8deg); }
+            30% { transform: rotate(14deg); }
+            40% { transform: rotate(-4deg); }
+            50% { transform: rotate(10deg); }
+            100% { transform: rotate(0deg); }
         }
+        .animate-wave { animation: wave 2.5s infinite; transform-origin: 70% 70%; display: inline-block; }
+
+        /* EASTER EGG: HACKER MODE */
+        .hacker-mode * {
+            font-family: 'Courier New', Courier, monospace !important;
+            color: #0f0 !important;
+            border-color: #0f0 !important;
+            background: #000 !important;
+            box-shadow: none !important;
+            text-shadow: 0 0 2px #0f0;
+        }
+        .hacker-mode .text-gradient { background: none; -webkit-text-fill-color: #0f0; }
+        .hacker-mode .bg-glow-purple, .hacker-mode .bg-glow-blue, .hacker-mode .bg-glow-orange { background: #000 !important; border: 1px solid #0f0 !important; }
+        .hacker-mode img, .hacker-mode svg { filter: sepia(100%) hue-rotate(90deg) saturate(300%) !important; }
+        .hacker-overlay {
+            display: none; pointer-events: none; position: fixed; inset: 0; z-index: 9999;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+        }
+        .hacker-mode .hacker-overlay { display: block; }
 
         /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
@@ -161,6 +193,16 @@
         .mobile-menu { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .mobile-menu.open { transform: translateX(0); }
 
+        /* POPUP STYLES */
+        .popup-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(12px);
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .popup-overlay.active { opacity: 1; visibility: visible; }
+        .popup-content { transform: scale(0.95); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .popup-overlay.active .popup-content { transform: scale(1); }
+
         /* Skeleton Loading Styles */
         .skeleton-wrapper {
             background-color: rgba(20,20,25,0.8);
@@ -175,32 +217,68 @@
         .skeleton-wrapper img { opacity: 0; transition: opacity 0.5s ease-in-out; position: relative; z-index: 2; }
         .skeleton-wrapper.loaded::after { display: none; animation: none; }
         .skeleton-wrapper.loaded img { opacity: 1; }
-
-        /* ZIA ANIMATIONS */
-        @keyframes wave {
-            0% { transform: rotate(0deg); }
-            10% { transform: rotate(14deg); }
-            20% { transform: rotate(-8deg); }
-            30% { transform: rotate(14deg); }
-            40% { transform: rotate(-4deg); }
-            50% { transform: rotate(10deg); }
-            60% { transform: rotate(0deg); }
-            100% { transform: rotate(0deg); }
-        }
-        .animate-wave {
-            animation: wave 2.5s infinite;
-            transform-origin: 70% 70%;
-            display: inline-block;
-        }
     </style>
 </head>
 
 <body class="font-sans antialiased selection:bg-glow-purple selection:text-white relative pb-20 md:pb-0">
+    <div class="hacker-overlay"></div>
 
+    <!-- Ambient Background Effects -->
     <div class="fixed top-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-glow-orange/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-glow-purple/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow" style="animation-delay: 2s;"></div>
     <div class="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 z-0 pointer-events-none"></div>
 
+    <!-- LIVE INNOVATION TICKER (NEW FEATURE) -->
+    <div class="w-full bg-glow-purple/10 border-b border-glow-purple/20 py-2 overflow-hidden relative z-50 backdrop-blur-md">
+        <div class="whitespace-nowrap animate-ticker inline-block text-[10px] md:text-xs font-mono text-glow-purple font-bold tracking-widest uppercase">
+            🚀 NeuroSync AI just reached 10,000 points! &nbsp; &nbsp; // &nbsp; &nbsp; 🎫 5 New VIP Event Passes claimed today &nbsp; &nbsp; // &nbsp; &nbsp; 💡 12 New Startup Ideas pitched to Zia this week! &nbsp; &nbsp; // &nbsp; &nbsp; 🏆 Protosynth 2026 Registration is now LIVE! &nbsp; &nbsp; // &nbsp; &nbsp; 🤖 AI Mentor servers are fully operational.
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-12 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl z-40 glass-nav rounded-full px-2 py-2 flex justify-between items-center transition-all duration-300" id="navbar">
+        <a href="index.html" class="flex items-center pl-4 group">
+            <span class="text-base font-display font-bold tracking-wider text-white">MET'S IEDC</span>
+        </a>
+        
+        <div class="hidden md:flex items-center space-x-1 bg-white/5 rounded-full px-2 py-1">
+            <a href="index.html" class="px-4 py-2 rounded-full bg-white/10 text-white text-xs font-semibold transition-colors">Home</a>
+            <a href="event.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Events</a>
+            <a href="report.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Reports</a>
+            <a href="initiatives.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Initiatives</a>
+        </div>
+
+        <div class="hidden md:flex items-center gap-3 pr-2">
+            <a href="login.html" class="text-white/70 hover:text-white text-xs font-semibold px-2 transition-colors">Log In</a>
+            <a href="login.html" class="btn-light px-5 py-2 rounded-full text-xs font-bold tracking-wide">Portal</a>
+        </div>
+
+        <button id="mobile-menu-button" class="md:hidden text-white p-2 pr-4">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-2xl z-50 overflow-y-auto border-l border-white/10">
+        <div class="flex justify-between items-center p-8 border-b border-white/10">
+            <span class="text-xl font-display font-bold text-white">NAVIGATION</span>
+            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+        <nav class="flex flex-col space-y-6 px-8 py-10 text-left">
+            <a href="index.html" class="text-3xl font-display font-medium text-white flex items-center gap-4"><i class="fas fa-home w-8 text-glow-purple"></i> Home</a>
+            <a href="event.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="far fa-calendar-alt w-8 text-glow-orange"></i> Events</a>
+            <a href="initiatives.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-rocket w-8 text-glow-blue"></i> Initiatives</a>
+            <a href="team.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-users w-8 text-white/40"></i> Ex-Com</a>
+            
+            <div class="pt-8 mt-8 border-t border-white/10 flex flex-col gap-4">
+                <a href="login.html" class="btn-light text-center py-4 rounded-xl text-sm font-bold uppercase tracking-widest">Portal Login</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- NOTIFICATION & PWA BANNERS -->
     <div id="pwa-update-banner" class="hidden fixed top-24 left-1/2 transform -translate-x-1/2 z-[9999] glass-panel rounded-full px-5 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300 border border-glow-purple/50 shadow-[0_0_20px_rgba(147,51,234,0.3)]">
         <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-full bg-glow-purple/20 flex items-center justify-center text-glow-purple">
@@ -232,193 +310,47 @@
         </div>
     </div>
 
-    <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl z-50 glass-nav rounded-full px-2 py-2 flex justify-between items-center transition-all duration-300" id="navbar">
-        <a href="index.html" class="flex items-center pl-4 group">
-            <span class="text-base font-display font-bold tracking-wider text-white">
-                MET'S IEDC
-            </span>
-        </a>
-        
-        <div class="hidden md:flex items-center space-x-1 bg-white/5 rounded-full px-2 py-1">
-            <a href="index.html" class="px-4 py-2 rounded-full bg-white/10 text-white text-xs font-semibold transition-colors">Home</a>
-            <a href="event.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Events</a>
-            <a href="report.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Reports</a>
-            <a href="initiatives.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Initiatives</a>
-            <a href="about.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Story</a>
-        </div>
-
-        <div class="hidden md:flex items-center gap-3 pr-2">
-            <a href="login.html" class="text-white/70 hover:text-white text-xs font-semibold px-2 transition-colors">Log In</a>
-            <a href="events.html" class="btn-light px-5 py-2 rounded-full text-xs font-bold tracking-wide">
-                View Events
-            </a>
-        </div>
-
-        <button id="mobile-menu-button" class="md:hidden text-white p-2 pr-4">
-            <i class="fas fa-bars text-xl"></i>
-        </button>
-    </nav>
-
-    <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-2xl z-50 overflow-y-auto border-l border-white/10">
-        <div class="flex justify-between items-center p-8 border-b border-white/10">
-            <span class="text-xl font-display font-bold text-white">NAVIGATION</span>
-            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors">
+    <!-- ANNOUNCEMENT IMAGE POPUP -->
+    <div id="imagePopup" class="popup-overlay" onclick="closePopup(event)">
+        <div class="popup-content relative max-w-4xl w-[90%] md:w-auto mx-auto glass-panel p-2 rounded-2xl">
+            <button onclick="closePopup(event)" class="absolute -top-4 -right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center text-black hover:bg-gray-200 transition-colors z-20 shadow-[0_0_20px_rgba(255,255,255,0.5)]">
                 <i class="fas fa-times text-lg"></i>
             </button>
-        </div>
-        <nav class="flex flex-col space-y-6 px-8 py-10 text-left">
-            <a href="index.html" class="text-3xl font-display font-medium text-white flex items-center gap-4"><i class="fas fa-home w-8 text-glow-purple"></i> Home</a>
-            <a href="event.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="far fa-calendar-alt w-8 text-glow-orange"></i> Events</a>
-            <a href="initiatives.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-rocket w-8 text-glow-blue"></i> Initiatives</a>
-            <a href="report.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-chart-bar w-8 text-white/40"></i> Reports</a>
-            <a href="team.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-users w-8 text-white/40"></i> Ex-Com</a>
-            <a href="announcement.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-bullhorn w-8 text-white/40"></i> Notices</a>
-            <a href="news.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-newspaper w-8 text-white/40"></i> News</a>
-            
-            <div class="pt-8 mt-8 border-t border-white/10 flex flex-col gap-4">
-                <a href="login.html" class="btn-light text-center py-4 rounded-xl text-sm font-bold uppercase tracking-widest">
-                    Portal Login
-                </a>
+            <div class="rounded-xl overflow-hidden relative skeleton-wrapper border border-white/5">
+                <img src="assets/images/events/1000299421.png" alt="Special Announcement" class="w-full h-auto max-h-[80vh] object-contain block bg-[#0a0a0c]" onerror="this.src='https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=1200'">
             </div>
-        </nav>
+        </div>
     </div>
 
     <!-- HERO SECTION -->
-    <div class="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden pt-20 z-10 px-4">
-        
+    <div class="relative min-h-[90vh] w-full flex flex-col items-center justify-center overflow-hidden pt-24 z-10 px-4">
         <div class="text-center flex flex-col items-center max-w-4xl mx-auto z-20">
-            <div class="glass-badge px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-8 flex items-center gap-2">
+            <div class="glass-badge px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-8 flex items-center gap-2 animate-float">
                 <span class="w-2 h-2 rounded-full bg-glow-purple animate-pulse"></span> Innovation Hub
             </div>
             
-            <h1 class="text-5xl md:text-7xl lg:text-[5.5rem] font-display font-bold leading-[1.1] tracking-tight mb-6">
-                <span class="text-white">Empowering Innovators.</span><br>
-                <span class="text-gradient">Effortless Execution!</span>
+            <h1 class="text-5xl md:text-7xl lg:text-[6rem] font-display font-black leading-[1.1] tracking-tight mb-6 drop-shadow-2xl">
+                <span class="text-white">Empower Ideas.</span><br>
+                <span class="text-gradient">Engineer the Future!</span>
             </h1>
             
             <p class="text-white/50 text-base md:text-lg max-w-2xl mx-auto font-light leading-relaxed mb-10">
-                Imagine transforming your concepts into reality with automatic mentorship, resources, and funding support directly through the IEDC ecosystem.
+                Transform your concepts into reality with automated AI mentorship, direct technical resources, and exclusive funding support through the MET'S IEDC ecosystem.
             </p>
             
             <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-                <a href="login.html" class="btn-light px-8 py-4 rounded-full text-sm font-bold w-full sm:w-auto text-center">
-                    Join Community
+                <a href="login.html" class="btn-light px-8 py-4 rounded-full text-sm font-bold w-full sm:w-auto text-center uppercase tracking-widest">
+                    Enter Portal
                 </a>
-                <a href="event.html" class="btn-primary px-8 py-4 rounded-full text-white text-sm font-bold w-full sm:w-auto text-center">
+                <a href="#events" class="btn-primary px-8 py-4 rounded-full text-white text-sm font-bold w-full sm:w-auto text-center uppercase tracking-widest">
                     Explore Events
                 </a>
             </div>
         </div>
-
-        <!-- LIVE ACTIVITY & UPCOMING EVENTS GRID -->
-        <div class="w-full max-w-6xl mx-auto mt-20 grid grid-cols-1 md:grid-cols-12 gap-6 z-20 px-4 relative">
-            <div class="hidden md:block absolute left-1/2 top-1/2 w-32 h-[1px] bg-white/20 border-t border-dashed border-white/40 z-0"></div>
-
-            <div class="md:col-span-5 glass-panel p-6 rounded-3xl animate-float">
-                <div class="flex items-center justify-between mb-6">
-                    <p class="text-white/70 text-sm font-medium">Upcoming Events</p>
-                    <div class="w-8 h-8 rounded-full bg-glow-orange/20 flex items-center justify-center text-glow-orange shadow-[0_0_15px_rgba(234,88,12,0.3)]">
-                        <i class="far fa-calendar-alt text-xs"></i>
-                    </div>
-                </div>
-                
-                <div class="bg-black/40 border border-white/5 rounded-2xl p-4 flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full overflow-hidden bg-glow-orange/20 border border-glow-orange/30 shrink-0 p-2">
-                        <img src="assets/images/logos/MSEM-removebg-preview.png" alt="Logo" class="w-full h-full object-contain rounded-full">
-                    </div>
-                    <div>
-                        <h4 class="text-white font-display font-semibold text-sm">No Upcoming Events</h4>
-                        <p class="text-white/40 text-xs mt-1">MM DD - DD, YYYY <span class="text-glow-orange ml-2 text-[10px] uppercase">Closed</span></p>
-                    </div>
-                </div>
-                
-                <div class="flex gap-3 mt-4">
-                    <button class="flex-1 py-2.5 rounded-xl border border-white/10 text-white/60 text-xs font-medium hover:bg-white/5 transition-colors">Details</button>
-                    <button class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-glow-orange to-red-600 text-white text-xs font-bold shadow-[0_0_15px_rgba(234,88,12,0.3)] hover:opacity-90 transition-opacity">Closed</button>
-                </div>
-            </div>
-
-            <div class="md:col-span-7 glass-panel p-6 rounded-3xl animate-float-delayed flex flex-col justify-between relative overflow-hidden">
-                <div class="absolute -right-10 -top-10 w-40 h-40 bg-glow-purple/20 blur-3xl rounded-full pointer-events-none"></div>
-                
-                <div>
-                    <div class="flex items-center gap-3 mb-6 bg-white/5 self-start w-fit px-3 py-1.5 rounded-lg border border-white/10">
-                        <span class="w-2 h-2 rounded-full bg-glow-purple animate-pulse"></span>
-                        <span class="text-white/80 text-xs font-medium">Live Activity</span>
-                    </div>
-
-                    <div class="bg-black/40 border border-white/5 rounded-2xl p-5 relative overflow-hidden">
-                        <div class="absolute left-6 top-10 bottom-4 w-[1px] bg-white/10"></div>
-                        
-                        <div class="flex items-start gap-4 mb-4 relative z-10">
-                            <div class="w-4 h-4 rounded-full bg-glow-purple shadow-[0_0_10px_rgba(147,51,234,0.5)] border-2 border-[#181b21] z-10 mt-1 shrink-0"></div>
-                            <div>
-                                <p class="text-white/50 text-[10px] uppercase tracking-wider font-semibold mb-1">Any Guess</p>
-                                <h4 class="text-white text-sm font-medium">A New Exciting Event is Coming </h4>
-                                <p class="text-glow-purple text-[10px] mt-1">Month 00 2026 00:00</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start gap-4 relative z-10">
-                            <div class="w-4 h-4 rounded-full border-2 border-white/30 bg-[#181b21] z-10 mt-1 shrink-0"></div>
-                            <div class="glass-panel w-full p-3 rounded-xl border border-white/5 flex justify-between items-center">
-                                <span class="text-white/70 text-xs">Awaiting Event Guessing</span>
-                                <span class="text-yellow-500 text-[10px] bg-yellow-500/10 px-2 py-1 rounded">Pending</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
-    <!-- FEATURE 4: 3D TILT EFFECT CARDS SECTION -->
-    <section class="py-24 relative z-10">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-4 tracking-tight">The Innovation <span class="text-glow-blue">Toolkit</span></h2>
-                <p class="text-white/50 font-light text-sm max-w-2xl mx-auto">Everything you need to launch your next big idea, built right into the dashboard.</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Tilt Card 1 -->
-                <div class="glass-panel p-8 rounded-3xl tilt-card cursor-pointer group">
-                    <div class="tilt-content flex flex-col items-center text-center">
-                        <div class="w-16 h-16 rounded-2xl bg-glow-blue/10 border border-glow-blue/30 flex items-center justify-center text-glow-blue mb-6 shadow-[0_0_20px_rgba(37,99,235,0.2)]">
-                            <i data-lucide="bot" class="w-8 h-8"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-3">AI Startup Mentor</h3>
-                        <p class="text-sm text-white/50 leading-relaxed">Pitch your ideas directly to our Gemini-powered AI. Get instant analysis on market challenges, strengths, and recommended tech stacks.</p>
-                    </div>
-                </div>
-
-                <!-- Tilt Card 2 -->
-                <div class="glass-panel p-8 rounded-3xl tilt-card cursor-pointer group">
-                    <div class="tilt-content flex flex-col items-center text-center">
-                        <div class="w-16 h-16 rounded-2xl bg-glow-purple/10 border border-glow-purple/30 flex items-center justify-center text-glow-purple mb-6 shadow-[0_0_20px_rgba(147,51,234,0.2)]">
-                            <i data-lucide="network" class="w-8 h-8"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Co-Founder Matchmaker</h3>
-                        <p class="text-sm text-white/50 leading-relaxed">Need a UI designer or a Backend dev? Browse through verified student profiles, check their skills, and connect instantly to build your dream team.</p>
-                    </div>
-                </div>
-
-                <!-- Tilt Card 3 -->
-                <div class="glass-panel p-8 rounded-3xl tilt-card cursor-pointer group">
-                    <div class="tilt-content flex flex-col items-center text-center">
-                        <div class="w-16 h-16 rounded-2xl bg-glow-orange/10 border border-glow-orange/30 flex items-center justify-center text-glow-orange mb-6 shadow-[0_0_20px_rgba(234,88,12,0.2)]">
-                            <i data-lucide="briefcase" class="w-8 h-8"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Automated Portfolios</h3>
-                        <p class="text-sm text-white/50 leading-relaxed">Every hackathon won, event attended, and point earned is automatically synced into a downloadable, professional PDF resume ready for recruiters.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- PARTNER LOGOS -->
-    <div class="py-10 border-y border-white/5 relative z-10 bg-dark-base/50 backdrop-blur-md">
+    <div class="py-8 border-y border-white/5 relative z-10 bg-dark-base/50 backdrop-blur-md">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-wrap justify-center gap-8 md:gap-16 items-center">
                 <img class="h-8 md:h-10 w-auto partner-logo" src="assets/images/logos/APJ_Abdul_Kalam_Technological_University_logo.png" alt="KTU" onerror="this.src='https://ui-avatars.com/api/?name=KTU&background=000&color=fff&font-size=0.4'">
@@ -429,7 +361,7 @@
         </div>
     </div>
 
-    <!-- FEATURE 1: LIVE IMPACT METRICS COUNTER -->
+    <!-- FEATURE: LIVE IMPACT METRICS COUNTER -->
     <section class="py-20 relative z-10 bg-gradient-to-b from-[#0a0a0c] to-[#050505]">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -445,16 +377,156 @@
                     <div class="text-4xl md:text-5xl font-display font-black text-glow-orange mb-2 count-up" data-target="45">0</div>
                     <div class="text-[10px] font-bold uppercase tracking-widest text-white/50">Startups Incubated</div>
                 </div>
-                <div class="glass-panel p-8 text-center rounded-2xl border-white/5 hover:border-white/30 transition-colors">
-                    <div class="text-4xl md:text-5xl font-display font-black text-white mb-2 count-up" data-target="120">0</div>
+                <div class="glass-panel p-8 text-center rounded-2xl border-white/5 hover:border-glow-green/30 transition-colors">
+                    <div class="text-4xl md:text-5xl font-display font-black text-glow-green mb-2 count-up" data-target="120">0</div>
                     <div class="text-[10px] font-bold uppercase tracking-widest text-white/50">Events Hosted</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FEATURE 3: INNOVATION ROADMAP TIMELINE -->
-    <section class="py-24 relative z-10 overflow-hidden">
+    <!-- FEATURE: 3D TILT EFFECT CARDS SECTION -->
+    <section class="py-24 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-4 tracking-tight">The Innovation <span class="text-glow-blue">Toolkit</span></h2>
+                <p class="text-white/50 font-light text-sm max-w-2xl mx-auto">Everything you need to launch your next big idea, built right into the dashboard.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Tilt Card 1 -->
+                <div class="glass-panel p-8 rounded-3xl tilt-card cursor-pointer group border-glow-blue/20 hover:border-glow-blue/50">
+                    <div class="tilt-content flex flex-col items-center text-center">
+                        <div class="w-16 h-16 rounded-2xl bg-glow-blue/10 border border-glow-blue/30 flex items-center justify-center text-glow-blue mb-6 shadow-[0_0_20px_rgba(37,99,235,0.2)]">
+                            <i data-lucide="bot" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">AI Startup Mentor</h3>
+                        <p class="text-sm text-white/50 leading-relaxed">Pitch your ideas directly to our Gemini-powered AI. Get instant analysis on market challenges, strengths, and recommended tech stacks.</p>
+                    </div>
+                </div>
+
+                <!-- Tilt Card 2 -->
+                <div class="glass-panel p-8 rounded-3xl tilt-card cursor-pointer group border-glow-purple/20 hover:border-glow-purple/50">
+                    <div class="tilt-content flex flex-col items-center text-center">
+                        <div class="w-16 h-16 rounded-2xl bg-glow-purple/10 border border-glow-purple/30 flex items-center justify-center text-glow-purple mb-6 shadow-[0_0_20px_rgba(147,51,234,0.2)]">
+                            <i data-lucide="network" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Co-Founder Matchmaker</h3>
+                        <p class="text-sm text-white/50 leading-relaxed">Need a UI designer or a Backend dev? Browse through verified student profiles, check their skills, and connect instantly to build your dream team.</p>
+                    </div>
+                </div>
+
+                <!-- Tilt Card 3 -->
+                <div class="glass-panel p-8 rounded-3xl tilt-card cursor-pointer group border-glow-orange/20 hover:border-glow-orange/50">
+                    <div class="tilt-content flex flex-col items-center text-center">
+                        <div class="w-16 h-16 rounded-2xl bg-glow-orange/10 border border-glow-orange/30 flex items-center justify-center text-glow-orange mb-6 shadow-[0_0_20px_rgba(234,88,12,0.2)]">
+                            <i data-lucide="briefcase" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Automated Portfolios</h3>
+                        <p class="text-sm text-white/50 leading-relaxed">Every hackathon won, event attended, and point earned is automatically synced into a downloadable, professional PDF resume ready for recruiters.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURE: INNOVATION POINTS CALCULATOR -->
+    <section class="py-24 relative z-10 overflow-hidden border-t border-white/5">
+        <div class="absolute right-0 top-0 w-96 h-96 bg-glow-blue/10 blur-[150px] rounded-full pointer-events-none"></div>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="glass-panel p-10 md:p-14 rounded-3xl text-center shadow-[0_0_50px_rgba(37,99,235,0.1)] border-glow-blue/20">
+                <h2 class="text-3xl font-display font-bold text-white mb-4 tracking-tight">Reward <span class="text-glow-blue">Calculator</span></h2>
+                <p class="text-white/50 font-light text-sm max-w-xl mx-auto mb-10">Slide to see what exclusive perks and event passes you can unlock by earning Innovation Points.</p>
+                
+                <h3 class="text-5xl font-display font-black text-white mb-8"><span id="slider-value">500</span> <span class="text-glow-blue text-2xl uppercase tracking-widest">Pts</span></h3>
+                
+                <input type="range" min="100" max="3000" step="100" value="500" id="point-slider" class="w-full h-3 bg-black/50 rounded-lg appearance-none cursor-pointer mb-10 border border-white/10">
+                
+                <div class="bg-black/40 border border-white/10 rounded-2xl p-6 transition-all duration-300" id="reward-display">
+                    <div class="w-16 h-16 mx-auto rounded-full bg-glow-blue/20 flex items-center justify-center text-glow-blue mb-4 shadow-[0_0_20px_rgba(37,99,235,0.3)]">
+                        <i class="fas fa-ticket-alt text-2xl"></i>
+                    </div>
+                    <h4 class="text-white font-bold text-xl mb-2">Standard Workshop Pass</h4>
+                    <p class="text-white/50 text-xs">Unlock free entry to any standard 1-day technical workshop.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURE: HARDWARE LAB TOUR (3D FLIP CARDS) -->
+    <section class="py-24 relative z-10 border-t border-white/5 bg-[#08080a]">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-4 tracking-tight">The Innovation <span class="text-glow-orange">Lab</span></h2>
+                <p class="text-white/50 font-light text-sm max-w-2xl mx-auto">Hover over our hardware modules to see the cutting-edge tech available to IEDC students.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Flip Card 1 -->
+                <div class="flip-card h-80 w-full group cursor-pointer">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front glass-panel flex flex-col items-center justify-center p-8 border-glow-orange/20">
+                            <i class="fas fa-cube text-6xl text-glow-orange mb-6 drop-shadow-[0_0_15px_rgba(234,88,12,0.5)]"></i>
+                            <h3 class="text-2xl font-bold text-white uppercase tracking-wider">3D Printing</h3>
+                            <p class="text-white/40 text-xs mt-2 uppercase tracking-widest font-bold">Rapid Prototyping</p>
+                        </div>
+                        <div class="flip-card-back glass-panel p-8 bg-[#0a0a0c] border-glow-orange/50">
+                            <h4 class="text-glow-orange font-bold text-lg mb-3">Available Hardware:</h4>
+                            <ul class="text-white/70 text-sm space-y-2 text-left list-disc pl-4">
+                                <li>2x Creality Ender 3 Pro</li>
+                                <li>Anycubic Resin Printer</li>
+                                <li>PLA, ABS, & TPU Filaments</li>
+                                <li>Free access for approved AI/Hardware projects.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flip Card 2 -->
+                <div class="flip-card h-80 w-full group cursor-pointer">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front glass-panel flex flex-col items-center justify-center p-8 border-glow-purple/20">
+                            <i class="fas fa-microchip text-6xl text-glow-purple mb-6 drop-shadow-[0_0_15px_rgba(147,51,234,0.5)]"></i>
+                            <h3 class="text-2xl font-bold text-white uppercase tracking-wider">IoT & Robotics</h3>
+                            <p class="text-white/40 text-xs mt-2 uppercase tracking-widest font-bold">Embedded Systems</p>
+                        </div>
+                        <div class="flip-card-back glass-panel p-8 bg-[#0a0a0c] border-glow-purple/50">
+                            <h4 class="text-glow-purple font-bold text-lg mb-3">Available Hardware:</h4>
+                            <ul class="text-white/70 text-sm space-y-2 text-left list-disc pl-4">
+                                <li>Raspberry Pi 4 Kits</li>
+                                <li>Arduino Mega/Uno Bundles</li>
+                                <li>Various Biometric Sensors</li>
+                                <li>Drone Building Frames & Motors</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flip Card 3 -->
+                <div class="flip-card h-80 w-full group cursor-pointer">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front glass-panel flex flex-col items-center justify-center p-8 border-glow-blue/20">
+                            <i class="fas fa-server text-6xl text-glow-blue mb-6 drop-shadow-[0_0_15px_rgba(37,99,235,0.5)]"></i>
+                            <h3 class="text-2xl font-bold text-white uppercase tracking-wider">Cloud & AI</h3>
+                            <p class="text-white/40 text-xs mt-2 uppercase tracking-widest font-bold">Compute Power</p>
+                        </div>
+                        <div class="flip-card-back glass-panel p-8 bg-[#0a0a0c] border-glow-blue/50">
+                            <h4 class="text-glow-blue font-bold text-lg mb-3">Available Resources:</h4>
+                            <ul class="text-white/70 text-sm space-y-2 text-left list-disc pl-4">
+                                <li>AWS & Google Cloud Credits</li>
+                                <li>Access to Gemini Pro APIs</li>
+                                <li>NVIDIA Jetson Nano Boards</li>
+                                <li>Mentorship for deployment</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURE: INNOVATION ROADMAP TIMELINE -->
+    <section class="py-24 relative z-10 overflow-hidden border-t border-white/5">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-4 tracking-tight">The 2026 <span class="text-glow-orange">Roadmap</span></h2>
@@ -503,7 +575,7 @@
         </div>
     </section>
 
-    <!-- FEATURE 2: HALL OF FAME (TOP PROJECTS) -->
+    <!-- FEATURE: HALL OF FAME (TOP PROJECTS) -->
     <section class="py-24 relative bg-[#0a0a0c] z-10 border-t border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-end mb-12">
@@ -572,29 +644,8 @@
         </div>
     </section>
 
-    <!-- GALLERY SECTION -->
-    <section class="py-32 relative bg-dark-base z-10 overflow-hidden border-t border-white/5">
-        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-64 h-64 bg-glow-purple/10 blur-[100px] rounded-full pointer-events-none"></div>
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="text-center mb-16">
-                <div class="glass-badge inline-block px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest text-glow-purple border-glow-purple/30 mb-4">Gallery</div>
-                <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-4 tracking-tight">Our Journey</h2>
-                <p class="text-white/50 max-w-2xl mx-auto font-light text-sm">Glimpses of our events, workshops, and milestones.</p>
-            </div>
-            
-            <div class="swiper mySwiper !pb-20 max-w-6xl mx-auto">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide skeleton-wrapper"><img src="assets/images/events/IMG-20251112-WA0014.jpg" onerror="this.src='https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800'" class="w-full h-[400px] object-cover"></div>
-                    <div class="swiper-slide skeleton-wrapper"><img src="assets/images/events/IMG-20251112-WA0013.jpg" onerror="this.src='https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800'" class="w-full h-[400px] object-cover"></div>
-                    <div class="swiper-slide skeleton-wrapper"><img src="assets/images/events/1.1.jpg" onerror="this.src='https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800'" class="w-full h-[400px] object-cover"></div>
-                    <div class="swiper-slide skeleton-wrapper"><img src="assets/images/events/2.1.jpg" onerror="this.src='https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?q=80&w=800'" class="w-full h-[400px] object-cover"></div>
-                </div>
-                <div class="swiper-pagination"></div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 relative border-t border-white/5 overflow-hidden z-10">
+    <!-- FEATURE: PROTOSYNTH COUNTDOWN -->
+    <section id="events" class="py-24 relative border-t border-white/5 overflow-hidden z-10">
         <div class="absolute inset-0 bg-dark-card/50"></div>
         <div class="absolute right-0 bottom-0 w-[40vw] h-[40vw] bg-glow-blue/10 blur-[120px] rounded-full mix-blend-screen pointer-events-none z-0"></div>
 
@@ -658,6 +709,110 @@
         </div>
     </section>
 
+    <!-- FEATURE: GALLERY SECTION -->
+    <section class="py-32 relative bg-dark-base z-10 overflow-hidden border-t border-white/5">
+        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-64 h-64 bg-glow-purple/10 blur-[100px] rounded-full pointer-events-none"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <div class="glass-badge inline-block px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest text-glow-purple border-glow-purple/30 mb-4">Gallery</div>
+                <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-4 tracking-tight">Our Journey</h2>
+                <p class="text-white/50 max-w-2xl mx-auto font-light text-sm">Glimpses of our events, workshops, and milestones.</p>
+            </div>
+            
+            <div class="swiper mySwiper !pb-20 max-w-6xl mx-auto">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide skeleton-wrapper"><img src="assets/images/events/IMG-20251112-WA0014.jpg" onerror="this.src='https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800'" class="w-full h-[400px] object-cover"></div>
+                    <div class="swiper-slide skeleton-wrapper"><img src="assets/images/events/IMG-20251112-WA0013.jpg" onerror="this.src='https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800'" class="w-full h-[400px] object-cover"></div>
+                    <div class="swiper-slide skeleton-wrapper"><img src="assets/images/events/1.1.jpg" onerror="this.src='https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800'" class="w-full h-[400px] object-cover"></div>
+                    <div class="swiper-slide skeleton-wrapper"><img src="assets/images/events/2.1.jpg" onerror="this.src='https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?q=80&w=800'" class="w-full h-[400px] object-cover"></div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURE: ALUMNI TESTIMONIALS CAROUSEL -->
+    <section class="py-24 relative bg-[#0a0a0c] z-10 border-t border-white/5 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 mb-12 text-center">
+            <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-4 tracking-tight">Wall of <span class="text-glow-purple">Success</span></h2>
+            <p class="text-white/50 font-light text-sm max-w-xl mx-auto">Hear from the founders and innovators who started their journey here.</p>
+        </div>
+
+        <div class="relative flex overflow-x-hidden group">
+            <div class="animate-marquee whitespace-nowrap flex gap-6 px-3">
+                <div class="glass-panel p-8 rounded-3xl w-[350px] md:w-[450px] inline-flex flex-col whitespace-normal border-white/5 shrink-0">
+                    <i class="fas fa-quote-left text-glow-purple/50 text-3xl mb-4"></i>
+                    <p class="text-white/70 text-sm leading-relaxed mb-6 italic">"The mentorship and cloud credits I got through the IEDC portal literally helped me deploy my first SaaS product. The Matchmaker helped me find my co-founder!"</p>
+                    <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-4">
+                        <div class="w-10 h-10 rounded-full bg-glow-purple flex items-center justify-center font-bold text-white text-sm">R</div>
+                        <div>
+                            <h4 class="text-white font-bold text-sm">Rahul K.</h4>
+                            <p class="text-white/40 text-[10px] uppercase tracking-widest">Founder, EcoGrid</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel p-8 rounded-3xl w-[350px] md:w-[450px] inline-flex flex-col whitespace-normal border-white/5 shrink-0">
+                    <i class="fas fa-quote-left text-glow-orange/50 text-3xl mb-4"></i>
+                    <p class="text-white/70 text-sm leading-relaxed mb-6 italic">"Protosynth was the turning point. Using the 3D printers in the lab, we built a drone frame that won us best hardware pitch."</p>
+                    <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-4">
+                        <div class="w-10 h-10 rounded-full bg-glow-orange flex items-center justify-center font-bold text-white text-sm">A</div>
+                        <div>
+                            <h4 class="text-white font-bold text-sm">Anjali M.</h4>
+                            <p class="text-white/40 text-[10px] uppercase tracking-widest">Lead Dev, AeroDrone</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel p-8 rounded-3xl w-[350px] md:w-[450px] inline-flex flex-col whitespace-normal border-white/5 shrink-0">
+                    <i class="fas fa-quote-left text-glow-blue/50 text-3xl mb-4"></i>
+                    <p class="text-white/70 text-sm leading-relaxed mb-6 italic">"The automated resume builder is magic. By the time placements started, my portfolio was fully packed with verified IEDC projects and certificates."</p>
+                    <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-4">
+                        <div class="w-10 h-10 rounded-full bg-glow-blue flex items-center justify-center font-bold text-white text-sm">S</div>
+                        <div>
+                            <h4 class="text-white font-bold text-sm">Sidarth P.</h4>
+                            <p class="text-white/40 text-[10px] uppercase tracking-widest">Software Engineer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="animate-marquee whitespace-nowrap flex gap-6 px-3 absolute top-0" style="left: 100%;">
+                <div class="glass-panel p-8 rounded-3xl w-[350px] md:w-[450px] inline-flex flex-col whitespace-normal border-white/5 shrink-0">
+                    <i class="fas fa-quote-left text-glow-purple/50 text-3xl mb-4"></i>
+                    <p class="text-white/70 text-sm leading-relaxed mb-6 italic">"The mentorship and cloud credits I got through the IEDC portal literally helped me deploy my first SaaS product. The Matchmaker helped me find my co-founder!"</p>
+                    <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-4">
+                        <div class="w-10 h-10 rounded-full bg-glow-purple flex items-center justify-center font-bold text-white text-sm">R</div>
+                        <div>
+                            <h4 class="text-white font-bold text-sm">Rahul K.</h4>
+                            <p class="text-white/40 text-[10px] uppercase tracking-widest">Founder, EcoGrid</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel p-8 rounded-3xl w-[350px] md:w-[450px] inline-flex flex-col whitespace-normal border-white/5 shrink-0">
+                    <i class="fas fa-quote-left text-glow-orange/50 text-3xl mb-4"></i>
+                    <p class="text-white/70 text-sm leading-relaxed mb-6 italic">"Protosynth was the turning point. Using the 3D printers in the lab, we built a drone frame that won us best hardware pitch."</p>
+                    <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-4">
+                        <div class="w-10 h-10 rounded-full bg-glow-orange flex items-center justify-center font-bold text-white text-sm">A</div>
+                        <div>
+                            <h4 class="text-white font-bold text-sm">Anjali M.</h4>
+                            <p class="text-white/40 text-[10px] uppercase tracking-widest">Lead Dev, AeroDrone</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel p-8 rounded-3xl w-[350px] md:w-[450px] inline-flex flex-col whitespace-normal border-white/5 shrink-0">
+                    <i class="fas fa-quote-left text-glow-blue/50 text-3xl mb-4"></i>
+                    <p class="text-white/70 text-sm leading-relaxed mb-6 italic">"The automated resume builder is magic. By the time placements started, my portfolio was fully packed with verified IEDC projects and certificates."</p>
+                    <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-4">
+                        <div class="w-10 h-10 rounded-full bg-glow-blue flex items-center justify-center font-bold text-white text-sm">S</div>
+                        <div>
+                            <h4 class="text-white font-bold text-sm">Sidarth P.</h4>
+                            <p class="text-white/40 text-[10px] uppercase tracking-widest">Software Engineer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
     <footer class="bg-dark-base pt-24 pb-12 border-t border-white/5 relative z-10">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-20">
@@ -672,7 +827,7 @@
                     <h3 class="text-[10px] font-bold text-white/70 uppercase tracking-widest mb-6">Navigation</h3>
                     <ul class="space-y-3 text-xs font-light text-white/40">
                         <li><a href="about.html" class="hover:text-white transition-colors">Our Story</a></li>
-                        <li><a href="events.html" class="hover:text-white transition-colors">Events</a></li>
+                        <li><a href="#events" class="hover:text-white transition-colors">Events</a></li>
                         <li><a href="initiatives.html" class="hover:text-white transition-colors">Initiatives</a></li>
                         <li><a href="https://startupmission.kerala.gov.in/" target="_blank" class="hover:text-white transition-colors flex items-center gap-2">KSUM <i class="fas fa-external-link-alt text-[10px]"></i></a></li>
                     </ul>
@@ -684,10 +839,6 @@
                         <p>MET'S School of Engineering<br>Mala, Thrissur, Kerala</p>
                         <p class="hover:text-white transition-colors cursor-pointer">+91 7306226875</p>
                         <p class="hover:text-white transition-colors cursor-pointer">metsenggiedc@gmail.com</p>
-                    </div>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-colors"><i class="fab fa-instagram text-sm"></i></a>
-                        <a href="#" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-colors"><i class="fab fa-linkedin-in text-sm"></i></a>
                     </div>
                 </div>
             </div>
@@ -702,51 +853,53 @@
         </div>
     </footer>
 
-    <!-- ZIA AI ASSISTANT WIDGET -->
-    <div id="zia-chat-widget" class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[100] flex flex-col items-end pointer-events-none">
+    <!-- FREE FLOATING ZIA AI ASSISTANT -->
+    <div id="zia-chat-widget" class="fixed bottom-0 right-0 md:bottom-2 md:right-2 z-[100] flex flex-col items-end pointer-events-none">
         
         <!-- Chat Window -->
-        <div id="zia-chat-window" class="hidden w-[90vw] md:w-80 h-96 glass-panel rounded-2xl mb-4 flex flex-col shadow-[0_0_30px_rgba(147,51,234,0.3)] border-glow-purple/30 transform transition-transform duration-300 origin-bottom-right scale-0 pointer-events-auto">
+        <div id="zia-chat-window" class="hidden w-[90vw] md:w-80 h-96 glass-panel rounded-3xl mb-2 mr-4 flex flex-col shadow-[0_0_40px_rgba(147,51,234,0.4)] border-glow-purple/40 transform transition-transform duration-300 origin-bottom-right scale-0 pointer-events-auto bg-[#0a0a0c]/95">
             <!-- Header -->
-            <div class="p-4 border-b border-white/10 bg-black/40 flex justify-between items-center rounded-t-2xl shrink-0">
+            <div class="p-4 border-b border-white/10 bg-black/60 flex justify-between items-center rounded-t-3xl shrink-0">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full overflow-hidden bg-[#050505] flex items-center justify-center border border-glow-purple/50 shrink-0">
-                        <img src="https://api.dicebear.com/9.x/lorelei/svg?seed=Zia&backgroundColor=transparent" alt="Zia" class="w-full h-full object-cover">
+                    <div class="w-8 h-8 rounded-full bg-glow-purple/20 flex items-center justify-center text-glow-purple shrink-0">
+                        <i class="fas fa-robot text-sm"></i>
                     </div>
                     <div>
                         <h3 class="text-white text-sm font-bold tracking-widest uppercase">Zia</h3>
-                        <p class="text-glow-purple text-[8px] uppercase font-bold tracking-widest">AI Assistant</p>
+                        <p class="text-glow-purple text-[8px] uppercase font-bold tracking-widest flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Online</p>
                     </div>
                 </div>
-                <button id="zia-close-btn" class="text-white/50 hover:text-white transition-colors">
-                    <i data-lucide="x" class="w-4 h-4"></i>
+                <!-- Crash-proof close icon -->
+                <button id="zia-close-btn" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
             <!-- Messages -->
-            <div id="zia-messages" class="flex-grow overflow-y-auto p-4 space-y-4 text-sm flex flex-col">
-                <div class="bg-white/10 border border-white/10 text-white p-3 rounded-tr-2xl rounded-bl-2xl rounded-br-2xl max-w-[85%] self-start text-xs leading-relaxed backdrop-blur-md shadow-md">
-                    Hi! I'm Zia, the MET'S IEDC AI. How can I help you innovate today? 🚀
+            <div id="zia-messages" class="flex-grow overflow-y-auto p-4 space-y-4 text-sm flex flex-col scroll-smooth">
+                <div class="bg-white/10 border border-white/10 text-white p-3 rounded-tr-2xl rounded-bl-2xl rounded-br-2xl max-w-[85%] self-start text-xs leading-relaxed shadow-md">
+                    Hi there! 👋 I'm Zia, the MET'S IEDC AI. Ask me about events, pitching ideas, or how to earn innovation points!
                 </div>
             </div>
             <!-- Input -->
-            <form id="zia-form" class="p-3 border-t border-white/10 bg-black/40 rounded-b-2xl flex gap-2 shrink-0">
-                <input type="text" id="zia-input" placeholder="Ask me anything..." class="flex-grow bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-glow-purple/50 transition-colors" autocomplete="off">
-                <button type="submit" class="w-9 h-9 rounded-xl bg-glow-purple text-white flex items-center justify-center hover:bg-purple-500 transition-colors shadow-[0_0_10px_rgba(147,51,234,0.4)] shrink-0">
-                    <i data-lucide="send" class="w-4 h-4"></i>
+            <form id="zia-form" class="p-3 border-t border-white/10 bg-black/60 rounded-b-3xl flex gap-2 shrink-0">
+                <input type="text" id="zia-input" placeholder="Type a message..." class="flex-grow bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-glow-purple/50 transition-colors" autocomplete="off">
+                <button type="submit" class="w-10 h-10 rounded-xl bg-glow-purple text-white flex items-center justify-center hover:bg-purple-500 transition-colors shadow-[0_0_15px_rgba(147,51,234,0.4)] shrink-0">
+                    <i class="fas fa-paper-plane text-xs"></i>
                 </button>
             </form>
         </div>
 
-        <!-- Chat Toggle Button with Animated Avatar -->
-        <div class="relative flex flex-col items-end group cursor-pointer z-50 pointer-events-auto" id="zia-toggle-btn">
-            <!-- Greeting Bubble -->
-            <div id="zia-greeting" class="absolute -top-6 right-16 md:-top-4 md:right-20 bg-gradient-to-r from-glow-purple to-glow-blue text-white text-xs font-bold px-4 py-2 rounded-2xl rounded-br-sm shadow-[0_0_15px_rgba(147,51,234,0.4)] whitespace-nowrap transition-all duration-300 z-0 opacity-90 group-hover:opacity-100 group-hover:-translate-y-1 pointer-events-none">
-                Hi, I'm Zia! <span class="animate-wave text-base ml-1">👋</span>
+        <!-- Free Standing Animated Avatar Button -->
+        <div class="relative flex flex-col items-end group cursor-pointer z-50 pointer-events-auto pr-4 pb-0" id="zia-toggle-btn">
+            
+            <!-- Floating Greeting Bubble -->
+            <div id="zia-greeting" class="absolute -top-8 right-24 md:-top-4 md:right-28 bg-white text-black text-xs font-bold px-4 py-2 rounded-2xl rounded-br-sm shadow-[0_0_20px_rgba(255,255,255,0.3)] whitespace-nowrap transition-all duration-300 z-0 opacity-90 group-hover:opacity-100 group-hover:-translate-y-2 pointer-events-none">
+                Ask me anything! <span class="animate-wave text-sm ml-1">👋</span>
             </div>
             
-            <!-- Free-Floating Avatar -->
-            <button class="w-24 h-24 md:w-32 md:h-32 bg-transparent hover:scale-110 transition-transform duration-300 relative z-10 flex items-end justify-center drop-shadow-[0_0_25px_rgba(147,51,234,0.5)] outline-none border-none">
-                <img src="https://api.dicebear.com/9.x/lorelei/svg?seed=Zia&backgroundColor=transparent" alt="Zia Assistant" class="w-full h-full object-contain animate-float">
+            <!-- Full Body Vector Avatar (No Background/Borders) -->
+            <button class="w-32 h-40 md:w-40 md:h-48 bg-transparent transition-transform duration-300 relative z-10 flex items-end justify-center drop-shadow-[0_0_25px_rgba(147,51,234,0.3)] outline-none border-none group-hover:scale-105">
+                <img src="https://api.dicebear.com/9.x/notionists/svg?seed=Mimi&lips=smile&backgroundColor=transparent" alt="Zia Assistant" class="w-full h-full object-contain animate-float">
                 <!-- Online Status Dot -->
                 <span class="absolute bottom-3 right-4 md:bottom-5 md:right-6 w-3 h-3 md:w-4 md:h-4 bg-green-500 border-2 border-[#050505] rounded-full animate-pulse"></span>
             </button>
@@ -758,12 +911,59 @@
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('year').textContent = new Date().getFullYear();
             
-            // Initialize Lucide Icons for everything on the page safely
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
+            // Initialize Lucide Icons safely
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+
+            // EASTER EGG: HACKER MODE
+            let keys = '';
+            document.addEventListener('keydown', (e) => {
+                keys += e.key.toLowerCase();
+                if (keys.includes('hack')) {
+                    document.body.classList.toggle('hacker-mode');
+                    keys = ''; // reset
+                }
+                if (keys.length > 10) keys = keys.slice(-10);
+            });
+
+            // INTERACTIVE POINTS CALCULATOR LOGIC
+            const slider = document.getElementById('point-slider');
+            const sliderVal = document.getElementById('slider-value');
+            const rewardDisplay = document.getElementById('reward-display');
+            
+            if(slider) {
+                slider.addEventListener('input', function() {
+                    const val = parseInt(this.value);
+                    sliderVal.textContent = val;
+                    
+                    let rewardColor = 'glow-blue';
+                    let rewardIcon = 'fa-ticket-alt';
+                    let rewardTitle = 'Standard Workshop Pass';
+                    let rewardDesc = 'Unlock free entry to any standard 1-day technical workshop.';
+
+                    if (val >= 1000 && val < 2000) {
+                        rewardColor = 'glow-purple'; rewardIcon = 'fa-laptop-code';
+                        rewardTitle = 'Premium Hackathon Entry'; rewardDesc = 'Fast-track approval and guaranteed seating for flagship internal hackathons.';
+                    } else if (val >= 2000 && val < 3000) {
+                        rewardColor = 'glow-green'; rewardIcon = 'fa-id-badge';
+                        rewardTitle = 'Tech Conference VIP'; rewardDesc = 'VIP seating, back-stage access, and premium lanyard for major campus tech conferences.';
+                    } else if (val >= 3000) {
+                        rewardColor = 'glow-orange'; rewardIcon = 'fa-user-tie';
+                        rewardTitle = 'Founders\' Networking Dinner'; rewardDesc = 'Exclusive invite-only dinner pass to network directly with industry speakers and alumni founders.';
+                    }
+
+                    rewardDisplay.className = `bg-black/40 border border-${rewardColor}/30 rounded-2xl p-6 transition-all duration-300 transform scale-105 shadow-[0_0_30px_rgba(var(--${rewardColor}),0.1)]`;
+                    rewardDisplay.innerHTML = `
+                        <div class="w-16 h-16 mx-auto rounded-full bg-${rewardColor}/20 flex items-center justify-center text-${rewardColor} mb-4 shadow-[0_0_20px_rgba(var(--${rewardColor}),0.3)]">
+                            <i class="fas ${rewardIcon} text-2xl"></i>
+                        </div>
+                        <h4 class="text-white font-bold text-xl mb-2">${rewardTitle}</h4>
+                        <p class="text-white/50 text-xs">${rewardDesc}</p>
+                    `;
+                    setTimeout(() => rewardDisplay.classList.remove('scale-105'), 200);
+                });
             }
 
-            // 1. LIGHTWEIGHT 3D TILT EFFECT LOGIC
+            // LIGHTWEIGHT 3D TILT EFFECT LOGIC
             const tiltCards = document.querySelectorAll('.tilt-card');
             tiltCards.forEach(card => {
                 card.addEventListener('mousemove', e => {
@@ -772,29 +972,26 @@
                     const y = e.clientY - rect.top;
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
-                    const rotateX = ((y - centerY) / centerY) * -10; // Max 10 deg rotation
+                    const rotateX = ((y - centerY) / centerY) * -10; 
                     const rotateY = ((x - centerX) / centerX) * 10;
-                    
-                    card.style.transition = 'none'; // Disable transition for instant tracking
+                    card.style.transition = 'none'; 
                     card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
                 });
-                
                 card.addEventListener('mouseleave', () => {
-                    card.style.transition = 'transform 0.5s ease-out'; // Smooth snap back
+                    card.style.transition = 'transform 0.5s ease-out'; 
                     card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
                 });
             });
 
-            // 2. COUNT UP ANIMATION LOGIC
+            // COUNT UP ANIMATION LOGIC
             const counters = document.querySelectorAll('.count-up');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const target = +entry.target.getAttribute('data-target');
-                        const duration = 2000; // 2 seconds
-                        const increment = target / (duration / 16); // 60fps
+                        const duration = 2000; 
+                        const increment = target / (duration / 16); 
                         let current = 0;
-                        
                         const updateCounter = () => {
                             current += increment;
                             if (current < target) {
@@ -805,11 +1002,10 @@
                             }
                         };
                         updateCounter();
-                        observer.unobserve(entry.target); // Only animate once
+                        observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.5 }); // Trigger when 50% visible
-            
+            }, { threshold: 0.5 }); 
             counters.forEach(counter => observer.observe(counter));
 
             // Skeleton Loader
@@ -898,11 +1094,12 @@
             function toggleZia() {
                 if (ziaWidget.classList.contains('hidden')) {
                     ziaWidget.classList.remove('hidden');
-                    if (ziaGreeting) ziaGreeting.classList.add('hidden'); // Hide bubble when chat is open
+                    if (ziaGreeting) ziaGreeting.classList.add('hidden'); 
                     setTimeout(() => ziaWidget.classList.remove('scale-0'), 10);
+                    ziaInput.focus();
                 } else {
                     ziaWidget.classList.add('scale-0');
-                    if (ziaGreeting) ziaGreeting.classList.remove('hidden'); // Show bubble when closed
+                    if (ziaGreeting) ziaGreeting.classList.remove('hidden'); 
                     setTimeout(() => ziaWidget.classList.add('hidden'), 300);
                 }
             }
@@ -914,7 +1111,7 @@
                 const msgDiv = document.createElement('div');
                 const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 
-                msgDiv.className = `p-3 text-xs leading-relaxed backdrop-blur-md max-w-[85%] shadow-md ${
+                msgDiv.className = `p-3 text-xs leading-relaxed max-w-[85%] shadow-md ${
                     isUser 
                     ? 'bg-glow-purple/20 border border-glow-purple/30 text-white rounded-tl-2xl rounded-bl-2xl rounded-br-2xl self-end' 
                     : 'bg-white/10 border border-white/10 text-white rounded-tr-2xl rounded-bl-2xl rounded-br-2xl self-start'
@@ -922,7 +1119,6 @@
                 msgDiv.innerHTML = formattedText;
                 ziaMessages.appendChild(msgDiv);
                 ziaMessages.scrollTop = ziaMessages.scrollHeight;
-                if (typeof lucide !== 'undefined') lucide.createIcons(); // refresh icons safely
             }
 
             if(ziaForm) {
@@ -944,7 +1140,6 @@
                     ziaMessages.scrollTop = ziaMessages.scrollHeight;
 
                     try {
-                        // The proxy handles the true key behind the scenes here
                         const apiKey = ""; 
                         const systemPrompt = "You are Zia, the official AI assistant for MET'S IEDC Innovation Hub. You are friendly, encouraging, and concise. Help students learn about IEDC, pitch ideas, find events, and navigate the platform. Keep your responses brief (1-3 sentences max).";
                         
