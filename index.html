@@ -186,6 +186,23 @@
         .skeleton-wrapper img { opacity: 0; transition: opacity 0.5s ease-in-out; position: relative; z-index: 2; }
         .skeleton-wrapper.loaded::after { display: none; animation: none; }
         .skeleton-wrapper.loaded img { opacity: 1; }
+
+        /* ZIA ANIMATIONS */
+        @keyframes wave {
+            0% { transform: rotate(0deg); }
+            10% { transform: rotate(14deg); }
+            20% { transform: rotate(-8deg); }
+            30% { transform: rotate(14deg); }
+            40% { transform: rotate(-4deg); }
+            50% { transform: rotate(10deg); }
+            60% { transform: rotate(0deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .animate-wave {
+            animation: wave 2.5s infinite;
+            transform-origin: 70% 70%;
+            display: inline-block;
+        }
     </style>
 </head>
 
@@ -714,8 +731,8 @@
             <!-- Header -->
             <div class="p-4 border-b border-white/10 bg-black/40 flex justify-between items-center rounded-t-2xl shrink-0">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-glow-purple/20 flex items-center justify-center text-glow-purple">
-                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    <div class="w-8 h-8 rounded-full overflow-hidden bg-[#050505] flex items-center justify-center border border-glow-purple/50">
+                        <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Zia&backgroundColor=transparent&hair=variant02&eyes=happy&mouth=happy02" alt="Zia" class="w-full h-full object-cover">
                     </div>
                     <div>
                         <h3 class="text-white text-sm font-bold tracking-widest uppercase">Zia</h3>
@@ -741,10 +758,22 @@
             </form>
         </div>
 
-        <!-- Chat Toggle Button -->
-        <button id="zia-toggle-btn" class="w-14 h-14 rounded-full bg-gradient-to-r from-glow-purple to-glow-blue text-white flex items-center justify-center shadow-[0_0_20px_rgba(147,51,234,0.5)] hover:scale-110 transition-transform duration-300">
-            <i data-lucide="message-square" class="w-6 h-6 zia-icon-open"></i>
-        </button>
+        <!-- Chat Toggle Button with Animated Avatar -->
+        <div class="relative flex flex-col items-end group cursor-pointer" id="zia-toggle-btn">
+            <!-- Greeting Bubble -->
+            <div id="zia-greeting" class="absolute -top-14 right-2 bg-gradient-to-r from-glow-purple to-glow-blue text-white text-xs font-bold px-4 py-2 rounded-2xl rounded-br-sm shadow-[0_0_15px_rgba(147,51,234,0.4)] whitespace-nowrap transition-all duration-300 z-0 opacity-90 group-hover:opacity-100 group-hover:-translate-y-1">
+                Hi, I'm Zia! <span class="animate-wave text-base ml-1">👋</span>
+            </div>
+            
+            <!-- Avatar Circle -->
+            <button class="w-16 h-16 rounded-full bg-gradient-to-br from-glow-purple to-glow-blue p-0.5 shadow-[0_0_25px_rgba(147,51,234,0.6)] hover:scale-110 transition-transform duration-300 relative z-10 flex items-center justify-center">
+                <div class="w-full h-full bg-[#050505] rounded-full overflow-hidden flex items-end justify-center relative">
+                    <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Zia&backgroundColor=transparent&hair=variant02&eyes=happy&mouth=happy02" alt="Zia Assistant" class="w-14 h-14 object-cover transform translate-y-1">
+                </div>
+                <!-- Online Status Dot -->
+                <span class="absolute bottom-0 right-1 w-4 h-4 bg-green-500 border-2 border-[#050505] rounded-full animate-pulse"></span>
+            </button>
+        </div>
     </div>
 
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
@@ -891,6 +920,7 @@
             // --- ZIA AI LOGIC ---
             const ziaWidget = document.getElementById('zia-chat-window');
             const ziaToggle = document.getElementById('zia-toggle-btn');
+            const ziaGreeting = document.getElementById('zia-greeting');
             const ziaClose = document.getElementById('zia-close-btn');
             const ziaForm = document.getElementById('zia-form');
             const ziaInput = document.getElementById('zia-input');
@@ -899,9 +929,11 @@
             function toggleZia() {
                 if (ziaWidget.classList.contains('hidden')) {
                     ziaWidget.classList.remove('hidden');
+                    if (ziaGreeting) ziaGreeting.classList.add('hidden'); // Hide bubble when chat is open
                     setTimeout(() => ziaWidget.classList.remove('scale-0'), 10);
                 } else {
                     ziaWidget.classList.add('scale-0');
+                    if (ziaGreeting) ziaGreeting.classList.remove('hidden'); // Show bubble when closed
                     setTimeout(() => ziaWidget.classList.add('hidden'), 300);
                 }
             }
