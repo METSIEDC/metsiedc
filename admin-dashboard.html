@@ -181,8 +181,10 @@
         
         <nav class="flex-grow px-4 py-2 space-y-1 overflow-y-auto">
             <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
-            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="users" class="w-4 h-4"></i> Users & Points</button>
-            <button onclick="showTab('rewards')" id="nav-rewards" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-gold"><i data-lucide="ticket" class="w-4 h-4"></i> Ticket Orders</button>
+            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="users" class="w-4 h-4"></i> User Directory</button>
+            <button onclick="showTab('points')" id="nav-points" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-gold"><i data-lucide="star" class="w-4 h-4"></i> Innovation Points</button>
+            <button onclick="showTab('rewards')" id="nav-rewards" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="ticket" class="w-4 h-4"></i> Ticket Orders</button>
+            <button onclick="showTab('features')" id="nav-features" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-blue"><i data-lucide="blocks" class="w-4 h-4"></i> Feature Manager</button>
             <button onclick="showTab('inventory')" id="nav-inventory" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="box" class="w-4 h-4"></i> Inventory</button>
             <button onclick="showTab('logs')" id="nav-logs" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="activity" class="w-4 h-4"></i> Activity Logs</button>
             <button onclick="showTab('excom')" id="nav-excom" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="shield" class="w-4 h-4"></i> ExCom Tracking</button>
@@ -222,7 +224,9 @@
         <nav class="flex-grow px-4 py-6 space-y-1 overflow-y-auto">
             <button onclick="showTab('overview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Dashboard</button>
             <button onclick="showTab('users'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Users</button>
-            <button onclick="showTab('rewards'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-glow-gold">Tickets</button>
+            <button onclick="showTab('points'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-glow-gold">Points</button>
+            <button onclick="showTab('rewards'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Tickets</button>
+            <button onclick="showTab('features'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-glow-blue">Features</button>
             <button onclick="showTab('inventory'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Inventory</button>
             <button onclick="showTab('logs'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Logs</button>
             <button onclick="showTab('excom'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">ExCom</button>
@@ -299,33 +303,6 @@
                         <div class="w-full max-w-[200px] flex-grow flex items-center justify-center"><canvas id="roleChart"></canvas></div>
                     </div>
                 </div>
-            </div>
-
-            <!-- USERS & PROJECTS SECTION -->
-            <div id="usersSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-                    <h2 class="text-2xl font-display font-bold text-white uppercase tracking-widest">User Directory</h2>
-                    <div class="flex gap-3 w-full lg:w-auto">
-                        <div class="relative flex-grow">
-                            <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search Name or Email..." class="glass-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-light">
-                            <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40"></i>
-                        </div>
-                        <button onclick="toggleAddUserModal(true)" class="flex-shrink-0 btn-primary px-5 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2">
-                            <i data-lucide="user-plus" class="w-4 h-4"></i> Add
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="glass-panel rounded-2xl overflow-x-auto w-full">
-                    <table class="w-full text-left min-w-[700px]">
-                        <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50">
-                            <tr><th class="px-6 py-5">Name</th><th class="px-6">Contact Details</th><th class="px-6 text-center">Points</th><th class="px-6">Role</th><th class="text-center px-6">Actions</th></tr>
-                        </thead>
-                        <tbody id="userListBody" class="divide-y divide-white/5 text-sm font-light text-white/90">
-                            <tr><td colspan="5" class="text-center py-8 text-white/30 text-xs tracking-widest uppercase font-bold">Loading users...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
 
                 <!-- Pending Projects for Approval -->
                 <div class="glass-panel p-6 rounded-3xl mt-8 border-glow-blue/20">
@@ -334,6 +311,121 @@
                     </h3>
                     <div id="pendingProjectsList" class="space-y-4">
                         <div class="text-center py-4 text-white/30 text-[10px] uppercase font-bold">Loading projects...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- USERS SECTION (Separated from Points) -->
+            <div id="usersSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl font-display font-bold text-white uppercase tracking-widest mb-1">User Directory</h2>
+                        <p class="text-[10px] uppercase tracking-widest text-white/50 font-bold">Total Registered: <span id="directoryUserCount" class="text-glow-blue text-sm ml-1">0</span></p>
+                    </div>
+                    <div class="flex gap-3 w-full lg:w-auto">
+                        <div class="relative flex-grow">
+                            <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search Name or Email..." class="glass-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-light">
+                            <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40"></i>
+                        </div>
+                        <button onclick="openGlobalScanner('syncUser')" class="flex-shrink-0 bg-glow-blue/10 hover:bg-glow-blue/20 border border-glow-blue/30 text-glow-blue px-4 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2 transition-colors">
+                            <i data-lucide="qr-code" class="w-4 h-4"></i> Scan QR
+                        </button>
+                        <button onclick="toggleAddUserModal(true)" class="flex-shrink-0 btn-primary px-5 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2">
+                            <i data-lucide="user-plus" class="w-4 h-4"></i> Add
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="glass-panel rounded-2xl overflow-x-auto w-full">
+                    <table class="w-full text-left min-w-[900px]">
+                        <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50">
+                            <tr>
+                                <th class="px-6 py-5">Name</th>
+                                <th class="px-6">Auth & Contact</th>
+                                <th class="px-6 text-center">Role</th>
+                                <th class="px-6 text-center">Status</th>
+                                <th class="text-center px-6">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userListBody" class="divide-y divide-white/5 text-sm font-light text-white/90">
+                            <tr><td colspan="5" class="text-center py-8 text-white/30 text-xs tracking-widest uppercase font-bold">Loading users...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- POINTS SECTION (New Separate Section) -->
+            <div id="pointsSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                    <h2 class="text-2xl font-display font-bold text-white uppercase tracking-widest">Innovation Points</h2>
+                    <div class="relative w-full lg:w-72">
+                        <input type="text" id="pointsSearchInput" onkeyup="filterPoints()" placeholder="Search Student..." class="glass-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-light">
+                        <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40"></i>
+                    </div>
+                </div>
+                
+                <div class="glass-panel rounded-2xl overflow-x-auto w-full">
+                    <table class="w-full text-left min-w-[700px]">
+                        <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50">
+                            <tr>
+                                <th class="px-6 py-5">Student Name</th>
+                                <th class="px-6">Email / ID</th>
+                                <th class="px-6 text-center">Total Points</th>
+                                <th class="text-center px-6">Manage Points</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pointsListBody" class="divide-y divide-white/5 text-sm font-light text-white/90">
+                            <tr><td colspan="4" class="text-center py-8 text-white/30 text-xs tracking-widest uppercase font-bold">Loading records...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- FEATURE MANAGER SECTION (New) -->
+            <div id="featuresSection" class="tab-content hidden space-y-6 max-w-5xl mx-auto w-full">
+                <div class="glass-panel p-8 md:p-10 rounded-3xl">
+                    <div class="border-b border-white/10 pb-5 mb-8">
+                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Feature Manager</h2>
+                        <p class="text-white/50 text-sm font-light">Draft and deploy new platform features or upcoming announcements.</p>
+                    </div>
+                    
+                    <form id="featureManagerForm" class="space-y-6 bg-black/30 p-6 rounded-2xl border border-white/10">
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Feature Title</label>
+                            <input type="text" id="fmTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. AI Resume Builder v2" required>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Feature Description</label>
+                            <textarea id="fmDescription" rows="3" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Describe what this feature does..." required></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Target Audience</label>
+                                <select id="fmTarget" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm">
+                                    <option value="All Students">All Students</option>
+                                    <option value="ExCom Only">ExCom Only</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Initial Status</label>
+                                <select id="fmStatus" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm text-green-400 font-bold">
+                                    <option value="Active">Active (Live)</option>
+                                    <option value="Draft" class="text-yellow-400">Draft (Hidden)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-white/10 flex justify-end">
+                            <button type="submit" id="btnSaveFeature" class="btn-primary px-8 py-4 rounded-xl text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
+                                <i data-lucide="blocks" class="w-4 h-4"></i> Deploy Feature
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="glass-panel p-6 rounded-3xl mt-6">
+                    <h3 class="text-xs font-bold text-white/50 mb-4 uppercase border-b border-white/10 pb-3">Platform Features Configured</h3>
+                    <div id="featuresListBody" class="space-y-3">
+                        <div class="text-center py-6 text-white/30 text-[10px] uppercase font-bold tracking-widest">Loading...</div>
                     </div>
                 </div>
             </div>
@@ -540,54 +632,33 @@
     <!-- QR Scanner Modal -->
     <div id="globalScannerModal" class="fixed inset-0 bg-[#050505]/95 backdrop-blur-xl z-[200] hidden flex flex-col items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md p-6 rounded-3xl relative border border-glow-blue/30">
-            <button onclick="closeGlobalScanner()" class="absolute top-4 right-4 w-8 h-8 bg-white/10 rounded-full text-white flex items-center justify-center hover:bg-white/20 transition-colors">
+            <button onclick="closeGlobalScanner()" class="absolute top-4 right-4 w-8 h-8 bg-white/10 rounded-full text-white flex items-center justify-center hover:bg-white/20 transition-colors z-10">
                 <i data-lucide="x" class="w-4 h-4"></i>
             </button>
-            <h2 class="text-xl font-display font-bold text-white text-center mb-6 uppercase tracking-widest mt-2">Scan ID</h2>
+            <h2 class="text-xl font-display font-bold text-white text-center mb-6 uppercase tracking-widest mt-2" id="scannerTitle">Scan ID</h2>
             <div id="global-qr-reader" class="w-full bg-black/80 rounded-xl min-h-[300px]"></div>
             <div id="globalScannerToast" class="text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl hidden mt-4 transition-all"></div>
         </div>
     </div>
     
-    <!-- Edit User Modal -->
-    <div id="editUserModal" class="fixed inset-0 bg-[#050505]/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-8 rounded-3xl">
-            <h2 class="text-xl font-bold text-white mb-6 uppercase border-b border-white/10 pb-4">Edit Role</h2>
-            <form id="editUserRoleForm" class="space-y-6">
-                <input type="hidden" id="editUserId">
-                <input type="text" id="editUserName" class="glass-input w-full py-3.5 px-4 rounded-xl text-sm" disabled>
-                <select id="editUserRoleSelect" class="glass-input w-full py-3.5 px-4 rounded-xl">
-                    <option value="student">Student</option>
-                    <option value="excom">ExCom Member</option>
-                    <option value="admin">Admin</option>
-                </select>
-                <div class="flex gap-3">
-                    <button type="button" onclick="toggleEditUserModal(false)" class="flex-1 bg-white/5 py-3.5 rounded-xl text-white text-[10px] uppercase font-bold hover:bg-white/10">Cancel</button>
-                    <button type="submit" id="updateUserBtn" class="flex-1 btn-primary py-3.5 rounded-xl text-[10px] uppercase font-bold">Update</button>
+    <!-- Edit Phone Modal -->
+    <div id="editPhoneModal" class="fixed inset-0 bg-[#050505]/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-sm p-8 rounded-3xl border-glow-blue/20">
+            <h2 class="text-lg font-bold text-white mb-4 uppercase border-b border-white/10 pb-3">Update Phone</h2>
+            <form id="editPhoneForm" class="space-y-4">
+                <input type="hidden" id="editPhoneUserId">
+                <div>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Student: <span id="editPhoneUserName" class="text-white"></span></label>
+                    <input type="tel" id="editPhoneInput" class="glass-input w-full py-3 px-4 rounded-xl text-sm" placeholder="10-digit number" required>
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="toggleEditPhoneModal(false)" class="flex-1 bg-white/5 py-3 rounded-xl text-white text-[10px] uppercase font-bold hover:bg-white/10">Cancel</button>
+                    <button type="submit" id="updatePhoneBtn" class="flex-1 btn-primary py-3 rounded-xl text-[10px] uppercase font-bold">Save</button>
                 </div>
             </form>
         </div>
     </div>
-    
-    <!-- Add Item Modal -->
-    <div id="addItemModal" class="fixed inset-0 bg-[#050505]/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-8 rounded-3xl">
-            <h2 class="text-xl font-bold text-white mb-6 uppercase border-b border-white/10 pb-4">Add Asset</h2>
-            <form id="addItemForm" class="space-y-6">
-                <input type="text" id="invName" class="glass-input w-full py-3.5 px-4 rounded-xl" placeholder="Item Name" required>
-                <select id="invCategory" class="glass-input w-full py-3.5 px-4 rounded-xl">
-                    <option value="Electronics">Electronics</option>
-                    <option value="Stationery">Stationery</option>
-                    <option value="Furniture">Furniture</option>
-                </select>
-                <div class="flex gap-3">
-                    <button type="button" onclick="document.getElementById('addItemModal').classList.add('hidden')" class="flex-1 bg-white/5 py-3.5 rounded-xl text-white text-[10px] uppercase font-bold hover:bg-white/10">Cancel</button>
-                    <button type="submit" class="flex-1 btn-primary py-3.5 rounded-xl text-[10px] uppercase font-bold">Add</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
+
     <!-- Add User Modal -->
     <div id="addUserModal" class="fixed inset-0 bg-[#050505]/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md p-8 rounded-3xl">
@@ -602,7 +673,7 @@
                 <input type="email" id="newUserEmail" class="glass-input w-full py-3.5 px-4 rounded-xl" placeholder="Email Address" required>
                 <div id="passwordFieldGroup"><input type="text" id="newUserPassword" class="glass-input w-full py-3.5 px-4 rounded-xl" placeholder="Temp Password" required></div>
                 <div id="uidFieldGroup" class="hidden">
-                    <input type="text" id="newUserUid" class="glass-input w-full py-3.5 px-4 rounded-xl" placeholder="Paste Firebase UID here...">
+                    <input type="text" id="newUserUid" class="glass-input w-full py-3.5 px-4 rounded-xl font-mono text-xs" placeholder="Firebase UID...">
                 </div>
                 <div id="addUserStatus" class="hidden text-[10px] text-center p-3 rounded-lg font-bold uppercase tracking-widest border border-white/20"></div>
                 <div class="flex gap-3 pt-2">
@@ -642,25 +713,25 @@
         </div>
     </div>
     
-    <!-- Award Points Modal -->
-    <div id="awardPointsModal" class="fixed inset-0 bg-[#050505]/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-8 rounded-3xl border-glow-gold/30">
-            <h2 class="text-xl font-bold text-white mb-2 uppercase tracking-wider">Award Points</h2>
-            <p class="text-[10px] text-white/50 uppercase tracking-widest mb-6 border-b border-white/10 pb-4">To: <span id="awardUserNameDisplay" class="text-glow-gold font-bold">Student</span></p>
-            <form id="awardPointsForm" class="space-y-6">
-                <input type="hidden" id="awardUserId">
+    <!-- Award/Deduct Points Modal -->
+    <div id="pointsModal" class="fixed inset-0 bg-[#050505]/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl" id="pointsModalContainer">
+            <h2 class="text-xl font-bold text-white mb-2 uppercase tracking-wider" id="pointsModalTitle">Manage Points</h2>
+            <p class="text-[10px] text-white/50 uppercase tracking-widest mb-6 border-b border-white/10 pb-4">Student: <span id="pointsUserNameDisplay" class="font-bold text-white"></span></p>
+            <form id="managePointsForm" class="space-y-6">
+                <input type="hidden" id="pointsUserId">
+                <input type="hidden" id="pointsActionType" value="add">
                 <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Points to Add</label>
-                    <input type="number" id="pointsAmount" class="glass-input w-full py-3.5 px-4 rounded-xl text-lg font-display font-bold text-glow-gold" placeholder="e.g. 500" required>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Amount</label>
+                    <input type="number" id="pointsAmount" class="glass-input w-full py-3.5 px-4 rounded-xl text-lg font-display font-bold text-white" placeholder="e.g. 100" min="1" required>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Reason</label>
-                    <input type="text" id="pointsReason" class="glass-input w-full py-3.5 px-4 rounded-xl text-sm" placeholder="e.g. Hackathon Winner" required>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Reason (Optional)</label>
+                    <input type="text" id="pointsReason" class="glass-input w-full py-3.5 px-4 rounded-xl text-sm" placeholder="e.g. Hackathon, Penalty...">
                 </div>
-                <div id="awardStatus" class="hidden"></div>
                 <div class="pt-4 flex gap-3">
-                    <button type="button" onclick="document.getElementById('awardPointsModal').classList.add('hidden')" class="flex-1 bg-white/5 py-3.5 rounded-xl text-white text-[10px] uppercase font-bold hover:bg-white/10">Cancel</button>
-                    <button type="submit" id="submitAwardBtn" class="flex-1 bg-glow-gold hover:bg-yellow-400 py-3.5 rounded-xl text-black font-bold text-[10px] uppercase transition-colors shadow-[0_0_15px_rgba(251,191,36,0.4)]">Award</button>
+                    <button type="button" onclick="document.getElementById('pointsModal').classList.add('hidden')" class="flex-1 bg-white/5 py-3.5 rounded-xl text-white text-[10px] uppercase font-bold hover:bg-white/10">Cancel</button>
+                    <button type="submit" id="submitPointsBtn" class="flex-1 py-3.5 rounded-xl text-white font-bold text-[10px] uppercase transition-colors"></button>
                 </div>
             </form>
         </div>
@@ -668,7 +739,6 @@
 
     <!-- UI Scripts -->
     <script>
-        // Form Builder Variables
         let formBuilderFields = [
             { id: generateId(), label: 'Full Name', type: 'text', required: true, options: [] },
             { id: generateId(), label: 'Email Address', type: 'email', required: true, options: [] },
@@ -701,18 +771,24 @@
             if(activeDesktop) activeDesktop.classList.add('active'); 
             
             let title = t.charAt(0).toUpperCase() + t.slice(1); 
-            if(t === 'users') title = "Users & Points"; 
+            if(t === 'users') title = "User Directory"; 
+            if(t === 'points') title = "Innovation Points";
             if(t === 'rewards') title = "Ticket Orders"; 
+            if(t === 'features') title = "Feature Manager";
             if(t === 'eventForms') title = "Forms"; 
             document.getElementById('headerTitle').textContent = title; 
             
             const menu = document.getElementById('mobile-sidebar'); 
             if(menu && !menu.classList.contains('-translate-x-full')) { window.toggleMobileSidebar(); } 
-            if(t !== 'scanner' && window.html5QrcodeScanner) { window.stopScanner(); } 
+            if(t !== 'scanner' && window.html5QrcodeScanner) { window.closeGlobalScanner(); } 
         };
 
-        window.toggleAddUserModal = (s) => document.getElementById('addUserModal').classList.toggle('hidden', !s);
+        window.toggleAddUserModal = (s) => {
+            document.getElementById('addUserModal').classList.toggle('hidden', !s);
+            if(s) switchAddMode('create');
+        };
         window.toggleEditUserModal = (s) => document.getElementById('editUserModal').classList.toggle('hidden', !s);
+        window.toggleEditPhoneModal = (s) => document.getElementById('editPhoneModal').classList.toggle('hidden', !s);
         window.toggleAttCheck = (id) => { const c = document.getElementById('att-'+id); c.checked = !c.checked; };
         
         window.switchAddMode = (mode) => { 
@@ -747,14 +823,51 @@
             } 
         };
 
-        window.prepareAwardPoints = (id, name) => { 
-            document.getElementById('awardUserId').value = id; 
-            document.getElementById('awardUserNameDisplay').textContent = name; 
+        window.filterPoints = () => { 
+            const input = document.getElementById("pointsSearchInput").value.toUpperCase(); 
+            const trs = document.getElementById("pointsListBody").getElementsByTagName("tr"); 
+            for (let i = 0; i < trs.length; i++) { 
+                const tdName = trs[i].getElementsByTagName("td")[0]; 
+                const tdEmail = trs[i].getElementsByTagName("td")[1]; 
+                if (tdName || tdEmail) { 
+                    const txtValue = (tdName.textContent || tdName.innerText) + (tdEmail.textContent || tdEmail.innerText); 
+                    trs[i].style.display = txtValue.toUpperCase().indexOf(input) > -1 ? "" : "none"; 
+                } 
+            } 
+        };
+
+        window.preparePointsAction = (id, name, actionType) => { 
+            document.getElementById('pointsUserId').value = id; 
+            document.getElementById('pointsUserNameDisplay').textContent = name; 
             document.getElementById('pointsAmount').value = ''; 
             document.getElementById('pointsReason').value = ''; 
-            document.getElementById('awardStatus').classList.add('hidden');
-            document.getElementById('awardPointsModal').classList.remove('hidden'); 
+            document.getElementById('pointsActionType').value = actionType;
+            
+            const btn = document.getElementById('submitPointsBtn');
+            const container = document.getElementById('pointsModalContainer');
+            const title = document.getElementById('pointsModalTitle');
+
+            if(actionType === 'add') {
+                title.innerHTML = '<span class="text-glow-gold">Award</span> Points';
+                btn.className = "flex-1 bg-glow-gold hover:bg-yellow-400 py-3.5 rounded-xl text-black font-bold text-[10px] uppercase transition-colors shadow-[0_0_15px_rgba(251,191,36,0.4)]";
+                btn.textContent = "Award Points";
+                container.className = "glass-panel w-full max-w-md p-8 rounded-3xl border-glow-gold/30";
+            } else {
+                title.innerHTML = '<span class="text-red-400">Deduct</span> Points';
+                btn.className = "flex-1 bg-red-500/80 hover:bg-red-500 py-3.5 rounded-xl text-white font-bold text-[10px] uppercase transition-colors shadow-[0_0_15px_rgba(220,38,38,0.4)]";
+                btn.textContent = "Deduct Points";
+                container.className = "glass-panel w-full max-w-md p-8 rounded-3xl border-red-500/30";
+            }
+
+            document.getElementById('pointsModal').classList.remove('hidden'); 
         };
+
+        window.openEditPhone = (id, name, currentPhone) => {
+            document.getElementById('editPhoneUserId').value = id;
+            document.getElementById('editPhoneUserName').textContent = name;
+            document.getElementById('editPhoneInput').value = currentPhone && currentPhone !== 'No Phone' ? currentPhone : '';
+            toggleEditPhoneModal(true);
+        }
 
         window.printLogs = () => { 
             const logsTableContent = document.getElementById('logsListBody').innerHTML; 
@@ -774,7 +887,7 @@
             printWindow.document.close(); 
         };
 
-        function escapeHTML(str) { return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)); }
+        function escapeHTML(str) { return str ? str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)) : ''; }
         function safeSetText(id, text) { const el = document.getElementById(id); if (el) el.textContent = text; }
         function generateId() { return Math.random().toString(36).substr(2, 9); }
         
@@ -893,10 +1006,10 @@
                     window.renderFormBuilderFields();
                 } else { 
                     alert("Unauthorized."); 
-                    signOut(auth).then(() => window.location.href = 'admin.html'); 
+                    signOut(auth).then(() => window.location.href = 'admin-login.html'); 
                 }
             } else { 
-                window.location.href = 'admin.html'; 
+                window.location.href = 'admin-login.html'; 
             }
         });
 
@@ -905,11 +1018,12 @@
             
             // 1. Users Sync
             onSnapshot(collection(db, "users"), (snap) => {
-                let uHtml = '', certHtml = '', attHtml = '', excomModalHtml = '', excomHtml = '';
+                let uHtml = '', pointsHtml = '', certHtml = '', attHtml = '', excomModalHtml = '', excomHtml = '';
                 let usersList = []; 
                 let studentCount = 0, excomCount = 0, adminCount = 0;
                 
                 document.getElementById('totalUsersCount').textContent = snap.size;
+                safeSetText('directoryUserCount', snap.size);
 
                 snap.forEach(d => {
                     const data = d.data(); 
@@ -946,29 +1060,60 @@
                     const safeEmail = escapeHTML(u.email || "No Email");
                     
                     let safePhone = u.phone ? escapeHTML(u.phone) : "No Phone";
-                    if (safePhone !== "No Phone" && !safePhone.startsWith("91") && safePhone.length === 10) safePhone = "91" + safePhone;
+                    
+                    // Is Google Auth? (Checking local data property)
+                    const isGoogle = u.authProvider === 'google' || u.googleLogin === true;
+                    const authBadge = isGoogle 
+                        ? `<span class="bg-white/10 text-white px-2 py-0.5 rounded text-[8px] uppercase tracking-widest flex items-center gap-1 w-max mt-1 border border-white/20"><i class="fab fa-google"></i> Google</span>`
+                        : `<span class="bg-white/5 text-white/50 px-2 py-0.5 rounded text-[8px] uppercase tracking-widest flex items-center gap-1 w-max mt-1 border border-white/10"><i class="fas fa-envelope"></i> Email</span>`;
                     
                     const points = u.points || 0;
                     
-                    let roleBadge = `<span class="px-2 py-1 bg-white/10 text-[9px] rounded-md uppercase">Student</span>`;
-                    if(u.role === 'admin') roleBadge = `<span class="px-2 py-1 bg-red-500/10 text-red-400 text-[9px] rounded-md uppercase">Admin</span>`;
-                    else if(u.role === 'excom') roleBadge = `<span class="px-2 py-1 bg-glow-purple/10 text-glow-purple text-[9px] rounded-md uppercase">ExCom</span>`;
+                    let roleBadge = `<span class="px-2 py-1 bg-white/10 text-[9px] rounded-md uppercase font-bold text-white/80 border border-white/10">Student</span>`;
+                    if(u.role === 'admin') roleBadge = `<span class="px-2 py-1 bg-red-500/10 text-red-400 text-[9px] rounded-md uppercase font-bold border border-red-500/30">Admin</span>`;
+                    else if(u.role === 'excom') roleBadge = `<span class="px-2 py-1 bg-glow-purple/10 text-glow-purple text-[9px] rounded-md uppercase font-bold border border-glow-purple/30">ExCom</span>`;
 
-                    // Build Tables
+                    let statusBadge = !u.disabled 
+                        ? `<span class="px-2 py-1 bg-green-500/10 text-green-400 text-[9px] rounded-md uppercase font-bold border border-green-500/30">Active</span>`
+                        : `<span class="px-2 py-1 bg-yellow-500/10 text-yellow-500 text-[9px] rounded-md uppercase font-bold border border-yellow-500/30">Disabled</span>`;
+
+                    const toggleStatusAction = !u.disabled ? 'Disable' : 'Enable';
+                    const toggleStatusColor = !u.disabled ? 'text-yellow-500 hover:bg-yellow-500/20' : 'text-green-400 hover:bg-green-500/20';
+                    const toggleIcon = !u.disabled ? 'user-minus' : 'user-check';
+
+                    // Build USER DIRECTORY HTML
                     uHtml += `
                     <tr class="border-b border-white/5 hover:bg-white/5 transition-colors text-sm font-light text-white/90">
                         <td class="px-6 py-4 font-medium text-white">${safeName}</td>
                         <td class="px-6 py-4">
                             <div class="text-sm text-white/80">${safeEmail}</div>
-                            <div class="text-[10px] text-white/40 font-mono mt-1"><i class="fab fa-whatsapp mr-1 text-green-500/70"></i> ${safePhone}</div>
+                            <div class="flex items-center gap-2 mt-1">
+                                <div class="text-[10px] text-white/40 font-mono"><i class="fab fa-whatsapp mr-1 text-green-500/70"></i> ${safePhone}</div>
+                                <button onclick="openEditPhone('${u.id}', '${safeName}', '${safePhone}')" class="text-white/30 hover:text-white transition-colors" title="Edit Phone"><i data-lucide="pencil" class="w-3 h-3"></i></button>
+                            </div>
+                            ${authBadge}
                         </td>
-                        <td class="px-6 py-4 text-center text-glow-gold font-bold text-lg">${points}</td>
-                        <td class="px-6 py-4">${roleBadge}</td>
-                        <td class="px-6 py-4 text-center flex justify-center gap-2">
-                            <button onclick="prepareAwardPoints('${u.id}', '${safeName}')" class="text-glow-gold bg-glow-gold/10 hover:bg-glow-gold/20 p-2 rounded-lg transition-colors"><i data-lucide="gift" class="w-4 h-4"></i></button>
-                            <button onclick="prepareEditUser('${u.id}', '${safeName}', '${u.role||'student'}')" class="text-glow-blue bg-white/5 hover:bg-white/10 p-2 rounded-lg transition-colors"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                        <td class="px-6 py-4 text-center">${roleBadge}</td>
+                        <td class="px-6 py-4 text-center">${statusBadge}</td>
+                        <td class="px-6 py-4 text-center flex justify-center gap-2 items-center">
+                            <button onclick="prepareEditUser('${u.id}', '${safeName}', '${u.role||'student'}')" class="text-glow-blue bg-white/5 hover:bg-white/10 p-2 rounded-lg transition-colors" title="Edit Role"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                            <button onclick="toggleUserStatus('${u.id}', ${!!u.disabled})" class="${toggleStatusColor} bg-white/5 p-2 rounded-lg transition-colors" title="${toggleStatusAction} User"><i data-lucide="${toggleIcon}" class="w-4 h-4"></i></button>
+                            <button onclick="deleteUser('${u.id}', '${safeName}')" class="text-red-400 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-lg transition-colors" title="Delete User"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </td>
                     </tr>`;
+
+                    // Build POINTS HTML
+                    pointsHtml += `
+                    <tr class="border-b border-white/5 hover:bg-white/5 transition-colors text-sm font-light text-white/90">
+                        <td class="px-6 py-4 font-medium text-white">${safeName}</td>
+                        <td class="px-6 py-4 text-xs text-white/60 font-mono">${safeEmail}<br><span class="text-[9px] text-white/30">ID: ${u.id}</span></td>
+                        <td class="px-6 py-4 text-center text-glow-gold font-display font-black text-xl">${points}</td>
+                        <td class="px-6 py-4 flex justify-center gap-2">
+                            <button onclick="preparePointsAction('${u.id}', '${safeName}', 'add')" class="bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 text-green-400 p-2 rounded-lg transition-colors flex items-center gap-1 text-[10px] font-bold uppercase"><i data-lucide="plus" class="w-3 h-3"></i> Add</button>
+                            <button onclick="preparePointsAction('${u.id}', '${safeName}', 'deduct')" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 p-2 rounded-lg transition-colors flex items-center gap-1 text-[10px] font-bold uppercase"><i data-lucide="minus" class="w-3 h-3"></i> Deduct</button>
+                        </td>
+                    </tr>
+                    `;
 
                     if(u.role === 'student' || u.role === 'excom') {
                         certHtml += `
@@ -1007,10 +1152,40 @@
                 });
                 
                 if(document.getElementById('userListBody')) document.getElementById('userListBody').innerHTML = uHtml;
+                if(document.getElementById('pointsListBody')) document.getElementById('pointsListBody').innerHTML = pointsHtml;
                 if(document.getElementById('certUserListBody')) document.getElementById('certUserListBody').innerHTML = certHtml;
                 if(document.getElementById('attendanceListBody')) document.getElementById('attendanceListBody').innerHTML = attHtml;
                 if(document.getElementById('excomMembersList')) document.getElementById('excomMembersList').innerHTML = excomHtml;
                 if(document.getElementById('excomAttendanceList')) document.getElementById('excomAttendanceList').innerHTML = excomModalHtml;
+                lucide.createIcons();
+            });
+
+            // Sync Features Map
+            onSnapshot(collection(db, "features"), (snap) => {
+                let html = '';
+                if(snap.empty) {
+                    html = '<div class="text-center py-6 text-white/30 text-[10px] uppercase font-bold tracking-widest border border-dashed border-white/10 rounded-xl">No active features found.</div>';
+                }
+                snap.forEach(d => {
+                    const f = d.data();
+                    const statusColor = f.status === 'Active' ? 'text-green-400 bg-green-500/10 border-green-500/30' : 'text-yellow-400 bg-yellow-500/10 border-yellow-500/30';
+                    html += `
+                    <div class="bg-black/30 border border-white/10 p-5 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 transition-colors hover:border-white/20">
+                        <div>
+                            <div class="flex items-center gap-3 mb-1">
+                                <h4 class="font-bold text-white text-sm">${f.title}</h4>
+                                <span class="px-2 py-0.5 rounded text-[8px] uppercase tracking-widest font-bold border ${statusColor}">${f.status}</span>
+                                <span class="px-2 py-0.5 rounded text-[8px] uppercase tracking-widest font-bold bg-white/5 text-white/50 border border-white/10">${f.target}</span>
+                            </div>
+                            <p class="text-xs text-white/50">${f.description}</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="toggleFeatureStatus('${d.id}', '${f.status}')" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white p-2 rounded-lg transition-colors text-[10px] uppercase font-bold tracking-widest"><i data-lucide="power" class="w-4 h-4"></i></button>
+                            <button onclick="deleteDoc(doc(window.db,'features','${d.id}'))" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 p-2 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>`;
+                });
+                if(document.getElementById('featuresListBody')) document.getElementById('featuresListBody').innerHTML = html;
                 lucide.createIcons();
             });
 
@@ -1052,7 +1227,7 @@
                 if(document.getElementById('redemptionsList')) document.getElementById('redemptionsList').innerHTML = h;
             });
 
-            // 3. Pending Projects Sync (With AI Feedback visualization support)
+            // 3. Pending Projects Sync
             onSnapshot(query(collection(db, "projects"), where("status", "==", "Pending Review")), (snap) => {
                 let h = '';
                 if(snap.empty) { 
@@ -1064,7 +1239,6 @@
                     let safePhone = "Unknown";
                     if(user && user.phone) { safePhone = user.phone.length === 10 ? "91" + user.phone : user.phone; }
 
-                    // Optional: If AI Feedback exists, show a badge
                     let aiBadge = p.aiFeedback ? `<span class="ml-2 text-[8px] bg-glow-blue/20 text-glow-blue px-2 py-0.5 rounded border border-glow-blue/30"><i class="fas fa-sparkles mr-1"></i>AI Mentored</span>` : "";
 
                     h += `
@@ -1078,7 +1252,7 @@
                         </div>
                         <p class="text-xs text-white/60 mb-4 line-clamp-2 leading-relaxed">${p.desc}</p>
                         <div class="flex gap-2 border-t border-white/5 pt-4 mt-auto">
-                            <button onclick="approveProject('${d.id}', '${p.uid}', '${safePhone}', '${p.title}')" class="flex-1 bg-green-500/10 hover:bg-green-500/20 text-green-400 border border-green-500/30 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors"><i class="fas fa-check mr-1"></i> Approve & Reward</button>
+                            <button onclick="approveProject('${d.id}', '${p.uid}', '${safePhone}', '${p.title}')" class="flex-1 bg-green-500/10 hover:bg-green-500/20 text-green-400 border border-green-500/30 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors"><i class="fas fa-check mr-1"></i> Approve</button>
                             <button onclick="rejectProject('${d.id}')" class="px-4 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 py-2 rounded-lg text-[10px] font-bold transition-colors"><i class="fas fa-times"></i></button>
                         </div>
                     </div>`;
@@ -1195,9 +1369,9 @@
             });
 
             // 8. Other basic counts
-            onSnapshot(collection(db, "announcements"), s => document.getElementById('totalAnnouncementsCount').textContent = s.size);
+            onSnapshot(collection(db, "announcements"), s => safeSetText('totalAnnouncementsCount', s.size));
             onSnapshot(collection(db, "eventForms"), s => { 
-                document.getElementById('activeFormsCount').textContent = s.size; 
+                safeSetText('activeFormsCount', s.size);
                 let h=''; 
                 s.forEach(d => { 
                     h += `
@@ -1282,6 +1456,108 @@
             } catch(e) { console.error("WhatsApp failed", e); }
         }
 
+        // --- USER MGMT HANDLERS ---
+        window.deleteUser = async (id, name) => {
+            if(!confirm(`WARNING: Are you sure you want to permanently delete the user '${name}'? This action cannot be undone.`)) return;
+            try {
+                await deleteDoc(doc(db, "users", id));
+                await logActivity("User Deleted", `Deleted user: ${name}`);
+            } catch(e) { alert("Error deleting user: " + e.message); }
+        };
+
+        window.toggleUserStatus = async (id, isDisabled) => {
+            const action = isDisabled ? "Enable" : "Disable";
+            if(!confirm(`Are you sure you want to ${action} this user?`)) return;
+            try {
+                await updateDoc(doc(db, "users", id), { disabled: !isDisabled });
+                await logActivity("User Status Changed", `${action}d user ID: ${id}`);
+            } catch(e) { alert("Error updating status: " + e.message); }
+        };
+
+        document.getElementById('editPhoneForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editPhoneUserId').value;
+            const newPhone = document.getElementById('editPhoneInput').value;
+            const btn = document.getElementById('updatePhoneBtn');
+            btn.disabled = true; btn.textContent = 'Saving...';
+            try {
+                await updateDoc(doc(db, "users", id), { phone: newPhone });
+                await logActivity("Phone Updated", `Updated phone for ID: ${id}`);
+                window.toggleEditPhoneModal(false);
+            } catch(err) {
+                alert(err.message);
+            } finally {
+                btn.disabled = false; btn.textContent = 'Save';
+            }
+        });
+
+        // --- POINTS LOGIC ---
+        document.getElementById('managePointsForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            const btn = document.getElementById('submitPointsBtn'); 
+            const uid = document.getElementById('pointsUserId').value; 
+            const pts = parseInt(document.getElementById('pointsAmount').value); 
+            const reason = document.getElementById('pointsReason').value || "No reason provided";
+            const actionType = document.getElementById('pointsActionType').value;
+            
+            btn.disabled = true; 
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            try {
+                const modifier = actionType === 'add' ? pts : -pts;
+                await updateDoc(doc(db, "users", uid), { points: increment(modifier) });
+                
+                const logAction = actionType === 'add' ? "Awarded Points" : "Deducted Points";
+                const logText = actionType === 'add' ? `Gave ${pts} pts` : `Removed ${pts} pts`;
+                
+                await addDoc(collection(db, "logs"), { 
+                    action: logAction, 
+                    details: `${logText} to ${document.getElementById('pointsUserNameDisplay').textContent} (${reason})`, 
+                    admin: window.currentUserEmail, 
+                    timestamp: Date.now() 
+                });
+                
+                document.getElementById('pointsModal').classList.add('hidden'); 
+                e.target.reset();
+            } catch(error) { 
+                alert(error.message); 
+            } finally { 
+                btn.disabled = false; 
+            }
+        });
+
+        // --- NEW FEATURE MANAGER ---
+        window.toggleFeatureStatus = async (id, currentStatus) => {
+            const newStatus = currentStatus === 'Active' ? 'Draft' : 'Active';
+            try {
+                await updateDoc(doc(db, "features", id), { status: newStatus });
+                await logActivity("Feature Toggled", `Feature ${id} changed to ${newStatus}`);
+            } catch(e) { alert("Error: " + e.message); }
+        };
+
+        document.getElementById('featureManagerForm').addEventListener('submit', async(e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSaveFeature');
+            const origText = btn.innerHTML;
+            btn.innerHTML = "Deploying..."; btn.disabled = true;
+            try {
+                await addDoc(collection(db, "features"), {
+                    title: document.getElementById('fmTitle').value,
+                    description: document.getElementById('fmDescription').value,
+                    target: document.getElementById('fmTarget').value,
+                    status: document.getElementById('fmStatus').value,
+                    timestamp: Date.now()
+                });
+                await logActivity("Feature Created", document.getElementById('fmTitle').value);
+                alert("Feature deployed successfully!");
+                e.target.reset();
+            } catch(err) {
+                alert(err.message);
+            } finally {
+                btn.innerHTML = origText; btn.disabled = false;
+            }
+        });
+
+
         // --- REWARD / TICKET FULFILLMENT LOGIC ---
         window.fulfillReward = async (id, phone, name, item, userId) => {
             if(!confirm("Approve this ticket and send the QR pass?")) return;
@@ -1317,210 +1593,100 @@
             }
         };
 
-        // --- ACTION HANDLERS ---
-        window.prepareEditUser = (id, name, role) => { 
-            document.getElementById('editUserId').value = id; 
-            document.getElementById('editUserName').value = name; 
-            document.getElementById('editUserRoleSelect').value = role; 
-            window.toggleEditUserModal(true); 
-        };
+        // --- GLOBAL SCANNER LOGIC ---
+        window.html5QrcodeScanner = null; 
+        window.isScanningFlag = false; 
+        window.currentScannerMode = null;
         
-        window.toggleItemStatus = async (id, status) => { 
-            await updateDoc(doc(db, "inventory", id), { status: status }); 
-            await logActivity("Inventory Update", `Changed item status to ${status}`); 
-        };
-        
-        window.deleteDoc = deleteDoc;
-        window.doc = doc;
+        window.openGlobalScanner = (mode) => {
+            window.currentScannerMode = mode; 
+            document.getElementById('globalScannerModal').classList.remove('hidden');
+            const toast = document.getElementById('globalScannerToast');
+            toast.classList.add('hidden');
 
-        window.openExcomAttendanceModal = () => { 
-            document.getElementById('excomMeetingTitle').value = ''; 
-            document.getElementById('excomMeetingDate').value = ''; 
-            document.getElementById('saveExcomBtn').disabled = false; 
-            document.getElementById('saveExcomBtn').innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log'; 
-            document.querySelectorAll('.excom-status-select').forEach(s => s.value = 'Absent'); 
-            document.getElementById('excomModal').classList.remove('hidden'); 
-            lucide.createIcons(); 
-        };
-
-        window.submitAttendance = async () => {
-            const eventName = document.getElementById('attendanceEventName').value.trim(); 
-            const date = document.getElementById('attendanceDate').value;
-            
-            if(!eventName || !date) return alert("Enter event name and date.");
-            
-            const btn = document.getElementById('btnSaveAttendance'); 
-            if(btn) { btn.disabled = true; btn.innerHTML = "Saving..."; }
-            
-            try {
-                const batch = writeBatch(db); 
-                let presentCount = 0; 
-                let absentCount = 0;
-                
-                document.querySelectorAll('.att-checkbox').forEach(cb => { 
-                    const uid = cb.value; 
-                    const isPresent = cb.checked; 
-                    const studentName = cb.dataset.name;
-                    
-                    batch.set(doc(collection(db, "attendance")), { 
-                        eventName: eventName, 
-                        date: date, 
-                        uid: uid, 
-                        studentName: studentName, 
-                        status: isPresent ? 'Present' : 'Absent', 
-                        timestamp: Date.now() 
-                    });
-                    
-                    if(isPresent) { 
-                        batch.update(doc(db, "users", uid), { points: increment(50) }); 
-                        presentCount++; 
-                    } else { 
-                        absentCount++; 
-                    }
-                });
-                
-                await batch.commit(); 
-                await logActivity("Marked Attendance", `Event: ${eventName}. Present: ${presentCount}, Absent: ${absentCount}`); 
-                alert(`Success! Saved ${presentCount} Present and ${absentCount} Absent.`);
-                
-                document.querySelectorAll('.att-checkbox').forEach(cb => cb.checked = false); 
-                document.getElementById('attendanceEventName').value = ''; 
-                document.getElementById('attendanceDate').value = '';
-            } catch(e) { 
-                alert(e.message); 
-            } finally { 
-                if(btn) { btn.disabled = false; btn.innerHTML = "Save List"; } 
+            if(mode === 'syncUser') {
+                document.getElementById('scannerTitle').textContent = "Scan ID to Add User";
+            } else {
+                document.getElementById('scannerTitle').textContent = "Scan ID";
             }
-        };
+            
+            window.html5QrcodeScanner = new Html5Qrcode("global-qr-reader");
+            window.html5QrcodeScanner.start(
+                { facingMode: "environment" }, 
+                { fps: 10, qrbox: { width: 250, height: 250 } }, 
+                (decodedText) => {
+                    if(window.isScanningFlag) return; 
+                    window.isScanningFlag = true;
+                    
+                    const uid = decodedText;
+                    
+                    if(mode === 'syncUser') {
+                        // Close Scanner and open Add User Modal
+                        window.closeGlobalScanner();
+                        window.toggleAddUserModal(true);
+                        window.switchAddMode('sync');
+                        document.getElementById('newUserUid').value = uid;
+                        window.isScanningFlag = false;
+                        return;
+                    }
 
-        window.submitExcomAttendance = async () => {
-            const title = document.getElementById('excomMeetingTitle').value.trim(); 
-            const date = document.getElementById('excomMeetingDate').value;
-            
-            if(!title || !date) return alert("Fill meeting name and date.");
-            
-            const attendanceRecords = Array.from(document.querySelectorAll('.excom-status-select')).map(sel => ({ 
-                id: sel.dataset.id, 
-                name: sel.dataset.name, 
-                status: sel.value 
-            }));
-            
-            const btn = document.getElementById('saveExcomBtn'); 
-            btn.disabled = true; 
-            btn.innerHTML = 'Saving...';
-            
-            try {
-                await addDoc(collection(db, "excom_meetings"), { 
-                    title: title, 
-                    date: date, 
-                    attendance: attendanceRecords, 
-                    timestamp: Date.now(), 
-                    loggedBy: window.currentUserEmail 
+                    toast.classList.remove('hidden');
+                    
+                    if(mode === 'attendance') {
+                        const cb = document.querySelector(`.att-checkbox[value="${uid}"]`);
+                        if(cb) { 
+                            cb.checked = true; 
+                            toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-green-500/30 bg-green-500/10 text-green-400 mt-4";
+                            toast.innerHTML = `✅ Checked In: ${cb.dataset.name}`;
+                        } else { 
+                            toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-red-500/30 bg-red-500/10 text-red-400 mt-4";
+                            toast.innerHTML = `❌ Student not found in list`;
+                        }
+                    } else if (mode === 'excom') {
+                        const sel = document.querySelector(`.excom-status-select[data-id="${uid}"]`);
+                        if(sel) { 
+                            sel.value = 'Present'; 
+                            toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-green-500/30 bg-green-500/10 text-green-400 mt-4";
+                            toast.innerHTML = `✅ ExCom Logged: ${sel.dataset.name}`; 
+                        } else { 
+                            toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-red-500/30 bg-red-500/10 text-red-400 mt-4";
+                            toast.innerHTML = `❌ Not an ExCom member`;
+                        }
+                    }
+                    
+                    setTimeout(() => { 
+                        window.isScanningFlag = false; 
+                        toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-glow-blue/30 bg-glow-blue/10 text-glow-blue mt-4";
+                        toast.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Ready for next scan...';
+                    }, 2000);
+                }
+            ).catch(err => { 
+                alert("Camera access denied or unavailable."); 
+            });
+        }
+        
+        window.closeGlobalScanner = () => { 
+            if(window.html5QrcodeScanner) { 
+                window.html5QrcodeScanner.stop().then(() => { 
+                    window.html5QrcodeScanner.clear(); 
+                    window.html5QrcodeScanner = null; 
                 }); 
-                await logActivity("ExCom Logged", `Meeting: ${date}`); 
-                alert("Saved!"); 
-                document.getElementById('excomModal').classList.add('hidden');
-            } catch(e) { 
-                alert(e.message); 
-                btn.disabled = false; 
-            }
-        };
+            } 
+            document.getElementById('globalScannerModal').classList.add('hidden'); 
+        }
 
-        window.issueCertificates = async () => {
-            const eventName = document.getElementById('certEventName').value; 
-            const issueDate = document.getElementById('certDate').value;
-            const checkboxes = document.querySelectorAll('.cert-checkbox:checked'); 
-            const btn = document.getElementById('certBtn');
-            const statusEl = document.getElementById('certStatus');
-            
-            if(!eventName || !issueDate || !window.certTemplateBase64) return alert("Fill all details and upload template.");
-            if(checkboxes.length === 0) return alert("Select at least one student.");
-            
-            btn.disabled = true; 
-            btn.innerHTML = `Issuing...`;
-            statusEl.classList.remove('hidden'); 
-            statusEl.textContent = "Uploading template...";
-            
-            try {
-                const fileObj = document.querySelector('input[accept="image/*"]').files[0];
-                const templateUrl = await uploadToDrive(fileObj); 
-                let count = 0;
-                
-                statusEl.textContent = `Assigning & Notifying...`;
-                
-                for(let cb of checkboxes) { 
-                    const userEmail = cb.dataset.email; 
-                    const userPhone = cb.dataset.phone; 
-                    const userName = cb.dataset.name;
-                    
-                    await addDoc(collection(db, "certificates"), { 
-                        userId: cb.value, 
-                        userName: userName, 
-                        eventName, 
-                        date: issueDate, 
-                        templateUrl, 
-                        timestamp: Date.now() 
-                    }); 
-                    
-                    if (userEmail && userEmail !== 'No Email') { 
-                        await sendAutomatedEmail(userEmail, userName, eventName, templateUrl); 
-                    }
-                    if (userPhone && userPhone !== "No Phone") { 
-                        const msg = `*MET'S IEDC | Certificate Issued* 🎓\n\nHi ${userName},\nCongratulations! Your certificate for *${eventName}* is ready.\n\nYou can view and download it directly from your IEDC Dashboard!`;
-                        await sendAutomatedWhatsApp(userPhone, msg); 
-                    }
-                    count++; 
-                }
-                
-                await logActivity("Issued Certificates", `Issued ${count} for ${eventName}`);
-                statusEl.classList.replace('text-white', 'text-green-400'); 
-                statusEl.innerHTML = `<i class="fas fa-check-circle mr-2"></i> Success! Sent ${count} emails & WhatsApps.`;
-                
-                setTimeout(() => { 
-                    statusEl.classList.add('hidden'); 
-                    statusEl.classList.replace('text-green-400', 'text-white'); 
-                }, 4000);
-                
-                document.getElementById('certEventName').value = ''; 
-                document.getElementById('certDate').value = ''; 
-                window.certTemplateBase64 = null; 
-                document.getElementById('certFileName').innerHTML = 'Upload a clean image design';
-                checkboxes.forEach(c => c.checked = false);
-            } catch(e) { 
-                alert("Error: " + e.message); 
-                statusEl.classList.add('hidden');
-            } finally { 
-                btn.disabled = false; 
-                btn.innerText = "Issue Certificates"; 
-            }
-        };
-
-        window.approveProject = async (projectId, userId, userPhone, projectTitle) => {
-            if(!confirm("Approve project and award 100 points?")) return;
-            try {
-                await updateDoc(doc(db, "projects", projectId), { status: "Approved" });
-                await updateDoc(doc(db, "users", userId), { points: increment(100) });
-                await logActivity("Project Approved", `Approved: ${projectTitle}`);
-                
-                if(userPhone && userPhone !== "Unknown") {
-                    const msg = `*MET'S IEDC | Project Approved* 🚀\n\nGreat news! Your project pitch for *${projectTitle}* has been officially approved.\n\n⚡ *+100 Innovation Points* have been added to your dashboard!`;
-                    await sendAutomatedWhatsApp(userPhone, msg);
-                    alert("Approved! Points added and WhatsApp sent.");
-                } else { 
-                    alert("Approved! Points added. (No valid phone number for WhatsApp)"); 
-                }
-            } catch(err) { alert("Error: " + err.message); }
-        };
-
-        window.rejectProject = async (projectId) => {
-            if(!confirm("Reject this project?")) return;
+        async function logActivity(action, details) { 
             try { 
-                await updateDoc(doc(db, "projects", projectId), { status: "Rejected" }); 
-                await logActivity("Project Rejected", `Rejected ID: ${projectId}`); 
-            } catch(err) { alert(err.message); }
-        };
+                await addDoc(collection(db, "logs"), { 
+                    action, 
+                    details, 
+                    admin: window.currentUserEmail, 
+                    timestamp: Date.now() 
+                }); 
+            } catch(e) {} 
+        }
 
-        // --- FORM SUBMISSIONS ---
+        // Add User Form Submission
         document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
             e.preventDefault(); 
             const mode = document.getElementById('addUserMode').value; 
@@ -1537,15 +1703,17 @@
             try {
                 if (mode === 'create') { 
                     status.className = "text-[10px] text-center p-3 text-yellow-400 border border-yellow-400/30 rounded-xl uppercase tracking-widest font-bold"; 
-                    status.textContent = "Use 'Sync Existing' tab."; 
+                    status.textContent = "To create a fresh auth user securely, please instruct the student to sign up on the portal. You can sync them here later."; 
                 } else {
                     const uid = document.getElementById('newUserUid').value;
+                    if(!uid) throw new Error("Please enter or scan a UID");
                     await setDoc(doc(db, "users", uid), { 
                         name: name, 
                         email: email, 
                         role: "student", 
+                        disabled: false,
                         createdAt: Date.now() 
-                    });
+                    }, {merge: true}); // Merge so we don't wipe existing points if they re-sync
                     await logActivity("Synced User", `Synced ${email}`); 
                     
                     status.className = "text-[10px] text-center p-3 text-green-400 border border-green-400/30 rounded-xl uppercase tracking-widest font-bold"; 
@@ -1633,38 +1801,7 @@
             }
         });
 
-        document.getElementById('galleryForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const btn = document.getElementById('postGalleryBtn'); 
-            
-            btn.disabled = true; 
-            btn.textContent = "Uploading...";
-            
-            try {
-                const urls = []; 
-                for (let file of window.galleryImages) { 
-                    urls.push(await uploadToDrive(file)); 
-                }
-                
-                await addDoc(collection(db, "gallery"), { 
-                    title: document.getElementById('galleryTitle').value, 
-                    date: document.getElementById('galleryDate').value, 
-                    images: urls, 
-                    timestamp: Date.now() 
-                });
-                
-                await logActivity("Uploaded Gallery", document.getElementById('galleryTitle').value); 
-                alert("Uploaded!"); 
-                e.target.reset(); 
-                window.galleryImages = [];
-            } catch(err) { 
-                alert(err.message); 
-            } finally { 
-                btn.disabled = false; 
-                btn.textContent = "Upload Photos"; 
-            }
-        });
-
+        // Other Publish Handlers (News, Announcements, ExCom)
         document.getElementById('pushAlertForm').addEventListener('submit', async (e) => {
             e.preventDefault(); 
             const btn = document.getElementById('btnBroadcastAlert'); 
@@ -1770,110 +1907,6 @@
                 btn.disabled = false; 
             }
         });
-
-        document.getElementById('awardPointsForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const btn = document.getElementById('submitAwardBtn'); 
-            const uid = document.getElementById('awardUserId').value; 
-            const pts = parseInt(document.getElementById('pointsAmount').value); 
-            const reason = document.getElementById('pointsReason').value;
-            
-            btn.disabled = true; 
-            btn.innerHTML = 'Processing...';
-            try {
-                await updateDoc(doc(db, "users", uid), { points: increment(pts) });
-                await addDoc(collection(db, "logs"), { 
-                    action: "Awarded Points", 
-                    details: `Gave ${pts} pts to ${document.getElementById('awardUserNameDisplay').textContent} for ${reason}`, 
-                    admin: window.currentUserEmail, 
-                    timestamp: Date.now() 
-                });
-                alert(`Awarded ${pts} points!`); 
-                document.getElementById('awardPointsModal').classList.add('hidden'); 
-                e.target.reset();
-            } catch(error) { 
-                alert(error.message); 
-            } finally { 
-                btn.disabled = false; 
-                btn.innerHTML = 'Award'; 
-            }
-        });
-
-        // --- GLOBAL SCANNER LOGIC ---
-        window.html5QrcodeScanner = null; 
-        window.isScanningFlag = false; 
-        window.currentScannerMode = null;
-        
-        window.openGlobalScanner = (mode) => {
-            window.currentScannerMode = mode; 
-            document.getElementById('globalScannerModal').classList.remove('hidden');
-            const toast = document.getElementById('globalScannerToast');
-            toast.classList.add('hidden');
-            
-            window.html5QrcodeScanner = new Html5Qrcode("global-qr-reader");
-            window.html5QrcodeScanner.start(
-                { facingMode: "environment" }, 
-                { fps: 10, qrbox: { width: 250, height: 250 } }, 
-                (decodedText) => {
-                    if(window.isScanningFlag) return; 
-                    window.isScanningFlag = true;
-                    
-                    const uid = decodedText;
-                    toast.classList.remove('hidden');
-                    
-                    if(mode === 'attendance') {
-                        const cb = document.querySelector(`.att-checkbox[value="${uid}"]`);
-                        if(cb) { 
-                            cb.checked = true; 
-                            toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-green-500/30 bg-green-500/10 text-green-400 mt-4";
-                            toast.innerHTML = `✅ Checked In: ${cb.dataset.name}`;
-                        } else { 
-                            toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-red-500/30 bg-red-500/10 text-red-400 mt-4";
-                            toast.innerHTML = `❌ Student not found in list`;
-                        }
-                    } else if (mode === 'excom') {
-                        const sel = document.querySelector(`.excom-status-select[data-id="${uid}"]`);
-                        if(sel) { 
-                            sel.value = 'Present'; 
-                            toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-green-500/30 bg-green-500/10 text-green-400 mt-4";
-                            toast.innerHTML = `✅ ExCom Logged: ${sel.dataset.name}`; 
-                        } else { 
-                            toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-red-500/30 bg-red-500/10 text-red-400 mt-4";
-                            toast.innerHTML = `❌ Not an ExCom member`;
-                        }
-                    }
-                    
-                    setTimeout(() => { 
-                        window.isScanningFlag = false; 
-                        toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-glow-blue/30 bg-glow-blue/10 text-glow-blue mt-4";
-                        toast.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Ready for next scan...';
-                    }, 2000);
-                }
-            ).catch(err => { 
-                alert("Camera access denied or unavailable."); 
-            });
-        }
-        
-        window.closeGlobalScanner = () => { 
-            if(window.html5QrcodeScanner) { 
-                window.html5QrcodeScanner.stop().then(() => { 
-                    window.html5QrcodeScanner.clear(); 
-                    window.html5QrcodeScanner = null; 
-                }); 
-            } 
-            document.getElementById('globalScannerModal').classList.add('hidden'); 
-        }
-
-        async function logActivity(action, details) { 
-            try { 
-                await addDoc(collection(db, "logs"), { 
-                    action, 
-                    details, 
-                    admin: window.currentUserEmail, 
-                    timestamp: Date.now() 
-                }); 
-            } catch(e) {} 
-        }
 
         document.getElementById('adminLogoutBtn').addEventListener('click', () => signOut(auth));
         document.getElementById('adminLogoutBtnMobile').addEventListener('click', () => signOut(auth));
