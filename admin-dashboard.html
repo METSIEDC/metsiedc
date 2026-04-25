@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | MET'S IEDC</title>
+    <title>Admin OS | MET'S IEDC</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="manifest.json">
@@ -30,16 +30,34 @@
                         display: ['Plus Jakarta Sans', 'sans-serif'] 
                     },
                     colors: {
-                        dark: { base: '#050505', panel: 'rgba(20, 20, 25, 0.6)', border: 'rgba(255, 255, 255, 0.08)' },
-                        glow: { purple: '#9333ea', orange: '#ea580c', blue: '#2563eb', green: '#22c55e', red: '#ef4444', gold: '#fbbf24' }
+                        dark: { 
+                            base: '#050505', 
+                            panel: 'rgba(20, 20, 25, 0.6)', 
+                            border: 'rgba(255, 255, 255, 0.08)' 
+                        },
+                        glow: { 
+                            purple: '#9333ea', 
+                            orange: '#ea580c', 
+                            blue: '#2563eb', 
+                            green: '#22c55e', 
+                            red: '#ef4444', 
+                            gold: '#fbbf24', 
+                            cyan: '#06b6d4' 
+                        }
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-glow': 'pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
-                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-5px)' } },
-                        pulseGlow: { '0%, 100%': { opacity: '0.2' }, '50%': { opacity: '0.5' } }
+                        float: { 
+                            '0%, 100%': { transform: 'translateY(0)' }, 
+                            '50%': { transform: 'translateY(-5px)' } 
+                        },
+                        pulseGlow: { 
+                            '0%, 100%': { opacity: '0.2' }, 
+                            '50%': { opacity: '0.5' } 
+                        }
                     }
                 }
             }
@@ -75,10 +93,13 @@
         .glass-input:focus { 
             border-color: rgba(147, 51, 234, 0.5); 
             outline: none; 
-            box-shadow: 0 0 15px rgba(147, 51, 234, 0.2);
+            box-shadow: 0 0 15px rgba(147, 51, 234, 0.2); 
         }
         
-        select.glass-input option { color: #1c2833; background: white; }
+        select.glass-input option { 
+            color: #1c2833; 
+            background: white; 
+        }
         
         .sidebar-link { 
             transition: all 0.2s ease; 
@@ -94,9 +115,9 @@
             border-left-color: #9333ea; 
         }
         
-        .sidebar-link:hover:not(.active) {
+        .sidebar-link:hover:not(.active) { 
             color: #ffffff; 
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.05); 
         }
 
         .btn-light { 
@@ -105,9 +126,9 @@
             transition: all 0.3s ease; 
         }
         
-        .btn-light:hover {
+        .btn-light:hover { 
             transform: translateY(-2px); 
-            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.2); 
         }
         
         .btn-primary { 
@@ -116,9 +137,9 @@
             transition: all 0.3s ease; 
         }
         
-        .btn-primary:hover {
+        .btn-primary:hover { 
             box-shadow: 0 0 20px rgba(147, 51, 234, 0.5); 
-            transform: translateY(-2px);
+            transform: translateY(-2px); 
         }
 
         .custom-checkbox { 
@@ -134,8 +155,17 @@
             transition: all 0.2s; 
         }
         
-        .custom-checkbox:checked { background-color: #9333ea; border-color: #9333ea; }
-        .custom-checkbox:checked::before { content: "✔"; color: #ffffff; font-size: 0.8em; font-weight: bold; }
+        .custom-checkbox:checked { 
+            background-color: #9333ea; 
+            border-color: #9333ea; 
+        }
+        
+        .custom-checkbox:checked::before { 
+            content: "✔"; 
+            color: #ffffff; 
+            font-size: 0.8em; 
+            font-weight: bold; 
+        }
         
         ::-webkit-scrollbar { width: 6px; height: 6px; } 
         ::-webkit-scrollbar-track { background: transparent; } 
@@ -149,7 +179,11 @@
             height: 16px; 
             animation: spin 1s linear infinite; 
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
         
         #global-qr-reader { border: none !important; border-radius: 1rem; overflow: hidden; }
         #global-qr-reader__scan_region { background: #000; }
@@ -162,6 +196,28 @@
             font-weight: bold; 
             cursor: pointer; 
             margin-top: 10px; 
+        }
+
+        /* Kanban Specific Styles */
+        .kanban-col { 
+            min-height: 200px; 
+            transition: background-color 0.2s; 
+        }
+        
+        .kanban-col.drag-over { 
+            background-color: rgba(255,255,255,0.05); 
+            border-color: rgba(147, 51, 234, 0.5); 
+        }
+        
+        .kanban-card { 
+            cursor: grab; 
+            transition: transform 0.2s, box-shadow 0.2s; 
+        }
+        
+        .kanban-card:active { 
+            cursor: grabbing; 
+            transform: scale(0.98); 
+            opacity: 0.8; 
         }
     </style>
 </head>
@@ -176,28 +232,73 @@
     <aside class="w-64 border-r border-white/10 flex-shrink-0 hidden md:flex flex-col h-full z-20 bg-[#0a0a0c]/50 backdrop-blur-xl">
         <div class="p-6 flex items-center gap-3">
             <div class="w-8 h-8 rounded-xl bg-glow-purple/20 flex items-center justify-center text-glow-purple font-bold">P</div>
-            <span class="text-xl font-display font-bold text-white tracking-widest uppercase">Admin</span>
+            <span class="text-xl font-display font-bold text-white tracking-widest uppercase">Admin OS</span>
         </div>
         
         <nav class="flex-grow px-4 py-2 space-y-1 overflow-y-auto">
-            <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
-            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="users" class="w-4 h-4"></i> User Directory</button>
-            <button onclick="showTab('points')" id="nav-points" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-gold"><i data-lucide="star" class="w-4 h-4"></i> Innovation Points</button>
-            <button onclick="showTab('rewards')" id="nav-rewards" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="ticket" class="w-4 h-4"></i> Ticket Orders</button>
-            <button onclick="showTab('features')" id="nav-features" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-blue"><i data-lucide="blocks" class="w-4 h-4"></i> Feature Manager</button>
-            <button onclick="showTab('inventory')" id="nav-inventory" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="box" class="w-4 h-4"></i> Inventory</button>
-            <button onclick="showTab('logs')" id="nav-logs" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="activity" class="w-4 h-4"></i> Activity Logs</button>
-            <button onclick="showTab('excom')" id="nav-excom" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="shield" class="w-4 h-4"></i> ExCom Tracking</button>
-            <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="clipboard-check" class="w-4 h-4"></i> Attendance</button>
-            <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="award" class="w-4 h-4"></i> Certificates</button>
+            <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+            </button>
+            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="users" class="w-4 h-4"></i> User Directory
+            </button>
+            <button onclick="showTab('points')" id="nav-points" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-gold">
+                <i data-lucide="star" class="w-4 h-4"></i> Innovation Points
+            </button>
+            <button onclick="showTab('rewards')" id="nav-rewards" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="ticket" class="w-4 h-4"></i> Ticket Orders
+            </button>
+            <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="clipboard-check" class="w-4 h-4"></i> Attendance
+            </button>
             
-            <div class="pt-4 pb-2 px-4 text-[10px] font-bold text-white/30 uppercase tracking-widest">Publish Content</div>
+            <div class="pt-4 pb-2 px-4 text-[10px] font-bold text-white/30 uppercase tracking-widest">Incubator Tools</div>
+            <button onclick="showTab('pipeline')" id="nav-pipeline" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-blue font-bold">
+                <i data-lucide="kanban" class="w-4 h-4"></i> Startup Pipeline
+            </button>
+            <button onclick="showTab('funds')" id="nav-funds" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-green-400">
+                <i data-lucide="wallet" class="w-4 h-4"></i> Funds & Grants
+            </button>
+            <button onclick="showTab('quests')" id="nav-quests" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-orange">
+                <i data-lucide="target" class="w-4 h-4"></i> Quests Engine
+            </button>
+            <button onclick="showTab('reports')" id="nav-reports" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="file-bar-chart" class="w-4 h-4"></i> Official Reports
+            </button>
             
-            <button onclick="showTab('notifications')" id="nav-notifications" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-purple font-bold"><i data-lucide="bell-ring" class="w-4 h-4"></i> Send Alert</button>
-            <button onclick="showTab('announcements')" id="nav-announcements" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="bell" class="w-4 h-4"></i> Circulars</button>
-            <button onclick="showTab('news')" id="nav-news" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="newspaper" class="w-4 h-4"></i> News Article</button>
-            <button onclick="showTab('eventForms')" id="nav-eventForms" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="file-plus" class="w-4 h-4"></i> Event Form</button>
-            <button onclick="showTab('gallery')" id="nav-gallery" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm"><i data-lucide="image" class="w-4 h-4"></i> Gallery</button>
+            <div class="pt-4 pb-2 px-4 text-[10px] font-bold text-white/30 uppercase tracking-widest">Platform</div>
+            <button onclick="showTab('features')" id="nav-features" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="blocks" class="w-4 h-4"></i> Feature Manager
+            </button>
+            <button onclick="showTab('inventory')" id="nav-inventory" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="box" class="w-4 h-4"></i> Inventory
+            </button>
+            <button onclick="showTab('excom')" id="nav-excom" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="shield" class="w-4 h-4"></i> ExCom Tracking
+            </button>
+            <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="award" class="w-4 h-4"></i> Certificates
+            </button>
+            <button onclick="showTab('logs')" id="nav-logs" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="activity" class="w-4 h-4"></i> Activity Logs
+            </button>
+            
+            <div class="pt-4 pb-2 px-4 text-[10px] font-bold text-white/30 uppercase tracking-widest">Publishing</div>
+            <button onclick="showTab('notifications')" id="nav-notifications" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="bell-ring" class="w-4 h-4"></i> Send Alert
+            </button>
+            <button onclick="showTab('announcements')" id="nav-announcements" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="bell" class="w-4 h-4"></i> Circulars
+            </button>
+            <button onclick="showTab('news')" id="nav-news" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="newspaper" class="w-4 h-4"></i> News Article
+            </button>
+            <button onclick="showTab('eventForms')" id="nav-eventForms" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="file-plus" class="w-4 h-4"></i> Event Form
+            </button>
+            <button onclick="showTab('gallery')" id="nav-gallery" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+                <i data-lucide="image" class="w-4 h-4"></i> Gallery
+            </button>
         </nav>
         
         <div class="p-6 mt-auto border-t border-white/5">
@@ -225,14 +326,15 @@
             <button onclick="showTab('overview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Dashboard</button>
             <button onclick="showTab('users'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Users</button>
             <button onclick="showTab('points'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-glow-gold">Points</button>
+            <button onclick="showTab('pipeline'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-glow-blue">Pipeline</button>
+            <button onclick="showTab('funds'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-green-400">Funds</button>
+            <button onclick="showTab('quests'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-glow-orange">Quests</button>
+            <button onclick="showTab('reports'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Reports</button>
             <button onclick="showTab('rewards'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Tickets</button>
-            <button onclick="showTab('features'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-glow-blue">Features</button>
-            <button onclick="showTab('inventory'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Inventory</button>
-            <button onclick="showTab('logs'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Logs</button>
-            <button onclick="showTab('excom'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">ExCom</button>
             <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Attendance</button>
-            <button onclick="showTab('certificates'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Certificates</button>
+            
             <div class="h-px bg-white/10 my-4 mx-4"></div>
+            
             <button onclick="showTab('notifications'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-glow-purple">Send Alert</button>
             <button onclick="showTab('announcements'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Circulars</button>
             <button onclick="showTab('news'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">News</button>
@@ -252,14 +354,16 @@
                 <button id="mobile-menu-toggle" class="md:hidden text-white/50 p-2 hover:bg-white/10 rounded-lg cursor-pointer">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
-                <div><h1 class="text-xl font-display font-bold text-white uppercase tracking-widest" id="headerTitle">Dashboard</h1></div>
+                <div>
+                    <h1 class="text-xl font-display font-bold text-white uppercase tracking-widest" id="headerTitle">Dashboard</h1>
+                </div>
             </div>
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-3">
                     <div class="text-right hidden sm:block">
                         <p class="text-[10px] font-bold uppercase tracking-widest text-white/50" id="adminEmailDisplay">Admin User</p>
                     </div>
-                    <div class="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white">
+                    <div class="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-[0_0_15px_rgba(255,255,255,0.2)]">
                         <i data-lucide="shield-check" class="w-5 h-5"></i>
                     </div>
                 </div>
@@ -268,7 +372,7 @@
 
         <main class="flex-grow overflow-y-auto p-4 md:p-8 w-full pb-24 md:pb-10 relative">
             
-            <!-- OVERVIEW DASHBOARD -->
+            <!-- ===================== OVERVIEW DASHBOARD ===================== -->
             <div id="overviewSection" class="tab-content space-y-6 max-w-7xl mx-auto w-full">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                     <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group">
@@ -276,20 +380,20 @@
                         <p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Total Users</p>
                         <h3 class="text-4xl md:text-5xl font-display font-bold text-white relative z-10" id="totalUsersCount">0</h3>
                     </div>
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group border-green-500/30">
+                        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-green-500/20 blur-xl rounded-full"></div>
+                        <p class="text-green-400/70 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Remaining Funds</p>
+                        <h3 class="text-3xl md:text-4xl font-display font-bold text-green-400 relative z-10">₹<span id="overviewFunds">0</span></h3>
+                    </div>
                     <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group">
                         <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-glow-blue/20 blur-xl rounded-full"></div>
-                        <p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Inventory Assets</p>
-                        <h3 class="text-4xl md:text-5xl font-display font-bold text-white relative z-10" id="invTotalOverview">0</h3>
+                        <p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Active Startups</p>
+                        <h3 class="text-4xl md:text-5xl font-display font-bold text-white relative z-10" id="overviewStartups">0</h3>
                     </div>
                     <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group">
                         <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-glow-orange/20 blur-xl rounded-full"></div>
                         <p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Announcements</p>
                         <h3 class="text-4xl md:text-5xl font-display font-bold text-white relative z-10" id="totalAnnouncementsCount">0</h3>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group">
-                        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-glow-green/20 blur-xl rounded-full"></div>
-                        <p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Active Forms</p>
-                        <h3 class="text-4xl md:text-5xl font-display font-bold text-white relative z-10" id="activeFormsCount">0</h3>
                     </div>
                 </div>
                 
@@ -303,19 +407,9 @@
                         <div class="w-full max-w-[200px] flex-grow flex items-center justify-center"><canvas id="roleChart"></canvas></div>
                     </div>
                 </div>
-
-                <!-- Pending Projects for Approval -->
-                <div class="glass-panel p-6 rounded-3xl mt-8 border-glow-blue/20">
-                    <h3 class="text-xs font-bold text-white/50 uppercase tracking-widest mb-6 border-b border-white/10 pb-4 flex items-center gap-2">
-                        <i data-lucide="rocket" class="w-4 h-4"></i> Pending Project Submissions
-                    </h3>
-                    <div id="pendingProjectsList" class="space-y-4">
-                        <div class="text-center py-4 text-white/30 text-[10px] uppercase font-bold">Loading projects...</div>
-                    </div>
-                </div>
             </div>
 
-            <!-- USERS SECTION (Separated from Points) -->
+            <!-- ===================== USERS SECTION ===================== -->
             <div id="usersSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
                 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                     <div>
@@ -327,19 +421,25 @@
                             <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search Name or Email..." class="glass-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-light">
                             <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40"></i>
                         </div>
-                        <button onclick="openGlobalScanner('syncUser')" class="flex-shrink-0 bg-glow-blue/10 hover:bg-glow-blue/20 border border-glow-blue/30 text-glow-blue px-4 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2 transition-colors">
-                            <i data-lucide="qr-code" class="w-4 h-4"></i> Scan QR
+                        <button onclick="generateIdCards()" class="flex-shrink-0 btn-light px-4 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2 transition-colors">
+                            <i data-lucide="printer" class="w-4 h-4"></i> IDs
                         </button>
-                        <button onclick="toggleAddUserModal(true)" class="flex-shrink-0 btn-primary px-5 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2">
+                        <button onclick="openGlobalScanner('syncUser')" class="flex-shrink-0 bg-glow-blue/10 hover:bg-glow-blue/20 border border-glow-blue/30 text-glow-blue px-4 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2 transition-colors">
+                            <i data-lucide="qr-code" class="w-4 h-4"></i> Scan
+                        </button>
+                        <button onclick="toggleAddUserModal(true)" class="flex-shrink-0 btn-primary px-4 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2">
                             <i data-lucide="user-plus" class="w-4 h-4"></i> Add
                         </button>
                     </div>
                 </div>
                 
-                <div class="glass-panel rounded-2xl overflow-x-auto w-full">
+                <div class="glass-panel rounded-2xl overflow-x-auto w-full border border-white/10 bg-black/40">
                     <table class="w-full text-left min-w-[900px]">
-                        <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50">
+                        <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10">
                             <tr>
+                                <th class="px-4 py-5 w-12 text-center">
+                                    <i data-lucide="check-square" class="w-4 h-4 mx-auto"></i>
+                                </th>
                                 <th class="px-6 py-5">Name</th>
                                 <th class="px-6">Auth & Contact</th>
                                 <th class="px-6 text-center">Role</th>
@@ -348,13 +448,15 @@
                             </tr>
                         </thead>
                         <tbody id="userListBody" class="divide-y divide-white/5 text-sm font-light text-white/90">
-                            <tr><td colspan="5" class="text-center py-8 text-white/30 text-xs tracking-widest uppercase font-bold">Loading users...</td></tr>
+                            <tr>
+                                <td colspan="6" class="text-center py-8 text-white/30 text-xs tracking-widest uppercase font-bold">Loading users...</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- POINTS SECTION (New Separate Section) -->
+            <!-- ===================== POINTS SECTION ===================== -->
             <div id="pointsSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
                 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                     <h2 class="text-2xl font-display font-bold text-white uppercase tracking-widest">Innovation Points</h2>
@@ -375,13 +477,194 @@
                             </tr>
                         </thead>
                         <tbody id="pointsListBody" class="divide-y divide-white/5 text-sm font-light text-white/90">
-                            <tr><td colspan="4" class="text-center py-8 text-white/30 text-xs tracking-widest uppercase font-bold">Loading records...</td></tr>
+                            <tr>
+                                <td colspan="4" class="text-center py-8 text-white/30 text-xs tracking-widest uppercase font-bold">Loading records...</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- FEATURE MANAGER SECTION (New) -->
+            <!-- ===================== PIPELINE SECTION (KANBAN) ===================== -->
+            <div id="pipelineSection" class="tab-content hidden h-[calc(100vh-140px)] w-full flex flex-col">
+                <div class="flex justify-between items-center mb-6 shrink-0">
+                    <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Incubation Pipeline</h2>
+                    <span class="text-[10px] bg-glow-blue/20 text-glow-blue border border-glow-blue/40 px-3 py-1.5 rounded-lg font-bold uppercase tracking-widest">Drag & Drop Supported</span>
+                </div>
+                
+                <div class="flex-grow flex gap-4 overflow-x-auto pb-4 items-start scroll-smooth">
+                    
+                    <!-- Column: Pending Review -->
+                    <div class="w-80 shrink-0 flex flex-col bg-black/40 border border-white/10 rounded-2xl h-full max-h-full">
+                        <div class="p-4 border-b border-white/5 shrink-0 flex justify-between items-center bg-white/5 rounded-t-2xl">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-widest">
+                                <span class="w-2 h-2 inline-block bg-yellow-500 rounded-full mr-2"></span>Pending Review
+                            </h3>
+                            <span class="text-[10px] font-mono text-white/50" id="count-pending">0</span>
+                        </div>
+                        <div class="p-3 flex-grow overflow-y-auto space-y-3 kanban-col" id="col-Pending Review" ondrop="drop(event, 'Pending Review')" ondragover="allowDrop(event)"></div>
+                    </div>
+
+                    <!-- Column: Approved -->
+                    <div class="w-80 shrink-0 flex flex-col bg-black/40 border border-white/10 rounded-2xl h-full max-h-full">
+                        <div class="p-4 border-b border-white/5 shrink-0 flex justify-between items-center bg-white/5 rounded-t-2xl">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-widest">
+                                <span class="w-2 h-2 inline-block bg-glow-blue rounded-full mr-2"></span>Approved / Ideation
+                            </h3>
+                            <span class="text-[10px] font-mono text-white/50" id="count-approved">0</span>
+                        </div>
+                        <div class="p-3 flex-grow overflow-y-auto space-y-3 kanban-col" id="col-Approved" ondrop="drop(event, 'Approved')" ondragover="allowDrop(event)"></div>
+                    </div>
+
+                    <!-- Column: Prototyping -->
+                    <div class="w-80 shrink-0 flex flex-col bg-black/40 border border-white/10 rounded-2xl h-full max-h-full">
+                        <div class="p-4 border-b border-white/5 shrink-0 flex justify-between items-center bg-white/5 rounded-t-2xl">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-widest">
+                                <span class="w-2 h-2 inline-block bg-glow-purple rounded-full mr-2"></span>Prototyping
+                            </h3>
+                            <span class="text-[10px] font-mono text-white/50" id="count-prototyping">0</span>
+                        </div>
+                        <div class="p-3 flex-grow overflow-y-auto space-y-3 kanban-col" id="col-Prototyping" ondrop="drop(event, 'Prototyping')" ondragover="allowDrop(event)"></div>
+                    </div>
+
+                    <!-- Column: KSUM Funded -->
+                    <div class="w-80 shrink-0 flex flex-col bg-black/40 border border-white/10 rounded-2xl h-full max-h-full">
+                        <div class="p-4 border-b border-white/5 shrink-0 flex justify-between items-center bg-white/5 rounded-t-2xl">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-widest">
+                                <span class="w-2 h-2 inline-block bg-glow-orange rounded-full mr-2"></span>KSUM Funded
+                            </h3>
+                            <span class="text-[10px] font-mono text-white/50" id="count-funded">0</span>
+                        </div>
+                        <div class="p-3 flex-grow overflow-y-auto space-y-3 kanban-col" id="col-Funded" ondrop="drop(event, 'Funded')" ondragover="allowDrop(event)"></div>
+                    </div>
+
+                    <!-- Column: Incubated / Live -->
+                    <div class="w-80 shrink-0 flex flex-col bg-black/40 border border-white/10 rounded-2xl h-full max-h-full">
+                        <div class="p-4 border-b border-white/5 shrink-0 flex justify-between items-center bg-white/5 rounded-t-2xl">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-widest">
+                                <span class="w-2 h-2 inline-block bg-green-500 rounded-full mr-2"></span>Incubated / Live
+                            </h3>
+                            <span class="text-[10px] font-mono text-white/50" id="count-incubated">0</span>
+                        </div>
+                        <div class="p-3 flex-grow overflow-y-auto space-y-3 kanban-col" id="col-Incubated" ondrop="drop(event, 'Incubated')" ondragover="allowDrop(event)"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ===================== FUNDS & GRANTS SECTION ===================== -->
+            <div id="fundsSection" class="tab-content hidden space-y-6 max-w-6xl mx-auto w-full">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Funds Ledger</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-panel p-6 rounded-2xl bg-black/40">
+                        <p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-1">Total Income</p>
+                        <h3 class="text-3xl font-display font-bold text-white">₹<span id="fundTotalIncome">0</span></h3>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl bg-black/40">
+                        <p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-1">Total Expenses</p>
+                        <h3 class="text-3xl font-display font-bold text-red-400">₹<span id="fundTotalExpense">0</span></h3>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl border border-green-500/30 bg-green-500/10">
+                        <p class="text-green-400 text-[10px] font-bold uppercase tracking-widest mb-1">Balance Remaining</p>
+                        <h3 class="text-3xl font-display font-bold text-green-400">₹<span id="fundBalance">0</span></h3>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-1 glass-panel p-6 rounded-3xl h-fit">
+                        <h3 class="text-xs font-bold text-white/50 mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Log Transaction</h3>
+                        <form id="fundsForm" class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Type</label>
+                                <select id="fundType" class="glass-input w-full py-3 px-3 rounded-xl text-sm">
+                                    <option value="Income">Income (Grant/Sponsor)</option>
+                                    <option value="Expense">Expense (Disbursed/Event)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Amount (₹)</label>
+                                <input type="number" id="fundAmount" class="glass-input w-full py-3 px-3 rounded-xl text-sm" required>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Description</label>
+                                <input type="text" id="fundDesc" class="glass-input w-full py-3 px-3 rounded-xl text-sm" placeholder="e.g. KSUM Grant Q1" required>
+                            </div>
+                            <button type="submit" class="w-full btn-primary py-3.5 rounded-xl text-[10px] uppercase font-bold mt-2">Save Record</button>
+                        </form>
+                    </div>
+                    
+                    <div class="lg:col-span-2 glass-panel rounded-3xl overflow-hidden flex flex-col max-h-[500px]">
+                        <table class="w-full text-left">
+                            <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10">
+                                <tr>
+                                    <th class="px-6 py-4">Date</th>
+                                    <th class="px-6">Description</th>
+                                    <th class="px-6 text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fundsListBody" class="divide-y divide-white/5 text-sm overflow-y-auto">
+                                <tr>
+                                    <td colspan="3" class="text-center py-8 text-white/30">Loading ledger...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== QUESTS ENGINE SECTION ===================== -->
+            <div id="questsSection" class="tab-content hidden space-y-6 max-w-6xl mx-auto w-full">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Gamification Quests</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-1 glass-panel p-6 rounded-3xl h-fit">
+                        <h3 class="text-xs font-bold text-white/50 mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Create Bounty</h3>
+                        <form id="questForm" class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Quest Title</label>
+                                <input type="text" id="questTitle" class="glass-input w-full py-3 px-3 rounded-xl text-sm" placeholder="e.g. The Hustler" required>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Reward Points</label>
+                                <input type="number" id="questReward" class="glass-input w-full py-3 px-3 rounded-xl text-sm text-glow-gold font-bold" placeholder="e.g. 1000" required>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Requirements</label>
+                                <textarea id="questDesc" class="glass-input w-full py-3 px-3 rounded-xl text-sm" rows="3" placeholder="e.g. Attend 3 events and pitch 1 idea." required></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-glow-orange hover:bg-orange-500 py-3.5 rounded-xl text-white text-[10px] uppercase font-bold mt-2 transition-colors">Publish Quest</button>
+                        </form>
+                    </div>
+                    
+                    <div class="lg:col-span-2 flex flex-col gap-4" id="questsListBody">
+                        <div class="glass-panel p-10 text-center text-white/30 text-xs font-bold uppercase tracking-widest">
+                            Loading active quests...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== OFFICIAL REPORTS SECTION ===================== -->
+            <div id="reportsSection" class="tab-content hidden space-y-6 max-w-4xl mx-auto w-full">
+                <div class="glass-panel p-10 rounded-3xl flex flex-col items-center justify-center text-center py-20 border-glow-purple/20">
+                    <div class="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white mb-6 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                        <i data-lucide="file-bar-chart-2" class="w-10 h-10"></i>
+                    </div>
+                    <h2 class="text-3xl font-display font-bold text-white tracking-widest uppercase mb-4">Official Reports</h2>
+                    <p class="text-white/50 font-light max-w-lg mb-10 leading-relaxed text-sm">Automatically generate a beautifully formatted PDF report containing all live platform metrics, user data, financial ledgers, and incubation pipeline statuses for KSUM or University submissions.</p>
+                    
+                    <button onclick="generateKsumReport()" class="btn-primary px-10 py-5 rounded-2xl text-xs uppercase tracking-widest font-bold flex items-center gap-3 shadow-[0_0_30px_rgba(147,51,234,0.4)]">
+                        <i data-lucide="printer" class="w-5 h-5"></i> Generate Comprehensive Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- ===================== FEATURE MANAGER SECTION ===================== -->
             <div id="featuresSection" class="tab-content hidden space-y-6 max-w-5xl mx-auto w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
                     <div class="border-b border-white/10 pb-5 mb-8">
@@ -430,7 +713,7 @@
                 </div>
             </div>
 
-            <!-- TICKET REWARDS SECTION -->
+            <!-- ===================== TICKET REWARDS SECTION ===================== -->
             <div id="rewardsSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Ticket Orders</h2>
@@ -447,13 +730,17 @@
                             </tr>
                         </thead>
                         <tbody id="redemptionsList" class="divide-y divide-white/5 text-sm">
-                            <tr><td colspan="5" class="text-center py-10 text-white/30 text-xs uppercase font-bold"><div class="spinner mx-auto mb-3"></div> Loading Orders...</td></tr>
+                            <tr>
+                                <td colspan="5" class="text-center py-10 text-white/30 text-xs uppercase font-bold">
+                                    <div class="spinner mx-auto mb-3"></div> Loading Orders...
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- INVENTORY SECTION -->
+            <!-- ===================== INVENTORY SECTION ===================== -->
             <div id="inventorySection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Hardware Assets</h2>
@@ -461,36 +748,68 @@
                         <i data-lucide="plus" class="w-4 h-4"></i> Add Asset
                     </button>
                 </div>
+                
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="glass-panel p-6 rounded-2xl flex justify-between items-center"><span class="text-white/50 text-[10px] font-bold uppercase tracking-widest">Total</span><span class="text-2xl font-display font-bold text-white" id="invTotal">0</span></div>
-                    <div class="glass-panel p-6 rounded-2xl flex justify-between items-center border-l-2 border-l-green-500"><span class="text-white/50 text-[10px] font-bold uppercase tracking-widest">Available</span><span class="text-2xl font-display font-bold text-green-400" id="invAvail">0</span></div>
-                    <div class="glass-panel p-6 rounded-2xl flex justify-between items-center border-l-2 border-l-red-500"><span class="text-white/50 text-[10px] font-bold uppercase tracking-widest">Borrowed</span><span class="text-2xl font-display font-bold text-red-400" id="invBorrowed">0</span></div>
+                    <div class="glass-panel p-6 rounded-2xl flex justify-between items-center">
+                        <span class="text-white/50 text-[10px] font-bold uppercase tracking-widest">Total</span>
+                        <span class="text-2xl font-display font-bold text-white" id="invTotal">0</span>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl flex justify-between items-center border-l-2 border-l-green-500">
+                        <span class="text-white/50 text-[10px] font-bold uppercase tracking-widest">Available</span>
+                        <span class="text-2xl font-display font-bold text-green-400" id="invAvail">0</span>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl flex justify-between items-center border-l-2 border-l-red-500">
+                        <span class="text-white/50 text-[10px] font-bold uppercase tracking-widest">Borrowed</span>
+                        <span class="text-2xl font-display font-bold text-red-400" id="invBorrowed">0</span>
+                    </div>
                 </div>
+                
                 <div class="glass-panel rounded-2xl overflow-x-auto w-full">
                     <table class="w-full text-left min-w-[600px]">
-                        <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase font-bold text-white/50"><tr><th class="px-6 py-5">Item Name</th><th class="px-6">Category</th><th class="px-6">Status</th><th class="px-6">Holder</th><th class="text-center px-6">Action</th></tr></thead>
-                        <tbody id="inventoryListBody" class="divide-y divide-white/5 text-sm text-white/90"></tbody>
+                        <thead class="bg-white/5 border-b border-white/10 text-[10px] uppercase font-bold text-white/50">
+                            <tr>
+                                <th class="px-6 py-5">Item Name</th>
+                                <th class="px-6">Category</th>
+                                <th class="px-6">Status</th>
+                                <th class="px-6">Holder</th>
+                                <th class="text-center px-6">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryListBody" class="divide-y divide-white/5 text-sm text-white/90">
+                            <tr><td colspan="5" class="text-center py-6 text-white/50">Loading inventory...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
             
-            <!-- LOGS SECTION -->
+            <!-- ===================== LOGS SECTION ===================== -->
             <div id="logsSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">System Logs</h2>
                     <button onclick="printLogs()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-5 py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
-                        <i data-lucide="printer" class="w-4 h-4"></i><span class="text-[10px] uppercase tracking-widest font-bold">Print</span>
+                        <i data-lucide="printer" class="w-4 h-4"></i>
+                        <span class="text-[10px] uppercase tracking-widest font-bold">Print</span>
                     </button>
                 </div>
+                
                 <div class="glass-panel rounded-2xl overflow-x-auto w-full max-h-[600px] overflow-y-auto">
                     <table class="w-full text-left min-w-[500px]">
-                        <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase font-bold text-white/50 sticky top-0 z-10"><tr><th class="px-6 py-5">Timestamp</th><th class="px-6">Action</th><th class="px-6">Details</th><th class="px-6">Admin</th></tr></thead>
-                        <tbody id="logsListBody" class="divide-y divide-white/5 text-white/80 text-sm"></tbody>
+                        <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase font-bold text-white/50 sticky top-0 z-10">
+                            <tr>
+                                <th class="px-6 py-5">Timestamp</th>
+                                <th class="px-6">Action</th>
+                                <th class="px-6">Details</th>
+                                <th class="px-6">Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsListBody" class="divide-y divide-white/5 text-white/80 text-sm">
+                            <tr><td colspan="4" class="text-center py-6 text-white/50">Loading logs...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- EXCOM SECTION -->
+            <!-- ===================== EXCOM SECTION ===================== -->
             <div id="excomSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">ExCom Tracker</h2>
@@ -498,58 +817,118 @@
                         <i data-lucide="clipboard-edit" class="w-4 h-4"></i> Log Meeting
                     </button>
                 </div>
+                
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="glass-panel p-6 rounded-2xl"><h3 class="text-xs font-bold text-white/50 mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Committee Members</h3><div id="excomMembersList" class="space-y-2 max-h-80 overflow-y-auto"></div></div>
-                    <div class="glass-panel p-6 rounded-2xl flex flex-col"><h3 class="text-xs font-bold text-white/50 mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Recent Meetings</h3><div id="excomMeetingsList" class="space-y-3 flex-grow overflow-y-auto"></div></div>
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <h3 class="text-xs font-bold text-white/50 mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Committee Members</h3>
+                        <div id="excomMembersList" class="space-y-2 max-h-80 overflow-y-auto">
+                            <div class="text-center py-4 text-white/50 text-[10px]">Loading members...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col">
+                        <h3 class="text-xs font-bold text-white/50 mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Recent Meetings</h3>
+                        <div id="excomMeetingsList" class="space-y-3 flex-grow overflow-y-auto">
+                            <div class="text-center py-4 text-white/50 text-[10px]">Loading meetings...</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- ATTENDANCE SECTION -->
+            <!-- ===================== ATTENDANCE SECTION ===================== -->
             <div id="attendanceSection" class="tab-content hidden space-y-6 max-w-5xl mx-auto w-full">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Manual Attendance</h2>
                     <div class="flex gap-3">
-                        <button onclick="openGlobalScanner('attendance')" class="bg-glow-blue/20 hover:bg-glow-blue/40 border border-glow-blue/50 text-glow-blue px-5 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2 transition-all"><i data-lucide="scan" class="w-4 h-4"></i> Scan QR</button>
-                        <button id="btnSaveAttendance" onclick="submitAttendance()" class="btn-primary px-5 py-3 rounded-xl text-[10px] uppercase font-bold transition-all">Save List</button>
+                        <button onclick="openGlobalScanner('attendance')" class="bg-glow-blue/20 hover:bg-glow-blue/40 border border-glow-blue/50 text-glow-blue px-5 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2 transition-all">
+                            <i data-lucide="scan" class="w-4 h-4"></i> Scan QR
+                        </button>
+                        <button id="btnSaveAttendance" onclick="submitAttendance()" class="btn-primary px-5 py-3 rounded-xl text-[10px] uppercase font-bold transition-all">
+                            Save List
+                        </button>
                     </div>
                 </div>
+                
                 <div class="glass-panel p-6 mb-6 flex gap-4 flex-col md:flex-row">
-                    <div class="w-full"><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Name</label><input type="text" id="attendanceEventName" class="glass-input w-full rounded-xl py-3 px-4" placeholder="E.g. Buildathon"></div>
-                    <div class="w-full"><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date</label><input type="date" id="attendanceDate" class="glass-input w-full rounded-xl py-3 px-4"></div>
+                    <div class="w-full">
+                        <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Name</label>
+                        <input type="text" id="attendanceEventName" class="glass-input w-full rounded-xl py-3 px-4" placeholder="E.g. Buildathon">
+                    </div>
+                    <div class="w-full">
+                        <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date</label>
+                        <input type="date" id="attendanceDate" class="glass-input w-full rounded-xl py-3 px-4">
+                    </div>
                 </div>
+                
                 <div class="glass-panel overflow-x-auto max-h-[500px] overflow-y-auto w-full">
                     <table class="w-full text-left min-w-[400px]">
-                        <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase font-bold text-white/50 sticky top-0 z-10"><tr><th class="px-6 py-5 w-16 text-center">Present</th><th>Name</th><th>Email</th></tr></thead>
-                        <tbody id="attendanceListBody" class="divide-y divide-white/5 text-white/80"></tbody>
+                        <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase font-bold text-white/50 sticky top-0 z-10">
+                            <tr>
+                                <th class="px-6 py-5 w-16 text-center">Present</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceListBody" class="divide-y divide-white/5 text-white/80">
+                            <tr><td colspan="3" class="text-center py-6 text-white/50">Loading users...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- CERTIFICATES SECTION -->
+            <!-- ===================== CERTIFICATES SECTION ===================== -->
             <div id="certificatesSection" class="tab-content hidden space-y-6 max-w-4xl mx-auto w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
-                    <div class="border-b border-white/10 pb-6 mb-8"><h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Issue Certificates</h2></div>
+                    <div class="border-b border-white/10 pb-6 mb-8">
+                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Issue Certificates</h2>
+                    </div>
+                    
                     <div id="certStatus" class="hidden mb-6 p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest text-center border border-glow-purple/50 bg-glow-purple/10 text-white"></div>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Name</label><input type="text" id="certEventName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Event Name"></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date of Issue</label><input type="date" id="certDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm"></div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Name</label>
+                            <input type="text" id="certEventName" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Event Name">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date of Issue</label>
+                            <input type="date" id="certDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm">
+                        </div>
                     </div>
+                    
                     <div class="mb-8 p-6 border border-white/10 rounded-2xl bg-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div><p class="text-sm font-bold text-white mb-1">Certificate Template</p><p class="text-[10px] text-white/50 uppercase tracking-widest font-bold" id="certFileName">Upload a clean image design</p></div>
-                        <label class="btn-light px-6 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold cursor-pointer transition-colors w-full md:w-auto text-center"><span>Browse Image</span><input type="file" onchange="handleCertTemplate(event)" class="hidden" accept="image/*"></label>
+                        <div>
+                            <p class="text-sm font-bold text-white mb-1">Certificate Template</p>
+                            <p class="text-[10px] text-white/50 uppercase tracking-widest font-bold" id="certFileName">Upload a clean image design</p>
+                        </div>
+                        <label class="btn-light px-6 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold cursor-pointer transition-colors w-full md:w-auto text-center">
+                            <span>Browse Image</span>
+                            <input type="file" onchange="handleCertTemplate(event)" class="hidden" accept="image/*">
+                        </label>
                     </div>
+                    
                     <label class="block text-[10px] font-bold text-white/50 mb-3 uppercase tracking-widest">Select Recipients</label>
                     <div class="border border-white/10 rounded-2xl overflow-x-auto max-h-72 overflow-y-auto mb-8 bg-black/30">
                         <table class="w-full text-left min-w-[300px]">
-                            <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10"><tr><th class="px-4 py-3 w-16 text-center"><i data-lucide="check-square" class="w-4 h-4 mx-auto"></i></th><th>Student Name</th></tr></thead>
-                            <tbody id="certUserListBody" class="divide-y divide-white/5 text-white/80"></tbody>
+                            <thead class="bg-black/80 backdrop-blur-md border-b border-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-white/50 sticky top-0 z-10">
+                                <tr>
+                                    <th class="px-4 py-3 w-16 text-center"><i data-lucide="check-square" class="w-4 h-4 mx-auto"></i></th>
+                                    <th>Student Name</th>
+                                </tr>
+                            </thead>
+                            <tbody id="certUserListBody" class="divide-y divide-white/5 text-white/80">
+                                <tr><td colspan="2" class="text-center py-6 text-white/50">Loading users...</td></tr>
+                            </tbody>
                         </table>
                     </div>
-                    <button onclick="issueCertificates()" id="certBtn" class="w-full btn-primary py-4 rounded-xl text-xs font-bold uppercase tracking-widest transition-all">Issue Certificates</button>
+                    <button onclick="issueCertificates()" id="certBtn" class="w-full btn-primary py-4 rounded-xl text-xs font-bold uppercase tracking-widest transition-all">
+                        Issue Certificates
+                    </button>
                 </div>
             </div>
 
-            <!-- CONTENT PUBLISHING SECTIONS -->
+            <!-- ===================== CONTENT PUBLISHING SECTIONS ===================== -->
+            
             <div id="notificationsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
                     <div class="border-b border-white/10 pb-5 mb-8">
@@ -558,72 +937,151 @@
                     </div>
                     <div id="alertStatus" class="hidden mb-6 p-4 rounded-xl text-[10px] font-bold uppercase tracking-widest text-center border border-glow-blue/50 bg-glow-blue/10 text-white"></div>
                     <form id="pushAlertForm" class="space-y-6">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Alert Title</label><input type="text" id="alertTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. Meeting Room Changed" required></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Category</label><select id="alertCategory" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm"><option value="Alert">Urgent Alert</option><option value="Event">Event Update</option></select></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Message Content</label><textarea id="alertContent" rows="4" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" required></textarea></div>
-                        <div class="pt-4"><button type="submit" id="btnBroadcastAlert" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest"><i class="fab fa-whatsapp mr-2 text-green-500"></i> Broadcast via WhatsApp & Dashboard</button></div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Alert Title</label>
+                            <input type="text" id="alertTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. Meeting Room Changed" required>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Category</label>
+                            <select id="alertCategory" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm">
+                                <option value="Alert">Urgent Alert</option>
+                                <option value="Event">Event Update</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Message Content</label>
+                            <textarea id="alertContent" rows="4" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" required></textarea>
+                        </div>
+                        <div class="pt-4">
+                            <button type="submit" id="btnBroadcastAlert" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest">
+                                <i class="fab fa-whatsapp mr-2 text-green-500"></i> Broadcast via WhatsApp
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
 
             <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
-                    <div class="border-b border-white/10 pb-5 mb-8"><h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Post Circular</h2></div>
+                    <div class="border-b border-white/10 pb-5 mb-8">
+                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Post Circular</h2>
+                    </div>
                     <form id="announcementForm" class="space-y-6">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Subject</label><input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3.5 px-4" required></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Details</label><textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3.5 px-4" required></textarea></div>
-                        <button type="submit" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase">Publish Circular</button>
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Subject</label>
+                            <input type="text" id="annTitle" class="glass-input w-full rounded-xl py-3.5 px-4" required>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Details</label>
+                            <textarea id="annContent" rows="4" class="glass-input w-full rounded-xl py-3.5 px-4" required></textarea>
+                        </div>
+                        <button type="submit" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase">
+                            Publish Circular
+                        </button>
                     </form>
                 </div>
             </div>
 
             <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
-                    <div class="border-b border-white/10 pb-5 mb-8"><h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Post News</h2></div>
+                    <div class="border-b border-white/10 pb-5 mb-8">
+                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Post News</h2>
+                    </div>
                     <form id="newsForm" class="space-y-6">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Headline</label><input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3.5 px-4" required></div>
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Content</label><textarea id="newsContent" rows="5" class="glass-input w-full rounded-xl py-3.5 px-4" required></textarea></div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Date</label><input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3.5 px-4" required></div>
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Cover Image</label><label class="glass-input w-full rounded-xl py-3.5 px-4 text-center cursor-pointer block border-dashed hover:bg-white/5"><span id="newsFileName" class="text-white/50">Browse File</span><input type="file" id="newsImageInput" class="hidden" onchange="handleNewsImage(event)"></label></div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Headline</label>
+                            <input type="text" id="newsTitle" class="glass-input w-full rounded-xl py-3.5 px-4" required>
                         </div>
-                        <button type="submit" id="postNewsBtn" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase">Publish News</button>
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Content</label>
+                            <textarea id="newsContent" rows="5" class="glass-input w-full rounded-xl py-3.5 px-4" required></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Date</label>
+                                <input type="date" id="newsDate" class="glass-input w-full rounded-xl py-3.5 px-4" required>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Cover Image</label>
+                                <label class="glass-input w-full rounded-xl py-3.5 px-4 text-center cursor-pointer block border-dashed hover:bg-white/5">
+                                    <span id="newsFileName" class="text-white/50">Browse File</span>
+                                    <input type="file" id="newsImageInput" class="hidden" onchange="handleNewsImage(event)">
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" id="postNewsBtn" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase">
+                            Publish News
+                        </button>
                     </form>
                 </div>
             </div>
 
             <div id="eventFormsSection" class="tab-content hidden max-w-3xl mx-auto space-y-6 w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
-                    <div class="border-b border-white/10 pb-5 mb-8"><h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Form Builder</h2></div>
+                    <div class="border-b border-white/10 pb-5 mb-8">
+                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Form Builder</h2>
+                    </div>
                     <form id="formBuilderForm" class="space-y-8">
                         <div class="space-y-6 bg-black/30 p-6 rounded-2xl border border-white/10">
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Form Title</label><input type="text" id="formTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. Hackathon Registration" required></div>
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Description</label><textarea id="formDescription" rows="2" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm"></textarea></div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Form Title</label>
+                                <input type="text" id="formTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. Hackathon Registration" required>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Description</label>
+                                <textarea id="formDescription" rows="2" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm"></textarea>
+                            </div>
                         </div>
                         <div>
                             <h3 class="text-xs font-bold text-white/50 mb-4 uppercase tracking-widest border-b border-white/10 pb-2">Form Questions</h3>
                             <div id="questionsContainer" class="space-y-4"></div>
-                            <button type="button" onclick="addQuestionField()" class="mt-4 w-full border-2 border-dashed border-white/20 text-white/50 hover:text-white py-4 rounded-2xl text-xs uppercase flex items-center justify-center gap-2"><i data-lucide="plus-circle" class="w-4 h-4"></i> Add Question</button>
+                            <button type="button" onclick="addQuestionField()" class="mt-4 w-full border-2 border-dashed border-white/20 text-white/50 hover:text-white py-4 rounded-2xl text-xs uppercase flex items-center justify-center gap-2">
+                                <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Question
+                            </button>
                         </div>
-                        <div class="border-t border-white/10 pt-8"><button type="submit" id="saveFormBtn" class="w-full btn-primary py-4 rounded-xl text-xs font-bold uppercase">Publish Form</button></div>
+                        <div class="border-t border-white/10 pt-8">
+                            <button type="submit" id="saveFormBtn" class="w-full btn-primary py-4 rounded-xl text-xs font-bold uppercase">Publish Form</button>
+                        </div>
                     </form>
                 </div>
-                <div class="glass-panel p-6 rounded-3xl"><h3 class="text-xs font-bold text-white/50 mb-4 uppercase border-b border-white/10 pb-3">Active Forms List</h3><div id="activeFormsList" class="space-y-3"></div></div>
+                <div class="glass-panel p-6 rounded-3xl">
+                    <h3 class="text-xs font-bold text-white/50 mb-4 uppercase border-b border-white/10 pb-3">Active Forms List</h3>
+                    <div id="activeFormsList" class="space-y-3">
+                        <div class="text-center py-6 text-white/50 text-[10px]">Loading forms...</div>
+                    </div>
+                </div>
             </div>
 
             <div id="gallerySection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
                 <div class="glass-panel p-8 md:p-10 rounded-3xl">
-                    <div class="border-b border-white/10 pb-5 mb-8"><h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Upload Gallery</h2></div>
+                    <div class="border-b border-white/10 pb-5 mb-8">
+                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Upload Gallery</h2>
+                    </div>
                     <form id="galleryForm" class="space-y-6">
-                        <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Album Title</label><input type="text" id="galleryTitle" class="glass-input w-full rounded-xl py-3.5 px-4" required></div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Date</label><input type="date" id="galleryDate" class="glass-input w-full rounded-xl py-3.5 px-4"></div>
-                            <div><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Batch Upload</label><label class="glass-input w-full rounded-xl py-3.5 px-4 text-center cursor-pointer block border-dashed hover:bg-white/5"><span id="galleryFileName" class="text-white/50">Select Photos</span><input type="file" id="galleryImageInput" class="hidden" multiple onchange="handleGalleryImages(event)"></label></div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Album Title</label>
+                            <input type="text" id="galleryTitle" class="glass-input w-full rounded-xl py-3.5 px-4" required>
                         </div>
-                        <button type="submit" id="postGalleryBtn" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase">Upload Photos</button>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Date</label>
+                                <input type="date" id="galleryDate" class="glass-input w-full rounded-xl py-3.5 px-4">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Batch Upload</label>
+                                <label class="glass-input w-full rounded-xl py-3.5 px-4 text-center cursor-pointer block border-dashed hover:bg-white/5">
+                                    <span id="galleryFileName" class="text-white/50">Select Photos</span>
+                                    <input type="file" id="galleryImageInput" class="hidden" multiple accept="image/*">
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" id="postGalleryBtn" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase">
+                            Upload Photos
+                        </button>
                     </form>
                 </div>
             </div>
+
         </main>
     </div>
 
@@ -671,11 +1129,17 @@
                 <input type="hidden" id="addUserMode" value="create">
                 <input type="text" id="newUserName" class="glass-input w-full py-3.5 px-4 rounded-xl" placeholder="Full Name" required>
                 <input type="email" id="newUserEmail" class="glass-input w-full py-3.5 px-4 rounded-xl" placeholder="Email Address" required>
-                <div id="passwordFieldGroup"><input type="text" id="newUserPassword" class="glass-input w-full py-3.5 px-4 rounded-xl" placeholder="Temp Password" required></div>
+                
+                <div id="passwordFieldGroup">
+                    <input type="text" id="newUserPassword" class="glass-input w-full py-3.5 px-4 rounded-xl" placeholder="Temp Password" required>
+                </div>
+                
                 <div id="uidFieldGroup" class="hidden">
                     <input type="text" id="newUserUid" class="glass-input w-full py-3.5 px-4 rounded-xl font-mono text-xs" placeholder="Firebase UID...">
                 </div>
+                
                 <div id="addUserStatus" class="hidden text-[10px] text-center p-3 rounded-lg font-bold uppercase tracking-widest border border-white/20"></div>
+                
                 <div class="flex gap-3 pt-2">
                     <button type="button" onclick="toggleAddUserModal(false)" class="flex-1 bg-white/5 py-3.5 rounded-xl text-white text-[10px] uppercase font-bold hover:bg-white/10">Cancel</button>
                     <button type="submit" id="submitAddUserBtn" class="flex-1 btn-primary py-3.5 rounded-xl text-[10px] uppercase font-bold">Add User</button>
@@ -692,23 +1156,32 @@
                 <input type="text" id="excomMeetingTitle" class="glass-input w-full py-3.5 px-4 rounded-xl" placeholder="Topic">
                 <input type="date" id="excomMeetingDate" class="glass-input w-full py-3.5 px-4 rounded-xl">
             </div>
+            
             <div class="flex justify-between items-center mb-3">
                 <label class="block text-[10px] font-bold text-white/50 uppercase tracking-widest">Mark Attendance</label>
                 <button onclick="openGlobalScanner('excom')" class="bg-glow-purple/20 hover:bg-glow-purple/40 text-glow-purple border border-glow-purple/50 px-4 py-2 rounded-lg text-[9px] uppercase font-bold flex items-center gap-2">
                     <i data-lucide="scan" class="w-3 h-3"></i> Scan ID
                 </button>
             </div>
+            
             <div class="overflow-y-auto flex-grow mb-6 bg-black/40 border border-white/10 rounded-2xl">
                 <table class="w-full text-left">
                     <thead class="bg-white/5 sticky top-0 border-b border-white/10 text-[10px] uppercase tracking-widest font-bold text-white/50 z-10">
-                        <tr><th class="px-6 py-4 w-48 text-center border-r border-white/10">Status</th><th class="px-6 py-4">Committee Member</th></tr>
+                        <tr>
+                            <th class="px-6 py-4 w-48 text-center border-r border-white/10">Status</th>
+                            <th class="px-6 py-4">Committee Member</th>
+                        </tr>
                     </thead>
-                    <tbody id="excomAttendanceList" class="divide-y divide-white/5 text-white/80"></tbody>
+                    <tbody id="excomAttendanceList" class="divide-y divide-white/5 text-white/80">
+                    </tbody>
                 </table>
             </div>
+            
             <div class="flex justify-end gap-4 pt-4 border-t border-white/10">
                 <button onclick="document.getElementById('excomModal').classList.add('hidden')" class="px-8 bg-white/5 py-3.5 rounded-xl text-white text-[10px] uppercase font-bold hover:bg-white/10">Cancel</button>
-                <button id="saveExcomBtn" onclick="submitExcomAttendance()" class="px-8 btn-primary py-3.5 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Save Log</button>
+                <button id="saveExcomBtn" onclick="submitExcomAttendance()" class="px-8 btn-primary py-3.5 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2">
+                    <i data-lucide="save" class="w-4 h-4"></i> Save Log
+                </button>
             </div>
         </div>
     </div>
@@ -718,6 +1191,7 @@
         <div class="glass-panel w-full max-w-md p-8 rounded-3xl" id="pointsModalContainer">
             <h2 class="text-xl font-bold text-white mb-2 uppercase tracking-wider" id="pointsModalTitle">Manage Points</h2>
             <p class="text-[10px] text-white/50 uppercase tracking-widest mb-6 border-b border-white/10 pb-4">Student: <span id="pointsUserNameDisplay" class="font-bold text-white"></span></p>
+            
             <form id="managePointsForm" class="space-y-6">
                 <input type="hidden" id="pointsUserId">
                 <input type="hidden" id="pointsActionType" value="add">
@@ -752,6 +1226,7 @@
         window.toggleMobileSidebar = function() { 
             const menu = document.getElementById('mobile-sidebar'); 
             const overlay = document.getElementById('mobile-sidebar-overlay'); 
+            
             if (menu && menu.classList.contains('-translate-x-full')) { 
                 menu.classList.remove('-translate-x-full'); 
                 if(overlay) overlay.classList.remove('hidden'); 
@@ -773,9 +1248,14 @@
             let title = t.charAt(0).toUpperCase() + t.slice(1); 
             if(t === 'users') title = "User Directory"; 
             if(t === 'points') title = "Innovation Points";
+            if(t === 'pipeline') title = "Startup Pipeline";
+            if(t === 'funds') title = "Funds & Grants";
+            if(t === 'quests') title = "Quests Engine";
+            if(t === 'reports') title = "Official Reports";
             if(t === 'rewards') title = "Ticket Orders"; 
             if(t === 'features') title = "Feature Manager";
             if(t === 'eventForms') title = "Forms"; 
+            
             document.getElementById('headerTitle').textContent = title; 
             
             const menu = document.getElementById('mobile-sidebar'); 
@@ -783,10 +1263,11 @@
             if(t !== 'scanner' && window.html5QrcodeScanner) { window.closeGlobalScanner(); } 
         };
 
-        window.toggleAddUserModal = (s) => {
-            document.getElementById('addUserModal').classList.toggle('hidden', !s);
-            if(s) switchAddMode('create');
+        window.toggleAddUserModal = (s) => { 
+            document.getElementById('addUserModal').classList.toggle('hidden', !s); 
+            if(s) switchAddMode('create'); 
         };
+        
         window.toggleEditUserModal = (s) => document.getElementById('editUserModal').classList.toggle('hidden', !s);
         window.toggleEditPhoneModal = (s) => document.getElementById('editPhoneModal').classList.toggle('hidden', !s);
         window.toggleAttCheck = (id) => { const c = document.getElementById('att-'+id); c.checked = !c.checked; };
@@ -814,8 +1295,8 @@
             const input = document.getElementById("userSearchInput").value.toUpperCase(); 
             const trs = document.getElementById("userListBody").getElementsByTagName("tr"); 
             for (let i = 0; i < trs.length; i++) { 
-                const tdName = trs[i].getElementsByTagName("td")[0]; 
-                const tdEmail = trs[i].getElementsByTagName("td")[1]; 
+                const tdName = trs[i].getElementsByTagName("td")[1]; 
+                const tdEmail = trs[i].getElementsByTagName("td")[2]; 
                 if (tdName || tdEmail) { 
                     const txtValue = (tdName.textContent || tdName.innerText) + (tdEmail.textContent || tdEmail.innerText); 
                     trs[i].style.display = txtValue.toUpperCase().indexOf(input) > -1 ? "" : "none"; 
@@ -846,7 +1327,7 @@
             const btn = document.getElementById('submitPointsBtn');
             const container = document.getElementById('pointsModalContainer');
             const title = document.getElementById('pointsModalTitle');
-
+            
             if(actionType === 'add') {
                 title.innerHTML = '<span class="text-glow-gold">Award</span> Points';
                 btn.className = "flex-1 bg-glow-gold hover:bg-yellow-400 py-3.5 rounded-xl text-black font-bold text-[10px] uppercase transition-colors shadow-[0_0_15px_rgba(251,191,36,0.4)]";
@@ -858,7 +1339,7 @@
                 btn.textContent = "Deduct Points";
                 container.className = "glass-panel w-full max-w-md p-8 rounded-3xl border-red-500/30";
             }
-
+            
             document.getElementById('pointsModal').classList.remove('hidden'); 
         };
 
@@ -869,42 +1350,244 @@
             toggleEditPhoneModal(true);
         }
 
+        // KANBAN DRAG & DROP LOGIC
+        window.drag = (ev) => { 
+            ev.dataTransfer.setData("text", ev.target.id); 
+        }
+        
+        window.allowDrop = (ev) => { 
+            ev.preventDefault(); 
+            ev.target.closest('.kanban-col').classList.add('drag-over'); 
+        }
+        
+        window.drop = async (ev, newStatus) => {
+            ev.preventDefault();
+            document.querySelectorAll('.kanban-col').forEach(c => c.classList.remove('drag-over'));
+            
+            var data = ev.dataTransfer.getData("text");
+            var el = document.getElementById(data);
+            if(!el) return;
+            
+            const targetCol = ev.target.closest('.kanban-col');
+            if(targetCol) {
+                targetCol.appendChild(el);
+                const projectId = data.replace('card-', '');
+                try {
+                    await window.updateKanbanStatus(projectId, newStatus);
+                } catch(e) { 
+                    alert("Failed to update status: " + e.message); 
+                }
+            }
+        }
+
+        // FEATURE GENERATORS
+        window.generateKsumReport = () => {
+            const printWin = window.open('', '_blank');
+            printWin.document.write(`
+                <html>
+                <head>
+                    <title>KSUM Official Report</title>
+                    <style>
+                        body{font-family:'Segoe UI', sans-serif; padding:40px; line-height:1.6; color:#111;} 
+                        h1{color:#4f46e5; text-align:center; text-transform:uppercase; letter-spacing:2px;}
+                        h2{color:#333; border-bottom:2px solid #ccc; padding-bottom:5px; margin-top:30px;} 
+                        .stat-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px; background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0;}
+                        .stat-box{text-align:center;}
+                        .stat-val{font-size:24px; font-weight:bold; color:#4f46e5;}
+                        table{width:100%; border-collapse:collapse; margin-top:15px;}
+                        th,td{border:1px solid #ccc; padding:10px; text-align:left; font-size:14px;}
+                        th{background:#f1f5f9;}
+                    </style>
+                </head>
+                <body>
+                    <h1>MET'S IEDC Innovation Report</h1>
+                    <p style="text-align:center;">Date Generated: <strong>${new Date().toLocaleDateString()}</strong></p>
+                    
+                    <h2>1. Executive Summary</h2>
+                    <div class="stat-grid">
+                        <div class="stat-box"><div class="stat-val">${window.allUsersData.length}</div>Total Innovators Enrolled</div>
+                        <div class="stat-box"><div class="stat-val">${window.projectsData.length}</div>Total Projects Pitched</div>
+                        <div class="stat-box"><div class="stat-val">₹${window.fundsBalance || 0}</div>Current Funds Balance</div>
+                        <div class="stat-box"><div class="stat-val">${window.invTotalOverview || 0}</div>Hardware Assets in Lab</div>
+                    </div>
+
+                    <h2>2. Financial Ledger Overview</h2>
+                    <table>
+                        <thead>
+                            <tr><th>Date</th><th>Type</th><th>Description</th><th>Amount</th></tr>
+                        </thead>
+                        <tbody>
+                            ${window.fundsData.slice(0, 10).map(f => `<tr><td>${new Date(f.timestamp).toLocaleDateString()}</td><td>${f.type}</td><td>${f.desc}</td><td>₹${f.amount}</td></tr>`).join('')}
+                        </tbody>
+                    </table>
+
+                    <h2>3. Active Incubation Pipeline</h2>
+                    <table>
+                        <thead>
+                            <tr><th>Project Name</th><th>Status</th><th>Tech Domain</th></tr>
+                        </thead>
+                        <tbody>
+                            ${window.projectsData.filter(p => p.status !== 'Rejected').slice(0, 15).map(p => `<tr><td>${p.title}</td><td>${p.status}</td><td>${p.tech}</td></tr>`).join('')}
+                        </tbody>
+                    </table>
+                    
+                    <div style="margin-top:50px; text-align:center; color:#666; font-size:12px;">
+                        Report generated automatically via MET'S IEDC Admin OS.
+                    </div>
+                    <script>setTimeout(()=>window.print(), 1000);<\/script>
+                </body>
+                </html>
+            `);
+            printWin.document.close();
+        }
+
+        window.generateIdCards = () => {
+            const checked = document.querySelectorAll('.user-select-cb:checked');
+            if(checked.length === 0) return alert("Select at least one student from the table.");
+            
+            const printWin = window.open('', '_blank');
+            let cardsHtml = '';
+            
+            checked.forEach(cb => {
+                const u = window.allUsersData.find(x => x.id === cb.value);
+                const safeName = u.name.split(' ')[0] + (u.name.split(' ')[1] ? ' ' + u.name.split(' ')[1][0] + '.' : '');
+                
+                cardsHtml += `
+                    <div style="width:240px; height:380px; border:2px solid #000; border-radius:15px; padding:20px; text-align:center; display:inline-flex; flex-direction:column; justify-content:space-between; margin:10px; font-family:sans-serif; page-break-inside: avoid; background:white;">
+                        <div>
+                            <h2 style="margin:0; color:#4f46e5; font-size:22px; text-transform:uppercase; letter-spacing:1px;">MET'S IEDC</h2>
+                            <h4 style="margin:5px 0 20px 0; color:#555; font-size:10px; letter-spacing:2px; text-transform:uppercase;">Innovation Hub</h4>
+                        </div>
+                        <div style="margin:0 auto;">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${u.id}" style="width:120px; height:120px; border:4px solid #fff; box-shadow:0 0 10px rgba(0,0,0,0.1); border-radius:10px;">
+                        </div>
+                        <div>
+                            <h2 style="margin:15px 0 5px 0; font-size:18px;">${safeName}</h2>
+                            <p style="margin:0; color:#4f46e5; text-transform:uppercase; font-size:10px; font-weight:bold; letter-spacing:1px;">${u.role}</p>
+                            <p style="margin:10px 0 0 0; font-size:8px; color:#888; font-family:monospace;">ID: ${u.id.substring(0,8)}...</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            printWin.document.write(`
+                <html>
+                <head><title>Print ID Cards</title></head>
+                <body style="background:#f1f5f9; padding:20px;">
+                    <div style="display:flex; flex-wrap:wrap; justify-content:center; max-width:900px; margin:0 auto;">
+                        ${cardsHtml}
+                    </div>
+                    <script>setTimeout(()=>window.print(), 1500);<\/script>
+                </body>
+                </html>
+            `);
+            printWin.document.close();
+            checked.forEach(cb => cb.checked = false);
+        }
+
         window.printLogs = () => { 
             const logsTableContent = document.getElementById('logsListBody').innerHTML; 
             if (!logsTableContent || logsTableContent.trim() === '') { alert("No logs available."); return; } 
+            
             const printWindow = window.open('', '_blank'); 
-            printWindow.document.write(`<html><head><title>System Logs</title><style>body{font-family:sans-serif;padding:40px;}table{width:100%;border-collapse:collapse;font-size:12px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#eee;}</style></head><body><h2>System Logs</h2><table><thead><tr><th>Time</th><th>Action</th><th>Details</th><th>Admin</th></tr></thead><tbody>${logsTableContent}</tbody></table><script>window.onload=()=>{window.print();setTimeout(()=>window.close(),500)};<\/script></body></html>`); 
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>System Logs</title>
+                    <style>
+                        body{font-family:sans-serif;padding:40px;}
+                        table{width:100%;border-collapse:collapse;font-size:12px;}
+                        th,td{border:1px solid #ccc;padding:8px;text-align:left;}
+                        th{background:#eee;}
+                    </style>
+                </head>
+                <body>
+                    <h2>System Logs</h2>
+                    <table>
+                        <thead>
+                            <tr><th>Time</th><th>Action</th><th>Details</th><th>Admin</th></tr>
+                        </thead>
+                        <tbody>
+                            ${logsTableContent}
+                        </tbody>
+                    </table>
+                    <script>window.onload=()=>{window.print();setTimeout(()=>window.close(),500)};<\/script>
+                </body>
+                </html>
+            `); 
             printWindow.document.close(); 
         };
 
         window.printExcomMeeting = (id) => { 
             const meeting = window.excomMeetingsData.find(m => m.id === id); 
             if(!meeting) return; 
+            
             const printWindow = window.open('', '_blank'); 
             let rows = ''; 
-            meeting.attendance.forEach(a => { rows += `<tr><td>${a.name}</td><td>${a.status}</td></tr>`; }); 
-            printWindow.document.write(`<html><head><title>Meeting</title><style>body{font-family:sans-serif;padding:40px;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ccc;padding:10px;text-align:left;}</style></head><body><h2>${meeting.title}</h2><p>${meeting.date}</p><table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table><script>window.onload=()=>{window.print();setTimeout(()=>window.close(),500)};<\/script></body></html>`); 
+            meeting.attendance.forEach(a => { 
+                rows += `<tr><td>${a.name}</td><td>${a.status}</td></tr>`; 
+            }); 
+            
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Meeting</title>
+                    <style>
+                        body{font-family:sans-serif;padding:40px;}
+                        table{width:100%;border-collapse:collapse;}
+                        th,td{border:1px solid #ccc;padding:10px;text-align:left;}
+                    </style>
+                </head>
+                <body>
+                    <h2>${meeting.title}</h2>
+                    <p>${meeting.date}</p>
+                    <table>
+                        <thead>
+                            <tr><th>Name</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            ${rows}
+                        </tbody>
+                    </table>
+                    <script>window.onload=()=>{window.print();setTimeout(()=>window.close(),500)};<\/script>
+                </body>
+                </html>
+            `); 
             printWindow.document.close(); 
         };
 
-        function escapeHTML(str) { return str ? str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)) : ''; }
-        function safeSetText(id, text) { const el = document.getElementById(id); if (el) el.textContent = text; }
-        function generateId() { return Math.random().toString(36).substr(2, 9); }
+        function escapeHTML(str) { 
+            return str ? str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)) : ''; 
+        }
+        
+        function safeSetText(id, text) { 
+            const el = document.getElementById(id); 
+            if (el) el.textContent = text; 
+        }
+        
+        function generateId() { 
+            return Math.random().toString(36).substr(2, 9); 
+        }
         
         Chart.defaults.color = 'rgba(255, 255, 255, 0.5)'; 
         Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.05)'; 
         Chart.defaults.font.family = "'Inter', sans-serif";
 
         // Form Builder Helpers
-        window.handleFormCoverImage = (e) => { window.formCoverImageFile = e.target.files[0]; };
+        window.handleFormCoverImage = (e) => { 
+            window.formCoverImageFile = e.target.files[0]; 
+        };
+        
         window.addQuestionField = () => { 
             formBuilderFields.push({ id: generateId(), label: '', type: 'text', required: false, options: [] }); 
             window.renderFormBuilderFields();
         };
+        
         window.removeQuestionField = (id) => { 
             formBuilderFields = formBuilderFields.filter(f => f.id !== id); 
             window.renderFormBuilderFields(); 
         };
+        
         window.updateField = (id, key, value) => { 
             const field = formBuilderFields.find(f => f.id === id); 
             if (field) { 
@@ -917,6 +1600,7 @@
                 } 
             } 
         };
+        
         window.addFieldOption = (id) => { 
             const field = formBuilderFields.find(f => f.id === id); 
             if (field) { 
@@ -925,6 +1609,7 @@
                 window.renderFormBuilderFields(); 
             } 
         };
+        
         window.removeFieldOption = (id, optIndex) => { 
             const field = formBuilderFields.find(f => f.id === id); 
             if (field && field.options) { 
@@ -932,6 +1617,7 @@
                 window.renderFormBuilderFields(); 
             } 
         };
+        
         window.updateFieldOption = (id, optIndex, value) => { 
             const field = formBuilderFields.find(f => f.id === id); 
             if (field && field.options) field.options[optIndex] = value; 
@@ -949,13 +1635,62 @@
                     if(field.options && field.options.length > 0) {
                         field.options.forEach((opt, optIdx) => {
                             const iconType = field.type === 'checkbox' ? 'square' : 'circle';
-                            opts += `<div class="flex items-center gap-3 mt-2"><i data-lucide="${iconType}" class="w-4 h-4 text-white/30 flex-shrink-0"></i><input type="text" class="glass-input w-full rounded-lg py-2.5 px-3 text-sm" value="${escapeHTML(opt)}" oninput="updateFieldOption('${field.id}', ${optIdx}, this.value)" placeholder="Option text"><button type="button" onclick="removeFieldOption('${field.id}', ${optIdx})" class="text-red-400 hover:text-red-500 p-1"><i data-lucide="x" class="w-4 h-4"></i></button></div>`;
+                            opts += `
+                                <div class="flex items-center gap-3 mt-2">
+                                    <i data-lucide="${iconType}" class="w-4 h-4 text-white/30 flex-shrink-0"></i>
+                                    <input type="text" class="glass-input w-full rounded-lg py-2.5 px-3 text-sm" value="${escapeHTML(opt)}" oninput="updateFieldOption('${field.id}', ${optIdx}, this.value)" placeholder="Option text">
+                                    <button type="button" onclick="removeFieldOption('${field.id}', ${optIdx})" class="text-red-400 hover:text-red-500 p-1">
+                                        <i data-lucide="x" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            `;
                         });
                     }
-                    optionsHtml = `<div class="mt-4 pl-4 border-l-2 border-white/10"><label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Answer Options</label>${opts}<button type="button" onclick="addFieldOption('${field.id}')" class="mt-3 text-[10px] uppercase text-glow-blue font-bold flex items-center gap-1.5"><i data-lucide="plus" class="w-3 h-3"></i> Add Option</button></div>`;
+                    optionsHtml = `
+                        <div class="mt-4 pl-4 border-l-2 border-white/10">
+                            <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase">Answer Options</label>
+                            ${opts}
+                            <button type="button" onclick="addFieldOption('${field.id}')" class="mt-3 text-[10px] uppercase text-glow-blue font-bold flex items-center gap-1.5">
+                                <i data-lucide="plus" class="w-3 h-3"></i> Add Option
+                            </button>
+                        </div>
+                    `;
                 }
-
-                container.innerHTML += `<div class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 relative shadow-sm"><div class="flex justify-between items-center border-b border-white/10 pb-3 mb-4"><span class="text-[10px] font-bold text-white/40 uppercase">Question ${index + 1}</span><button type="button" onclick="removeQuestionField('${field.id}')" class="text-white/40 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div class="md:col-span-2"><label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Question Title</label><input type="text" class="glass-input w-full rounded-lg py-3 px-3 text-sm" value="${escapeHTML(field.label)}" oninput="updateField('${field.id}', 'label', this.value)"></div><div><label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Answer Type</label><select class="glass-input w-full rounded-lg py-3 px-3 text-sm" onchange="updateField('${field.id}', 'type', this.value)"><option value="text" ${field.type === 'text' ? 'selected' : ''}>Short Answer</option><option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Paragraph</option><option value="email" ${field.type === 'email' ? 'selected' : ''}>Email Address</option><option value="tel" ${field.type === 'tel' ? 'selected' : ''}>Phone Number</option><option value="radio" ${field.type === 'radio' ? 'selected' : ''}>Multiple Choice</option><option value="checkbox" ${field.type === 'checkbox' ? 'selected' : ''}>Checkboxes</option><option value="select" ${field.type === 'select' ? 'selected' : ''}>Dropdown</option><option value="date" ${field.type === 'date' ? 'selected' : ''}>Date</option></select></div></div>${optionsHtml}<div class="mt-5 flex items-center justify-end gap-3 border-t border-white/5 pt-4"><label class="text-[10px] font-bold text-white/60 uppercase cursor-pointer" for="req-${field.id}">Required</label><input type="checkbox" id="req-${field.id}" class="custom-checkbox" ${field.required ? 'checked' : ''} onchange="updateField('${field.id}', 'required', this.checked)"></div></div>`;
+                
+                container.innerHTML += `
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6 relative shadow-sm">
+                        <div class="flex justify-between items-center border-b border-white/10 pb-3 mb-4">
+                            <span class="text-[10px] font-bold text-white/40 uppercase">Question ${index + 1}</span>
+                            <button type="button" onclick="removeQuestionField('${field.id}')" class="text-white/40 hover:text-red-400">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="md:col-span-2">
+                                <label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Question Title</label>
+                                <input type="text" class="glass-input w-full rounded-lg py-3 px-3 text-sm" value="${escapeHTML(field.label)}" oninput="updateField('${field.id}', 'label', this.value)">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-white/50 mb-1 uppercase">Answer Type</label>
+                                <select class="glass-input w-full rounded-lg py-3 px-3 text-sm" onchange="updateField('${field.id}', 'type', this.value)">
+                                    <option value="text" ${field.type === 'text' ? 'selected' : ''}>Short Answer</option>
+                                    <option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Paragraph</option>
+                                    <option value="email" ${field.type === 'email' ? 'selected' : ''}>Email Address</option>
+                                    <option value="tel" ${field.type === 'tel' ? 'selected' : ''}>Phone Number</option>
+                                    <option value="radio" ${field.type === 'radio' ? 'selected' : ''}>Multiple Choice</option>
+                                    <option value="checkbox" ${field.type === 'checkbox' ? 'selected' : ''}>Checkboxes</option>
+                                    <option value="select" ${field.type === 'select' ? 'selected' : ''}>Dropdown</option>
+                                    <option value="date" ${field.type === 'date' ? 'selected' : ''}>Date</option>
+                                </select>
+                            </div>
+                        </div>
+                        ${optionsHtml}
+                        <div class="mt-5 flex items-center justify-end gap-3 border-t border-white/5 pt-4">
+                            <label class="text-[10px] font-bold text-white/60 uppercase cursor-pointer" for="req-${field.id}">Required</label>
+                            <input type="checkbox" id="req-${field.id}" class="custom-checkbox" ${field.required ? 'checked' : ''} onchange="updateField('${field.id}', 'required', this.checked)">
+                        </div>
+                    </div>
+                `;
             });
             lucide.createIcons();
         };
@@ -970,6 +1705,7 @@
 
         lucide.createIcons();
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhv5--AImomPzvUOw1-fsnBom_YN5jDQq-8wd-L0xPg1J7AZAJumfBeXAEku4zd6I-/exec"; 
+        
         const firebaseConfig = { 
             apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8", 
             authDomain: "metsiedc-3010e.firebaseapp.com", 
@@ -983,14 +1719,18 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         
-        window.newsImageFile = null; 
-        window.galleryImages = []; 
-        window.certTemplateBase64 = null; 
-        window.currentUserEmail = ""; 
         window.allUsersData = []; 
+        window.projectsData = [];
+        window.fundsData = [];
+        window.fundsBalance = 0;
         window.excomMeetingsData = []; 
-        window.formCoverImageFile = null; 
+        window.currentUserEmail = ""; 
         window.db = db;
+        
+        window.updateKanbanStatus = async (projectId, newStatus) => {
+            await updateDoc(doc(db, "projects", projectId), { status: newStatus });
+            await logActivity("Pipeline Updated", `Project moved to ${newStatus}`);
+        };
         
         let roleChartInstance = null; 
         let activityChartInstance = null;
@@ -1033,7 +1773,7 @@
                     else studentCount++;
                 });
                 
-                window.allUsersData = usersList; // Cache for WhatsApp sending
+                window.allUsersData = usersList;
                 
                 // Chart Generation
                 if(roleChartInstance) roleChartInstance.destroy();
@@ -1058,10 +1798,8 @@
                 usersList.forEach(u => {
                     const safeName = escapeHTML(u.name || "Unknown"); 
                     const safeEmail = escapeHTML(u.email || "No Email");
-                    
                     let safePhone = u.phone ? escapeHTML(u.phone) : "No Phone";
                     
-                    // Is Google Auth? (Checking local data property)
                     const isGoogle = u.authProvider === 'google' || u.googleLogin === true;
                     const authBadge = isGoogle 
                         ? `<span class="bg-white/10 text-white px-2 py-0.5 rounded text-[8px] uppercase tracking-widest flex items-center gap-1 w-max mt-1 border border-white/20"><i class="fab fa-google"></i> Google</span>`
@@ -1077,54 +1815,76 @@
                         ? `<span class="px-2 py-1 bg-green-500/10 text-green-400 text-[9px] rounded-md uppercase font-bold border border-green-500/30">Active</span>`
                         : `<span class="px-2 py-1 bg-yellow-500/10 text-yellow-500 text-[9px] rounded-md uppercase font-bold border border-yellow-500/30">Disabled</span>`;
 
-                    const toggleStatusAction = !u.disabled ? 'Disable' : 'Enable';
                     const toggleStatusColor = !u.disabled ? 'text-yellow-500 hover:bg-yellow-500/20' : 'text-green-400 hover:bg-green-500/20';
                     const toggleIcon = !u.disabled ? 'user-minus' : 'user-check';
 
-                    // Build USER DIRECTORY HTML
+                    // USER DIRECTORY HTML
                     uHtml += `
                     <tr class="border-b border-white/5 hover:bg-white/5 transition-colors text-sm font-light text-white/90">
+                        <td class="px-4 py-4 text-center">
+                            <input type="checkbox" class="user-select-cb custom-checkbox" value="${u.id}">
+                        </td>
                         <td class="px-6 py-4 font-medium text-white">${safeName}</td>
                         <td class="px-6 py-4">
                             <div class="text-sm text-white/80">${safeEmail}</div>
                             <div class="flex items-center gap-2 mt-1">
-                                <div class="text-[10px] text-white/40 font-mono"><i class="fab fa-whatsapp mr-1 text-green-500/70"></i> ${safePhone}</div>
-                                <button onclick="openEditPhone('${u.id}', '${safeName}', '${safePhone}')" class="text-white/30 hover:text-white transition-colors" title="Edit Phone"><i data-lucide="pencil" class="w-3 h-3"></i></button>
+                                <div class="text-[10px] text-white/40 font-mono">
+                                    <i class="fab fa-whatsapp mr-1 text-green-500/70"></i> ${safePhone}
+                                </div>
+                                <button onclick="openEditPhone('${u.id}', '${safeName}', '${safePhone}')" class="text-white/30 hover:text-white transition-colors">
+                                    <i data-lucide="pencil" class="w-3 h-3"></i>
+                                </button>
                             </div>
                             ${authBadge}
                         </td>
                         <td class="px-6 py-4 text-center">${roleBadge}</td>
                         <td class="px-6 py-4 text-center">${statusBadge}</td>
                         <td class="px-6 py-4 text-center flex justify-center gap-2 items-center">
-                            <button onclick="prepareEditUser('${u.id}', '${safeName}', '${u.role||'student'}')" class="text-glow-blue bg-white/5 hover:bg-white/10 p-2 rounded-lg transition-colors" title="Edit Role"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                            <button onclick="toggleUserStatus('${u.id}', ${!!u.disabled})" class="${toggleStatusColor} bg-white/5 p-2 rounded-lg transition-colors" title="${toggleStatusAction} User"><i data-lucide="${toggleIcon}" class="w-4 h-4"></i></button>
-                            <button onclick="deleteUser('${u.id}', '${safeName}')" class="text-red-400 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-lg transition-colors" title="Delete User"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <button onclick="prepareEditUser('${u.id}', '${safeName}', '${u.role||'student'}')" class="text-glow-blue bg-white/5 hover:bg-white/10 p-2 rounded-lg transition-colors">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="toggleUserStatus('${u.id}', ${!!u.disabled})" class="${toggleStatusColor} bg-white/5 p-2 rounded-lg transition-colors">
+                                <i data-lucide="${toggleIcon}" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="deleteUser('${u.id}', '${safeName}')" class="text-red-400 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-lg transition-colors">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
                         </td>
                     </tr>`;
 
-                    // Build POINTS HTML
+                    // POINTS HTML
                     pointsHtml += `
                     <tr class="border-b border-white/5 hover:bg-white/5 transition-colors text-sm font-light text-white/90">
                         <td class="px-6 py-4 font-medium text-white">${safeName}</td>
-                        <td class="px-6 py-4 text-xs text-white/60 font-mono">${safeEmail}<br><span class="text-[9px] text-white/30">ID: ${u.id}</span></td>
+                        <td class="px-6 py-4 text-xs text-white/60 font-mono">
+                            ${safeEmail}<br>
+                            <span class="text-[9px] text-white/30">ID: ${u.id}</span>
+                        </td>
                         <td class="px-6 py-4 text-center text-glow-gold font-display font-black text-xl">${points}</td>
                         <td class="px-6 py-4 flex justify-center gap-2">
-                            <button onclick="preparePointsAction('${u.id}', '${safeName}', 'add')" class="bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 text-green-400 p-2 rounded-lg transition-colors flex items-center gap-1 text-[10px] font-bold uppercase"><i data-lucide="plus" class="w-3 h-3"></i> Add</button>
-                            <button onclick="preparePointsAction('${u.id}', '${safeName}', 'deduct')" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 p-2 rounded-lg transition-colors flex items-center gap-1 text-[10px] font-bold uppercase"><i data-lucide="minus" class="w-3 h-3"></i> Deduct</button>
+                            <button onclick="preparePointsAction('${u.id}', '${safeName}', 'add')" class="bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 text-green-400 p-2 rounded-lg transition-colors flex items-center gap-1 text-[10px] font-bold uppercase">
+                                <i data-lucide="plus" class="w-3 h-3"></i> Add
+                            </button>
+                            <button onclick="preparePointsAction('${u.id}', '${safeName}', 'deduct')" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 p-2 rounded-lg transition-colors flex items-center gap-1 text-[10px] font-bold uppercase">
+                                <i data-lucide="minus" class="w-3 h-3"></i> Deduct
+                            </button>
                         </td>
-                    </tr>
-                    `;
+                    </tr>`;
 
                     if(u.role === 'student' || u.role === 'excom') {
                         certHtml += `
                         <tr class="border-b border-white/5 hover:bg-white/5">
-                            <td class="px-6 py-4 text-center"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${u.id}" data-name="${safeName}" data-email="${safeEmail}" data-phone="${safePhone}"></td>
+                            <td class="px-6 py-4 text-center">
+                                <input type="checkbox" class="cert-checkbox custom-checkbox" value="${u.id}" data-name="${safeName}" data-email="${safeEmail}" data-phone="${safePhone}">
+                            </td>
                             <td class="text-sm font-medium text-white">${safeName}</td>
                         </tr>`;
                         
                         attHtml += `
                         <tr class="border-b border-white/5 hover:bg-white/5 cursor-pointer" onclick="toggleAttCheck('${u.id}')">
-                            <td class="px-6 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${u.id}" value="${u.id}" data-name="${safeName}"></td>
+                            <td class="px-6 py-4 text-center">
+                                <input type="checkbox" class="att-checkbox custom-checkbox" id="att-${u.id}" value="${u.id}" data-name="${safeName}">
+                            </td>
                             <td class="text-sm font-bold text-white">${safeName}</td>
                             <td class="text-xs text-white/50">${safeEmail}</td>
                         </tr>`;
@@ -1160,7 +1920,108 @@
                 lucide.createIcons();
             });
 
-            // Sync Features Map
+            // 2. KANBAN & PROJECTS SYNC
+            onSnapshot(query(collection(db, "projects"), orderBy("timestamp", "desc")), (snap) => {
+                window.projectsData = [];
+                let pendingHtml = '', apprHtml = '', protoHtml = '', fundHtml = '', incHtml = '';
+                let pCount=0, aCount=0, prCount=0, fCount=0, iCount=0;
+                
+                snap.forEach(d => {
+                    const p = d.data();
+                    window.projectsData.push({id: d.id, ...p});
+                    
+                    const status = p.status || 'Pending Review';
+                    let aiBadge = p.aiFeedback ? `<span class="ml-2 text-[8px] bg-glow-blue/20 text-glow-blue px-2 py-0.5 rounded border border-glow-blue/30"><i class="fas fa-sparkles"></i> AI</span>` : "";
+                    
+                    const card = `
+                    <div class="kanban-card bg-black/60 border border-white/10 p-4 rounded-xl hover:border-glow-purple/50 transition-colors" id="card-${d.id}" draggable="true" ondragstart="drag(event)">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-white text-sm leading-tight">${p.title}</h4>
+                        </div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-[9px] text-white/50 uppercase tracking-widest font-mono bg-white/5 px-2 py-0.5 rounded border border-white/10">${p.tech}</span>
+                            ${aiBadge}
+                        </div>
+                        <p class="text-[10px] text-white/40 line-clamp-2 leading-relaxed mb-3">${p.desc}</p>
+                        <div class="text-[8px] text-white/30 text-right">UID: ${p.uid.substring(0,8)}...</div>
+                    </div>`;
+
+                    if(status === 'Pending Review') { pendingHtml += card; pCount++; }
+                    else if(status === 'Approved') { apprHtml += card; aCount++; }
+                    else if(status === 'Prototyping') { protoHtml += card; prCount++; }
+                    else if(status === 'Funded') { fundHtml += card; fCount++; }
+                    else if(status === 'Incubated') { incHtml += card; iCount++; }
+                });
+                
+                if(document.getElementById('col-Pending Review')) {
+                    document.getElementById('col-Pending Review').innerHTML = pendingHtml; document.getElementById('count-pending').textContent = pCount;
+                    document.getElementById('col-Approved').innerHTML = apprHtml; document.getElementById('count-approved').textContent = aCount;
+                    document.getElementById('col-Prototyping').innerHTML = protoHtml; document.getElementById('count-prototyping').textContent = prCount;
+                    document.getElementById('col-Funded').innerHTML = fundHtml; document.getElementById('count-funded').textContent = fCount;
+                    document.getElementById('col-Incubated').innerHTML = incHtml; document.getElementById('count-incubated').textContent = iCount;
+                    safeSetText('overviewStartups', aCount+prCount+fCount+iCount); 
+                }
+            });
+
+            // 3. FUNDS & GRANTS SYNC
+            onSnapshot(query(collection(db, "funds"), orderBy("timestamp", "desc")), (snap) => {
+                window.fundsData = [];
+                let h = '', inc = 0, exp = 0;
+                
+                snap.forEach(d => {
+                    const f = d.data();
+                    window.fundsData.push({id: d.id, ...f});
+                    const color = f.type === 'Income' ? 'text-green-400' : 'text-red-400';
+                    const sign = f.type === 'Income' ? '+' : '-';
+                    
+                    if(f.type === 'Income') inc += parseFloat(f.amount); 
+                    else exp += parseFloat(f.amount);
+                    
+                    h += `
+                    <tr class="border-b border-white/5 hover:bg-white/5">
+                        <td class="px-6 py-4 text-[10px] font-mono text-white/50">${new Date(f.timestamp).toLocaleDateString()}</td>
+                        <td class="px-6 py-4 text-white text-sm">${f.desc}</td>
+                        <td class="px-6 py-4 text-right font-bold font-mono ${color}">${sign}₹${f.amount}</td>
+                    </tr>`;
+                });
+                
+                window.fundsBalance = inc - exp;
+                safeSetText('fundTotalIncome', inc.toLocaleString());
+                safeSetText('fundTotalExpense', exp.toLocaleString());
+                safeSetText('fundBalance', window.fundsBalance.toLocaleString());
+                safeSetText('overviewFunds', window.fundsBalance.toLocaleString()); 
+                
+                if(document.getElementById('fundsListBody')) {
+                    document.getElementById('fundsListBody').innerHTML = h || '<tr><td colspan="3" class="text-center py-8 text-white/30">No records found.</td></tr>';
+                }
+            });
+
+            // 4. QUESTS ENGINE SYNC
+            onSnapshot(collection(db, "quests"), (snap) => {
+                let h = '';
+                snap.forEach(d => {
+                    const q = d.data();
+                    h += `
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-glow-orange/20">
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <i class="fas fa-gem text-glow-orange text-xl"></i>
+                                <h4 class="font-bold text-white text-lg">${q.title}</h4>
+                            </div>
+                            <p class="text-xs text-white/50">${q.desc}</p>
+                        </div>
+                        <div class="flex flex-col items-end gap-2 shrink-0">
+                            <span class="text-xl font-display font-black text-glow-gold">+${q.reward} <span class="text-[10px]">PTS</span></span>
+                            <button onclick="deleteDoc(doc(window.db,'quests','${d.id}'))" class="text-[9px] uppercase tracking-widest text-red-400 hover:text-white transition-colors">Delete Quest</button>
+                        </div>
+                    </div>`;
+                });
+                if(document.getElementById('questsListBody')) {
+                    document.getElementById('questsListBody').innerHTML = h || '<div class="glass-panel p-10 text-center text-white/30 text-xs font-bold uppercase tracking-widest">No active quests.</div>';
+                }
+            });
+
+            // 5. Features Sync
             onSnapshot(collection(db, "features"), (snap) => {
                 let html = '';
                 if(snap.empty) {
@@ -1180,22 +2041,27 @@
                             <p class="text-xs text-white/50">${f.description}</p>
                         </div>
                         <div class="flex gap-2">
-                            <button onclick="toggleFeatureStatus('${d.id}', '${f.status}')" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white p-2 rounded-lg transition-colors text-[10px] uppercase font-bold tracking-widest"><i data-lucide="power" class="w-4 h-4"></i></button>
-                            <button onclick="deleteDoc(doc(window.db,'features','${d.id}'))" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 p-2 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <button onclick="toggleFeatureStatus('${d.id}', '${f.status}')" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white p-2 rounded-lg transition-colors text-[10px] uppercase font-bold tracking-widest">
+                                <i data-lucide="power" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="deleteDoc(doc(window.db,'features','${d.id}'))" class="bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 p-2 rounded-lg transition-colors">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
                         </div>
                     </div>`;
                 });
-                if(document.getElementById('featuresListBody')) document.getElementById('featuresListBody').innerHTML = html;
+                if(document.getElementById('featuresListBody')) {
+                    document.getElementById('featuresListBody').innerHTML = html;
+                }
                 lucide.createIcons();
             });
 
-            // 2. Ticket Orders (Redemptions) Sync
+            // 6. Ticket Orders (Redemptions) Sync
             onSnapshot(query(collection(db, "redemptions"), orderBy("timestamp", "desc")), (snap) => {
                 let h = '';
                 if(snap.empty) { 
                     h = '<tr><td colspan="5" class="text-center py-10 text-white/30 text-xs uppercase font-bold tracking-widest">No orders yet.</td></tr>'; 
                 }
-                
                 snap.forEach(d => {
                     const r = d.data();
                     let badge = `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-yellow-500/30 bg-yellow-500/10 text-yellow-400">Pending</span>`;
@@ -1214,7 +2080,7 @@
                     } else if (r.status === 'Fulfilled' && r.ticketId) {
                         actions = `<span class="text-[10px] text-white/50 font-mono font-bold tracking-wider">${r.ticketId}</span>`;
                     }
-
+                    
                     h += `
                     <tr class="border-b border-white/5 hover:bg-white/5 transition-colors text-sm">
                         <td class="px-6 py-4 text-white font-medium">${r.userName}</td>
@@ -1224,58 +2090,30 @@
                         <td class="px-6 py-4 flex justify-center gap-2">${actions}</td>
                     </tr>`;
                 });
-                if(document.getElementById('redemptionsList')) document.getElementById('redemptionsList').innerHTML = h;
-            });
-
-            // 3. Pending Projects Sync
-            onSnapshot(query(collection(db, "projects"), where("status", "==", "Pending Review")), (snap) => {
-                let h = '';
-                if(snap.empty) { 
-                    h = '<div class="text-center py-8 text-white/30 text-[10px] uppercase font-bold tracking-widest border border-dashed border-white/10 rounded-xl">No pending projects</div>'; 
+                if(document.getElementById('redemptionsList')) {
+                    document.getElementById('redemptionsList').innerHTML = h;
                 }
-                snap.forEach(d => {
-                    const p = d.data();
-                    const user = window.allUsersData.find(u => u.id === p.uid);
-                    let safePhone = "Unknown";
-                    if(user && user.phone) { safePhone = user.phone.length === 10 ? "91" + user.phone : user.phone; }
-
-                    let aiBadge = p.aiFeedback ? `<span class="ml-2 text-[8px] bg-glow-blue/20 text-glow-blue px-2 py-0.5 rounded border border-glow-blue/30"><i class="fas fa-sparkles mr-1"></i>AI Mentored</span>` : "";
-
-                    h += `
-                    <div class="bg-black/40 border border-white/10 p-5 rounded-2xl transition-colors hover:border-glow-blue/30">
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <h4 class="font-bold text-white text-sm">${p.title} ${aiBadge}</h4>
-                                <p class="text-[9px] text-white/50 uppercase tracking-widest mt-1">Tech: ${p.tech}</p>
-                            </div>
-                            <span class="px-2 py-1 bg-yellow-500/10 text-yellow-400 text-[9px] rounded uppercase font-bold border border-yellow-500/30 tracking-widest">Pending</span>
-                        </div>
-                        <p class="text-xs text-white/60 mb-4 line-clamp-2 leading-relaxed">${p.desc}</p>
-                        <div class="flex gap-2 border-t border-white/5 pt-4 mt-auto">
-                            <button onclick="approveProject('${d.id}', '${p.uid}', '${safePhone}', '${p.title}')" class="flex-1 bg-green-500/10 hover:bg-green-500/20 text-green-400 border border-green-500/30 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors"><i class="fas fa-check mr-1"></i> Approve</button>
-                            <button onclick="rejectProject('${d.id}')" class="px-4 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 py-2 rounded-lg text-[10px] font-bold transition-colors"><i class="fas fa-times"></i></button>
-                        </div>
-                    </div>`;
-                });
-                if(document.getElementById('pendingProjectsList')) document.getElementById('pendingProjectsList').innerHTML = h;
             });
 
-            // 4. Attendance Chart Sync
+            // 7. Attendance Chart Sync
             onSnapshot(query(collection(db, "attendance"), orderBy("timestamp", "desc"), limit(50)), (snap) => {
                 let activityLog = []; 
                 snap.forEach(d => activityLog.push(d.data()));
                 let chartDataMap = {};
+                
                 activityLog.reverse().forEach(log => { 
                     if(log.timestamp) { 
                         const dateString = new Date(log.timestamp).toLocaleDateString(undefined, {month: 'short', day:'numeric'}); 
                         chartDataMap[dateString] = (chartDataMap[dateString] || 0) + 1; 
                     } 
                 });
+                
                 const labels = Object.keys(chartDataMap); 
                 const dataPoints = Object.values(chartDataMap);
                 
                 if(activityChartInstance) activityChartInstance.destroy();
                 const ctxAct = document.getElementById('activityChart');
+                
                 if(ctxAct && labels.length > 0) {
                     activityChartInstance = new Chart(ctxAct, { 
                         type: 'line', 
@@ -1300,16 +2138,24 @@
                 }
             });
 
-            // 5. Inventory Sync
+            // 8. Inventory Sync
             onSnapshot(collection(db, "inventory"), (snap) => {
                 let h='', total=0, avail=0, borrowed=0;
+                
                 snap.forEach(d => {
-                    const id = d.id; const item = d.data();
+                    const id = d.id; 
+                    const item = d.data(); 
                     total++; 
-                    if(item.status === 'Available') avail++; else borrowed++;
+                    if(item.status === 'Available') avail++; 
+                    else borrowed++;
                     
-                    const btn = item.status === 'Available' ? `<button onclick="toggleItemStatus('${id}', 'Borrowed')" class="bg-white/5 border border-white/20 px-4 py-2 rounded-lg text-[9px] uppercase font-bold text-white hover:bg-white/10 transition-colors">Lend</button>` : `<button onclick="toggleItemStatus('${id}', 'Available')" class="bg-white text-black px-4 py-2 rounded-lg text-[9px] uppercase font-bold hover:bg-gray-200 transition-colors">Return</button>`;
-                    const statusBadge = item.status === 'Available' ? `<span class="text-[9px] uppercase tracking-widest px-3 py-1.5 rounded border border-green-500/30 text-green-400 bg-green-500/10 font-bold">${item.status}</span>` : `<span class="text-[9px] uppercase tracking-widest px-3 py-1.5 rounded border border-red-500/30 text-red-400 bg-red-500/10 font-bold">${item.status}</span>`;
+                    const btn = item.status === 'Available' 
+                        ? `<button onclick="toggleItemStatus('${id}', 'Borrowed')" class="bg-white/5 border border-white/20 px-4 py-2 rounded-lg text-[9px] uppercase font-bold text-white hover:bg-white/10 transition-colors">Lend</button>` 
+                        : `<button onclick="toggleItemStatus('${id}', 'Available')" class="bg-white text-black px-4 py-2 rounded-lg text-[9px] uppercase font-bold hover:bg-gray-200 transition-colors">Return</button>`;
+                        
+                    const statusBadge = item.status === 'Available' 
+                        ? `<span class="text-[9px] uppercase tracking-widest px-3 py-1.5 rounded border border-green-500/30 text-green-400 bg-green-500/10 font-bold">${item.status}</span>` 
+                        : `<span class="text-[9px] uppercase tracking-widest px-3 py-1.5 rounded border border-red-500/30 text-red-400 bg-red-500/10 font-bold">${item.status}</span>`;
                     
                     h += `
                     <tr class="border-b border-white/5 hover:bg-white/5 text-sm font-light text-white/90">
@@ -1319,18 +2165,22 @@
                         <td class="text-sm text-white/60 px-6">${item.holder||'-'}</td>
                         <td class="text-center flex justify-center gap-4 py-4 px-6">
                             ${btn}
-                            <button onclick="deleteDoc(doc(window.db,'inventory','${id}'))" class="text-red-400 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <button onclick="deleteDoc(doc(window.db,'inventory','${id}'))" class="text-red-400 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-lg transition-colors">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
                         </td>
                     </tr>`;
                 });
                 
                 if(document.getElementById('inventoryListBody')) document.getElementById('inventoryListBody').innerHTML = h;
-                safeSetText('invTotalOverview', total); safeSetText('invTotal', total); 
-                safeSetText('invAvail', avail); safeSetText('invBorrowed', borrowed);
+                safeSetText('invTotalOverview', total); 
+                safeSetText('invTotal', total); 
+                safeSetText('invAvail', avail); 
+                safeSetText('invBorrowed', borrowed);
                 lucide.createIcons();
             });
 
-            // 6. System Logs Sync
+            // 9. System Logs Sync
             onSnapshot(query(collection(db, "logs"), orderBy("timestamp", "desc"), limit(50)), (snap) => {
                 let h = ''; 
                 snap.forEach(d => { 
@@ -1346,7 +2196,7 @@
                 if(document.getElementById('logsListBody')) document.getElementById('logsListBody').innerHTML = h;
             });
 
-            // 7. ExCom Meetings Sync
+            // 10. ExCom Meetings Sync
             onSnapshot(query(collection(db, "excom_meetings"), orderBy("date", "desc")), (snap) => {
                 window.excomMeetingsData = []; 
                 let h = '';
@@ -1368,7 +2218,7 @@
                 lucide.createIcons();
             });
 
-            // 8. Other basic counts
+            // Basic Counts
             onSnapshot(collection(db, "announcements"), s => safeSetText('totalAnnouncementsCount', s.size));
             onSnapshot(collection(db, "eventForms"), s => { 
                 safeSetText('activeFormsCount', s.size);
@@ -1407,7 +2257,8 @@
                             }) 
                         });
                         const data = await res.json();
-                        if(data.url) resolve(data.url); else reject(new Error("Upload failed"));
+                        if(data.url) resolve(data.url); 
+                        else reject(new Error("Upload failed"));
                     } catch(e) { reject(e); }
                 };
                 reader.onerror = () => reject(new Error("File read error"));
@@ -1415,501 +2266,66 @@
             });
         }
 
-        async function sendAutomatedEmail(toEmail, studentName, eventName, certificateUrl) {
-            const emailHtml = `
-                <div style="font-family: Arial, sans-serif; max-w: 600px; margin: 0 auto; background: #050505; color: #ffffff; padding: 30px; border-radius: 15px; border: 1px solid #333;">
-                    <h2 style="color: #9333ea; text-align: center;">MET'S IEDC</h2>
-                    <h3 style="text-align: center;">Certificate of Participation</h3>
-                    <p>Hi ${studentName},</p>
-                    <p>Congratulations! Your certificate for <strong>${eventName}</strong> has been issued.</p>
-                    <p>You can view and download it from your IEDC Student Dashboard, or directly via the link below:</p>
-                    <div style="text-align: center; margin: 30px 0;">
-                        <a href="${certificateUrl}" style="background: #2563eb; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold;">View Certificate</a>
-                    </div>
-                    <p style="color: #888; font-size: 12px; text-align: center;">Keep innovating!<br>- The MET'S IEDC Team</p>
-                </div>`;
-            try { 
-                await fetch(SCRIPT_URL, { 
-                    method: 'POST', 
-                    headers: { "Content-Type": "text/plain;charset=utf-8" }, 
-                    body: JSON.stringify({ 
-                        action: 'sendEmail', 
-                        to: toEmail, 
-                        subject: `Your Certificate for ${eventName} | MET'S IEDC`, 
-                        htmlBody: emailHtml 
-                    }) 
-                }); 
-            } catch(e) { console.error("Email failed", e); }
-        }
-
-        async function sendAutomatedWhatsApp(phoneNumber, messageContent) {
-            try { 
-                await fetch(SCRIPT_URL, { 
-                    method: 'POST', 
-                    headers: { "Content-Type": "text/plain;charset=utf-8" }, 
-                    body: JSON.stringify({ 
-                        action: 'sendWhatsApp', 
-                        phone: phoneNumber, 
-                        message: messageContent 
-                    }) 
-                }); 
-            } catch(e) { console.error("WhatsApp failed", e); }
-        }
-
-        // --- USER MGMT HANDLERS ---
-        window.deleteUser = async (id, name) => {
-            if(!confirm(`WARNING: Are you sure you want to permanently delete the user '${name}'? This action cannot be undone.`)) return;
-            try {
-                await deleteDoc(doc(db, "users", id));
-                await logActivity("User Deleted", `Deleted user: ${name}`);
-            } catch(e) { alert("Error deleting user: " + e.message); }
-        };
-
-        window.toggleUserStatus = async (id, isDisabled) => {
-            const action = isDisabled ? "Enable" : "Disable";
-            if(!confirm(`Are you sure you want to ${action} this user?`)) return;
-            try {
-                await updateDoc(doc(db, "users", id), { disabled: !isDisabled });
-                await logActivity("User Status Changed", `${action}d user ID: ${id}`);
-            } catch(e) { alert("Error updating status: " + e.message); }
-        };
-
-        document.getElementById('editPhoneForm').addEventListener('submit', async (e) => {
+        // --- NEW FORM HANDLERS (FUNDS & QUESTS) ---
+        document.getElementById('fundsForm').addEventListener('submit', async(e) => {
             e.preventDefault();
-            const id = document.getElementById('editPhoneUserId').value;
-            const newPhone = document.getElementById('editPhoneInput').value;
-            const btn = document.getElementById('updatePhoneBtn');
-            btn.disabled = true; btn.textContent = 'Saving...';
-            try {
-                await updateDoc(doc(db, "users", id), { phone: newPhone });
-                await logActivity("Phone Updated", `Updated phone for ID: ${id}`);
-                window.toggleEditPhoneModal(false);
-            } catch(err) {
-                alert(err.message);
-            } finally {
-                btn.disabled = false; btn.textContent = 'Save';
-            }
-        });
-
-        // --- POINTS LOGIC ---
-        document.getElementById('managePointsForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const btn = document.getElementById('submitPointsBtn'); 
-            const uid = document.getElementById('pointsUserId').value; 
-            const pts = parseInt(document.getElementById('pointsAmount').value); 
-            const reason = document.getElementById('pointsReason').value || "No reason provided";
-            const actionType = document.getElementById('pointsActionType').value;
-            
+            const btn = e.target.querySelector('button'); 
             btn.disabled = true; 
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            btn.innerHTML = "Saving...";
             try {
-                const modifier = actionType === 'add' ? pts : -pts;
-                await updateDoc(doc(db, "users", uid), { points: increment(modifier) });
-                
-                const logAction = actionType === 'add' ? "Awarded Points" : "Deducted Points";
-                const logText = actionType === 'add' ? `Gave ${pts} pts` : `Removed ${pts} pts`;
-                
-                await addDoc(collection(db, "logs"), { 
-                    action: logAction, 
-                    details: `${logText} to ${document.getElementById('pointsUserNameDisplay').textContent} (${reason})`, 
-                    admin: window.currentUserEmail, 
-                    timestamp: Date.now() 
-                });
-                
-                document.getElementById('pointsModal').classList.add('hidden'); 
-                e.target.reset();
-            } catch(error) { 
-                alert(error.message); 
-            } finally { 
-                btn.disabled = false; 
-            }
-        });
-
-        // --- NEW FEATURE MANAGER ---
-        window.toggleFeatureStatus = async (id, currentStatus) => {
-            const newStatus = currentStatus === 'Active' ? 'Draft' : 'Active';
-            try {
-                await updateDoc(doc(db, "features", id), { status: newStatus });
-                await logActivity("Feature Toggled", `Feature ${id} changed to ${newStatus}`);
-            } catch(e) { alert("Error: " + e.message); }
-        };
-
-        document.getElementById('featureManagerForm').addEventListener('submit', async(e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnSaveFeature');
-            const origText = btn.innerHTML;
-            btn.innerHTML = "Deploying..."; btn.disabled = true;
-            try {
-                await addDoc(collection(db, "features"), {
-                    title: document.getElementById('fmTitle').value,
-                    description: document.getElementById('fmDescription').value,
-                    target: document.getElementById('fmTarget').value,
-                    status: document.getElementById('fmStatus').value,
+                await addDoc(collection(db, "funds"), {
+                    type: document.getElementById('fundType').value,
+                    amount: parseFloat(document.getElementById('fundAmount').value),
+                    desc: document.getElementById('fundDesc').value,
                     timestamp: Date.now()
                 });
-                await logActivity("Feature Created", document.getElementById('fmTitle').value);
-                alert("Feature deployed successfully!");
                 e.target.reset();
-            } catch(err) {
-                alert(err.message);
-            } finally {
-                btn.innerHTML = origText; btn.disabled = false;
-            }
-        });
-
-
-        // --- REWARD / TICKET FULFILLMENT LOGIC ---
-        window.fulfillReward = async (id, phone, name, item, userId) => {
-            if(!confirm("Approve this ticket and send the QR pass?")) return;
-            try {
-                const ticketId = "TKT-" + Math.random().toString(36).substr(2, 6).toUpperCase();
-                
-                await updateDoc(doc(db, "redemptions", id), { 
-                    status: "Fulfilled", 
-                    ticketId: ticketId 
-                });
-                
-                await logActivity("Ticket Approved", `${name} got pass for ${item} (${ticketId})`);
-                
-                if(phone && phone !== "No Phone") {
-                    const msg = `*MET'S IEDC | Event Pass Ready!* 🎉\n\nHi ${name},\nYour ticket for *${item}* has been approved!\n\n🎫 *Ticket ID:* ${ticketId}\n\nCheck your IEDC Dashboard to view your scannable QR Code Pass. See you there!`;
-                    await sendAutomatedWhatsApp(phone, msg);
-                }
             } catch(e) { 
-                alert("Error approving ticket: " + e.message); 
-            }
-        };
-
-        window.refundReward = async (id, userId, cost) => {
-            if(!confirm("Reject this order and refund their points?")) return;
-            try {
-                const batch = writeBatch(db);
-                batch.update(doc(db, "redemptions", id), { status: "Refunded" });
-                batch.update(doc(db, "users", userId), { points: increment(cost) });
-                await batch.commit();
-                await logActivity("Reward Refunded", `Refunded ${cost} pts for order ${id}`);
-            } catch(e) { 
-                alert("Error refunding ticket: " + e.message); 
-            }
-        };
-
-        // --- GLOBAL SCANNER LOGIC ---
-        window.html5QrcodeScanner = null; 
-        window.isScanningFlag = false; 
-        window.currentScannerMode = null;
-        
-        window.openGlobalScanner = (mode) => {
-            window.currentScannerMode = mode; 
-            document.getElementById('globalScannerModal').classList.remove('hidden');
-            const toast = document.getElementById('globalScannerToast');
-            toast.classList.add('hidden');
-
-            if(mode === 'syncUser') {
-                document.getElementById('scannerTitle').textContent = "Scan ID to Add User";
-            } else {
-                document.getElementById('scannerTitle').textContent = "Scan ID";
-            }
-            
-            window.html5QrcodeScanner = new Html5Qrcode("global-qr-reader");
-            window.html5QrcodeScanner.start(
-                { facingMode: "environment" }, 
-                { fps: 10, qrbox: { width: 250, height: 250 } }, 
-                (decodedText) => {
-                    if(window.isScanningFlag) return; 
-                    window.isScanningFlag = true;
-                    
-                    const uid = decodedText;
-                    
-                    if(mode === 'syncUser') {
-                        // Close Scanner and open Add User Modal
-                        window.closeGlobalScanner();
-                        window.toggleAddUserModal(true);
-                        window.switchAddMode('sync');
-                        document.getElementById('newUserUid').value = uid;
-                        window.isScanningFlag = false;
-                        return;
-                    }
-
-                    toast.classList.remove('hidden');
-                    
-                    if(mode === 'attendance') {
-                        const cb = document.querySelector(`.att-checkbox[value="${uid}"]`);
-                        if(cb) { 
-                            cb.checked = true; 
-                            toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-green-500/30 bg-green-500/10 text-green-400 mt-4";
-                            toast.innerHTML = `✅ Checked In: ${cb.dataset.name}`;
-                        } else { 
-                            toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-red-500/30 bg-red-500/10 text-red-400 mt-4";
-                            toast.innerHTML = `❌ Student not found in list`;
-                        }
-                    } else if (mode === 'excom') {
-                        const sel = document.querySelector(`.excom-status-select[data-id="${uid}"]`);
-                        if(sel) { 
-                            sel.value = 'Present'; 
-                            toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-green-500/30 bg-green-500/10 text-green-400 mt-4";
-                            toast.innerHTML = `✅ ExCom Logged: ${sel.dataset.name}`; 
-                        } else { 
-                            toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-red-500/30 bg-red-500/10 text-red-400 mt-4";
-                            toast.innerHTML = `❌ Not an ExCom member`;
-                        }
-                    }
-                    
-                    setTimeout(() => { 
-                        window.isScanningFlag = false; 
-                        toast.className = "text-center text-[10px] font-bold uppercase tracking-widest py-3 rounded-xl border border-glow-blue/30 bg-glow-blue/10 text-glow-blue mt-4";
-                        toast.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Ready for next scan...';
-                    }, 2000);
-                }
-            ).catch(err => { 
-                alert("Camera access denied or unavailable."); 
-            });
-        }
-        
-        window.closeGlobalScanner = () => { 
-            if(window.html5QrcodeScanner) { 
-                window.html5QrcodeScanner.stop().then(() => { 
-                    window.html5QrcodeScanner.clear(); 
-                    window.html5QrcodeScanner = null; 
-                }); 
-            } 
-            document.getElementById('globalScannerModal').classList.add('hidden'); 
-        }
-
-        async function logActivity(action, details) { 
-            try { 
-                await addDoc(collection(db, "logs"), { 
-                    action, 
-                    details, 
-                    admin: window.currentUserEmail, 
-                    timestamp: Date.now() 
-                }); 
-            } catch(e) {} 
-        }
-
-        // Add User Form Submission
-        document.getElementById('adminAddUserForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const mode = document.getElementById('addUserMode').value; 
-            const name = document.getElementById('newUserName').value; 
-            const email = document.getElementById('newUserEmail').value; 
-            const btn = document.getElementById('submitAddUserBtn');
-            const status = document.getElementById('addUserStatus');
-            
-            btn.disabled = true;
-            status.classList.remove('hidden'); 
-            status.className = "text-[10px] text-center p-3 text-blue-400 border border-blue-400/30 rounded-xl uppercase tracking-widest font-bold"; 
-            status.textContent = "Processing...";
-            
-            try {
-                if (mode === 'create') { 
-                    status.className = "text-[10px] text-center p-3 text-yellow-400 border border-yellow-400/30 rounded-xl uppercase tracking-widest font-bold"; 
-                    status.textContent = "To create a fresh auth user securely, please instruct the student to sign up on the portal. You can sync them here later."; 
-                } else {
-                    const uid = document.getElementById('newUserUid').value;
-                    if(!uid) throw new Error("Please enter or scan a UID");
-                    await setDoc(doc(db, "users", uid), { 
-                        name: name, 
-                        email: email, 
-                        role: "student", 
-                        disabled: false,
-                        createdAt: Date.now() 
-                    }, {merge: true}); // Merge so we don't wipe existing points if they re-sync
-                    await logActivity("Synced User", `Synced ${email}`); 
-                    
-                    status.className = "text-[10px] text-center p-3 text-green-400 border border-green-400/30 rounded-xl uppercase tracking-widest font-bold"; 
-                    status.textContent = "Success!";
-                    
-                    e.target.reset(); 
-                    setTimeout(()=> window.toggleAddUserModal(false), 2000);
-                }
-            } catch(err) { 
-                status.className = "text-[10px] text-center p-3 text-red-400 border border-red-400/30 rounded-xl uppercase tracking-widest font-bold"; 
-                status.textContent = err.message; 
+                alert(e.message); 
             } finally { 
                 btn.disabled = false; 
+                btn.innerHTML = "Save Record"; 
             }
         });
 
-        document.getElementById('editUserRoleForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const id = document.getElementById('editUserId').value; 
-            const role = document.getElementById('editUserRoleSelect').value; 
-            const btn = document.getElementById('updateUserBtn');
-            
-            btn.disabled = true; 
-            btn.innerHTML = `Updating...`;
-            
-            try { 
-                await updateDoc(doc(db, "users", id), { role: role }); 
-                await logActivity("Changed Role", `Updated to ${role}`); 
-                window.toggleEditUserModal(false); 
-            } catch(err) { 
-                alert(err.message); 
-            } finally { 
-                btn.disabled = false; 
-                btn.innerText = "Update"; 
-            }
-        });
-
-        document.getElementById('addItemForm').addEventListener('submit', async (e) => {
+        document.getElementById('questForm').addEventListener('submit', async(e) => {
             e.preventDefault();
-            try { 
-                await addDoc(collection(db, "inventory"), { 
-                    name: document.getElementById('invName').value, 
-                    category: document.getElementById('invCategory').value, 
-                    status: 'Available', 
-                    holder: '', 
-                    timestamp: Date.now() 
-                }); 
-                await logActivity("Added Asset", document.getElementById('invName').value); 
-                document.getElementById('addItemModal').classList.add('hidden'); 
-                e.target.reset(); 
-            } catch(err) { alert(err.message); }
-        });
-
-        document.getElementById('formBuilderForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const btn = document.getElementById('saveFormBtn'); 
-            const orig = btn.innerHTML; 
-            
-            btn.disabled = true; 
-            btn.innerHTML = `Publishing...`;
-            
-            try {
-                let coverUrl = window.formCoverImageFile ? await uploadToDrive(window.formCoverImageFile) : "";
-                
-                await addDoc(collection(db, "eventForms"), { 
-                    title: document.getElementById('formTitle').value, 
-                    description: document.getElementById('formDescription').value, 
-                    webhook: '', 
-                    coverImage: coverUrl, 
-                    questions: formBuilderFields, 
-                    createdAt: Date.now() 
-                });
-                
-                await logActivity("Published Form", document.getElementById('formTitle').value); 
-                alert("Published!"); 
-                e.target.reset(); 
-                formBuilderFields = []; 
-                document.getElementById('questionsContainer').innerHTML = ''; 
-                window.formCoverImageFile = null;
-            } catch(err) { 
-                alert(err.message); 
-            } finally { 
-                btn.innerHTML = orig; 
-                btn.disabled = false; 
-            }
-        });
-
-        // Other Publish Handlers (News, Announcements, ExCom)
-        document.getElementById('pushAlertForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const btn = document.getElementById('btnBroadcastAlert'); 
-            const orig = btn.innerHTML; 
-            const statusEl = document.getElementById('alertStatus');
-            
-            btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Broadcasting...`; 
-            btn.disabled = true;
-            statusEl.classList.remove('hidden');
-            statusEl.textContent = "Saving to dashboard...";
-            
-            try { 
-                const title = document.getElementById('alertTitle').value; 
-                const cat = document.getElementById('alertCategory').value; 
-                const msg = document.getElementById('alertContent').value;
-                
-                await addDoc(collection(db, "notifications"), { 
-                    title: title, 
-                    category: cat, 
-                    message: msg, 
-                    timestamp: Date.now() 
-                }); 
-                await logActivity("Sent Alert & WhatsApp", title); 
-                
-                statusEl.textContent = "Sending WhatsApp Broadcasts...";
-                let sentCount = 0; 
-                const waMsg = `*MET'S IEDC | 🚨 ${cat.toUpperCase()} 🚨*\n\n*${title}*\n${msg}\n\n_Check your IEDC dashboard for details._`;
-                
-                for(let user of window.allUsersData) { 
-                    if(user.phone) { 
-                        let phone = user.phone.length === 10 ? "91" + user.phone : user.phone; 
-                        await sendAutomatedWhatsApp(phone, waMsg); 
-                        sentCount++; 
-                    } 
-                }
-                
-                statusEl.classList.replace('text-white', 'text-green-400');
-                statusEl.classList.replace('border-glow-blue/50', 'border-green-500/50');
-                statusEl.classList.replace('bg-glow-blue/10', 'bg-green-500/10');
-                statusEl.innerHTML = `<i class="fas fa-check-circle mr-2"></i> Success! Sent to dashboard and ${sentCount} WhatsApps.`;
-                
-                e.target.reset(); 
-                setTimeout(() => {
-                    statusEl.classList.add('hidden');
-                    statusEl.classList.replace('text-green-400', 'text-white');
-                    statusEl.classList.replace('border-green-500/50', 'border-glow-blue/50');
-                    statusEl.classList.replace('bg-green-500/10', 'bg-glow-blue/10');
-                }, 5000);
-            } catch (err) { 
-                alert(err.message); 
-                statusEl.classList.add('hidden');
-            } finally { 
-                btn.innerHTML = orig; 
-                btn.disabled = false; 
-            }
-        });
-
-        document.getElementById('newsForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const btn = document.getElementById('postNewsBtn'); 
-            btn.disabled = true; 
-            btn.innerText = "Publishing...";
-            try { 
-                let url = window.newsImageFile ? await uploadToDrive(window.newsImageFile) : ""; 
-                await addDoc(collection(db, "news"), { 
-                    title: document.getElementById('newsTitle').value, 
-                    description: document.getElementById('newsContent').value, 
-                    date: document.getElementById('newsDate').value, 
-                    imageUrl: url, 
-                    timestamp: Date.now() 
-                }); 
-                await logActivity("Posted News", document.getElementById('newsTitle').value); 
-                alert("Published!"); 
-                e.target.reset(); 
-                window.newsImageFile = null; 
-            } catch(err) { 
-                alert(err.message); 
-            } finally { 
-                btn.disabled = false; 
-                btn.innerText = "Publish News"; 
-            }
-        });
-
-        document.getElementById('announcementForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
             const btn = e.target.querySelector('button'); 
-            const orig = btn.innerHTML; 
-            btn.innerHTML = `Broadcasting...`; 
-            btn.disabled = true;
-            try { 
-                await addDoc(collection(db, "announcements"), { 
-                    title: document.getElementById('annTitle').value, 
-                    description: document.getElementById('annContent').value, 
-                    timestamp: Date.now() 
-                }); 
-                await logActivity("Posted Update", document.getElementById('annTitle').value); 
-                alert("Broadcasted!"); 
-                e.target.reset(); 
-            } catch (err) { 
-                alert(err.message); 
+            btn.disabled = true; 
+            btn.innerHTML = "Publishing...";
+            try {
+                await addDoc(collection(db, "quests"), {
+                    title: document.getElementById('questTitle').value,
+                    reward: parseInt(document.getElementById('questReward').value),
+                    desc: document.getElementById('questDesc').value,
+                    timestamp: Date.now()
+                });
+                e.target.reset();
+            } catch(e) { 
+                alert(e.message); 
             } finally { 
-                btn.innerHTML = orig; 
                 btn.disabled = false; 
+                btn.innerHTML = "Publish Quest"; 
             }
         });
 
-        document.getElementById('adminLogoutBtn').addEventListener('click', () => signOut(auth));
-        document.getElementById('adminLogoutBtnMobile').addEventListener('click', () => signOut(auth));
+        // --- OTHER ADMIN HANDLERS ---
+        window.deleteUser = async (id, name) => {
+            if(!confirm(`WARNING: Are you sure you want to permanently delete '${name}'?`)) return;
+            try { 
+                await deleteDoc(doc(db, "users", id)); 
+                await logActivity("User Deleted", name); 
+            } catch(e) { alert(e.message); }
+        };
+        
+        window.toggleUserStatus = async (id, isDisabled) => {
+            if(!confirm(`Are you sure you want to ${isDisabled ? 'Enable' : 'Disable'} this user?`)) return;
+            try { 
+                await updateDoc(doc(db, "users", id), { disabled: !isDisabled }); 
+                await logActivity("User Status", `${isDisabled?'Enabled':'Disabled'} ${id}`); 
+            } catch(e) { alert(e.message); }
+        };
+
     </script>
 </body>
 </html>
