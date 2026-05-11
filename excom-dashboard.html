@@ -106,7 +106,7 @@
 <body class="font-sans antialiased relative h-screen overflow-hidden selection:bg-glow-purple selection:text-white">
 
     <!-- MAIN DASHBOARD UI (Hidden on print) -->
-    <div id="dashboard-ui" class="flex h-full w-full relative">
+    <div id="dashboard-ui" class="flex h-full w-full relative hidden">
         
         <!-- Ambient Effects -->
         <div class="ambient-glow fixed top-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-glow-purple/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow"></div>
@@ -471,6 +471,18 @@
         </div>
     </div>
 
+    <!-- UNAUTHORIZED ACCESS SCREEN (Replaces hard redirects) -->
+    <div id="unauthorizedScreen" class="fixed inset-0 bg-[#050505] z-[9999] hidden flex-col items-center justify-center p-6 text-center">
+        <div class="w-20 h-20 bg-red-500/20 border border-red-500/30 text-red-500 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(239,68,68,0.3)] animate-pulse-glow">
+            <i data-lucide="shield-alert" class="w-10 h-10"></i>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-display font-bold text-white mb-4 uppercase tracking-widest">Access Denied</h1>
+        <p class="text-white/50 mb-8 max-w-md text-sm leading-relaxed" id="unauthorizedMessage">You must be logged in with an Executive Committee account to view this dashboard.</p>
+        <a href="excom-login.html" class="bg-gradient-to-r from-glow-purple to-blue-600 hover:opacity-90 px-8 py-4 rounded-xl text-white text-[10px] uppercase font-bold tracking-widest shadow-[0_0_20px_rgba(147,51,234,0.4)] transition-opacity">
+            Go to ExCom Login
+        </a>
+    </div>
+
     <!-- PRINT ONLY AREA (Dynamically populated by JS based on document type) -->
     <div id="printArea" class="hidden">
         <!-- Content gets injected here -->
@@ -479,8 +491,6 @@
     <!-- UI Scripts -->
     <script>
         // --- SECTION PASSWORD CONFIGURATION ---
-        // To add new protected sections in the future, simply add them here:
-        // Format: 'tabId': 'PASSWORD'
         const tabPasswords = {
             'circular': 'METS2026', 
             'order': 'ORDER2026',
@@ -488,17 +498,15 @@
             'finance': 'FINANCE2026'
         };
         
-        // This Set remembers which tabs the user has already unlocked during this session
         const unlockedTabs = new Set(['overview']); 
 
         document.addEventListener('DOMContentLoaded', () => { 
             document.getElementById('mobile-menu-toggle')?.addEventListener('click', window.toggleMobileSidebar); 
-            // Set today's date automatically in the forms
+            
             if(document.getElementById('circDate')) document.getElementById('circDate').valueAsDate = new Date();
             if(document.getElementById('minDate')) document.getElementById('minDate').valueAsDate = new Date();
             if(document.getElementById('finDate')) document.getElementById('finDate').valueAsDate = new Date();
 
-            // Tab Password Form Handler
             document.getElementById('tabPasswordForm')?.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const targetTab = document.getElementById('targetTabId').value;
@@ -506,16 +514,10 @@
                 const errorEl = document.getElementById('tabPasswordError');
                 
                 if (enteredPass === tabPasswords[targetTab]) {
-                    // Password Correct!
                     unlockedTabs.add(targetTab);
                     window.closeTabPasswordModal();
-                    
-                    // Add a tiny delay for visual smoothness before showing the tab
-                    setTimeout(() => {
-                        window.showTab(targetTab); 
-                    }, 100);
+                    setTimeout(() => { window.showTab(targetTab); }, 100);
                 } else {
-                    // Password Incorrect
                     errorEl.classList.remove('hidden');
                     document.getElementById('tabPasswordInput').value = '';
                 }
@@ -541,10 +543,7 @@
         };
 
         window.showTab = (t) => { 
-            // --- PASSWORD PROTECTION INTERCEPTOR ---
-            // If the requested tab requires a password and hasn't been unlocked yet
             if (tabPasswords[t] && !unlockedTabs.has(t)) {
-                // Set target and update modal UI
                 document.getElementById('targetTabId').value = t;
                 let modalTitle = t.charAt(0).toUpperCase() + t.slice(1); 
                 if(t === 'circular') modalTitle = "Draft Circular"; 
@@ -553,29 +552,24 @@
                 if(t === 'finance') modalTitle = "Finance Documents";
                 document.getElementById('tabPasswordTitle').textContent = "Unlock: " + modalTitle;
                 
-                // Show modal
                 document.getElementById('tabPasswordModal').classList.remove('hidden');
                 document.getElementById('tabPasswordInput').focus();
                 
-                // Close mobile sidebar if it was open so the modal is clearly visible
                 const menu = document.getElementById('mobile-sidebar'); 
                 if(menu && !menu.classList.contains('-translate-x-full')) { 
                     window.toggleMobileSidebar(); 
                 } 
-                return; // Stop execution here until the user provides the correct password
+                return; 
             }
 
-            // --- STANDARD TAB SWITCHING LOGIC (Proceeds if unlocked) ---
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); 
             const sec = document.getElementById(t+'Section'); 
             if(sec) sec.classList.remove('hidden'); 
             
-            // Handle Desktop Nav Active State
             document.querySelectorAll('aside .sidebar-link').forEach(el => el.classList.remove('active')); 
             const activeDesktop = document.getElementById('nav-'+t); 
             if(activeDesktop) activeDesktop.classList.add('active'); 
             
-            // Handle Mobile Nav Active State
             document.querySelectorAll('#mobile-sidebar .sidebar-link').forEach(el => el.classList.remove('active')); 
             const activeMobile = document.getElementById('nav-mobile-'+t); 
             if(activeMobile) activeMobile.classList.add('active'); 
@@ -592,33 +586,23 @@
         };
 
         // --- PRINTING TEMPLATE ENGINE ---
-        
-        // Reusable Official Letterhead Top Component
         const letterheadTop = `
-            <!-- Watermark -->
             <div class="watermark">MET'S IEDC PORTAL</div>
-            
-            <!-- Header Logos -->
             <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 5px;">
                 <img src="assets/images/logos/mets_logo.png" style="height: 60px;" alt="METS" onerror="this.src='https://ui-avatars.com/api/?name=METS&background=fff&color=000&size=100'">
                 <img src="assets/images/logos/ksum.png" style="height: 50px;" alt="KSUM" onerror="this.src='https://ui-avatars.com/api/?name=KSUM&background=fff&color=000&size=100'">
                 <img src="assets/images/logos/KERALA IEDC.png" style="height: 60px;" alt="IEDC" onerror="this.src='https://ui-avatars.com/api/?name=IEDC&background=fff&color=000&size=100'">
             </div>
-            
-            <!-- Header Text -->
             <div style="text-align: center; margin-bottom: 10px;">
                 <h1 style="font-size: 22px; font-weight: bold; margin: 0; padding: 0;">MET'S SCHOOL OF ENGINEERING</h1>
                 <p style="font-size: 11px; margin: 2px 0 0 0; color: #333;">Innovation and Entrepreneurship Development Centre (IEDC) KSUMIEDC1163</p>
             </div>
-            
-            <!-- Blue Line Contact Block -->
             <div class="blue-line-block">
                 <span style="color: black;">Kuruvilassery P.O, Mala, Thrissur Dist. Kerala Pin-680732 Ph:0484 2967337,</span><br>
                 <a href="https://metsiedc.github.io/metsiedc">metsiedc.github.io/metsiedc</a>, Email: <a href="mailto:metsenggiedc@gmail.com">metsenggiedc@gmail.com</a>
             </div>
         `;
 
-        // Reusable Official Digital Signature Bottom Component
         function getLetterheadBottom(issuerName) {
             return `
                 <div style="margin-top: 50px; border-top: 1px solid #ccc; padding-top: 10px; text-align: center; font-size: 10px; color: #666; font-style: italic;">
@@ -627,13 +611,9 @@
             `;
         }
 
-        // --- CIRCULAR GENERATION LOGIC ---
         window.generateCircularPrint = (e) => {
             e.preventDefault();
-            
-            // Gather form data
             const ref = document.getElementById('circRef').value;
-            // Format date to DD/MM/YYYY for printing
             const dateVal = new Date(document.getElementById('circDate').value);
             const dateStr = dateVal.toLocaleDateString('en-GB'); 
             const subject = document.getElementById('circSubject').value;
@@ -642,20 +622,15 @@
             const signName = document.getElementById('circSignName').value;
             const signDesig = document.getElementById('circSignDesig').value;
 
-            // Generate Content Body
             const content = `
                 <div style="font-size: 14px; line-height: 1.6;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-weight: bold;">
                         <div>Ref: ${ref}</div>
                         <div>Date: ${dateStr}</div>
                     </div>
-                    
                     <h2 style="text-align: center; font-size: 16px; font-weight: bold; text-decoration: underline; margin-bottom: 30px; text-transform: uppercase;">${subject}</h2>
-                    
                     <p style="margin-bottom: 20px; font-weight: bold;">${salutation}</p>
-                    
                     <div style="white-space: pre-wrap; text-align: justify; margin-bottom: 60px; min-height: 250px;">${body}</div>
-                    
                     <div style="float: right; text-align: center; margin-bottom: 40px;">
                         <p style="margin-bottom: 50px; font-weight: bold;">Yours faithfully,</p>
                         <p style="margin: 0; font-weight: bold; text-transform: uppercase;">${signName}</p>
@@ -665,41 +640,27 @@
                 </div>
             `;
 
-            // Inject into Print Area
             const issuerName = window.currentUserName || window.currentUserEmail || "ExCom Admin";
             document.getElementById('printArea').innerHTML = letterheadTop + content + getLetterheadBottom(issuerName);
 
-            // Trigger the browser print dialog
             setTimeout(() => {
                 window.print();
-                // Optional: Log to firebase that a circular was generated
-                if (window.logActivity) {
-                    window.logActivity("Generated Circular", `Ref: ${ref} | Sub: ${subject}`);
-                }
+                if (window.logActivity) window.logActivity("Generated Circular", `Ref: ${ref} | Sub: ${subject}`);
             }, 500);
         };
 
-        // --- OFFICIAL ORDER GENERATION LOGIC ---
         window.generateOrderPrint = (e) => {
             e.preventDefault();
-            
-            // Gather form data
             const ref = document.getElementById('orderRef').value;
             const body = document.getElementById('orderBody').value;
             const sign1 = document.getElementById('orderSign1').value;
             const sign2 = document.getElementById('orderSign2').value;
 
-            // Generate Content Body matching the exact Order format
             const content = `
                 <div style="font-size: 14px; line-height: 1.6;">
-                    <div style="margin-bottom: 30px; font-weight: bold; font-size: 15px;">
-                        ${ref}
-                    </div>
-                    
+                    <div style="margin-bottom: 30px; font-weight: bold; font-size: 15px;">${ref}</div>
                     <h2 style="text-align: center; font-size: 16px; font-weight: bold; text-decoration: underline; margin-bottom: 30px; text-transform: uppercase;">OFFICIAL ORDER</h2>
-                    
                     <div style="white-space: pre-wrap; text-align: justify; margin-bottom: 60px; min-height: 200px; font-weight: bold;">${body}</div>
-                    
                     <div style="text-align: left; margin-bottom: 40px; font-weight: bold;">
                         <p style="margin-bottom: 30px; font-weight: normal; font-size: 13px;">This order is issued with the approval of the concerned authority.</p>
                         <p style="margin: 0 0 15px 0;">– ${sign1}</p>
@@ -709,21 +670,16 @@
                 </div>
             `;
 
-            // Inject into Print Area
             const issuerName = window.currentUserName || window.currentUserEmail || "ExCom Admin";
             document.getElementById('printArea').innerHTML = letterheadTop + content + getLetterheadBottom(issuerName);
 
-            // Trigger the browser print dialog
             setTimeout(() => {
                 window.print();
-                // Optional: Log to firebase that an order was generated
-                if (window.logActivity) {
-                    window.logActivity("Generated Order", `Ref: ${ref}`);
-                }
+                if (window.logActivity) window.logActivity("Generated Order", `Ref: ${ref}`);
             }, 500);
         };
 
-        // Handles for the new uploaders
+        // File handling logic
         window.minutesFileBase64 = null;
         window.financeFileBase64 = null;
         
@@ -763,16 +719,27 @@
         window.currentUserEmail = ""; 
         window.currentUserName = "";
         window.db = db;
+
+        // Function to handle unauthorized state cleanly without forcing a redirect
+        function showUnauthorizedError(message) {
+            document.getElementById('dashboard-ui').style.display = 'none';
+            document.getElementById('unauthorizedMessage').textContent = message;
+            document.getElementById('unauthorizedScreen').classList.remove('hidden');
+            document.getElementById('unauthorizedScreen').classList.add('flex');
+            lucide.createIcons();
+        }
         
         // ExCom Auth Check
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const snapshot = await getDoc(doc(db, "users", user.uid));
                 if (snapshot.exists() && (snapshot.data().role === 'excom' || snapshot.data().role === 'admin')) {
+                    // Auth Success: Show Dashboard UI
+                    document.getElementById('dashboard-ui').classList.remove('hidden');
+                    
                     window.currentUserEmail = user.email; 
                     window.currentUserName = snapshot.data().name || user.email;
                     
-                    // Pre-fill the sign-off name with the logged-in user's name
                     const nameField = document.getElementById('circSignName');
                     if(nameField && !nameField.value && snapshot.data().name) {
                         nameField.value = snapshot.data().name;
@@ -780,11 +747,13 @@
 
                     document.getElementById('excomEmailDisplay').textContent = window.currentUserName; 
                 } else { 
-                    alert("Unauthorized. This dashboard is for ExCom members only."); 
-                    signOut(auth).then(() => window.location.href = 'login.html'); 
+                    // Failed Role Check
+                    showUnauthorizedError("Unauthorized. This workspace is reserved for Executive Committee members only.");
+                    await signOut(auth);
                 }
             } else { 
-                window.location.href = 'login.html'; 
+                // Not Logged In
+                showUnauthorizedError("Authentication required. Please log in to access the ExCom Dashboard.");
             }
         });
 
@@ -814,7 +783,7 @@
                                 filename: file.name, 
                                 mimeType: file.type, 
                                 data: base64Data, 
-                                action: 'uploadImage' // The backend handles both images and pdfs as generic blobs via base64
+                                action: 'uploadImage' 
                             }) 
                         });
                         const data = await res.json();
@@ -905,8 +874,14 @@
             }
         });
 
-        document.getElementById('excomLogoutBtn').addEventListener('click', () => signOut(auth));
-        document.getElementById('excomLogoutBtnMobile').addEventListener('click', () => signOut(auth));
+        document.getElementById('excomLogoutBtn').addEventListener('click', async () => {
+            await signOut(auth);
+            window.location.reload();
+        });
+        document.getElementById('excomLogoutBtnMobile').addEventListener('click', async () => {
+            await signOut(auth);
+            window.location.reload();
+        });
     </script>
 </body>
 </html>
