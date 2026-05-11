@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExCom Portal | MET'S IEDC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050505">
+    <link rel="apple-touch-icon" href="assets/images/logos/MSEM.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif']
+                    },
+                    colors: {
+                        dark: {
+                            base: '#050505',
+                            panel: 'rgba(20, 20, 25, 0.6)',
+                            border: 'rgba(255, 255, 255, 0.08)'
+                        },
+                        glow: {
+                            purple: '#9333ea',
+                            blue: '#2563eb',
+                            orange: '#ea580c'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.2' },
+                            '50%': { opacity: '0.5' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            background-color: #050505; 
+            color: #e2e8f0; 
+            overflow-x: hidden; 
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(30, 30, 35, 0.8) 0%, rgba(15, 15, 20, 0.6) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02), 0 20px 50px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            z-index: 1;
+        }
+
+        /* Input styling */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(147, 51, 234, 0.5); /* Purple glow for excom */
+            outline: none;
+            box-shadow: 0 0 15px rgba(147, 51, 234, 0.2);
+        }
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Button Styling */
+        .btn-light {
+            background: #ffffff;
+            color: #050505;
+            transition: all 0.3s ease;
+        }
+        .btn-light:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
+        }
+        .btn-light:disabled {
+            opacity: 0.7;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 2px solid #000;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
+    </style>
+</head>
+<body class="font-sans antialiased relative min-h-screen flex items-center justify-center selection:bg-glow-purple/30 selection:text-white pb-20 md:pb-0">
+
+    <!-- FULLSCREEN ANIMATED CANVAS BACKGROUND -->
+    <div class="fixed inset-0 w-full h-full z-[-10] overflow-hidden bg-[#050505]">
+        <canvas id="bg-canvas" class="absolute top-0 left-0 w-full h-full opacity-60"></canvas>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/70 to-[#050505]/40"></div>
+    </div>
+
+    <!-- Ambient Background Effects -->
+    <div class="fixed top-[10%] right-[-10%] w-[40vw] h-[40vw] bg-glow-purple/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-[-5] animate-pulse-glow"></div>
+    <div class="fixed bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-glow-blue/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-[-5]" style="animation-delay: 2s;"></div>
+    <div class="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 z-[-5] pointer-events-none"></div>
+
+    <div class="w-full max-w-md px-4 relative z-10 flex flex-col items-center">
+        
+        <div class="text-center mb-10">
+            <a href="index.html" class="inline-block mb-6 group">
+                <div class="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.8)] flex items-center justify-center mx-auto overflow-hidden group-hover:border-glow-purple/50 group-hover:shadow-[0_0_30px_rgba(147,51,234,0.3)] transition-all duration-300 relative z-10 backdrop-blur-md">
+                    <img src="assets/images/logos/MSEM.jpg" alt="IEDC Logo" class="w-full h-full object-cover grayscale opacity-80" onerror="this.src='https://ui-avatars.com/api/?name=MI&background=0f1115&color=fff'">
+                </div>
+            </a>
+            <h1 class="text-3xl md:text-4xl font-display font-bold text-white tracking-widest uppercase mb-2">ExCom Portal</h1>
+            <p class="text-white/40 text-[10px] uppercase tracking-[0.2em] font-bold">MET'S IEDC Workspace</p>
+        </div>
+
+        <div class="glass-panel w-full p-8 md:p-10 rounded-3xl animate-float relative backdrop-blur-3xl bg-[#050505]/40">
+            
+            <div class="absolute -right-10 -top-10 w-32 h-32 bg-glow-purple/20 blur-2xl rounded-full pointer-events-none"></div>
+            
+            <div class="flex justify-center mb-8 relative z-10">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-glow-purple/10 border border-glow-purple/30 text-glow-purple text-[10px] font-bold uppercase tracking-widest shadow-[0_0_15px_rgba(147,51,234,0.15)]">
+                    <i class="fas fa-shield-alt"></i> Committee Access
+                </span>
+            </div>
+
+            <div id="loginError" class="hidden mb-8 p-4 rounded-xl text-xs tracking-wide text-center border font-medium bg-red-500/10 border-red-500/30 text-red-400 flex items-center justify-center gap-3 relative z-10 shadow-lg">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="loginErrorText">Invalid credentials</span>
+            </div>
+
+            <form id="excomLoginForm" class="space-y-6 relative z-10">
+                <div>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">ExCom Email</label>
+                    <div class="relative">
+                        <i class="fas fa-user-tie absolute left-4 top-1/2 transform -translate-y-1/2 text-white/30"></i>
+                        <input type="email" id="excomEmail" placeholder="member@metsiedc.in" class="glass-input w-full rounded-xl py-3.5 pl-11 pr-4 text-sm font-light bg-black/20">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Security Key</label>
+                    <div class="relative">
+                        <i class="fas fa-key absolute left-4 top-1/2 transform -translate-y-1/2 text-white/30"></i>
+                        <input type="password" id="excomPassword" placeholder="••••••••••••" class="glass-input w-full rounded-xl py-3.5 pl-11 pr-12 text-sm font-light bg-black/20">
+                        <button type="button" class="toggle-password absolute right-4 top-1/2 transform -translate-y-1/2 text-white/30 hover:text-white transition-colors">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" id="loginBtn" class="w-full btn-light font-bold py-4 rounded-xl text-[10px] uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(255,255,255,0.15)] flex justify-center items-center gap-3">
+                        <span id="loginBtnText">Access Dashboard</span>
+                        <div id="loginSpinner" class="spinner hidden"></div>
+                        <i id="loginIcon" class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-8 pt-6 border-t border-white/10 text-center relative z-10">
+                <a href="index.html" class="text-[9px] uppercase tracking-[0.2em] font-bold text-white/30 hover:text-white transition-colors flex items-center justify-center gap-2">
+                    <i class="fas fa-arrow-left"></i> Return to Main Site
+                </a>
+            </div>
+        </div>
+
+        <p class="text-center text-white/30 text-[9px] uppercase tracking-widest mt-10 leading-relaxed max-w-xs font-mono opacity-60">
+            System monitored.<br>Unauthorized access is prohibited.<br>
+            &copy; <span id="year">2026</span> MET'S IEDC.
+        </p>
+    </div>
+
+    <!-- Mobile Navigation Bottom Bar (for small screens) -->
+    <div class="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-xl border-t border-white/10 z-[100] md:hidden pb-safe">
+        <div class="flex justify-around items-center px-2 py-3">
+            <a href="index.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Home</span>
+            </a>
+            <a href="login.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-user-graduate text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Student</span>
+            </a>
+            <a href="admin-login.html" class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors">
+                <i class="fas fa-user-shield text-lg"></i>
+                <span class="text-[9px] uppercase tracking-wider font-medium">Admin</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // --- BACKGROUND CANVAS ANIMATION (Particle Network) ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 1.2;
+                this.vy = (Math.random() - 0.5) * 1.2;
+                this.radius = Math.random() * 2 + 0.5;
+                // ExCom Theme Colors: Purple, Blue, and White
+                const colors = ['#9333ea', '#2563eb', '#ffffff'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                if (this.x < 0 || this.x > width) this.vx = -this.vx;
+                if (this.y < 0 || this.y > height) this.vy = -this.vy;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.shadowBlur = 0; 
+            }
+        }
+
+        const particleCount = window.innerWidth < 768 ? 40 : 100;
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < 130) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 - (dist / 130) * 0.15})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // IMPORTANT: Replace with your actual Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+            authDomain: "metsiedc-3010e.firebaseapp.com",
+            databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+            projectId: "metsiedc-3010e",
+            storageBucket: "metsiedc-3010e.firebasestorage.app",
+            messagingSenderId: "954403413150",
+            appId: "1:954403413150:web:2523a3377f15a3d6002f8f"
+        };
+
+        let app, auth, db;
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+        } catch (e) {
+            console.error("Firebase Init Error:", e);
+            alert("Error initializing Firebase. Check console.");
+        }
+
+        const loginForm = document.getElementById('excomLoginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginBtnText = document.getElementById('loginBtnText');
+        const loginSpinner = document.getElementById('loginSpinner');
+        const loginIcon = document.getElementById('loginIcon');
+        const loginError = document.getElementById('loginError');
+        const loginErrorText = document.getElementById('loginErrorText');
+
+        // Toggle Password Visibility
+        document.querySelectorAll('.toggle-password').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                const icon = this.querySelector('i');
+                input.type = input.type === 'password' ? 'text' : 'password';
+                icon.classList.toggle('fa-eye'); icon.classList.toggle('fa-eye-slash');
+            });
+        });
+
+        onAuthStateChanged(auth, async (user) => {
+            // Keep session active, let the form submission handle routing
+        });
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('excomEmail').value.trim();
+            const password = document.getElementById('excomPassword').value;
+
+            if (!email || !password) {
+                showError("Please enter both email and password.");
+                return;
+            }
+
+            loginBtn.disabled = true;
+            loginBtnText.textContent = "Verifying...";
+            if(loginSpinner) loginSpinner.classList.remove('hidden');
+            if(loginIcon) loginIcon.classList.add('hidden');
+            loginError.classList.add('hidden');
+
+            try {
+                // 1. Authenticate with Firebase
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // 2. Fetch the user's role from Firestore
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+                
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+
+                    // 3. Check Role (Allow 'excom' or 'admin' to use this portal)
+                    if (userData.role === 'excom' || userData.role === 'admin') {
+                        try {
+                            await addDoc(collection(db, "logs"), {
+                                action: "ExCom Login",
+                                details: "Successful login to ExCom Portal",
+                                admin: email,
+                                timestamp: Date.now()
+                            });
+                        } catch (err) {} // ignore logging errors
+
+                        // 4. Redirect to ExCom Dashboard
+                        window.location.href = 'excom-dashboard.html'; 
+                    } else {
+                        // If they are just a student, deny access
+                        try {
+                            await addDoc(collection(db, "logs"), {
+                                action: "Unauthorized Access",
+                                details: "Student attempted to login to ExCom Portal",
+                                admin: email,
+                                timestamp: Date.now()
+                            });
+                        } catch (err) {} 
+
+                        throw new Error("Access Denied: Your account does not have Committee privileges.");
+                    }
+                } else {
+                    throw new Error("Access Denied: User profile not found in database.");
+                }
+
+            } catch (error) {
+                console.error("Login Error:", error);
+                
+                // Force sign out if they were rejected based on role
+                if (error.message.includes("Access Denied")) {
+                    await signOut(auth);
+                }
+
+                let msg = "Authentication failed: " + error.message;
+                if(error.code === 'auth/invalid-credential') msg = "Invalid email or password.";
+                if(error.code === 'auth/user-not-found') msg = "User not found.";
+                if(error.code === 'auth/wrong-password') msg = "Invalid password.";
+                
+                showError(msg);
+                
+                // Reset Button UI
+                loginBtn.disabled = false;
+                loginBtnText.textContent = "Access Dashboard";
+                if(loginSpinner) loginSpinner.classList.add('hidden');
+                if(loginIcon) loginIcon.classList.remove('hidden');
+            }
+        });
+
+        function showError(msg) {
+            loginErrorText.textContent = msg;
+            loginError.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
