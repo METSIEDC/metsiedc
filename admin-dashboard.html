@@ -19,6 +19,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <!-- Tailwind Config -->
     <script>
@@ -841,7 +842,10 @@
                     <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase">Manual Attendance</h2>
                     <div class="flex gap-3">
                         <button onclick="openGlobalScanner('attendance')" class="bg-glow-blue/20 hover:bg-glow-blue/40 border border-glow-blue/50 text-glow-blue px-5 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2 transition-all">
-                            <i data-lucide="scan" class="w-4 h-4"></i> Scan QR
+                            <i data-lucide="scan" class="w-4 h-4"></i> Scan ID
+                        </button>
+                        <button onclick="generateEventQR()" class="bg-glow-purple/20 hover:bg-glow-purple/40 border border-glow-purple/50 text-glow-purple px-5 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2 transition-all">
+                            <i data-lucide="qr-code" class="w-4 h-4"></i> Generate Event QR
                         </button>
                         <button id="btnSaveAttendance" onclick="submitAttendance()" class="btn-primary px-5 py-3 rounded-xl text-[10px] uppercase font-bold transition-all">
                             Save List
@@ -1087,6 +1091,23 @@
 
     <!-- MODALS -->
     
+    <!-- Event QR Display Modal -->
+    <div id="eventQrModal" class="fixed inset-0 bg-[#050505]/95 backdrop-blur-xl z-[200] hidden flex flex-col items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl relative border border-glow-purple/30 flex flex-col items-center text-center">
+            <button onclick="document.getElementById('eventQrModal').classList.add('hidden')" class="absolute top-4 right-4 w-8 h-8 bg-white/10 rounded-full text-white flex items-center justify-center hover:bg-white/20 transition-colors z-10">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+            <h2 class="text-2xl font-display font-bold text-white mb-2 uppercase tracking-widest mt-2" id="qrEventTitle">Event Name</h2>
+            <p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-8" id="qrEventDate">Date</p>
+            
+            <div class="bg-white p-4 rounded-2xl shadow-[0_0_30px_rgba(147,51,234,0.3)] mb-6">
+                <div id="event-qr-container"></div>
+            </div>
+            
+            <p class="text-xs text-white/70">Ask students to scan this QR from their Student Dashboard to mark attendance.</p>
+        </div>
+    </div>
+
     <!-- QR Scanner Modal -->
     <div id="globalScannerModal" class="fixed inset-0 bg-[#050505]/95 backdrop-blur-xl z-[200] hidden flex flex-col items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md p-6 rounded-3xl relative border border-glow-blue/30">
@@ -1218,6 +1239,8 @@
             { id: generateId(), label: 'Email Address', type: 'email', required: true, options: [] },
             { id: generateId(), label: 'Mobile Number', type: 'tel', required: true, options: [] }
         ];
+        
+        let eventQrInstance = null;
 
         document.addEventListener('DOMContentLoaded', () => { 
             document.getElementById('mobile-menu-toggle')?.addEventListener('click', window.toggleMobileSidebar); 
@@ -1379,6 +1402,41 @@
                 }
             }
         }
+        
+        // EVENT QR GENERATOR
+        window.generateEventQR = () => {
+            const eventName = document.getElementById('attendanceEventName').value.trim();
+            const date = document.getElementById('attendanceDate').value;
+            
+            if(!eventName || !date) {
+                alert("Please enter the Event Name and Date first.");
+                return;
+            }
+            
+            document.getElementById('qrEventTitle').textContent = eventName;
+            document.getElementById('qrEventDate').textContent = date;
+            
+            const qrData = JSON.stringify({
+                action: 'mark_attendance',
+                eventName: eventName,
+                date: date,
+                ref: Date.now() // Unique reference
+            });
+            
+            document.getElementById('eventQrModal').classList.remove('hidden');
+            
+            const container = document.getElementById('event-qr-container');
+            container.innerHTML = ''; // Clear previous QR
+            
+            eventQrInstance = new QRCode(container, {
+                text: qrData,
+                width: 200,
+                height: 200,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        };
 
         // FEATURE GENERATORS
         window.generateKsumReport = () => {
@@ -2324,6 +2382,217 @@
                 await updateDoc(doc(db, "users", id), { disabled: !isDisabled }); 
                 await logActivity("User Status", `${isDisabled?'Enabled':'Disabled'} ${id}`); 
             } catch(e) { alert(e.message); }
+        };
+
+        window.deleteDoc = deleteDoc;
+        window.doc = doc;
+
+        window.openExcomAttendanceModal = () => { 
+            document.getElementById('excomMeetingTitle').value = ''; 
+            document.getElementById('excomMeetingDate').value = ''; 
+            document.getElementById('saveExcomBtn').disabled = false; 
+            document.getElementById('saveExcomBtn').innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Log'; 
+            document.querySelectorAll('.excom-status-select').forEach(s => s.value = 'Absent'); 
+            document.getElementById('excomModal').classList.remove('hidden'); 
+            lucide.createIcons(); 
+        };
+
+        window.submitExcomAttendance = async () => {
+            const title = document.getElementById('excomMeetingTitle').value.trim(); 
+            const date = document.getElementById('excomMeetingDate').value;
+            
+            if(!title || !date) return alert("Fill meeting name and date.");
+            
+            const attendanceRecords = Array.from(document.querySelectorAll('.excom-status-select')).map(sel => ({ 
+                id: sel.dataset.id, 
+                name: sel.dataset.name, 
+                status: sel.value 
+            }));
+            
+            const btn = document.getElementById('saveExcomBtn'); 
+            btn.disabled = true; 
+            btn.innerHTML = 'Saving...';
+            
+            try {
+                await addDoc(collection(db, "excom_meetings"), { 
+                    title: title, 
+                    date: date, 
+                    attendance: attendanceRecords, 
+                    timestamp: Date.now(), 
+                    loggedBy: window.currentUserEmail 
+                }); 
+                await logActivity("ExCom Logged", `Meeting: ${date}`); 
+                alert("Saved!"); 
+                document.getElementById('excomModal').classList.add('hidden');
+            } catch(e) { 
+                alert(e.message); 
+                btn.disabled = false; 
+            }
+        };
+
+        window.submitAttendance = async () => {
+            const eventName = document.getElementById('attendanceEventName').value.trim(); 
+            const date = document.getElementById('attendanceDate').value;
+            
+            if(!eventName || !date) return alert("Enter event name and date.");
+            
+            const btn = document.getElementById('btnSaveAttendance'); 
+            if(btn) { btn.disabled = true; btn.innerHTML = "Saving..."; }
+            
+            try {
+                const batch = writeBatch(db); 
+                let presentCount = 0; 
+                let absentCount = 0;
+                
+                document.querySelectorAll('.att-checkbox').forEach(cb => { 
+                    const uid = cb.value; 
+                    const isPresent = cb.checked; 
+                    const studentName = cb.dataset.name;
+                    
+                    batch.set(doc(collection(db, "attendance")), { 
+                        eventName: eventName, 
+                        date: date, 
+                        uid: uid, 
+                        studentName: studentName, 
+                        status: isPresent ? 'Present' : 'Absent', 
+                        timestamp: Date.now() 
+                    });
+                    
+                    if(isPresent) { 
+                        batch.update(doc(db, "users", uid), { points: increment(50) }); 
+                        presentCount++; 
+                    } else { 
+                        absentCount++; 
+                    }
+                });
+                
+                await batch.commit(); 
+                await logActivity("Marked Attendance", `Event: ${eventName}. Present: ${presentCount}, Absent: ${absentCount}`); 
+                alert(`Success! Saved ${presentCount} Present and ${absentCount} Absent.`);
+                
+                document.querySelectorAll('.att-checkbox').forEach(cb => cb.checked = false); 
+                document.getElementById('attendanceEventName').value = ''; 
+                document.getElementById('attendanceDate').value = '';
+            } catch(e) { 
+                alert(e.message); 
+            } finally { 
+                if(btn) { btn.disabled = false; btn.innerHTML = "Save List"; } 
+            }
+        };
+
+        window.handleCertTemplate = (e) => { 
+            window.certTemplateBase64 = true; 
+            window.formCoverImageFile = e.target.files[0]; 
+            document.getElementById('certFileName').textContent = e.target.files[0].name; 
+        };
+
+        window.issueCertificates = async () => {
+            const eventName = document.getElementById('certEventName').value; 
+            const issueDate = document.getElementById('certDate').value;
+            const checkboxes = document.querySelectorAll('.cert-checkbox:checked'); 
+            const btn = document.getElementById('certBtn');
+            const statusEl = document.getElementById('certStatus');
+            
+            if(!eventName || !issueDate || !window.certTemplateBase64) return alert("Fill all details and upload template.");
+            if(checkboxes.length === 0) return alert("Select at least one student.");
+            
+            btn.disabled = true; 
+            btn.innerHTML = `Issuing...`;
+            statusEl.classList.remove('hidden'); 
+            statusEl.textContent = "Uploading template...";
+            
+            try {
+                const fileObj = document.querySelector('input[accept="image/*"]').files[0];
+                const templateUrl = await uploadToDrive(fileObj); 
+                let count = 0;
+                
+                statusEl.textContent = `Assigning & Notifying...`;
+                
+                for(let cb of checkboxes) { 
+                    const userEmail = cb.dataset.email; 
+                    const userPhone = cb.dataset.phone; 
+                    const userName = cb.dataset.name;
+                    
+                    await addDoc(collection(db, "certificates"), { 
+                        userId: cb.value, 
+                        userName: userName, 
+                        eventName, 
+                        date: issueDate, 
+                        templateUrl, 
+                        timestamp: Date.now() 
+                    }); 
+                    
+                    if (userEmail && userEmail !== 'No Email') { 
+                        await sendAutomatedEmail(userEmail, userName, eventName, templateUrl); 
+                    }
+                    if (userPhone && userPhone !== "No Phone") { 
+                        const msg = `*MET'S IEDC | Certificate Issued* 🎓\n\nHi ${userName},\nCongratulations! Your certificate for *${eventName}* is ready.\n\nYou can view and download it directly from your IEDC Dashboard!`;
+                        await sendAutomatedWhatsApp(userPhone, msg); 
+                    }
+                    count++; 
+                }
+                
+                await logActivity("Issued Certificates", `Issued ${count} for ${eventName}`);
+                statusEl.classList.replace('text-white', 'text-green-400'); 
+                statusEl.innerHTML = `<i class="fas fa-check-circle mr-2"></i> Success! Sent ${count} emails & WhatsApps.`;
+                
+                setTimeout(() => { 
+                    statusEl.classList.add('hidden'); 
+                    statusEl.classList.replace('text-green-400', 'text-white'); 
+                }, 4000);
+                
+                document.getElementById('certEventName').value = ''; 
+                document.getElementById('certDate').value = ''; 
+                window.certTemplateBase64 = null; 
+                document.getElementById('certFileName').innerHTML = 'Upload a clean image design';
+                checkboxes.forEach(c => c.checked = false);
+            } catch(e) { 
+                alert("Error: " + e.message); 
+                statusEl.classList.add('hidden');
+            } finally { 
+                btn.disabled = false; 
+                btn.innerText = "Issue Certificates"; 
+            }
+        };
+
+        window.approveProject = async (projectId, userId, userPhone, projectTitle) => {
+            if(!confirm("Approve project and award 100 points?")) return;
+            try {
+                await updateDoc(doc(db, "projects", projectId), { status: "Approved" });
+                await updateDoc(doc(db, "users", userId), { points: increment(100) });
+                await logActivity("Project Approved", `Approved: ${projectTitle}`);
+                
+                if(userPhone && userPhone !== "Unknown") {
+                    const msg = `*MET'S IEDC | Project Approved* 🚀\n\nGreat news! Your project pitch for *${projectTitle}* has been officially approved.\n\n⚡ *+100 Innovation Points* have been added to your dashboard!`;
+                    await sendAutomatedWhatsApp(userPhone, msg);
+                    alert("Approved! Points added and WhatsApp sent.");
+                } else { 
+                    alert("Approved! Points added. (No valid phone number for WhatsApp)"); 
+                }
+            } catch(err) { alert("Error: " + err.message); }
+        };
+
+        window.rejectProject = async (projectId) => {
+            if(!confirm("Reject this project?")) return;
+            try { 
+                await updateDoc(doc(db, "projects", projectId), { status: "Rejected" }); 
+                await logActivity("Project Rejected", `Rejected ID: ${projectId}`); 
+            } catch(err) { alert(err.message); }
+        };
+
+        window.toggleItemStatus = async (id, status) => { 
+            await updateDoc(doc(db, "inventory", id), { status: status }); 
+            await logActivity("Inventory Update", `Changed item status to ${status}`); 
+        };
+
+        window.handleNewsImage = (e) => { 
+            window.newsImageFile = e.target.files[0]; 
+            document.getElementById('newsFileName').textContent = e.target.files[0].name; 
+        };
+        
+        window.handleGalleryImages = (e) => { 
+            window.galleryImages = Array.from(e.target.files); 
+            document.getElementById('galleryFileName').textContent = `${window.galleryImages.length} files selected`; 
         };
 
     </script>
