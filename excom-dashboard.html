@@ -106,7 +106,7 @@
 <body class="font-sans antialiased relative h-screen overflow-hidden selection:bg-glow-purple selection:text-white">
 
     <!-- MAIN DASHBOARD UI (Hidden on print) -->
-    <div id="dashboard-ui" class="flex h-full w-full relative hidden">
+    <div id="dashboard-ui" class="flex h-full w-full relative">
         
         <!-- Ambient Effects -->
         <div class="ambient-glow fixed top-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-glow-purple/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow"></div>
@@ -125,7 +125,7 @@
                     <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
                 </button>
                 
-                <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-white/30 uppercase tracking-widest">Document Drafters</div>
+                <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-white/30 uppercase tracking-widest">Workspace tools</div>
                 
                 <button onclick="showTab('circular')" id="nav-circular" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-blue font-bold">
                     <i data-lucide="file-text" class="w-4 h-4"></i> Draft Circular
@@ -134,18 +134,6 @@
 
                 <button onclick="showTab('order')" id="nav-order" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-orange font-bold">
                     <i data-lucide="gavel" class="w-4 h-4"></i> Draft Order
-                    <i data-lucide="lock" class="w-3 h-3 ml-auto opacity-50"></i>
-                </button>
-
-                <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-white/30 uppercase tracking-widest">Admin Submissions</div>
-
-                <button onclick="showTab('minutes')" id="nav-minutes" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-glow-purple font-bold">
-                    <i data-lucide="file-check-2" class="w-4 h-4"></i> Upload Minutes
-                    <i data-lucide="lock" class="w-3 h-3 ml-auto opacity-50"></i>
-                </button>
-
-                <button onclick="showTab('finance')" id="nav-finance" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-green-400 font-bold">
-                    <i data-lucide="receipt" class="w-4 h-4"></i> Finance Docs
                     <i data-lucide="lock" class="w-3 h-3 ml-auto opacity-50"></i>
                 </button>
             </nav>
@@ -180,14 +168,6 @@
 
                 <button onclick="showTab('order'); toggleMobileSidebar()" id="nav-mobile-order" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-glow-orange font-bold">
                     Draft Order <i data-lucide="lock" class="w-3 h-3 ml-auto opacity-50"></i>
-                </button>
-
-                <button onclick="showTab('minutes'); toggleMobileSidebar()" id="nav-mobile-minutes" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-glow-purple font-bold">
-                    Upload Minutes <i data-lucide="lock" class="w-3 h-3 ml-auto opacity-50"></i>
-                </button>
-
-                <button onclick="showTab('finance'); toggleMobileSidebar()" id="nav-mobile-finance" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-green-400 font-bold">
-                    Finance Docs <i data-lucide="lock" class="w-3 h-3 ml-auto opacity-50"></i>
                 </button>
             </nav>
             <div class="mt-8 px-4 pb-6">
@@ -230,19 +210,11 @@
                     <p class="text-white/50 font-light max-w-xl mx-auto text-sm leading-relaxed mb-8">This portal has been stripped down and optimized specifically for Executive Committee tasks. Use the sidebar to access your specialized tools.</p>
                     
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <button onclick="showTab('circular')" class="btn-primary px-6 py-3 rounded-xl text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(147,51,234,0.4)]">
+                        <button onclick="showTab('circular')" class="btn-primary px-8 py-4 rounded-xl text-xs uppercase tracking-widest font-bold flex items-center gap-2 shadow-[0_0_20px_rgba(147,51,234,0.4)]">
                             <i data-lucide="file-text" class="w-4 h-4"></i> Draft a Circular
                         </button>
-                        <button onclick="showTab('order')" class="bg-gradient-to-r from-glow-orange to-red-600 hover:opacity-90 transition-opacity text-white px-6 py-3 rounded-xl text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(234,88,12,0.4)]">
+                        <button onclick="showTab('order')" class="bg-gradient-to-r from-glow-orange to-red-600 hover:opacity-90 transition-opacity text-white px-8 py-4 rounded-xl text-xs uppercase tracking-widest font-bold flex items-center gap-2 shadow-[0_0_20px_rgba(234,88,12,0.4)]">
                             <i data-lucide="gavel" class="w-4 h-4"></i> Issue an Order
-                        </button>
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-4 mt-4">
-                        <button onclick="showTab('minutes')" class="bg-glow-purple/20 hover:bg-glow-purple/30 border border-glow-purple/50 text-glow-purple px-6 py-3 rounded-xl text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2 transition-all">
-                            <i data-lucide="file-check-2" class="w-4 h-4"></i> Submit Minutes
-                        </button>
-                        <button onclick="showTab('finance')" class="bg-green-500/20 hover:bg-green-500/30 border border-green-500/50 text-green-400 px-6 py-3 rounded-xl text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2 transition-all">
-                            <i data-lucide="receipt" class="w-4 h-4"></i> Submit Finance
                         </button>
                     </div>
                 </div>
@@ -347,97 +319,6 @@
                     </div>
                 </div>
 
-                <!-- ===================== MEETING MINUTES UPLOADER ===================== -->
-                <div id="minutesSection" class="tab-content hidden space-y-6 max-w-4xl mx-auto w-full">
-                    <div class="glass-panel p-8 md:p-10 rounded-3xl border-glow-purple/20">
-                        <div class="border-b border-white/10 pb-5 mb-8 flex justify-between items-end">
-                            <div>
-                                <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Upload Meeting Minutes</h2>
-                                <p class="text-white/50 text-sm font-light">Securely submit official ExCom meeting records directly to the Nodal Officer/Admin dashboard.</p>
-                            </div>
-                            <span class="bg-green-500/10 text-green-400 border border-green-500/30 px-3 py-1 rounded text-[9px] uppercase tracking-widest font-bold flex items-center gap-1.5"><i data-lucide="unlock" class="w-3 h-3"></i> Unlocked</span>
-                        </div>
-                        
-                        <form id="minutesForm" class="space-y-6">
-                            <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Meeting Title</label>
-                                <input type="text" id="minTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="e.g. June Monthly ExCom Sync" required>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Meeting Date</label>
-                                    <input type="date" id="minDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" required>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Signed Document (Scan/PDF/Image)</label>
-                                    <label class="glass-input w-full rounded-xl py-3.5 px-4 text-center cursor-pointer block border-dashed hover:bg-white/5">
-                                        <span id="minutesFileName" class="text-white/50">Browse File</span>
-                                        <input type="file" id="minutesFileInput" class="hidden" accept="image/*,application/pdf" onchange="handleMinutesFile(event)" required>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="pt-6 border-t border-white/10">
-                                <button type="submit" id="btnUploadMinutes" class="w-full btn-light py-4 rounded-xl text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2">
-                                    <i data-lucide="upload-cloud" class="w-4 h-4"></i> Submit to Admin
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- ===================== FINANCE & BILLS UPLOADER ===================== -->
-                <div id="financeSection" class="tab-content hidden space-y-6 max-w-4xl mx-auto w-full">
-                    <div class="glass-panel p-8 md:p-10 rounded-3xl border-green-500/20">
-                        <div class="border-b border-white/10 pb-5 mb-8 flex justify-between items-end">
-                            <div>
-                                <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Finance Document Uploader</h2>
-                                <p class="text-white/50 text-sm font-light">Submit bills, receipts, or funding utilization certificates for the official financial ledger.</p>
-                            </div>
-                            <span class="bg-green-500/10 text-green-400 border border-green-500/30 px-3 py-1 rounded text-[9px] uppercase tracking-widest font-bold flex items-center gap-1.5"><i data-lucide="unlock" class="w-3 h-3"></i> Unlocked</span>
-                        </div>
-                        
-                        <form id="financeForm" class="space-y-6">
-                            <div>
-                                <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Document Title</label>
-                                <input type="text" id="finTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="e.g. Protosynth Flex Printing Bill" required>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Document Type</label>
-                                    <select id="finType" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" required>
-                                        <option value="Expense Receipt">Expense Receipt (Bill)</option>
-                                        <option value="Fund Utilization">Fund Utilization Certificate</option>
-                                        <option value="Income Proof">Income Proof / Grant Letter</option>
-                                        <option value="Other">Other Official Document</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Amount Related (Optional, ₹)</label>
-                                    <input type="number" id="finAmount" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="e.g. 1500">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Date on Document</label>
-                                    <input type="date" id="finDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" required>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Scan of Document</label>
-                                    <label class="glass-input w-full rounded-xl py-3.5 px-4 text-center cursor-pointer block border-dashed hover:bg-white/5">
-                                        <span id="financeFileName" class="text-white/50">Browse File</span>
-                                        <input type="file" id="financeFileInput" class="hidden" accept="image/*,application/pdf" onchange="handleFinanceFile(event)" required>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="pt-6 border-t border-white/10">
-                                <button type="submit" id="btnUploadFinance" class="w-full bg-green-500/20 hover:bg-green-500/30 border border-green-500/50 text-green-400 py-4 rounded-xl text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2 transition-all">
-                                    <i data-lucide="receipt" class="w-4 h-4"></i> Submit Finance Doc
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
             </main>
         </div>
     </div>
@@ -471,18 +352,6 @@
         </div>
     </div>
 
-    <!-- UNAUTHORIZED ACCESS SCREEN (Replaces hard redirects) -->
-    <div id="unauthorizedScreen" class="fixed inset-0 bg-[#050505] z-[9999] hidden flex-col items-center justify-center p-6 text-center">
-        <div class="w-20 h-20 bg-red-500/20 border border-red-500/30 text-red-500 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(239,68,68,0.3)] animate-pulse-glow">
-            <i data-lucide="shield-alert" class="w-10 h-10"></i>
-        </div>
-        <h1 class="text-3xl md:text-4xl font-display font-bold text-white mb-4 uppercase tracking-widest">Access Denied</h1>
-        <p class="text-white/50 mb-8 max-w-md text-sm leading-relaxed" id="unauthorizedMessage">You must be logged in with an Executive Committee account to view this dashboard.</p>
-        <a href="excom-login.html" class="bg-gradient-to-r from-glow-purple to-blue-600 hover:opacity-90 px-8 py-4 rounded-xl text-white text-[10px] uppercase font-bold tracking-widest shadow-[0_0_20px_rgba(147,51,234,0.4)] transition-opacity">
-            Go to ExCom Login
-        </a>
-    </div>
-
     <!-- PRINT ONLY AREA (Dynamically populated by JS based on document type) -->
     <div id="printArea" class="hidden">
         <!-- Content gets injected here -->
@@ -491,22 +360,22 @@
     <!-- UI Scripts -->
     <script>
         // --- SECTION PASSWORD CONFIGURATION ---
+        // To add new protected sections in the future, simply add them here:
+        // Format: 'tabId': 'PASSWORD'
         const tabPasswords = {
-            'circular': 'METS2026', 
-            'order': 'ORDER2026',
-            'minutes': 'MINUTES2026',
-            'finance': 'FINANCE2026'
+            'circular': 'GU5878HJ78', // Password for Circular section
+            'order': 'RU698TG893'    // Password for Official Order section
         };
         
+        // This Set remembers which tabs the user has already unlocked during this session
         const unlockedTabs = new Set(['overview']); 
 
         document.addEventListener('DOMContentLoaded', () => { 
             document.getElementById('mobile-menu-toggle')?.addEventListener('click', window.toggleMobileSidebar); 
-            
-            if(document.getElementById('circDate')) document.getElementById('circDate').valueAsDate = new Date();
-            if(document.getElementById('minDate')) document.getElementById('minDate').valueAsDate = new Date();
-            if(document.getElementById('finDate')) document.getElementById('finDate').valueAsDate = new Date();
+            // Set today's date automatically in the forms
+            document.getElementById('circDate').valueAsDate = new Date();
 
+            // Tab Password Form Handler
             document.getElementById('tabPasswordForm')?.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const targetTab = document.getElementById('targetTabId').value;
@@ -514,10 +383,16 @@
                 const errorEl = document.getElementById('tabPasswordError');
                 
                 if (enteredPass === tabPasswords[targetTab]) {
+                    // Password Correct!
                     unlockedTabs.add(targetTab);
                     window.closeTabPasswordModal();
-                    setTimeout(() => { window.showTab(targetTab); }, 100);
+                    
+                    // Add a tiny delay for visual smoothness before showing the tab
+                    setTimeout(() => {
+                        window.showTab(targetTab); 
+                    }, 100);
                 } else {
+                    // Password Incorrect
                     errorEl.classList.remove('hidden');
                     document.getElementById('tabPasswordInput').value = '';
                 }
@@ -543,33 +418,39 @@
         };
 
         window.showTab = (t) => { 
+            // --- PASSWORD PROTECTION INTERCEPTOR ---
+            // If the requested tab requires a password and hasn't been unlocked yet
             if (tabPasswords[t] && !unlockedTabs.has(t)) {
+                // Set target and update modal UI
                 document.getElementById('targetTabId').value = t;
                 let modalTitle = t.charAt(0).toUpperCase() + t.slice(1); 
                 if(t === 'circular') modalTitle = "Draft Circular"; 
                 if(t === 'order') modalTitle = "Draft Order";
-                if(t === 'minutes') modalTitle = "Meeting Minutes";
-                if(t === 'finance') modalTitle = "Finance Documents";
                 document.getElementById('tabPasswordTitle').textContent = "Unlock: " + modalTitle;
                 
+                // Show modal
                 document.getElementById('tabPasswordModal').classList.remove('hidden');
                 document.getElementById('tabPasswordInput').focus();
                 
+                // Close mobile sidebar if it was open so the modal is clearly visible
                 const menu = document.getElementById('mobile-sidebar'); 
                 if(menu && !menu.classList.contains('-translate-x-full')) { 
                     window.toggleMobileSidebar(); 
                 } 
-                return; 
+                return; // Stop execution here until the user provides the correct password
             }
 
+            // --- STANDARD TAB SWITCHING LOGIC (Proceeds if unlocked) ---
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); 
             const sec = document.getElementById(t+'Section'); 
             if(sec) sec.classList.remove('hidden'); 
             
+            // Handle Desktop Nav Active State
             document.querySelectorAll('aside .sidebar-link').forEach(el => el.classList.remove('active')); 
             const activeDesktop = document.getElementById('nav-'+t); 
             if(activeDesktop) activeDesktop.classList.add('active'); 
             
+            // Handle Mobile Nav Active State
             document.querySelectorAll('#mobile-sidebar .sidebar-link').forEach(el => el.classList.remove('active')); 
             const activeMobile = document.getElementById('nav-mobile-'+t); 
             if(activeMobile) activeMobile.classList.add('active'); 
@@ -577,8 +458,6 @@
             let title = t.charAt(0).toUpperCase() + t.slice(1); 
             if(t === 'circular') title = "Draft Circular"; 
             if(t === 'order') title = "Draft Order"; 
-            if(t === 'minutes') title = "Meeting Minutes"; 
-            if(t === 'finance') title = "Finance Docs"; 
             document.getElementById('headerTitle').textContent = title; 
             
             const menu = document.getElementById('mobile-sidebar'); 
@@ -586,23 +465,33 @@
         };
 
         // --- PRINTING TEMPLATE ENGINE ---
+        
+        // Reusable Official Letterhead Top Component
         const letterheadTop = `
+            <!-- Watermark -->
             <div class="watermark">MET'S IEDC PORTAL</div>
+            
+            <!-- Header Logos -->
             <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 5px;">
                 <img src="assets/images/logos/mets_logo.png" style="height: 60px;" alt="METS" onerror="this.src='https://ui-avatars.com/api/?name=METS&background=fff&color=000&size=100'">
                 <img src="assets/images/logos/ksum.png" style="height: 50px;" alt="KSUM" onerror="this.src='https://ui-avatars.com/api/?name=KSUM&background=fff&color=000&size=100'">
                 <img src="assets/images/logos/KERALA IEDC.png" style="height: 60px;" alt="IEDC" onerror="this.src='https://ui-avatars.com/api/?name=IEDC&background=fff&color=000&size=100'">
             </div>
+            
+            <!-- Header Text -->
             <div style="text-align: center; margin-bottom: 10px;">
                 <h1 style="font-size: 22px; font-weight: bold; margin: 0; padding: 0;">MET'S SCHOOL OF ENGINEERING</h1>
                 <p style="font-size: 11px; margin: 2px 0 0 0; color: #333;">Innovation and Entrepreneurship Development Centre (IEDC) KSUMIEDC1163</p>
             </div>
+            
+            <!-- Blue Line Contact Block -->
             <div class="blue-line-block">
                 <span style="color: black;">Kuruvilassery P.O, Mala, Thrissur Dist. Kerala Pin-680732 Ph:0484 2967337,</span><br>
                 <a href="https://metsiedc.github.io/metsiedc">metsiedc.github.io/metsiedc</a>, Email: <a href="mailto:metsenggiedc@gmail.com">metsenggiedc@gmail.com</a>
             </div>
         `;
 
+        // Reusable Official Digital Signature Bottom Component
         function getLetterheadBottom(issuerName) {
             return `
                 <div style="margin-top: 50px; border-top: 1px solid #ccc; padding-top: 10px; text-align: center; font-size: 10px; color: #666; font-style: italic;">
@@ -611,9 +500,13 @@
             `;
         }
 
+        // --- CIRCULAR GENERATION LOGIC ---
         window.generateCircularPrint = (e) => {
             e.preventDefault();
+            
+            // Gather form data
             const ref = document.getElementById('circRef').value;
+            // Format date to DD/MM/YYYY for printing
             const dateVal = new Date(document.getElementById('circDate').value);
             const dateStr = dateVal.toLocaleDateString('en-GB'); 
             const subject = document.getElementById('circSubject').value;
@@ -622,15 +515,20 @@
             const signName = document.getElementById('circSignName').value;
             const signDesig = document.getElementById('circSignDesig').value;
 
+            // Generate Content Body
             const content = `
                 <div style="font-size: 14px; line-height: 1.6;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-weight: bold;">
                         <div>Ref: ${ref}</div>
                         <div>Date: ${dateStr}</div>
                     </div>
+                    
                     <h2 style="text-align: center; font-size: 16px; font-weight: bold; text-decoration: underline; margin-bottom: 30px; text-transform: uppercase;">${subject}</h2>
+                    
                     <p style="margin-bottom: 20px; font-weight: bold;">${salutation}</p>
+                    
                     <div style="white-space: pre-wrap; text-align: justify; margin-bottom: 60px; min-height: 250px;">${body}</div>
+                    
                     <div style="float: right; text-align: center; margin-bottom: 40px;">
                         <p style="margin-bottom: 50px; font-weight: bold;">Yours faithfully,</p>
                         <p style="margin: 0; font-weight: bold; text-transform: uppercase;">${signName}</p>
@@ -640,27 +538,41 @@
                 </div>
             `;
 
+            // Inject into Print Area
             const issuerName = window.currentUserName || window.currentUserEmail || "ExCom Admin";
             document.getElementById('printArea').innerHTML = letterheadTop + content + getLetterheadBottom(issuerName);
 
+            // Trigger the browser print dialog
             setTimeout(() => {
                 window.print();
-                if (window.logActivity) window.logActivity("Generated Circular", `Ref: ${ref} | Sub: ${subject}`);
+                // Optional: Log to firebase that a circular was generated
+                if (window.logActivity) {
+                    window.logActivity("Generated Circular", `Ref: ${ref} | Sub: ${subject}`);
+                }
             }, 500);
         };
 
+        // --- OFFICIAL ORDER GENERATION LOGIC ---
         window.generateOrderPrint = (e) => {
             e.preventDefault();
+            
+            // Gather form data
             const ref = document.getElementById('orderRef').value;
             const body = document.getElementById('orderBody').value;
             const sign1 = document.getElementById('orderSign1').value;
             const sign2 = document.getElementById('orderSign2').value;
 
+            // Generate Content Body matching the exact Order format
             const content = `
                 <div style="font-size: 14px; line-height: 1.6;">
-                    <div style="margin-bottom: 30px; font-weight: bold; font-size: 15px;">${ref}</div>
+                    <div style="margin-bottom: 30px; font-weight: bold; font-size: 15px;">
+                        ${ref}
+                    </div>
+                    
                     <h2 style="text-align: center; font-size: 16px; font-weight: bold; text-decoration: underline; margin-bottom: 30px; text-transform: uppercase;">OFFICIAL ORDER</h2>
+                    
                     <div style="white-space: pre-wrap; text-align: justify; margin-bottom: 60px; min-height: 200px; font-weight: bold;">${body}</div>
+                    
                     <div style="text-align: left; margin-bottom: 40px; font-weight: bold;">
                         <p style="margin-bottom: 30px; font-weight: normal; font-size: 13px;">This order is issued with the approval of the concerned authority.</p>
                         <p style="margin: 0 0 15px 0;">– ${sign1}</p>
@@ -670,26 +582,18 @@
                 </div>
             `;
 
+            // Inject into Print Area
             const issuerName = window.currentUserName || window.currentUserEmail || "ExCom Admin";
             document.getElementById('printArea').innerHTML = letterheadTop + content + getLetterheadBottom(issuerName);
 
+            // Trigger the browser print dialog
             setTimeout(() => {
                 window.print();
-                if (window.logActivity) window.logActivity("Generated Order", `Ref: ${ref}`);
+                // Optional: Log to firebase that an order was generated
+                if (window.logActivity) {
+                    window.logActivity("Generated Order", `Ref: ${ref}`);
+                }
             }, 500);
-        };
-
-        // File handling logic
-        window.minutesFileBase64 = null;
-        window.financeFileBase64 = null;
-        
-        window.handleMinutesFile = (e) => { 
-            window.minutesFileBase64 = e.target.files[0]; 
-            document.getElementById('minutesFileName').textContent = e.target.files[0].name; 
-        };
-        window.handleFinanceFile = (e) => { 
-            window.financeFileBase64 = e.target.files[0]; 
-            document.getElementById('financeFileName').textContent = e.target.files[0].name; 
         };
     </script>
 
@@ -701,8 +605,6 @@
 
         lucide.createIcons();
         
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhv5--AImomPzvUOw1-fsnBom_YN5jDQq-8wd-L0xPg1J7AZAJumfBeXAEku4zd6I-/exec";
-
         const firebaseConfig = { 
             apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8", 
             authDomain: "metsiedc-3010e.firebaseapp.com", 
@@ -719,27 +621,16 @@
         window.currentUserEmail = ""; 
         window.currentUserName = "";
         window.db = db;
-
-        // Function to handle unauthorized state cleanly without forcing a redirect
-        function showUnauthorizedError(message) {
-            document.getElementById('dashboard-ui').style.display = 'none';
-            document.getElementById('unauthorizedMessage').textContent = message;
-            document.getElementById('unauthorizedScreen').classList.remove('hidden');
-            document.getElementById('unauthorizedScreen').classList.add('flex');
-            lucide.createIcons();
-        }
         
         // ExCom Auth Check
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const snapshot = await getDoc(doc(db, "users", user.uid));
                 if (snapshot.exists() && (snapshot.data().role === 'excom' || snapshot.data().role === 'admin')) {
-                    // Auth Success: Show Dashboard UI
-                    document.getElementById('dashboard-ui').classList.remove('hidden');
-                    
                     window.currentUserEmail = user.email; 
                     window.currentUserName = snapshot.data().name || user.email;
                     
+                    // Pre-fill the sign-off name with the logged-in user's name
                     const nameField = document.getElementById('circSignName');
                     if(nameField && !nameField.value && snapshot.data().name) {
                         nameField.value = snapshot.data().name;
@@ -747,13 +638,11 @@
 
                     document.getElementById('excomEmailDisplay').textContent = window.currentUserName; 
                 } else { 
-                    // Failed Role Check
-                    showUnauthorizedError("Unauthorized. This workspace is reserved for Executive Committee members only.");
-                    await signOut(auth);
+                    alert("Unauthorized. This dashboard is for ExCom members only."); 
+                    signOut(auth).then(() => window.location.href = 'login.html'); 
                 }
             } else { 
-                // Not Logged In
-                showUnauthorizedError("Authentication required. Please log in to access the ExCom Dashboard.");
+                window.location.href = 'login.html'; 
             }
         });
 
@@ -769,119 +658,8 @@
             } catch(e) {} 
         }
 
-        // Backend Uploader
-        async function uploadToDrive(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = async () => {
-                    const base64Data = reader.result.split(',')[1];
-                    try {
-                        const res = await fetch(SCRIPT_URL, { 
-                            method: 'POST', 
-                            headers: { "Content-Type": "text/plain;charset=utf-8" }, 
-                            body: JSON.stringify({ 
-                                filename: file.name, 
-                                mimeType: file.type, 
-                                data: base64Data, 
-                                action: 'uploadImage' 
-                            }) 
-                        });
-                        const data = await res.json();
-                        if(data.url) resolve(data.url); 
-                        else reject(new Error("Upload failed"));
-                    } catch(e) { reject(e); }
-                };
-                reader.onerror = () => reject(new Error("File read error"));
-                reader.readAsDataURL(file);
-            });
-        }
-
-        // --- SUBMIT MINUTES LOGIC ---
-        document.getElementById('minutesForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnUploadMinutes');
-            const orig = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = `Uploading...`;
-
-            try {
-                if(!window.minutesFileBase64) throw new Error("Please select a file to upload.");
-                
-                const title = document.getElementById('minTitle').value;
-                const date = document.getElementById('minDate').value;
-                const fileUrl = await uploadToDrive(window.minutesFileBase64);
-
-                await addDoc(collection(db, "meeting_minutes"), {
-                    title: title,
-                    date: date,
-                    fileUrl: fileUrl,
-                    uploadedBy: window.currentUserName,
-                    timestamp: Date.now()
-                });
-
-                await logActivity("Minutes Uploaded", `Title: ${title}`);
-                alert("Minutes submitted to Admin successfully!");
-                e.target.reset();
-                document.getElementById('minutesFileName').textContent = "Browse File";
-                window.minutesFileBase64 = null;
-
-            } catch(error) {
-                alert("Error: " + error.message);
-            } finally {
-                btn.innerHTML = orig;
-                btn.disabled = false;
-            }
-        });
-
-        // --- SUBMIT FINANCE LOGIC ---
-        document.getElementById('financeForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnUploadFinance');
-            const orig = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = `Uploading...`;
-
-            try {
-                if(!window.financeFileBase64) throw new Error("Please select a document to upload.");
-                
-                const title = document.getElementById('finTitle').value;
-                const type = document.getElementById('finType').value;
-                const amount = document.getElementById('finAmount').value;
-                const date = document.getElementById('finDate').value;
-                const fileUrl = await uploadToDrive(window.financeFileBase64);
-
-                await addDoc(collection(db, "finance_docs"), {
-                    title: title,
-                    type: type,
-                    amount: amount ? parseFloat(amount) : null,
-                    date: date,
-                    fileUrl: fileUrl,
-                    uploadedBy: window.currentUserName,
-                    timestamp: Date.now()
-                });
-
-                await logActivity("Finance Doc Uploaded", `Type: ${type}, Title: ${title}`);
-                alert("Finance document submitted successfully!");
-                e.target.reset();
-                document.getElementById('financeFileName').textContent = "Browse File";
-                window.financeFileBase64 = null;
-
-            } catch(error) {
-                alert("Error: " + error.message);
-            } finally {
-                btn.innerHTML = orig;
-                btn.disabled = false;
-            }
-        });
-
-        document.getElementById('excomLogoutBtn').addEventListener('click', async () => {
-            await signOut(auth);
-            window.location.reload();
-        });
-        document.getElementById('excomLogoutBtnMobile').addEventListener('click', async () => {
-            await signOut(auth);
-            window.location.reload();
-        });
+        document.getElementById('excomLogoutBtn').addEventListener('click', () => signOut(auth));
+        document.getElementById('excomLogoutBtnMobile').addEventListener('click', () => signOut(auth));
     </script>
 </body>
 </html>
