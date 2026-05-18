@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -53,122 +54,38 @@
     </script>
 
     <style>
-        body { 
-            background-color: #050505; 
-            color: #e2e8f0; 
-            overflow-x: hidden; 
-        }
+        body { background-color: #050505; color: #e2e8f0; overflow-x: hidden; }
 
-        /* Glassmorphism Utilities */
         .glass-nav {
-            background: rgba(15, 15, 20, 0.4);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            background: rgba(15, 15, 20, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
         .glass-panel {
-            background: linear-gradient(145deg, rgba(30, 30, 35, 0.8) 0%, rgba(15, 15, 20, 0.6) 100%);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02), 0 20px 40px rgba(0,0,0,0.4);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background: linear-gradient(145deg, rgba(30, 30, 35, 0.8) 0%, rgba(15, 15, 20, 0.6) 100%); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02), 0 20px 40px rgba(0,0,0,0.4); position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
+        .glass-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); z-index: 1; }
 
-        .glass-panel::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            z-index: 1;
-        }
+        .glass-badge { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
 
-        .glass-badge {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        /* Input Styles */
-        .glass-input {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-        .glass-input:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(37, 99, 235, 0.5); /* Blue glow */
-            outline: none;
-            box-shadow: 0 0 15px rgba(37, 99, 235, 0.2);
-        }
+        .glass-input { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; backdrop-filter: blur(10px); }
+        .glass-input:focus { border-color: rgba(37, 99, 235, 0.5); outline: none; box-shadow: 0 0 15px rgba(37, 99, 235, 0.2); }
         
-        select.glass-input option { color: #1c2833; background: white; }
+        .text-gradient-blue { background: linear-gradient(to right, #93c5fd, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Text Gradients */
-        .text-gradient {
-            background: linear-gradient(to right, #ffffff, #a1a1aa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .text-gradient-blue {
-            background: linear-gradient(to right, #93c5fd, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Button Styling */
-        .btn-light {
-            background: #ffffff;
-            color: #000000;
-            transition: all 0.3s ease;
-        }
-        .btn-light:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
-        }
+        .btn-light { background: #ffffff; color: #000000; transition: all 0.3s ease; }
+        .btn-light:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(255,255,255,0.2); }
         
-        .btn-primary {
-            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-            color: #ffffff;
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
-            transform: translateY(-2px);
-        }
+        .btn-primary { background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); color: #ffffff; transition: all 0.3s ease; }
+        .btn-primary:hover { box-shadow: 0 0 20px rgba(37, 99, 235, 0.5); transform: translateY(-2px); }
 
-        /* Mobile Menu */
         .mobile-menu { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .mobile-menu.open { transform: translateX(0); }
 
-        /* Ticket Styles */
-        .ticket-cut {
-            border-top: 1px dashed rgba(0,0,0,0.2);
-            position: relative;
-        }
-        .ticket-cut::before, .ticket-cut::after {
-            content: ''; position: absolute; top: -10px; width: 20px; height: 20px; background-color: #050505; border-radius: 50%;
-        }
+        .ticket-cut { border-top: 1px dashed rgba(0,0,0,0.2); position: relative; }
+        .ticket-cut::before, .ticket-cut::after { content: ''; position: absolute; top: -10px; width: 20px; height: 20px; background-color: #050505; border-radius: 50%; }
         .ticket-cut::before { left: -10px; }
         .ticket-cut::after { right: -10px; }
 
-        /* Custom Checkbox for Payment */
-        .custom-radio {
-            appearance: none; background-color: transparent; width: 1.25em; height: 1.25em; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; cursor: pointer; display: inline-grid; place-content: center;
-        }
-        .custom-radio::before {
-            content: ""; width: 0.65em; height: 0.65em; border-radius: 50%; transform: scale(0); transition: 120ms transform ease-in-out; box-shadow: inset 1em 1em #2563eb;
-        }
-        .custom-radio:checked { border-color: #2563eb; }
-        .custom-radio:checked::before { transform: scale(1); }
-
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #050505; }
         ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
@@ -193,25 +110,17 @@
 
     <div id="pwa-update-banner" class="hidden fixed top-24 left-1/2 transform -translate-x-1/2 z-[9999] glass-panel rounded-full px-5 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md transition-all duration-300 border border-glow-blue/50 shadow-[0_0_20px_rgba(37,99,235,0.3)] no-print">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-glow-blue/20 flex items-center justify-center text-glow-blue">
-                <i class="fas fa-cloud-download-alt"></i>
-            </div>
+            <div class="w-8 h-8 rounded-full bg-glow-blue/20 flex items-center justify-center text-glow-blue"><i class="fas fa-cloud-download-alt"></i></div>
             <div class="flex flex-col">
                 <span class="text-white text-sm font-semibold">Update Available</span>
                 <span class="text-white/50 text-[10px] uppercase tracking-wider">New version ready</span>
             </div>
         </div>
-        <button id="pwa-refresh-btn" class="ml-auto bg-white text-black text-xs font-bold px-4 py-2 rounded-full transition-colors hover:bg-gray-200">
-            Refresh
-        </button>
+        <button id="pwa-refresh-btn" class="ml-auto bg-white text-black text-xs font-bold px-4 py-2 rounded-full transition-colors hover:bg-gray-200">Refresh</button>
     </div>
 
     <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl z-50 glass-nav rounded-full px-2 py-2 flex justify-between items-center transition-all duration-300 no-print" id="navbar">
-        <a href="index.html" class="flex items-center pl-4 group">
-            <span class="text-base font-display font-bold tracking-wider text-white">
-                MET'S IEDC
-            </span>
-        </a>
+        <a href="index.html" class="flex items-center pl-4 group"><span class="text-base font-display font-bold tracking-wider text-white">MET'S IEDC</span></a>
         
         <div class="hidden md:flex items-center space-x-1 bg-white/5 rounded-full px-2 py-1">
             <a href="index.html" class="px-4 py-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-xs font-medium transition-colors">Home</a>
@@ -225,27 +134,19 @@
             <button onclick="toggleHistoryModal()" class="text-white/70 hover:text-white text-xs font-semibold px-4 py-2 flex items-center gap-2 transition-colors border border-transparent hover:border-white/10 rounded-full bg-white/5">
                 <i data-lucide="ticket" class="w-4 h-4"></i> My Tickets
             </button>
-            <a href="login.html" class="btn-light px-5 py-2 rounded-full text-xs font-bold tracking-wide">
-                Log In
-            </a>
+            <a href="login.html" class="btn-light px-5 py-2 rounded-full text-xs font-bold tracking-wide">Log In</a>
         </div>
 
         <div class="md:hidden flex items-center gap-2 pr-2">
-            <button onclick="toggleHistoryModal()" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white">
-                <i data-lucide="ticket" class="w-4 h-4"></i>
-            </button>
-            <button id="mobile-menu-button" class="text-white p-2">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
+            <button onclick="toggleHistoryModal()" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white"><i data-lucide="ticket" class="w-4 h-4"></i></button>
+            <button id="mobile-menu-button" class="text-white p-2"><i class="fas fa-bars text-xl"></i></button>
         </div>
     </nav>
 
     <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-full h-screen bg-[#050505]/95 backdrop-blur-2xl z-[200] overflow-y-auto border-l border-white/10 no-print">
         <div class="flex justify-between items-center p-8 border-b border-white/10">
             <span class="text-xl font-display font-bold text-white tracking-widest">NAVIGATION</span>
-            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors">
-                <i class="fas fa-times text-lg"></i>
-            </button>
+            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors"><i class="fas fa-times text-lg"></i></button>
         </div>
         <nav class="flex flex-col space-y-6 px-8 py-10 text-left">
             <a href="index.html" class="text-3xl font-display font-medium text-white/60 hover:text-white transition-colors flex items-center gap-4"><i class="fas fa-home w-8 text-white/40"></i> Home</a>
@@ -259,9 +160,7 @@
                 <button onclick="toggleHistoryModal(); document.getElementById('close-mobile-menu').click();" class="text-sm font-display font-bold text-white tracking-[0.2em] uppercase flex items-center justify-center gap-3 py-4 rounded-xl bg-white/5 border border-white/10">
                     <i data-lucide="ticket"></i> View My Tickets
                 </button>
-                <a href="login.html" class="btn-light text-center py-4 rounded-xl text-sm font-bold uppercase tracking-widest">
-                    Portal Login
-                </a>
+                <a href="login.html" class="btn-light text-center py-4 rounded-xl text-sm font-bold uppercase tracking-widest">Portal Login</a>
             </div>
         </nav>
     </div>
@@ -302,8 +201,6 @@
                 
                 <form id="dynamicForm" class="space-y-6 relative z-10">
                     </form>
-                
-                <div id="submissionStatus" class="hidden mt-6 p-4 rounded-xl border border-glow-blue/50 bg-glow-blue/10 text-glow-blue text-center text-sm font-bold uppercase tracking-widest relative z-10"></div>
             </div>
         </div>
 
@@ -312,35 +209,34 @@
                 <button onclick="closePaymentModal()" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-white transition-colors">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
-                <div class="text-center mb-8">
-                    <div class="w-16 h-16 rounded-full bg-glow-blue/20 flex items-center justify-center text-glow-blue mx-auto mb-4 border border-glow-blue/30">
-                        <i data-lucide="credit-card" class="w-8 h-8"></i>
-                    </div>
-                    <h2 class="text-xl font-display font-bold text-white uppercase tracking-widest">Complete Payment</h2>
-                    <p class="text-xs text-white/50 mt-2 font-light">Registration Fee</p>
+                
+                <div class="text-center mb-6">
+                    <h2 class="text-xl font-display font-bold text-white uppercase tracking-widest">Registration Fee</h2>
                     <div class="text-4xl font-display font-bold text-white mt-2">₹<span id="paymentAmount">199</span></div>
                 </div>
 
-                <div class="space-y-3 mb-8">
-                    <label class="flex items-center justify-between p-4 rounded-xl border border-glow-blue/50 bg-glow-blue/10 cursor-pointer transition-colors">
-                        <div class="flex items-center gap-3">
-                            <i class="fab fa-google-pay text-2xl text-white"></i>
-                            <span class="text-sm font-bold text-white uppercase tracking-wide">UPI / GPay</span>
-                        </div>
-                        <input type="radio" name="payment_method" checked class="custom-radio">
-                    </label>
-                    
-                    <label class="flex items-center justify-between p-4 rounded-xl border border-white/10 bg-white/5 cursor-not-allowed opacity-50">
-                        <div class="flex items-center gap-3">
-                            <i data-lucide="credit-card" class="w-6 h-6 text-white/50"></i>
-                            <span class="text-sm font-bold text-white/50 uppercase tracking-wide">Card / Netbanking</span>
-                        </div>
-                        <span class="text-[9px] uppercase tracking-widest text-white/30 font-bold bg-white/10 px-2 py-1 rounded">Unavailable</span>
-                    </label>
+                <div class="bg-white p-3 rounded-2xl mx-auto w-48 h-48 mb-6 shadow-[0_0_20px_rgba(255,255,255,0.1)] relative group">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=metsiedc@oksbi&pn=METSIEDC&am=199&cu=INR" alt="Pay via UPI" class="w-full h-full object-cover rounded-xl" id="upiQRCodeImage">
+                    <div class="absolute inset-0 bg-black/50 hidden group-hover:flex items-center justify-center rounded-2xl transition-all">
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-white">Scan with GPay/PhonePe</span>
+                    </div>
                 </div>
 
-                <button id="processPaymentBtn" onclick="simulatePayment()" class="w-full btn-primary py-4 rounded-xl text-xs uppercase tracking-widest font-bold flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(37,99,235,0.4)]">
-                    Pay Securely
+                <div class="space-y-4 mb-8">
+                    <p class="text-center text-xs text-white/60 leading-relaxed px-4">Scan the QR code above to pay the registration fee. Once paid, strictly enter the <strong class="text-white">12-digit UTR / Reference ID</strong> below to claim your ticket.</p>
+                    
+                    <div>
+                        <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest text-center">Transaction ID (UTR)</label>
+                        <input type="text" id="utrInput" placeholder="e.g. 312345678901" class="glass-input w-full rounded-xl py-4 px-4 text-center font-mono tracking-widest text-sm" maxlength="12" minlength="12" required>
+                    </div>
+                    
+                    <div id="utrError" class="hidden text-red-400 text-[10px] uppercase font-bold text-center tracking-widest mt-2 flex justify-center items-center gap-1">
+                        <i data-lucide="alert-circle" class="w-3 h-3"></i> Invalid UTR Length
+                    </div>
+                </div>
+
+                <button id="processPaymentBtn" onclick="submitUtrPayment()" class="w-full btn-primary py-4 rounded-xl text-xs uppercase tracking-widest font-bold flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(37,99,235,0.4)]">
+                    Submit UTR & Get Ticket
                 </button>
             </div>
         </div>
@@ -354,10 +250,8 @@
                 </div>
                 
                 <div class="p-8 text-center bg-white relative">
-                    <div class="absolute top-4 right-4 text-green-500 flex flex-col items-center opacity-80 border border-green-200 p-2 rounded-lg bg-green-50">
-                        <i class="fas fa-check-circle text-lg mb-1"></i>
-                        <span class="text-[8px] font-bold uppercase tracking-wider">Paid</span>
-                    </div>
+                    <div id="ticketBadge" class="absolute top-4 right-4 flex flex-col items-center opacity-90 p-2 rounded-lg">
+                        </div>
 
                     <h1 class="text-2xl font-display font-bold mb-2 leading-tight uppercase tracking-tight text-[#050505]" id="ticketEventName">Event Name</h1>
                     <p class="text-xs uppercase tracking-widest text-gray-500 mb-8 font-semibold" id="ticketDate">Date: --</p>
@@ -375,6 +269,8 @@
                         <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold">Ticket ID</p>
                         <p class="font-mono text-[#050505] font-bold tracking-widest text-lg" id="ticketID">#IEDC-0000</p>
                     </div>
+                    
+                    <p id="ticketUtrDisplay" class="mt-4 text-[9px] text-gray-400 font-mono tracking-widest"></p>
                 </div>
 
                 <div class="p-6 bg-gray-50 ticket-cut flex justify-between items-center border-t border-gray-200">
@@ -443,19 +339,17 @@
         const firebaseConfig = {
           apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
           authDomain: "metsiedc-3010e.firebaseapp.com",
-          databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
           projectId: "metsiedc-3010e",
           storageBucket: "metsiedc-3010e.firebasestorage.app",
           messagingSenderId: "954403413150",
           appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
-          measurementId: "G-6E7EK0D7JG"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         
         let currentEventData = null;
-        let pendingFormTarget = null; // Store form context for payment
+        let pendingFormTarget = null; 
 
         // 1. Fetch Events
         async function loadEvents() {
@@ -527,7 +421,6 @@
             submitBtn.type = "submit";
             submitBtn.id = "formSubmitBtn";
             submitBtn.className = "w-full btn-light font-bold py-4 rounded-xl text-xs uppercase tracking-widest transition-all mt-8 flex items-center justify-center gap-3";
-            // Changed text to Proceed to Payment
             submitBtn.innerHTML = `Proceed to Payment <i data-lucide="arrow-right" class="w-4 h-4"></i>`;
             form.appendChild(submitBtn);
             lucide.createIcons();
@@ -537,62 +430,56 @@
         // 3. Intercept Form Submission -> Open Payment Modal
         document.getElementById('dynamicForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            
-            // Store the form target so we can process it AFTER payment
             pendingFormTarget = e.target;
             
-            // Set dynamic price if it exists in Firebase, otherwise default to 199
             const amount = currentEventData.price || 199;
             document.getElementById('paymentAmount').textContent = amount;
             
-            // Show Payment Modal
+            // Generate UPI QR dynamically based on amount (You should replace the root UPI ID later)
+            const upiUrl = `upi://pay?pa=metsiedc@oksbi&pn=METSIEDC&am=${amount}&cu=INR`;
+            document.getElementById('upiQRCodeImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;
+            
+            // Reset UTR input & hide errors
+            document.getElementById('utrInput').value = '';
+            document.getElementById('utrError').classList.add('hidden');
+            
             document.getElementById('paymentModal').classList.remove('hidden');
         });
 
-        // Close Payment Modal
         window.closePaymentModal = () => {
             document.getElementById('paymentModal').classList.add('hidden');
         };
 
-        // 4. Simulate Payment Process
-        window.simulatePayment = () => {
-            const btn = document.getElementById('processPaymentBtn');
+        // 4. Validate and Process UTR
+        window.submitUtrPayment = () => {
+            const utrVal = document.getElementById('utrInput').value.trim();
+            const errorLabel = document.getElementById('utrError');
             
-            // UI Loading state
+            // Strict length check for Indian UTRs
+            if(utrVal.length < 12) {
+                errorLabel.classList.remove('hidden');
+                return;
+            }
+            errorLabel.classList.add('hidden');
+
+            const btn = document.getElementById('processPaymentBtn');
             btn.disabled = true;
             btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Processing...`;
             lucide.createIcons();
             
-            // Simulate network delay for payment
+            // Fire backend submission with UTR
             setTimeout(() => {
-                // Success state
-                btn.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4"></i> Payment Successful`;
-                btn.classList.remove('btn-primary');
-                btn.style.background = '#22c55e'; // Green
-                btn.style.boxShadow = '0 0 20px rgba(34, 197, 94, 0.4)';
-                lucide.createIcons();
+                document.getElementById('paymentModal').classList.add('hidden');
+                btn.disabled = false;
+                btn.innerHTML = `Submit UTR & Get Ticket`;
                 
-                // Wait 1 second so user sees success, then execute actual submission
-                setTimeout(() => {
-                    document.getElementById('paymentModal').classList.add('hidden');
-                    
-                    // Reset modal button for next time
-                    btn.disabled = false;
-                    btn.innerHTML = `Pay Securely`;
-                    btn.classList.add('btn-primary');
-                    btn.style.background = '';
-                    btn.style.boxShadow = '';
-                    
-                    // Trigger the actual backend submission
-                    executeActualSubmission();
-                }, 1000);
-            }, 2000); // 2 second mock delay
+                executeActualSubmission(utrVal);
+            }, 800);
         };
 
-        // 5. Execute Actual Backend Submission & Ticket Generation
-        async function executeActualSubmission() {
+        // 5. Execute Actual Backend Submission
+        async function executeActualSubmission(utrCode) {
             const btn = document.getElementById('formSubmitBtn');
-            
             if(!currentEventData || !currentEventData.sheetUrl) return alert("Configuration Error: No Sheet URL.");
 
             const responses = [];
@@ -602,10 +489,13 @@
             inputs.forEach(input => {
                 if(input.dataset.label) {
                     responses.push({ label: input.dataset.label, answer: input.value });
-                    // Try to detect name for the ticket
                     if(input.dataset.label.toLowerCase().includes('name')) userName = input.value;
                 }
             });
+
+            // Add the UTR code to the backend payload so Admin can verify it
+            responses.push({ label: "UTR / Transaction ID", answer: utrCode });
+            responses.push({ label: "Payment Status", answer: "Pending Verification" });
 
             const ticketID = 'IEDC-' + Math.floor(1000 + Math.random() * 9000);
             const payload = { eventName: currentEventData.title, userName: userName, userEmail: "Guest", responses: responses, ticketID: ticketID };
@@ -618,23 +508,21 @@
                 // Post to Google Sheet
                 await fetch(currentEventData.sheetUrl, { method: 'POST', body: JSON.stringify(payload) });
                 
-                // Save to Local History
+                // Save to Local History as "Pending"
                 saveBookingToHistory({
                     eventName: currentEventData.title,
                     attendee: userName,
                     date: new Date().toLocaleDateString(),
                     ticketID: ticketID,
-                    paid: true
+                    status: 'pending'
                 });
 
-                // Show Ticket
-                showTicket(currentEventData.title, userName, ticketID, new Date().toLocaleDateString());
+                showTicket(currentEventData.title, userName, ticketID, new Date().toLocaleDateString(), utrCode);
 
             } catch (error) {
                 console.error(error);
-                // Even if network fails response (no-cors), we assume success for user experience if using Web App
-                saveBookingToHistory({ eventName: currentEventData.title, attendee: userName, date: new Date().toLocaleDateString(), ticketID: ticketID, paid: true });
-                showTicket(currentEventData.title, userName, ticketID, new Date().toLocaleDateString());
+                saveBookingToHistory({ eventName: currentEventData.title, attendee: userName, date: new Date().toLocaleDateString(), ticketID: ticketID, status: 'pending' });
+                showTicket(currentEventData.title, userName, ticketID, new Date().toLocaleDateString(), utrCode);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = `Proceed to Payment <i data-lucide="arrow-right" class="w-4 h-4"></i>`;
@@ -643,7 +531,7 @@
         }
 
         // 6. Ticket Display Logic
-        function showTicket(event, name, id, date) {
+        function showTicket(event, name, id, date, utr = null) {
             document.getElementById('formView').classList.add('hidden');
             document.getElementById('ticketView').classList.remove('hidden');
             
@@ -652,7 +540,18 @@
             document.getElementById('ticketID').textContent = `#${id}`;
             document.getElementById('ticketDate').textContent = `Date: ${date}`;
             
-            // Generate QR Code (using Google Charts API for simplicity)
+            if(utr) {
+                document.getElementById('ticketUtrDisplay').textContent = `UTR: ${utr}`;
+            }
+
+            // Set Yellow "Pending" Badge
+            const badge = document.getElementById('ticketBadge');
+            badge.className = "absolute top-4 right-4 text-yellow-500 flex flex-col items-center opacity-90 border border-yellow-200 p-2 rounded-lg bg-yellow-50";
+            badge.innerHTML = `
+                <i class="fas fa-clock text-lg mb-1"></i>
+                <span class="text-[8px] font-bold uppercase tracking-wider">Pending</span>
+            `;
+            
             document.getElementById('ticketQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${id}`;
             window.scrollTo(0,0);
         }
@@ -695,12 +594,20 @@
                     history.forEach(t => {
                         const div = document.createElement('div');
                         div.className = "border border-white/10 bg-white/5 p-4 rounded-xl cursor-pointer hover:bg-white/10 hover:border-white/30 transition-all flex justify-between items-center group";
+                        
+                        let badgeHtml = '';
+                        if(t.status === 'pending') {
+                            badgeHtml = '<span class="px-1.5 py-0.5 bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 text-[8px] rounded uppercase font-bold tracking-widest">Pending</span>';
+                        } else if(t.paid) {
+                            badgeHtml = '<span class="px-1.5 py-0.5 bg-green-500/20 text-green-500 border border-green-500/30 text-[8px] rounded uppercase font-bold tracking-widest">Paid</span>';
+                        }
+
                         div.innerHTML = `
                             <div>
                                 <h4 class="font-display font-bold text-white text-sm uppercase tracking-wide mb-1">${t.eventName}</h4>
                                 <div class="flex items-center gap-2">
                                     <span class="text-[10px] text-white/40 tracking-widest uppercase font-mono">${t.ticketID} • ${t.date}</span>
-                                    ${t.paid ? '<span class="px-1.5 py-0.5 bg-green-500/20 text-green-500 text-[8px] rounded uppercase font-bold tracking-widest">Paid</span>' : ''}
+                                    ${badgeHtml}
                                 </div>
                             </div>
                             <i data-lucide="chevron-right" class="w-4 h-4 text-white/30 group-hover:text-white transition-colors"></i>
@@ -720,7 +627,7 @@
 
         loadEvents();
 
-        // Mobile Menu Logic
+        // Mobile Menu & Scroll
         const btn = document.getElementById('mobile-menu-button');
         const menu = document.getElementById('mobile-menu');
         const closeBtn = document.getElementById('close-mobile-menu');
@@ -736,32 +643,20 @@
                 document.body.style.overflow = '';
             }
         }
-        
         if(btn) btn.addEventListener('click', toggleMobileMenu);
         if(closeBtn) closeBtn.addEventListener('click', toggleMobileMenu);
 
-        const menuLinks = menu.querySelectorAll('a');
-        menuLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (!menu.classList.contains('translate-x-full')) {
-                    toggleMobileMenu();
-                }
-            });
-        });
-        
-        // Navbar scroll effect
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 20) { 
-                nav.classList.add('scrolled-nav');
-                nav.classList.remove('py-4');
+                nav.classList.add('scrolled-nav'); nav.classList.remove('py-4');
             } else { 
-                nav.classList.remove('scrolled-nav');
-                nav.classList.add('py-4');
+                nav.classList.remove('scrolled-nav'); nav.classList.add('py-4');
             }
         });
     </script>
 </body>
 </html>
+
 
 ```
