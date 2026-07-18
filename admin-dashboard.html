@@ -1835,7 +1835,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         
-        // REMOVED THE ARTIFACT WRAPPERS - NOW POINTING TO FIRESTORE ROOT
         const getCol = (name) => collection(db, name);
         const getDocRef = (name, id) => doc(db, name, id);
 
@@ -2045,6 +2044,44 @@
                 window.showToast(e.message, "error");
             } finally {
                 btn.disabled = false; btn.innerText = "Add User";
+            }
+        });
+
+        // ==========================================
+        // POINTS DEDUCTION/ADDITION HANDLER
+        // ==========================================
+        document.getElementById('managePointsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const userId = document.getElementById('pointsUserId').value;
+            const amount = parseInt(document.getElementById('pointsAmount').value);
+            const action = document.getElementById('pointsActionType').value; // 'add' or 'deduct'
+            const reason = document.getElementById('pointsReason').value;
+
+            if (!userId || isNaN(amount)) return window.showToast("Invalid data", "error");
+
+            const btn = document.getElementById('submitPointsBtn');
+            btn.disabled = true;
+            btn.innerText = "Updating...";
+
+            try {
+                // Deductions require negative numbers for the increment function
+                const adjustment = (action === 'deduct') ? -amount : amount;
+
+                await updateDoc(getDocRef("users", userId), { 
+                    points: increment(adjustment) 
+                });
+
+                await window.logActivity("Points Updated", `${action.toUpperCase()} ${amount} pts for ${userId}. Reason: ${reason}`);
+                
+                window.showToast("Points updated successfully!", "success");
+                document.getElementById('pointsModal').classList.add('hidden');
+                e.target.reset();
+            } catch (err) {
+                console.error("Points Update Error:", err);
+                window.showToast("Permission denied or server error: " + err.message, "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = (action === 'add') ? "Award Points" : "Deduct Points";
             }
         });
 
@@ -2827,4 +2864,3 @@
     </script>
 </body>
 </html>
-
