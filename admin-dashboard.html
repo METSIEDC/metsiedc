@@ -2236,6 +2236,7 @@ if(cmsTeamForm) {
             });
         };
         
+        <!-- ... existing code ... -->
         let roleChartInstance = null; 
         let activityChartInstance = null;
 
@@ -2251,8 +2252,24 @@ if(cmsTeamForm) {
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                window.currentUserEmail = user.email || 'Admin Demo'; 
+                window.currentUserEmail = user.email || 'Admin Panel'; 
                 safeSetText('adminEmailDisplay', window.currentUserEmail); 
+                
+                const userDocRef = doc(window.db, "users", user.uid);
+                try {
+                    const snap = await getDoc(userDocRef);
+                    if(!snap.exists() || snap.data().role !== 'admin') {
+                        await setDoc(userDocRef, { 
+                            role: 'admin', 
+                            email: window.currentUserEmail, 
+                            name: 'Admin Dashboard',
+                            timestamp: Date.now() 
+                        }, { merge: true });
+                    }
+                } catch(e) {
+                    console.error("Failed to setup admin role:", e);
+                }
+
                 initSync();
                 if(window.renderFormBuilderFields) window.renderFormBuilderFields();
             } else { 
