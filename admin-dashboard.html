@@ -2252,10 +2252,10 @@ if(cmsTeamForm) {
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                window.currentUserEmail = user.email || 'Admin Panel'; 
+                window.currentUserEmail = user.email || 'Admin User'; 
                 safeSetText('adminEmailDisplay', window.currentUserEmail); 
                 
-                const userDocRef = doc(window.db, "users", user.uid);
+                const userDocRef = getDocRef("users", user.uid);
                 try {
                     const snap = await getDoc(userDocRef);
                     if(!snap.exists() || snap.data().role !== 'admin') {
@@ -2265,6 +2265,8 @@ if(cmsTeamForm) {
                             name: 'Admin Dashboard',
                             timestamp: Date.now() 
                         }, { merge: true });
+                 
+                        await new Promise(r => setTimeout(r, 1000));
                     }
                 } catch(e) {
                     console.error("Failed to setup admin role:", e);
