@@ -1477,8 +1477,7 @@
 
     <!-- UI Scripts -->
     <script>
-        let formBuilderFields = [
-            // Toast Notification Function
+                    // Toast Notification Function
 window.showToast = (msg, type = 'info') => {
     const toast = document.getElementById('customToast');
     if(!toast) { alert(msg); return; } // Fallback if UI is missing
@@ -1499,6 +1498,8 @@ window.customConfirm = (msg) => {
         document.getElementById('customConfirmCancel').onclick = () => { modal.classList.add('hidden'); resolve(false); };
     });
 };
+        let formBuilderFields = [
+
             { id: generateId(), label: 'Full Name', type: 'text', required: true, options: [] },
             { id: generateId(), label: 'Email Address', type: 'email', required: true, options: [] },
             { id: generateId(), label: 'Mobile Number', type: 'tel', required: true, options: [] }
@@ -2075,7 +2076,46 @@ window.customConfirm = (msg) => {
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signOut, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, onSnapshot, getDocs, increment, writeBatch, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
+        const cmsTeamForm = document.getElementById('cmsTeamForm');
+if(cmsTeamForm) {
+    cmsTeamForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Prevent page refresh
+        const btn = document.getElementById('cmsTeamSubmitBtn');
+        const originalText = btn.innerText;
+        btn.disabled = true; 
+        btn.innerText = "Uploading...";
+
+        try {
+            const file = document.getElementById('cmsTeamPhoto').files[0];
+            if (!file) throw new Error("Please select a photo.");
+
+            // 1. Upload photo to Firebase Storage
+            const storageRef = ref(storage, 'team_photos/' + Date.now() + '_' + file.name);
+            const uploadTask = await uploadBytesResumable(storageRef, file);
+            const downloadURL = await getDownloadURL(uploadTask.ref);
+
+            // 2. Save details to Firestore
+            await addDoc(collection(db, "coreTeam"), {
+                name: document.getElementById('cmsTeamName').value,
+                role: document.getElementById('cmsTeamRole').value,
+                order: parseInt(document.getElementById('cmsTeamOrder').value),
+                imageUrl: downloadURL,
+                storagePath: storageRef.fullPath
+            });
+
+            window.showToast("Team Member Added Successfully!", "success");
+            cmsTeamForm.reset();
+        } catch(error) {
+            console.error(error);
+            window.showToast("Error: " + error.message, "error");
+        } finally {
+            btn.disabled = false; 
+            btn.innerText = originalText;
+        }
+    });
+}
         // Keep icons up to date
         if(typeof lucide !== 'undefined') lucide.createIcons();
         
@@ -2094,6 +2134,7 @@ window.customConfirm = (msg) => {
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const storage = getStorage(app);
         
         const getCol = (name) => collection(db, name);
         const getDocRef = (name, id) => doc(db, name, id);
