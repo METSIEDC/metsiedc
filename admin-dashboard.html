@@ -402,7 +402,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <!-- Form -->
                     <div class="glass-panel p-6 md:p-8 rounded-3xl">
-                        <form id="cmsEventForm" class="space-y-4">
+                        <form id="cmsTeamForm" class="space-y-4" onsubmit="event.preventDefault();">
                             <div>
                                 <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Event Title</label>
                                 <input type="text" id="cmsEventTitle" required class="glass-input w-full px-4 py-3 rounded-xl text-sm" placeholder="e.g. Protosynth 2026">
@@ -1478,6 +1478,27 @@
     <!-- UI Scripts -->
     <script>
         let formBuilderFields = [
+            // Toast Notification Function
+window.showToast = (msg, type = 'info') => {
+    const toast = document.getElementById('customToast');
+    if(!toast) { alert(msg); return; } // Fallback if UI is missing
+    toast.textContent = msg;
+    toast.className = `fixed bottom-4 right-4 z-[9999] px-6 py-3 rounded-xl text-sm font-bold shadow-xl transition-opacity duration-300 ${type === 'error' ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`;
+    toast.classList.remove('hidden');
+    setTimeout(() => { toast.classList.add('hidden'); }, 3000);
+};
+
+// Custom Confirm Function
+window.customConfirm = (msg) => {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('customConfirmModal');
+        if(!modal) { resolve(confirm(msg)); return; } // Fallback if UI is missing
+        document.getElementById('customConfirmMsg').textContent = msg;
+        modal.classList.remove('hidden');
+        document.getElementById('customConfirmOk').onclick = () => { modal.classList.add('hidden'); resolve(true); };
+        document.getElementById('customConfirmCancel').onclick = () => { modal.classList.add('hidden'); resolve(false); };
+    });
+};
             { id: generateId(), label: 'Full Name', type: 'text', required: true, options: [] },
             { id: generateId(), label: 'Email Address', type: 'email', required: true, options: [] },
             { id: generateId(), label: 'Mobile Number', type: 'tel', required: true, options: [] }
