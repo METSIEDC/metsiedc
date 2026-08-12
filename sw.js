@@ -37,7 +37,7 @@ self.addEventListener('notificationclick', function(event) {
     );
 });
 
-// Bumped to v15 for a fresh install
+// Bumped to v16 for a fresh install
 const CACHE_NAME = 'mets-iedc-v16'; 
 
 const urlsToCache = [
@@ -45,6 +45,15 @@ const urlsToCache = [
   './index.html',
   './offline.html',
   './manifest.json'
+];
+
+// ഈ URL-കൾ സർവീസ് വർക്കർ കാഷ് ചെയ്യില്ല (Firebase & Google APIs)
+const IGNORED_URLS = [
+  'firestore.googleapis.com',
+  'identitytoolkit.googleapis.com',
+  'firebasestorage.googleapis.com',
+  'script.google.com',
+  'googleusercontent.com'
 ];
 
 // 1. Install Phase
@@ -76,8 +85,14 @@ self.addEventListener('activate', event => {
 
 // 3. Fetch Phase
 self.addEventListener('fetch', event => {
-  // Only intercept standard GET requests (ignores POST requests like form submissions)
   if (event.request.method !== 'GET') return;
+
+  const requestUrl = new URL(event.request.url);
+  const shouldIgnore = IGNORED_URLS.some(url => requestUrl.hostname.includes(url));
+  
+  if (shouldIgnore) {
+    return; // Ignore Firebase/Google API requests
+  }
 
   if (event.request.mode === 'navigate') {
     event.respondWith(
@@ -91,13 +106,11 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       caches.match(event.request).then(cachedResponse => {
         const fetchPromise = fetch(event.request).then(networkResponse => {
-          // Safety check: Only cache valid, successful responses
-          if (networkResponse && networkResponse.status === 200) {
-            // Clone synchronously BEFORE passing to the cache
+          // Check if valid before caching
+          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
             const responseToCache = networkResponse.clone();
-            
             caches.open(CACHE_NAME).then(cache => {
-              cache.put(event.request, responseToCache);
+              cache.put(event.request, responseToCache).catch(()=>console.log("Ignored cache error"));
             });
           }
           return networkResponse;
