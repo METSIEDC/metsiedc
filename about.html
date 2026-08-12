@@ -167,7 +167,7 @@
             </p>
         </section>
 
-        <!-- CORE TEAM GRID -->
+        <!-- DYNAMIC CORE TEAM GRID -->
         <section class="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-gray-100 relative overflow-hidden">
             <div class="flex justify-between items-end mb-10">
                 <h2 class="text-2xl md:text-3xl font-display font-bold text-theme-primary tracking-tight">Core <span class="text-gray-400">Team</span></h2>
@@ -176,46 +176,20 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                <!-- Nodal Officer -->
-                <div class="glass-panel p-2 rounded-3xl group bg-gray-50 border border-gray-100">
-                    <div class="aspect-[4/5] rounded-[1.5rem] overflow-hidden relative">
-                        <img src="assets/images/team/NODAL OFFICER.jpg" alt="Nodal Officer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://ui-avatars.com/api/?name=NO&background=1a1a2e&color=fff'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-4 md:p-6">
-                            <span class="text-sm md:text-base font-display font-bold text-white tracking-wide">Nodal Officer</span>
-                            <span class="text-[9px] uppercase tracking-widest text-blue-300 mt-1">Leadership</span>
-                        </div>
-                    </div>
+            <!-- Team Grid Container (Populated via Firebase) -->
+            <div id="team-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                <!-- Skeleton Loading State (Shown while data is fetching) -->
+                <div class="glass-panel p-2 rounded-3xl bg-gray-50 border border-gray-100 animate-pulse">
+                    <div class="aspect-[4/5] rounded-[1.5rem] bg-gray-200 w-full h-full"></div>
                 </div>
-                <!-- Student Lead 1 -->
-                <div class="glass-panel p-2 rounded-3xl group bg-gray-50 border border-gray-100">
-                    <div class="aspect-[4/5] rounded-[1.5rem] overflow-hidden relative">
-                        <img src="assets/images/team/1000193375.webp" alt="Shahil" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://ui-avatars.com/api/?name=CH&background=1a1a2e&color=fff'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-4 md:p-6">
-                            <span class="text-sm md:text-base font-display font-bold text-white tracking-wide">Muhammed Shahil</span>
-                            <span class="text-[9px] uppercase tracking-widest text-gray-300 mt-1">Student Lead 1</span>
-                        </div>
-                    </div>
+                <div class="glass-panel p-2 rounded-3xl bg-gray-50 border border-gray-100 animate-pulse">
+                    <div class="aspect-[4/5] rounded-[1.5rem] bg-gray-200 w-full h-full"></div>
                 </div>
-                <!-- Student Lead 2 -->
-                <div class="glass-panel p-2 rounded-3xl group bg-gray-50 border border-gray-100">
-                    <div class="aspect-[4/5] rounded-[1.5rem] overflow-hidden relative">
-                        <img src="assets/images/team/1000284515.jpg" alt="Manna" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://ui-avatars.com/api/?name=DE&background=1a1a2e&color=fff'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-4 md:p-6">
-                            <span class="text-sm md:text-base font-display font-bold text-white tracking-wide">Manna Mariyam</span>
-                            <span class="text-[9px] uppercase tracking-widest text-gray-300 mt-1">Student Lead 2</span>
-                        </div>
-                    </div>
+                <div class="glass-panel p-2 rounded-3xl bg-gray-50 border border-gray-100 animate-pulse hidden md:block">
+                    <div class="aspect-[4/5] rounded-[1.5rem] bg-gray-200 w-full h-full"></div>
                 </div>
-                <!-- Community Lead -->
-                <div class="glass-panel p-2 rounded-3xl group bg-gray-50 border border-gray-100">
-                    <div class="aspect-[4/5] rounded-[1.5rem] overflow-hidden relative">
-                        <img src="assets/images/team/1000225890.jpg" alt="Gokul" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://ui-avatars.com/api/?name=HA&background=1a1a2e&color=fff'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-4 md:p-6">
-                            <span class="text-sm md:text-base font-display font-bold text-white tracking-wide">Gokul</span>
-                            <span class="text-[9px] uppercase tracking-widest text-gray-300 mt-1">Community Lead</span>
-                        </div>
-                    </div>
+                <div class="glass-panel p-2 rounded-3xl bg-gray-50 border border-gray-100 animate-pulse hidden md:block">
+                    <div class="aspect-[4/5] rounded-[1.5rem] bg-gray-200 w-full h-full"></div>
                 </div>
             </div>
         </section>
@@ -368,7 +342,7 @@
 
     </main>
 
-    <!-- SCRIPTS -->
+    <!-- UI SCRIPTS -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Update Copyright Year
@@ -405,6 +379,70 @@
                     }
                 });
             });
+        });
+    </script>
+
+    <!-- FIREBASE & DYNAMIC TEAM DATA LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Your Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
+            authDomain: "metsiedc-3010e.firebaseapp.com",
+            databaseURL: "https://metsiedc-3010e-default-rtdb.firebaseio.com",
+            projectId: "metsiedc-3010e",
+            storageBucket: "metsiedc-3010e.firebasestorage.app",
+            messagingSenderId: "954403413150",
+            appId: "1:954403413150:web:2523a3377f15a3d6002f8f",
+            measurementId: "G-6E7EK0D7JG"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Fetch Dynamic Team Data
+        const teamGrid = document.getElementById('team-grid');
+        
+        // Ensure you create a collection named "coreTeam" in your Firestore Database.
+        // We limit to 4 members to keep the "About" page grid neat. (Full team will be on team.html)
+        const teamQuery = query(collection(db, "coreTeam"), orderBy("order", "asc"), limit(4));
+
+        onSnapshot(teamQuery, (snapshot) => {
+            teamGrid.innerHTML = ''; // Clear skeleton loaders
+            
+            if (snapshot.empty) {
+                teamGrid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">No team members added yet.</p>';
+                return;
+            }
+
+            snapshot.forEach((doc) => {
+                const member = doc.data();
+                
+                // Fallback details if fields are empty
+                const name = member.name || 'Member Name';
+                const role = member.role || 'Role';
+                const category = member.category || 'Core Team';
+                // If imageUrl is empty, it uses ui-avatars to generate a text avatar automatically
+                const image = member.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1a1a2e&color=fff`;
+
+                const memberHTML = `
+                    <div class="glass-panel p-2 rounded-3xl group bg-gray-50 border border-gray-100">
+                        <div class="aspect-[4/5] rounded-[1.5rem] overflow-hidden relative">
+                            <img src="${image}" alt="${name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1a1a2e&color=fff'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-4 md:p-6">
+                                <span class="text-sm md:text-base font-display font-bold text-white tracking-wide">${name}</span>
+                                <span class="text-[9px] uppercase tracking-widest text-blue-300 mt-1">${role}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                teamGrid.innerHTML += memberHTML;
+            });
+        }, (error) => {
+            console.error("Error fetching team data: ", error);
+            teamGrid.innerHTML = '<p class="col-span-full text-center text-red-500 py-10">Failed to load team data. Please check connection.</p>';
         });
     </script>
 </body>
