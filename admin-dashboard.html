@@ -1343,6 +1343,138 @@
         </main>
     </div>
 
+    <!-- UI MODALS -->
+    <!-- Points Modal -->
+    <div id="pointsModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
+        <div id="pointsModalContainer" class="glass-panel w-full max-w-md p-8 rounded-3xl border-gray-200 bg-white shadow-2xl">
+            <h2 class="text-xl font-bold text-gray-900 mb-6 uppercase tracking-widest text-center" id="pointsModalTitle">Manage Points</h2>
+            <form id="managePointsForm" class="space-y-4">
+                <input type="hidden" id="pointsUserId">
+                <input type="hidden" id="pointsActionType">
+                <div class="text-center font-bold text-lg text-blue-600 mb-4" id="pointsUserNameDisplay">Student Name</div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Amount</label>
+                    <input type="number" id="pointsAmount" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required placeholder="e.g. 50">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Reason / Description</label>
+                    <input type="text" id="pointsReason" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required placeholder="e.g. Hackathon Winner">
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="document.getElementById('pointsModal').classList.add('hidden')" class="flex-1 bg-gray-100 hover:bg-gray-200 py-3.5 rounded-xl text-gray-600 font-bold text-[10px] uppercase transition-colors">Cancel</button>
+                    <button type="submit" id="submitPointsBtn" class="flex-1 btn-primary py-3.5 rounded-xl text-white font-bold text-[10px] uppercase transition-colors shadow-lg">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl border-gray-200 bg-white shadow-2xl">
+            <h2 class="text-xl font-bold text-gray-900 mb-6 uppercase tracking-widest text-center">Add New User</h2>
+            <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
+                <button id="tabCreateNew" onclick="window.switchAddMode('create')" class="flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg bg-blue-50 text-blue-600 transition-all">Create New</button>
+                <button id="tabSyncExisting" onclick="window.switchAddMode('sync')" class="flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg text-gray-400 hover:text-gray-900 transition-all">Sync Existing</button>
+            </div>
+            <form id="adminAddUserForm" class="space-y-4">
+                <input type="hidden" id="addUserMode" value="create">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Full Name</label>
+                    <input type="text" id="newUserName" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Email Address</label>
+                    <input type="email" id="newUserEmail" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required>
+                </div>
+                <div id="passwordFieldGroup">
+                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Password</label>
+                    <input type="password" id="newUserPassword" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required>
+                </div>
+                <div id="uidFieldGroup" class="hidden">
+                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Firebase UID (Optional)</label>
+                    <input type="text" id="newUserUid" class="glass-input w-full px-4 py-3 rounded-xl text-sm">
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="window.toggleAddUserModal(false)" class="flex-1 bg-gray-100 hover:bg-gray-200 py-3.5 rounded-xl text-gray-600 font-bold text-[10px] uppercase transition-colors">Cancel</button>
+                    <button type="submit" id="submitAddUserBtn" class="flex-1 btn-primary py-3.5 rounded-xl text-white font-bold text-[10px] uppercase transition-colors shadow-lg">Add User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="editUserModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl border-gray-200 bg-white shadow-2xl">
+            <h2 class="text-xl font-bold text-gray-900 mb-6 uppercase tracking-widest text-center">Edit Role</h2>
+            <form id="editUserForm" class="space-y-4">
+                <input type="hidden" id="editUserId">
+                <div class="text-center font-bold text-lg text-blue-600 mb-4" id="editUserName">Student Name</div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Role</label>
+                    <select id="editUserRole" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required>
+                        <option value="student">Student</option>
+                        <option value="excom">ExCom</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="window.toggleEditUserModal(false)" class="flex-1 bg-gray-100 hover:bg-gray-200 py-3.5 rounded-xl text-gray-600 font-bold text-[10px] uppercase transition-colors">Cancel</button>
+                    <button type="submit" class="flex-1 btn-primary py-3.5 rounded-xl text-white font-bold text-[10px] uppercase transition-colors shadow-lg">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Phone Modal -->
+    <div id="editPhoneModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl border-gray-200 bg-white shadow-2xl">
+            <h2 class="text-xl font-bold text-gray-900 mb-6 uppercase tracking-widest text-center">Update Contact</h2>
+            <form id="editPhoneForm" class="space-y-4">
+                <input type="hidden" id="editPhoneUserId">
+                <div class="text-center font-bold text-lg text-blue-600 mb-4" id="editPhoneUserName">Student Name</div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Phone Number (with Country Code)</label>
+                    <input type="tel" id="editPhoneInput" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required placeholder="+91...">
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="window.toggleEditPhoneModal(false)" class="flex-1 bg-gray-100 hover:bg-gray-200 py-3.5 rounded-xl text-gray-600 font-bold text-[10px] uppercase transition-colors">Cancel</button>
+                    <button type="submit" class="flex-1 btn-primary py-3.5 rounded-xl text-white font-bold text-[10px] uppercase transition-colors shadow-lg">Save Contact</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ExCom Attendance Modal -->
+    <div id="excomModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-2xl p-8 rounded-3xl border-gray-200 bg-white shadow-2xl max-h-[90vh] flex flex-col">
+            <h2 class="text-xl font-bold text-gray-900 mb-6 uppercase tracking-widest text-center shrink-0">Log Meeting Minutes</h2>
+            <div class="flex gap-4 mb-6 shrink-0">
+                <div class="flex-1">
+                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Meeting Title</label>
+                    <input type="text" id="excomMeetingTitle" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required>
+                </div>
+                <div class="flex-1">
+                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Date</label>
+                    <input type="date" id="excomMeetingDate" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required>
+                </div>
+            </div>
+            <div class="overflow-y-auto flex-grow mb-6 border border-gray-100 rounded-xl">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 text-[10px] uppercase tracking-widest font-bold text-gray-500 sticky top-0 z-10">
+                        <tr><th class="px-6 py-3 w-40 text-center">Status</th><th class="px-6 py-3">Member Name</th></tr>
+                    </thead>
+                    <tbody id="excomAttendanceList" class="divide-y divide-gray-100 text-sm text-gray-700">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex gap-3 shrink-0">
+                <button type="button" onclick="document.getElementById('excomModal').classList.add('hidden')" class="flex-1 bg-gray-100 hover:bg-gray-200 py-4 rounded-xl text-gray-600 font-bold text-[10px] uppercase transition-colors">Cancel</button>
+                <button type="button" id="saveExcomBtn" onclick="window.submitExcomAttendance()" class="flex-1 btn-primary py-4 rounded-xl text-white font-bold text-[10px] uppercase transition-colors shadow-lg">Save Log</button>
+            </div>
+        </div>
+    </div>
+
     <!-- UI Scripts -->
     <script>
         let formBuilderFields = [
@@ -1352,6 +1484,41 @@
         ];
         
         let eventQrInstance = null;
+
+        window.showToast = (msg, type = 'info') => {
+            const toast = document.getElementById('customToast');
+            if(!toast) return;
+            toast.textContent = msg;
+            toast.className = `fixed bottom-4 right-4 z-[9999] px-6 py-3 rounded-xl text-sm font-bold shadow-xl transition-opacity duration-300 flex items-center gap-2 ${type === 'error' ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`;
+            toast.classList.remove('hidden');
+            setTimeout(() => { toast.classList.add('hidden'); }, 3000);
+        };
+
+        window.customConfirm = (msg) => {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('customConfirmModal');
+                if(!modal) { resolve(confirm(msg)); return; }
+                document.getElementById('customConfirmMsg').textContent = msg;
+                modal.classList.remove('hidden');
+
+                document.getElementById('customConfirmOk').onclick = () => {
+                    modal.classList.add('hidden');
+                    resolve(true);
+                };
+                document.getElementById('customConfirmCancel').onclick = () => {
+                    modal.classList.add('hidden');
+                    resolve(false);
+                };
+            });
+        };
+
+        window.openGlobalScanner = (type) => {
+            window.showToast("Scanner initialized: " + type, "info");
+        };
+
+        window.closeGlobalScanner = () => {
+            console.log("Scanner closed");
+        };
 
         document.addEventListener('DOMContentLoaded', () => { 
             document.getElementById('mobile-menu-toggle')?.addEventListener('click', window.toggleMobileSidebar); 
@@ -2285,6 +2452,118 @@
         window.handleGalleryImages = (e) => { 
             window.galleryImages = Array.from(e.target.files); 
             document.getElementById('galleryFileName').textContent = `${window.galleryImages.length} files selected`; 
+        };
+
+        const editUserForm = document.getElementById('editUserForm');
+        if(editUserForm) {
+            editUserForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const id = document.getElementById('editUserId').value;
+                const role = document.getElementById('editUserRole').value;
+                try {
+                    await updateDoc(getDocRef("users", id), { role: role });
+                    await window.logActivity("User Updated", `Role changed to ${role} for ${id}`);
+                    window.showToast("User role updated successfully", "success");
+                    window.toggleEditUserModal(false);
+                } catch (err) {
+                    window.showToast(err.message, "error");
+                }
+            });
+        }
+
+        const adminAddUserForm = document.getElementById('adminAddUserForm');
+        if(adminAddUserForm) {
+            adminAddUserForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('submitAddUserBtn');
+                btn.disabled = true; btn.innerText = "Processing...";
+                try {
+                    const name = document.getElementById('newUserName').value;
+                    const email = document.getElementById('newUserEmail').value;
+                    const uid = document.getElementById('newUserUid').value || generateId();
+                    await setDoc(getDocRef("users", uid), { name, email, role: 'student', points: 0, timestamp: Date.now() });
+                    window.showToast("User added successfully", "success");
+                    window.toggleAddUserModal(false);
+                    e.target.reset();
+                } catch(err) {
+                    window.showToast(err.message, "error");
+                } finally {
+                    btn.disabled = false; btn.innerText = "Add User";
+                }
+            });
+        }
+
+        const editPhoneForm = document.getElementById('editPhoneForm');
+        if(editPhoneForm) {
+            editPhoneForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const id = document.getElementById('editPhoneUserId').value;
+                const phone = document.getElementById('editPhoneInput').value;
+                try {
+                    await updateDoc(getDocRef("users", id), { phone: phone });
+                    await window.logActivity("User Phone Updated", `Phone changed for ${id}`);
+                    window.showToast("Phone number updated", "success");
+                    window.toggleEditPhoneModal(false);
+                } catch (err) {
+                    window.showToast(err.message, "error");
+                }
+            });
+        }
+
+        const managePointsForm = document.getElementById('managePointsForm');
+        if(managePointsForm) {
+            managePointsForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const userId = document.getElementById('pointsUserId').value;
+                const amount = parseInt(document.getElementById('pointsAmount').value);
+                const action = document.getElementById('pointsActionType').value;
+                const reason = document.getElementById('pointsReason').value;
+
+                if (!userId || isNaN(amount)) return window.showToast("Invalid data", "error");
+
+                const btn = e.target.querySelector('button[type="submit"]');
+                btn.disabled = true; btn.innerText = "Updating...";
+
+                try {
+                    const adjustment = (action === 'deduct') ? -amount : amount;
+                    await updateDoc(getDocRef("users", userId), { points: increment(adjustment) });
+                    await window.logActivity("Points Updated", `${action.toUpperCase()} ${amount} pts for ${userId}. Reason: ${reason}`);
+                    window.showToast("Points updated successfully!", "success");
+                    document.getElementById('pointsModal').classList.add('hidden');
+                    e.target.reset();
+                } catch (err) {
+                    window.showToast("Permission denied or server error: " + err.message, "error");
+                } finally {
+                    btn.disabled = false;
+                    btn.innerText = "Submit";
+                }
+            });
+        }
+
+        window.submitExcomAttendance = async () => {
+            const title = document.getElementById('excomMeetingTitle').value.trim(); 
+            const date = document.getElementById('excomMeetingDate').value;
+            if(!title || !date) return window.showToast("Fill meeting name and date.", "error");
+            
+            const attendanceRecords = Array.from(document.querySelectorAll('.excom-status-select')).map(sel => ({ 
+                id: sel.dataset.id, name: sel.dataset.name, status: sel.value 
+            }));
+            
+            const btn = document.getElementById('saveExcomBtn'); 
+            btn.disabled = true; btn.innerHTML = 'Saving...';
+            
+            try {
+                await addDoc(getCol("excom_meetings"), { 
+                    title: title, date: date, attendance: attendanceRecords, 
+                    timestamp: Date.now(), loggedBy: window.currentUserEmail 
+                }); 
+                await window.logActivity("ExCom Logged", `Meeting: ${date}`); 
+                window.showToast("Saved!", "success"); 
+                document.getElementById('excomModal').classList.add('hidden');
+            } catch(e) { 
+                window.showToast(e.message, "error"); 
+                btn.disabled = false; btn.innerHTML = 'Save Log';
+            }
         };
 
         // --- MASTER SYNC LOGIC (Light Theme specific class injections) ---
