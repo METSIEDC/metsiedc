@@ -379,7 +379,7 @@
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-3">
                     <div class="text-right hidden sm:block">
-                        <p class="text-[10px] font-bold uppercase tracking-widest text-gray-500" id="adminEmailDisplay">Admin User</p>
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-gray-500" id="adminEmailDisplay">Admin</p>
                     </div>
                     <div class="w-10 h-10 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
                         <i data-lucide="shield-check" class="w-5 h-5"></i>
@@ -1617,6 +1617,7 @@ window.customConfirm = (msg) => {
                 document.getElementById('tabCreateNew').className = "flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg bg-blue-50 text-blue-600 transition-all";
                 document.getElementById('tabSyncExisting').className = "flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg text-gray-400 hover:text-gray-900 transition-all";
                 document.getElementById('passwordFieldGroup').classList.remove('hidden'); 
+                
                 document.getElementById('uidFieldGroup').classList.add('hidden');
                 document.getElementById('newUserPassword').required = true; 
                 document.getElementById('newUserUid').required = false;
@@ -2236,7 +2237,6 @@ if(cmsTeamForm) {
             });
         };
         
-        <!-- ... existing code ... -->
         let roleChartInstance = null; 
         let activityChartInstance = null;
 
