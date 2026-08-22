@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SIB Task 03 — The Startup Detective</title>
+
+<style>
+:root {
+    --bg: #050a12;
+    --panel: #0b1422;
+    --blue: #168cff;
+    --light-blue: #65b7ff;
+    --white: #eef4ff;
+    --muted: #9eacc0;
+    --line: #1d3a5b;
+    --red: #ff3b45;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background:
+        radial-gradient(circle at 50% 0%, #102746, #050a12 48%, #02050a);
+    color: var(--white);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Background grid */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+
+    background-image:
+        linear-gradient(90deg, #fff 1px, transparent 1px),
+        linear-gradient(#fff 1px, transparent 1px);
+
+    background-size: 55px 55px;
+}
+
+/* ================= NAVBAR ================= */
+
+nav {
+    position: fixed;
+    z-index: 5;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    padding: 16px 6%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: #040914dd;
+    border-bottom: 1px solid var(--line);
+
+    backdrop-filter: blur(12px);
+}
+
+nav strong {
+    letter-spacing: 1px;
+}
+
+nav span {
+    color: var(--blue);
+}
+
+nav a {
+    color: #b9c8dc;
+    text-decoration: none;
+
+    margin-left: 22px;
+
+    font-size: 12px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: white;
+}
+
+/* ================= HERO ================= */
+
+.hero {
+    min-height: 100vh;
+
+    padding: 125px 7% 70px;
+
+    display: grid;
+    place-items: center;
+}
+
+.hero > div {
+    max-width: 1150px;
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+
+    gap: 45px;
+    align-items: center;
+}
+
+.kicker {
+    color: var(--light-blue);
+
+    letter-spacing: 4px;
+
+    font-size: 13px;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: clamp(58px, 9vw, 110px);
+
+    line-height: 0.84;
+
+    margin: 18px 0;
+
+    letter-spacing: -5px;
+}
+
+h1 span {
+    color: var(--blue);
+}
+
+.sub {
+    font-size: 21px;
+
+    line-height: 1.5;
+
+    color: #d4dfed;
+}
+
+.date {
+    display: inline-block;
+
+    margin-top: 20px;
+
+    border: 1px solid #285987;
+
+    background: #09182a;
+
+    padding: 13px 17px;
+
+    font-weight: bold;
+}
+
+.date b {
+    color: var(--light-blue);
+}
+
+.btn {
+    display: inline-block;
+
+    margin-top: 25px;
+
+    padding: 14px 20px;
+
+    background: var(--blue);
+
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    border-radius: 4px;
+
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #45a7ff;
+
+    transform: translateY(-2px);
+}
+
+/* ================= DETECTIVE BOARD ================= */
+
+.board {
+    height: 430px;
+
+    border: 1px solid #294a6c;
+
+    background: #09111d;
+
+    position: relative;
+
+    box-shadow: 0 25px 70px #000;
+
+    transform: rotate(1deg);
+}
+
+.board::after {
+    content: "CONFIDENTIAL";
+
+    position: absolute;
+
+    right: 16px;
+    top: 18px;
+
+    border: 2px solid var(--red);
+
+    color: var(--red);
+
+    padding: 7px;
+
+    transform: rotate(-7deg);
+
+    font-weight: bold;
+}
+
+/* Detective photo */
+
+.photo {
+    position: absolute;
+
+    left: 28px;
+    top: 55px;
+
+    width: 190px;
+    height: 135px;
+
+    background: #141b25;
+
+    border: 7px solid #9ba7b5;
+}
+
+.photo::after {
+    content: "?";
+
+    display: grid;
+    place-items: center;
+
+    height: 100%;
+
+    font-size: 90px;
+
+    color: #111;
+
+    font-weight: bold;
+}
+
+/* Evidence file */
+
+.file {
+    position: absolute;
+
+    right: 25px;
+    top: 110px;
+
+    width: 195px;
+
+    padding: 18px;
+
+    background: #d7c49d;
+
+    color: #17120b;
+
+    transform: rotate(-4deg);
+
+    box-shadow: 0 15px 25px #000;
+}
+
+.file h3 {
+    margin-top: 0;
+}
+
+.file p {
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+/* Magnifying glass */
+
+.lens {
+    position: absolute;
+
+    right: 30px;
+    bottom: 30px;
+
+    width: 120px;
+    height: 120px;
+
+    border: 13px solid #7c8998;
+
+    border-radius: 50%;
+}
+
+/* ================= SECTIONS ================= */
+
+section {
+    padding: 90px 7%;
+}
+
+.wrap {
+    max-width: 1120px;
+
+    margin: auto;
+}
+
+.ey {
+    color: var(--blue);
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+}
+
+h2 {
+    font-size: 40px;
+
+    margin: 10px 0 14px;
+}
+
+.lead {
+    color: var(--muted);
+
+    max-width: 760px;
+
+    line-height: 1.7;
+}
+
+/* ================= CARDS ================= */
+
+.grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+
+    margin-top: 32px;
+}
+
+.card {
+    background:
+        linear-gradient(
+            145deg,
+            #0c1727,
+            #07101b
+        );
+
+    border: 1px solid var(--line);
+
+    padding: 25px;
+
+    min-height: 180px;
+
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+
+    border-color: var(--blue);
+
+    box-shadow:
+        0 15px 40px #000;
+}
+
+.card > b {
+    color: var(--blue);
+}
+
+.card h3 {
+    margin: 10px 0;
+}
+
+.card p {
+    color: var(--muted);
+
+    line-height: 1.6;
+
+    font-size: 14px;
+}
+
+/* ================= EVIDENCE ================= */
+
+.types {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-top: 30px;
+}
+
+.tag {
+    display: inline-block;
+
+    padding: 7px 10px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+}
+
+.g {
+    background: #173b2a;
+
+    color: #75e7a2;
+}
+
+.y {
+    background: #493c12;
+
+    color: #ffd85a;
+}
+
+.r {
+    background: #47171c;
+
+    color: #ff7178;
+}
+
+/* ================= FLOW ================= */
+
+.flow {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+
+    gap: 7px;
+
+    margin-top: 30px;
+}
+
+.step {
+    background: #08111d;
+
+    border: 1px solid var(--line);
+
+    padding: 17px 8px;
+
+    text-align: center;
+}
+
+.step b {
+    display: block;
+
+    color: var(--blue);
+
+    font-size: 21px;
+
+    margin-bottom: 8px;
+}
+
+.step small {
+    color: #b8c5d5;
+}
+
+/* ================= RULES ================= */
+
+.rules {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 16px;
+
+    margin-top: 30px;
+}
+
+.rule {
+    background: #08111d;
+
+    border-left: 3px solid var(--blue);
+
+    padding: 20px;
+
+    color: #b9c7d8;
+
+    line-height: 1.6;
+}
+
+/* ================= CTA ================= */
+
+.cta {
+    text-align: center;
+
+    margin-top: 45px;
+
+    padding: 50px 20px;
+
+    border: 1px solid #24598b;
+
+    background:
+        linear-gradient(
+            135deg,
+            #081522,
+            #0b1930
+        );
+}
+
+.cta h2 {
+    margin: 0;
+}
+
+/* ================= FOOTER ================= */
+
+footer {
+    text-align: center;
+
+    padding: 35px 7%;
+
+    border-top: 1px solid var(--line);
+
+    color: #718096;
+
+    font-size: 12px;
+
+    letter-spacing: 1px;
+
+    line-height: 1.8;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 800px) {
+
+    nav div:last-child {
+        display: none;
+    }
+
+    .hero > div {
+        grid-template-columns: 1fr;
+    }
+
+    .board {
+        height: 350px;
+    }
+
+    .grid,
+    .types,
+    .rules {
+        grid-template-columns: 1fr;
+    }
+
+    .flow {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    h1 {
+        letter-spacing: -3px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+
+    <strong>
+        SIB
+        <span>•</span>
+        STARTUP INTELLIGENCE BUREAU
+    </strong>
+
+    <div>
+        <a href="#mission">MISSION</a>
+        <a href="#evidence">EVIDENCE</a>
+        <a href="#flow">FLOW</a>
+        <a href="#rules">RULES</a>
+    </div>
+
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<header class="hero">
+
+<div>
+
+    <div>
+
+        <div class="kicker">
+            IEDC • MET’S SCHOOL OF ENGINEERING • PRESENTS
+        </div>
+
+        <h1>
+            TASK <span>03</span>
+            <br>
+            THE STARTUP
+            <br>
+            <span>DETECTIVE</span>
+        </h1>
+
+        <p class="sub">
+            Decode the clues.
+            Analyse the business.
+            Verify the evidence.
+            Solve the case.
+        </p>
+
+        <div class="date">
+            COMMENCES FROM
+            <b>19 AUGUST 2026</b>
+        </div>
+
+        <br>
+
+        <a class="btn" href="#mission">
+            ENTER THE CASE FILE →
+        </a>
+
+    </div>
+
+
+    <!-- Detective board -->
+
+    <div class="board">
+
+        <div class="photo"></div>
+
+        <div class="file">
+
+            <h3>
+                EVIDENCE DOCUMENT
+            </h3>
+
+            <p>
+                Some clues are useful.
+                Some are misleading.
+                Some are designed to fool you.
+            </p>
+
+            <b>
+                CASE FILE 03
+            </b>
+
+        </div>
+
+        <div class="lens"></div>
+
+    </div>
+
+</div>
+
+</header>
+
+
+<!-- ================= MISSION ================= -->
+
+<section id="mission">
+
+<div class="wrap">
+
+    <div class="ey">
+        01 / MISSION
+    </div>
+
+    <h2>
+        Find the startup.
+        Find the truth.
+    </h2>
+
+    <p class="lead">
+
+        Task 03 is an investigation-based
+        startup challenge.
+
+        Teams receive information progressively
+        and must connect clues, identify the real
+        business problem and make a founder-level
+        decision.
+
+        This is not a routine case study.
+
+    </p>
+
+
+    <div class="grid">
+
+        <div class="card">
+
+            <b>01</b>
+
+            <h3>
+                INVESTIGATE
+            </h3>
+
+            <p>
+                Study each clue, document and
+                signal instead of accepting it
+                at face value.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <b>02</b>
+
+            <h3>
+                ANALYSE
+            </h3>
+
+            <p>
+                Compare evidence, spot
+                contradictions and understand
+                the business behind the clues.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <b>03</b>
+
+            <h3>
+                DECIDE
+            </h3>
+
+            <p>
+                Identify the actual threat and
+                recommend what the founder
+                should do next.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ================= EVIDENCE ================= -->
+
+<section id="evidence">
+
+<div class="wrap">
+
+    <div class="ey">
+        02 / EVIDENCE
+    </div>
+
+    <h2>
+        Not every clue deserves your trust.
+    </h2>
+
+    <p class="lead">
+
+        SIB may release evidence in different
+        formats.
+
+        Your job is to verify before you conclude.
+
+    </p>
+
+
+    <div class="types">
+
+        <div class="card">
+
+            <span class="tag g">
+                GENUINE
+            </span>
+
+            <h3>
+                Supported Evidence
+            </h3>
+
+            <p>
+                Information backed by credible
+                and verifiable sources.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <span class="tag y">
+                MISLEADING
+            </span>
+
+            <h3>
+                Wrong Direction
+            </h3>
+
+            <p>
+                Information that may contain
+                truth but can create a false
+                conclusion without context.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <span class="tag r">
+                COMPLETELY FALSE
+            </span>
+
+            <h3>
+                Fabricated Evidence
+            </h3>
+
+            <p>
+                Information designed to look
+                credible but unsupported
+                by facts.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ================= FLOW ================= -->
+
+<section id="flow">
+
+<div class="wrap">
+
+    <div class="ey">
+        03 / MISSION FLOW
+    </div>
+
+    <h2>
+        Seven moves. One case.
+    </h2>
+
+
+    <div class="flow">
+
+        <div class="step">
+            <b>01</b>
+            <small>RECEIVE</small>
+        </div>
+
+        <div class="step">
+            <b>02</b>
+            <small>INVESTIGATE</small>
+        </div>
+
+        <div class="step">
+            <b>03</b>
+            <small>CONNECT</small>
+        </div>
+
+        <div class="step">
+            <b>04</b>
+            <small>VERIFY</small>
+        </div>
+
+        <div class="step">
+            <b>05</b>
+            <small>IDENTIFY</small>
+        </div>
+
+        <div class="step">
+            <b>06</b>
+            <small>DECIDE</small>
+        </div>
+
+        <div class="step">
+            <b>07</b>
+            <small>RESPOND</small>
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ================= RULES ================= -->
+
+<section id="rules">
+
+<div class="wrap">
+
+    <div class="ey">
+        04 / GENERAL INSTRUCTIONS
+    </div>
+
+    <h2>
+        Think like a founder.
+        Investigate like a detective.
+    </h2>
+
+
+    <div class="rules">
+
+        <div class="rule">
+
+            <b>TEAMWORK</b>
+
+            <br>
+
+            Every member should contribute.
+            Collaborate, discuss and document
+            your reasoning.
+
+        </div>
+
+
+        <div class="rule">
+
+            <b>VERIFY</b>
+
+            <br>
+
+            Use credible sources.
+
+            Do not treat appearance, numbers
+            or a reliability score as proof.
+
+        </div>
+
+
+        <div class="rule">
+
+            <b>NO GUESSWORK</b>
+
+            <br>
+
+            Every major classification needs
+            a logical reason and, where possible,
+            supporting evidence.
+
+        </div>
+
+
+        <div class="rule">
+
+            <b>INTEGRITY</b>
+
+            <br>
+
+            No plagiarism, fake sources,
+            manipulation of evidence or sharing
+            confidential clues before release.
+
+        </div>
+
+    </div>
+
+
+    <!-- CTA -->
+
+    <div class="cta">
+
+        <h2>
+            EVERY CLUE MATTERS.
+        </h2>
+
+        <p class="lead" style="margin:12px auto">
+
+            Every idea counts.
+            The truth is out there.
+            Find it.
+
+        </p>
+
+        <a class="btn" href="#mission">
+            START INVESTIGATION
+        </a>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    SIB • STARTUP INTELLIGENCE BUREAU
+    • MET’S SCHOOL OF ENGINEERING
+    • IEDC
+
+    <br><br>
+
+    THINK CRITICALLY •
+    VERIFY RELENTLESSLY •
+    SOLVE INTELLIGENTLY
+
+</footer>
+
+
+</body>
+</html>
