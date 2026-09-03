@@ -99,7 +99,6 @@
     <!-- Ambient Background Effects -->
     <div class="fixed top-[10%] right-[-10%] w-[40vw] h-[40vw] bg-glow-blue/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow"></div>
     <div class="fixed bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-glow-purple/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow" style="animation-delay: 2s;"></div>
-    <div class="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-50 z-0 pointer-events-none"></div>
 
     <div class="w-full h-[100dvh] md:h-[95vh] md:w-[95vw] md:max-w-[1400px] flex overflow-hidden relative z-10 md:rounded-[2.5rem] border-none md:border border-white/10 glass-panel shadow-2xl backdrop-blur-2xl bg-[#050505]/60">
 
@@ -158,6 +157,7 @@
                 <div id="dashboardOverviewSection" class="tab-content space-y-6 max-w-6xl w-full mx-auto pt-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         
+                        <!-- Points Card -->
                         <div class="glass-panel p-6 rounded-3xl flex flex-col justify-between relative group border-glow-gold/20 overflow-visible">
                             <div class="absolute -right-4 -top-4 w-24 h-24 bg-glow-gold/20 blur-2xl rounded-full pointer-events-none"></div>
                             <div class="flex justify-between items-start mb-6">
@@ -170,6 +170,7 @@
                             </div>
                         </div>
 
+                        <!-- ID Card -->
                         <div class="glass-panel p-6 rounded-3xl lg:col-span-2 flex flex-col md:flex-row items-center gap-6 md:gap-10 border-white/10 relative overflow-hidden">
                             <div class="absolute inset-0 bg-[url('assets/images/logos/MSEM.jpg')] bg-cover bg-center opacity-5 grayscale mix-blend-overlay"></div>
                             <div class="shrink-0 bg-white p-3 rounded-2xl shadow-[0_0_30px_rgba(255,255,255,0.1)] relative z-10"><div id="qrcode"></div><p class="text-center text-[#050505] text-[8px] font-bold uppercase tracking-widest mt-2">Scan for Attendance</p></div>
@@ -185,7 +186,16 @@
                         </div>
                     </div>
 
-                    <div>
+                    <!-- RECENT POINT HISTORY (NEW FEATURE) -->
+                    <div class="mt-8 pt-8 border-t border-white/10">
+                        <h3 class="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-4 px-2 flex items-center gap-2"><i data-lucide="history" class="w-4 h-4"></i> Point History</h3>
+                        <div id="pointHistoryList" class="grid grid-cols-1 lg:grid-cols-2 gap-4 max-h-64 overflow-y-auto pr-2">
+                            <!-- History injected here -->
+                            <div class="col-span-full text-center py-6 text-white/30 text-[10px] uppercase tracking-widest font-bold">Loading history...</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-8 border-t border-white/10">
                         <h3 class="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-4 px-2">Quick Actions</h3>
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                             <div onclick="showTab('joinIedc')" class="glass-panel p-6 flex flex-col items-center justify-center cursor-pointer glass-card-hover group"><div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 text-white group-hover:text-glow-blue transition-colors"><i data-lucide="users" class="w-6 h-6"></i></div><h3 class="text-sm font-display font-bold text-white uppercase tracking-wider">Join IEDC</h3></div>
@@ -199,6 +209,7 @@
                 </div>
 
                 <!-- INNOVATION PORTFOLIO / RESUME SECTION -->
+                <!-- ... (All other sections remain exactly the same) ... -->
                 <div id="portfolioSection" class="tab-content hidden w-full pt-6">
                     <div class="flex flex-col md:flex-row gap-6 max-w-7xl mx-auto w-full">
                         
@@ -241,7 +252,7 @@
                     </div>
                 </div>
 
-                <!-- PROJECT SUBMISSION SECTION (WITH DIRECT AI API) -->
+                <!-- PROJECT SUBMISSION SECTION -->
                 <div id="submitProjectSection" class="tab-content hidden w-full pt-6">
                     <div class="glass-panel p-8 md:p-10 max-w-2xl mx-auto rounded-3xl">
                         <div class="border-b border-white/10 pb-5 mb-8">
@@ -369,7 +380,6 @@
     </div>
 
     <!-- MODALS -->
-
     <!-- Matchmaker Create Profile Modal -->
     <div id="matchmakerModal" class="fixed inset-0 bg-[#050505]/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-lg p-8 rounded-3xl relative">
@@ -422,7 +432,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, query, where, orderBy, getDocs, limit, increment, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, query, where, orderBy, getDocs, limit, increment, writeBatch, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Initialize Lucide Icons
         lucide.createIcons();
@@ -458,21 +468,18 @@
             btn.innerHTML = `<div class="spinner border-white/20 border-t-white w-4 h-4 mr-2"></div> Generating...`;
 
             try {
-                // 1. Get Base User Data
                 const userDoc = await getDoc(doc(db, "users", window.currentUserId));
                 const userData = userDoc.exists() ? userDoc.data() : {};
                 const email = userData.email || "student@mets.edu";
                 const points = userData.points || 0;
                 const role = userData.role || "student";
 
-                // 2. Get Form Inputs
                 const name = document.getElementById('resName').value || userData.name || "Student Name";
                 const phone = document.getElementById('resPhone').value || userData.phone || "";
                 const links = document.getElementById('resLinks').value || "";
                 const bio = document.getElementById('resBio').value || "";
                 const skills = document.getElementById('resSkills').value || "";
 
-                // 3. Fetch Approved AI Projects
                 const qProjects = query(collection(db, "projects"), where("uid", "==", window.currentUserId), where("status", "==", "Approved"));
                 const snapProjects = await getDocs(qProjects);
                 let projectsHTML = "";
@@ -493,7 +500,6 @@
                     projectsHTML = `<p style="font-size: 13px; color: #666; font-style: italic;">No approved projects logged yet.</p>`;
                 }
 
-                // 4. Fetch Certificates
                 const qCerts = query(collection(db, "certificates"), where("userId", "==", window.currentUserId));
                 const snapCerts = await getDocs(qCerts);
                 let certsHTML = "";
@@ -507,7 +513,6 @@
                     certsHTML = `<p style="font-size: 13px; color: #666; font-style: italic;">No certificates earned yet.</p>`;
                 }
 
-                // 5. Construct Clean HTML for Print Area
                 const printArea = document.getElementById('resumePrintArea');
                 printArea.innerHTML = `
                     <div style="text-align: center; border-bottom: 2px solid #2563eb; padding-bottom: 24px; margin-bottom: 30px;">
@@ -545,7 +550,6 @@
                     </div>
                 `;
 
-                // Show Preview Container
                 document.getElementById('resumePreviewContainer').classList.remove('hidden');
                 document.getElementById('resumePreviewContainer').classList.add('flex');
 
@@ -558,7 +562,6 @@
                 lucide.createIcons(); 
             }
         });
-
 
         // --- FEATURE 4: CO-FOUNDER MATCHMAKER ---
         window.openMatchmakerModal = () => {
@@ -658,49 +661,26 @@
             btn.innerHTML = `<div class="spinner border-white/20 border-t-white w-4 h-4 mr-2"></div> AI Mentor is thinking...`;
 
             try {
-                // IMPORTANT: Paste your "AIzaSy..." key here before deployment!
-                const apiKey = ""; 
-                const prompt = `You are an expert startup mentor. Analyze this student idea: '${title}'. Description: '${desc}'. Provide a JSON response with exactly three fields: 'strengths' (array of 2 strings), 'challenges' (array of 2 strings), and 'techStack' (array of 3 strings). Keep it encouraging. Respond ONLY with raw valid JSON.`;
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhv5--AImomPzvUOw1-fsnBom_YN5jDQq-8wd-L0xPg1J7AZAJumfBeXAEku4zd6I-/exec";
                 const payload = {
-                    contents: [{ parts: [{ text: prompt }] }],
-                    generationConfig: { responseMimeType: "application/json" }
+                    action: "analyzeIdea",
+                    title: title,
+                    desc: desc
                 };
 
-                let aiRes;
-                let success = false;
-                const delays = [1000, 2000, 4000, 8000, 16000];
-
-                for (let i = 0; i <= 5; i++) {
-                    try {
-                        aiRes = await fetch(url, {
-                            method: 'POST',
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify(payload)
-                        });
-                        if (aiRes.ok) {
-                            success = true;
-                            break;
-                        }
-                    } catch (err) {
-                        // Network error, ignore and retry
-                    }
-                    if (i < 5) {
-                        await new Promise(resolve => setTimeout(resolve, delays[i]));
-                    }
-                }
-
-                if (!success || !aiRes) {
-                    throw new Error("Our AI Mentor is experiencing high traffic. Please try again in a moment.");
-                }
+                const aiRes = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify(payload)
+                });
                 
                 const rawData = await aiRes.json();
-                let aiText = rawData.candidates?.[0]?.content?.parts?.[0]?.text;
                 
-                if (!aiText) throw new Error("Invalid response format from AI.");
-                
-                aiText = aiText.replace(/```json/gi, '').replace(/```/g, '').trim();
-                const aiData = JSON.parse(aiText);
+                if (rawData.error) {
+                    throw new Error("AI Error: " + rawData.error);
+                }
+
+                const aiData = rawData;
 
                 document.getElementById('aiFeedbackArea').classList.remove('hidden');
                 document.getElementById('aiStrengths').innerHTML = aiData.strengths.map(s => `<li>${s}</li>`).join('');
@@ -717,16 +697,9 @@
                     timestamp: Date.now()
                 });
                 
-                await updateDoc(doc(db, "users", window.currentUserId), { points: increment(100) });
-                
-                alert("Project Logged! +100 Innovation Points awarded.");
+                alert("Project Logged! Innovation Points will be updated shortly.");
                 btn.innerHTML = `<span>Pitch Successful!</span> <i class="fas fa-check ml-2"></i>`;
                 
-                const ptsEl = document.getElementById('userPointsDisplay');
-                const newPts = parseInt(ptsEl.textContent) + 100;
-                ptsEl.textContent = newPts;
-                safeSetText('storePointsDisplay', newPts);
-
             } catch(error) { 
                 try {
                     await addDoc(collection(db, "projects"), { 
@@ -765,7 +738,10 @@
                 if(!confirm(`Are you sure you want to spend ${cost} points for the ${itemName}?`)) return;
 
                 const batch = writeBatch(db);
-                batch.update(doc(db, "users", window.currentUserId), { points: increment(-cost) });
+                // Deduct points arrayUnion History is NOT needed here as redemption itself acts as history in admin panel
+                batch.update(doc(db, "users", window.currentUserId), { 
+                    points: increment(-cost) 
+                });
                 
                 const redRef = doc(collection(db, "redemptions"));
                 batch.set(redRef, {
@@ -779,10 +755,6 @@
                 });
 
                 await batch.commit();
-
-                const newPts = currentPts - cost;
-                safeSetText('userPointsDisplay', newPts);
-                safeSetText('storePointsDisplay', newPts);
                 
                 alert(`🎉 Ticket Secured!\n\nYou have claimed the ${itemName}. The IEDC Admin will approve it shortly!`);
                 window.fetchMyTickets();
@@ -1020,7 +992,9 @@
             }
         });
 
-        // --- AUTH & DATA LOAD ---
+        // --- AUTH & DATA LOAD (WITH LIVE SYNC FOR POINTS) ---
+        import { arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 window.currentUserId = user.uid;
@@ -1042,27 +1016,52 @@
                 safeSetText('idCardUID', user.uid);
                 safeSetText('idCardEmail', user.email);
                 
-                try {
-                    const userDoc = await getDoc(doc(db, "users", user.uid));
-                    let nameToDisplay = user.email.split('@')[0], roleToDisplay = 'Student', pointsToDisplay = 0;
-
-                    if (userDoc.exists()) {
-                        const data = userDoc.data();
-                        if (data.name) nameToDisplay = data.name;
-                        if (data.role) roleToDisplay = data.role;
-                        if (data.points) pointsToDisplay = data.points;
+                // LIVE SYNC FOR USER POINTS & HISTORY
+                onSnapshot(doc(db, "users", user.uid), (docSnapshot) => {
+                    if (docSnapshot.exists()) {
+                        const data = docSnapshot.data();
                         
-                        // Auto-fill Resume Name input if possible
+                        const nameToDisplay = data.name || user.email.split('@')[0];
+                        const roleToDisplay = data.role || 'Student';
+                        const pointsToDisplay = data.points || 0;
+
                         const resNameInput = document.getElementById('resName');
                         if (resNameInput && !resNameInput.value) resNameInput.value = nameToDisplay;
-                    }
 
-                    safeSetText('idCardName', nameToDisplay); 
-                    safeSetText('idCardRole', roleToDisplay.toUpperCase());
-                    safeSetText('userPointsDisplay', pointsToDisplay); 
-                    safeSetText('storePointsDisplay', pointsToDisplay);
-                    safeSetText('headerWelcomeName', nameToDisplay.split(' ')[0]);
-                } catch(e) { console.error(e); }
+                        safeSetText('idCardName', nameToDisplay); 
+                        safeSetText('idCardRole', roleToDisplay.toUpperCase());
+                        safeSetText('userPointsDisplay', pointsToDisplay); 
+                        safeSetText('storePointsDisplay', pointsToDisplay);
+                        if(document.getElementById('headerWelcomeName')) safeSetText('headerWelcomeName', nameToDisplay.split(' ')[0]);
+
+                        // Render Point History
+                        const history = data.pointHistory || [];
+                        let hHtml = '';
+                        if (history.length === 0) {
+                            hHtml = '<div class="col-span-full text-center py-6 text-white/30 text-[10px] uppercase tracking-widest font-bold">No points history found.</div>';
+                        } else {
+                            // Sort by latest first
+                            history.sort((a,b) => b.timestamp - a.timestamp);
+                            history.forEach(h => {
+                                const isAdd = h.type === 'add';
+                                const sign = isAdd ? '+' : '-';
+                                const color = isAdd ? 'text-green-400' : 'text-red-400';
+                                const bg = isAdd ? 'bg-green-500/10 border-green-500/20' : 'bg-red-500/10 border-red-500/20';
+                                
+                                hHtml += `
+                                <div class="flex justify-between items-center p-4 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-colors">
+                                    <div>
+                                        <p class="text-xs text-white font-bold">${h.reason}</p>
+                                        <p class="text-[9px] text-white/40 font-mono mt-1">${new Date(h.timestamp).toLocaleString()}</p>
+                                    </div>
+                                    <span class="px-3 py-1.5 rounded-lg border ${bg} ${color} text-[10px] font-black tracking-wider shadow-sm">${sign}${h.amount}</span>
+                                </div>`;
+                            });
+                        }
+                        const historyListEl = document.getElementById('pointHistoryList');
+                        if(historyListEl) historyListEl.innerHTML = hHtml;
+                    }
+                });
 
                 window.fetchLeaderboard();
                 window.fetchMyTickets(); // Pre-load tickets
