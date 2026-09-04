@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify & Download Certificate | MET'S IEDC</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- External Libraries -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'], 
+                        display: ['Plus Jakarta Sans', 'sans-serif']
+                    },
+                    colors: {
+                        dark: '#050505',
+                        glow: { blue: '#2563eb', purple: '#9333ea', gold: '#fbbf24', green: '#22c55e' }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+                        pulseGlow: { '0%, 100%': { opacity: '0.2' }, '50%': { opacity: '0.5' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #050505; color: #e2e8f0; overflow-x: hidden; min-height: 100vh; }
+        
+        .glass-panel { 
+            background: linear-gradient(145deg, rgba(30, 30, 35, 0.8) 0%, rgba(15, 15, 20, 0.6) 100%); 
+            backdrop-filter: blur(24px); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02), 0 20px 40px rgba(0,0,0,0.6); 
+        }
+        
+        .glass-input { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            color: white; 
+            transition: all 0.3s ease; 
+        }
+        .glass-input:focus { border-color: rgba(37, 99, 235, 0.5); outline: none; box-shadow: 0 0 15px rgba(37, 99, 235, 0.2); background: rgba(255,255,255,0.05); }
+        
+        .btn-primary { background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%); color: #ffffff; transition: all 0.3s ease; }
+        .btn-primary:hover { box-shadow: 0 0 20px rgba(37, 99, 235, 0.5); transform: translateY(-2px); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .spinner { border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 50%; border-top: 2px solid #fff; width: 16px; height: 16px; animation: spin 1s linear infinite; display: inline-block;}
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="relative flex flex-col items-center justify-center p-4 selection:bg-glow-blue selection:text-white min-h-screen py-12">
+
+    <!-- Custom Toast UI -->
+    <div id="customToast" class="fixed bottom-6 right-6 z-[9999] px-6 py-4 rounded-xl text-sm font-bold shadow-2xl transition-all duration-300 transform translate-y-20 opacity-0 flex items-center gap-3">
+        <i data-lucide="info" class="w-5 h-5"></i>
+        <span id="toastMessage">Message</span>
+    </div>
+
+    <!-- Ambient Effects -->
+    <div class="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-glow-blue/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-glow-purple/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0 animate-pulse-glow" style="animation-delay: 2s;"></div>
+
+    <!-- ================= VIEW 1: SEARCH FORM ================= -->
+    <div class="w-full max-w-xl relative z-10" id="searchContainer">
+        <div class="text-center mb-10 animate-float">
+            <div class="w-20 h-20 mx-auto rounded-2xl bg-glow-gold/10 border border-glow-gold/30 flex items-center justify-center text-glow-gold mb-6 shadow-[0_0_30px_rgba(251,191,36,0.2)]">
+                <i data-lucide="award" class="w-10 h-10"></i>
+            </div>
+            <h1 class="text-3xl md:text-5xl font-display font-bold text-white tracking-tight mb-4 uppercase">Certificate <br><span class="text-glow-gold">Portal</span></h1>
+            <p class="text-white/50 text-sm max-w-md mx-auto leading-relaxed">Enter your exact details below to search and download your official participation certificates.</p>
+        </div>
+
+        <div class="glass-panel p-8 md:p-10 rounded-3xl shadow-2xl">
+            <form id="searchForm" class="space-y-6">
+                <div>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Full Name</label>
+                    <div class="relative">
+                        <input type="text" id="studentName" class="glass-input w-full py-4 pl-12 pr-4 rounded-xl text-sm" placeholder="e.g. Muhammed Shahil" required>
+                        <i data-lucide="user" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/30"></i>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Register Number (Optional)</label>
+                    <div class="relative">
+                        <input type="text" id="regNo" class="glass-input w-full py-4 pl-12 pr-4 rounded-xl text-sm uppercase" placeholder="e.g. MET20CS001">
+                        <i data-lucide="hash" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/30"></i>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Event Name</label>
+                    <div class="relative">
+                        <input type="text" id="eventName" class="glass-input w-full py-4 pl-12 pr-4 rounded-xl text-sm" placeholder="e.g. Protosynth Buildathon 2026" required>
+                        <i data-lucide="calendar-check" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/30"></i>
+                    </div>
+                </div>
+                
+                <div class="pt-4 border-t border-white/10">
+                    <button type="submit" id="btnSearch" class="w-full bg-gradient-to-r from-glow-gold to-orange-500 hover:shadow-[0_0_20px_rgba(251,191,36,0.4)] text-black py-4 rounded-xl text-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2 transition-all">
+                        <i data-lucide="search" class="w-4 h-4"></i> Find My Certificate
+                    </button>
+                </div>
+                
+                <p class="text-[9px] text-center text-white/30 uppercase tracking-widest pt-2">Powered by MET'S IEDC Innovation Hub</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= VIEW 2: RESULT & DOWNLOAD ================= -->
+    <div class="w-full max-w-5xl relative z-10 hidden" id="resultContainer">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-white/10 pb-6">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-display font-bold text-white tracking-widest uppercase mb-2">Your Certificate</h2>
+                <p class="text-white/50 text-xs font-mono" id="congratsText">Congratulations on your achievement!</p>
+            </div>
+            <button onclick="resetSearch()" class="bg-white/5 hover:bg-white/10 text-white/70 px-5 py-3 rounded-xl border border-white/10 text-[10px] uppercase tracking-widest font-bold transition-colors flex items-center gap-2">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Back to Search
+            </button>
+        </div>
+        
+        <div class="flex flex-col lg:flex-row gap-8 items-start">
+            
+            <!-- Image Display Area -->
+            <div class="w-full lg:w-2/3 glass-panel p-2 rounded-2xl relative shadow-[0_0_50px_rgba(251,191,36,0.15)] group">
+                <!-- Loading Skeleton -->
+                <div id="imageLoader" class="absolute inset-0 bg-black/60 flex items-center justify-center rounded-2xl backdrop-blur-sm z-20">
+                    <div class="flex flex-col items-center">
+                        <div class="spinner w-8 h-8 mb-3 border-t-glow-gold border-white/20"></div>
+                        <p class="text-[10px] text-white uppercase tracking-widest font-bold">Loading Image...</p>
+                    </div>
+                </div>
+                
+                <img id="finalCertificateImg" src="" alt="Generated Certificate" class="w-full h-auto rounded-xl object-contain shadow-inner" onload="document.getElementById('imageLoader').classList.add('hidden')">
+            </div>
+            
+            <!-- Actions Area -->
+            <div class="w-full lg:w-1/3 flex flex-col gap-4 glass-panel p-6 rounded-3xl">
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 border-b border-white/10 pb-4">Export Options</h3>
+
+                <button onclick="downloadAsPNG()" class="btn-primary w-full py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-3">
+                    <i data-lucide="image" class="w-4 h-4"></i> Download as Image
+                </button>
+                <button onclick="downloadAsPDF()" id="btnPdf" class="bg-white hover:bg-gray-200 text-black w-full py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                    <i data-lucide="file-text" class="w-4 h-4"></i> Download as PDF
+                </button>
+
+                <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-6 mb-2 border-b border-white/10 pb-2">Share your achievement</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="shareToLinkedIn()" class="bg-[#0A66C2] hover:bg-[#004182] text-white py-3 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg">
+                        <i class="fab fa-linkedin-in text-lg"></i>
+                    </button>
+                    <button onclick="shareToWhatsApp()" class="bg-[#25D366] hover:bg-[#128C7E] text-white py-3 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg">
+                        <i class="fab fa-whatsapp text-lg"></i>
+                    </button>
+                </div>
+                <button onclick="copyShareText()" class="bg-white/5 border border-white/10 hover:bg-white/10 text-white/70 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors mt-2">
+                    <i class="fas fa-copy mr-2"></i> Copy Caption
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIREBASE & LOGIC -->
+    <script type="module">
+        import { window as jspdfWindow } from "jspdf"; 
+        const { jsPDF } = jspdfWindow.jspdf;
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        lucide.createIcons();
+
+        // Firebase Setup
+        const firebaseConfig = { 
+            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8", 
+            authDomain: "metsiedc-3010e.firebaseapp.com", 
+            projectId: "metsiedc-3010e", 
+            storageBucket: "metsiedc-3010e.firebasestorage.app", 
+            messagingSenderId: "954403413150", 
+            appId: "1:954403413150:web:2523a3377f15a3d6002f8f" 
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Global State Variables
+        let currentCertUrl = null;
+        let currentStudentName = "";
+        let currentEventName = "";
+
+        // Custom Toast Function
+        window.showToast = (msg, type = "error") => {
+            const toast = document.getElementById('customToast');
+            const icon = toast.querySelector('i');
+            
+            if (type === "success") {
+                toast.className = "fixed bottom-6 right-6 z-[9999] px-6 py-4 rounded-xl text-sm font-bold shadow-2xl transition-all duration-300 bg-green-500 text-white flex items-center gap-3";
+                icon.setAttribute('data-lucide', 'check-circle');
+            } else {
+                toast.className = "fixed bottom-6 right-6 z-[9999] px-6 py-4 rounded-xl text-sm font-bold shadow-2xl transition-all duration-300 bg-red-500 text-white flex items-center gap-3";
+                icon.setAttribute('data-lucide', 'alert-circle');
+            }
+            
+            document.getElementById('toastMessage').textContent = msg;
+            lucide.createIcons();
+            
+            setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 4000);
+        };
+
+        // Form Submission - Search Firebase
+        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('btnSearch');
+            btn.disabled = true;
+            btn.innerHTML = `<div class="spinner mr-2"></div> Searching Database...`;
+
+            const inputName = document.getElementById('studentName').value.trim().toLowerCase();
+            const inputEvent = document.getElementById('eventName').value.trim();
+            // Reg No can be used for future exact matching if needed
+            // const inputRegNo = document.getElementById('regNo').value.trim();
+
+            try {
+                // Query by event name first
+                const q = query(collection(db, "certificates"), where("eventName", "==", inputEvent));
+                const snap = await getDocs(q);
+
+                if (snap.empty) {
+                    throw new Error("No certificates found for this event. Please check the exact event name.");
+                }
+
+                // Filter locally by name (case-insensitive) to prevent "Caps-Lock" errors by students
+                let match = null;
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    if (data.userName && data.userName.toLowerCase() === inputName) {
+                        match = data;
+                    }
+                });
+
+                if (!match) {
+                    throw new Error(`We couldn't find a certificate for "${document.getElementById('studentName').value}". Ensure the name matches the registration exact spelling.`);
+                }
+
+                // Match Found! Setup UI
+                currentCertUrl = match.templateUrl; // In this setup, templateUrl holds the fully designed final image URL
+                currentStudentName = match.userName;
+                currentEventName = match.eventName;
+                
+                // Demo/Fallback if admin forgot to add a URL
+                if(!currentCertUrl || currentCertUrl === "mock_template_url.jpg") {
+                    currentCertUrl = "https://placehold.co/1200x800/1e3a8a/fbbf24?text=Certificate+Found!\nBut+Image+Missing";
+                }
+
+                document.getElementById('congratsText').textContent = `Verified and found, ${currentStudentName.split(' ')[0]}!`;
+                document.getElementById('finalCertificateImg').src = currentCertUrl;
+                document.getElementById('imageLoader').classList.remove('hidden');
+
+                // Switch Views
+                document.getElementById('searchContainer').classList.add('hidden');
+                document.getElementById('resultContainer').classList.remove('hidden');
+                window.showToast("Certificate Verified Successfully!", "success");
+
+            } catch (error) {
+                window.showToast(error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="search" class="w-4 h-4"></i> Find My Certificate`;
+                lucide.createIcons();
+            }
+        });
+
+        // --- ACTIONS LOGIC ---
+        window.resetSearch = () => {
+            document.getElementById('resultContainer').classList.add('hidden');
+            document.getElementById('searchContainer').classList.remove('hidden');
+            document.getElementById('searchForm').reset();
+            currentCertUrl = null;
+        };
+
+        // Utility: Convert Image URL to Base64 (Needed for proper PNG/PDF saving if image is cross-origin)
+        async function getBase64FromUrl(url) {
+            const data = await fetch(url);
+            const blob = await data.blob();
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(blob); 
+                reader.onloadend = () => {
+                    resolve(reader.result);
+                }
+            });
+        }
+
+        window.downloadAsPNG = async () => {
+            if(!currentCertUrl) return;
+            try {
+                window.showToast("Preparing image...", "success");
+                // Fetch to base64 avoids CORS download block in some browsers
+                const base64Img = await getBase64FromUrl(currentCertUrl);
+                const link = document.createElement('a');
+                link.download = `${currentStudentName.replace(/\s+/g, '_')}_Certificate.png`;
+                link.href = base64Img;
+                link.click();
+            } catch(e) {
+                // Fallback
+                window.open(currentCertUrl, '_blank');
+            }
+        };
+
+        window.downloadAsPDF = async () => {
+            if(!currentCertUrl) return;
+            const btn = document.getElementById('btnPdf');
+            btn.innerHTML = '<div class="spinner border-black/20 border-t-black"></div>';
+            
+            try {
+                const base64Img = await getBase64FromUrl(currentCertUrl);
+                
+                // Initialize jsPDF (Landscape, millimeters, A4 size)
+                const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+                
+                const width = doc.internal.pageSize.getWidth();
+                const height = doc.internal.pageSize.getHeight();
+
+                // Add image filling the A4 page
+                doc.addImage(base64Img, "PNG", 0, 0, width, height);
+                doc.save(`${currentStudentName.replace(/\s+/g, '_')}_Certificate.pdf`);
+                
+                window.showToast("PDF Downloaded!", "success");
+            } catch(e) {
+                console.error(e);
+                alert("Failed to generate PDF directly due to file security rules. Please download as Image instead.");
+            } finally {
+                btn.innerHTML = `<i data-lucide="file-text" class="w-4 h-4"></i> Download as PDF`;
+                lucide.createIcons();
+            }
+        };
+
+        window.getShareMessage = () => {
+            return `I am thrilled to share that I have successfully participated in "${currentEventName}" organized by MET'S IEDC! 🚀🔥\n\n#METSIEDC #Innovation #KeralaStartupMission`;
+        };
+
+        window.copyShareText = () => {
+            const text = window.getShareMessage();
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                window.showToast("Caption copied to clipboard!", "success");
+            } catch (err) {
+                alert("Oops, unable to copy. Please copy manually.");
+            }
+            document.body.removeChild(textArea);
+        };
+
+        window.shareToWhatsApp = () => {
+            const text = encodeURIComponent(window.getShareMessage());
+            window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+        };
+
+        window.shareToLinkedIn = () => {
+            window.copyShareText();
+            setTimeout(() => {
+                alert("Caption copied! Please download the Image and upload it directly to your LinkedIn post.");
+                window.open(`https://www.linkedin.com/feed/`, '_blank');
+            }, 500);
+        };
+
+    </script>
+</body>
+</html>
