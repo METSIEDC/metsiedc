@@ -1137,7 +1137,6 @@
                 </div>
             </div>
 
-            <!-- ===================== CERTIFICATES SECTION ===================== -->
           <!-- ===================== CERTIFICATES SECTION ===================== -->
 <div id="certificatesSection" class="tab-content hidden space-y-6 max-w-4xl mx-auto w-full pt-6">
     <div class="glass-panel p-8 md:p-10 border border-gray-200 rounded-3xl">
@@ -2406,10 +2405,9 @@ if(cmsTeamForm) {
             }
         };
 
-        window.submitAttendance = async () => {
+   window.submitAttendance = async () => {
             const eventName = document.getElementById('attendanceEventName').value.trim(); 
             const date = document.getElementById('attendanceDate').value;
-            
             if(!eventName || !date) return window.showToast("Enter event name and date.", "error");
             
             const btn = document.getElementById('btnSaveAttendance'); 
@@ -2444,14 +2442,11 @@ if(cmsTeamForm) {
                 document.querySelectorAll('.att-checkbox').forEach(cb => cb.checked = false); 
                 document.getElementById('attendanceEventName').value = ''; 
                 document.getElementById('attendanceDate').value = '';
-            } catch(e) { 
-                window.showToast(e.message, "error"); 
-            } finally { 
-                if(btn) { btn.disabled = false; btn.innerHTML = "Save List"; } 
-            }
+            } catch(e) { window.showToast(e.message, "error"); } 
+            finally { if(btn) { btn.disabled = false; btn.innerHTML = "Save List"; } }
         };
 
-      // --- NEW CERTIFICATE UPLOAD LOGIC ---
+        // --- NEW CERTIFICATE UPLOAD LOGIC ---
         window.handleCertFile = (e) => { 
             window.studentCertFile = e.target.files[0]; 
             document.getElementById('certFileName').textContent = e.target.files[0].name; 
@@ -2474,12 +2469,17 @@ if(cmsTeamForm) {
                     const date = document.getElementById('certDate').value;
                     const studentName = document.getElementById('certStudentName').value.trim();
                     
+                    // Register Number ഉണ്ടെങ്കിൽ അതും എടുക്കുന്നു (നിങ്ങൾ മുൻപ് ചേർത്തത്)
+                    const regNoEl = document.getElementById('certRegNo');
+                    const regNo = regNoEl ? regNoEl.value.trim().toUpperCase() : '';
+                    
                     // Upload the specific certificate to Google Drive
                     const fileUrl = await uploadToDrive(window.studentCertFile);
                     
                     // Save to Firestore so the Public Portal can find it
                     await addDoc(collection(db, "certificates"), { 
                         userName: studentName, 
+                        regNo: regNo,
                         eventName: eventName, 
                         date: date, 
                         templateUrl: fileUrl, 
@@ -2502,29 +2502,7 @@ if(cmsTeamForm) {
                 }
             });
         }
-                
-                await window.logActivity("Issued Certificates", `Issued ${count} for ${eventName}`);
-                statusEl.classList.replace('text-purple-600', 'text-green-600'); 
-                statusEl.innerHTML = `<i class="fas fa-check-circle mr-2"></i> Success! Sent ${count} certificates.`;
-                
-                setTimeout(() => { 
-                    statusEl.classList.add('hidden'); 
-                    statusEl.classList.replace('text-green-600', 'text-purple-600'); 
-                }, 4000);
-                
-                document.getElementById('certEventName').value = ''; 
-                document.getElementById('certDate').value = ''; 
-                window.certTemplateBase64 = null; 
-                document.getElementById('certFileName').innerHTML = 'Upload a clean image design';
-                checkboxes.forEach(c => c.checked = false);
-            } catch(e) { 
-                window.showToast("Error: " + e.message, "error"); 
-                statusEl.classList.add('hidden');
-            } finally { 
-                btn.disabled = false; 
-                btn.innerText = "Issue Certificates"; 
-            }
-        };
+
 
         window.toggleItemStatus = async (id, status) => { 
             await updateDoc(getDocRef("inventory", id), { status: status }); 
