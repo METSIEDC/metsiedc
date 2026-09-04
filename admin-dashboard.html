@@ -2405,7 +2405,7 @@ if(cmsTeamForm) {
             }
         };
 
-   window.submitAttendance = async () => {
+window.submitAttendance = async () => {
             const eventName = document.getElementById('attendanceEventName').value.trim(); 
             const date = document.getElementById('attendanceDate').value;
             if(!eventName || !date) return window.showToast("Enter event name and date.", "error");
@@ -2442,14 +2442,43 @@ if(cmsTeamForm) {
                 document.querySelectorAll('.att-checkbox').forEach(cb => cb.checked = false); 
                 document.getElementById('attendanceEventName').value = ''; 
                 document.getElementById('attendanceDate').value = '';
-            } catch(e) { window.showToast(e.message, "error"); } 
-            finally { if(btn) { btn.disabled = false; btn.innerHTML = "Save List"; } }
+            } catch(e) { 
+                window.showToast(e.message, "error"); 
+            } finally { 
+                if(btn) { btn.disabled = false; btn.innerHTML = "Save List"; } 
+            }
+        };
+
+        // --- GOOGLE DRIVE UPLOAD UTILITY ---
+        window.uploadToDrive = async function(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = async () => {
+                    const base64Data = reader.result.split(',')[1];
+                    try {
+                        // നിങ്ങളുടെ ഗൂഗിൾ ആപ്പ് സ്ക്രിപ്റ്റ് ലിങ്ക് ഇവിടെയുണ്ട്
+                        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhv5--AImomPzvUOw1-fsnBom_YN5jDQq-8wd-L0xPg1J7AZAJumfBeXAEku4zd6I-/exec";
+                        const res = await fetch(SCRIPT_URL, { 
+                            method: 'POST', 
+                            headers: { "Content-Type": "text/plain;charset=utf-8" }, 
+                            body: JSON.stringify({ filename: file.name, mimeType: file.type, data: base64Data, action: 'uploadImage' }) 
+                        });
+                        const data = await res.json();
+                        if(data.url) resolve(data.url); 
+                        else reject(new Error("Drive Upload failed"));
+                    } catch(e) { reject(e); }
+                };
+                reader.onerror = () => reject(new Error("File read error"));
+                reader.readAsDataURL(file);
+            });
         };
 
         // --- NEW CERTIFICATE UPLOAD LOGIC ---
         window.handleCertFile = (e) => { 
-            window.studentCertFile = e.target.files[0]; 
-            document.getElementById('certFileName').textContent = e.target.files[0].name; 
+            if(e.target.files && e.target.files[0]) {
+                window.studentCertFile = e.target.files[0]; 
+                document.getElementById('certFileName').textContent = e.target.files[0].name; 
+            }
         };
 
         const certUploadForm = document.getElementById('certUploadForm');
@@ -2463,23 +2492,18 @@ if(cmsTeamForm) {
                     if(!window.studentCertFile) throw new Error("Please select a certificate file.");
                     
                     btn.disabled = true; 
-                    btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Uploading to Drive...`;
+                    btn.innerHTML = `<div class="spinner w-4 h-4 mr-2 border-t-white"></div> Uploading...`;
                     
                     const eventName = document.getElementById('certEventName').value.trim();
                     const date = document.getElementById('certDate').value;
                     const studentName = document.getElementById('certStudentName').value.trim();
                     
-                    // Register Number ഉണ്ടെങ്കിൽ അതും എടുക്കുന്നു (നിങ്ങൾ മുൻപ് ചേർത്തത്)
-                    const regNoEl = document.getElementById('certRegNo');
-                    const regNo = regNoEl ? regNoEl.value.trim().toUpperCase() : '';
-                    
                     // Upload the specific certificate to Google Drive
-                    const fileUrl = await uploadToDrive(window.studentCertFile);
+                    const fileUrl = await window.uploadToDrive(window.studentCertFile);
                     
                     // Save to Firestore so the Public Portal can find it
                     await addDoc(collection(db, "certificates"), { 
                         userName: studentName, 
-                        regNo: regNo,
                         eventName: eventName, 
                         date: date, 
                         templateUrl: fileUrl, 
@@ -2502,8 +2526,6 @@ if(cmsTeamForm) {
                 }
             });
         }
-
-
         window.toggleItemStatus = async (id, status) => { 
             await updateDoc(getDocRef("inventory", id), { status: status }); 
             await window.logActivity("Inventory Update", `Changed item status to ${status}`); 
