@@ -2450,22 +2450,29 @@ window.submitAttendance = async () => {
         };
 
         // --- GOOGLE DRIVE UPLOAD UTILITY ---
+     // --- GOOGLE DRIVE UPLOAD UTILITY ---
         window.uploadToDrive = async function(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onload = async () => {
                     const base64Data = reader.result.split(',')[1];
                     try {
-                        // നിങ്ങളുടെ ഗൂഗിൾ ആപ്പ് സ്ക്രിപ്റ്റ് ലിങ്ക് ഇവിടെയുണ്ട്
+                        // ഇവിടെ നിങ്ങളുടെ പുതിയ ഗൂഗിൾ ആപ്പ് സ്ക്രിപ്റ്റ് ലിങ്ക് തന്നെയാണോ എന്ന് ഉറപ്പുവരുത്തുക
                         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhv5--AImomPzvUOw1-fsnBom_YN5jDQq-8wd-L0xPg1J7AZAJumfBeXAEku4zd6I-/exec";
+                        
                         const res = await fetch(SCRIPT_URL, { 
                             method: 'POST', 
                             headers: { "Content-Type": "text/plain;charset=utf-8" }, 
                             body: JSON.stringify({ filename: file.name, mimeType: file.type, data: base64Data, action: 'uploadImage' }) 
                         });
                         const data = await res.json();
-                        if(data.url) resolve(data.url); 
-                        else reject(new Error("Drive Upload failed"));
+                        
+                        if(data.url) {
+                            resolve(data.url); 
+                        } else {
+                            // ആപ്പ് സ്ക്രിപ്റ്റിലെ യഥാർത്ഥ എറർ സ്ക്രീനിൽ കാണിക്കാൻ 
+                            reject(new Error(data.error || "Drive Upload failed"));
+                        }
                     } catch(e) { reject(e); }
                 };
                 reader.onerror = () => reject(new Error("File read error"));
