@@ -12,6 +12,7 @@
     <!-- External Libraries -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -176,15 +177,16 @@
     </div>
 
     <!-- FIREBASE & LOGIC -->
-    <script type="module">
-        import { window as jspdfWindow } from "jspdf"; 
-        const { jsPDF } = jspdfWindow.jspdf;
+  <script type="module">
+        
+        const { jsPDF } = window.jspdf;
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         lucide.createIcons();
-
+        
+    
         // Firebase Setup
         const firebaseConfig = { 
             apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8", 
