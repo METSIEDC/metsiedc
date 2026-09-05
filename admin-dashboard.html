@@ -2576,6 +2576,7 @@ window.submitAttendance = async () => {
                 }
             });
             // ==========================================
+     // ==========================================
         // EX-COM / CORE TEAM MANAGEMENT
         // ==========================================
         const excomForm = document.getElementById('excomForm');
@@ -2586,7 +2587,7 @@ window.submitAttendance = async () => {
                 const originalText = btn.innerText;
                 btn.disabled = true; btn.innerText = "Saving...";
 
-           try {
+                try {
                     const id = document.getElementById('excomId').value;
                     let finalImageUrl = document.getElementById('excomExistingImageUrl').value; // Pazhaya image undenkil ath edukkkum
 
@@ -2613,7 +2614,14 @@ window.submitAttendance = async () => {
                         window.showToast("New member added!", "success");
                     }
                     window.resetExcomForm();
+                    
+                } catch(err) { 
+                    window.showToast(err.message, "error"); 
+                } finally { 
+                    btn.disabled = false; btn.innerText = originalText; 
                 }
+            });
+        }
         }
 
         window.deleteExcomMember = async (id, name) => {
