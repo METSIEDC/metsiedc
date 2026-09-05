@@ -216,10 +216,11 @@
 
     <!-- DESKTOP SIDEBAR -->
     <aside class="w-64 border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col h-full z-20 bg-white shadow-sm">
-        <div class="p-6 flex items-center gap-3 border-b border-gray-100">
-            <div class="w-8 h-8 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 font-bold">A</div>
-            <span class="text-xl font-display font-bold text-theme-primary tracking-widest uppercase">Admin OS</span>
-        </div>
+       <div class="p-6 flex items-center gap-3 border-b border-white/10 mb-2">
+            <div class="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/30">A</div>
+            <span class="text-xl font-display font-bold text-white tracking-widest uppercase">Admin OS</span>
+        </div> <!-- ഇവിടെ ഈ ">" ചേർക്കുക -->
+       <nav class="flex-grow py-2 space-y-1.5 overflow-y-auto custom-scrollbar">
         
         <nav class="flex-grow px-4 py-4 space-y-1 overflow-y-auto">
             <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
@@ -316,8 +317,6 @@
                 <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
             </button>
         </div>
-    </div>
-    </aside>
     </aside>
 
     <!-- MOBILE SIDEBAR OVERLAY -->
@@ -391,8 +390,7 @@
                         <i data-lucide="shield-check" class="w-5 h-5"></i>
                     </div>
                 </div>
-            </div>
-          
+            </div>
         </header>
 
         <main class="flex-grow overflow-y-auto p-4 md:p-8 w-full pb-24 md:pb-10 relative">
