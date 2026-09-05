@@ -449,6 +449,77 @@ button{ -webkit-tap-highlight-color:transparent; }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto !important;transition:none !important;animation:none !important}}
 
 </style>
+        <!-- MAGIC FIX FOR LAYOUT & ALIGNMENT -->
+    <style id="magic-layout-fix">
+      /* 1. Force Body to Full Screen */
+      html, body {
+        width: 100vw !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        overflow: hidden !important;
+      }
+      
+      /* 2. Desktop Sidebar Lock */
+      @media (min-width: 768px) {
+        aside.w-64 {
+          display: flex !important;
+          flex: 0 0 256px !important;
+          width: 256px !important;
+          height: 100vh !important;
+        }
+        body > div.flex-1, 
+        body > div.flex-grow {
+          flex: 1 1 auto !important;
+          width: calc(100vw - 256px) !important;
+          max-width: calc(100vw - 256px) !important;
+        }
+      }
+
+      /* 3. Mobile Full Width */
+      @media (max-width: 767px) {
+        body > div.flex-1, 
+        body > div.flex-grow {
+          width: 100vw !important;
+          max-width: 100vw !important;
+        }
+      }
+
+      /* 4. Force Main Content Constraints */
+      body > div.flex-1, 
+      body > div.flex-grow {
+        height: 100vh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+      }
+
+      /* 5. Fix Sidebar Icon & Text Alignment (Staircase Bug) */
+      .sidebar-link {
+        display: flex !important;
+        align-items: center !important;
+        padding-left: 1.5rem !important;
+      }
+      .sidebar-link i, .sidebar-link svg {
+        width: 24px !important;
+        min-width: 24px !important;
+        display: flex !important;
+        justify-content: center !important;
+      }
+      .sidebar-link span {
+        margin-left: 16px !important;
+        text-align: left !important;
+        flex-grow: 1 !important;
+      }
+      
+      /* Stop cards from stretching vertically */
+      #overviewSection .grid.lg\:grid-cols-4 {
+          align-items: start !important;
+      }
+    </style>
+</head>
 </head>
 
 <body class="font-sans antialiased relative flex h-screen w-full overflow-hidden selection:bg-blue-100 selection:text-blue-900">
