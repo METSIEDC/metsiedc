@@ -1179,6 +1179,65 @@
         </form>
     </div>
 </div>
+
+            <!-- ===================== EX-COM / CORE TEAM SECTION ===================== -->
+            <div id="manageTeamSection" class="tab-content hidden space-y-6 max-w-6xl mx-auto w-full pt-6">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Form Side (Add/Edit) -->
+                    <div class="glass-panel p-6 md:p-8 border border-gray-200 rounded-3xl w-full lg:w-1/3 h-fit">
+                        <h2 class="text-xl font-display font-bold text-theme-primary tracking-widest uppercase mb-6" id="excomFormTitle">Add Team Member</h2>
+                        <form id="excomForm" class="space-y-4">
+                            <input type="hidden" id="excomId">
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Full Name</label>
+                                <input type="text" id="excomName" class="glass-input border border-gray-200 w-full rounded-xl py-2.5 px-4 text-sm" required>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Role / Designation</label>
+                                <input type="text" id="excomRole" class="glass-input border border-gray-200 w-full rounded-xl py-2.5 px-4 text-sm" placeholder="e.g. CEO, Developer" required>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Profile Image URL</label>
+                                <input type="url" id="excomImage" class="glass-input border border-gray-200 w-full rounded-xl py-2.5 px-4 text-sm" placeholder="Drive image link (optional)">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Instagram Link</label>
+                                <input type="url" id="excomInsta" class="glass-input border border-gray-200 w-full rounded-xl py-2.5 px-4 text-sm" placeholder="https://instagram.com/... (optional)">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">LinkedIn Link</label>
+                                <input type="url" id="excomLinkedIn" class="glass-input border border-gray-200 w-full rounded-xl py-2.5 px-4 text-sm" placeholder="https://linkedin.com/in/... (optional)">
+                            </div>
+                            <div class="pt-4 flex gap-2">
+                                <button type="button" onclick="window.resetExcomForm()" class="flex-1 bg-gray-100 py-3 rounded-xl text-gray-600 text-[10px] uppercase font-bold hover:bg-gray-200 transition-colors">Clear</button>
+                                <button type="submit" id="excomSubmitBtn" class="flex-1 btn-primary py-3 rounded-xl text-[10px] uppercase font-bold">Save Member</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- List Side -->
+                    <div class="glass-panel border border-gray-200 rounded-3xl w-full lg:w-2/3 overflow-hidden bg-white">
+                        <div class="p-6 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                            <h2 class="text-lg font-display font-bold text-theme-primary tracking-widest uppercase">Current Ex-Com</h2>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-gray-50/50 border-b border-gray-100 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500">
+                                    <tr>
+                                        <th class="px-6 py-4">Profile</th>
+                                        <th class="px-6 py-4">Name & Role</th>
+                                        <th class="px-6 py-4 text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="excomListBody" class="divide-y divide-gray-100 text-sm font-light text-gray-800">
+                                    <tr><td colspan="3" class="text-center py-8 text-gray-400 text-xs tracking-widest uppercase font-bold">Loading team...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- ===================== CONTENT PUBLISHING SECTIONS ===================== -->
             
             <div id="notificationsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
@@ -2063,6 +2122,28 @@ window.customConfirm = (msg) => {
             });
             lucide.createIcons();
         };
+
+        // --- EXCOM FORM LOGIC ---
+        window.resetExcomForm = () => {
+            document.getElementById('excomForm').reset();
+            document.getElementById('excomId').value = '';
+            document.getElementById('excomFormTitle').textContent = 'Add Team Member';
+            document.getElementById('excomSubmitBtn').textContent = 'Save Member';
+        };
+
+        window.editExcomMember = (id, name, role, img, insta, linkedin) => {
+            document.getElementById('excomId').value = id;
+            document.getElementById('excomName').value = name;
+            document.getElementById('excomRole').value = role;
+            document.getElementById('excomImage').value = img !== 'undefined' ? img : '';
+            document.getElementById('excomInsta').value = insta !== 'undefined' ? insta : '';
+            document.getElementById('excomLinkedIn').value = linkedin !== 'undefined' ? linkedin : '';
+            
+            document.getElementById('excomFormTitle').textContent = 'Edit Member';
+            document.getElementById('excomSubmitBtn').textContent = 'Update Member';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        
     </script>
 
     <!-- FIREBASE AND APP LOGIC -->
@@ -2532,6 +2613,82 @@ window.submitAttendance = async () => {
                     btn.innerText = "Upload & Publish Certificate"; 
                 }
             });
+            // ==========================================
+        // EX-COM / CORE TEAM MANAGEMENT
+        // ==========================================
+        const excomForm = document.getElementById('excomForm');
+        if(excomForm) {
+            excomForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('excomSubmitBtn');
+                const originalText = btn.innerText;
+                btn.disabled = true; btn.innerText = "Saving...";
+
+                try {
+                    const id = document.getElementById('excomId').value;
+                    const data = {
+                        name: document.getElementById('excomName').value.trim(),
+                        role: document.getElementById('excomRole').value.trim(),
+                        imageUrl: document.getElementById('excomImage').value.trim(),
+                        instaLink: document.getElementById('excomInsta').value.trim(),
+                        linkedinLink: document.getElementById('excomLinkedIn').value.trim(),
+                        timestamp: Date.now()
+                    };
+
+                    if(id) {
+                        await updateDoc(doc(db, "excom", id), data);
+                        window.showToast("Member updated successfully!", "success");
+                    } else {
+                        await addDoc(collection(db, "excom"), data);
+                        window.showToast("New member added!", "success");
+                    }
+                    window.resetExcomForm();
+                } catch(err) {
+                    window.showToast(err.message, "error");
+                } finally {
+                    btn.disabled = false; btn.innerText = originalText;
+                }
+            });
+        }
+
+        window.deleteExcomMember = async (id, name) => {
+            if(await window.customConfirm(`Are you sure you want to delete ${name} from the team?`)) {
+                try {
+                    await deleteDoc(doc(db, "excom", id));
+                    window.showToast("Member deleted", "success");
+                } catch(e) { window.showToast(e.message, "error"); }
+            }
+        };
+
+        // EX-COM SNAPSHOT (Call this inside your initSync function)
+        onSnapshot(collection(db, "excom"), (snap) => {
+            let html = '';
+            snap.forEach(d => {
+                const data = d.data();
+                const id = d.id;
+                // Auto avatar if no image is provided
+                const safeImg = data.imageUrl || `https://api.dicebear.com/9.x/notionists/svg?seed=${data.name}`;
+                
+                html += `
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4">
+                        <img src="${safeImg}" class="w-12 h-12 rounded-full object-cover border border-gray-200 shadow-sm">
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="font-bold text-gray-900 text-sm mb-1">${data.name}</div>
+                        <div class="text-[9px] uppercase tracking-widest text-teal-600 font-bold bg-teal-50 inline-block px-2 py-1 rounded-md border border-teal-100">${data.role}</div>
+                    </td>
+                    <td class="px-6 py-4 text-center flex justify-center gap-2 mt-2">
+                        <button onclick="window.editExcomMember('${id}', '${data.name}', '${data.role}', '${data.imageUrl}', '${data.instaLink}', '${data.linkedinLink}')" class="text-blue-600 bg-blue-50 p-2.5 rounded-xl hover:bg-blue-100 transition-colors"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                        <button onclick="window.deleteExcomMember('${id}', '${data.name}')" class="text-red-500 bg-red-50 p-2.5 rounded-xl hover:bg-red-100 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </td>
+                </tr>`;
+            });
+            const tbody = document.getElementById('excomListBody');
+            if(tbody) tbody.innerHTML = html || '<tr><td colspan="3" class="text-center py-8 text-gray-400 text-xs font-bold uppercase tracking-widest">No members added yet.</td></tr>';
+            lucide.createIcons();
+        });
+            
         }
         window.toggleItemStatus = async (id, status) => { 
             await updateDoc(getDocRef("inventory", id), { status: status }); 
