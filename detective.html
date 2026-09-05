@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIB Portal | Startup Detective</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Typewriter font for the classified look -->
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #22c55e;
+            font-family: 'Courier New', Courier, monospace;
+            background-image: 
+                radial-gradient(#111827 1px, transparent 1px),
+                radial-gradient(#111827 1px, transparent 1px);
+            background-position: 0 0, 20px 20px;
+            background-size: 40px 40px;
+        }
+
+        .typewriter-font { font-family: 'Special Elite', cursive; }
+
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 9999;
+            position: absolute;
+            pointer-events: none;
+            background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(34,197,94,0.1) 50%, rgba(0,0,0,0) 100%);
+            opacity: 0.1;
+            animation: scanline 6s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { top: -100px; }
+            100% { top: 100%; }
+        }
+
+        .paper-texture {
+            background-color: #f4ebd8;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            color: #1a1a1a;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .red-stamp {
+            color: #dc2626;
+            border: 4px solid #dc2626;
+            transform: rotate(-15deg);
+            padding: 4px 12px;
+            border-radius: 8px;
+            opacity: 0.8;
+            font-weight: bold;
+        }
+
+        .blink { animation: blinker 1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <div class="scanline"></div>
+
+    <!-- MAIN TERMINAL LOGIN -->
+    <div id="loginScreen" class="w-full max-w-md bg-black border border-green-500/30 rounded-lg p-8 relative shadow-[0_0_30px_rgba(34,197,94,0.15)] z-10">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold tracking-widest text-green-500 mb-2">S.I.B.</h1>
+            <p class="text-xs tracking-[0.3em] text-green-500/70">STARTUP INTELLIGENCE BUREAU</p>
+            <p class="text-[10px] mt-4 text-gray-500">AUTHORIZED ACCESS ONLY</p>
+        </div>
+
+        <form id="clueForm" onsubmit="handleClueSubmit(event)">
+            <div class="mb-6">
+                <label class="block text-xs text-green-500/80 mb-2">> ENTER CLEARANCE CODE</label>
+                <input type="text" id="clueCode" autocomplete="off" class="w-full bg-black border-2 border-green-500 text-green-400 p-3 outline-none font-bold text-center tracking-widest uppercase focus:bg-green-900/10 focus:shadow-[0_0_15px_rgba(34,197,94,0.3)] transition-all" placeholder="[_ _ _ _ _ _]">
+            </div>
+            <button type="submit" id="submitBtn" class="w-full bg-green-500 text-black font-bold tracking-widest py-3 hover:bg-green-400 transition-colors uppercase">
+                Decrypt Case File
+            </button>
+        </form>
+        <p id="errorMsg" class="text-red-500 text-xs text-center mt-4 hidden blink">> ACCESS DENIED. INVALID CODE.</p>
+    </div>
+
+    <!-- TERMINAL LOADING SCREEN -->
+    <div id="loadingScreen" class="hidden w-full max-w-2xl z-10">
+        <p id="loadingText" class="text-sm md:text-base leading-relaxed tracking-wider"></p>
+    </div>
+
+    <!-- CLASSIFIED LETTER (REVEALED) -->
+    <div id="letterScreen" class="hidden w-full max-w-3xl z-20">
+        <div class="paper-texture p-8 md:p-12 relative rotate-1">
+            <!-- Stamps -->
+            <div class="absolute top-8 right-8 red-stamp text-2xl font-serif">TOP SECRET</div>
+            <div class="absolute bottom-10 left-10 red-stamp text-xl font-serif" style="transform: rotate(5deg); opacity: 0.6;">CLASSIFIED</div>
+
+            <!-- Letter Header -->
+            <div class="border-b-2 border-black/80 pb-4 mb-6">
+                <h2 class="text-3xl typewriter-font font-bold tracking-tighter">CASE FILE: #001</h2>
+                <p class="text-sm font-bold mt-2">DATE: <span id="currentDate"></span></p>
+                <p class="text-sm font-bold">TO: Lead Detective</p>
+                <p class="text-sm font-bold">FROM: S.I.B Headquarters</p>
+            </div>
+
+            <!-- Letter Body (This content will come from Firebase later) -->
+            <div class="typewriter-font text-base md:text-lg leading-relaxed space-y-4">
+                <p>Detective,</p>
+                <p>If you are reading this, you have successfully bypassed our preliminary security checks. Welcome to the Hunt for the Next Unicorn.</p>
+                <p>Your first target is a company that redefined an entire industry, yet started in a small room with no formal funding. Look closely at the market patterns from 2008. They didn't sell a product; they sold an experience.</p>
+                
+                <div class="bg-black/10 p-4 border border-black/20 my-4">
+                    <p class="font-bold">EVIDENCE ATTACHED:</p>
+                    <ul class="list-disc pl-5 mt-2 text-sm">
+                        <li>Founder was rejected by 10 investors.</li>
+                        <li>Their first logo was drawn on a napkin.</li>
+                        <li>Headquarters shifted from a garage to Silicon Valley in 6 months.</li>
+                    </ul>
+                </div>
+
+                <p>Find their first pitch deck. That is your next objective.</p>
+                <p>Do not trust everything you read. Trust the data.</p>
+            </div>
+
+            <!-- Signature -->
+            <div class="mt-12 pt-6 border-t border-black/20">
+                <p class="font-bold">Director of Intelligence,</p>
+                <p class="typewriter-font italic text-xl mt-2">Manna & Team</p>
+                <p class="text-xs mt-1">IEDC MSEM</p>
+            </div>
+        </div>
+        
+        <div class="text-center mt-6">
+            <button onclick="location.reload()" class="text-gray-500 hover:text-white text-xs tracking-widest underline">< END SESSION</button>
+        </div>
+    </div>
+
+    <!-- Javascript Logic -->
+    <script>
+        // Set current date on the letter
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-GB');
+
+        function handleClueSubmit(e) {
+            e.preventDefault();
+            const code = document.getElementById('clueCode').value.trim().toUpperCase();
+            const errorMsg = document.getElementById('errorMsg');
+            const btn = document.getElementById('submitBtn');
+
+            // 1. (LATER) Here you will write Firebase code to check if 'code' exists in 'case_files'
+            // For now, we use a hardcoded demo code: "SIB-001"
+            
+            if (code === 'SIB-001') {
+                // Success!
+                errorMsg.classList.add('hidden');
+                document.getElementById('loginScreen').classList.add('hidden');
+                startDecryptionAnimation();
+            } else {
+                // Failed!
+                errorMsg.classList.remove('hidden');
+                document.getElementById('clueCode').value = '';
+                btn.classList.add('bg-red-600');
+                btn.textContent = 'ACCESS DENIED';
+                setTimeout(() => {
+                    btn.classList.remove('bg-red-600');
+                    btn.textContent = 'DECRYPT CASE FILE';
+                }, 1500);
+            }
+        }
+
+        // Fake Terminal Animation Effect
+        function startDecryptionAnimation() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const loadingText = document.getElementById('loadingText');
+            loadingScreen.classList.remove('hidden');
+
+            const lines = [
+                "> Establishing secure connection to S.I.B Mainframe...",
+                "> Verifying clearance code...",
+                "> Code Accepted.",
+                "> Bypassing firewall...",
+                "> Decrypting case file #001...",
+                "> Extracting payload...",
+                "> ACCESS GRANTED."
+            ];
+
+            let lineIndex = 0;
+            loadingText.innerHTML = '';
+
+            const interval = setInterval(() => {
+                if (lineIndex < lines.length) {
+                    loadingText.innerHTML += lines[lineIndex] + '<br>';
+                    lineIndex++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loadingScreen.classList.add('hidden');
+                        document.getElementById('letterScreen').classList.remove('hidden');
+                    }, 800);
+                }
+            }, 400); // Speed of the text appearing
+        }
+    </script>
+</body>
+</html>
