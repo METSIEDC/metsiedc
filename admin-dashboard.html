@@ -3327,23 +3327,7 @@ window.submitAttendance = async () => {
             }, (err) => console.error("ExCom Meetings Sync Error:", err));
 
          // ==========================================
-        // EXCOM TASK BOARD LOGIC (ADD, MOVE, DELETE)
-        // ==========================================
-        const taskModal = document.getElementById('taskModal');
-        const taskModalContent = document.getElementById('taskModalContent');
-        const taskForm = document.getElementById('taskForm');
-
-        window.openTaskModal = () => {
-            if(taskForm) taskForm.reset();
-            taskModal.classList.remove('hidden');
-            setTimeout(() => { taskModal.classList.remove('opacity-0'); taskModalContent.classList.remove('scale-95'); }, 10);
-        };
-
-        window.closeTaskModal = () => {
-            taskModal.classList.add('opacity-0'); taskModalContent.classList.add('scale-95');
-            setTimeout(() => taskModal.classList.add('hidden'), 300);
-        };
-
+    
         if(taskForm) {
             taskForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
