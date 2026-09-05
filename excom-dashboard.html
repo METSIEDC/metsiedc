@@ -1030,6 +1030,7 @@
         };
 
         // GOOGLE DRIVE UPLOAD LOGIC
+     // GOOGLE DRIVE UPLOAD LOGIC
         async function uploadToDrive(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -1039,11 +1040,17 @@
                         const res = await fetch(SCRIPT_URL, { 
                             method: 'POST', 
                             headers: { "Content-Type": "text/plain;charset=utf-8" }, 
-                            body: JSON.stringify({ filename: file.name, mimeType: file.type, data: base64Data, action: 'uploadImage' }) 
+                            body: JSON.stringify({ filename: file.name, mimeType: file.type, data: base64Data, action: 'uploadImage' }),
+                            redirect: "follow" // ഇതാണ് പുതിയതായി ചേർത്തത്
                         });
+                        
                         const data = await res.json();
-                        if(data.url) resolve(data.url); 
-                        else reject(new Error("Drive Upload failed"));
+                        
+                        if(data.url) {
+                            resolve(data.url); 
+                        } else {
+                            reject(new Error(data.error || "Drive Upload failed"));
+                        }
                     } catch(e) { reject(e); }
                 };
                 reader.onerror = () => reject(new Error("File read error"));
