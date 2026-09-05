@@ -1140,9 +1140,17 @@
                                 <input type="text" id="excomRole" class="glass-input border border-gray-200 w-full rounded-xl py-2.5 px-4 text-sm" placeholder="e.g. CEO, Developer" required>
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Profile Image URL</label>
-                                <input type="url" id="excomImage" class="glass-input border border-gray-200 w-full rounded-xl py-2.5 px-4 text-sm" placeholder="Drive image link (optional)">
-                            </div>
+                               <div>
+    <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Profile Image</label>
+    <div class="flex items-center gap-3">
+        <label class="bg-blue-50 text-blue-600 px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest cursor-pointer hover:bg-blue-100 transition-colors border border-blue-200 shadow-sm">
+            <span>Browse Image</span>
+            <input type="file" id="excomImageFile" onchange="window.handleExcomFile(event)" class="hidden" accept="image/*">
+        </label>
+        <span id="excomFileName" class="text-xs text-gray-500 font-medium">No file chosen</span>
+    </div>
+    <input type="hidden" id="excomExistingImageUrl">
+</div>
                             <div>
                                 <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Instagram Link</label>
                                 <input type="url" id="excomInsta" class="glass-input border border-gray-200 w-full rounded-xl py-2.5 px-4 text-sm" placeholder="https://instagram.com/... (optional)">
@@ -2065,20 +2073,32 @@ window.customConfirm = (msg) => {
             });
             lucide.createIcons();
         };
-
-        // --- EXCOM FORM LOGIC ---
+        
+   // --- EXCOM FORM LOGIC ---
         window.resetExcomForm = () => {
             document.getElementById('excomForm').reset();
             document.getElementById('excomId').value = '';
+            document.getElementById('excomExistingImageUrl').value = ''; 
+            document.getElementById('excomFileName').textContent = 'No file chosen';
+            window.excomSelectedFile = null; 
             document.getElementById('excomFormTitle').textContent = 'Add Team Member';
             document.getElementById('excomSubmitBtn').textContent = 'Save Member';
+        };
+
+        window.handleExcomFile = (e) => { 
+            if(e.target.files && e.target.files[0]) {
+                window.excomSelectedFile = e.target.files[0]; 
+                document.getElementById('excomFileName').textContent = e.target.files[0].name; 
+            }
         };
 
         window.editExcomMember = (id, name, role, img, insta, linkedin) => {
             document.getElementById('excomId').value = id;
             document.getElementById('excomName').value = name;
             document.getElementById('excomRole').value = role;
-            document.getElementById('excomImage').value = img !== 'undefined' ? img : '';
+            document.getElementById('excomExistingImageUrl').value = img !== 'undefined' ? img : '';
+            document.getElementById('excomFileName').textContent = (img && img !== 'undefined' && img !== '') ? 'Existing Image Saved' : 'No file chosen';
+            window.excomSelectedFile = null;
             document.getElementById('excomInsta').value = insta !== 'undefined' ? insta : '';
             document.getElementById('excomLinkedIn').value = linkedin !== 'undefined' ? linkedin : '';
             
@@ -2086,7 +2106,6 @@ window.customConfirm = (msg) => {
             document.getElementById('excomSubmitBtn').textContent = 'Update Member';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
-        
     </script>
 
     <!-- FIREBASE AND APP LOGIC -->
@@ -2567,12 +2586,20 @@ window.submitAttendance = async () => {
                 const originalText = btn.innerText;
                 btn.disabled = true; btn.innerText = "Saving...";
 
-                try {
+           try {
                     const id = document.getElementById('excomId').value;
+                    let finalImageUrl = document.getElementById('excomExistingImageUrl').value; // Pazhaya image undenkil ath edukkkum
+
+                    // Puthiyathayi oru file select cheythittundenkil ath Drive-lekk upload aavum
+                    if (window.excomSelectedFile) {
+                        btn.innerHTML = `<div class="spinner w-4 h-4 mr-2 border-t-white"></div> Uploading Image...`;
+                        finalImageUrl = await window.uploadToDrive(window.excomSelectedFile);
+                    }
+
                     const data = {
                         name: document.getElementById('excomName').value.trim(),
                         role: document.getElementById('excomRole').value.trim(),
-                        imageUrl: document.getElementById('excomImage').value.trim(),
+                        imageUrl: finalImageUrl,
                         instaLink: document.getElementById('excomInsta').value.trim(),
                         linkedinLink: document.getElementById('excomLinkedIn').value.trim(),
                         timestamp: Date.now()
@@ -2586,12 +2613,7 @@ window.submitAttendance = async () => {
                         window.showToast("New member added!", "success");
                     }
                     window.resetExcomForm();
-                } catch(err) {
-                    window.showToast(err.message, "error");
-                } finally {
-                    btn.disabled = false; btn.innerText = originalText;
                 }
-            });
         }
 
         window.deleteExcomMember = async (id, name) => {
