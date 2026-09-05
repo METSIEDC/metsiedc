@@ -455,65 +455,6 @@
                 </div>
             </div>
 
-            <!-- ===================== CMS CORE TEAM SECTION ===================== -->
-            <div id="manageTeamSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-2">
-                    <div>
-                        <h2 class="text-2xl font-display font-bold text-theme-primary uppercase tracking-widest mb-1">About Page Team CMS</h2>
-                        <p class="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Manage core team members displayed on the About page</p>
-                    </div>
-                </div>
-
-                <div class="grid lg:grid-cols-3 gap-8">
-                    <!-- Add Form -->
-                    <div class="lg:col-span-1 glass-panel p-6 rounded-3xl h-fit">
-                        <h2 class="text-sm font-bold text-gray-600 mb-6 uppercase tracking-widest border-b border-gray-100 pb-3">Add Team Member</h2>
-                        <form id="cmsTeamForm" class="space-y-4">
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Full Name</label>
-                                <input type="text" id="cmsTeamName" required class="glass-input w-full px-4 py-3 rounded-xl text-sm" placeholder="e.g. Muhammed Shahil">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Role / Position</label>
-                                <input type="text" id="cmsTeamRole" required class="glass-input w-full px-4 py-3 rounded-xl text-sm" placeholder="e.g. Student Lead">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Display Order</label>
-                                <input type="number" id="cmsTeamOrder" required class="glass-input w-full px-4 py-3 rounded-xl text-sm" placeholder="1, 2, 3..." value="1">
-                                <p class="text-[9px] text-gray-400 mt-1">Lower numbers appear first on the website.</p>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Profile Photo</label>
-                                <input type="file" id="cmsTeamPhoto" accept="image/*" required class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-teal-50 file:text-teal-600 hover:file:bg-teal-100">
-                            </div>
-                            <button type="submit" id="cmsTeamSubmitBtn" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3.5 rounded-xl transition-all text-xs uppercase tracking-widest mt-4">
-                                Add Member
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Team List -->
-                    <div class="lg:col-span-2 glass-panel p-6 rounded-3xl flex flex-col">
-                        <h2 class="text-sm font-bold text-gray-600 mb-6 uppercase tracking-widest border-b border-gray-100 pb-3">Active Members</h2>
-                        <div class="overflow-x-auto flex-grow">
-                            <table class="w-full text-left">
-                                <thead class="bg-gray-50 border-b border-gray-200 text-[10px] uppercase tracking-widest font-bold text-gray-500">
-                                    <tr>
-                                        <th class="px-4 py-3 rounded-tl-lg">Photo</th>
-                                        <th class="px-4 py-3">Name & Role</th>
-                                        <th class="px-4 py-3 text-center">Order</th>
-                                        <th class="px-4 py-3 text-center rounded-tr-lg">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="cmsTeamListBody" class="divide-y divide-gray-100 text-sm text-gray-700">
-                                    <tr><td colspan="4" class="text-center py-8 text-gray-400 text-xs">Loading data...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- ===================== OVERVIEW DASHBOARD ===================== -->
             <div id="overviewSection" class="tab-content space-y-6 max-w-7xl mx-auto w-full">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
