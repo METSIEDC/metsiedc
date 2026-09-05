@@ -201,6 +201,291 @@
         .app-main-shell > main { width:100% !important; min-width:0 !important; max-width:100% !important; overflow-x:hidden !important; overflow-y:auto !important; }
         .tab-content { min-width:0; }
         @media (max-width:767px) { body > aside { display:none !important; } .app-main-shell { width:100% !important; max-width:100vw !important; } }
+
+/* ===== DEFINITIVE DESKTOP LAYOUT FIX v2 ===== */
+html, body {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body {
+  display: grid !important;
+  grid-template-columns: 16rem minmax(0, 1fr) !important;
+  grid-template-rows: 100vh !important;
+  align-items: stretch !important;
+  justify-content: stretch !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+body > aside {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  display: flex !important;
+  width: 16rem !important;
+  min-width: 16rem !important;
+  max-width: 16rem !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+.app-main-shell {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+.app-main-shell > header {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.app-main-shell > main {
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+#overviewSection, .tab-content {
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 80rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+@media (max-width: 767px) {
+  body {
+    display: block !important;
+    width: 100vw !important;
+  }
+  body > aside { display: none !important; }
+  .app-main-shell { width: 100vw !important; max-width: 100vw !important; height: 100vh !important; }
+}
+
+/* =========================================================
+   ADMIN OS — PREMIUM RESPONSIVE UI LAYER
+   Visual-only overrides. Firebase/JS/DOM IDs are untouched.
+   ========================================================= */
+:root{
+  --ao-bg:#f6f8fc;
+  --ao-surface:rgba(255,255,255,.88);
+  --ao-border:rgba(15,23,42,.08);
+  --ao-text:#111827;
+  --ao-muted:#64748b;
+  --ao-primary:#2563eb;
+  --ao-primary-2:#4f46e5;
+  --ao-shadow:0 18px 55px rgba(15,23,42,.08);
+  --ao-shadow-soft:0 8px 30px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+html{background:var(--ao-bg)}
+body{
+  background:
+    radial-gradient(circle at 80% 5%,rgba(59,130,246,.10),transparent 28%),
+    radial-gradient(circle at 10% 90%,rgba(124,58,237,.08),transparent 30%),
+    var(--ao-bg) !important;
+  color:var(--ao-text);
+}
+/* Premium sidebar */
+body > aside{
+  background:rgba(255,255,255,.92) !important;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-right:1px solid rgba(15,23,42,.07) !important;
+  box-shadow:12px 0 40px rgba(15,23,42,.035) !important;
+}
+body > aside > div:first-child{
+  padding:22px 22px !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(248,250,252,.88));
+}
+body > aside > div:first-child > div:first-child{
+  width:40px !important;height:40px !important;border-radius:12px !important;
+  background:linear-gradient(135deg,#2563eb,#4f46e5) !important;
+  box-shadow:0 10px 24px rgba(37,99,235,.24) !important;
+  font-size:17px !important;
+}
+body > aside .sidebar-link{
+  min-height:42px;
+  margin:3px 0;
+  color:#475569;
+  border:1px solid transparent;
+  transition:transform .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease;
+}
+body > aside .sidebar-link:hover{
+  transform:translateX(2px);
+  background:rgba(37,99,235,.055) !important;
+  border-color:rgba(37,99,235,.08);
+  color:#1e3a8a !important;
+}
+body > aside .sidebar-link.active{
+  background:linear-gradient(135deg,rgba(37,99,235,.12),rgba(79,70,229,.07)) !important;
+  color:#1d4ed8 !important;
+  border-color:rgba(37,99,235,.12) !important;
+  box-shadow:inset 3px 0 0 #2563eb,0 5px 18px rgba(37,99,235,.06);
+}
+body > aside nav{
+  scrollbar-width:thin;
+  scrollbar-color:#cbd5e1 transparent;
+}
+/* Main shell/header */
+.app-main-shell{
+  background:linear-gradient(180deg,rgba(248,250,252,.78),rgba(246,248,252,.94)) !important;
+}
+.app-main-shell > header{
+  height:76px !important;
+  padding-left:clamp(18px,3vw,42px) !important;
+  padding-right:clamp(18px,3vw,42px) !important;
+  background:rgba(255,255,255,.78) !important;
+  border-bottom:1px solid rgba(15,23,42,.07) !important;
+  box-shadow:0 8px 30px rgba(15,23,42,.035);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+}
+#headerTitle{font-size:clamp(17px,1.8vw,24px) !important;letter-spacing:.16em !important}
+#adminEmailDisplay{color:#475569 !important}
+.app-main-shell > header .rounded-full{
+  width:42px !important;height:42px !important;
+  background:linear-gradient(135deg,#eff6ff,#eef2ff) !important;
+  border-color:rgba(37,99,235,.13) !important;
+  box-shadow:0 6px 18px rgba(37,99,235,.10) !important;
+}
+/* Main content rhythm */
+.app-main-content{
+  padding:clamp(18px,3vw,38px) !important;
+  padding-bottom:clamp(80px,7vw,110px) !important;
+  scroll-behavior:smooth;
+}
+#overviewSection,.tab-content{
+  width:100% !important;
+  max-width:1180px !important;
+}
+/* Glass/panel system */
+.glass-panel{
+  background:var(--ao-surface) !important;
+  border:1px solid var(--ao-border) !important;
+  box-shadow:var(--ao-shadow-soft) !important;
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
+}
+.glass-panel:hover{
+  border-color:rgba(37,99,235,.13) !important;
+  box-shadow:var(--ao-shadow) !important;
+}
+#overviewSection > .grid:first-child{
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:18px !important;
+}
+#overviewSection > .grid:first-child > .glass-panel{
+  min-height:154px;
+  padding:24px !important;
+  border-radius:22px !important;
+}
+#overviewSection > .grid:first-child > .glass-panel:hover{transform:translateY(-3px)}
+#overviewSection > .grid:first-child h3{line-height:1.05}
+/* Make overview accents more sophisticated without touching IDs/content */
+#overviewSection > .grid:first-child > .glass-panel:before{
+  content:"";position:absolute;inset:0 auto auto 0;width:100%;height:2px;
+  background:linear-gradient(90deg,rgba(37,99,235,.65),rgba(79,70,229,.15),transparent);
+  opacity:.75;
+}
+/* Forms, tables, controls */
+.glass-input,input:not([type="checkbox"]):not([type="radio"]),select,textarea{
+  border-color:rgba(148,163,184,.28) !important;
+  background:rgba(255,255,255,.86) !important;
+  box-shadow:0 2px 10px rgba(15,23,42,.025) !important;
+  transition:border-color .2s ease,box-shadow .2s ease,background .2s ease !important;
+}
+.glass-input:focus,input:not([type="checkbox"]):not([type="radio"]):focus,select:focus,textarea:focus{
+  outline:none !important;
+  border-color:rgba(37,99,235,.45) !important;
+  box-shadow:0 0 0 4px rgba(37,99,235,.08) !important;
+  background:#fff !important;
+}
+button{ -webkit-tap-highlight-color:transparent; }
+.btn-primary,.app-main-content button.bg-indigo-600{
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 10px 24px rgba(37,99,235,.16) !important;
+}
+.btn-primary:hover,.app-main-content button.bg-indigo-600:hover{transform:translateY(-1px)}
+/* Better scrollbars */
+.app-main-content::-webkit-scrollbar,body > aside nav::-webkit-scrollbar{width:8px}
+.app-main-content::-webkit-scrollbar-thumb,body > aside nav::-webkit-scrollbar-thumb{background:rgba(100,116,139,.35);border-radius:999px;border:2px solid transparent;background-clip:padding-box}
+/* Mobile/tablet */
+@media (max-width:1199px){
+  #overviewSection > .grid:first-child{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+@media (max-width:767px){
+  .app-main-shell > header{height:68px !important;padding-left:14px !important;padding-right:14px !important}
+  .app-main-content{padding:14px !important;padding-bottom:90px !important}
+  #overviewSection,.tab-content{max-width:none !important}
+  #overviewSection > .grid:first-child{grid-template-columns:1fr !important;gap:12px !important}
+  #overviewSection > .grid:first-child > .glass-panel{min-height:132px;padding:20px !important;border-radius:18px !important}
+  .glass-panel{border-radius:20px !important}
+  .grid{min-width:0}
+  table{min-width:650px}
+  .overflow-x-auto{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
+@media (min-width:768px) and (max-width:1023px){
+  body{grid-template-columns:15rem minmax(0,1fr) !important}
+  body > aside{width:15rem !important;min-width:15rem !important;max-width:15rem !important}
+  #overviewSection > .grid:first-child{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+@media (max-width:480px){
+  #headerTitle{font-size:15px !important;letter-spacing:.12em !important}
+  .app-main-shell > header .rounded-full{width:38px !important;height:38px !important}
+  .app-main-content h2{font-size:19px !important}
+  .app-main-content .text-4xl{font-size:2.25rem !important}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto !important;transition:none !important;animation:none !important}}
+
+</style>
+
+<style id="admin-os-final-responsive-fix">
+/* ADMIN OS — FINAL RESPONSIVE GRID / VIEWPORT FIX */
+.app-main-shell{min-width:0 !important; width:auto !important; max-width:none !important;}
+.app-main-content{min-width:0 !important; width:100% !important; overflow-x:hidden !important;}
+#overviewSection{width:100% !important; max-width:none !important; margin-inline:auto !important;}
+#overviewSection > .grid:first-child{
+  width:100% !important;
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:18px !important;
+}
+#overviewSection > .grid:first-child > .glass-panel{
+  min-width:0 !important;
+  width:100% !important;
+}
+/* The previous premium layer used a 1199px breakpoint. At browser zoom levels this
+   can incorrectly collapse a desktop dashboard to 2 columns. Keep 4 cards on
+   normal desktop widths and progressively reduce only on genuinely smaller layouts. */
+@media (min-width:1100px){
+  #overviewSection > .grid:first-child{grid-template-columns:repeat(4,minmax(0,1fr)) !important;}
+}
+@media (min-width:768px) and (max-width:1099px){
+  #overviewSection > .grid:first-child{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
+}
+@media (min-width:520px) and (max-width:767px){
+  #overviewSection > .grid:first-child{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+}
+@media (max-width:519px){
+  #overviewSection > .grid:first-child{grid-template-columns:1fr !important;}
+}
+/* Keep the second overview row fluid as well. */
+#overviewSection > .grid:nth-of-type(2){
+  width:100% !important;
+  min-width:0 !important;
+}
+#overviewSection canvas{max-width:100% !important;}
 </style>
 </head>
 
