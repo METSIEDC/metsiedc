@@ -2661,8 +2661,7 @@ window.submitAttendance = async () => {
             if(tbody) tbody.innerHTML = html || '<tr><td colspan="3" class="text-center py-8 text-gray-400 text-xs font-bold uppercase tracking-widest">No members added yet.</td></tr>';
             lucide.createIcons();
         });
-            
-        }
+
         window.toggleItemStatus = async (id, status) => { 
             await updateDoc(getDocRef("inventory", id), { status: status }); 
             await window.logActivity("Inventory Update", `Changed item status to ${status}`); 
