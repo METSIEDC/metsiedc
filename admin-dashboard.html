@@ -2191,6 +2191,29 @@ if(cmsTeamForm) {
                 storagePath: storageRef.fullPath
             });
 
+            // ==========================================
+        // TASK MODAL OPEN & CLOSE LOGIC
+        // ==========================================
+        window.openTaskModal = () => {
+            const form = document.getElementById('taskForm');
+            if(form) form.reset();
+            
+            // രണ്ടും സപ്പോർട്ട് ചെയ്യാൻ വേണ്ടി
+            const modal = document.getElementById('addTaskModal') || document.getElementById('taskModal');
+            if(modal) {
+                modal.classList.remove('hidden');
+                setTimeout(() => { modal.classList.remove('opacity-0'); }, 10);
+            }
+        };
+
+        window.closeTaskModal = () => {
+            const modal = document.getElementById('addTaskModal') || document.getElementById('taskModal');
+            if(modal) {
+                modal.classList.add('opacity-0');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        };
+
             window.showToast("Team Member Added Successfully!", "success");
             cmsTeamForm.reset();
         } catch(error) {
