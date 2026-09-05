@@ -29,21 +29,15 @@
                         sans: ['Inter', 'sans-serif'], 
                         display: ['Plus Jakarta Sans', 'sans-serif'] 
                     },
-                    colors: {
-                        theme: {
-                            bg: '#f0f2f5', 
-                            sidebar: '#ffffff', 
-                            primary: '#1a1a2e', 
-                            accent: '#2f2e41'
-                        },
-                        glow: { 
-                            purple: '#9333ea', 
-                            orange: '#ea580c', 
-                            blue: '#2563eb', 
-                            green: '#22c55e', 
-                            red: '#ef4444', 
-                            gold: '#fbbf24', 
-                            cyan: '#06b6d4' 
+                      colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#0f172a', /* Dark slate for sidebar */
+                            950: '#020617',
                         }
                     },
                     animation: {
@@ -64,56 +58,62 @@
             }
         }
     </script>
-
+    
     <style>
         body { 
-            background-color: #f0f2f5; 
-            color: #1e293b; 
+            background-color: #f8fafc; /* Very light slate */
+            color: #334155; 
             overflow-x: hidden; 
         }
         
+        /* Premium Card Style (Replaces glass-panel) */
         .glass-panel { 
             background: #ffffff; 
             border: 1px solid #e2e8f0; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); 
-            border-radius: 24px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.01); 
+            border-radius: 16px; 
             overflow: hidden;
-            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        .glass-panel:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border-color: #cbd5e1;
         }
         
         .glass-input { 
-            background: #f8fafc; 
-            border: 1px solid #e2e8f0; 
-            color: #1e293b; 
-            transition: all 0.3s ease; 
+            background: #ffffff; 
+            border: 1px solid #cbd5e1; 
+            color: #0f172a; 
+            transition: all 0.2s ease; 
         }
-        
         .glass-input:focus { 
-            border-color: #2563eb; 
+            border-color: #3b82f6; 
             outline: none; 
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); 
-            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); 
         }
         
         select.glass-input option { color: #1e293b; background: white; }
         
+        /* Dark Sidebar Links */
         .sidebar-link { 
             transition: all 0.2s ease; 
             border-left: 3px solid transparent; 
             cursor: pointer; 
-            font-weight: 600; 
-            color: #64748b; 
+            font-weight: 500; 
+            color: #94a3b8; 
+            border-radius: 8px;
+            margin: 0 8px;
         }
         
         .sidebar-link.active { 
-            color: #2563eb; 
-            background-color: #eff6ff; 
-            border-left-color: #2563eb; 
+            color: #ffffff; 
+            background-color: rgba(255,255,255,0.1); 
         }
         
         .sidebar-link:hover:not(.active) { 
-            color: #1e293b; 
-            background: #f1f5f9; 
+            color: #f8fafc; 
+            background: rgba(255,255,255,0.05); 
         }
 
         .btn-light { 
@@ -210,19 +210,18 @@
         </div>
     </div>
 
-    <!-- Ambient Effects -->
+   <!-- Ambient Effects -->
     <div class="fixed top-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-blue-100/50 blur-[150px] rounded-full mix-blend-multiply pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-purple-100/50 blur-[150px] rounded-full mix-blend-multiply pointer-events-none z-0"></div>
 
     <!-- DESKTOP SIDEBAR -->
-    <aside class="w-64 border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col h-full z-20 bg-white shadow-sm">
-        <div class="p-6 flex items-center gap-3 border-b border-gray-100">
-            <div class="w-8 h-8 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 font-bold">A</div>
-            <span class="text-xl font-display font-bold text-theme-primary tracking-widest uppercase">Admin OS</span>
-        </div>
-        
-        <nav class="flex-grow px-4 py-4 space-y-1 overflow-y-auto">
-            <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
+    <aside class="w-64 bg-brand-900 flex-shrink-0 hidden md:flex flex-col h-full z-20 text-slate-300 shadow-2xl relative">
+        <div class="p-6 flex items-center gap-3 border-b border-white/10 mb-2">
+            <div class="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/30">A</div>
+            <span class="text-xl font-display font-bold text-white tracking-widest uppercase">Admin OS</span>
+        </div
+       <nav class="flex-grow py-2 space-y-1.5 overflow-y-auto custom-scrollbar">
+            <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center gap-3 px-4 py-2.5 text-sm">
                 <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
             </button>
             <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
