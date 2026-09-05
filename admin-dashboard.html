@@ -1,2524 +1,428 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin OS | MET'S IEDC</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#f0f2f5">
-     <link rel="apple-touch-icon" href="assets/images/logos/MSEM-removebg-preview.png">
-    <link rel="icon" type="image/png" href="assets/images/logos/MSEM-removebg-preview.png">
-    
-    <!-- Icons and Fonts -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- External Libraries -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin OS | MET'S IEDC</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#e4f2f0">
+    
+    <!-- Icons and Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- External Libraries -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { 
-                        sans: ['Inter', 'sans-serif'], 
-                        display: ['Plus Jakarta Sans', 'sans-serif'] 
-                    },
-                    colors: {
-                        theme: {
-                            bg: '#f0f2f5', 
-                            sidebar: '#ffffff', 
-                            primary: '#1a1a2e', 
-                            accent: '#2f2e41'
-                        },
-                        glow: { 
-                            purple: '#9333ea', 
-                            orange: '#ea580c', 
-                            blue: '#2563eb', 
-                            green: '#22c55e', 
-                            red: '#ef4444', 
-                            gold: '#fbbf24', 
-                            cyan: '#06b6d4' 
-                        }
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-glow': 'pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        float: { 
-                            '0%, 100%': { transform: 'translateY(0)' }, 
-                            '50%': { transform: 'translateY(-5px)' } 
-                        },
-                        pulseGlow: { 
-                            '0%, 100%': { opacity: '0.4' }, 
-                            '50%': { opacity: '0.8' } 
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        body { 
-            background-color: #f0f2f5; 
-            color: #1e293b; 
-            overflow-x: hidden; 
-        }
-        
-        .glass-panel { 
-            background: #ffffff; 
-            border: 1px solid #e2e8f0; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); 
-            border-radius: 24px; 
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .glass-input { 
-            background: #f8fafc; 
-            border: 1px solid #e2e8f0; 
-            color: #1e293b; 
-            transition: all 0.3s ease; 
-        }
-        
-        .glass-input:focus { 
-            border-color: #2563eb; 
-            outline: none; 
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); 
-            background: #ffffff;
-        }
-        
-        select.glass-input option { color: #1e293b; background: white; }
-        
-        .sidebar-link { 
-            transition: all 0.2s ease; 
-            border-left: 3px solid transparent; 
-            cursor: pointer; 
-            font-weight: 600; 
-            color: #64748b; 
-        }
-        
-        .sidebar-link.active { 
-            color: #2563eb; 
-            background-color: #eff6ff; 
-            border-left-color: #2563eb; 
-        }
-        
-        .sidebar-link:hover:not(.active) { 
-            color: #1e293b; 
-            background: #f1f5f9; 
-        }
-
-        .btn-light { 
-            background: #ffffff; 
-            color: #1e293b; 
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease; 
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        }
-        
-        .btn-light:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
-        }
-        
-        .btn-primary { 
-            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%); 
-            color: #ffffff; 
-            transition: all 0.3s ease; 
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
-        }
-        
-        .btn-primary:hover { 
-            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4); 
-            transform: translateY(-2px); 
-        }
-
-        .custom-checkbox { 
-            appearance: none; 
-            background-color: #f8fafc; 
-            width: 1.25em; 
-            height: 1.25em; 
-            border: 1px solid #cbd5e1; 
-            border-radius: 0.25em; 
-            cursor: pointer; 
-            display: inline-grid; 
-            place-content: center; 
-            transition: all 0.2s; 
-        }
-        
-        .custom-checkbox:checked { 
-            background-color: #2563eb; 
-            border-color: #2563eb; 
-        }
-        
-        .custom-checkbox:checked::before { 
-            content: "✔"; 
-            color: #ffffff; 
-            font-size: 0.8em; 
-            font-weight: bold; 
-        }
-        
-        ::-webkit-scrollbar { width: 6px; height: 6px; } 
-        ::-webkit-scrollbar-track { background: transparent; } 
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        
-        .spinner { 
-            border: 2px solid #e2e8f0; 
-            border-radius: 50%; 
-            border-top: 2px solid #2563eb; 
-            width: 16px; 
-            height: 16px; 
-            animation: spin 1s linear infinite; 
-        }
-        
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        #global-qr-reader { border: none !important; border-radius: 1rem; overflow: hidden; background: white;}
-        #global-qr-reader__scan_region { background: #f8fafc; }
-        #global-qr-reader__dashboard_section_csr button { 
-            background: #2563eb !important; color: white !important; padding: 8px 16px; 
-            border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; 
-        }
-
-        .kanban-col { min-height: 200px; transition: background-color 0.2s; }
-        .kanban-col.drag-over { background-color: #eff6ff; border: 1px dashed #2563eb; border-radius: 1rem;}
-        .kanban-card { cursor: grab; transition: transform 0.2s, box-shadow 0.2s; }
-        .kanban-card:active { cursor: grabbing; transform: scale(0.98); opacity: 0.8; }
-    
-        /* ====== LAYOUT FIX ====== */
-        html, body { width:100%; height:100%; min-width:0; margin:0; }
-        body { display:flex; align-items:stretch; justify-content:flex-start !important; overflow:hidden !important; }
-        body > aside { flex:0 0 16rem; width:16rem !important; min-width:16rem !important; max-width:16rem !important; margin:0 !important; }
-        .app-main-shell { flex:1 1 auto; min-width:0 !important; width:auto !important; max-width:calc(100vw - 16rem); overflow:hidden !important; }
-        .app-main-shell > main { width:100% !important; min-width:0 !important; max-width:100% !important; overflow-x:hidden !important; overflow-y:auto !important; }
-        .tab-content { min-width:0; }
-        @media (max-width:767px) { body > aside { display:none !important; } .app-main-shell { width:100% !important; max-width:100vw !important; } }
-
-/* ===== DEFINITIVE DESKTOP LAYOUT FIX v2 ===== */
-html, body {
-  width: 100% !important;
-  height: 100% !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-body {
-  display: grid !important;
-  grid-template-columns: 16rem minmax(0, 1fr) !important;
-  grid-template-rows: 100vh !important;
-  align-items: stretch !important;
-  justify-content: stretch !important;
-  overflow: hidden !important;
-  position: relative !important;
-}
-body > aside {
-  grid-column: 1 !important;
-  grid-row: 1 !important;
-  display: flex !important;
-  width: 16rem !important;
-  min-width: 16rem !important;
-  max-width: 16rem !important;
-  height: 100vh !important;
-  margin: 0 !important;
-  box-sizing: border-box !important;
-}
-.app-main-shell {
-  grid-column: 2 !important;
-  grid-row: 1 !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  width: auto !important;
-  max-width: none !important;
-  height: 100vh !important;
-  overflow: hidden !important;
-  box-sizing: border-box !important;
-}
-.app-main-shell > header {
-  width: 100% !important;
-  box-sizing: border-box !important;
-}
-.app-main-shell > main {
-  min-width: 0 !important;
-  width: 100% !important;
-  max-width: none !important;
-  box-sizing: border-box !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-}
-#overviewSection, .tab-content {
-  min-width: 0 !important;
-  width: 100% !important;
-  max-width: 80rem !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  box-sizing: border-box !important;
-}
-@media (max-width: 767px) {
-  body {
-    display: block !important;
-    width: 100vw !important;
-  }
-  body > aside { display: none !important; }
-  .app-main-shell { width: 100vw !important; max-width: 100vw !important; height: 100vh !important; }
-}
-
-/* =========================================================
-   ADMIN OS — PREMIUM RESPONSIVE UI LAYER
-   Visual-only overrides. Firebase/JS/DOM IDs are untouched.
-   ========================================================= */
-:root{
-  --ao-bg:#f6f8fc;
-  --ao-surface:rgba(255,255,255,.88);
-  --ao-border:rgba(15,23,42,.08);
-  --ao-text:#111827;
-  --ao-muted:#64748b;
-  --ao-primary:#2563eb;
-  --ao-primary-2:#4f46e5;
-  --ao-shadow:0 18px 55px rgba(15,23,42,.08);
-  --ao-shadow-soft:0 8px 30px rgba(15,23,42,.06);
-}
-*{box-sizing:border-box}
-html{background:var(--ao-bg)}
-body{
-  background:
-    radial-gradient(circle at 80% 5%,rgba(59,130,246,.10),transparent 28%),
-    radial-gradient(circle at 10% 90%,rgba(124,58,237,.08),transparent 30%),
-    var(--ao-bg) !important;
-  color:var(--ao-text);
-}
-/* Premium sidebar */
-body > aside{
-  background:rgba(255,255,255,.92) !important;
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  border-right:1px solid rgba(15,23,42,.07) !important;
-  box-shadow:12px 0 40px rgba(15,23,42,.035) !important;
-}
-body > aside > div:first-child{
-  padding:22px 22px !important;
-  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(248,250,252,.88));
-}
-body > aside > div:first-child > div:first-child{
-  width:40px !important;height:40px !important;border-radius:12px !important;
-  background:linear-gradient(135deg,#2563eb,#4f46e5) !important;
-  box-shadow:0 10px 24px rgba(37,99,235,.24) !important;
-  font-size:17px !important;
-}
-body > aside .sidebar-link{
-  min-height:42px;
-  margin:3px 0;
-  color:#475569;
-  border:1px solid transparent;
-  transition:transform .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease;
-}
-body > aside .sidebar-link:hover{
-  transform:translateX(2px);
-  background:rgba(37,99,235,.055) !important;
-  border-color:rgba(37,99,235,.08);
-  color:#1e3a8a !important;
-}
-body > aside .sidebar-link.active{
-  background:linear-gradient(135deg,rgba(37,99,235,.12),rgba(79,70,229,.07)) !important;
-  color:#1d4ed8 !important;
-  border-color:rgba(37,99,235,.12) !important;
-  box-shadow:inset 3px 0 0 #2563eb,0 5px 18px rgba(37,99,235,.06);
-}
-body > aside nav{
-  scrollbar-width:thin;
-  scrollbar-color:#cbd5e1 transparent;
-}
-/* Main shell/header */
-.app-main-shell{
-  background:linear-gradient(180deg,rgba(248,250,252,.78),rgba(246,248,252,.94)) !important;
-}
-.app-main-shell > header{
-  height:76px !important;
-  padding-left:clamp(18px,3vw,42px) !important;
-  padding-right:clamp(18px,3vw,42px) !important;
-  background:rgba(255,255,255,.78) !important;
-  border-bottom:1px solid rgba(15,23,42,.07) !important;
-  box-shadow:0 8px 30px rgba(15,23,42,.035);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-}
-#headerTitle{font-size:clamp(17px,1.8vw,24px) !important;letter-spacing:.16em !important}
-#adminEmailDisplay{color:#475569 !important}
-.app-main-shell > header .rounded-full{
-  width:42px !important;height:42px !important;
-  background:linear-gradient(135deg,#eff6ff,#eef2ff) !important;
-  border-color:rgba(37,99,235,.13) !important;
-  box-shadow:0 6px 18px rgba(37,99,235,.10) !important;
-}
-/* Main content rhythm */
-.app-main-content{
-  padding:clamp(18px,3vw,38px) !important;
-  padding-bottom:clamp(80px,7vw,110px) !important;
-  scroll-behavior:smooth;
-}
-#overviewSection,.tab-content{
-  width:100% !important;
-  max-width:1180px !important;
-}
-/* Glass/panel system */
-.glass-panel{
-  background:var(--ao-surface) !important;
-  border:1px solid var(--ao-border) !important;
-  box-shadow:var(--ao-shadow-soft) !important;
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-  transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
-}
-.glass-panel:hover{
-  border-color:rgba(37,99,235,.13) !important;
-  box-shadow:var(--ao-shadow) !important;
-}
-#overviewSection > .grid:first-child{
-  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
-  gap:18px !important;
-}
-#overviewSection > .grid:first-child > .glass-panel{
-  min-height:154px;
-  padding:24px !important;
-  border-radius:22px !important;
-}
-#overviewSection > .grid:first-child > .glass-panel:hover{transform:translateY(-3px)}
-#overviewSection > .grid:first-child h3{line-height:1.05}
-/* Make overview accents more sophisticated without touching IDs/content */
-#overviewSection > .grid:first-child > .glass-panel:before{
-  content:"";position:absolute;inset:0 auto auto 0;width:100%;height:2px;
-  background:linear-gradient(90deg,rgba(37,99,235,.65),rgba(79,70,229,.15),transparent);
-  opacity:.75;
-}
-/* Forms, tables, controls */
-.glass-input,input:not([type="checkbox"]):not([type="radio"]),select,textarea{
-  border-color:rgba(148,163,184,.28) !important;
-  background:rgba(255,255,255,.86) !important;
-  box-shadow:0 2px 10px rgba(15,23,42,.025) !important;
-  transition:border-color .2s ease,box-shadow .2s ease,background .2s ease !important;
-}
-.glass-input:focus,input:not([type="checkbox"]):not([type="radio"]):focus,select:focus,textarea:focus{
-  outline:none !important;
-  border-color:rgba(37,99,235,.45) !important;
-  box-shadow:0 0 0 4px rgba(37,99,235,.08) !important;
-  background:#fff !important;
-}
-button{ -webkit-tap-highlight-color:transparent; }
-.btn-primary,.app-main-content button.bg-indigo-600{
-  border:1px solid rgba(255,255,255,.18);
-  box-shadow:0 10px 24px rgba(37,99,235,.16) !important;
-}
-.btn-primary:hover,.app-main-content button.bg-indigo-600:hover{transform:translateY(-1px)}
-/* Better scrollbars */
-.app-main-content::-webkit-scrollbar,body > aside nav::-webkit-scrollbar{width:8px}
-.app-main-content::-webkit-scrollbar-thumb,body > aside nav::-webkit-scrollbar-thumb{background:rgba(100,116,139,.35);border-radius:999px;border:2px solid transparent;background-clip:padding-box}
-/* Mobile/tablet */
-@media (max-width:1199px){
-  #overviewSection > .grid:first-child{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
-}
-@media (max-width:767px){
-  .app-main-shell > header{height:68px !important;padding-left:14px !important;padding-right:14px !important}
-  .app-main-content{padding:14px !important;padding-bottom:90px !important}
-  #overviewSection,.tab-content{max-width:none !important}
-  #overviewSection > .grid:first-child{grid-template-columns:1fr !important;gap:12px !important}
-  #overviewSection > .grid:first-child > .glass-panel{min-height:132px;padding:20px !important;border-radius:18px !important}
-  .glass-panel{border-radius:20px !important}
-  .grid{min-width:0}
-  table{min-width:650px}
-  .overflow-x-auto{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
-}
-@media (min-width:768px) and (max-width:1023px){
-  body{grid-template-columns:15rem minmax(0,1fr) !important}
-  body > aside{width:15rem !important;min-width:15rem !important;max-width:15rem !important}
-  #overviewSection > .grid:first-child{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
-}
-@media (max-width:480px){
-  #headerTitle{font-size:15px !important;letter-spacing:.12em !important}
-  .app-main-shell > header .rounded-full{width:38px !important;height:38px !important}
-  .app-main-content h2{font-size:19px !important}
-  .app-main-content .text-4xl{font-size:2.25rem !important}
-}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto !important;transition:none !important;animation:none !important}}
-
-</style>
-        <!-- MAGIC FIX FOR LAYOUT & ALIGNMENT -->
-    <style id="magic-layout-fix">
-      /* 1. Force Body to Full Screen */
-      html, body {
-        width: 100vw !important;
-        height: 100vh !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        display: flex !important;
-        flex-direction: row !important;
-        overflow: hidden !important;
-      }
-      
-      /* 2. Desktop Sidebar Lock */
-      @media (min-width: 768px) {
-        aside.w-64 {
-          display: flex !important;
-          flex: 0 0 256px !important;
-          width: 256px !important;
-          height: 100vh !important;
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'], 
+                        display: ['Plus Jakarta Sans', 'sans-serif'] 
+                    },
+                    colors: {
+                        brand: {
+                            teal: '#007b70',       /* Active sidebar button color */
+                            lightTeal: '#007b7015',/* Hover state */
+                            text: '#2d3748',
+                            muted: '#718096'
+                        }
+                    }
+                }
+            }
         }
-        body > div.flex-1, 
-        body > div.flex-grow {
-          flex: 1 1 auto !important;
-          width: calc(100vw - 256px) !important;
-          max-width: calc(100vw - 256px) !important;
+    </script>
+
+    <style>
+        /* The CoachPro Style Gradient Background */
+        body { 
+            background: linear-gradient(135deg, #eaf5f3 0%, #eef0f8 50%, #f4eaf4 100%);
+            color: #2d3748; 
         }
-      }
-
-      /* 3. Mobile Full Width */
-      @media (max-width: 767px) {
-        body > div.flex-1, 
-        body > div.flex-grow {
-          width: 100vw !important;
-          max-width: 100vw !important;
+        
+        /* Soft Floating Glass Cards */
+        .glass-panel { 
+            background: rgba(255, 255, 255, 0.65); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.9); 
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05); 
+            border-radius: 1.5rem; 
+            overflow: hidden; 
+            position: relative; 
         }
-      }
+        
+        /* Inputs matching the new theme */
+        .glass-input { 
+            background: rgba(255,255,255,0.7); 
+            border: 1px solid rgba(255,255,255,0.8); 
+            color: #2d3748; 
+            transition: all 0.3s ease; 
+        }
+        .glass-input:focus { 
+            border-color: #007b70; 
+            outline: none; 
+            box-shadow: 0 0 0 3px rgba(0, 123, 112, 0.1); 
+            background: #ffffff; 
+        }
+        
+        /* Sidebar Link Styling matching the image */
+        .sidebar-link { 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            cursor: pointer; 
+            font-weight: 600; 
+            color: #718096; 
+            border-radius: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+        .sidebar-link i, .sidebar-link svg { color: #007b70; transition: all 0.3s ease; }
+        
+        /* Active State (Teal Pill) */
+        .sidebar-link.active { 
+            background-color: #007b70; 
+            color: #ffffff; 
+            box-shadow: 0 4px 15px rgba(0, 123, 112, 0.3);
+        }
+        .sidebar-link.active i, .sidebar-link.active svg { color: #ffffff; }
+        
+        /* Hover State */
+        .sidebar-link:hover:not(.active) { 
+            background-color: rgba(0, 123, 112, 0.08); 
+            color: #007b70; 
+        }
 
-      /* 4. Force Main Content Constraints */
-      body > div.flex-1, 
-      body > div.flex-grow {
-        height: 100vh !important;
-        display: flex !important;
-        flex-direction: column !important;
-        overflow: hidden !important;
-      }
+        /* Buttons */
+        .btn-primary { background: #007b70; color: #ffffff; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 123, 112, 0.25); border-radius: 1rem;}
+        .btn-primary:hover { box-shadow: 0 6px 20px rgba(0, 123, 112, 0.4); transform: translateY(-2px); }
+        .btn-light { background: #ffffff; color: #2d3748; border: 1px solid rgba(255,255,255,0.9); transition: all 0.3s ease; border-radius: 1rem;}
+        .btn-light:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
 
-      /* 5. Fix Sidebar Icon & Text Alignment (Staircase Bug) */
-      .sidebar-link {
-        display: flex !important;
-        align-items: center !important;
-        padding-left: 1.5rem !important;
-      }
-      .sidebar-link i, .sidebar-link svg {
-        width: 24px !important;
-        min-width: 24px !important;
-        display: flex !important;
-        justify-content: center !important;
-      }
-      .sidebar-link span {
-        margin-left: 16px !important;
-        text-align: left !important;
-        flex-grow: 1 !important;
-      }
-      
-      /* Stop cards from stretching vertically */
-      #overviewSection .grid.lg\:grid-cols-4 {
-          align-items: start !important;
-      }
+        ::-webkit-scrollbar { width: 6px; height: 6px; } 
+        ::-webkit-scrollbar-track { background: transparent; } 
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .spinner { border: 2px solid transparent; border-radius: 50%; border-top: 2px solid #ffffff; width: 16px; height: 16px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-</head>
 
-<body class="font-sans antialiased relative flex h-screen w-full overflow-hidden selection:bg-blue-100 selection:text-blue-900">
+<body class="font-sans antialiased relative flex h-screen w-full overflow-hidden selection:bg-teal-100 selection:text-teal-900">
 
-    <!-- Custom Toast UI for replacing alerts -->
-    <div id="customToast" class="fixed bottom-4 right-4 z-[9999] px-6 py-3 rounded-xl text-sm font-bold shadow-xl transition-opacity duration-300 hidden"></div>
-            
-    <!-- Custom Confirm Modal -->
-    <div id="customConfirmModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm p-6 rounded-3xl text-center shadow-2xl border border-gray-100">
-            <h2 class="text-lg font-bold text-gray-900 mb-6 uppercase tracking-widest" id="customConfirmMsg">Are you sure?</h2>
-            <div class="flex gap-3">
-                <button id="customConfirmCancel" class="flex-1 bg-gray-100 py-3 rounded-xl text-gray-600 text-[10px] uppercase font-bold hover:bg-gray-200">Cancel</button>
-                <button id="customConfirmOk" class="flex-1 btn-primary py-3 rounded-xl text-[10px] uppercase font-bold">Confirm</button>
-            </div>
-        </div>
-    </div>
+    <!-- GLOBAL UI ELEMENTS -->
+    <div id="customToast" class="fixed bottom-4 right-4 z-[9999] px-6 py-3 rounded-2xl text-sm font-bold shadow-2xl transition-opacity duration-300 hidden"></div>
+    <div id="customConfirmModal" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-sm p-8 text-center shadow-2xl">
+            <h2 class="text-lg font-bold text-gray-900 mb-6 uppercase tracking-widest" id="customConfirmMsg">Are you sure?</h2>
+            <div class="flex gap-3">
+                <button id="customConfirmCancel" class="flex-1 bg-white border border-gray-200 py-3 rounded-xl text-gray-600 text-[10px] uppercase font-bold hover:bg-gray-50 transition-colors">Cancel</button>
+                <button id="customConfirmOk" class="flex-1 btn-primary py-3 rounded-xl text-[10px] uppercase font-bold">Confirm</button>
+            </div>
+        </div>
+    </div>
 
-    <!-- Ambient Effects -->
-    <div class="fixed top-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-blue-100/50 blur-[150px] rounded-full mix-blend-multiply pointer-events-none z-0"></div>
-    <div class="fixed bottom-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-purple-100/50 blur-[150px] rounded-full mix-blend-multiply pointer-events-none z-0"></div>
-
-    <!-- DESKTOP SIDEBAR -->
-<aside class="w-64 border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col h-full z-20 bg-white shadow-sm">
-        <div class="p-6 flex items-center border-b border-gray-100 mb-2">
-            <!-- Logo is exactly w-8 -->
-            <div class="w-8 h-8 flex-shrink-0 rounded-lg bg-blue-500 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/30">A</div>
-            <span class="text-xl font-display font-bold text-theme-primary tracking-widest uppercase ml-3">Admin OS</span>
+    <!-- 1. DESKTOP SIDEBAR -->
+    <aside class="w-64 flex-shrink-0 hidden md:flex flex-col h-full z-20 bg-transparent pl-4 py-4">
+        <!-- Logo Area -->
+        <div class="p-6 flex items-center gap-3 mb-4">
+            <div class="w-8 h-8 flex-shrink-0 rounded-xl bg-brand-teal flex items-center justify-center text-white font-bold shadow-lg shadow-teal-500/30">M</div>
+            <span class="text-xl font-display font-extrabold text-gray-900 tracking-tight">Admin<span class="text-brand-teal">OS</span></span>
         </div>
         
-        <nav class="flex-grow py-2 space-y-1.5 overflow-y-auto custom-scrollbar px-4">
-            
-            <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center px-2 py-3 rounded-xl text-sm">
-                <!-- Icon is wrapped in w-8 to perfectly align with the logo above it -->
-                <div class="w-8 flex justify-center flex-shrink-0"><i data-lucide="layout-dashboard" class="w-4 h-4"></i></div>
-                <span class="ml-3 font-semibold text-left flex-grow">Dashboard</span>
+        <nav class="flex-grow overflow-y-auto custom-scrollbar pr-4 space-y-1">
+            <!-- Sidebar Items -->
+            <button onclick="showTab('overview')" id="nav-overview" class="sidebar-link active w-full flex items-center px-4 py-3.5 text-sm">
+                <div class="w-6 flex justify-center flex-shrink-0"><i data-lucide="layout-dashboard" class="w-5 h-5"></i></div>
+                <span class="ml-4 font-semibold text-left flex-grow">Dashboard</span>
             </button>
             
-            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center px-2 py-3 rounded-xl text-sm">
-                <div class="w-8 flex justify-center flex-shrink-0"><i data-lucide="users" class="w-4 h-4"></i></div>
-                <span class="ml-3 font-semibold text-left flex-grow">User Directory</span>
+            <button onclick="showTab('users')" id="nav-users" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm">
+                <div class="w-6 flex justify-center flex-shrink-0"><i data-lucide="users" class="w-5 h-5"></i></div>
+                <span class="ml-4 font-semibold text-left flex-grow">User Directory</span>
             </button>
             
-            <button onclick="showTab('points')" id="nav-points" class="sidebar-link w-full flex items-center px-2 py-3 rounded-xl text-sm text-yellow-600">
-                <div class="w-8 flex justify-center flex-shrink-0"><i data-lucide="star" class="w-4 h-4"></i></div>
-                <span class="ml-3 font-semibold text-left flex-grow">Innovation Points</span>
+            <button onclick="showTab('points')" id="nav-points" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm">
+                <div class="w-6 flex justify-center flex-shrink-0"><i data-lucide="star" class="w-5 h-5"></i></div>
+                <span class="ml-4 font-semibold text-left flex-grow">Innovation Points</span>
             </button>
-                    
-            <button onclick="showTab('rewards')" id="nav-rewards" class="sidebar-link w-full flex items-center px-2 py-3 rounded-xl text-sm text-yellow-600">
-                <div class="w-8 flex justify-center flex-shrink-0"><i data-lucide="ticket" class="w-4 h-4"></i></div>
-                <span class="ml-3 font-semibold text-left flex-grow">Ticket Orders</span>
+            
+            <button onclick="showTab('rewards')" id="nav-rewards" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm">
+                <div class="w-6 flex justify-center flex-shrink-0"><i data-lucide="ticket" class="w-5 h-5"></i></div>
+                <span class="ml-4 font-semibold text-left flex-grow">Ticket Orders</span>
             </button>
 
-                <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center px-2 py-3 rounded-xl text-sm text-yellow-600">
-                <div class="w-8 flex justify-center flex-shrink-0"><i data-lucide="clipboard-check" class="w-4 h-4"></i></div>
-                <span class="ml-3 font-semibold text-left flex-grow">Attendance</span>
+            <button onclick="showTab('attendance')" id="nav-attendance" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm">
+                <div class="w-6 flex justify-center flex-shrink-0"><i data-lucide="clipboard-check" class="w-5 h-5"></i></div>
+                <span class="ml-4 font-semibold text-left flex-grow">Attendance</span>
             </button>
-            
-            <!-- WEBSITE CMS SECTION -->
-         <button onclick="showTab('manageEvent')" id="nav-manageEvent" class="sidebar-link w-full flex items-center px-2 py-3 rounded-xl text-sm text-indigo-600 font-bold bg-indigo-50/50">
-    <div class="w-8 flex justify-center flex-shrink-0"><i data-lucide="monitor-play" class="w-4 h-4"></i></div>
-    <span class="ml-3 font-semibold text-left flex-grow">Latest Event</span>
-</button>
-            <button onclick="showTab('manageTeam')" id="nav-manageTeam" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm text-teal-600 font-bold bg-teal-50/50">
-                <i data-lucide="users" class="w-4 h-4"></i> Core Team
-            </button>
 
-            <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">ExCom Submissions</div>
-            <button onclick="showTab('adminTasks')" id="nav-adminTasks" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm text-yellow-500 font-bold">
-                <i data-lucide="kanban" class="w-4 h-4"></i> ExCom Tasks
-            </button>
-            <button onclick="showTab('adminMedia')" id="nav-adminMedia" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm text-pink-500 font-bold">
-                <i data-lucide="image" class="w-4 h-4"></i> Media Drop
-            </button>
-            <button onclick="showTab('adminMentorship')" id="nav-adminMentorship" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm text-cyan-500 font-bold">
-                <i data-lucide="users" class="w-4 h-4"></i> Mentorship Logs
-            </button>
-            <button onclick="showTab('adminDocs')" id="nav-adminDocs" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm text-green-500 font-bold">
-                <i data-lucide="file-check-2" class="w-4 h-4"></i> Submitted Docs
-            </button>
-
-            <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Incubator Tools</div>
-            <button onclick="showTab('pipeline')" id="nav-pipeline" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-blue-600">
-                <i data-lucide="rocket" class="w-4 h-4"></i> Startup Pipeline
-            </button>
-            <button onclick="showTab('funds')" id="nav-funds" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-green-600">
-                <i data-lucide="wallet" class="w-4 h-4"></i> Funds & Grants
-            </button>
-            <button onclick="showTab('quests')" id="nav-quests" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-orange-600">
-                <i data-lucide="target" class="w-4 h-4"></i> Quests Engine
-            </button>
-            <button onclick="showTab('reports')" id="nav-reports" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium">
-                <i data-lucide="file-bar-chart" class="w-4 h-4"></i> Official Reports
-            </button>
-            
-            <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Platform</div>
-            <button onclick="showTab('features')" id="nav-features" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm">
-                <i data-lucide="blocks" class="w-4 h-4"></i> Feature Manager
-            </button>
-            <button onclick="showTab('inventory')" id="nav-inventory" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm">
-                <i data-lucide="box" class="w-4 h-4"></i> Inventory
-            </button>
-            <button onclick="showTab('excom')" id="nav-excom" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm">
-                <i data-lucide="shield" class="w-4 h-4"></i> ExCom Tracking
-            </button>
-            <button onclick="showTab('certificates')" id="nav-certificates" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm">
-                <i data-lucide="award" class="w-4 h-4"></i> Certificates
-            </button>
-            
-            <button onclick="showTab('logs')" id="nav-logs" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm">
-                <i data-lucide="activity" class="w-4 h-4"></i> Activity Logs
-            </button>
-            
-            <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Publishing</div>
-            <button onclick="showTab('notifications')" id="nav-notifications" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm text-purple-600">
-                <i data-lucide="bell-ring" class="w-4 h-4"></i> Send Alert
-            </button>
-            <button onclick="showTab('announcements')" id="nav-announcements" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm">
-                <i data-lucide="bell" class="w-4 h-4"></i> Circulars
-            </button>
-            <button onclick="showTab('news')" id="nav-news" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm">
-                <i data-lucide="newspaper" class="w-4 h-4"></i> News Article
-            </button>
-            <button onclick="showTab('eventForms')" id="nav-eventForms" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm">
-                <i data-lucide="file-plus" class="w-4 h-4"></i> Event Form
-            </button>
-            <button onclick="showTab('gallery')" id="nav-gallery" class="sidebar-link w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm">
-                <i data-lucide="image" class="w-4 h-4"></i> Gallery
-            </button>
-        </nav>
-        
-        <div class="p-6 mt-auto border-t border-gray-100">
-            <button id="adminLogoutBtn" class="w-full bg-red-50 hover:bg-red-100 border border-red-100 text-red-600 py-3 rounded-xl text-[10px] font-bold uppercase flex justify-center items-center gap-2 transition-colors">
-                <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
-            </button>
-        </div>
-    </aside>
-
-    <!-- MOBILE SIDEBAR OVERLAY -->
-    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[100] hidden md:hidden transition-opacity" onclick="toggleMobileSidebar()"></div>
-    
-    <!-- MOBILE SIDEBAR -->
-    <div id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-white border-r border-gray-200 z-[200] transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl">
-        <div class="p-6 flex items-center justify-between border-b border-gray-100">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 font-bold">A</div>
-                <span class="text-lg font-display font-bold text-theme-primary tracking-widest uppercase">ADMIN</span>
-            </div>
-            <button onclick="toggleMobileSidebar()" class="text-gray-500 hover:text-gray-900 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center relative z-[300]">
-                <i data-lucide="x" class="w-4 h-4 pointer-events-none"></i>
-            </button>
-        </div>
-        <nav class="flex-grow px-4 py-6 space-y-1 overflow-y-auto">
-            <button onclick="showTab('overview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Dashboard</button>
-            <button onclick="showTab('manageEvent'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-indigo-600">Event CMS</button>
-            <button onclick="showTab('manageTeam'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-teal-600">Team CMS</button>
-            <button onclick="showTab('users'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Users</button>
-            <button onclick="showTab('points'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-yellow-600">Points</button>
-            
-            <div class="h-px bg-gray-100 my-4 mx-4"></div>
-            <p class="px-4 text-[9px] text-gray-400 uppercase tracking-widest mb-2 font-bold">ExCom Sync</p>
-            <button onclick="showTab('adminTasks'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-yellow-500">Team Tasks</button>
-            <button onclick="showTab('adminMedia'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-pink-500">Media Drop</button>
-            <button onclick="showTab('adminMentorship'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-cyan-500">Mentorship</button>
-            <button onclick="showTab('adminDocs'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-green-500">Documents</button>
-            <div class="h-px bg-gray-100 my-4 mx-4"></div>
-
-            <button onclick="showTab('pipeline'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-blue-600">Pipeline</button>
-            <button onclick="showTab('funds'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-green-600">Funds</button>
-            <button onclick="showTab('quests'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-orange-600">Quests</button>
-            <button onclick="showTab('reports'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Reports</button>
-            <button onclick="showTab('rewards'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Tickets</button>
-            <button onclick="showTab('attendance'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Attendance</button>
-            <button onclick="showTab('manageTeam'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest"> Core Team</button>
-            
-            <div class="h-px bg-gray-100 my-4 mx-4"></div>
-            
-            <button onclick="showTab('notifications'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest text-purple-600">Send Alert</button>
-            <button onclick="showTab('announcements'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Circulars</button>
-            <button onclick="showTab('news'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">News</button>
-            <button onclick="showTab('eventForms'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Forms</button>
-            <button onclick="showTab('gallery'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-xs uppercase tracking-widest">Gallery</button>
-        </nav>
-        <div class="mt-8 px-4 pb-6 border-t border-gray-100 pt-4">
-            <button id="adminLogoutBtnMobile" class="w-full bg-red-50 hover:bg-red-100 text-red-600 py-3.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2">Sign Out</button>
-        </div>
-    </div>
-           
-    <!-- MAIN CONTENT AREA -->
-<div class="app-main-shell flex-1 min-w-0 flex flex-col h-full overflow-hidden bg-transparent">
+            <!-- Workspace Section -->
+            <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-brand-teal/60 uppercase tracking-widest">Workspace</div>
+            
+            <button onclick="showTab('adminTasks')" id="nav-adminTasks" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm">
+                <div class="w-6 flex justify-center flex-shrink-0"><i data-lucide="kanban" class="w-5 h-5"></i></div>
+                <span class="ml-4 font-semibold text-left flex-grow">ExCom Tasks</span>
+            </button>
+            
+            <button onclick="showTab('pipeline')" id="nav-pipeline" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm">
+                <div class="w-6 flex justify-center flex-shrink-0"><i data-lucide="rocket" class="w-5 h-5"></i></div>
+                <span class="ml-4 font-semibold text-left flex-grow">Startup Pipeline</span>
+            </button>
+            
+            <button onclick="showTab('funds')" id="nav-funds" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm">
+                <div class="w-6 flex justify-center flex-shrink-0"><i data-lucide="wallet" class="w-5 h-5"></i></div>
+                <span class="ml-4 font-semibold text-left flex-grow">Funds & Grants</span>
+            </button>
+            
+            <button onclick="showTab('quests')" id="nav-quests" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm">
+                <div class="w-6 flex justify-center flex-shrink-0"><i data-lucide="target" class="w-5 h-5"></i></div>
+                <span class="ml-4 font-semibold text-left flex-grow">Quests Engine</span>
+            </button>
+        </nav>
         
-        <header class="h-20 flex items-center justify-between px-6 md:px-10 shrink-0 border-b border-gray-200 bg-white/80 backdrop-blur-md">
-            <div class="flex items-center gap-4">
-                <button id="mobile-menu-toggle" class="md:hidden text-gray-500 p-2 hover:bg-gray-100 rounded-lg cursor-pointer">
-                    <i data-lucide="menu" class="w-6 h-6"></i>
-                </button>
-                <div>
-                    <h1 class="text-xl font-display font-bold text-theme-primary uppercase tracking-widest" id="headerTitle">Dashboard</h1>
-                </div>
-            </div>
-            <div class="flex items-center gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="text-right hidden sm:block">
-                        <p class="text-[10px] font-bold uppercase tracking-widest text-gray-500" id="adminEmailDisplay">Admin</p>
-                    </div>
-                    <div class="w-10 h-10 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
-                        <i data-lucide="shield-check" class="w-5 h-5"></i>
-                    </div>
-                </div>
-            </div>
-</header>
-
-        <main class="app-main-content flex-1 min-w-0 overflow-y-auto overflow-x-hidden p-4 md:p-8 pb-24 relative">
-
-            <!-- ===================== CMS LATEST EVENT SECTION ===================== -->
-            <div id="manageEventSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-2">
-                    <div>
-                        <h2 class="text-2xl font-display font-bold text-theme-primary uppercase tracking-widest mb-1">Index Page Event CMS</h2>
-                        <p class="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Update the hero section poster on the home page</p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- Form -->
-                    <div class="glass-panel p-6 md:p-8 rounded-3xl">
-                        <form id="cmsTeamForm" class="space-y-4" onsubmit="event.preventDefault();">
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Event Title</label>
-                                <input type="text" id="cmsEventTitle" required class="glass-input w-full px-4 py-3 rounded-xl text-sm" placeholder="e.g. Protosynth 2026">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Tag / Badge</label>
-                                <input type="text" id="cmsEventTag" required class="glass-input w-full px-4 py-3 rounded-xl text-sm" placeholder="e.g. Hackathon">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Short Description</label>
-                                <textarea id="cmsEventDesc" required rows="3" class="glass-input w-full px-4 py-3 rounded-xl text-sm" placeholder="Join the ultimate state-level buildathon..."></textarea>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Registration Link (URL)</label>
-                                <input type="url" id="cmsEventLink" required class="glass-input w-full px-4 py-3 rounded-xl text-sm" placeholder="https://forms.gle/...">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Event Poster (Image)</label>
-                                <input type="file" id="cmsEventPhoto" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
-                                <p class="text-[9px] text-gray-400 mt-1">Leave blank to keep existing image.</p>
-                            </div>
-                            <button type="submit" id="cmsEventSubmitBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition-all text-xs uppercase tracking-widest mt-4">
-                                Update Home Page
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Live Preview -->
-                    <div class="glass-panel p-6 md:p-8 rounded-3xl bg-gray-50 flex flex-col items-center justify-center">
-                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-6 w-full text-left">Live Website Preview</h3>
-                        <div class="bg-theme-primary text-white rounded-2xl p-6 w-full shadow-xl relative overflow-hidden flex flex-col justify-center">
-                            <div class="absolute right-[-10%] bottom-[-10%] w-32 h-32 bg-blue-500/20 rounded-full blur-[40px] pointer-events-none"></div>
-                            
-                            <div class="inline-flex items-center self-start px-2 py-1 rounded bg-white/10 text-blue-400 text-[8px] font-bold tracking-widest uppercase mb-3 border border-white/10">
-                                <span class="w-1.5 h-1.5 rounded-full bg-blue-400 mr-2"></span> <span id="previewEventTag">Loading...</span>
-                            </div>
-                            
-                            <h3 id="previewEventTitle" class="text-xl font-display font-bold mb-2 tracking-tight text-white">Loading...</h3>
-                            <p id="previewEventDesc" class="text-white/70 font-light mb-4 text-[10px] leading-relaxed line-clamp-3">Please wait...</p>
-
-                            <div class="w-full aspect-video rounded-xl overflow-hidden bg-white/5 border border-white/10 mb-4">
-                                <img id="previewEventPoster" src="" alt="Poster" class="w-full h-full object-cover">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===================== OVERVIEW DASHBOARD ===================== -->
-            <div id="overviewSection" class="tab-content space-y-6 max-w-7xl mx-auto w-full">
-             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 items-start">
-                    <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group border border-gray-200">
-                        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-purple-100 blur-xl rounded-full"></div>
-                        <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Total Users</p>
-                        <h3 class="text-4xl md:text-5xl font-display font-bold text-gray-900 relative z-10" id="totalUsersCount">0</h3>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group border border-green-200 bg-green-50/50">
-                        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-green-100 blur-xl rounded-full"></div>
-                        <p class="text-green-600 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Remaining Funds</p>
-                        <h3 class="text-3xl md:text-4xl font-display font-bold text-green-600 relative z-10">₹<span id="overviewFunds">0</span></h3>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group border border-blue-200 bg-blue-50/50">
-                        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-100 blur-xl rounded-full"></div>
-                        <p class="text-blue-600 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Active Startups</p>
-                        <h3 class="text-4xl md:text-5xl font-display font-bold text-gray-900 relative z-10" id="overviewStartups">0</h3>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl flex flex-col relative overflow-hidden group border border-orange-200 bg-orange-50/50">
-                        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-orange-100 blur-xl rounded-full"></div>
-                        <p class="text-orange-600 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Announcements</p>
-                        <h3 class="text-4xl md:text-5xl font-display font-bold text-gray-900 relative z-10" id="totalAnnouncementsCount">0</h3>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-                    <div class="lg:col-span-2 glass-panel p-6 rounded-3xl">
-                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-6">Recent Scans & Activity</h3>
-                        <div class="w-full h-64"><canvas id="activityChart"></canvas></div>
-                    </div>
-                    <div class="glass-panel p-6 rounded-3xl flex flex-col items-center">
-                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest w-full text-left mb-6">User Demographics</h3>
-                        <div class="w-full max-w-[200px] flex-grow flex items-center justify-center"><canvas id="roleChart"></canvas></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===================== USERS SECTION ===================== -->
-            <div id="usersSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-                    <div>
-                        <h2 class="text-2xl font-display font-bold text-theme-primary uppercase tracking-widest mb-1">User Directory</h2>
-                        <p class="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Total Registered: <span id="directoryUserCount" class="text-blue-600 text-sm ml-1">0</span></p>
-                    </div>
-                    <div class="flex gap-3 w-full lg:w-auto">
-                        <div class="relative flex-grow">
-                            <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search Name or Email..." class="glass-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-light border border-gray-200">
-                            <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"></i>
-                        </div>
-                        <button onclick="generateIdCards()" class="flex-shrink-0 btn-light px-4 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2 transition-colors">
-                            <i data-lucide="printer" class="w-4 h-4"></i> IDs
-                        </button>
-                        <button onclick="openGlobalScanner('syncUser')" class="flex-shrink-0 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 px-4 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2 transition-colors">
-                            <i data-lucide="qr-code" class="w-4 h-4"></i> Scan
-                        </button>
-                        <button onclick="toggleAddUserModal(true)" class="flex-shrink-0 btn-primary px-4 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2">
-                            <i data-lucide="user-plus" class="w-4 h-4"></i> Add
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="glass-panel rounded-2xl overflow-x-auto w-full border border-gray-100 bg-white">
-                    <table class="w-full text-left min-w-[900px]">
-                        <thead class="bg-gray-50 border-b border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500 sticky top-0 z-10">
-                            <tr>
-                                <th class="px-4 py-5 w-12 text-center"><i data-lucide="check-square" class="w-4 h-4 mx-auto"></i></th>
-                                <th class="px-6 py-5">Name</th>
-                                <th class="px-6">Auth & Contact</th>
-                                <th class="px-6 text-center">Role</th>
-                                <th class="px-6 text-center">Status</th>
-                                <th class="text-center px-6">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="userListBody" class="divide-y divide-gray-100 text-sm font-light text-gray-800">
-                            <tr>
-                                <td colspan="6" class="text-center py-8 text-gray-400 text-xs tracking-widest uppercase font-bold">Loading users...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ===================== POINTS SECTION ===================== -->
-            <div id="pointsSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-                    <h2 class="text-2xl font-display font-bold text-theme-primary uppercase tracking-widest">Innovation Points</h2>
-                    <div class="relative w-full lg:w-72">
-                        <input type="text" id="pointsSearchInput" onkeyup="filterPoints()" placeholder="Search Student..." class="glass-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-light border border-gray-200">
-                        <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"></i>
-                    </div>
-                </div>
-                
-                <div class="glass-panel rounded-2xl overflow-x-auto w-full border border-gray-100 bg-white">
-                    <table class="w-full text-left min-w-[700px]">
-                        <thead class="bg-gray-50 border-b border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500">
-                            <tr>
-                                <th class="px-6 py-5">Student Name</th>
-                                <th class="px-6">Email / ID</th>
-                                <th class="px-6 text-center">Total Points</th>
-                                <th class="text-center px-6">Manage Points</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pointsListBody" class="divide-y divide-gray-100 text-sm font-light text-gray-800">
-                            <tr>
-                                <td colspan="4" class="text-center py-8 text-gray-400 text-xs tracking-widest uppercase font-bold">Loading records...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ===================== TICKET REWARDS SECTION ===================== -->
-            <div id="rewardsSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase">Ticket Orders</h2>
-                </div>
-                <div class="glass-panel rounded-3xl overflow-hidden border-gray-200">
-                    <table class="w-full text-left min-w-[700px]">
-                        <thead class="bg-gray-50 border-b border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500">
-                            <tr>
-                                <th class="px-6 py-5">Student</th>
-                                <th class="px-6">Pass Redeemed</th>
-                                <th class="px-6">Date</th>
-                                <th class="px-6">Status</th>
-                                <th class="px-6 text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="redemptionsList" class="divide-y divide-gray-100 text-sm text-gray-700">
-                            <tr>
-                                <td colspan="5" class="text-center py-10 text-gray-400 text-xs uppercase font-bold">
-                                    <div class="spinner mx-auto mb-3"></div> Loading Orders...
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ===================== ATTENDANCE SECTION ===================== -->
-            <div id="attendanceSection" class="tab-content hidden space-y-6 max-w-5xl mx-auto w-full">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase">Manual Attendance</h2>
-                    <div class="flex gap-3">
-                        <button onclick="openGlobalScanner('attendance')" class="bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 px-5 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2 transition-all">
-                            <i data-lucide="scan" class="w-4 h-4"></i> Scan ID
-                        </button>
-                        <button onclick="generateEventQR()" class="bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-600 px-5 py-3 rounded-xl text-[10px] uppercase font-bold flex items-center gap-2 transition-all">
-                            <i data-lucide="qr-code" class="w-4 h-4"></i> Generate Event QR
-                        </button>
-                        <button id="btnSaveAttendance" onclick="submitAttendance()" class="btn-primary px-5 py-3 rounded-xl text-[10px] uppercase font-bold transition-all">
-                            Save List
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="glass-panel p-6 mb-6 flex gap-4 flex-col md:flex-row border border-gray-200">
-                    <div class="w-full">
-                        <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Event Name</label>
-                        <input type="text" id="attendanceEventName" class="glass-input w-full rounded-xl py-3 px-4 border border-gray-200" placeholder="E.g. Buildathon">
-                    </div>
-                    <div class="w-full">
-                        <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Date</label>
-                        <input type="date" id="attendanceDate" class="glass-input w-full rounded-xl py-3 px-4 border border-gray-200">
-                    </div>
-                </div>
-                
-                <div class="glass-panel overflow-x-auto max-h-[500px] overflow-y-auto w-full border border-gray-200">
-                    <table class="w-full text-left min-w-[400px]">
-                        <thead class="bg-gray-50 border-b border-gray-200 text-[10px] uppercase font-bold text-gray-500 sticky top-0 z-10">
-                            <tr>
-                                <th class="px-6 py-5 w-16 text-center">Present</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                            </tr>
-                        </thead>
-                        <tbody id="attendanceListBody" class="divide-y divide-gray-100 text-gray-700">
-                            <tr><td colspan="3" class="text-center py-6 text-gray-400">Loading users...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ===================== EXCOM SYNC: TASKS ===================== -->
-           <!-- ===================== EX-COM TASK BOARD SECTION ===================== -->
-            <div id="adminTasksSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full pt-6">
-                
-                <!-- Header & Add Button -->
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-gray-100 pb-6 mb-6 gap-4">
-                    <div>
-                        <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase mb-1">ExCom Task Board</h2>
-                        <p class="text-gray-500 text-sm font-light">View and assign tasks for the Executive Committee.</p>
-                    </div>
-                    <!-- NEW TASK BUTTON -->
-                    <button onclick="window.openTaskModal()" class="btn-primary px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg">
-                        <i data-lucide="plus" class="w-4 h-4"></i> Assign New Duty
-                    </button>
-                </div>
-
-                <!-- Kanban Board Columns -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-[70vh]">
-                    
-                    <!-- TO-DO COLUMN -->
-                    <div class="bg-gray-50/50 border border-gray-100 rounded-3xl p-5 flex flex-col h-full overflow-hidden">
-                        <div class="flex items-center gap-2 mb-4 px-2">
-                            <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
-                            <h3 class="font-bold text-gray-700 uppercase tracking-widest text-xs">To-Do</h3>
-                            <span id="count-todo" class="ml-auto bg-white border border-gray-200 text-gray-600 px-2 py-0.5 rounded-full text-[10px] font-bold">0</span>
-                        </div>
-                        <div id="list-todo" class="flex-1 overflow-y-auto space-y-3 pb-2 pr-1"></div>
-                    </div>
-
-                    <!-- IN PROGRESS COLUMN -->
-                    <div class="bg-blue-50/30 border border-blue-100/50 rounded-3xl p-5 flex flex-col h-full overflow-hidden">
-                        <div class="flex items-center gap-2 mb-4 px-2">
-                            <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-                            <h3 class="font-bold text-blue-700 uppercase tracking-widest text-xs">In Progress</h3>
-                            <span id="count-inprogress" class="ml-auto bg-blue-100 border border-blue-200 text-blue-600 px-2 py-0.5 rounded-full text-[10px] font-bold">0</span>
-                        </div>
-                        <div id="list-inprogress" class="flex-1 overflow-y-auto space-y-3 pb-2 pr-1"></div>
-                    </div>
-
-                    <!-- COMPLETED COLUMN -->
-                    <div class="bg-green-50/30 border border-green-100/50 rounded-3xl p-5 flex flex-col h-full overflow-hidden">
-                        <div class="flex items-center gap-2 mb-4 px-2">
-                            <span class="w-2 h-2 rounded-full bg-green-400"></span>
-                            <h3 class="font-bold text-green-700 uppercase tracking-widest text-xs">Completed</h3>
-                            <span id="count-completed" class="ml-auto bg-green-100 border border-green-200 text-green-600 px-2 py-0.5 rounded-full text-[10px] font-bold">0</span>
-                        </div>
-                        <div id="list-completed" class="flex-1 overflow-y-auto space-y-3 pb-2 pr-1"></div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- ===================== EXCOM SYNC: MEDIA DROP ===================== -->
-            <div id="adminMediaSection" class="tab-content hidden space-y-6 max-w-6xl mx-auto w-full">
-                <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase mb-1">Marketing Media Drop</h2>
-                        <p class="text-gray-500 text-sm font-light">View event posters and captions uploaded by the ExCom team.</p>
-                    </div>
-                </div>
-                <div id="adminMediaGalleryContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="col-span-full text-center py-10 text-gray-400 text-xs font-bold uppercase tracking-widest border border-dashed border-gray-200 rounded-2xl">Loading media assets...</div>
-                </div>
-            </div>
-
-            <!-- ===================== EXCOM SYNC: MENTORSHIP LOGS ===================== -->
-            <div id="adminMentorshipSection" class="tab-content hidden space-y-6 max-w-5xl mx-auto w-full">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                    <div>
-                        <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase mb-1">Mentorship Logs</h2>
-                        <p class="text-gray-500 text-sm font-light">View progress logs submitted by ExCom mentors.</p>
-                    </div>
-                </div>
-                <div class="glass-panel p-6 rounded-3xl w-full">
-                    <div id="adminMentorshipLogsContainer" class="space-y-4">
-                        <div class="text-center py-10 text-gray-400 text-xs font-bold uppercase tracking-widest border border-dashed border-gray-200 rounded-2xl">Loading mentorship logs...</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===================== EXCOM SYNC: SUBMITTED DOCS ===================== -->
-            <div id="adminDocsSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
-                <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase mb-1">Submitted Documents</h2>
-                        <p class="text-gray-500 text-sm font-light">Official meeting minutes and finance documents submitted by ExCom.</p>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                    <!-- Meeting Minutes -->
-                    <div class="glass-panel p-6 flex flex-col max-h-[600px]">
-                        <h3 class="text-xs font-bold text-indigo-600 mb-6 uppercase tracking-widest border-b border-gray-100 pb-4 flex items-center gap-2">
-                            <i data-lucide="file-check-2" class="w-4 h-4"></i> Meeting Minutes
-                        </h3>
-                        <div class="overflow-y-auto flex-grow rounded-xl border border-gray-200 bg-white">
-                            <table class="w-full text-left">
-                                <thead class="bg-gray-50 border-b border-gray-200 text-[10px] uppercase tracking-widest font-bold text-gray-500 sticky top-0 z-10">
-                                    <tr>
-                                        <th class="px-6 py-4">Meeting Title</th>
-                                        <th class="px-6 py-4">Date</th>
-                                        <th class="px-6 py-4">Uploaded By</th>
-                                        <th class="px-6 py-4 text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="adminMinutesListBody" class="divide-y divide-gray-100 text-sm overflow-y-auto text-gray-700">
-                                    <tr><td colspan="4" class="text-center py-8 text-gray-400 text-xs">Loading minutes...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Finance Docs -->
-                    <div class="glass-panel p-6 flex flex-col max-h-[600px]">
-                        <h3 class="text-xs font-bold text-green-600 mb-6 uppercase tracking-widest border-b border-gray-100 pb-4 flex items-center gap-2">
-                            <i data-lucide="receipt" class="w-4 h-4"></i> Finance Documents
-                        </h3>
-                        <div class="overflow-y-auto flex-grow rounded-xl border border-gray-200 bg-white">
-                            <table class="w-full text-left">
-                                <thead class="bg-gray-50 border-b border-gray-200 text-[10px] uppercase tracking-widest font-bold text-gray-500 sticky top-0 z-10">
-                                    <tr>
-                                        <th class="px-6 py-4">Document Title</th>
-                                        <th class="px-6 py-4">Amount</th>
-                                        <th class="px-6 py-4">Date</th>
-                                        <th class="px-6 py-4">Uploader</th>
-                                        <th class="px-6 py-4 text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="adminFinanceListBody" class="divide-y divide-gray-100 text-sm overflow-y-auto text-gray-700">
-                                    <tr><td colspan="5" class="text-center py-8 text-gray-400 text-xs">Loading finance docs...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===================== PIPELINE SECTION (KANBAN) ===================== -->
-            <div id="pipelineSection" class="tab-content hidden h-[calc(100vh-140px)] w-full flex flex-col">
-                <div class="flex justify-between items-center mb-6 shrink-0">
-                    <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase">Incubation Pipeline</h2>
-                    <span class="text-[10px] bg-blue-50 text-blue-600 border border-blue-200 px-3 py-1.5 rounded-lg font-bold uppercase tracking-widest">Drag & Drop Supported</span>
-                </div>
-                
-                <div class="flex-grow flex gap-4 overflow-x-auto pb-4 items-start scroll-smooth">
-                    <!-- Column: Pending Review -->
-                    <div class="w-80 shrink-0 flex flex-col bg-gray-50 border border-gray-200 rounded-2xl h-full max-h-full">
-                        <div class="p-4 border-b border-gray-200 shrink-0 flex justify-between items-center bg-white rounded-t-2xl">
-                            <h3 class="text-xs font-bold text-gray-700 uppercase tracking-widest">
-                                <span class="w-2 h-2 inline-block bg-yellow-500 rounded-full mr-2"></span>Pending Review
-                            </h3>
-                            <span class="text-[10px] font-mono text-gray-500" id="count-pending">0</span>
-                        </div>
-                        <div class="p-3 flex-grow overflow-y-auto space-y-3 kanban-col" id="col-Pending Review" ondrop="drop(event, 'Pending Review')" ondragover="allowDrop(event)"></div>
-                    </div>
-
-                    <!-- Column: Approved -->
-                    <div class="w-80 shrink-0 flex flex-col bg-gray-50 border border-gray-200 rounded-2xl h-full max-h-full">
-                        <div class="p-4 border-b border-gray-200 shrink-0 flex justify-between items-center bg-white rounded-t-2xl">
-                            <h3 class="text-xs font-bold text-gray-700 uppercase tracking-widest">
-                                <span class="w-2 h-2 inline-block bg-blue-500 rounded-full mr-2"></span>Approved / Ideation
-                            </h3>
-                            <span class="text-[10px] font-mono text-gray-500" id="count-approved">0</span>
-                        </div>
-                        <div class="p-3 flex-grow overflow-y-auto space-y-3 kanban-col" id="col-Approved" ondrop="drop(event, 'Approved')" ondragover="allowDrop(event)"></div>
-                    </div>
-
-                    <!-- Column: Prototyping -->
-                    <div class="w-80 shrink-0 flex flex-col bg-gray-50 border border-gray-200 rounded-2xl h-full max-h-full">
-                        <div class="p-4 border-b border-gray-200 shrink-0 flex justify-between items-center bg-white rounded-t-2xl">
-                            <h3 class="text-xs font-bold text-gray-700 uppercase tracking-widest">
-                                <span class="w-2 h-2 inline-block bg-purple-500 rounded-full mr-2"></span>Prototyping
-                            </h3>
-                            <span class="text-[10px] font-mono text-gray-500" id="count-prototyping">0</span>
-                        </div>
-                        <div class="p-3 flex-grow overflow-y-auto space-y-3 kanban-col" id="col-Prototyping" ondrop="drop(event, 'Prototyping')" ondragover="allowDrop(event)"></div>
-                    </div>
-
-                    <!-- Column: KSUM Funded -->
-                    <div class="w-80 shrink-0 flex flex-col bg-gray-50 border border-gray-200 rounded-2xl h-full max-h-full">
-                        <div class="p-4 border-b border-gray-200 shrink-0 flex justify-between items-center bg-white rounded-t-2xl">
-                            <h3 class="text-xs font-bold text-gray-700 uppercase tracking-widest">
-                                <span class="w-2 h-2 inline-block bg-orange-500 rounded-full mr-2"></span>KSUM Funded
-                            </h3>
-                            <span class="text-[10px] font-mono text-gray-500" id="count-funded">0</span>
-                        </div>
-                        <div class="p-3 flex-grow overflow-y-auto space-y-3 kanban-col" id="col-Funded" ondrop="drop(event, 'Funded')" ondragover="allowDrop(event)"></div>
-                    </div>
-
-                    <!-- Column: Incubated / Live -->
-                    <div class="w-80 shrink-0 flex flex-col bg-gray-50 border border-gray-200 rounded-2xl h-full max-h-full">
-                        <div class="p-4 border-b border-gray-200 shrink-0 flex justify-between items-center bg-white rounded-t-2xl">
-                            <h3 class="text-xs font-bold text-gray-700 uppercase tracking-widest">
-                                <span class="w-2 h-2 inline-block bg-green-500 rounded-full mr-2"></span>Incubated / Live
-                            </h3>
-                            <span class="text-[10px] font-mono text-gray-500" id="count-incubated">0</span>
-                        </div>
-                        <div class="p-3 flex-grow overflow-y-auto space-y-3 kanban-col" id="col-Incubated" ondrop="drop(event, 'Incubated')" ondragover="allowDrop(event)"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===================== FUNDS & GRANTS SECTION ===================== -->
-            <div id="fundsSection" class="tab-content hidden space-y-6 max-w-6xl mx-auto w-full">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase">Funds Ledger</h2>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="glass-panel p-6 rounded-2xl bg-white border border-gray-200">
-                        <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Total Income</p>
-                        <h3 class="text-3xl font-display font-bold text-theme-primary">₹<span id="fundTotalIncome">0</span></h3>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl bg-white border border-gray-200">
-                        <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Total Expenses</p>
-                        <h3 class="text-3xl font-display font-bold text-red-500">₹<span id="fundTotalExpense">0</span></h3>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl border-l-4 border-green-500 bg-green-50">
-                        <p class="text-green-600 text-[10px] font-bold uppercase tracking-widest mb-1">Balance Remaining</p>
-                        <h3 class="text-3xl font-display font-bold text-green-600">₹<span id="fundBalance">0</span></h3>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-1 glass-panel p-6 h-fit rounded-3xl border border-gray-200">
-                        <h3 class="text-xs font-bold text-gray-500 mb-6 uppercase tracking-widest border-b border-gray-100 pb-4">Log Transaction</h3>
-                        <form id="fundsForm" class="space-y-4">
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Type</label>
-                                <select id="fundType" class="glass-input w-full py-3 px-3 rounded-xl text-sm border border-gray-200">
-                                    <option value="Income">Income (Grant/Sponsor)</option>
-                                    <option value="Expense">Expense (Disbursed/Event)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Amount (₹)</label>
-                                <input type="number" id="fundAmount" class="glass-input w-full py-3 px-3 rounded-xl text-sm border border-gray-200" required>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Description</label>
-                                <input type="text" id="fundDesc" class="glass-input w-full py-3 px-3 rounded-xl text-sm border border-gray-200" placeholder="e.g. KSUM Grant Q1" required>
-                            </div>
-                            <button type="submit" class="w-full btn-primary py-3.5 rounded-xl text-[10px] uppercase font-bold mt-2">Save Record</button>
-                        </form>
-                    </div>
-                    
-                    <div class="lg:col-span-2 glass-panel rounded-3xl overflow-hidden flex flex-col max-h-[500px] border border-gray-200">
-                        <table class="w-full text-left">
-                            <thead class="bg-gray-50 border-b border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500 sticky top-0 z-10">
-                                <tr>
-                                    <th class="px-6 py-4">Date</th>
-                                    <th class="px-6">Description</th>
-                                    <th class="px-6 text-right">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody id="fundsListBody" class="divide-y divide-gray-100 text-sm overflow-y-auto text-gray-700">
-                                <tr>
-                                    <td colspan="3" class="text-center py-8 text-gray-400">Loading ledger...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===================== QUESTS ENGINE SECTION ===================== -->
-            <div id="questsSection" class="tab-content hidden space-y-6 max-w-6xl mx-auto w-full">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase">Gamification Quests</h2>
-                </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-1 glass-panel p-6 h-fit rounded-3xl border border-gray-200">
-                        <h3 class="text-xs font-bold text-gray-500 mb-6 uppercase tracking-widest border-b border-gray-100 pb-4">Create Bounty</h3>
-                        <form id="questForm" class="space-y-4">
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Quest Title</label>
-                                <input type="text" id="questTitle" class="glass-input w-full py-3 px-3 rounded-xl text-sm border border-gray-200" placeholder="e.g. The Hustler" required>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Reward Points</label>
-                                <input type="number" id="questReward" class="glass-input w-full py-3 px-3 rounded-xl text-sm text-yellow-600 font-bold border border-gray-200" placeholder="e.g. 1000" required>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Requirements</label>
-                                <textarea id="questDesc" class="glass-input w-full py-3 px-3 rounded-xl text-sm border border-gray-200" rows="3" placeholder="e.g. Attend 3 events and pitch 1 idea." required></textarea>
-                            </div>
-                            <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 py-3.5 rounded-xl text-white text-[10px] uppercase font-bold mt-2 transition-colors">Publish Quest</button>
-                        </form>
-                    </div>
-                    
-                    <div class="lg:col-span-2 flex flex-col gap-4" id="questsListBody">
-                        <div class="glass-panel p-10 text-center text-gray-400 text-xs font-bold uppercase tracking-widest border border-gray-200">
-                            Loading active quests...
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===================== OFFICIAL REPORTS SECTION ===================== -->
-            <div id="reportsSection" class="tab-content hidden space-y-6 max-w-4xl mx-auto w-full">
-                <div class="glass-panel p-10 rounded-3xl flex flex-col items-center justify-center text-center py-20 border-purple-200 bg-white">
-                    <div class="w-20 h-20 rounded-full bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600 mb-6 shadow-sm">
-                        <i data-lucide="file-bar-chart-2" class="w-10 h-10"></i>
-                    </div>
-                    <h2 class="text-3xl font-display font-bold text-theme-primary tracking-widest uppercase mb-4">Official Reports</h2>
-                    <p class="text-gray-500 font-light max-w-lg mb-10 leading-relaxed text-sm">Automatically generate a beautifully formatted PDF report containing all live platform metrics, user data, financial ledgers, and incubation pipeline statuses for KSUM or University submissions.</p>
-                    
-                    <button onclick="generateKsumReport()" class="btn-primary px-10 py-5 rounded-2xl text-xs uppercase tracking-widest font-bold flex items-center gap-3 shadow-lg">
-                        <i data-lucide="printer" class="w-5 h-5"></i> Generate Comprehensive Report
-                    </button>
-                </div>
-            </div>
-
-            <!-- ===================== FEATURE MANAGER SECTION ===================== -->
-            <div id="featuresSection" class="tab-content hidden space-y-6 max-w-5xl mx-auto w-full">
-                <div class="glass-panel p-8 md:p-10 rounded-3xl border border-gray-200">
-                    <div class="border-b border-gray-100 pb-5 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase mb-2">Feature Manager</h2>
-                        <p class="text-gray-500 text-sm font-light">Draft and deploy new platform features or upcoming announcements.</p>
-                    </div>
-                    
-                    <form id="featureManagerForm" class="space-y-6 bg-gray-50 p-6 rounded-2xl border border-gray-200">
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Feature Title</label>
-                            <input type="text" id="fmTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm border border-gray-200" placeholder="E.g. AI Resume Builder v2" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Feature Description</label>
-                            <textarea id="fmDescription" rows="3" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm border border-gray-200" placeholder="Describe what this feature does..." required></textarea>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Target Audience</label>
-                                <select id="fmTarget" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm border border-gray-200">
-                                    <option value="All Students">All Students</option>
-                                    <option value="ExCom Only">ExCom Only</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Initial Status</label>
-                                <select id="fmStatus" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm text-green-600 font-bold border border-gray-200">
-                                    <option value="Active">Active (Live)</option>
-                                    <option value="Draft" class="text-yellow-600">Draft (Hidden)</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="pt-4 border-t border-gray-200 flex justify-end">
-                            <button type="submit" id="btnSaveFeature" class="btn-primary px-8 py-4 rounded-xl text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
-                                <i data-lucide="blocks" class="w-4 h-4"></i> Deploy Feature
-                            </button>
-                        </div>
-                    </form>
-                    
-                    <div class="mt-6">
-                        <h3 class="text-xs font-bold text-gray-500 mb-4 uppercase border-b border-gray-100 pb-3">Platform Features Configured</h3>
-                        <div id="featuresListBody" class="space-y-3">
-                            <div class="text-center py-6 text-gray-400 text-[10px] uppercase font-bold tracking-widest">Loading...</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===================== INVENTORY SECTION ===================== -->
-            <div id="inventorySection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase">Hardware Assets</h2>
-                </div>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="glass-panel p-6 rounded-2xl flex justify-between items-center border border-gray-200">
-                        <span class="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Total</span>
-                        <span class="text-2xl font-display font-bold text-theme-primary" id="invTotal">0</span>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl flex justify-between items-center border-l-4 border-l-green-500 bg-green-50 border border-gray-200">
-                        <span class="text-green-600/70 text-[10px] font-bold uppercase tracking-widest">Available</span>
-                        <span class="text-2xl font-display font-bold text-green-500" id="invAvail">0</span>
-                    </div>
-                    <div class="glass-panel p-6 rounded-2xl flex justify-between items-center border-l-4 border-l-red-500 bg-red-50 border border-gray-200">
-                        <span class="text-red-600/70 text-[10px] font-bold uppercase tracking-widest">Borrowed</span>
-                        <span class="text-2xl font-display font-bold text-red-500" id="invBorrowed">0</span>
-                    </div>
-                </div>
-                
-                <div class="glass-panel overflow-x-auto w-full border border-gray-200">
-                    <table class="w-full text-left min-w-[600px]">
-                        <thead class="bg-gray-50 border-b border-gray-200 text-[10px] uppercase font-bold text-gray-500">
-                            <tr>
-                                <th class="px-6 py-5">Item Name</th>
-                                <th class="px-6">Category</th>
-                                <th class="px-6">Status</th>
-                                <th class="px-6">Holder</th>
-                                <th class="text-center px-6">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="inventoryListBody" class="divide-y divide-gray-100 text-sm text-gray-700">
-                            <tr><td colspan="5" class="text-center py-6 text-gray-400">Loading inventory...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ===================== LOGS SECTION ===================== -->
-            <div id="logsSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase">System Logs</h2>
-                    <button onclick="printLogs()" class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 px-5 py-3 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm">
-                        <i data-lucide="printer" class="w-4 h-4"></i>
-                        <span class="text-[10px] uppercase tracking-widest font-bold">Print</span>
-                    </button>
-                </div>
-                
-                <div class="glass-panel overflow-x-auto w-full max-h-[600px] overflow-y-auto border border-gray-200">
-                    <table class="w-full text-left min-w-[500px]">
-                        <thead class="bg-gray-50 border-b border-gray-200 text-[10px] uppercase font-bold text-gray-500 sticky top-0 z-10">
-                            <tr>
-                                <th class="px-6 py-5">Timestamp</th>
-                                <th class="px-6">Action</th>
-                                <th class="px-6">Details</th>
-                                <th class="px-6">Admin</th>
-                            </tr>
-                        </thead>
-                        <tbody id="logsListBody" class="divide-y divide-gray-100 text-gray-700 text-sm">
-                            <tr><td colspan="4" class="text-center py-6 text-gray-400">Loading logs...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ===================== EXCOM SECTION ===================== -->
-            <div id="excomSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase">ExCom Tracker</h2>
-                    <button onclick="openExcomAttendanceModal()" class="btn-primary px-6 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold flex items-center gap-2">
-                        <i data-lucide="clipboard-edit" class="w-4 h-4"></i> Log Meeting
-                    </button>
-                </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="glass-panel p-6 border border-gray-200">
-                        <h3 class="text-xs font-bold text-gray-500 mb-6 uppercase tracking-widest border-b border-gray-100 pb-4">Committee Members</h3>
-                        <div id="excomMembersList" class="space-y-2 max-h-80 overflow-y-auto">
-                            <div class="text-center py-4 text-gray-400 text-[10px]">Loading members...</div>
-                        </div>
-                    </div>
-                    
-                    <div class="glass-panel p-6 flex flex-col border border-gray-200">
-                        <h3 class="text-xs font-bold text-gray-500 mb-6 uppercase tracking-widest border-b border-gray-100 pb-4">Recent Meetings</h3>
-                        <div id="excomMeetingsList" class="space-y-3 flex-grow overflow-y-auto">
-                            <div class="text-center py-4 text-gray-400 text-[10px]">Loading meetings...</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-          <!-- ===================== CERTIFICATES SECTION ===================== -->
-<div id="certificatesSection" class="tab-content hidden space-y-6 max-w-4xl mx-auto w-full pt-6">
-    <div class="glass-panel p-8 md:p-10 border border-gray-200 rounded-3xl">
-        <div class="border-b border-gray-100 pb-6 mb-8">
-            <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase">Upload Pre-designed Certificate</h2>
-            <p class="text-gray-500 text-sm font-light mt-1">Upload the completed certificate file specifically designed for a student.</p>
-        </div>
-        
-        <form id="certUploadForm" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Event Name</label>
-                    <input type="text" id="certEventName" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4 text-sm" placeholder="e.g. Protosynth 2026" required>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Date of Issue</label>
-                    <input type="date" id="certDate" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4 text-sm" required>
-                </div>
-            </div>
-            
-            <div>
-                <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Student Full Name</label>
-                <input type="text" id="certStudentName" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4 text-sm" placeholder="Must exactly match what the student will search for" required>
-            </div>
-
-            <div class="mb-8 p-6 border border-gray-200 rounded-2xl bg-gray-50 flex flex-col md:flex-row items-center justify-between gap-4">
-                <div>
-                    <p class="text-sm font-bold text-gray-900 mb-1">Student's Certificate File</p>
-                    <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold" id="certFileName">Upload Image / PDF</p>
-                </div>
-                <label class="btn-light px-6 py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold cursor-pointer transition-colors w-full md:w-auto text-center">
-                    <span>Browse File</span>
-                    <input type="file" id="certFileInput" onchange="window.handleCertFile(event)" class="hidden" accept="image/*,application/pdf" required>
-                </label>
-            </div>
-            
-            <button type="submit" id="certBtn" class="w-full btn-primary py-4 rounded-xl text-xs font-bold uppercase tracking-widest transition-all">
-                Upload & Publish Certificate
-            </button>
-        </form>
-    </div>
-</div>
-
-            <!-- ===================== EX-COM / CORE TEAM SECTION ===================== -->
-            <div id="manageTeamSection" class="tab-content hidden space-y-6 max-w-6xl mx-auto w-full pt-6">
-                <div class="flex flex-col lg:flex-row gap-8">
-                    <!-- Form Side (Add/Edit) -->
-                    <div class="glass-panel p-6 md:p-8 border border-gray-200 rounded-3xl w-full lg:w-1/3 h-fit">
-                        <h2 class="text-xl font-display font-bold text-theme-primary tracking-widest uppercase mb-6" id="excomFormTitle">Add Team Member</h2>
-                        <form id="excomForm" class="space-y-4">
-                            <input type="hidden" id="excomId">
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Full Name</label>
-                                <input type="text" id="excomName" class="glass-input border border-gray-200 w-full rounded-xl py-2.5 px-4 text-sm" required>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Role / Designation</label>
-                                <input type="text" id="excomRole" class="glass-input border border-gray-200 w-full rounded-xl py-2.5 px-4 text-sm" placeholder="e.g. CEO, Developer" required>
-                            </div>
-                            <div>
-                               <div>
-    <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Profile Image</label>
-    <div class="flex items-center gap-3">
-        <label class="bg-blue-50 text-blue-600 px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest cursor-pointer hover:bg-blue-100 transition-colors border border-blue-200 shadow-sm">
-            <span>Browse Image</span>
-            <input type="file" id="excomImageFile" onchange="window.handleExcomFile(event)" class="hidden" accept="image/*">
-        </label>
-        <span id="excomFileName" class="text-xs text-gray-500 font-medium">No file chosen</span>
-    </div>
-    <input type="hidden" id="excomExistingImageUrl">
-</div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Instagram Link</label>
-                                <input type="url" id="excomInsta" class="glass-input border border-gray-200 w-full rounded-xl py-2.5 px-4 text-sm" placeholder="https://instagram.com/... (optional)">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">LinkedIn Link</label>
-                                <input type="url" id="excomLinkedIn" class="glass-input border border-gray-200 w-full rounded-xl py-2.5 px-4 text-sm" placeholder="https://linkedin.com/in/... (optional)">
-                            </div>
-                            <div class="pt-4 flex gap-2">
-                                <button type="button" onclick="window.resetExcomForm()" class="flex-1 bg-gray-100 py-3 rounded-xl text-gray-600 text-[10px] uppercase font-bold hover:bg-gray-200 transition-colors">Clear</button>
-                                <button type="submit" id="excomSubmitBtn" class="flex-1 btn-primary py-3 rounded-xl text-[10px] uppercase font-bold">Save Member</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- List Side -->
-                    <div class="glass-panel border border-gray-200 rounded-3xl w-full lg:w-2/3 overflow-hidden bg-white">
-                        <div class="p-6 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-                            <h2 class="text-lg font-display font-bold text-theme-primary tracking-widest uppercase">Current Ex-Com</h2>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left">
-                                <thead class="bg-gray-50/50 border-b border-gray-100 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500">
-                                    <tr>
-                                        <th class="px-6 py-4">Profile</th>
-                                        <th class="px-6 py-4">Name & Role</th>
-                                        <th class="px-6 py-4 text-center">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="excomListBody" class="divide-y divide-gray-100 text-sm font-light text-gray-800">
-                                    <tr><td colspan="3" class="text-center py-8 text-gray-400 text-xs tracking-widest uppercase font-bold">Loading team...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- ===================== CONTENT PUBLISHING SECTIONS ===================== -->
-            
-            <div id="notificationsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
-                <div class="glass-panel p-8 md:p-10 border border-gray-200">
-                    <div class="border-b border-gray-100 pb-5 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase mb-2">Send In-App Alert</h2>
-                        <p class="text-gray-500 text-sm font-light">Pushes a notification to the dashboard <span class="text-green-600 font-bold">and sends a WhatsApp broadcast</span>.</p>
-                    </div>
-                    <form id="pushAlertForm" class="space-y-6">
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Alert Title</label>
-                            <input type="text" id="alertTitle" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. Meeting Room Changed" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Category</label>
-                            <select id="alertCategory" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4 text-sm">
-                                <option value="Alert">Urgent Alert</option>
-                                <option value="Event">Event Update</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest">Message Content</label>
-                            <textarea id="alertContent" rows="4" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4 text-sm" required></textarea>
-                        </div>
-                        <div class="pt-4">
-                            <button type="submit" class="w-full btn-light py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-green-200 hover:border-green-400">
-                                <i class="fab fa-whatsapp mr-2 text-green-500"></i> Broadcast via WhatsApp
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div id="announcementsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
-                <div class="glass-panel p-8 md:p-10 border border-gray-200">
-                    <div class="border-b border-gray-100 pb-5 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase mb-2">Post Circular</h2>
-                    </div>
-                    <form id="announcementForm" class="space-y-6">
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Subject</label>
-                            <input type="text" id="annTitle" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Details</label>
-                            <textarea id="annContent" rows="4" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4" required></textarea>
-                        </div>
-                        <button type="submit" class="w-full btn-primary py-4 rounded-xl text-[10px] font-bold uppercase">
-                            Publish Circular
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <div id="newsSection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
-                <div class="glass-panel p-8 md:p-10 border border-gray-200">
-                    <div class="border-b border-gray-100 pb-5 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase">Post News</h2>
-                    </div>
-                    <form id="newsForm" class="space-y-6">
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Headline</label>
-                            <input type="text" id="newsTitle" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Content</label>
-                            <textarea id="newsContent" rows="5" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4" required></textarea>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Date</label>
-                                <input type="date" id="newsDate" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4" required>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Cover Image</label>
-                                <label class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4 text-center cursor-pointer block border-dashed hover:bg-gray-50">
-                                    <span id="newsFileName" class="text-gray-500">Browse File</span>
-                                    <input type="file" id="newsImageInput" class="hidden" onchange="handleNewsImage(event)">
-                                </label>
-                            </div>
-                        </div>
-                        <button type="submit" id="postNewsBtn" class="w-full btn-primary py-4 rounded-xl text-[10px] font-bold uppercase">
-                            Publish News
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <div id="eventFormsSection" class="tab-content hidden max-w-3xl mx-auto space-y-6 w-full">
-                <div class="glass-panel p-8 md:p-10 border border-gray-200">
-                    <div class="border-b border-gray-100 pb-5 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase mb-2">Form Builder</h2>
-                    </div>
-                    <form id="formBuilderForm" class="space-y-8">
-                        <div class="space-y-6 bg-gray-50 p-6 rounded-2xl border border-gray-200">
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Form Title</label>
-                                <input type="text" id="formTitle" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4 text-sm" placeholder="E.g. Hackathon Registration" required>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Description</label>
-                                <textarea id="formDescription" rows="2" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4 text-sm"></textarea>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-widest border-b border-gray-100 pb-2">Form Questions</h3>
-                            <div id="questionsContainer" class="space-y-4"></div>
-                            <button type="button" onclick="addQuestionField()" class="mt-4 w-full border-2 border-dashed border-gray-300 text-gray-500 hover:text-theme-primary hover:border-theme-primary py-4 rounded-2xl text-xs uppercase flex items-center justify-center gap-2 transition-colors">
-                                <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Question
-                            </button>
-                        </div>
-                        <div class="border-t border-gray-200 pt-8">
-                            <button type="submit" id="saveFormBtn" class="w-full btn-primary py-4 rounded-xl text-xs font-bold uppercase">Publish Form</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="glass-panel p-6 border border-gray-200">
-                    <h3 class="text-xs font-bold text-gray-500 mb-4 uppercase border-b border-gray-100 pb-3">Active Forms List</h3>
-                    <div id="activeFormsList" class="space-y-3">
-                        <div class="text-center py-6 text-gray-400 text-[10px]">Loading forms...</div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="gallerySection" class="tab-content hidden max-w-2xl mx-auto space-y-6 w-full">
-                <div class="glass-panel p-8 md:p-10 border border-gray-200">
-                    <div class="border-b border-gray-100 pb-5 mb-8">
-                        <h2 class="text-2xl font-display font-bold text-theme-primary tracking-widest uppercase">Upload Gallery</h2>
-                    </div>
-                    <form id="galleryForm" class="space-y-6">
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Album Title</label>
-                            <input type="text" id="galleryTitle" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4" required>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Date</label>
-                                <input type="date" id="galleryDate" class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4" required>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Batch Upload</label>
-                                <label class="glass-input border border-gray-200 w-full rounded-xl py-3.5 px-4 text-center cursor-pointer block border-dashed hover:bg-gray-50">
-                                    <span id="galleryFileName" class="text-gray-500">Select Photos</span>
-                                    <input type="file" id="galleryImageInput" class="hidden" multiple accept="image/*" onchange="handleGalleryImages(event)">
-                                </label>
-                            </div>
-                        </div>
-                        <button type="submit" id="postGalleryBtn" class="w-full btn-primary py-4 rounded-xl text-[10px] font-bold uppercase">
-                            Upload Photos
-                        </button>
-                    </form>
-                </div>
-            </div>
-<!-- ===================== ADD TASK MODAL ===================== -->
-            <div id="taskModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4 transition-opacity opacity-0 duration-300">
-                <div class="bg-white w-full max-w-md p-8 rounded-[2rem] shadow-2xl border border-gray-100 transform scale-95 transition-transform duration-300" id="taskModalContent">
-                    <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
-                        <h2 class="text-lg font-bold text-theme-primary uppercase tracking-widest">Assign New Duty</h2>
-                        <button onclick="window.closeTaskModal()" class="w-8 h-8 bg-gray-50 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
-                    </div>
-                    
-                    <form id="taskForm" class="space-y-4">
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Task Title</label>
-                            <input type="text" id="taskTitle" class="glass-input border border-gray-200 w-full rounded-xl py-3 px-4 text-sm" placeholder="What needs to be done?" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Assign To (Name)</label>
-                            <input type="text" id="taskAssignee" class="glass-input border border-gray-200 w-full rounded-xl py-3 px-4 text-sm" placeholder="e.g. Manna" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Priority</label>
-                            <select id="taskPriority" class="glass-input border border-gray-200 w-full rounded-xl py-3 px-4 text-sm outline-none" required>
-                                <option value="low">Low Priority</option>
-                                <option value="medium" selected>Medium Priority</option>
-                                <option value="high">High Priority</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Description</label>
-                            <textarea id="taskDesc" rows="3" class="glass-input border border-gray-200 w-full rounded-xl py-3 px-4 text-sm resize-none" placeholder="Provide details about the duty..." required></textarea>
-                        </div>
-                        
-                        <div class="pt-4 flex gap-3">
-                            <button type="button" onclick="window.closeTaskModal()" class="flex-1 bg-gray-100 py-3 rounded-xl text-gray-600 text-[10px] uppercase font-bold hover:bg-gray-200 transition-colors">Cancel</button>
-                            <button type="submit" id="taskSubmitBtn" class="flex-1 btn-primary py-3 rounded-xl text-[10px] uppercase font-bold">Assign Duty</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            
-        </main>
-    </div>
-
-    <!-- UI MODALS -->
-    <!-- Points Modal -->
-    <div id="pointsModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
-        <div id="pointsModalContainer" class="glass-panel w-full max-w-md p-8 rounded-3xl border-gray-200 bg-white shadow-2xl">
-            <h2 class="text-xl font-bold text-gray-900 mb-6 uppercase tracking-widest text-center" id="pointsModalTitle">Manage Points</h2>
-            <form id="managePointsForm" class="space-y-4">
-                <input type="hidden" id="pointsUserId">
-                <input type="hidden" id="pointsActionType">
-                <div class="text-center font-bold text-lg text-blue-600 mb-4" id="pointsUserNameDisplay">Student Name</div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Amount</label>
-                    <input type="number" id="pointsAmount" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required placeholder="e.g. 50">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Reason / Description</label>
-                    <input type="text" id="pointsReason" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required placeholder="e.g. Hackathon Winner">
-                </div>
-                <div class="flex gap-3 pt-2">
-                    <button type="button" onclick="document.getElementById('pointsModal').classList.add('hidden')" class="flex-1 bg-gray-100 hover:bg-gray-200 py-3.5 rounded-xl text-gray-600 font-bold text-[10px] uppercase transition-colors">Cancel</button>
-                    <button type="submit" id="submitPointsBtn" class="flex-1 btn-primary py-3.5 rounded-xl text-white font-bold text-[10px] uppercase transition-colors shadow-lg">Submit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Add User Modal -->
-    <div id="addUserModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-8 rounded-3xl border-gray-200 bg-white shadow-2xl">
-            <h2 class="text-xl font-bold text-gray-900 mb-6 uppercase tracking-widest text-center">Add New User</h2>
-            <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
-                <button id="tabCreateNew" onclick="window.switchAddMode('create')" class="flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg bg-blue-50 text-blue-600 transition-all">Create New</button>
-                <button id="tabSyncExisting" onclick="window.switchAddMode('sync')" class="flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg text-gray-400 hover:text-gray-900 transition-all">Sync Existing</button>
-            </div>
-            <form id="adminAddUserForm" class="space-y-4">
-                <input type="hidden" id="addUserMode" value="create">
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Full Name</label>
-                    <input type="text" id="newUserName" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Email Address</label>
-                    <input type="email" id="newUserEmail" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required>
-                </div>
-                <div id="passwordFieldGroup">
-                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Password</label>
-                    <input type="password" id="newUserPassword" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required>
-                </div>
-                <div id="uidFieldGroup" class="hidden">
-                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Firebase UID (Optional)</label>
-                    <input type="text" id="newUserUid" class="glass-input w-full px-4 py-3 rounded-xl text-sm">
-                </div>
-                <div class="flex gap-3 pt-2">
-                    <button type="button" onclick="window.toggleAddUserModal(false)" class="flex-1 bg-gray-100 hover:bg-gray-200 py-3.5 rounded-xl text-gray-600 font-bold text-[10px] uppercase transition-colors">Cancel</button>
-                    <button type="submit" id="submitAddUserBtn" class="flex-1 btn-primary py-3.5 rounded-xl text-white font-bold text-[10px] uppercase transition-colors shadow-lg">Add User</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Edit User Modal -->
-    <div id="editUserModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-8 rounded-3xl border-gray-200 bg-white shadow-2xl">
-            <h2 class="text-xl font-bold text-gray-900 mb-6 uppercase tracking-widest text-center">Edit Role</h2>
-            <form id="editUserForm" class="space-y-4">
-                <input type="hidden" id="editUserId">
-                <div class="text-center font-bold text-lg text-blue-600 mb-4" id="editUserName">Student Name</div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Role</label>
-                    <select id="editUserRole" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required>
-                        <option value="student">Student</option>
-                        <option value="excom">ExCom</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <div class="flex gap-3 pt-2">
-                    <button type="button" onclick="window.toggleEditUserModal(false)" class="flex-1 bg-gray-100 hover:bg-gray-200 py-3.5 rounded-xl text-gray-600 font-bold text-[10px] uppercase transition-colors">Cancel</button>
-                    <button type="submit" class="flex-1 btn-primary py-3.5 rounded-xl text-white font-bold text-[10px] uppercase transition-colors shadow-lg">Update</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Edit Phone Modal -->
-    <div id="editPhoneModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-8 rounded-3xl border-gray-200 bg-white shadow-2xl">
-            <h2 class="text-xl font-bold text-gray-900 mb-6 uppercase tracking-widest text-center">Update Contact</h2>
-            <form id="editPhoneForm" class="space-y-4">
-                <input type="hidden" id="editPhoneUserId">
-                <div class="text-center font-bold text-lg text-blue-600 mb-4" id="editPhoneUserName">Student Name</div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Phone Number (with Country Code)</label>
-                    <input type="tel" id="editPhoneInput" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required placeholder="+91...">
-                </div>
-                <div class="flex gap-3 pt-2">
-                    <button type="button" onclick="window.toggleEditPhoneModal(false)" class="flex-1 bg-gray-100 hover:bg-gray-200 py-3.5 rounded-xl text-gray-600 font-bold text-[10px] uppercase transition-colors">Cancel</button>
-                    <button type="submit" class="flex-1 btn-primary py-3.5 rounded-xl text-white font-bold text-[10px] uppercase transition-colors shadow-lg">Save Contact</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- ExCom Attendance Modal -->
-    <div id="excomModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-2xl p-8 rounded-3xl border-gray-200 bg-white shadow-2xl max-h-[90vh] flex flex-col">
-            <h2 class="text-xl font-bold text-gray-900 mb-6 uppercase tracking-widest text-center shrink-0">Log Meeting Minutes</h2>
-            <div class="flex gap-4 mb-6 shrink-0">
-                <div class="flex-1">
-                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Meeting Title</label>
-                    <input type="text" id="excomMeetingTitle" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required>
-                </div>
-                <div class="flex-1">
-                    <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-widest">Date</label>
-                    <input type="date" id="excomMeetingDate" class="glass-input w-full px-4 py-3 rounded-xl text-sm" required>
-                </div>
-            </div>
-            <div class="overflow-y-auto flex-grow mb-6 border border-gray-100 rounded-xl">
-                <table class="w-full text-left">
-                    <thead class="bg-gray-50 text-[10px] uppercase tracking-widest font-bold text-gray-500 sticky top-0 z-10">
-                        <tr><th class="px-6 py-3 w-40 text-center">Status</th><th class="px-6 py-3">Member Name</th></tr>
-                    </thead>
-                    <tbody id="excomAttendanceList" class="divide-y divide-gray-100 text-sm text-gray-700">
-                        <!-- Populated dynamically -->
-                    </tbody>
-                </table>
-            </div>
-            <div class="flex gap-3 shrink-0">
-                <button type="button" onclick="document.getElementById('excomModal').classList.add('hidden')" class="flex-1 bg-gray-100 hover:bg-gray-200 py-4 rounded-xl text-gray-600 font-bold text-[10px] uppercase transition-colors">Cancel</button>
-                <button type="button" id="saveExcomBtn" onclick="window.submitExcomAttendance()" class="flex-1 btn-primary py-4 rounded-xl text-white font-bold text-[10px] uppercase transition-colors shadow-lg">Save Log</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- UI Scripts -->
-    <script>
-                    // Toast Notification Function
-window.showToast = (msg, type = 'info') => {
-    const toast = document.getElementById('customToast');
-    if(!toast) { alert(msg); return; } // Fallback if UI is missing
-    toast.textContent = msg;
-    toast.className = `fixed bottom-4 right-4 z-[9999] px-6 py-3 rounded-xl text-sm font-bold shadow-xl transition-opacity duration-300 ${type === 'error' ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`;
-    toast.classList.remove('hidden');
-    setTimeout(() => { toast.classList.add('hidden'); }, 3000);
-};
-// ==========================================
-        // TASK MODAL OPEN & CLOSE LOGIC
-        // ==========================================
-        window.openTaskModal = () => {
-            const form = document.getElementById('taskForm');
-            if(form) form.reset();
-            
-            const modal = document.getElementById('addTaskModal') || document.getElementById('taskModal');
-            if(modal) {
-                modal.classList.remove('hidden');
-                setTimeout(() => { modal.classList.remove('opacity-0'); }, 10);
-            }
-        };
-
-        window.closeTaskModal = () => {
-            const modal = document.getElementById('addTaskModal') || document.getElementById('taskModal');
-            if(modal) {
-                modal.classList.add('opacity-0');
-                setTimeout(() => modal.classList.add('hidden'), 300);
-            }
-        };
-// Custom Confirm Function
-window.customConfirm = (msg) => {
-    return new Promise((resolve) => {
-        const modal = document.getElementById('customConfirmModal');
-        if(!modal) { resolve(confirm(msg)); return; } // Fallback if UI is missing
-        document.getElementById('customConfirmMsg').textContent = msg;
-        modal.classList.remove('hidden');
-        document.getElementById('customConfirmOk').onclick = () => { modal.classList.add('hidden'); resolve(true); };
-        document.getElementById('customConfirmCancel').onclick = () => { modal.classList.add('hidden'); resolve(false); };
-    });
-};
-        let formBuilderFields = [
-
-            { id: generateId(), label: 'Full Name', type: 'text', required: true, options: [] },
-            { id: generateId(), label: 'Email Address', type: 'email', required: true, options: [] },
-            { id: generateId(), label: 'Mobile Number', type: 'tel', required: true, options: [] }
-        ];
-        
-        let eventQrInstance = null;
-
-        window.showToast = (msg, type = 'info') => {
-            const toast = document.getElementById('customToast');
-            if(!toast) return;
-            toast.textContent = msg;
-            toast.className = `fixed bottom-4 right-4 z-[9999] px-6 py-3 rounded-xl text-sm font-bold shadow-xl transition-opacity duration-300 flex items-center gap-2 ${type === 'error' ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`;
-            toast.classList.remove('hidden');
-            setTimeout(() => { toast.classList.add('hidden'); }, 3000);
-        };
-
-        window.customConfirm = (msg) => {
-            return new Promise((resolve) => {
-                const modal = document.getElementById('customConfirmModal');
-                if(!modal) { resolve(confirm(msg)); return; }
-                document.getElementById('customConfirmMsg').textContent = msg;
-                modal.classList.remove('hidden');
-
-                document.getElementById('customConfirmOk').onclick = () => {
-                    modal.classList.add('hidden');
-                    resolve(true);
-                };
-                document.getElementById('customConfirmCancel').onclick = () => {
-                    modal.classList.add('hidden');
-                    resolve(false);
-                };
-            });
-        };
-
-        window.openGlobalScanner = (type) => {
-            window.showToast("Scanner initialized: " + type, "info");
-        };
-
-        window.closeGlobalScanner = () => {
-            console.log("Scanner closed");
-        };
-
-        document.addEventListener('DOMContentLoaded', () => { 
-            document.getElementById('mobile-menu-toggle')?.addEventListener('click', window.toggleMobileSidebar); 
-            lucide.createIcons();
-            Chart.defaults.color = '#64748b'; 
-            Chart.defaults.borderColor = '#e2e8f0'; 
-            Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
-            window.renderFormBuilderFields();
-        });
-
-        window.toggleMobileSidebar = function() { 
-            const menu = document.getElementById('mobile-sidebar'); 
-            const overlay = document.getElementById('mobile-sidebar-overlay'); 
-            
-            if (menu && menu.classList.contains('-translate-x-full')) { 
-                menu.classList.remove('-translate-x-full'); 
-                if(overlay) overlay.classList.remove('hidden'); 
-            } else if(menu) { 
-                menu.classList.add('-translate-x-full'); 
-                if(overlay) overlay.classList.add('hidden'); 
-            } 
-        };
-
-        window.showTab = (t) => { 
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); 
-            const sec = document.getElementById(t+'Section'); 
-            if(sec) sec.classList.remove('hidden'); 
-            
-            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active')); 
-            const activeDesktop = document.getElementById('nav-'+t); 
-            if(activeDesktop) activeDesktop.classList.add('active'); 
-            
-            let title = t.charAt(0).toUpperCase() + t.slice(1); 
-            if(t === 'users') title = "User Directory"; 
-            if(t === 'points') title = "Innovation Points";
-            if(t === 'pipeline') title = "Startup Pipeline";
-            if(t === 'funds') title = "Funds & Grants";
-            if(t === 'quests') title = "Quests Engine";
-            if(t === 'reports') title = "Official Reports";
-            if(t === 'rewards') title = "Ticket Orders"; 
-            if(t === 'features') title = "Feature Manager";
-            if(t === 'eventForms') title = "Forms"; 
-            if(t === 'adminTasks') title = "ExCom Task Board";
-            if(t === 'adminMedia') title = "Media Drop";
-            if(t === 'adminMentorship') title = "Mentorship Logs";
-            if(t === 'adminDocs') title = "Submitted Documents";
-            if(t === 'manageEvent') title = "Latest Event CMS";
-            if(t === 'manageTeam') title = "Core Team CMS";
-            
-            document.getElementById('headerTitle').textContent = title; 
-            
-            const menu = document.getElementById('mobile-sidebar'); 
-            if(menu && !menu.classList.contains('-translate-x-full')) { window.toggleMobileSidebar(); } 
-            if(t !== 'scanner' && window.html5QrcodeScanner) { window.closeGlobalScanner(); } 
-        };
-
-        window.toggleAddUserModal = (s) => { 
-            const m = document.getElementById('addUserModal');
-            if(m) {
-                m.classList.toggle('hidden', !s); 
-                if(s && window.switchAddMode) window.switchAddMode('create'); 
-            }
-        };
-        
-        window.toggleEditUserModal = (s) => { const m = document.getElementById('editUserModal'); if(m) m.classList.toggle('hidden', !s); };
-        window.toggleEditPhoneModal = (s) => { const m = document.getElementById('editPhoneModal'); if(m) m.classList.toggle('hidden', !s); };
-        window.toggleAttCheck = (id) => { const c = document.getElementById('att-'+id); if(c) c.checked = !c.checked; };
-        
-        window.switchAddMode = (mode) => { 
-            const m = document.getElementById('addUserMode');
-            if(!m) return;
-            m.value = mode; 
-            if(mode === 'create') {
-                document.getElementById('tabCreateNew').className = "flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg bg-blue-50 text-blue-600 transition-all";
-                document.getElementById('tabSyncExisting').className = "flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg text-gray-400 hover:text-gray-900 transition-all";
-                document.getElementById('passwordFieldGroup').classList.remove('hidden'); 
-                
-                document.getElementById('uidFieldGroup').classList.add('hidden');
-                document.getElementById('newUserPassword').required = true; 
-                document.getElementById('newUserUid').required = false;
-            } else {
-                document.getElementById('tabSyncExisting').className = "flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg bg-blue-50 text-blue-600 transition-all";
-                document.getElementById('tabCreateNew').className = "flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-lg text-gray-400 hover:text-gray-900 transition-all";
-                document.getElementById('passwordFieldGroup').classList.add('hidden'); 
-                document.getElementById('uidFieldGroup').classList.remove('hidden');
-                document.getElementById('newUserPassword').required = false; 
-                document.getElementById('newUserUid').required = true;
-            }
-        };
-
-        window.filterUsers = () => { 
-            const input = document.getElementById("userSearchInput").value.toUpperCase(); 
-            const trs = document.getElementById("userListBody").getElementsByTagName("tr"); 
-            for (let i = 0; i < trs.length; i++) { 
-                const tdName = trs[i].getElementsByTagName("td")[1]; 
-                const tdEmail = trs[i].getElementsByTagName("td")[2]; 
-                if (tdName || tdEmail) { 
-                    const txtValue = (tdName.textContent || tdName.innerText) + (tdEmail.textContent || tdEmail.innerText); 
-                    trs[i].style.display = txtValue.toUpperCase().indexOf(input) > -1 ? "" : "none"; 
-                } 
-            } 
-        };
-
-        window.filterPoints = () => { 
-            const input = document.getElementById("pointsSearchInput").value.toUpperCase(); 
-            const trs = document.getElementById("pointsListBody").getElementsByTagName("tr"); 
-            for (let i = 0; i < trs.length; i++) { 
-                const tdName = trs[i].getElementsByTagName("td")[0]; 
-                const tdEmail = trs[i].getElementsByTagName("td")[1]; 
-                if (tdName || tdEmail) { 
-                    const txtValue = (tdName.textContent || tdName.innerText) + (tdEmail.textContent || tdEmail.innerText); 
-                    trs[i].style.display = txtValue.toUpperCase().indexOf(input) > -1 ? "" : "none"; 
-                } 
-            } 
-        };
-
-        window.preparePointsAction = (id, name, actionType) => { 
-            document.getElementById('pointsUserId').value = id; 
-            document.getElementById('pointsUserNameDisplay').textContent = name; 
-            document.getElementById('pointsAmount').value = ''; 
-            document.getElementById('pointsReason').value = ''; 
-            document.getElementById('pointsActionType').value = actionType;
-            
-            const btn = document.getElementById('submitPointsBtn');
-            const container = document.getElementById('pointsModalContainer');
-            const title = document.getElementById('pointsModalTitle');
-            
-            if(!title || !btn || !container) return; // if modal is missing in DOM
-            
-            if(actionType === 'add') {
-                title.innerHTML = '<span class="text-yellow-600">Award</span> Points';
-                btn.className = "flex-1 bg-yellow-500 hover:bg-yellow-600 py-3.5 rounded-xl text-white font-bold text-[10px] uppercase transition-colors shadow-lg";
-                btn.textContent = "Award Points";
-                container.className = "glass-panel w-full max-w-md p-8 rounded-3xl border-yellow-200 bg-white";
-            } else {
-                title.innerHTML = '<span class="text-red-600">Deduct</span> Points';
-                btn.className = "flex-1 bg-red-500 hover:bg-red-600 py-3.5 rounded-xl text-white font-bold text-[10px] uppercase transition-colors shadow-lg";
-                btn.textContent = "Deduct Points";
-                container.className = "glass-panel w-full max-w-md p-8 rounded-3xl border-red-200 bg-white";
-            }
-            
-            document.getElementById('pointsModal').classList.remove('hidden'); 
-        };
-
-        window.openEditPhone = (id, name, currentPhone) => {
-            const m = document.getElementById('editPhoneUserId');
-            if(!m) return;
-            m.value = id;
-            document.getElementById('editPhoneUserName').textContent = name;
-            document.getElementById('editPhoneInput').value = currentPhone && currentPhone !== 'No Phone' ? currentPhone : '';
-            toggleEditPhoneModal(true);
-        }
-
-        // KANBAN DRAG & DROP LOGIC
-        window.drag = (ev) => { 
-            ev.dataTransfer.setData("text", ev.target.id); 
-        }
-        
-        window.allowDrop = (ev) => { 
-            ev.preventDefault(); 
-            ev.target.closest('.kanban-col').classList.add('drag-over'); 
-        }
-        
-        window.drop = async (ev, newStatus) => {
-            ev.preventDefault();
-            document.querySelectorAll('.kanban-col').forEach(c => c.classList.remove('drag-over'));
-            
-            var data = ev.dataTransfer.getData("text");
-            var el = document.getElementById(data);
-            if(!el) return;
-            
-            const targetCol = ev.target.closest('.kanban-col');
-            if(targetCol) {
-                targetCol.appendChild(el);
-                const projectId = data.replace('card-', '');
-                try {
-                    await window.updateKanbanStatus(projectId, newStatus);
-                } catch(e) { 
-                    window.showToast("Failed to update status: " + e.message, "error"); 
-                }
-            }
-        }
-        
-        // EVENT QR GENERATOR
-        window.generateEventQR = () => {
-            const eventName = document.getElementById('attendanceEventName').value.trim();
-            const date = document.getElementById('attendanceDate').value;
-            
-            if(!eventName || !date) {
-                window.showToast("Please enter the Event Name and Date first.", "error");
-                return;
-            }
-            
-            // Generate simple popup
-            const overlay = document.getElementById('imagePopup') || document.createElement('div');
-            overlay.className = 'fixed inset-0 bg-gray-900/80 backdrop-blur-sm z-[9999] flex items-center justify-center';
-            overlay.onclick = (e) => { if(e.target===overlay) overlay.remove(); }
-            
-            overlay.innerHTML = `
-                <div class="bg-white p-8 rounded-3xl text-center shadow-2xl relative w-full max-w-sm m-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-900">${eventName}</h3>
-                    <p class="text-sm text-gray-500 mb-6">${date}</p>
-                    <div id="event-qr-container" class="mx-auto flex justify-center mb-6 bg-white p-4 rounded-xl border border-gray-100 inline-block"></div>
-                    <button class="w-full btn-light py-3 rounded-xl font-bold uppercase tracking-widest text-[10px]" onclick="this.closest('.fixed').remove()">Close</button>
-                </div>
-            `;
-            if(!document.getElementById('imagePopup')) document.body.appendChild(overlay);
-            
-            const qrData = JSON.stringify({ action: 'mark_attendance', eventName: eventName, date: date, ref: Date.now() });
-            
-            new QRCode(document.getElementById('event-qr-container'), {
-                text: qrData, width: 200, height: 200, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H
-            });
-        };
-
-        // FEATURE GENERATORS
-        window.generateKsumReport = () => {
-            const printWin = window.open('', '_blank');
-            printWin.document.write(`
-                <html>
-                <head>
-                    <title>KSUM Official Report</title>
-                    <style>
-                        body{font-family:'Segoe UI', sans-serif; padding:40px; line-height:1.6; color:#111;} 
-                        h1{color:#4f46e5; text-align:center; text-transform:uppercase; letter-spacing:2px;}
-                        h2{color:#333; border-bottom:2px solid #ccc; padding-bottom:5px; margin-top:30px;} 
-                        .stat-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px; background:#f8fafc; padding:20px; border-radius:10px; border:1px solid #e2e8f0;}
-                        .stat-box{text-align:center;}
-                        .stat-val{font-size:24px; font-weight:bold; color:#4f46e5;}
-                        table{width:100%; border-collapse:collapse; margin-top:15px;}
-                        th,td{border:1px solid #ccc; padding:10px; text-align:left; font-size:14px;}
-                        th{background:#f1f5f9;}
-                    </style>
-                </head>
-                <body>
-                    <h1>MET'S IEDC Innovation Report</h1>
-                    <p style="text-align:center;">Date Generated: <strong>${new Date().toLocaleDateString()}</strong></p>
-                    
-                    <h2>1. Executive Summary</h2>
-                    <div class="stat-grid">
-                        <div class="stat-box"><div class="stat-val">${window.allUsersData ? window.allUsersData.length : 0}</div>Total Innovators Enrolled</div>
-                        <div class="stat-box"><div class="stat-val">${window.projectsData ? window.projectsData.length : 0}</div>Total Projects Pitched</div>
-                        <div class="stat-box"><div class="stat-val">₹${window.fundsBalance || 0}</div>Current Funds Balance</div>
-                        <div class="stat-box"><div class="stat-val">${document.getElementById('invTotal') ? document.getElementById('invTotal').innerText : 0}</div>Hardware Assets in Lab</div>
-                    </div>
-
-                    <h2>2. Financial Ledger Overview</h2>
-                    <table>
-                        <thead>
-                            <tr><th>Date</th><th>Type</th><th>Description</th><th>Amount</th></tr>
-                        </thead>
-                        <tbody>
-                            ${window.fundsData ? window.fundsData.slice(0, 10).map(f => `<tr><td>${new Date(f.timestamp).toLocaleDateString()}</td><td>${f.type}</td><td>${f.desc}</td><td>₹${f.amount}</td></tr>`).join('') : ''}
-                        </tbody>
-                    </table>
-
-                    <h2>3. Active Incubation Pipeline</h2>
-                    <table>
-                        <thead>
-                            <tr><th>Project Name</th><th>Status</th><th>Tech Domain</th></tr>
-                        </thead>
-                        <tbody>
-                            ${window.projectsData ? window.projectsData.filter(p => p.status !== 'Rejected').slice(0, 15).map(p => `<tr><td>${p.title}</td><td>${p.status}</td><td>${p.tech || 'Tech'}</td></tr>`).join('') : ''}
-                        </tbody>
-                    </table>
-                    
-                    <div style="margin-top:50px; text-align:center; color:#666; font-size:12px;">
-                        Report generated automatically via MET'S IEDC Admin OS.
-                    </div>
-                    <script>setTimeout(()=>window.print(), 1000);<\/script>
-                </body>
-                </html>
-            `);
-            printWin.document.close();
-        }
-
-        window.generateIdCards = () => {
-            const checked = document.querySelectorAll('.user-select-cb:checked');
-            if(checked.length === 0) return window.showToast("Select at least one student from the table.", "error");
-            
-            const printWin = window.open('', '_blank');
-            let cardsHtml = '';
-            
-            checked.forEach(cb => {
-                const u = window.allUsersData.find(x => x.id === cb.value);
-                if(!u) return;
-                const safeName = u.name.split(' ')[0] + (u.name.split(' ')[1] ? ' ' + u.name.split(' ')[1][0] + '.' : '');
-                
-                cardsHtml += `
-                    <div style="width:240px; height:380px; border:2px solid #000; border-radius:15px; padding:20px; text-align:center; display:inline-flex; flex-direction:column; justify-content:space-between; margin:10px; font-family:sans-serif; page-break-inside: avoid; background:white;">
-                        <div>
-                            <h2 style="margin:0; color:#2563eb; font-size:22px; text-transform:uppercase; letter-spacing:1px;">MET'S IEDC</h2>
-                            <h4 style="margin:5px 0 20px 0; color:#555; font-size:10px; letter-spacing:2px; text-transform:uppercase;">Innovation Hub</h4>
-                        </div>
-                        <div style="margin:0 auto;">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${u.id}" style="width:120px; height:120px; border:4px solid #fff; box-shadow:0 0 10px rgba(0,0,0,0.1); border-radius:10px;">
-                        </div>
-                        <div>
-                            <h2 style="margin:15px 0 5px 0; font-size:18px;">${safeName}</h2>
-                            <p style="margin:0; color:#2563eb; text-transform:uppercase; font-size:10px; font-weight:bold; letter-spacing:1px;">${u.role || 'Student'}</p>
-                            <p style="margin:10px 0 0 0; font-size:8px; color:#888; font-family:monospace;">ID: ${u.id.substring(0,8)}...</p>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            printWin.document.write(`
-                <html>
-                <head><title>Print ID Cards</title></head>
-                <body style="background:#f1f5f9; padding:20px;">
-                    <div style="display:flex; flex-wrap:wrap; justify-content:center; max-width:900px; margin:0 auto;">
-                        ${cardsHtml}
-                    </div>
-                    <script>setTimeout(()=>window.print(), 1500);<\/script>
-                </body>
-                </html>
-            `);
-            printWin.document.close();
-            checked.forEach(cb => cb.checked = false);
-        }
-
-        window.printLogs = () => { 
-            const logsTableContent = document.getElementById('logsListBody').innerHTML; 
-            if (!logsTableContent || logsTableContent.trim() === '') { window.showToast("No logs available.", "error"); return; } 
-            
-            const printWindow = window.open('', '_blank'); 
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>System Logs</title>
-                    <style>
-                        body{font-family:sans-serif;padding:40px;}
-                        table{width:100%;border-collapse:collapse;font-size:12px;}
-                        th,td{border:1px solid #ccc;padding:8px;text-align:left;}
-                        th{background:#eee;}
-                    </style>
-                </head>
-                <body>
-                    <h2>System Logs</h2>
-                    <table>
-                        <thead>
-                            <tr><th>Time</th><th>Action</th><th>Details</th><th>Admin</th></tr>
-                        </thead>
-                        <tbody>
-                            ${logsTableContent}
-                        </tbody>
-                    </table>
-                    <script>window.onload=()=>{window.print();setTimeout(()=>window.close(),500)};<\/script>
-                </body>
-                </html>
-            `); 
-            printWindow.document.close(); 
-        };
-
-        window.printExcomMeeting = (id) => { 
-            if(!window.excomMeetingsData) return;
-            const meeting = window.excomMeetingsData.find(m => m.id === id); 
-            if(!meeting) return; 
-            
-            const printWindow = window.open('', '_blank'); 
-            let rows = ''; 
-            if(meeting.attendance) {
-                meeting.attendance.forEach(a => { 
-                    rows += `<tr><td>${a.name}</td><td>${a.status}</td></tr>`; 
-                }); 
-            }
-            
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>Meeting Minutes</title>
-                    <style>
-                        body{font-family:sans-serif;padding:40px;}
-                        table{width:100%;border-collapse:collapse;}
-                        th,td{border:1px solid #ccc;padding:10px;text-align:left;}
-                    </style>
-                </head>
-                <body>
-                    <h2>${meeting.title}</h2>
-                    <p>${meeting.date}</p>
-                    <table>
-                        <thead>
-                            <tr><th>Name</th><th>Status</th></tr>
-                        </thead>
-                        <tbody>
-                            ${rows}
-                        </tbody>
-                    </table>
-                    <script>window.onload=()=>{window.print();setTimeout(()=>window.close(),500)};<\/script>
-                </body>
-                </html>
-            `); 
-            printWindow.document.close(); 
-        };
-
-        function escapeHTML(str) { 
-            return str ? str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)) : ''; 
-        }
-        
-        function safeSetText(id, text) { 
-            const el = document.getElementById(id); 
-            if (el) el.textContent = text; 
-        }
-        
-        function generateId() { 
-            return Math.random().toString(36).substr(2, 9); 
-        }
-
-        // Form Builder Helpers
-        window.handleFormCoverImage = (e) => { 
-            window.formCoverImageFile = e.target.files[0]; 
-        };
-        
-        window.addQuestionField = () => { 
-            formBuilderFields.push({ id: generateId(), label: '', type: 'text', required: false, options: [] }); 
-            window.renderFormBuilderFields();
-        };
-        
-        window.removeQuestionField = (id) => { 
-            formBuilderFields = formBuilderFields.filter(f => f.id !== id); 
-            window.renderFormBuilderFields(); 
-        };
-        
-        window.updateField = (id, key, value) => { 
-            const field = formBuilderFields.find(f => f.id === id); 
-            if (field) { 
-                field[key] = value; 
-                if (key === 'type') { 
-                    if (['radio', 'checkbox', 'select'].includes(value) && (!field.options || field.options.length === 0)) { 
-                        field.options = ['Option 1']; 
-                    } 
-                    window.renderFormBuilderFields(); 
-                } 
-            } 
-        };
-        
-        window.addFieldOption = (id) => { 
-            const field = formBuilderFields.find(f => f.id === id); 
-            if (field) { 
-                if(!field.options) field.options = []; 
-                field.options.push(`Option ${field.options.length + 1}`); 
-                window.renderFormBuilderFields(); 
-            } 
-        };
-        
-        window.removeFieldOption = (id, optIndex) => { 
-            const field = formBuilderFields.find(f => f.id === id); 
-            if (field && field.options) { 
-                field.options.splice(optIndex, 1); 
-                window.renderFormBuilderFields(); 
-            } 
-        };
-        
-        window.updateFieldOption = (id, optIndex, value) => { 
-            const field = formBuilderFields.find(f => f.id === id); 
-            if (field && field.options) field.options[optIndex] = value; 
-        };
-
-        window.renderFormBuilderFields = () => {
-            const container = document.getElementById('questionsContainer');
-            if(!container) return;
-            container.innerHTML = '';
-            
-            formBuilderFields.forEach((field, index) => {
-                let optionsHtml = '';
-                if (['radio', 'checkbox', 'select'].includes(field.type)) {
-                    let opts = '';
-                    if(field.options && field.options.length > 0) {
-                        field.options.forEach((opt, optIdx) => {
-                            const iconType = field.type === 'checkbox' ? 'square' : 'circle';
-                            opts += `
-                                <div class="flex items-center gap-3 mt-2">
-                                    <i data-lucide="${iconType}" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
-                                    <input type="text" class="glass-input w-full rounded-lg py-2.5 px-3 text-sm border border-gray-200" value="${escapeHTML(opt)}" oninput="updateFieldOption('${field.id}', ${optIdx}, this.value)" placeholder="Option text">
-                                    <button type="button" onclick="removeFieldOption('${field.id}', ${optIdx})" class="text-red-400 hover:text-red-500 p-1">
-                                        <i data-lucide="x" class="w-4 h-4"></i>
-                                    </button>
-                                </div>
-                            `;
-                        });
-                    }
-                    optionsHtml = `
-                        <div class="mt-4 pl-4 border-l-2 border-gray-200">
-                            <label class="block text-[10px] font-bold text-gray-500 mb-2 uppercase">Answer Options</label>
-                            ${opts}
-                            <button type="button" onclick="addFieldOption('${field.id}')" class="mt-3 text-[10px] uppercase text-blue-600 font-bold flex items-center gap-1.5">
-                                <i data-lucide="plus" class="w-3 h-3"></i> Add Option
-                            </button>
-                        </div>
-                    `;
-                }
-                
-                container.innerHTML += `
-                    <div class="bg-white border border-gray-200 rounded-2xl p-5 md:p-6 relative shadow-sm mb-4">
-                        <div class="flex justify-between items-center border-b border-gray-100 pb-3 mb-4">
-                            <span class="text-[10px] font-bold text-gray-500 uppercase">Question ${index + 1}</span>
-                            <button type="button" onclick="removeQuestionField('${field.id}')" class="text-gray-400 hover:text-red-500">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="md:col-span-2">
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Question Title</label>
-                                <input type="text" class="glass-input w-full rounded-lg py-3 px-3 text-sm border border-gray-200" value="${escapeHTML(field.label)}" oninput="updateField('${field.id}', 'label', this.value)">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Answer Type</label>
-                                <select class="glass-input w-full rounded-lg py-3 px-3 text-sm border border-gray-200" onchange="updateField('${field.id}', 'type', this.value)">
-                                    <option value="text" ${field.type === 'text' ? 'selected' : ''}>Short Answer</option>
-                                    <option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Paragraph</option>
-                                    <option value="email" ${field.type === 'email' ? 'selected' : ''}>Email Address</option>
-                                    <option value="tel" ${field.type === 'tel' ? 'selected' : ''}>Phone Number</option>
-                                    <option value="radio" ${field.type === 'radio' ? 'selected' : ''}>Multiple Choice</option>
-                                    <option value="checkbox" ${field.type === 'checkbox' ? 'selected' : ''}>Checkboxes</option>
-                                    <option value="select" ${field.type === 'select' ? 'selected' : ''}>Dropdown</option>
-                                    <option value="date" ${field.type === 'date' ? 'selected' : ''}>Date</option>
-                                </select>
-                            </div>
-                        </div>
-                        ${optionsHtml}
-                        <div class="mt-5 flex items-center justify-end gap-3 border-t border-gray-100 pt-4">
-                            <label class="text-[10px] font-bold text-gray-500 uppercase cursor-pointer" for="req-${field.id}">Required</label>
-                            <input type="checkbox" id="req-${field.id}" class="custom-checkbox" ${field.required ? 'checked' : ''} onchange="updateField('${field.id}', 'required', this.checked)">
-                        </div>
-                    </div>
-                `;
-            });
-            lucide.createIcons();
-        };
-        
-   // --- EXCOM FORM LOGIC ---
-        window.resetExcomForm = () => {
-            document.getElementById('excomForm').reset();
-            document.getElementById('excomId').value = '';
-            document.getElementById('excomExistingImageUrl').value = ''; 
-            document.getElementById('excomFileName').textContent = 'No file chosen';
-            window.excomSelectedFile = null; 
-            document.getElementById('excomFormTitle').textContent = 'Add Team Member';
-            document.getElementById('excomSubmitBtn').textContent = 'Save Member';
-        };
-
-        window.handleExcomFile = (e) => { 
-            if(e.target.files && e.target.files[0]) {
-                window.excomSelectedFile = e.target.files[0]; 
-                document.getElementById('excomFileName').textContent = e.target.files[0].name; 
-            }
-        };
-
-        window.editExcomMember = (id, name, role, img, insta, linkedin) => {
-            document.getElementById('excomId').value = id;
-            document.getElementById('excomName').value = name;
-            document.getElementById('excomRole').value = role;
-            document.getElementById('excomExistingImageUrl').value = img !== 'undefined' ? img : '';
-            document.getElementById('excomFileName').textContent = (img && img !== 'undefined' && img !== '') ? 'Existing Image Saved' : 'No file chosen';
-            window.excomSelectedFile = null;
-            document.getElementById('excomInsta').value = insta !== 'undefined' ? insta : '';
-            document.getElementById('excomLinkedIn').value = linkedin !== 'undefined' ? linkedin : '';
-            
-            document.getElementById('excomFormTitle').textContent = 'Edit Member';
-            document.getElementById('excomSubmitBtn').textContent = 'Update Member';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-    </script>
-
-    <!-- FIREBASE AND APP LOGIC -->
-    <script type="module">
+        <div class="p-4 mt-auto">
+            <button id="adminLogoutBtn" class="w-full bg-white/50 hover:bg-red-50 text-red-600 py-3.5 rounded-2xl text-xs font-bold uppercase tracking-widest flex justify-center items-center gap-2 transition-colors border border-white">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- MOBILE SIDEBAR OVERLAY & MENU (Kept functionality, updated styling) -->
+    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[100] hidden md:hidden transition-opacity" onclick="toggleMobileSidebar()"></div>
+    <aside id="mobile-sidebar" class="fixed top-0 left-0 h-full w-72 bg-white/90 backdrop-blur-xl z-[200] transform -translate-x-full transition-transform duration-300 md:hidden flex flex-col shadow-2xl border-r border-white">
+        <div class="p-6 flex items-center justify-between border-b border-gray-100/50">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-brand-teal flex items-center justify-center text-white font-bold">M</div>
+                <span class="text-lg font-display font-bold text-gray-900 tracking-tight">AdminOS</span>
+            </div>
+            <button onclick="toggleMobileSidebar()" class="text-gray-500 hover:text-gray-900 p-2 bg-gray-100/50 rounded-full">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+        <nav class="flex-grow px-4 py-6 overflow-y-auto space-y-1">
+            <button onclick="showTab('overview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center px-4 py-3.5 text-sm font-semibold rounded-xl">Dashboard</button>
+            <button onclick="showTab('users'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm font-semibold rounded-xl">User Directory</button>
+            <button onclick="showTab('pipeline'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm font-semibold rounded-xl">Startup Pipeline</button>
+            <button onclick="showTab('funds'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm font-semibold rounded-xl">Funds Ledger</button>
+        </nav>
+    </aside>
+
+    <!-- 3. MAIN CONTENT AREA -->
+    <div class="flex-1 min-w-0 flex flex-col h-full overflow-hidden bg-transparent">
+        
+        <!-- HEADER (CoachPro Style) -->
+        <header class="h-24 flex flex-col justify-center px-6 md:px-10 shrink-0 bg-transparent z-10 relative mt-4">
+            <div class="flex items-center justify-between w-full">
+                <div>
+                    <p class="text-sm font-medium text-brand-teal mb-1" id="welcomeText">Welcome back, Admin 👋</p>
+                    <div class="flex items-center gap-3">
+                        <button id="mobile-menu-toggle" onclick="toggleMobileSidebar()" class="md:hidden text-gray-700 p-2 hover:bg-white/50 rounded-lg cursor-pointer">
+                            <i data-lucide="menu" class="w-6 h-6"></i>
+                        </button>
+                        <h1 class="text-3xl font-display font-extrabold text-gray-900 tracking-tight" id="headerTitle">Dashboard</h1>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <!-- Search Icon -->
+                    <button class="w-10 h-10 rounded-full bg-white/50 border border-white hover:bg-white flex items-center justify-center text-brand-teal transition-all shadow-sm hidden sm:flex">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                    </button>
+                    <!-- Bell Icon -->
+                    <button class="w-10 h-10 rounded-full bg-white/50 border border-white hover:bg-white flex items-center justify-center text-brand-teal transition-all shadow-sm relative hidden sm:flex">
+                        <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+                        <i data-lucide="bell" class="w-4 h-4"></i>
+                    </button>
+                    <!-- Profile -->
+                    <div class="flex items-center gap-3 bg-white/60 backdrop-blur-md px-2 py-1.5 rounded-full border border-white shadow-sm pr-4">
+                        <div class="w-8 h-8 rounded-full bg-brand-teal flex items-center justify-center text-white font-bold text-xs">
+                            A
+                        </div>
+                        <p class="text-xs font-bold text-gray-700 hidden sm:block" id="adminEmailDisplay">Admin User</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- SCROLLABLE SECTIONS CONTAINER -->
+        <main class="flex-1 min-w-0 overflow-y-auto p-4 md:p-10 pb-24 relative custom-scrollbar">
+            
+            <!-- ===================== SECTION 1: OVERVIEW (Rebuilt to match image) ===================== -->
+            <div id="overviewSection" class="tab-content w-full max-w-7xl mx-auto space-y-6 block">
+                
+                <!-- Metrics Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+                    
+                    <div class="glass-panel p-6 flex flex-col justify-center min-h-[160px]">
+                        <div class="flex justify-between items-center w-full mb-4">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600"><i data-lucide="users" class="w-4 h-4"></i></div>
+                            <span class="text-[10px] font-bold text-brand-muted uppercase tracking-widest">Total Users</span>
+                        </div>
+                        <h3 class="text-4xl font-display font-extrabold text-gray-900" id="totalUsersCount">0</h3>
+                    </div>
+
+                    <div class="glass-panel p-6 flex flex-col justify-center min-h-[160px]">
+                        <div class="flex justify-between items-center w-full mb-4">
+                            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600"><i data-lucide="wallet" class="w-4 h-4"></i></div>
+                            <span class="text-[10px] font-bold text-brand-muted uppercase tracking-widest">Remaining Funds</span>
+                        </div>
+                        <h3 class="text-4xl font-display font-extrabold text-gray-900">₹<span id="overviewFunds">0</span></h3>
+                    </div>
+
+                    <div class="glass-panel p-6 flex flex-col justify-center min-h-[160px]">
+                        <div class="flex justify-between items-center w-full mb-4">
+                            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600"><i data-lucide="rocket" class="w-4 h-4"></i></div>
+                            <span class="text-[10px] font-bold text-brand-muted uppercase tracking-widest">Active Startups</span>
+                        </div>
+                        <h3 class="text-4xl font-display font-extrabold text-gray-900" id="overviewStartups">0</h3>
+                    </div>
+
+                    <div class="glass-panel p-6 flex flex-col justify-center min-h-[160px] bg-gradient-to-br from-brand-teal to-[#004d40] text-white border-transparent">
+                        <div class="flex justify-between items-center w-full mb-4">
+                            <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white"><i data-lucide="bell" class="w-4 h-4"></i></div>
+                            <span class="text-[10px] font-bold text-white/80 uppercase tracking-widest">Announcements</span>
+                        </div>
+                        <h3 class="text-4xl font-display font-extrabold text-white" id="totalAnnouncementsCount">0</h3>
+                        <p class="text-xs text-white/70 mt-2 font-light">Live on portal</p>
+                    </div>
+
+                </div>
+
+                <!-- Charts Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                    <div class="lg:col-span-2 glass-panel p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-sm font-bold text-gray-800">Activity Analytics</h3>
+                            <span class="text-xs font-medium text-brand-teal cursor-pointer">View full report</span>
+                        </div>
+                        <div class="w-full h-64"><canvas id="activityChart"></canvas></div>
+                    </div>
+                    <div class="glass-panel p-8 flex flex-col items-center justify-center">
+                        <h3 class="text-sm font-bold text-gray-800 w-full text-left mb-6">User Demographics</h3>
+                        <div class="w-full max-w-[200px] flex-grow flex items-center justify-center"><canvas id="roleChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== SECTION 2: USERS (Wrapped in new Glass Panel) ===================== -->
+            <div id="usersSection" class="tab-content w-full max-w-7xl mx-auto space-y-6 hidden">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl font-display font-bold text-gray-900 tracking-tight mb-1">Directory</h2>
+                        <p class="text-xs text-brand-muted font-medium">Manage students, excom, and points.</p>
+                    </div>
+                    <div class="flex gap-3 w-full lg:w-auto">
+                        <div class="relative flex-grow">
+                            <input type="text" id="userSearchInput" onkeyup="filterUsers()" placeholder="Search directory..." class="glass-input w-full pl-10 pr-4 py-3 rounded-2xl text-sm border border-white">
+                            <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-brand-teal"></i>
+                        </div>
+                        <button onclick="toggleAddUserModal(true)" class="flex-shrink-0 btn-primary px-6 py-3 rounded-2xl text-xs font-bold flex items-center gap-2">
+                            <i data-lucide="user-plus" class="w-4 h-4"></i> Add User
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="glass-panel overflow-x-auto w-full">
+                    <table class="w-full text-left min-w-[900px]">
+                        <thead class="border-b border-gray-200/50 text-[10px] uppercase tracking-[0.2em] font-bold text-brand-muted bg-white/30">
+                            <tr>
+                                <th class="px-6 py-5">Name</th>
+                                <th class="px-6">Contact Details</th>
+                                <th class="px-6 text-center">Role</th>
+                                <th class="px-6 text-center">Status</th>
+                                <th class="text-center px-6">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userListBody" class="divide-y divide-gray-100/50 text-sm font-medium text-gray-700">
+                            <tr>
+                                <td colspan="5" class="text-center py-10 text-brand-muted text-xs tracking-widest uppercase font-bold">Loading records...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PLACEHOLDERS FOR REMAINING TABS (Keep IDs intact for JS to work) -->
+            <div id="pointsSection" class="tab-content w-full max-w-7xl mx-auto space-y-6 hidden"><div class="glass-panel p-10 text-center text-brand-muted font-medium">Innovation Points feature loads here...</div></div>
+            <div id="rewardsSection" class="tab-content w-full max-w-7xl mx-auto space-y-6 hidden"><div class="glass-panel p-10 text-center text-brand-muted font-medium">Rewards feature loads here...</div></div>
+            <div id="attendanceSection" class="tab-content w-full max-w-7xl mx-auto space-y-6 hidden"><div class="glass-panel p-10 text-center text-brand-muted font-medium">Attendance feature loads here...</div></div>
+            <div id="adminTasksSection" class="tab-content w-full max-w-7xl mx-auto space-y-6 hidden"><div class="glass-panel p-10 text-center text-brand-muted font-medium">Task Board loads here...</div></div>
+            <div id="pipelineSection" class="tab-content w-full max-w-7xl mx-auto space-y-6 hidden"><div class="glass-panel p-10 text-center text-brand-muted font-medium">Startup Pipeline loads here...</div></div>
+            <div id="fundsSection" class="tab-content w-full max-w-7xl mx-auto space-y-6 hidden"><div class="glass-panel p-10 text-center text-brand-muted font-medium">Funds Ledger loads here...</div></div>
+            <div id="questsSection" class="tab-content w-full max-w-7xl mx-auto space-y-6 hidden"><div class="glass-panel p-10 text-center text-brand-muted font-medium">Quests Engine loads here...</div></div>
+
+        </main>
+    </div>
+
+    <!-- UI Core Scripts -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Mobile Sidebar Toggle
+        function toggleMobileSidebar() {
+            const menu = document.getElementById('mobile-sidebar');
+            const overlay = document.getElementById('mobile-sidebar-overlay');
+            if (menu.classList.contains('-translate-x-full')) {
+                menu.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                menu.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // Tab Switching Logic
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            
+            document.querySelectorAll('aside nav .sidebar-link').forEach(el => el.classList.remove('active'));
+            
+            const section = document.getElementById(tabId + 'Section');
+            if (section) {
+                section.classList.remove('hidden');
+                section.classList.add('block');
+            }
+            
+            const activeLinks = document.querySelectorAll('#nav-' + tabId);
+            activeLinks.forEach(link => link.classList.add('active'));
+
+            let title = tabId.charAt(0).toUpperCase() + tabId.slice(1);
+            if(tabId === 'users') title = "Directory";
+            if(tabId === 'points') title = "Innovation Points";
+            if(tabId === 'adminTasks') title = "ExCom Task Board";
+            
+            document.getElementById('headerTitle').textContent = title;
+        }
+
+        // Initialize empty charts to prevent errors
+        document.addEventListener('DOMContentLoaded', () => {
+            Chart.defaults.color = '#718096';
+            Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+            
+            const ctxRole = document.getElementById('roleChart');
+            if(ctxRole) {
+                new Chart(ctxRole, { type: 'doughnut', data: { labels: ['Empty'], datasets: [{ data: [1], backgroundColor: ['#e2e8f0'] }] } });
+            }
+            
+            const ctxAct = document.getElementById('activityChart');
+            if(ctxAct) {
+                new Chart(ctxAct, { type: 'line', data: { labels: ['M','T','W','T','F'], datasets: [{ data: [0,0,0,0,0], borderColor: '#007b70' }] } });
+            }
+        });
+        
+        // Include your old Firebase Script tags here at the very bottom
+        // <script type="module"> ... 
+    </script>
+         <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signOut, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, onSnapshot, getDocs, increment, writeBatch, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
