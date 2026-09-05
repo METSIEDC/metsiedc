@@ -194,11 +194,12 @@
         .kanban-card:active { cursor: grabbing; transform: scale(0.98); opacity: 0.8; }
     </style>
 </head>
+
 <body class="font-sans antialiased relative flex h-screen w-full overflow-hidden selection:bg-blue-100 selection:text-blue-900"
 
     <!-- Custom Toast UI for replacing alerts -->
     <div id="customToast" class="fixed bottom-4 right-4 z-[9999] px-6 py-3 rounded-xl text-sm font-bold shadow-xl transition-opacity duration-300 hidden"></div>
-
+            
     <!-- Custom Confirm Modal -->
     <div id="customConfirmModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm p-6 rounded-3xl text-center shadow-2xl border border-gray-100">
@@ -368,6 +369,7 @@
             <button id="adminLogoutBtnMobile" class="w-full bg-red-50 hover:bg-red-100 text-red-600 py-3.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2">Sign Out</button>
         </div>
     </div>
+            <header>
     <!-- MAIN CONTENT AREA -->
     <div class="flex-1 min-w-0 flex flex-col h-full overflow-hidden relative z-10 bg-transparent">
         
