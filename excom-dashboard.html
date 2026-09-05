@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050505">
-     <link rel="apple-touch-icon" href="assets/images/logos/MSEM-removebg-preview.png">
+    <link rel="apple-touch-icon" href="assets/images/logos/MSEM-removebg-preview.png">
     <link rel="icon" type="image/png" href="assets/images/logos/MSEM-removebg-preview.png">
     
     <!-- Icons and Fonts -->
@@ -83,16 +83,12 @@
         ::-webkit-scrollbar-track { background: transparent; } 
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
         
-        /* Kanban Specific Styles */
         .kanban-col { min-height: 150px; transition: background-color 0.2s; border-radius: 12px; }
-        .kanban-col.drag-over { background-color: rgba(255,255,255,0.05); border-color: rgba(147, 51, 234, 0.5); }
-        .kanban-card { cursor: grab; transition: transform 0.2s, box-shadow 0.2s; }
-        .kanban-card:active { cursor: grabbing; transform: scale(0.98); opacity: 0.8; }
 
         /* PRINT SPECIFIC STYLES */
         @media print {
             body { background: white !important; color: black !important; margin: 0; padding: 0; }
-            #dashboard-ui, #tabPasswordModal, #unauthorizedScreen { display: none !important; }
+            #dashboard-ui, #tabPasswordModal, #unauthorizedScreen, #addMediaModal, #addMentorLogModal { display: none !important; }
             #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; height: auto; padding: 2cm; box-sizing: border-box; font-family: 'Times New Roman', Times, serif !important; }
             
             .watermark {
@@ -112,7 +108,7 @@
 </head>
 <body class="font-sans antialiased relative h-screen overflow-hidden selection:bg-glow-purple selection:text-white">
 
-    <!-- Custom Toast UI for replacing alerts -->
+    <!-- Custom Toast UI -->
     <div id="customToast" class="fixed bottom-4 right-4 z-[9999] px-6 py-3 rounded-xl text-sm font-bold shadow-xl transition-opacity duration-300 hidden"></div>
 
     <!-- Custom Confirm Modal -->
@@ -310,65 +306,56 @@
                     </div>
                 </div>
 
-          <!-- ===================== TEAM TASK BOARD (DARK UI) ===================== -->
-           <!-- ===================== MY DUTY BOARD (EX-COM VIEW) ===================== -->
-            <div id="tasksSection" class="tab-content hidden h-full w-full flex flex-col">
-                <div class="flex justify-between items-center mb-6 shrink-0">
-                    <div>
-                        <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-1">My Duty Board</h2>
-                        <p class="text-white/50 text-sm font-light">View and update tasks assigned by the Admin.</p>
+                <!-- ===================== MY DUTY BOARD (EX-COM VIEW) ===================== -->
+                <div id="tasksSection" class="tab-content hidden h-full w-full flex flex-col">
+                    <div class="flex justify-between items-center mb-6 shrink-0">
+                        <div>
+                            <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-1">My Duty Board</h2>
+                            <p class="text-white/50 text-sm font-light">View and update tasks assigned by the Admin.</p>
+                        </div>
+                        <!-- Add Task button is intentionally removed for Ex-Com members -->
                     </div>
-                    <!-- Add Task button is removed for Ex-Com members -->
-                </div>
-                
-                <div class="flex-grow flex gap-6 overflow-x-auto pb-4 items-start scroll-smooth w-full">
                     
-                    <!-- Column: To-Do -->
-                    <div class="w-full md:w-1/3 shrink-0 flex flex-col bg-black/40 border border-white/10 rounded-2xl h-full max-h-[70vh]">
-                        <div class="p-4 border-b border-white/5 shrink-0 flex justify-between items-center bg-white/5 rounded-t-2xl">
-                            <h3 class="text-xs font-bold text-white uppercase tracking-widest">
-                                <span class="w-2 h-2 inline-block bg-red-400 rounded-full mr-2 animate-pulse"></span>To-Do
-                            </h3>
-                        </div>
-                        <div class="p-4 flex-grow overflow-y-auto space-y-4 kanban-col custom-scrollbar" id="col-ToDo">
-                            <!-- Tasks injected here -->
-                        </div>
-                    </div>
-
-                    <!-- Column: In Progress -->
-                    <div class="w-full md:w-1/3 shrink-0 flex flex-col bg-black/40 border border-white/10 rounded-2xl h-full max-h-[70vh]">
-                        <div class="p-4 border-b border-white/5 shrink-0 flex justify-between items-center bg-white/5 rounded-t-2xl">
-                            <h3 class="text-xs font-bold text-white uppercase tracking-widest">
-                                <span class="w-2 h-2 inline-block bg-yellow-400 rounded-full mr-2 animate-pulse"></span>In Progress
-                            </h3>
-                        </div>
-                        <div class="p-4 flex-grow overflow-y-auto space-y-4 kanban-col custom-scrollbar" id="col-InProgress">
-                            <!-- Tasks injected here -->
-                        </div>
-                    </div>
-
-                    <!-- Column: Completed -->
-                    <div class="w-full md:w-1/3 shrink-0 flex flex-col bg-black/40 border border-white/10 rounded-2xl h-full max-h-[70vh]">
-                        <div class="p-4 border-b border-white/5 shrink-0 flex justify-between items-center bg-white/5 rounded-t-2xl">
-                            <h3 class="text-xs font-bold text-white uppercase tracking-widest">
-                                <span class="w-2 h-2 inline-block bg-green-400 rounded-full mr-2"></span>Completed
-                            </h3>
-                        </div>
-                        <div class="p-4 flex-grow overflow-y-auto space-y-4 kanban-col custom-scrollbar" id="col-Completed">
-                            <!-- Tasks injected here -->
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+                    <div class="flex-grow flex gap-6 overflow-x-auto pb-4 items-start scroll-smooth w-full">
                         
-                        <div class="pt-4 flex gap-3">
-                            <button type="button" onclick="document.getElementById('addTaskModal').classList.add('hidden')" class="flex-1 bg-white/5 py-3 rounded-xl text-white/70 text-[10px] uppercase font-bold hover:bg-white/10 transition-colors">Cancel</button>
-                            <button type="submit" id="taskSubmitBtn" class="flex-1 bg-yellow-500 text-black py-3 rounded-xl text-[10px] uppercase font-bold hover:bg-yellow-400 shadow-[0_0_15px_rgba(234,179,8,0.3)]">Assign Duty</button>
+                        <!-- Column: To-Do -->
+                        <div class="w-full md:w-1/3 shrink-0 flex flex-col bg-black/40 border border-white/10 rounded-2xl h-full max-h-[70vh]">
+                            <div class="p-4 border-b border-white/5 shrink-0 flex justify-between items-center bg-white/5 rounded-t-2xl">
+                                <h3 class="text-xs font-bold text-white uppercase tracking-widest">
+                                    <span class="w-2 h-2 inline-block bg-red-400 rounded-full mr-2 animate-pulse"></span>To-Do
+                                </h3>
+                            </div>
+                            <div class="p-4 flex-grow overflow-y-auto space-y-4 kanban-col custom-scrollbar" id="col-ToDo">
+                                <!-- Tasks injected here -->
+                            </div>
                         </div>
-                    </form>
+
+                        <!-- Column: In Progress -->
+                        <div class="w-full md:w-1/3 shrink-0 flex flex-col bg-black/40 border border-white/10 rounded-2xl h-full max-h-[70vh]">
+                            <div class="p-4 border-b border-white/5 shrink-0 flex justify-between items-center bg-white/5 rounded-t-2xl">
+                                <h3 class="text-xs font-bold text-white uppercase tracking-widest">
+                                    <span class="w-2 h-2 inline-block bg-yellow-400 rounded-full mr-2 animate-pulse"></span>In Progress
+                                </h3>
+                            </div>
+                            <div class="p-4 flex-grow overflow-y-auto space-y-4 kanban-col custom-scrollbar" id="col-InProgress">
+                                <!-- Tasks injected here -->
+                            </div>
+                        </div>
+
+                        <!-- Column: Completed -->
+                        <div class="w-full md:w-1/3 shrink-0 flex flex-col bg-black/40 border border-white/10 rounded-2xl h-full max-h-[70vh]">
+                            <div class="p-4 border-b border-white/5 shrink-0 flex justify-between items-center bg-white/5 rounded-t-2xl">
+                                <h3 class="text-xs font-bold text-white uppercase tracking-widest">
+                                    <span class="w-2 h-2 inline-block bg-green-400 rounded-full mr-2"></span>Completed
+                                </h3>
+                            </div>
+                            <div class="p-4 flex-grow overflow-y-auto space-y-4 kanban-col custom-scrollbar" id="col-Completed">
+                                <!-- Tasks injected here -->
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
 
                 <!-- ===================== MEDIA DROP (MARKETING HUB) ===================== -->
                 <div id="marketingSection" class="tab-content hidden space-y-6 max-w-6xl mx-auto w-full">
@@ -529,7 +516,7 @@
                         <div class="border-b border-white/10 pb-5 mb-8 flex justify-between items-end">
                             <div>
                                 <h2 class="text-2xl font-display font-bold text-white tracking-widest uppercase mb-2">Upload Meeting Minutes</h2>
-                                <p class="text-white/50 text-sm font-light">Securely submit official ExCom meeting records directly to the Nodal Officer/Admin dashboard.</p>
+                                <p class="text-white/50 text-sm font-light">Securely submit official ExCom meeting records directly to the Admin dashboard.</p>
                             </div>
                             <span class="bg-green-500/10 text-green-400 border border-green-500/30 px-3 py-1 rounded text-[9px] uppercase tracking-widest font-bold flex items-center gap-1.5"><i data-lucide="unlock" class="w-3 h-3"></i> Unlocked</span>
                         </div>
@@ -537,7 +524,7 @@
                         <form id="minutesForm" class="space-y-6">
                             <div>
                                 <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Meeting Title</label>
-                                <input type="text" id="minTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="e.g. June Monthly ExCom Sync" required>
+                                <input type="text" id="minTitle" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" placeholder="e.g. June Monthly Sync" required>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
@@ -545,10 +532,10 @@
                                     <input type="date" id="minDate" class="glass-input w-full rounded-xl py-3.5 px-4 text-sm" required>
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Signed Document (Scan/PDF/Image)</label>
+                                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Signed Document (Scan/Image)</label>
                                     <label class="glass-input w-full rounded-xl py-3.5 px-4 text-center cursor-pointer block border-dashed hover:bg-white/5">
                                         <span id="minutesFileName" class="text-white/50">Browse File</span>
-                                        <input type="file" id="minutesFileInput" class="hidden" accept="image/*,application/pdf" onchange="handleMinutesFile(event)" required>
+                                        <input type="file" id="minutesFileInput" class="hidden" accept="image/*,application/pdf" onchange="window.handleMinutesFile(event)" required>
                                     </label>
                                 </div>
                             </div>
@@ -601,7 +588,7 @@
                                     <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Scan of Document</label>
                                     <label class="glass-input w-full rounded-xl py-3.5 px-4 text-center cursor-pointer block border-dashed hover:bg-white/5">
                                         <span id="financeFileName" class="text-white/50">Browse File</span>
-                                        <input type="file" id="financeFileInput" class="hidden" accept="image/*,application/pdf" onchange="handleFinanceFile(event)" required>
+                                        <input type="file" id="financeFileInput" class="hidden" accept="image/*,application/pdf" onchange="window.handleFinanceFile(event)" required>
                                     </label>
                                 </div>
                             </div>
@@ -642,27 +629,6 @@
                     <button type="submit" class="flex-1 btn-primary py-3.5 rounded-xl text-[10px] uppercase tracking-widest font-bold shadow-[0_0_15px_rgba(147,51,234,0.4)] flex items-center justify-center gap-2">
                         <i data-lucide="unlock" class="w-3.5 h-3.5"></i> Unlock
                     </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Add Task Modal -->
-    <div id="addTaskModal" class="fixed inset-0 bg-[#050505]/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-8 rounded-3xl border-yellow-500/30">
-            <h2 class="text-xl font-bold text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-4">Add New Task</h2>
-            <form id="addTaskForm" class="space-y-5">
-                <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Task Description</label>
-                    <input type="text" id="newTaskDesc" class="glass-input w-full py-3.5 px-4 rounded-xl text-sm" placeholder="e.g. Design Buildathon Poster" required>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-white/50 mb-2 uppercase tracking-widest">Assignee</label>
-                    <input type="text" id="newTaskAssignee" class="glass-input w-full py-3.5 px-4 rounded-xl text-sm" placeholder="e.g. Design Team or Name" required>
-                </div>
-                <div class="flex gap-3 pt-2">
-                    <button type="button" onclick="document.getElementById('addTaskModal').classList.add('hidden')" class="flex-1 bg-white/5 py-3.5 rounded-xl text-white text-[10px] uppercase tracking-widest font-bold hover:bg-white/10">Cancel</button>
-                    <button type="submit" id="btnSaveTask" class="flex-1 bg-yellow-500 text-black py-3.5 rounded-xl text-[10px] uppercase tracking-widest font-bold hover:bg-yellow-400 transition-colors">Add Task</button>
                 </div>
             </form>
         </div>
@@ -724,8 +690,7 @@
 
     <!-- UI Scripts -->
     <script>
-        // --- SECTION PASSWORD CONFIGURATION ---
-         const tabPasswords = {
+        const tabPasswords = {
             'circular': 'GU5878HJ78', 
             'order': 'RU698TG893',
             'minutes': 'YO7976BH8U',
@@ -952,27 +917,6 @@
             });
         };
 
-        // Kanban logic
-        window.dragTask = (ev) => { ev.dataTransfer.setData("text", ev.target.id); }
-        window.allowDrop = (ev) => { ev.preventDefault(); ev.target.closest('.kanban-col').classList.add('drag-over'); }
-        window.dropTask = async (ev, newStatus) => {
-            ev.preventDefault();
-            document.querySelectorAll('.kanban-col').forEach(c => c.classList.remove('drag-over'));
-            
-            var data = ev.dataTransfer.getData("text");
-            var el = document.getElementById(data);
-            if(!el) return;
-            
-            const targetCol = ev.target.closest('.kanban-col');
-            if(targetCol) {
-                targetCol.appendChild(el);
-                const taskId = data.replace('task-', '');
-                try {
-                    if(window.updateTaskStatusInDB) await window.updateTaskStatusInDB(taskId, newStatus);
-                } catch(e) { window.showToast("Failed to update status: " + e.message, "error"); }
-            }
-        };
-
         // Toast Notification Function
         window.showToast = (msg, type = 'info') => {
             const toast = document.getElementById('customToast');
@@ -987,7 +931,7 @@
         window.customConfirm = (msg) => {
             return new Promise((resolve) => {
                 const modal = document.getElementById('customConfirmModal');
-                if(!modal) { resolve(confirm(msg)); return; } // Fallback if UI is missing
+                if(!modal) { resolve(confirm(msg)); return; } 
                 document.getElementById('customConfirmMsg').textContent = msg;
                 modal.classList.remove('hidden');
                 document.getElementById('customConfirmOk').onclick = () => { modal.classList.add('hidden'); resolve(true); };
@@ -1063,167 +1007,6 @@
             }
         });
 
-        // Initialize Real-time listeners for the new features
-        function initExcomSync() {
-            // 1. Task Board Sync
-          // ==========================================
-        // EXCOM TASK BOARD LOGIC (DARK MODE)
-        // ==========================================
-        const taskForm = document.getElementById('taskForm');
-
-        if(taskForm) {
-            taskForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btn = document.getElementById('taskSubmitBtn');
-                const originalText = btn.innerText;
-                btn.disabled = true; btn.innerText = "Assigning...";
-
-                try {
-                    const data = {
-                        title: document.getElementById('taskTitle').value.trim(),
-                        assignee: document.getElementById('taskAssignee').value.trim(),
-                        priority: document.getElementById('taskPriority').value,
-                        description: document.getElementById('taskDesc').value.trim(),
-                        status: 'To-Do', // Default Status
-                        timestamp: Date.now()
-                    };
-
-                    await addDoc(collection(db, "excom_tasks"), data);
-                    if(window.showToast) window.showToast("New duty assigned successfully!", "success");
-                    document.getElementById('addTaskModal').classList.add('hidden');
-                    taskForm.reset();
-                } catch(err) { 
-                    alert("Error: " + err.message);
-                } finally { 
-                    btn.disabled = false; btn.innerText = originalText; 
-                }
-            });
-        }
-
-        // Update Task Status (Arrow Buttons)
-        window.updateTaskStatus = async (id, newStatus) => {
-            try { await updateDoc(doc(db, "excom_tasks", id), { status: newStatus }); } 
-            catch(e) { console.error(e); }
-        };
-
-        // Delete Task
-        window.deleteTask = async (id) => {
-            if(confirm('Are you sure you want to delete this task?')) {
-                try { await deleteDoc(doc(db, "excom_tasks", id)); } 
-                catch(e) { console.error(e); }
-            }
-        };
-
-        // Fetch & Render Tasks in Dark Cards
-        onSnapshot(collection(db, "excom_tasks"), (snap) => {
-            const lists = { 'To-Do': '', 'In Progress': '', 'Completed': '' };
-            
-            const priorityColors = { 
-                low: 'bg-green-500/20 text-green-400 border-green-500/30', 
-                medium: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30', 
-                high: 'bg-red-500/20 text-red-400 border-red-500/30' 
-            };
-
-            snap.forEach(d => {
-                const data = d.data();
-                const id = d.id;
-                const status = data.status || 'To-Do';
-
-                let prevStatus = '', nextStatus = '', prevIcon = '', nextIcon = '';
-                if(status === 'To-Do') { nextStatus = 'In Progress'; nextIcon = 'arrow-right'; }
-                else if(status === 'In Progress') { prevStatus = 'To-Do'; prevIcon = 'arrow-left'; nextStatus = 'Completed'; nextIcon = 'check'; }
-                else if(status === 'Completed') { prevStatus = 'In Progress'; prevIcon = 'arrow-left'; }
-
-                const safeAvatar = `https://api.dicebear.com/9.x/notionists/svg?seed=${data.assignee}`;
-
-                lists[status] += `
-                <div class="bg-white/5 p-4 rounded-2xl border border-white/10 shadow-lg hover:border-white/20 transition-all group relative mb-3">
-                    <div class="flex justify-between items-start mb-3">
-                        <span class="text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-md border ${priorityColors[data.priority] || priorityColors.medium}">${data.priority || 'medium'}</span>
-                        <button onclick="window.deleteTask('${id}')" class="text-white/20 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
-                    </div>
-                    <h4 class="font-bold text-white text-sm mb-1">${data.title}</h4>
-                    <p class="text-xs text-white/50 line-clamp-2 mb-4 leading-relaxed">${data.description}</p>
-                    
-                    <div class="flex items-center justify-between mt-auto pt-3 border-t border-white/10">
-                        <div class="flex items-center gap-2">
-                            <img src="${safeAvatar}" class="w-6 h-6 rounded-full bg-black border border-white/20">
-                            <span class="text-[10px] font-bold text-white/80 truncate max-w-[80px]">${data.assignee}</span>
-                        </div>
-                        <div class="flex gap-1">
-                            ${prevStatus ? `<button onclick="window.updateTaskStatus('${id}', '${prevStatus}')" class="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/20 flex items-center justify-center text-white/50 hover:text-white transition-colors"><i data-lucide="${prevIcon}" class="w-3.5 h-3.5"></i></button>` : ''}
-                            ${nextStatus ? `<button onclick="window.updateTaskStatus('${id}', '${nextStatus}')" class="w-7 h-7 rounded-lg ${status === 'In Progress' ? 'bg-green-500/20 text-green-400 hover:bg-green-500/40' : 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/40'} flex items-center justify-center transition-colors"><i data-lucide="${nextIcon}" class="w-3.5 h-3.5"></i></button>` : ''}
-                        </div>
-                    </div>
-                </div>`;
-            });
-
-            // Updating the columns matching your exact HTML IDs
-            if(document.getElementById('col-ToDo')) document.getElementById('col-ToDo').innerHTML = lists['To-Do'] || `<div class="text-center py-6 text-white/30 text-[10px] uppercase font-bold tracking-widest border border-dashed border-white/10 rounded-xl">No Tasks</div>`;
-            if(document.getElementById('col-InProgress')) document.getElementById('col-InProgress').innerHTML = lists['In Progress'] || `<div class="text-center py-6 text-white/30 text-[10px] uppercase font-bold tracking-widest border border-dashed border-white/10 rounded-xl">No Tasks</div>`;
-            if(document.getElementById('col-Completed')) document.getElementById('col-Completed').innerHTML = lists['Completed'] || `<div class="text-center py-6 text-white/30 text-[10px] uppercase font-bold tracking-widest border border-dashed border-white/10 rounded-xl">No Tasks</div>`;
-
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        });
-            // 2. Marketing Hub Sync
-            onSnapshot(query(collection(db, "marketing_assets"), orderBy("timestamp", "desc")), (snap) => {
-                let h = '';
-                if(snap.empty) {
-                    h = '<div class="col-span-full text-center py-10 text-white/30 text-xs font-bold uppercase tracking-widest border border-dashed border-white/10 rounded-2xl">No media assets uploaded yet.</div>';
-                }
-                snap.forEach(d => {
-                    const m = d.data();
-                    h += `
-                    <div class="bg-[#111] border border-white/10 rounded-2xl overflow-hidden flex flex-col group relative hover:border-pink-500/30 transition-colors">
-                        <button onclick="window.deleteDocument('marketing_assets', '${d.id}')" class="absolute top-3 right-3 bg-black/50 backdrop-blur text-white/50 hover:text-red-400 p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                        <div class="h-48 bg-black/50 relative">
-                            <img src="${m.imageUrl}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" alt="${m.title}">
-                            <div class="absolute bottom-2 left-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded text-[9px] uppercase tracking-widest text-white/70 font-mono">${new Date(m.timestamp).toLocaleDateString()}</div>
-                        </div>
-                        <div class="p-5 flex flex-col flex-grow">
-                            <h4 class="font-bold text-sm text-white mb-2">${m.title}</h4>
-                            <p class="text-[10px] text-white/50 line-clamp-3 leading-relaxed mb-4 flex-grow italic">"${m.caption}"</p>
-                            <div class="flex gap-2 mt-auto pt-3 border-t border-white/5">
-                                <a href="${m.imageUrl}" target="_blank" download class="flex-1 bg-white/5 hover:bg-white/10 text-white py-2 rounded-lg text-[9px] uppercase tracking-widest font-bold text-center transition-colors">View Image</a>
-                                <button onclick="window.copyToClipboard('${escapeHTML(m.caption.replace(/'/g, "\\'"))}')" class="flex-1 bg-pink-500/20 hover:bg-pink-500/30 text-pink-400 border border-pink-500/30 py-2 rounded-lg text-[9px] uppercase tracking-widest font-bold transition-colors">Copy Caption</button>
-                            </div>
-                        </div>
-                    </div>`;
-                });
-                if(document.getElementById('mediaGalleryContainer')) {
-                    document.getElementById('mediaGalleryContainer').innerHTML = h;
-                    lucide.createIcons();
-                }
-            });
-
-            // 3. Mentorship Logs Sync
-            onSnapshot(query(collection(db, "mentorship_logs"), orderBy("timestamp", "desc")), (snap) => {
-                let h = '';
-                if(snap.empty) {
-                    h = '<div class="text-center py-10 text-white/30 text-xs font-bold uppercase tracking-widest border border-dashed border-white/10 rounded-2xl">No mentorship logs yet.</div>';
-                }
-                snap.forEach(d => {
-                    const l = d.data();
-                    h += `
-                    <div class="bg-[#111] border border-white/10 p-5 rounded-2xl relative group hover:border-cyan-500/30 transition-colors">
-                        <button onclick="window.deleteDocument('mentorship_logs', '${d.id}')" class="absolute top-4 right-4 text-white/20 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-8 h-8 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400 shrink-0"><i data-lucide="rocket" class="w-4 h-4"></i></div>
-                            <div>
-                                <h4 class="font-bold text-sm text-white leading-tight">${l.startupName}</h4>
-                                <p class="text-[9px] text-white/40 uppercase tracking-widest font-mono">${new Date(l.timestamp).toLocaleString()} • By ${l.mentor}</p>
-                            </div>
-                        </div>
-                        <p class="text-xs text-white/70 leading-relaxed bg-white/5 p-3 rounded-xl border border-white/5">${l.notes}</p>
-                    </div>`;
-                });
-                if(document.getElementById('mentorshipLogsContainer')) {
-                    document.getElementById('mentorshipLogsContainer').innerHTML = h;
-                    lucide.createIcons();
-                }
-            });
-        }
-
         window.logActivity = async function(action, details) { 
             try { 
                 await addDoc(collection(db, "logs"), { 
@@ -1233,11 +1016,6 @@
                     timestamp: Date.now() 
                 }); 
             } catch(e) {} 
-        }
-        
-        window.updateTaskStatusInDB = async function(taskId, newStatus) {
-            await updateDoc(doc(db, "excom_tasks", taskId), { status: newStatus });
-            await logActivity("Task Updated", `Task moved to ${newStatus}`);
         }
 
         // GLOBAL HELPER TO DELETE DOCUMENTS 
@@ -1273,135 +1051,248 @@
             });
         }
 
-        // --- NEW FEATURES SUBMISSION LOGIC ---
-
-        // Task Form
-        document.getElementById('addTaskForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnSaveTask');
-            const orig = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = 'Saving...';
-            try {
-                await addDoc(collection(db, "excom_tasks"), {
-                    desc: document.getElementById('newTaskDesc').value,
-                    assignee: document.getElementById('newTaskAssignee').value,
-                    status: 'To-Do',
-                    timestamp: Date.now()
-                });
-                document.getElementById('addTaskModal').classList.add('hidden');
-                e.target.reset();
-                window.showToast("Task added successfully!", "success");
-            } catch(err) { window.showToast(err.message, "error"); }
-            finally { btn.innerHTML = orig; btn.disabled = false; }
-        });
+        // --- SUBMISSION LOGIC ---
 
         // Media Form (UPLOADS TO GOOGLE DRIVE)
-        document.getElementById('addMediaForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnSaveMedia');
-            const orig = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = 'Uploading to Drive...';
-            try {
-                if(!window.mediaFileBase64) throw new Error("Please select an image.");
-                const title = document.getElementById('mediaTitle').value;
-                const caption = document.getElementById('mediaCaption').value;
-                
-                // Upload to Google Drive using the Apps Script
-                const url = await uploadToDrive(window.mediaFileBase64);
+        const addMediaForm = document.getElementById('addMediaForm');
+        if(addMediaForm) {
+            addMediaForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('btnSaveMedia');
+                const orig = btn.innerHTML;
+                btn.disabled = true; btn.innerHTML = 'Uploading to Drive...';
+                try {
+                    if(!window.mediaFileBase64) throw new Error("Please select an image.");
+                    const title = document.getElementById('mediaTitle').value;
+                    const caption = document.getElementById('mediaCaption').value;
+                    
+                    const url = await uploadToDrive(window.mediaFileBase64);
 
-                await addDoc(collection(db, "marketing_assets"), {
-                    title: title,
-                    caption: caption,
-                    imageUrl: url,
-                    uploader: window.currentUserName,
-                    timestamp: Date.now()
-                });
-                
-                document.getElementById('addMediaModal').classList.add('hidden');
-                e.target.reset();
-                document.getElementById('mediaUploadFileName').textContent = "Select Image";
-                window.mediaFileBase64 = null;
-                window.showToast("Media uploaded to Drive successfully!", "success");
-            } catch(err) { window.showToast(err.message, "error"); }
-            finally { btn.innerHTML = orig; btn.disabled = false; }
-        });
+                    await addDoc(collection(db, "marketing_assets"), {
+                        title: title,
+                        caption: caption,
+                        imageUrl: url,
+                        uploader: window.currentUserName,
+                        timestamp: Date.now()
+                    });
+                    
+                    document.getElementById('addMediaModal').classList.add('hidden');
+                    e.target.reset();
+                    document.getElementById('mediaUploadFileName').textContent = "Select Image";
+                    window.mediaFileBase64 = null;
+                    window.showToast("Media uploaded to Drive successfully!", "success");
+                } catch(err) { window.showToast(err.message, "error"); }
+                finally { btn.innerHTML = orig; btn.disabled = false; }
+            });
+        }
 
         // Mentorship Log Form
-        document.getElementById('addMentorLogForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnSaveMentorLog');
-            const orig = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = 'Saving...';
-            try {
-                await addDoc(collection(db, "mentorship_logs"), {
-                    startupName: document.getElementById('mentorStartupName').value,
-                    notes: document.getElementById('mentorNotes').value,
-                    mentor: window.currentUserName,
-                    timestamp: Date.now()
+        const addMentorLogForm = document.getElementById('addMentorLogForm');
+        if(addMentorLogForm) {
+            addMentorLogForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('btnSaveMentorLog');
+                const orig = btn.innerHTML;
+                btn.disabled = true; btn.innerHTML = 'Saving...';
+                try {
+                    await addDoc(collection(db, "mentorship_logs"), {
+                        startupName: document.getElementById('mentorStartupName').value,
+                        notes: document.getElementById('mentorNotes').value,
+                        mentor: window.currentUserName,
+                        timestamp: Date.now()
+                    });
+                    document.getElementById('addMentorLogModal').classList.add('hidden');
+                    e.target.reset();
+                    window.showToast("Mentorship log saved!", "success");
+                } catch(err) { window.showToast(err.message, "error"); }
+                finally { btn.innerHTML = orig; btn.disabled = false; }
+            });
+        }
+
+        // Minutes Upload to Google Drive
+        const minutesForm = document.getElementById('minutesForm');
+        if(minutesForm) {
+            minutesForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('btnUploadMinutes');
+                const orig = btn.innerHTML;
+                btn.disabled = true; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Uploading to Drive...`;
+                lucide.createIcons();
+                try {
+                    if(!window.minutesFileBase64) throw new Error("Please select a file to upload.");
+                    const title = document.getElementById('minTitle').value;
+                    const date = document.getElementById('minDate').value;
+                    
+                    const fileUrl = await uploadToDrive(window.minutesFileBase64);
+
+                    await addDoc(collection(db, "meeting_minutes"), { title: title, date: date, fileUrl: fileUrl, uploadedBy: window.currentUserName, timestamp: Date.now() });
+                    await logActivity("Minutes Uploaded", `Title: ${title}`);
+                    window.showToast("Minutes submitted to Admin successfully!", "success");
+                    
+                    e.target.reset();
+                    document.getElementById('minutesFileName').textContent = "Browse File";
+                    window.minutesFileBase64 = null;
+                } catch(error) { window.showToast("Error: " + error.message, "error"); } 
+                finally { btn.innerHTML = orig; btn.disabled = false; }
+            });
+        }
+
+        // Finance Docs Upload to Google Drive
+        const financeForm = document.getElementById('financeForm');
+        if(financeForm) {
+            financeForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('btnUploadFinance');
+                const orig = btn.innerHTML;
+                btn.disabled = true; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Uploading to Drive...`;
+                lucide.createIcons();
+                try {
+                    if(!window.financeFileBase64) throw new Error("Please select a document to upload.");
+                    const title = document.getElementById('finTitle').value;
+                    const type = document.getElementById('finType').value;
+                    const amount = document.getElementById('finAmount').value;
+                    const date = document.getElementById('finDate').value;
+                    
+                    const fileUrl = await uploadToDrive(window.financeFileBase64);
+
+                    await addDoc(collection(db, "finance_docs"), { title: title, type: type, amount: amount ? parseFloat(amount) : null, date: date, fileUrl: fileUrl, uploadedBy: window.currentUserName, timestamp: Date.now() });
+                    await logActivity("Finance Doc Uploaded", `Type: ${type}, Title: ${title}`);
+                    window.showToast("Finance document submitted successfully!", "success");
+                    
+                    e.target.reset();
+                    document.getElementById('financeFileName').textContent = "Browse File";
+                    window.financeFileBase64 = null;
+                } catch(error) { window.showToast("Error: " + error.message, "error"); } 
+                finally { btn.innerHTML = orig; btn.disabled = false; }
+            });
+        }
+
+
+        // ==========================================
+        // INITIALIZE REAL-TIME LISTENERS
+        // ==========================================
+        function initExcomSync() {
+            
+            // 1. EXCOM TASK BOARD LOGIC (VIEW & MOVE ONLY)
+            window.updateTaskStatus = async (id, newStatus) => {
+                try { await updateDoc(doc(db, "excom_tasks", id), { status: newStatus }); } 
+                catch(e) { console.error(e); }
+            };
+
+            // Fetch & Render Tasks in Dark Cards
+            onSnapshot(collection(db, "excom_tasks"), (snap) => {
+                // IMPORTANT: Matches the exact lowercase keys from Admin Panel
+                const lists = { 'todo': '', 'inprogress': '', 'completed': '' };
+                
+                const priorityColors = { 
+                    low: 'bg-green-500/20 text-green-400 border-green-500/30', 
+                    medium: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30', 
+                    high: 'bg-red-500/20 text-red-400 border-red-500/30' 
+                };
+
+                snap.forEach(d => {
+                    const data = d.data();
+                    const id = d.id;
+                    const status = data.status || 'todo'; // Match lowercase
+
+                    let prevStatus = '', nextStatus = '', prevIcon = '', nextIcon = '';
+                    if(status === 'todo') { nextStatus = 'inprogress'; nextIcon = 'arrow-right'; }
+                    else if(status === 'inprogress') { prevStatus = 'todo'; prevIcon = 'arrow-left'; nextStatus = 'completed'; nextIcon = 'check'; }
+                    else if(status === 'completed') { prevStatus = 'inprogress'; prevIcon = 'arrow-left'; }
+
+                    const safeAvatar = `https://api.dicebear.com/9.x/notionists/svg?seed=${data.assignee}`;
+
+                    // ExCom view has NO delete button
+                    lists[status] += `
+                    <div class="bg-white/5 p-4 rounded-2xl border border-white/10 shadow-lg hover:border-white/20 transition-all group relative mb-3">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-md border ${priorityColors[data.priority] || priorityColors.medium}">${data.priority || 'medium'}</span>
+                        </div>
+                        <h4 class="font-bold text-white text-sm mb-1">${data.title}</h4>
+                        <p class="text-xs text-white/50 line-clamp-2 mb-4 leading-relaxed">${data.description}</p>
+                        
+                        <div class="flex items-center justify-between mt-auto pt-3 border-t border-white/10">
+                            <div class="flex items-center gap-2">
+                                <img src="${safeAvatar}" class="w-6 h-6 rounded-full bg-black border border-white/20">
+                                <span class="text-[10px] font-bold text-white/80 truncate max-w-[80px]">${data.assignee}</span>
+                            </div>
+                            <div class="flex gap-1">
+                                ${prevStatus ? `<button onclick="window.updateTaskStatus('${id}', '${prevStatus}')" class="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/20 flex items-center justify-center text-white/50 hover:text-white transition-colors"><i data-lucide="${prevIcon}" class="w-3.5 h-3.5"></i></button>` : ''}
+                                ${nextStatus ? `<button onclick="window.updateTaskStatus('${id}', '${nextStatus}')" class="w-7 h-7 rounded-lg ${status === 'inprogress' ? 'bg-green-500/20 text-green-400 hover:bg-green-500/40' : 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/40'} flex items-center justify-center transition-colors"><i data-lucide="${nextIcon}" class="w-3.5 h-3.5"></i></button>` : ''}
+                            </div>
+                        </div>
+                    </div>`;
                 });
-                document.getElementById('addMentorLogModal').classList.add('hidden');
-                e.target.reset();
-                window.showToast("Mentorship log saved!", "success");
-            } catch(err) { window.showToast(err.message, "error"); }
-            finally { btn.innerHTML = orig; btn.disabled = false; }
-        });
 
+                if(document.getElementById('col-ToDo')) document.getElementById('col-ToDo').innerHTML = lists['todo'] || `<div class="text-center py-6 text-white/30 text-[10px] uppercase font-bold tracking-widest border border-dashed border-white/10 rounded-xl">No Tasks</div>`;
+                if(document.getElementById('col-InProgress')) document.getElementById('col-InProgress').innerHTML = lists['inprogress'] || `<div class="text-center py-6 text-white/30 text-[10px] uppercase font-bold tracking-widest border border-dashed border-white/10 rounded-xl">No Tasks</div>`;
+                if(document.getElementById('col-Completed')) document.getElementById('col-Completed').innerHTML = lists['completed'] || `<div class="text-center py-6 text-white/30 text-[10px] uppercase font-bold tracking-widest border border-dashed border-white/10 rounded-xl">No Tasks</div>`;
 
-        // --- EXISTING SUBMIT LOGIC (UPLOADS TO GOOGLE DRIVE) ---
-        document.getElementById('minutesForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnUploadMinutes');
-            const orig = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Uploading to Drive...`;
-            lucide.createIcons();
-            try {
-                if(!window.minutesFileBase64) throw new Error("Please select a file to upload.");
-                const title = document.getElementById('minTitle').value;
-                const date = document.getElementById('minDate').value;
-                
-                // Upload to Google Drive
-                const fileUrl = await uploadToDrive(window.minutesFileBase64);
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            });
 
-                await addDoc(collection(db, "meeting_minutes"), { title: title, date: date, fileUrl: fileUrl, uploadedBy: window.currentUserName, timestamp: Date.now() });
-                await logActivity("Minutes Uploaded", `Title: ${title}`);
-                window.showToast("Minutes submitted to Admin successfully!", "success");
-                
-                e.target.reset();
-                document.getElementById('minutesFileName').textContent = "Browse File";
-                window.minutesFileBase64 = null;
-            } catch(error) { window.showToast("Error: " + error.message, "error"); } 
-            finally { btn.innerHTML = orig; btn.disabled = false; }
-        });
+            // 2. Marketing Hub Sync
+            onSnapshot(query(collection(db, "marketing_assets"), orderBy("timestamp", "desc")), (snap) => {
+                let h = '';
+                if(snap.empty) {
+                    h = '<div class="col-span-full text-center py-10 text-white/30 text-xs font-bold uppercase tracking-widest border border-dashed border-white/10 rounded-2xl">No media assets uploaded yet.</div>';
+                }
+                snap.forEach(d => {
+                    const m = d.data();
+                    h += `
+                    <div class="bg-[#111] border border-white/10 rounded-2xl overflow-hidden flex flex-col group relative hover:border-pink-500/30 transition-colors">
+                        <button onclick="window.deleteDocument('marketing_assets', '${d.id}')" class="absolute top-3 right-3 bg-black/50 backdrop-blur text-white/50 hover:text-red-400 p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        <div class="h-48 bg-black/50 relative">
+                            <img src="${m.imageUrl}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" alt="${m.title}">
+                            <div class="absolute bottom-2 left-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded text-[9px] uppercase tracking-widest text-white/70 font-mono">${new Date(m.timestamp).toLocaleDateString()}</div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow">
+                            <h4 class="font-bold text-sm text-white mb-2">${m.title}</h4>
+                            <p class="text-[10px] text-white/50 line-clamp-3 leading-relaxed mb-4 flex-grow italic">"${m.caption}"</p>
+                            <div class="flex gap-2 mt-auto pt-3 border-t border-white/5">
+                                <a href="${m.imageUrl}" target="_blank" download class="flex-1 bg-white/5 hover:bg-white/10 text-white py-2 rounded-lg text-[9px] uppercase tracking-widest font-bold text-center transition-colors">View Image</a>
+                                <button onclick="window.copyToClipboard('${escapeHTML(m.caption.replace(/'/g, "\\'"))}')" class="flex-1 bg-pink-500/20 hover:bg-pink-500/30 text-pink-400 border border-pink-500/30 py-2 rounded-lg text-[9px] uppercase tracking-widest font-bold transition-colors">Copy Caption</button>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                if(document.getElementById('mediaGalleryContainer')) {
+                    document.getElementById('mediaGalleryContainer').innerHTML = h;
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                }
+            });
 
-        document.getElementById('financeForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnUploadFinance');
-            const orig = btn.innerHTML;
-            btn.disabled = true; btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Uploading to Drive...`;
-            lucide.createIcons();
-            try {
-                if(!window.financeFileBase64) throw new Error("Please select a document to upload.");
-                const title = document.getElementById('finTitle').value;
-                const type = document.getElementById('finType').value;
-                const amount = document.getElementById('finAmount').value;
-                const date = document.getElementById('finDate').value;
-                
-                // Upload to Google Drive
-                const fileUrl = await uploadToDrive(window.financeFileBase64);
+            // 3. Mentorship Logs Sync
+            onSnapshot(query(collection(db, "mentorship_logs"), orderBy("timestamp", "desc")), (snap) => {
+                let h = '';
+                if(snap.empty) {
+                    h = '<div class="text-center py-10 text-white/30 text-xs font-bold uppercase tracking-widest border border-dashed border-white/10 rounded-2xl">No mentorship logs yet.</div>';
+                }
+                snap.forEach(d => {
+                    const l = d.data();
+                    h += `
+                    <div class="bg-[#111] border border-white/10 p-5 rounded-2xl relative group hover:border-cyan-500/30 transition-colors">
+                        <button onclick="window.deleteDocument('mentorship_logs', '${d.id}')" class="absolute top-4 right-4 text-white/20 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400 shrink-0"><i data-lucide="rocket" class="w-4 h-4"></i></div>
+                            <div>
+                                <h4 class="font-bold text-sm text-white leading-tight">${l.startupName}</h4>
+                                <p class="text-[9px] text-white/40 uppercase tracking-widest font-mono">${new Date(l.timestamp).toLocaleString()} • By ${l.mentor}</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-white/70 leading-relaxed bg-white/5 p-3 rounded-xl border border-white/5">${l.notes}</p>
+                    </div>`;
+                });
+                if(document.getElementById('mentorshipLogsContainer')) {
+                    document.getElementById('mentorshipLogsContainer').innerHTML = h;
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                }
+            });
+        }
 
-                await addDoc(collection(db, "finance_docs"), { title: title, type: type, amount: amount ? parseFloat(amount) : null, date: date, fileUrl: fileUrl, uploadedBy: window.currentUserName, timestamp: Date.now() });
-                await logActivity("Finance Doc Uploaded", `Type: ${type}, Title: ${title}`);
-                window.showToast("Finance document submitted successfully!", "success");
-                
-                e.target.reset();
-                document.getElementById('financeFileName').textContent = "Browse File";
-                window.financeFileBase64 = null;
-            } catch(error) { window.showToast("Error: " + error.message, "error"); } 
-            finally { btn.innerHTML = orig; btn.disabled = false; }
-        });
-
-        document.getElementById('excomLogoutBtn').addEventListener('click', async () => { await signOut(auth); window.location.reload(); });
-        document.getElementById('excomLogoutBtnMobile').addEventListener('click', async () => { await signOut(auth); window.location.reload(); });
+        // Logout
+        document.getElementById('excomLogoutBtn')?.addEventListener('click', async () => { await signOut(auth); window.location.reload(); });
+        document.getElementById('excomLogoutBtnMobile')?.addEventListener('click', async () => { await signOut(auth); window.location.reload(); });
     </script>
 </body>
 </html>
