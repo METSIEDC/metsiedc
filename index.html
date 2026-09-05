@@ -1,6 +1,5 @@
-<!-- STREAMING_CHUNK:Initializing HTML setup and Tailwind config... -->
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,16 +7,16 @@
     <link rel="icon" type="image/png" href="assets/images/logos/MSEM-removebg-preview.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#050505">
     <link rel="apple-touch-icon" href="assets/images/logos/MSEM-removebg-preview.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- STREAMING_CHUNK:Configuring Tailwind Theme... -->
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: { 
@@ -26,9 +25,10 @@
                     },
                     colors: {
                         theme: {
-                            bg: '#f0f2f5',
-                            sidebar: '#ffffff',
-                            primary: '#1a1a2e',
+                            bg: '#050505',
+                            surface: '#0f0f11',
+                            surfaceLight: '#1a1a1f',
+                            primary: '#ffffff',
                             accent: '#2f2e41'
                         },
                         glow: {
@@ -43,6 +43,7 @@
                         'ticker': 'ticker 30s linear infinite',
                         'marquee': 'marquee 25s linear infinite',
                         'pulse-glow': 'pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'border-spin': 'borderSpin 4s linear infinite',
                     },
                     keyframes: {
                         float: {
@@ -60,6 +61,9 @@
                         pulseGlow: {
                             '0%, 100%': { opacity: '0.4' },
                             '50%': { opacity: '0.8' },
+                        },
+                        borderSpin: {
+                            '100%': { transform: 'translate(-50%, -50%) rotate(360deg)' }
                         }
                     }
                 }
@@ -67,405 +71,389 @@
         }
     </script>
 
-    <!-- STREAMING_CHUNK:Adding custom CSS styles... -->
     <style>
         body { 
-            background-color: #f0f2f5; 
-            color: #1a1a2e; 
+            background-color: #050505; 
+            color: #ffffff; 
             overflow-x: hidden; 
         }
 
-        /* Glassmorphism Utilities */
+        /* Animated Glowing Border Effect (Like the Video) */
+        .animated-glow-wrapper {
+            position: relative;
+            border-radius: 2.5rem;
+            overflow: hidden;
+            background: #0f0f11;
+            z-index: 0;
+        }
+        .animated-glow-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, transparent, transparent, #ea580c);
+            animation: borderSpin 4s linear infinite;
+            transform-origin: 0 0;
+            z-index: -2;
+        }
+        .animated-glow-wrapper.blue-glow::before {
+            background: conic-gradient(transparent, transparent, transparent, #2563eb);
+        }
+        .animated-glow-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: #0f0f11;
+            border-radius: calc(2.5rem - 2px);
+            z-index: -1;
+        }
+
+        /* Glassmorphism for Dark Mode */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
-
-        .glass-card-dark {
-            background: rgba(30, 30, 40, 0.6);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
-            color: white;
+        .glass-panel:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        /* 3D Tilt CSS */
-        .tilt-card { transform-style: preserve-3d; transform: perspective(1000px); }
-        .tilt-content { transform: translateZ(30px); }
 
         /* Text Gradients */
         .text-gradient { background: linear-gradient(to right, #2563eb, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .text-gradient-white { background: linear-gradient(to right, #ffffff, #e2e8f0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-gradient-orange { background: linear-gradient(to right, #ea580c, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Custom Range Slider */
-        input[type=range] { -webkit-appearance: none; background: rgba(0,0,0,0.1); height: 8px; border-radius: 8px; }
+        /* Custom Range Slider (Dark Theme) */
+        input[type=range] { -webkit-appearance: none; background: rgba(255,255,255,0.1); height: 8px; border-radius: 8px; }
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%;
-            background: #2563eb; cursor: pointer; box-shadow: 0 0 15px rgba(37,99,235,0.4);
+            background: #2563eb; cursor: pointer; box-shadow: 0 0 20px rgba(37,99,235,0.8);
             transition: transform 0.1s;
         }
         input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 
-        /* Swiper overrides */
-        .swiper-slide { filter: grayscale(20%) opacity(0.7); transition: 0.5s; border-radius: 24px; overflow: hidden; }
-        .swiper-slide-active { filter: grayscale(0%) opacity(1); transform: scale(1.05); z-index: 10; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border: 2px solid white;}
-        .swiper-pagination-bullet { background: rgba(0,0,0,0.3); opacity: 1; }
-        .swiper-pagination-bullet-active { background: #2563eb; box-shadow: 0 0 10px rgba(37,99,235,0.5);}
-
-        /* EASTER EGG: HACKER MODE */
-        .hacker-mode * {
-            font-family: 'Courier New', Courier, monospace !important;
-            color: #0f0 !important;
-            border-color: #0f0 !important;
-            background: #000 !important;
-            box-shadow: none !important;
-            text-shadow: 0 0 2px #0f0;
-        }
-        .hacker-mode img, .hacker-mode svg { filter: sepia(100%) hue-rotate(90deg) saturate(300%) !important; }
-        .hacker-overlay {
-            display: none; pointer-events: none; position: fixed; inset: 0; z-index: 9999;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 2px, 3px 100%;
-        }
-        .hacker-mode .hacker-overlay { display: block; }
+        /* Swiper overrides for dark mode */
+        .swiper-slide { filter: grayscale(50%) brightness(0.5); transition: 0.5s; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .swiper-slide-active { filter: grayscale(0%) brightness(1); transform: scale(1.05); z-index: 10; box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.2);}
+        .swiper-pagination-bullet { background: rgba(255,255,255,0.2); opacity: 1; }
+        .swiper-pagination-bullet-active { background: #2563eb; box-shadow: 0 0 15px rgba(37,99,235,0.8);}
 
         /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.4); }
-
-        /* Popup */
-        .popup-overlay {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(12px);
-            z-index: 1000; display: flex; align-items: center; justify-content: center;
-            opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
-        }
-        .popup-overlay.active { opacity: 1; visibility: visible; }
-        .popup-content { transform: scale(0.95); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .popup-overlay.active .popup-content { transform: scale(1); }
-
-        /* Mobile Menu */
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #1f1f22; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2f2e41; }
+        
+        /* Sidebar & Menu styles */
         .mobile-menu { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .mobile-menu.open { transform: translateX(0); }
     </style>
 </head>
 
-<body class="font-sans antialiased selection:bg-theme-primary selection:text-white relative">
+<body class="font-sans antialiased selection:bg-glow-orange selection:text-white relative">
     
-    <!-- Hacker Mode Overlay -->
-    <div class="hacker-overlay"></div>
-
-    <!-- STREAMING_CHUNK:Building Desktop Sidebar Navigation... -->
     <!-- DESKTOP FIXED SIDEBAR -->
-    <aside class="hidden md:flex fixed top-4 left-4 bottom-4 w-24 flex-col items-center justify-between py-8 px-4 bg-theme-sidebar rounded-[2.5rem] shadow-[0_10px_40px_rgba(0,0,0,0.08)] z-50">
+    <aside class="hidden md:flex fixed top-4 left-4 bottom-4 w-24 flex-col items-center justify-between py-8 px-4 bg-theme-surface border border-white/5 rounded-[2.5rem] shadow-[0_0_40px_rgba(0,0,0,0.5)] z-50">
         <div class="flex flex-col gap-6 items-center w-full">
-            <a href="index.html" class="w-12 h-12 rounded-full bg-theme-primary text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110">
+            <a href="index.html" class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-transform hover:scale-110">
                 <i data-lucide="home" class="w-5 h-5"></i>
             </a>
-            <a href="event.html" class="w-12 h-12 rounded-full text-gray-400 hover:text-theme-primary hover:bg-gray-100 flex items-center justify-center transition-all">
+            <a href="event.html" class="w-12 h-12 rounded-full text-gray-500 hover:text-white hover:bg-white/10 flex items-center justify-center transition-all">
                 <i data-lucide="calendar" class="w-5 h-5"></i>
             </a>
-            <a href="initiatives.html" class="w-12 h-12 rounded-full text-gray-400 hover:text-theme-primary hover:bg-gray-100 flex items-center justify-center transition-all">
+            <a href="initiatives.html" class="w-12 h-12 rounded-full text-gray-500 hover:text-white hover:bg-white/10 flex items-center justify-center transition-all">
                 <i data-lucide="grid" class="w-5 h-5"></i>
             </a>
-            <a href="report.html" class="w-12 h-12 rounded-full text-gray-400 hover:text-theme-primary hover:bg-gray-100 flex items-center justify-center transition-all">
+            <a href="report.html" class="w-12 h-12 rounded-full text-gray-500 hover:text-white hover:bg-white/10 flex items-center justify-center transition-all">
                 <i data-lucide="file-text" class="w-5 h-5"></i>
             </a>
-             <a href="about.html" class="w-12 h-12 rounded-full bg-theme-primary text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110">
+             <a href="about.html" class="w-12 h-12 rounded-full bg-white/5 hover:bg-white/10 text-white flex items-center justify-center border border-white/10 transition-transform hover:scale-110">
                 <i data-lucide="info" class="w-5 h-5"></i>
             </a>
             
-            <!-- User Profile Avatar -->
             <a href="team.html">
-                <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-gray-100 mt-2 hover:border-theme-primary transition-colors cursor-pointer">
-                    <img src="https://api.dicebear.com/9.x/notionists/svg?seed=IEDC" alt="Team" class="w-full h-full object-cover bg-gray-50">
+                <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white/10 mt-2 hover:border-glow-orange transition-colors cursor-pointer shadow-[0_0_15px_rgba(234,88,12,0.2)]">
+                    <img src="https://api.dicebear.com/9.x/notionists/svg?seed=IEDC" alt="Team" class="w-full h-full object-cover bg-theme-surfaceLight">
                 </div>
             </a>
         </div>
 
         <div class="flex flex-col gap-4 items-center">
-            <button onclick="document.getElementById('zia-toggle-btn').click()" class="w-12 h-12 rounded-full text-glow-purple hover:bg-purple-50 flex items-center justify-center transition-all mt-2 group relative shadow-sm border border-purple-100">
+            <button onclick="document.getElementById('zia-toggle-btn').click()" class="w-12 h-12 rounded-full text-glow-purple bg-purple-500/10 hover:bg-purple-500/20 flex items-center justify-center transition-all mt-2 group relative shadow-[0_0_20px_rgba(147,51,234,0.3)] border border-purple-500/30">
                 <i data-lucide="bot" class="w-5 h-5 group-hover:animate-pulse"></i>
             </button>
         </div>
     </aside>
 
-    <!-- STREAMING_CHUNK:Building Mobile Header and Menu... -->
     <!-- MOBILE HEADER -->
-    <header class="md:hidden fixed top-0 left-0 right-0 h-16 bg-white/80 backdrop-blur-md z-40 flex items-center justify-between px-4 shadow-sm">
-        <a href="index.html" class="font-display font-bold text-theme-primary tracking-wide">MET'S IEDC</a>
-        <button id="mobile-menu-button" class="text-theme-primary p-2">
+    <header class="md:hidden fixed top-0 left-0 right-0 h-16 bg-theme-surface/80 backdrop-blur-xl border-b border-white/5 z-40 flex items-center justify-between px-4">
+        <a href="index.html" class="font-display font-bold text-white tracking-wide flex items-center gap-2">
+            <img src="assets/images/logos/MSEM-removebg-preview.png" class="w-6 h-6 filter invert" alt="Logo"> MET'S IEDC
+        </a>
+        <button id="mobile-menu-button" class="text-white p-2">
             <i data-lucide="menu" class="w-6 h-6"></i>
         </button>
     </header>
 
     <!-- MOBILE MENU -->
-    <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-white/95 backdrop-blur-xl z-50 overflow-y-auto flex flex-col">
-        <div class="flex justify-between items-center p-6 border-b border-gray-100">
-            <span class="text-xl font-display font-bold text-theme-primary">MENU</span>
-            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600">
+    <div id="mobile-menu" class="mobile-menu fixed inset-0 bg-theme-bg/95 backdrop-blur-2xl z-50 overflow-y-auto flex flex-col border-l border-white/10">
+        <div class="flex justify-between items-center p-6 border-b border-white/10">
+            <span class="text-xl font-display font-bold text-white">MENU</span>
+            <button id="close-mobile-menu" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>
         <nav class="flex flex-col space-y-6 px-8 py-10">
-            <a href="index.html" class="text-2xl font-bold text-theme-primary flex items-center gap-4"><i data-lucide="home" class="w-6 h-6 text-glow-blue"></i> Home</a>
-            <a href="event.html" class="text-2xl font-bold text-gray-500 hover:text-theme-primary flex items-center gap-4"><i data-lucide="calendar" class="w-6 h-6 text-glow-orange"></i> Events</a>
-            <a href="initiatives.html" class="text-2xl font-bold text-gray-500 hover:text-theme-primary flex items-center gap-4"><i data-lucide="rocket" class="w-6 h-6 text-glow-purple"></i> Initiatives</a>
-            <a href="about.html" class="text-2xl font-bold text-theme-primary flex items-center gap-4"><i data-lucide="info" class="w-6 h-6 text-theme-primary"></i> About</a>
-            <a href="team.html" class="text-2xl font-bold text-gray-500 hover:text-theme-primary flex items-center gap-4"><i data-lucide="users" class="w-6 h-6 text-glow-green"></i> Ex-Com</a>
+            <a href="index.html" class="text-2xl font-bold text-white flex items-center gap-4"><i data-lucide="home" class="w-6 h-6 text-glow-blue"></i> Home</a>
+            <a href="event.html" class="text-2xl font-bold text-gray-400 hover:text-white flex items-center gap-4"><i data-lucide="calendar" class="w-6 h-6 text-glow-orange"></i> Events</a>
+            <a href="initiatives.html" class="text-2xl font-bold text-gray-400 hover:text-white flex items-center gap-4"><i data-lucide="rocket" class="w-6 h-6 text-glow-purple"></i> Initiatives</a>
+            <a href="about.html" class="text-2xl font-bold text-white flex items-center gap-4"><i data-lucide="info" class="w-6 h-6 text-gray-300"></i> About</a>
+            <a href="team.html" class="text-2xl font-bold text-gray-400 hover:text-white flex items-center gap-4"><i data-lucide="users" class="w-6 h-6 text-glow-green"></i> Ex-Com</a>
             
-            <div class="pt-8 mt-8 border-t border-gray-200">
-                <a href="login.html" class="w-full bg-theme-primary text-white text-center py-4 rounded-xl font-bold uppercase tracking-widest block">Portal Login</a>
+            <div class="pt-8 mt-8 border-t border-white/10">
+                <a href="login.html" class="w-full bg-white text-black text-center py-4 rounded-xl font-bold uppercase tracking-widest block hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-shadow">Portal Login</a>
             </div>
         </nav>
     </div>
 
-    <!-- STREAMING_CHUNK:Creating main scrollable content and Hero section... -->
     <!-- MAIN SCROLLABLE CONTENT -->
     <main class="md:ml-32 pt-16 md:pt-4 p-4 min-h-screen flex flex-col gap-6">
 
         <!-- LIVE TICKER -->
-        <div class="w-full bg-white rounded-2xl shadow-sm border border-gray-200 py-2 overflow-hidden relative z-30">
-            <div class="whitespace-nowrap animate-ticker inline-block text-[10px] md:text-xs font-mono text-glow-blue font-bold tracking-widest uppercase">
-                Join MET'S IEDC now! &nbsp; &nbsp; // &nbsp; &nbsp; Are you excited!!! &nbsp; &nbsp; // &nbsp; &nbsp; Something is cooking ! &nbsp; &nbsp; // &nbsp; &nbsp; Can you crack! &nbsp; &nbsp; // &nbsp; &nbsp; AI mentor Zia is available.
+        <div class="w-full bg-theme-surface border border-white/5 rounded-2xl shadow-lg py-2 overflow-hidden relative z-30">
+            <div class="whitespace-nowrap animate-ticker inline-block text-[10px] md:text-xs font-mono text-glow-orange font-bold tracking-widest uppercase shadow-[0_0_10px_rgba(234,88,12,0.5)]">
+                Initialize System &nbsp; &nbsp; // &nbsp; &nbsp; Are you excited!!! &nbsp; &nbsp; // &nbsp; &nbsp; Innovation is loading ! &nbsp; &nbsp; // &nbsp; &nbsp; Can you crack it? &nbsp; &nbsp; // &nbsp; &nbsp; AI mentor Zia is online.
             </div>
         </div>
 
         <!-- HERO SECTION -->
-        <section class="relative w-full h-[80vh] md:h-[90vh] rounded-[2.5rem] md:rounded-[3rem] overflow-hidden shadow-2xl bg-white shrink-0">
-            
-            <!-- CHANGED: Replaced building image with an IEDC/Tech Collaboration Image -->
-            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2000" alt="Innovation Hub Background" class="absolute inset-0 w-full h-full object-cover">
-            
-            <!-- Slightly darker gradient to make text stand out on the new background -->
-            <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/80 pointer-events-none"></div>
+        <section class="animated-glow-wrapper blue-glow h-[80vh] md:h-[90vh] shadow-[0_0_50px_rgba(37,99,235,0.15)] shrink-0">
+            <div class="absolute inset-[2px] rounded-[calc(2.5rem-2px)] overflow-hidden z-10 bg-theme-bg">
+                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2000" alt="Cyber Hub Background" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-luminosity">
+                <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/80 via-transparent to-[#050505] pointer-events-none"></div>
 
-            <!-- Top Header in Hero -->
-            <div class="absolute top-0 left-0 right-0 p-6 flex flex-wrap justify-between items-start z-20 gap-4 pointer-events-none">
-                <a href="event.html" class="pointer-events-auto bg-white/90 backdrop-blur-md px-6 py-3 rounded-full text-sm font-bold tracking-wide shadow-lg hover:bg-white transition-colors flex items-center gap-2 text-theme-primary">
-                    <i data-lucide="arrow-up-left" class="w-4 h-4 text-glow-orange"></i> Events
-                </a>
+                <!-- Top Header in Hero -->
+                <div class="absolute top-0 left-0 right-0 p-6 flex flex-wrap justify-between items-start z-20 gap-4">
+                    <a href="event.html" class="bg-white/10 backdrop-blur-md border border-white/10 px-6 py-3 rounded-full text-sm font-bold tracking-wide shadow-lg hover:bg-white/20 transition-colors flex items-center gap-2 text-white">
+                        <i data-lucide="arrow-up-left" class="w-4 h-4 text-glow-orange"></i> Events
+                    </a>
 
-                <div class="hidden lg:flex pointer-events-auto items-center gap-2 bg-white/90 backdrop-blur-md p-2 rounded-full shadow-lg">
-                    <button class="px-6 py-2 rounded-full hover:bg-gray-100 text-sm font-semibold flex items-center gap-2 transition-colors text-theme-primary">
-                        <i data-lucide="map-pin" class="w-4 h-4 text-gray-500"></i> Hub <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 ml-1"></i>
-                    </button>
-                    <div class="w-px h-6 bg-gray-300"></div>
-                    <button class="px-6 py-2 rounded-full hover:bg-gray-100 text-sm font-semibold flex items-center gap-2 transition-colors text-theme-primary">
-                        <i data-lucide="box" class="w-4 h-4 text-gray-500"></i> Dept <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 ml-1"></i>
-                    </button>
+                    <div class="hidden lg:flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 p-2 rounded-full shadow-lg">
+                        <button class="px-6 py-2 rounded-full hover:bg-white/10 text-sm font-semibold flex items-center gap-2 transition-colors text-white">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-gray-400"></i> Hub <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 ml-1"></i>
+                        </button>
+                        <div class="w-px h-6 bg-white/20"></div>
+                        <button class="px-6 py-2 rounded-full hover:bg-white/10 text-sm font-semibold flex items-center gap-2 transition-colors text-white">
+                            <i data-lucide="box" class="w-4 h-4 text-gray-400"></i> Dept <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 ml-1"></i>
+                        </button>
+                    </div>
+
+                    <a href="login.html" class="bg-white text-black px-6 py-3 rounded-full text-sm font-bold tracking-wide shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:scale-105 transition-all flex items-center gap-2 ml-auto lg:ml-0">
+                        Portal <i data-lucide="arrow-up-right" class="w-4 h-4 text-black"></i>
+                    </a>
                 </div>
 
-                <a href="login.html" class="pointer-events-auto bg-white/90 backdrop-blur-md px-6 py-3 rounded-full text-sm font-bold tracking-wide shadow-lg hover:bg-white transition-colors flex items-center gap-2 text-theme-primary ml-auto lg:ml-0">
-                    Portal <i data-lucide="arrow-up-right" class="w-4 h-4 text-glow-blue"></i>
-                </a>
-            </div>
+                <!-- Center Text -->
+                <div class="absolute top-[25%] left-0 right-0 flex flex-col items-center justify-center pointer-events-none z-10 px-4">
+                    <h1 class="text-white text-5xl md:text-7xl lg:text-[7.5rem] font-medium leading-[1.05] tracking-tight text-center drop-shadow-2xl">
+                        Empower <span class="text-gradient">Ideas</span><br>
+                        Engineer <span class="text-white/70 font-light">Future</span>
+                    </h1>
+                </div>
 
-            <!-- Center Text -->
-            <div class="absolute top-[25%] left-0 right-0 flex flex-col items-center justify-center pointer-events-none z-10 px-4">
-                <h1 class="text-white text-5xl md:text-7xl lg:text-[7rem] font-medium leading-[1.05] tracking-tight text-center drop-shadow-2xl">
-                    Empower <span class="text-white/90 font-light">Ideas</span><br>
-                    Engineer <span class="text-white/90 font-light">Future</span>
-                </h1>
-            </div>
-
-            <!-- Bottom Cards -->
-            <div class="absolute bottom-4 md:bottom-8 left-4 md:left-8 right-4 md:right-8 flex flex-col md:flex-row justify-between items-end gap-6 z-20 pointer-events-none">
-                
-                <!-- Left Solid Card -->
-                <div class="bg-white rounded-[2rem] p-6 md:p-8 w-full md:max-w-[340px] shadow-2xl relative overflow-hidden pointer-events-auto">
-                    <h2 class="text-xl font-bold mb-3 text-theme-primary">Find The Perfect Team</h2>
-                    <p class="text-gray-500 text-xs leading-relaxed mb-6">
-                        Connect with AI mentorship, direct technical resources, and exclusive funding support through the MET'S IEDC ecosystem.
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h3 class="text-2xl font-black text-theme-primary count-up" data-target="15000">0</h3>
-                            <p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Innovation Pts</p>
-                        </div>
-                        <div class="flex items-center">
-                            <img src="https://api.dicebear.com/9.x/notionists/svg?seed=A" class="w-10 h-10 rounded-full border-2 border-white -mr-3 bg-blue-100 shadow-sm">
-                            <img src="https://api.dicebear.com/9.x/notionists/svg?seed=B" class="w-10 h-10 rounded-full border-2 border-white -mr-3 bg-purple-100 shadow-sm">
-                            <div class="w-10 h-10 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500 shadow-sm z-10 cursor-pointer">
-                                <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                <!-- Bottom Cards -->
+                <div class="absolute bottom-4 md:bottom-8 left-4 md:left-8 right-4 md:right-8 flex flex-col md:flex-row justify-between items-end gap-6 z-20">
+                    
+                    <!-- Left Glass Card -->
+                    <div class="glass-panel rounded-[2rem] p-6 md:p-8 w-full md:max-w-[340px] pointer-events-auto">
+                        <h2 class="text-xl font-bold mb-3 text-white">Find The Perfect Team</h2>
+                        <p class="text-gray-400 text-xs leading-relaxed mb-6">
+                            Connect with AI mentorship, direct technical resources, and exclusive funding support through the MET'S IEDC ecosystem.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-2xl font-black text-glow-blue count-up drop-shadow-[0_0_10px_rgba(37,99,235,0.5)]" data-target="15000">0</h3>
+                                <p class="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Innovation Pts</p>
+                            </div>
+                            <div class="flex items-center">
+                                <img src="https://api.dicebear.com/9.x/notionists/svg?seed=A" class="w-10 h-10 rounded-full border-2 border-[#1a1a1f] -mr-3 bg-blue-900 shadow-sm">
+                                <img src="https://api.dicebear.com/9.x/notionists/svg?seed=B" class="w-10 h-10 rounded-full border-2 border-[#1a1a1f] -mr-3 bg-purple-900 shadow-sm">
+                                <div class="w-10 h-10 rounded-full border-2 border-[#1a1a1f] bg-white/10 backdrop-blur-md flex items-center justify-center text-xs font-bold text-white shadow-sm z-10 cursor-pointer hover:bg-white/20 transition-colors">
+                                    <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Right Glass Card WITH COUNTDOWN -->
-                <div class="glass-card-dark rounded-[2.5rem] p-6 md:p-8 w-full md:max-w-[420px] relative pointer-events-auto">
-                    <button class="absolute -top-6 -right-6 md:-right-4 w-16 h-16 bg-theme-primary rounded-full flex items-center justify-center shadow-2xl border-4 border-white hover:scale-105 transition-transform z-30">
-                        <img src="assets/images/logos/MSEM-removebg-preview.png" alt="Logo" class="w-8 h-8 filter invert" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                        <i data-lucide="zap" class="w-8 h-8 text-white hidden"></i>
-                    </button>
+                    <!-- Right Countdown Card -->
+                    <div class="glass-panel rounded-[2.5rem] p-6 md:p-8 w-full md:max-w-[420px] relative pointer-events-auto">
+                        <button class="absolute -top-6 -right-6 md:-right-4 w-16 h-16 bg-theme-bg rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)] border border-white/20 hover:scale-105 transition-transform z-30 group">
+                            <img src="assets/images/logos/MSEM-removebg-preview.png" alt="Logo" class="w-8 h-8 filter invert group-hover:hidden">
+                            <i data-lucide="zap" class="w-8 h-8 text-glow-orange hidden group-hover:block drop-shadow-[0_0_10px_rgba(234,88,12,0.8)]"></i>
+                        </button>
 
-                    <h2 class="text-2xl font-bold text-white mb-1">Protosynth 2026</h2>
-                    <p class="text-white/70 text-xs flex items-center gap-1 mb-4">
-                        <i data-lucide="map-pin" class="w-3 h-3"></i> MET'S Engineering College
-                    </p>
+                        <h2 class="text-2xl font-bold text-white mb-1">Protosynth 2026</h2>
+                        <p class="text-gray-400 text-xs flex items-center gap-1 mb-4">
+                            <i data-lucide="map-pin" class="w-3 h-3 text-glow-blue"></i> MET'S Engineering College
+                        </p>
 
-                    <!-- LIVE COUNTDOWN TIMER -->
-                    <div id="countdown-container" class="flex gap-2 md:gap-3 mb-6 border-y border-white/20 py-4">
-                        <div class="flex flex-col items-center flex-1 bg-white/10 rounded-xl py-2 backdrop-blur-sm border border-white/10">
-                            <span id="days" class="text-xl md:text-2xl font-black text-white drop-shadow-md">00</span>
-                            <span class="text-[9px] font-bold tracking-widest text-white/60 uppercase">Days</span>
+                        <div id="countdown-container" class="flex gap-2 md:gap-3 mb-6 border-y border-white/10 py-4">
+                            <div class="flex flex-col items-center flex-1 bg-black/40 rounded-xl py-2 border border-white/5 shadow-inner">
+                                <span id="days" class="text-xl md:text-2xl font-black text-white">00</span>
+                                <span class="text-[9px] font-bold tracking-widest text-gray-500 uppercase">Days</span>
+                            </div>
+                            <div class="flex flex-col items-center flex-1 bg-black/40 rounded-xl py-2 border border-white/5 shadow-inner">
+                                <span id="hours" class="text-xl md:text-2xl font-black text-white">00</span>
+                                <span class="text-[9px] font-bold tracking-widest text-gray-500 uppercase">Hours</span>
+                            </div>
+                            <div class="flex flex-col items-center flex-1 bg-black/40 rounded-xl py-2 border border-white/5 shadow-inner">
+                                <span id="minutes" class="text-xl md:text-2xl font-black text-white">00</span>
+                                <span class="text-[9px] font-bold tracking-widest text-gray-500 uppercase">Mins</span>
+                            </div>
+                            <div class="flex flex-col items-center flex-1 bg-black/40 rounded-xl py-2 border border-white/5 shadow-inner">
+                                <span id="seconds" class="text-xl md:text-2xl font-black text-glow-orange drop-shadow-[0_0_8px_rgba(234,88,12,0.6)] animate-pulse">00</span>
+                                <span class="text-[9px] font-bold tracking-widest text-glow-orange uppercase">Secs</span>
+                            </div>
                         </div>
-                        <div class="flex flex-col items-center flex-1 bg-white/10 rounded-xl py-2 backdrop-blur-sm border border-white/10">
-                            <span id="hours" class="text-xl md:text-2xl font-black text-white drop-shadow-md">00</span>
-                            <span class="text-[9px] font-bold tracking-widest text-white/60 uppercase">Hours</span>
-                        </div>
-                        <div class="flex flex-col items-center flex-1 bg-white/10 rounded-xl py-2 backdrop-blur-sm border border-white/10">
-                            <span id="minutes" class="text-xl md:text-2xl font-black text-white drop-shadow-md">00</span>
-                            <span class="text-[9px] font-bold tracking-widest text-white/60 uppercase">Mins</span>
-                        </div>
-                        <div class="flex flex-col items-center flex-1 bg-white/10 rounded-xl py-2 backdrop-blur-sm border border-white/10">
-                            <span id="seconds" class="text-xl md:text-2xl font-black text-glow-orange drop-shadow-md animate-pulse">00</span>
-                            <span class="text-[9px] font-bold tracking-widest text-white/60 uppercase">Secs</span>
-                        </div>
-                    </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="flex items-center gap-2 text-white text-sm font-semibold">
-                            <i data-lucide="users" class="w-4 h-4 opacity-70"></i> <span class="count-up" data-target="181">0</span>+ Active
-                        </div>
-                        <div class="flex items-center gap-2 text-white text-sm font-semibold">
-                            <i data-lucide="rocket" class="w-4 h-4 opacity-70"></i> <span class="count-up" data-target="5">0</span> Incubated
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center gap-2 text-gray-300 text-sm font-semibold">
+                                <i data-lucide="users" class="w-4 h-4 text-glow-purple"></i> <span class="count-up text-white" data-target="181">0</span>+ Active
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-300 text-sm font-semibold">
+                                <i data-lucide="rocket" class="w-4 h-4 text-glow-green"></i> <span class="count-up text-white" data-target="5">0</span> Incubated
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK:Creating Partner Logos and Toolkit Section... -->
         <!-- PARTNER LOGOS -->
-        <section class="py-6 bg-white rounded-[2rem] shadow-sm border border-gray-100 flex flex-wrap justify-center gap-8 md:gap-16 items-center px-4">
-            <img class="h-8 md:h-10 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300" src="assets/images/logos/APJ_Abdul_Kalam_Technological_University_logo.png" alt="KTU" onerror="this.src='https://ui-avatars.com/api/?name=KTU&background=fff&color=000&font-size=0.4'">
-            <img class="h-8 md:h-10 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300" src="assets/images/logos/METS IEDC LOGO.jpg" alt="METS IEDC" onerror="this.src='https://ui-avatars.com/api/?name=IEDC&background=fff&color=000&font-size=0.4'">
-            <img class="h-8 md:h-10 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300" src="assets/images/logos/KERALA IEDC.png" alt="Kerala IEDC" onerror="this.src='https://ui-avatars.com/api/?name=Kerala+IEDC&background=fff&color=000&font-size=0.4'">
-            <img class="h-8 md:h-10 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300" src="assets/images/logos/ksum.png" alt="KSUM" onerror="this.src='https://ui-avatars.com/api/?name=KSUM&background=fff&color=000&font-size=0.4'">
+        <section class="py-6 bg-theme-surface border border-white/5 rounded-[2rem] shadow-lg flex flex-wrap justify-center gap-8 md:gap-16 items-center px-4">
+            <img class="h-8 md:h-10 w-auto filter grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 invert" src="assets/images/logos/APJ_Abdul_Kalam_Technological_University_logo.png" alt="KTU" onerror="this.src='https://ui-avatars.com/api/?name=KTU&background=111&color=fff&font-size=0.4'">
+            <img class="h-8 md:h-10 w-auto filter grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300" src="assets/images/logos/METS IEDC LOGO.jpg" alt="METS IEDC" onerror="this.src='https://ui-avatars.com/api/?name=IEDC&background=111&color=fff&font-size=0.4'">
+            <img class="h-8 md:h-10 w-auto filter grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300" src="assets/images/logos/KERALA IEDC.png" alt="Kerala IEDC" onerror="this.src='https://ui-avatars.com/api/?name=Kerala+IEDC&background=111&color=fff&font-size=0.4'">
+            <img class="h-8 md:h-10 w-auto filter grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300 invert" src="assets/images/logos/ksum.png" alt="KSUM" onerror="this.src='https://ui-avatars.com/api/?name=KSUM&background=111&color=fff&font-size=0.4'">
         </section>
 
         <!-- THE INNOVATION TOOLKIT -->
         <section class="py-12 relative z-10">
             <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-display font-bold text-theme-primary mb-4 tracking-tight">The Innovation <span class="text-glow-blue">Toolkit</span></h2>
-                <p class="text-gray-500 font-medium text-sm max-w-2xl mx-auto">Everything you need to launch your next big idea, built right into the dashboard.</p>
+                <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4 tracking-tight">The Innovation <span class="text-glow-orange drop-shadow-[0_0_15px_rgba(234,88,12,0.4)]">Toolkit</span></h2>
+                <p class="text-gray-400 font-medium text-sm max-w-2xl mx-auto">Everything you need to launch your next big idea, built right into the dashboard.</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="glass-panel bg-white/90 p-8 rounded-[2rem] tilt-card cursor-pointer border border-gray-200 hover:border-glow-blue hover:shadow-xl transition-all">
+                <div class="glass-panel p-8 rounded-[2rem] tilt-card cursor-pointer hover:border-glow-blue hover:shadow-[0_0_30px_rgba(37,99,235,0.2)]">
                     <div class="tilt-content flex flex-col items-center text-center">
-                        <div class="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-glow-blue mb-6 border border-blue-100 shadow-sm">
+                        <div class="w-16 h-16 rounded-2xl bg-blue-900/30 flex items-center justify-center text-glow-blue mb-6 border border-blue-500/30 shadow-[0_0_15px_rgba(37,99,235,0.2)]">
                             <i data-lucide="bot" class="w-8 h-8"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-theme-primary mb-3">AI Startup Mentor</h3>
-                        <p class="text-sm text-gray-500 leading-relaxed">Pitch ideas directly to Zia AI. Get instant analysis on market challenges, strengths, and tech stacks.</p>
+                        <h3 class="text-xl font-bold text-white mb-3">AI Startup Mentor</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Pitch ideas directly to Zia AI. Get instant analysis on market challenges, strengths, and tech stacks.</p>
                     </div>
                 </div>
 
-                <div class="glass-panel bg-white/90 p-8 rounded-[2rem] tilt-card cursor-pointer border border-gray-200 hover:border-glow-purple hover:shadow-xl transition-all">
+                <div class="glass-panel p-8 rounded-[2rem] tilt-card cursor-pointer hover:border-glow-purple hover:shadow-[0_0_30px_rgba(147,51,234,0.2)]">
                     <div class="tilt-content flex flex-col items-center text-center">
-                        <div class="w-16 h-16 rounded-2xl bg-purple-50 flex items-center justify-center text-glow-purple mb-6 border border-purple-100 shadow-sm">
+                        <div class="w-16 h-16 rounded-2xl bg-purple-900/30 flex items-center justify-center text-glow-purple mb-6 border border-purple-500/30 shadow-[0_0_15px_rgba(147,51,234,0.2)]">
                             <i data-lucide="network" class="w-8 h-8"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-theme-primary mb-3">Co-Founder Matchmaker</h3>
-                        <p class="text-sm text-gray-500 leading-relaxed">Browse verified student profiles, check their skills, and connect instantly to build your dream team.</p>
+                        <h3 class="text-xl font-bold text-white mb-3">Co-Founder Matchmaker</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Browse verified student profiles, check their skills, and connect instantly to build your dream team.</p>
                     </div>
                 </div>
 
-                <div class="glass-panel bg-white/90 p-8 rounded-[2rem] tilt-card cursor-pointer border border-gray-200 hover:border-glow-orange hover:shadow-xl transition-all">
+                <div class="glass-panel p-8 rounded-[2rem] tilt-card cursor-pointer hover:border-glow-orange hover:shadow-[0_0_30px_rgba(234,88,12,0.2)]">
                     <div class="tilt-content flex flex-col items-center text-center">
-                        <div class="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center text-glow-orange mb-6 border border-orange-100 shadow-sm">
+                        <div class="w-16 h-16 rounded-2xl bg-orange-900/30 flex items-center justify-center text-glow-orange mb-6 border border-orange-500/30 shadow-[0_0_15px_rgba(234,88,12,0.2)]">
                             <i data-lucide="briefcase" class="w-8 h-8"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-theme-primary mb-3">Automated Portfolios</h3>
-                        <p class="text-sm text-gray-500 leading-relaxed">Every hackathon won and point earned automatically syncs into a professional PDF resume.</p>
+                        <h3 class="text-xl font-bold text-white mb-3">Automated Portfolios</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Every hackathon won and point earned automatically syncs into a professional PDF resume.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK:Building dynamic Event & Point Calculator sections... -->
-        <!-- POINTS CALCULATOR & DYNAMIC FIREBASE EVENT BANNER -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- POINTS & DYNAMIC EVENT (Glowing animated card here) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             
             <!-- Point Calculator Section -->
-            <section class="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-gray-100 relative overflow-hidden flex flex-col justify-center">
-                <div class="absolute right-0 top-0 w-64 h-64 bg-blue-50/50 rounded-full blur-[80px] pointer-events-none"></div>
+            <section class="bg-theme-surface border border-white/5 rounded-[2.5rem] p-8 md:p-12 shadow-xl relative overflow-hidden flex flex-col justify-center">
+                <div class="absolute right-0 top-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] pointer-events-none"></div>
                 <div class="relative z-10 text-center">
-                    <h2 class="text-2xl font-display font-bold text-theme-primary mb-2">Reward <span class="text-glow-blue">Calculator</span></h2>
-                    <p class="text-gray-500 text-xs mb-8">Slide to see what exclusive perks you can unlock.</p>
+                    <h2 class="text-2xl font-display font-bold text-white mb-2">Reward <span class="text-glow-blue drop-shadow-[0_0_10px_rgba(37,99,235,0.5)]">Calculator</span></h2>
+                    <p class="text-gray-400 text-xs mb-8">Slide to see what exclusive perks you can unlock.</p>
                     
-                    <h3 class="text-5xl font-black text-theme-primary mb-8"><span id="slider-value">500</span> <span class="text-glow-blue text-lg uppercase tracking-widest">Pts</span></h3>
+                    <h3 class="text-5xl font-black text-white mb-8"><span id="slider-value">500</span> <span class="text-glow-blue text-lg uppercase tracking-widest drop-shadow-[0_0_5px_rgba(37,99,235,0.5)]">Pts</span></h3>
                     
-                    <input type="range" min="100" max="3000" step="100" value="500" id="point-slider" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer mb-8">
+                    <input type="range" min="100" max="3000" step="100" value="500" id="point-slider" class="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer mb-8">
                     
-                    <div class="bg-gray-50 border border-gray-200 rounded-2xl p-6 transition-all duration-300" id="reward-display">
-                        <div class="w-12 h-12 mx-auto rounded-full bg-blue-100 flex items-center justify-center text-glow-blue mb-3 shadow-sm">
+                    <div class="bg-black/40 border border-white/10 rounded-2xl p-6 transition-all duration-300 shadow-inner" id="reward-display">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-blue-900/40 border border-blue-500/30 flex items-center justify-center text-glow-blue mb-3 shadow-[0_0_15px_rgba(37,99,235,0.2)]">
                             <i data-lucide="ticket" class="w-6 h-6"></i>
                         </div>
-                        <h4 class="text-theme-primary font-bold text-lg mb-1">Standard Pass</h4>
-                        <p class="text-gray-500 text-[11px]">Unlock free entry to any standard 1-day technical workshop.</p>
+                        <h4 class="text-white font-bold text-lg mb-1">Standard Pass</h4>
+                        <p class="text-gray-400 text-[11px]">Unlock free entry to any standard 1-day technical workshop.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- CHANGED: Dynamic Firebase Event Section (Replaced Farewell Tribute) -->
-            <section id="dynamic-event-section" class="bg-theme-primary text-white rounded-[2.5rem] p-6 md:p-10 shadow-xl relative overflow-hidden flex flex-col justify-center min-h-[300px]">
-                <div class="absolute right-[-10%] bottom-[-10%] w-64 h-64 bg-glow-blue/20 rounded-full blur-[80px] pointer-events-none"></div>
-                
-                <!-- Loading Skeleton (Shows while Firebase fetches data) -->
-                <div id="event-loading" class="animate-pulse flex flex-col gap-4 w-full z-10">
-                    <div class="h-4 bg-white/20 rounded w-1/4 mb-4"></div>
-                    <div class="h-8 bg-white/20 rounded w-3/4 mb-2"></div>
-                    <div class="h-4 bg-white/20 rounded w-full mb-6"></div>
-                    <div class="h-48 bg-white/20 rounded-2xl w-full"></div>
-                </div>
-
-                <!-- Actual Content (Populated via JS/Firebase below) -->
-                <div id="event-content" class="hidden z-10 flex-col h-full w-full justify-center">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="inline-flex items-center px-3 py-1.5 rounded-md bg-white/10 text-glow-blue text-[10px] font-bold tracking-widest uppercase border border-white/10">
-                            <span class="w-1.5 h-1.5 rounded-full bg-glow-blue mr-2 animate-pulse"></span> <span id="event-tag">Announcement</span>
-                        </div>
-                    </div>
+            <!-- Dynamic Firebase Event Banner with the Spinning Glow Animation -->
+            <section id="dynamic-event-section" class="animated-glow-wrapper shadow-[0_0_40px_rgba(234,88,12,0.15)] min-h-[350px]">
+                <div class="absolute inset-[2px] rounded-[calc(2.5rem-2px)] overflow-hidden z-10 bg-[#0f0f11] p-6 md:p-10 flex flex-col justify-center">
+                    <div class="absolute right-[-10%] bottom-[-10%] w-64 h-64 bg-glow-orange/10 rounded-full blur-[80px] pointer-events-none"></div>
                     
-                    <div class="flex flex-col md:flex-row gap-6 items-center">
-                        <div class="flex-1 order-2 md:order-1 text-center md:text-left">
-                            <h3 id="event-title" class="text-2xl md:text-3xl font-display font-bold mb-3 tracking-tight leading-tight text-white">
-                                Loading Event...
-                            </h3>
-                            <p id="event-desc" class="text-white/70 font-light mb-6 text-xs md:text-sm leading-relaxed line-clamp-3">
-                                Please wait while we fetch the latest updates from our database.
-                            </p>
-                            <a id="event-link" href="#" target="_blank" class="inline-flex bg-white text-theme-primary px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg hover:bg-gray-100 transition-colors items-center justify-center gap-2">
-                                Register Now <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                            </a>
+                    <!-- Loading Skeleton -->
+                    <div id="event-loading" class="animate-pulse flex flex-col gap-4 w-full z-10">
+                        <div class="h-4 bg-white/10 rounded w-1/4 mb-4"></div>
+                        <div class="h-8 bg-white/10 rounded w-3/4 mb-2"></div>
+                        <div class="h-4 bg-white/10 rounded w-full mb-6"></div>
+                        <div class="h-48 bg-white/10 rounded-2xl w-full"></div>
+                    </div>
+
+                    <!-- Actual Content -->
+                    <div id="event-content" class="hidden z-10 flex-col h-full w-full justify-center">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="inline-flex items-center px-3 py-1.5 rounded-md bg-orange-500/10 text-glow-orange text-[10px] font-bold tracking-widest uppercase border border-orange-500/20 shadow-[0_0_10px_rgba(234,88,12,0.2)]">
+                                <span class="w-1.5 h-1.5 rounded-full bg-glow-orange mr-2 animate-pulse shadow-[0_0_5px_rgba(234,88,12,0.8)]"></span> <span id="event-tag">Announcement</span>
+                            </div>
                         </div>
-                        <div class="w-full md:w-2/5 aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 shrink-0 order-1 md:order-2 bg-white/5 shadow-2xl">
-                            <!-- Fallback image used via onerror if Firebase URL is broken -->
-                            <img id="event-poster" src="" alt="Event Poster" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=600'">
+                        
+                        <div class="flex flex-col md:flex-row gap-6 items-center">
+                            <div class="flex-1 order-2 md:order-1 text-center md:text-left">
+                                <h3 id="event-title" class="text-2xl md:text-3xl font-display font-bold mb-3 tracking-tight leading-tight text-white drop-shadow-md">
+                                    Loading Event...
+                                </h3>
+                                <p id="event-desc" class="text-gray-400 font-light mb-6 text-xs md:text-sm leading-relaxed line-clamp-3">
+                                    Please wait while we fetch the latest updates from our database.
+                                </p>
+                                <a id="event-link" href="#" target="_blank" class="inline-flex bg-white text-black px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:scale-105 transition-all items-center justify-center gap-2">
+                                    Register Now <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+                            <div class="w-full md:w-2/5 aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 shrink-0 order-1 md:order-2 bg-black shadow-2xl relative">
+                                <img id="event-poster" src="" alt="Event Poster" class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity" onerror="this.src='https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=600'">
+                                <div class="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl pointer-events-none"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- STREAMING_CHUNK:Generating Gallery and Testimonials... -->
         <!-- GALLERY SECTION -->
-        <section class="py-12 bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+        <section class="py-12 bg-theme-surface border border-white/5 rounded-[2.5rem] shadow-xl overflow-hidden mt-6">
             <div class="text-center mb-10 px-4">
-                <div class="inline-block px-3 py-1 rounded-full bg-purple-50 text-[10px] font-bold uppercase tracking-widest text-glow-purple mb-4 border border-purple-100">Gallery</div>
-                <h2 class="text-3xl font-display font-bold text-theme-primary mb-2">Our Journey</h2>
-                <p class="text-gray-500 text-sm">Glimpses of events, workshops, and milestones.</p>
+                <div class="inline-block px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-[10px] font-bold uppercase tracking-widest text-glow-purple mb-4 shadow-[0_0_10px_rgba(147,51,234,0.2)]">Gallery</div>
+                <h2 class="text-3xl font-display font-bold text-white mb-2">Our Journey</h2>
+                <p class="text-gray-400 text-sm">Glimpses of events, workshops, and milestones.</p>
             </div>
             
             <div class="swiper mySwiper w-full px-4 pb-12">
@@ -485,68 +473,72 @@
         </section>
 
         <!-- ALUMNI TESTIMONIALS (Marquee) -->
-        <section class="py-12 rounded-[2.5rem] bg-theme-primary overflow-hidden relative">
-            <div class="px-8 mb-8 text-center md:text-left">
-                <h2 class="text-2xl font-bold text-white mb-2">Wall of <span class="text-glow-purple">Success</span></h2>
-                <p class="text-white/60 text-xs">Hear from the founders who started here.</p>
+        <section class="py-12 rounded-[2.5rem] bg-[#0a0a0a] border border-white/5 overflow-hidden relative shadow-inner">
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/10 via-[#0a0a0a] to-[#0a0a0a] pointer-events-none"></div>
+            
+            <div class="px-8 mb-8 text-center md:text-left relative z-10">
+                <h2 class="text-2xl font-bold text-white mb-2">Wall of <span class="text-glow-purple drop-shadow-[0_0_15px_rgba(147,51,234,0.5)]">Success</span></h2>
+                <p class="text-gray-400 text-xs">Hear from the founders who started here.</p>
             </div>
 
-            <div class="relative flex overflow-x-hidden group">
+            <div class="relative flex overflow-x-hidden group z-10">
                 <div class="animate-marquee whitespace-nowrap flex gap-6 px-4">
-                    <div class="glass-card-dark p-6 rounded-3xl w-[300px] md:w-[400px] inline-flex flex-col whitespace-normal shrink-0">
+                    <div class="glass-panel p-6 rounded-3xl w-[300px] md:w-[400px] inline-flex flex-col whitespace-normal shrink-0">
                         <i data-lucide="quote" class="text-glow-purple/50 w-8 h-8 mb-4"></i>
-                        <p class="text-white/80 text-sm leading-relaxed mb-6 italic">"The mentorship and cloud credits helped me deploy my first SaaS product. The Matchmaker helped me find my co-founder!"</p>
+                        <p class="text-gray-300 text-sm leading-relaxed mb-6 italic">"The mentorship and cloud credits helped me deploy my first SaaS product. The Matchmaker helped me find my co-founder!"</p>
                         <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-4">
-                            <div class="w-10 h-10 rounded-full bg-glow-purple flex items-center justify-center font-bold text-white">R</div>
+                            <div class="w-10 h-10 rounded-full bg-purple-600/20 border border-purple-500/50 flex items-center justify-center font-bold text-glow-purple shadow-[0_0_10px_rgba(147,51,234,0.3)]">R</div>
                             <div>
                                 <h4 class="text-white font-bold text-sm">Rahul K.</h4>
-                                <p class="text-white/40 text-[10px] uppercase tracking-widest">Founder, EcoGrid</p>
+                                <p class="text-gray-500 text-[10px] uppercase tracking-widest">Founder, EcoGrid</p>
                             </div>
                         </div>
                     </div>
-                    <div class="glass-card-dark p-6 rounded-3xl w-[300px] md:w-[400px] inline-flex flex-col whitespace-normal shrink-0">
+                    <div class="glass-panel p-6 rounded-3xl w-[300px] md:w-[400px] inline-flex flex-col whitespace-normal shrink-0">
                         <i data-lucide="quote" class="text-glow-orange/50 w-8 h-8 mb-4"></i>
-                        <p class="text-white/80 text-sm leading-relaxed mb-6 italic">"Using the 3D printers in the lab, we built a drone frame that won best pitch."</p>
+                        <p class="text-gray-300 text-sm leading-relaxed mb-6 italic">"Using the 3D printers in the lab, we built a drone frame that won best pitch."</p>
                         <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-4">
-                            <div class="w-10 h-10 rounded-full bg-glow-orange flex items-center justify-center font-bold text-white">A</div>
+                            <div class="w-10 h-10 rounded-full bg-orange-600/20 border border-orange-500/50 flex items-center justify-center font-bold text-glow-orange shadow-[0_0_10px_rgba(234,88,12,0.3)]">A</div>
                             <div>
                                 <h4 class="text-white font-bold text-sm">Anjali M.</h4>
-                                <p class="text-white/40 text-[10px] uppercase tracking-widest">Lead Dev, AeroDrone</p>
+                                <p class="text-gray-500 text-[10px] uppercase tracking-widest">Lead Dev, AeroDrone</p>
                             </div>
                         </div>
                     </div>
-                     <div class="glass-card-dark p-6 rounded-3xl w-[300px] md:w-[400px] inline-flex flex-col whitespace-normal shrink-0">
+                     <div class="glass-panel p-6 rounded-3xl w-[300px] md:w-[400px] inline-flex flex-col whitespace-normal shrink-0">
                         <i data-lucide="quote" class="text-glow-blue/50 w-8 h-8 mb-4"></i>
-                        <p class="text-white/80 text-sm leading-relaxed mb-6 italic">"The automated resume builder is magic. By placements, my portfolio was packed."</p>
+                        <p class="text-gray-300 text-sm leading-relaxed mb-6 italic">"The automated resume builder is magic. By placements, my portfolio was packed."</p>
                         <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-4">
-                            <div class="w-10 h-10 rounded-full bg-glow-blue flex items-center justify-center font-bold text-white">S</div>
+                            <div class="w-10 h-10 rounded-full bg-blue-600/20 border border-blue-500/50 flex items-center justify-center font-bold text-glow-blue shadow-[0_0_10px_rgba(37,99,235,0.3)]">S</div>
                             <div>
                                 <h4 class="text-white font-bold text-sm">Sidarth P.</h4>
-                                <p class="text-white/40 text-[10px] uppercase tracking-widest">Software Engineer</p>
+                                <p class="text-gray-500 text-[10px] uppercase tracking-widest">Software Engineer</p>
                             </div>
                         </div>
                     </div>
                 </div>
+                
+                <!-- Duplicate for seamless scroll -->
                 <div class="animate-marquee whitespace-nowrap flex gap-6 px-4 absolute top-0 left-full">
-                     <div class="glass-card-dark p-6 rounded-3xl w-[300px] md:w-[400px] inline-flex flex-col whitespace-normal shrink-0">
+                    <div class="glass-panel p-6 rounded-3xl w-[300px] md:w-[400px] inline-flex flex-col whitespace-normal shrink-0">
                         <i data-lucide="quote" class="text-glow-purple/50 w-8 h-8 mb-4"></i>
-                        <p class="text-white/80 text-sm leading-relaxed mb-6 italic">"The mentorship and cloud credits helped me deploy my first SaaS product."</p>
+                        <p class="text-gray-300 text-sm leading-relaxed mb-6 italic">"The mentorship and cloud credits helped me deploy my first SaaS product. The Matchmaker helped me find my co-founder!"</p>
                         <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-4">
-                            <div class="w-10 h-10 rounded-full bg-glow-purple flex items-center justify-center font-bold text-white">R</div>
+                            <div class="w-10 h-10 rounded-full bg-purple-600/20 border border-purple-500/50 flex items-center justify-center font-bold text-glow-purple shadow-[0_0_10px_rgba(147,51,234,0.3)]">R</div>
                             <div>
                                 <h4 class="text-white font-bold text-sm">Rahul K.</h4>
-                                <p class="text-white/40 text-[10px] uppercase tracking-widest">Founder, EcoGrid</p>
+                                <p class="text-gray-500 text-[10px] uppercase tracking-widest">Founder, EcoGrid</p>
                             </div>
                         </div>
                     </div>
-                    <div class="glass-card-dark p-6 rounded-3xl w-[300px] md:w-[400px] inline-flex flex-col whitespace-normal shrink-0">
+                    <div class="glass-panel p-6 rounded-3xl w-[300px] md:w-[400px] inline-flex flex-col whitespace-normal shrink-0">
                         <i data-lucide="quote" class="text-glow-orange/50 w-8 h-8 mb-4"></i>
-                        <p class="text-white/80 text-sm leading-relaxed mb-6 italic">"Using the 3D printers in the lab, we built a drone frame that won best pitch."</p>
+                        <p class="text-gray-300 text-sm leading-relaxed mb-6 italic">"Using the 3D printers in the lab, we built a drone frame that won best pitch."</p>
                         <div class="flex items-center gap-4 mt-auto border-t border-white/10 pt-4">
-                            <div class="w-10 h-10 rounded-full bg-glow-orange flex items-center justify-center font-bold text-white">A</div>
+                            <div class="w-10 h-10 rounded-full bg-orange-600/20 border border-orange-500/50 flex items-center justify-center font-bold text-glow-orange shadow-[0_0_10px_rgba(234,88,12,0.3)]">A</div>
                             <div>
                                 <h4 class="text-white font-bold text-sm">Anjali M.</h4>
-                                <p class="text-white/40 text-[10px] uppercase tracking-widest">Lead Dev, AeroDrone</p>
+                                <p class="text-gray-500 text-[10px] uppercase tracking-widest">Lead Dev, AeroDrone</p>
                             </div>
                         </div>
                     </div>
@@ -555,117 +547,81 @@
         </section>
 
         <!-- FOOTER -->
-        <footer class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 mt-4 mb-20 md:mb-0">
+        <footer class="bg-theme-surface border border-white/5 rounded-[2.5rem] p-8 shadow-xl mt-4 mb-20 md:mb-0">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
                 <div class="md:col-span-5">
-                    <span class="text-xl font-display font-bold text-theme-primary tracking-widest mb-4 block">MET'S IEDC.</span>
-                    <p class="text-gray-500 text-xs leading-relaxed max-w-sm font-medium">
+                    <span class="text-xl font-display font-bold text-white tracking-widest mb-4 block flex items-center gap-2">
+                        <img src="assets/images/logos/MSEM-removebg-preview.png" class="w-6 h-6 filter invert" alt="Logo"> MET'S IEDC.
+                    </span>
+                    <p class="text-gray-400 text-xs leading-relaxed max-w-sm font-medium">
                         Fostering a culture of innovation and entrepreneurship. Supported by Kerala Startup Mission.
                     </p>
                 </div>
                 <div class="md:col-span-3">
-                    <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Navigation</h3>
-                    <ul class="space-y-3 text-xs font-semibold text-theme-primary">
-                        <li><a href="about.html" class="hover:text-glow-blue transition-colors">Our Story</a></li>
-                        <li><a href="#events" class="hover:text-glow-blue transition-colors">Events</a></li>
-                        <li><a href="initiatives.html" class="hover:text-glow-blue transition-colors">Initiatives</a></li>
+                    <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4">Navigation</h3>
+                    <ul class="space-y-3 text-xs font-semibold text-gray-300">
+                        <li><a href="about.html" class="hover:text-white transition-colors">Our Story</a></li>
+                        <li><a href="event.html" class="hover:text-white transition-colors">Events</a></li>
+                        <li><a href="initiatives.html" class="hover:text-white transition-colors">Initiatives</a></li>
                     </ul>
                 </div>
                 <div class="md:col-span-4">
-                    <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Connect</h3>
-                    <div class="space-y-3 text-xs font-semibold text-theme-primary">
+                    <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4">Connect</h3>
+                    <div class="space-y-3 text-xs font-semibold text-gray-300">
                         <p>MET'S School of Engineering<br>Mala, Thrissur</p>
-                        <p class="hover:text-glow-blue cursor-pointer">+91 7306226875</p>
-                        <p class="hover:text-glow-blue cursor-pointer">metsenggiedc@gmail.com</p>
+                        <p class="hover:text-white cursor-pointer">+91 7306226875</p>
+                        <p class="hover:text-white cursor-pointer">metsenggiedc@gmail.com</p>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-gray-100 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold tracking-widest uppercase text-gray-400">
+            <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold tracking-widest uppercase text-gray-500">
                 <p>© <span id="year">2026</span> MET'S IEDC.</p>
                 <div class="flex space-x-6">
-                    <a href="#" class="hover:text-theme-primary transition-colors">Privacy</a>
-                    <a href="#" class="hover:text-theme-primary transition-colors">Terms</a>
+                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms</a>
                 </div>
             </div>
         </footer>
 
     </main>
 
-    <!-- STREAMING_CHUNK:Adding Notifications, Popups, and Zia AI UI... -->
-    <!-- NOTIFICATION & PWA BANNERS -->
-    <div id="pwa-update-banner" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-white rounded-full px-5 py-3 items-center gap-4 w-[90%] md:w-auto max-w-md shadow-lg border border-gray-200">
-        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-glow-blue"><i data-lucide="download-cloud" class="w-4 h-4"></i></div>
-        <div class="flex flex-col">
-            <span class="text-theme-primary text-sm font-bold">Update Available</span>
-            <span class="text-gray-500 text-[10px] uppercase font-semibold">New version ready</span>
-        </div>
-        <button id="pwa-refresh-btn" class="ml-auto bg-theme-primary text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-accent transition-colors">Refresh</button>
-    </div>
-
-    <div id="push-permission-banner" class="hidden fixed bottom-24 md:bottom-4 left-4 right-4 md:left-auto md:right-8 md:w-96 bg-white rounded-2xl p-5 z-[90] transform transition-transform translate-y-full shadow-2xl border border-gray-100">
-        <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-glow-blue shrink-0"><i data-lucide="bell" class="w-5 h-5"></i></div>
-            <div class="flex-grow">
-                <h4 class="text-theme-primary text-sm font-bold mb-1">Stay Updated!</h4>
-                <p class="text-gray-500 text-[11px] leading-relaxed mb-4">Enable push notifications to never miss an important event.</p>
-                <div class="flex gap-2">
-                    <button id="dismiss-push-btn" class="flex-1 px-4 py-2 rounded-xl border border-gray-200 text-gray-500 text-[10px] font-bold uppercase hover:bg-gray-50 transition-colors">Not Now</button>
-                    <button id="enable-push-btn" class="flex-1 px-4 py-2 rounded-xl bg-theme-primary hover:bg-accent text-white text-[10px] font-bold uppercase transition-colors shadow-md">Enable</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ANNOUNCEMENT POPUP -->
-    <div id="imagePopup" class="popup-overlay" onclick="closePopup(event)">
-        <div class="popup-content relative max-w-md mx-auto bg-white p-2 rounded-3xl shadow-2xl border border-gray-200">
-            <button onclick="closePopup(event)" class="absolute -top-4 -right-4 w-10 h-10 bg-theme-primary text-white rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors z-20">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-            <div class="rounded-2xl overflow-hidden bg-gray-50">
-                <img src="assets/images/events/1000299421.png" alt="Announcement" class="w-full h-auto object-contain block" onerror="this.src='https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=600'">
-            </div>
-        </div>
-    </div>
-
-    <!-- ZIA AI WIDGET -->
+    <!-- ZIA AI WIDGET (Dark UI) -->
     <div id="zia-chat-widget" class="fixed bottom-20 md:bottom-6 right-4 md:right-8 z-[100] flex flex-col items-end pointer-events-none">
         
-        <div id="zia-chat-window" class="hidden w-[90vw] md:w-80 h-[28rem] bg-white rounded-3xl mb-4 flex flex-col shadow-2xl border border-gray-200 transform transition-all duration-300 origin-bottom-right scale-0 pointer-events-auto overflow-hidden">
-            <div class="p-4 bg-theme-primary text-white flex justify-between items-center shrink-0">
+        <div id="zia-chat-window" class="hidden w-[90vw] md:w-80 h-[28rem] bg-[#0a0a0a] border border-white/10 rounded-3xl mb-4 flex flex-col shadow-[0_0_40px_rgba(147,51,234,0.2)] transform transition-all duration-300 origin-bottom-right scale-0 pointer-events-auto overflow-hidden">
+            <div class="p-4 bg-theme-surfaceLight border-b border-white/5 text-white flex justify-between items-center shrink-0">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0"><i data-lucide="bot" class="w-4 h-4"></i></div>
+                    <div class="w-8 h-8 rounded-full bg-purple-500/20 border border-purple-500/50 flex items-center justify-center shrink-0 text-glow-purple shadow-[0_0_10px_rgba(147,51,234,0.4)]"><i data-lucide="bot" class="w-4 h-4"></i></div>
                     <div>
-                        <h3 class="text-sm font-bold tracking-widest uppercase">Zia AI</h3>
-                        <p class="text-[8px] uppercase font-bold tracking-widest flex items-center gap-1 text-green-400"><span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span> Online</p>
+                        <h3 class="text-sm font-bold tracking-widest uppercase text-white">Zia AI</h3>
+                        <p class="text-[8px] uppercase font-bold tracking-widest flex items-center gap-1 text-green-400"><span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-[0_0_5px_rgba(34,197,94,0.8)]"></span> Online</p>
                     </div>
                 </div>
-                <button id="zia-close-btn" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
+                <button id="zia-close-btn" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors text-white">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
             
-            <div id="zia-messages" class="flex-grow overflow-y-auto p-4 space-y-4 flex flex-col bg-gray-50 scroll-smooth">
-                <div class="bg-white border border-gray-200 text-gray-800 p-3 rounded-2xl rounded-tl-sm max-w-[85%] self-start text-xs leading-relaxed shadow-sm">
+            <div id="zia-messages" class="flex-grow overflow-y-auto p-4 space-y-4 flex flex-col bg-[#050505] scroll-smooth">
+                <div class="bg-white/10 border border-white/5 text-gray-200 p-3 rounded-2xl rounded-tl-sm max-w-[85%] self-start text-xs leading-relaxed shadow-sm">
                     Hi there! 👋 I'm Zia, the AI mentor. Ask me about events, ideas, or innovation points!
                 </div>
             </div>
             
-            <form id="zia-form" class="p-3 bg-white border-t border-gray-100 flex gap-2 shrink-0">
-                <input type="text" id="zia-input" placeholder="Ask anything..." class="flex-grow bg-gray-100 rounded-xl px-4 py-2.5 text-xs text-theme-primary focus:outline-none focus:ring-2 focus:ring-glow-purple/30 transition-shadow" autocomplete="off">
-                <button type="submit" class="w-10 h-10 rounded-xl bg-theme-primary text-white flex items-center justify-center hover:bg-accent transition-colors shadow-md shrink-0">
+            <form id="zia-form" class="p-3 bg-theme-surfaceLight border-t border-white/5 flex gap-2 shrink-0">
+                <input type="text" id="zia-input" placeholder="Ask anything..." class="flex-grow bg-black border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-glow-purple focus:ring-1 focus:ring-glow-purple transition-shadow" autocomplete="off">
+                <button type="submit" class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center hover:bg-purple-700 transition-colors shadow-[0_0_15px_rgba(147,51,234,0.4)] shrink-0">
                     <i data-lucide="send" class="w-4 h-4"></i>
                 </button>
             </form>
         </div>
 
-        <button id="zia-toggle-btn" class="md:hidden w-14 h-14 bg-theme-primary text-white rounded-full flex items-center justify-center shadow-xl pointer-events-auto hover:bg-accent transition-transform hover:scale-105 group relative">
+        <button id="zia-toggle-btn" class="md:hidden w-14 h-14 bg-theme-surface text-glow-purple rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(147,51,234,0.3)] pointer-events-auto hover:bg-theme-surfaceLight border border-purple-500/30 transition-transform hover:scale-105 group relative">
             <i data-lucide="bot" class="w-6 h-6 group-hover:animate-pulse"></i>
-            <span class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+            <span class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-theme-surface rounded-full shadow-[0_0_5px_rgba(34,197,94,0.8)]"></span>
         </button>
     </div>
 
-    <!-- STREAMING_CHUNK:Injecting Main Logic (UI, Swiper, Firebase)... -->
     <!-- MAIN UI & ANIMATION SCRIPTS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
@@ -692,17 +648,6 @@
                 }
             }
 
-            // EASTER EGG: HACKER MODE
-            let keys = '';
-            document.addEventListener('keydown', (e) => {
-                keys += e.key.toLowerCase();
-                if (keys.includes('hack')) {
-                    document.body.classList.toggle('hacker-mode');
-                    keys = ''; 
-                }
-                if (keys.length > 10) keys = keys.slice(-10);
-            });
-
             // Countdown Logic for Protosynth
             const countDownDate = new Date("Feb 2, 2026 23:59:00").getTime();
             const x = setInterval(function() {
@@ -727,7 +672,7 @@
                 }
             }, 1000);
 
-            // Points Calculator
+            // Points Calculator (Adapted for Dark Mode)
             const slider = document.getElementById('point-slider');
             const sliderVal = document.getElementById('slider-value');
             const rewardDisplay = document.getElementById('reward-display');
@@ -742,13 +687,13 @@
                     else if (val >= 2000 && val < 3000) { color = 'green'; icon = 'badge-check'; title = 'VIP Conference'; desc = 'VIP seating & back-stage access.'; } 
                     else if (val >= 3000) { color = 'orange'; icon = 'star'; title = 'Founders Dinner'; desc = 'Exclusive invite-only networking dinner.'; }
 
-                    rewardDisplay.className = `bg-${color}-50 border border-${color}-100 rounded-2xl p-6 transition-all duration-300 transform scale-105`;
+                    rewardDisplay.className = `bg-black/40 border border-${color}-500/30 rounded-2xl p-6 transition-all duration-300 transform scale-105 shadow-[0_0_20px_rgba(var(--tw-colors-${color}-500),0.1)]`;
                     rewardDisplay.innerHTML = `
-                        <div class="w-12 h-12 mx-auto rounded-full bg-${color}-200 flex items-center justify-center text-${color}-600 mb-3 shadow-sm">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-${color}-900/40 border border-${color}-500/30 flex items-center justify-center text-glow-${color} mb-3 shadow-[0_0_15px_rgba(var(--tw-colors-${color}-500),0.2)]">
                             <i data-lucide="${icon}" class="w-6 h-6"></i>
                         </div>
-                        <h4 class="text-theme-primary font-bold text-lg mb-1">${title}</h4>
-                        <p class="text-gray-500 text-[11px]">${desc}</p>
+                        <h4 class="text-white font-bold text-lg mb-1">${title}</h4>
+                        <p class="text-gray-400 text-[11px]">${desc}</p>
                     `;
                     lucide.createIcons();
                     setTimeout(() => rewardDisplay.classList.remove('scale-105'), 200);
@@ -819,7 +764,7 @@
 
             function addMsg(text, isUser) {
                 const div = document.createElement('div');
-                div.className = `p-3 text-xs leading-relaxed max-w-[85%] shadow-sm rounded-2xl ${isUser ? 'bg-theme-primary text-white rounded-tr-sm self-end' : 'bg-white border border-gray-200 text-gray-800 rounded-tl-sm self-start'}`;
+                div.className = `p-3 text-xs leading-relaxed max-w-[85%] shadow-sm rounded-2xl ${isUser ? 'bg-purple-600 text-white rounded-tr-sm self-end' : 'bg-white/10 border border-white/5 text-gray-200 rounded-tl-sm self-start'}`;
                 div.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 ziaMessages.appendChild(div);
                 ziaMessages.scrollTop = ziaMessages.scrollHeight;
@@ -836,8 +781,8 @@
                     const typingId = 'typing-' + Date.now();
                     const typingDiv = document.createElement('div');
                     typingDiv.id = typingId;
-                    typingDiv.className = 'bg-gray-100 text-gray-500 p-3 rounded-2xl rounded-tl-sm self-start text-[10px] uppercase font-bold flex gap-2 items-center';
-                    typingDiv.innerHTML = '<div class="w-1.5 h-1.5 rounded-full bg-gray-400 animate-ping"></div> Zia is thinking...';
+                    typingDiv.className = 'bg-white/5 border border-white/5 text-gray-400 p-3 rounded-2xl rounded-tl-sm self-start text-[10px] uppercase font-bold flex gap-2 items-center';
+                    typingDiv.innerHTML = '<div class="w-1.5 h-1.5 rounded-full bg-glow-purple animate-ping"></div> Zia is thinking...';
                     ziaMessages.appendChild(typingDiv);
                     ziaMessages.scrollTop = ziaMessages.scrollHeight;
 
@@ -871,40 +816,6 @@
                     }
                 });
             }
-
-            // PWA Updates Logic Restored
-            let newWorker;
-            const updateBanner = document.getElementById('pwa-update-banner');
-            const refreshBtn = document.getElementById('pwa-refresh-btn');
-
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js').then(registration => {
-                        registration.addEventListener('updatefound', () => {
-                            newWorker = registration.installing;
-                            newWorker.addEventListener('statechange', () => {
-                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    updateBanner.classList.remove('hidden');
-                                    updateBanner.classList.add('flex');
-                                }
-                            });
-                        });
-                    });
-                    let refreshing;
-                    navigator.serviceWorker.addEventListener('controllerchange', () => {
-                        if (refreshing) return;
-                        refreshing = true;
-                        window.location.reload();
-                    });
-                });
-            }
-
-            if (refreshBtn) {
-                refreshBtn.addEventListener('click', () => {
-                    if (newWorker) newWorker.postMessage({ action: 'skipWaiting' });
-                    updateBanner.classList.add('hidden'); 
-                });
-            }
         });
     </script>
 
@@ -914,7 +825,6 @@
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-messaging.js";
 
-        // Firebase Configuration provided by user
         const firebaseConfig = {
             apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8",
             authDomain: "metsiedc-3010e.firebaseapp.com",
@@ -931,7 +841,6 @@
         const messaging = getMessaging(app);
 
         // --- FETCH DYNAMIC EVENT DATA FROM FIRESTORE ---
-        // Listens to changes in the "latestEvent" document inside the "public" collection.
         const eventDocRef = doc(db, 'public', 'latestEvent');
         const eventLoading = document.getElementById('event-loading');
         const eventContent = document.getElementById('event-content');
@@ -944,20 +853,16 @@
         onSnapshot(eventDocRef, (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
-                
-                // Populate DOM with data from Firestore
                 eventTitle.textContent = data.title || 'Exciting Event Coming Up!';
                 eventDesc.textContent = data.description || 'Stay tuned for more details regarding our upcoming activities.';
                 eventPoster.src = data.imageUrl || 'https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=600';
                 eventLink.href = data.registrationLink || '#';
                 eventTag.textContent = data.tag || 'New Event';
                 
-                // Show content, hide skeleton
                 eventLoading.classList.add('hidden');
                 eventContent.classList.remove('hidden');
                 eventContent.classList.add('flex');
             } else {
-                // Fallback UI if document doesn't exist yet
                 eventTitle.textContent = 'No Upcoming Events';
                 eventDesc.textContent = 'Check back later for exciting tech events and hackathons from MET\'S IEDC.';
                 eventPoster.src = 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=600';
@@ -968,86 +873,11 @@
                 eventContent.classList.remove('hidden');
                 eventContent.classList.add('flex');
             }
-            
-            // Re-initialize icons just in case they were nested inside dynamically loaded content
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
+            if (typeof lucide !== 'undefined') { lucide.createIcons(); }
         }, (error) => {
             console.error("Error fetching latest event from Firebase:", error);
-            // Optionally handle error UI here
         });
         
-        // --- PUSH NOTIFICATION LOGIC ---
-        const pushBanner = document.getElementById('push-permission-banner');
-        const enableBtn = document.getElementById('enable-push-btn');
-        const dismissBtn = document.getElementById('dismiss-push-btn');
-
-        function checkPushBannerStatus() {
-            if (localStorage.getItem('pushPrompted') === 'true' || Notification.permission === 'granted') {
-                return;
-            }
-            setTimeout(() => {
-                pushBanner.classList.remove('hidden');
-                setTimeout(() => {
-                    pushBanner.classList.remove('translate-y-full');
-                }, 50);
-            }, 3000);
-        }
-
-        function hidePushBanner() {
-            pushBanner.classList.add('translate-y-full');
-            setTimeout(() => {
-                pushBanner.classList.add('hidden');
-            }, 300);
-        }
-
-        if(dismissBtn) {
-            dismissBtn.addEventListener('click', () => {
-                localStorage.setItem('pushPrompted', 'true');
-                hidePushBanner();
-            });
-        }
-
-        if(enableBtn) {
-            enableBtn.addEventListener('click', async () => {
-                hidePushBanner();
-                localStorage.setItem('pushPrompted', 'true');
-
-                if (!('Notification' in window)) {
-                    alert("Your browser does not support notifications.");
-                    return;
-                }
-
-                try {
-                    const permission = await Notification.requestPermission();
-                    if (permission === 'granted') {
-                        const registration = await navigator.serviceWorker.ready;
-                        const currentToken = await getToken(messaging, { 
-                            vapidKey: 'BLAXirXbhUCSrlOF1tdyvLbqhrCBvRJV4xvemvkMzdsM3Fh_DS-Pr_SCliI2Bbl-jIpE6Ugkm9-htU_-FhVWXCE', 
-                            serviceWorkerRegistration: registration 
-                        });
-                        
-                        if (currentToken) {
-                            await setDoc(doc(db, "subscribers", currentToken), {
-                                token: currentToken,
-                                platform: navigator.userAgent,
-                                subscribedAt: Date.now()
-                            }, { merge: true });
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error asking for permission: ', error);
-                }
-            });
-        }
-
-        window.addEventListener('load', checkPushBannerStatus);
-
-        onMessage(messaging, (payload) => {
-            alert(`📢 MET'S IEDC UPDATE:\n${payload.notification.title}\n${payload.notification.body}`);
-        });
     </script>
 </body>
 </html>
-```eof
