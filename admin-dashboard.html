@@ -1601,11 +1601,11 @@
     <!-- FIREBASE AND APP LOGIC -->
    <script type="module">
         // Downgraded to 10.8.0 for ultimate stability with WebChannels
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signOut, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, onSnapshot, increment, writeBatch, orderBy, initializeFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-       import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, onSnapshot, getDocs, increment, writeBatch, orderBy, initializeFirestore, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, onSnapshot, getDocs, increment, writeBatch, orderBy, initializeFirestore, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+       
     const cmsTeamForm = document.getElementById('cmsTeamForm');
         if(cmsTeamForm) {
             cmsTeamForm.addEventListener('submit', async (e) => {
