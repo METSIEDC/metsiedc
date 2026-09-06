@@ -124,6 +124,17 @@ self.addEventListener('fetch', event => {
   }
 });
 
+self.addEventListener('fetch', (event) => {
+    // DO NOT intercept Firebase or Google API calls
+    if (event.request.url.includes('firestore.googleapis.com') || 
+        event.request.url.includes('google.com') ||
+        event.request.url.includes('firebase')) {
+        return; 
+    }
+    
+    // ... rest of your normal fetch logic ...
+});
+
 // 4. Message Phase (For the Update Banner)
 self.addEventListener('message', event => {
   if (event.data && event.data.action === 'skipWaiting') {
