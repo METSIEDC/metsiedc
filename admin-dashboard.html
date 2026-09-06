@@ -2178,47 +2178,7 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
                 finally { btn.disabled = false; btn.innerText = "Submit"; }
             });
         }
-
-       const sibAdminForm = document.getElementById('sibAdminForm');
-if(sibAdminForm) {
-    sibAdminForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('sibSubmitBtn'); 
-        const originalText = btn.innerText; btn.disabled = true; btn.innerText = "Uploading Image...";
-        try {
-            const week = document.getElementById('sibWeek').value;
-            const day = document.getElementById('sibDay').value;
-            const docId = `${week}_D${day}`; // ഉദാഹരണത്തിന്: w1_D1
-            
-            const file = document.getElementById('sibLetterImage').files[0];
-            let letterUrl = document.getElementById('sibExistingImageUrl').value;
-            
-            // ഇമേജ് അപ്‌ലോഡ് ചെയ്യാൻ
-            if (file) {
-                const storageRef = ref(storage, 'sib_letters/' + Date.now() + '_' + file.name);
-                const uploadTask = await uploadBytesResumable(storageRef, file);
-                letterUrl = await getDownloadURL(uploadTask.ref);
-            } else if (!letterUrl) {
-                throw new Error("Please upload a Task Letter image!");
-            }
-            
-            const data = { 
-                week: week, day: parseInt(day),
-                clue: document.getElementById('sibClue').value.trim(), 
-                answer: document.getElementById('sibAnswer').value.trim().toUpperCase(), 
-                letterUrl: letterUrl, // അപ്‌ലോഡ് ചെയ്ത ഇമേജിന്റെ ലിങ്ക് 
-                isLocked: document.getElementById('sibStatus').value === 'Locked',
-                timestamp: Date.now() 
-            };
-            
-            await setDoc(doc(db, "startup_detective", docId), data);
-            window.showToast("Case File Deployed!", "success");
-            window.resetSibForm();
-        } catch(err) { window.showToast(err.message, "error"); } 
-        finally { btn.disabled = false; btn.innerText = originalText; }
-    });
-}
-
+       
         window.submitExcomAttendance = async () => {
             const title = document.getElementById('excomMeetingTitle').value.trim(); const date = document.getElementById('excomMeetingDate').value;
             if(!title || !date) return window.showToast("Fill meeting name and date.", "error");
