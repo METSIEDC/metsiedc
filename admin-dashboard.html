@@ -1346,8 +1346,10 @@
 
         document.addEventListener('DOMContentLoaded', () => { 
             lucide.createIcons();
-            Chart.defaults.color = '#718096'; 
-            Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+            if(typeof Chart !== 'undefined') {
+                Chart.defaults.color = '#718096'; 
+                Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+            }
             if(window.renderFormBuilderFields) window.renderFormBuilderFields();
         });
 
@@ -1380,7 +1382,8 @@
             if(t === 'manageEvent') title = "Event CMS";
             if(t === 'manageTeam') title = "Core Team CMS";
             
-            document.getElementById('headerTitle').textContent = title; 
+            const headerTitle = document.getElementById('headerTitle');
+            if(headerTitle) headerTitle.textContent = title; 
             
             const menu = document.getElementById('mobile-sidebar'); 
             if(menu && !menu.classList.contains('-translate-x-full')) { toggleMobileSidebar(); } 
@@ -1454,7 +1457,6 @@
             
             const btn = document.getElementById('submitPointsBtn');
             const title = document.getElementById('pointsModalTitle');
-            
             if(!title || !btn) return; 
             
             if(actionType === 'add') {
@@ -1466,7 +1468,6 @@
                 btn.className = "flex-1 bg-red-500 hover:bg-red-600 py-3.5 rounded-xl text-white font-bold text-[10px] uppercase transition-colors shadow-lg";
                 btn.textContent = "Deduct Points";
             }
-            
             document.getElementById('pointsModal').classList.remove('hidden'); 
         };
 
@@ -1477,7 +1478,7 @@
             document.getElementById('editPhoneUserName').textContent = name;
             document.getElementById('editPhoneInput').value = currentPhone && currentPhone !== 'No Phone' ? currentPhone : '';
             toggleEditPhoneModal(true);
-        }
+        };
 
         // Kanban Drag & Drop
         window.drag = (ev) => { ev.dataTransfer.setData("text", ev.target.id); }
@@ -1495,7 +1496,7 @@
                 try { await window.updateKanbanStatus(projectId, newStatus); } 
                 catch(e) { window.showToast("Failed to update status: " + e.message, "error"); }
             }
-        }
+        };
         
         window.generateEventQR = () => {
             const eventName = document.getElementById('attendanceEventName').value.trim();
@@ -1503,6 +1504,7 @@
             if(!eventName || !date) { window.showToast("Please enter the Event Name and Date first.", "error"); return; }
             
             const overlay = document.getElementById('imagePopup') || document.createElement('div');
+            overlay.id = 'imagePopup';
             overlay.className = 'fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[9999] flex items-center justify-center';
             overlay.onclick = (e) => { if(e.target===overlay) overlay.remove(); }
             
@@ -1568,7 +1570,7 @@
                 </html>
             `);
             printWin.document.close();
-        }
+        };
 
         window.generateIdCards = () => {
             const checked = document.querySelectorAll('.user-select-cb:checked');
@@ -1592,7 +1594,7 @@
             printWin.document.write(`<html><head><title>Print ID Cards</title></head><body style="background:#f1f5f9; padding:20px;"><div style="display:flex; flex-wrap:wrap; justify-content:center; max-width:900px; margin:0 auto;">${cardsHtml}</div><script>setTimeout(()=>window.print(), 1500);<\/script></body></html>`);
             printWin.document.close();
             checked.forEach(cb => cb.checked = false);
-        }
+        };
 
         window.printLogs = () => { 
             const logsTableContent = document.getElementById('logsListBody').innerHTML; 
@@ -1613,7 +1615,7 @@
             printWindow.document.close(); 
         };
 
-        function escapeHTML(str) { return str ? str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)) : ''; }
+        window.escapeHTML = (str) => { return str ? str.toString().replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)) : ''; };
         function safeSetText(id, text) { const el = document.getElementById(id); if (el) el.textContent = text; }
         function generateId() { return Math.random().toString(36).substr(2, 9); }
 
@@ -1646,22 +1648,21 @@
                     if(field.options && field.options.length > 0) {
                         field.options.forEach((opt, optIdx) => {
                             const iconType = field.type === 'checkbox' ? 'square' : 'circle';
-                            opts += `<div class="flex items-center gap-3 mt-2"><i data-lucide="${iconType}" class="w-4 h-4 text-gray-400 flex-shrink-0"></i><input type="text" class="glass-input w-full rounded-lg py-2.5 px-3 text-sm" value="${escapeHTML(opt)}" oninput="updateFieldOption('${field.id}', ${optIdx}, this.value)" placeholder="Option text"><button type="button" onclick="removeFieldOption('${field.id}', ${optIdx})" class="text-red-400 hover:text-red-500 p-1"><i data-lucide="x" class="w-4 h-4"></i></button></div>`;
+                            opts += `<div class="flex items-center gap-3 mt-2"><i data-lucide="${iconType}" class="w-4 h-4 text-gray-400 flex-shrink-0"></i><input type="text" class="glass-input w-full rounded-lg py-2.5 px-3 text-sm" value="${window.escapeHTML(opt)}" oninput="window.updateFieldOption('${field.id}', ${optIdx}, this.value)" placeholder="Option text"><button type="button" onclick="window.removeFieldOption('${field.id}', ${optIdx})" class="text-red-400 hover:text-red-500 p-1"><i data-lucide="x" class="w-4 h-4"></i></button></div>`;
                         });
                     }
-                    optionsHtml = `<div class="mt-4 pl-4 border-l-2 border-brand-teal/20"><label class="block text-[10px] font-bold text-brand-muted mb-2 uppercase">Answer Options</label>${opts}<button type="button" onclick="addFieldOption('${field.id}')" class="mt-3 text-[10px] uppercase text-brand-teal font-bold flex items-center gap-1.5"><i data-lucide="plus" class="w-3 h-3"></i> Add Option</button></div>`;
+                    optionsHtml = `<div class="mt-4 pl-4 border-l-2 border-brand-teal/20"><label class="block text-[10px] font-bold text-brand-muted mb-2 uppercase">Answer Options</label>${opts}<button type="button" onclick="window.addFieldOption('${field.id}')" class="mt-3 text-[10px] uppercase text-brand-teal font-bold flex items-center gap-1.5"><i data-lucide="plus" class="w-3 h-3"></i> Add Option</button></div>`;
                 }
-                container.innerHTML += `<div class="bg-white/50 border border-gray-100 rounded-2xl p-5 md:p-6 relative shadow-sm mb-4"><div class="flex justify-between items-center border-b border-gray-200/50 pb-3 mb-4"><span class="text-[10px] font-bold text-brand-muted uppercase">Question ${index + 1}</span><button type="button" onclick="removeQuestionField('${field.id}')" class="text-gray-400 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div class="md:col-span-2"><label class="block text-[10px] font-bold text-brand-muted mb-1 uppercase">Question Title</label><input type="text" class="glass-input w-full rounded-lg py-3 px-3 text-sm" value="${escapeHTML(field.label)}" oninput="updateField('${field.id}', 'label', this.value)"></div><div><label class="block text-[10px] font-bold text-brand-muted mb-1 uppercase">Answer Type</label><select class="glass-input w-full rounded-lg py-3 px-3 text-sm" onchange="updateField('${field.id}', 'type', this.value)"><option value="text" ${field.type === 'text' ? 'selected' : ''}>Short Answer</option><option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Paragraph</option><option value="email" ${field.type === 'email' ? 'selected' : ''}>Email Address</option><option value="tel" ${field.type === 'tel' ? 'selected' : ''}>Phone Number</option><option value="radio" ${field.type === 'radio' ? 'selected' : ''}>Multiple Choice</option><option value="checkbox" ${field.type === 'checkbox' ? 'selected' : ''}>Checkboxes</option><option value="select" ${field.type === 'select' ? 'selected' : ''}>Dropdown</option><option value="date" ${field.type === 'date' ? 'selected' : ''}>Date</option></select></div></div>${optionsHtml}<div class="mt-5 flex items-center justify-end gap-3 border-t border-gray-200/50 pt-4"><label class="text-[10px] font-bold text-brand-muted uppercase cursor-pointer" for="req-${field.id}">Required</label><input type="checkbox" id="req-${field.id}" class="custom-checkbox" ${field.required ? 'checked' : ''} onchange="updateField('${field.id}', 'required', this.checked)"></div></div>`;
+                container.innerHTML += `<div class="bg-white/50 border border-gray-100 rounded-2xl p-5 md:p-6 relative shadow-sm mb-4"><div class="flex justify-between items-center border-b border-gray-200/50 pb-3 mb-4"><span class="text-[10px] font-bold text-brand-muted uppercase">Question ${index + 1}</span><button type="button" onclick="window.removeQuestionField('${field.id}')" class="text-gray-400 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div class="md:col-span-2"><label class="block text-[10px] font-bold text-brand-muted mb-1 uppercase">Question Title</label><input type="text" class="glass-input w-full rounded-lg py-3 px-3 text-sm" value="${window.escapeHTML(field.label)}" oninput="window.updateField('${field.id}', 'label', this.value)"></div><div><label class="block text-[10px] font-bold text-brand-muted mb-1 uppercase">Answer Type</label><select class="glass-input w-full rounded-lg py-3 px-3 text-sm" onchange="window.updateField('${field.id}', 'type', this.value)"><option value="text" ${field.type === 'text' ? 'selected' : ''}>Short Answer</option><option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Paragraph</option><option value="email" ${field.type === 'email' ? 'selected' : ''}>Email Address</option><option value="tel" ${field.type === 'tel' ? 'selected' : ''}>Phone Number</option><option value="radio" ${field.type === 'radio' ? 'selected' : ''}>Multiple Choice</option><option value="checkbox" ${field.type === 'checkbox' ? 'selected' : ''}>Checkboxes</option><option value="select" ${field.type === 'select' ? 'selected' : ''}>Dropdown</option><option value="date" ${field.type === 'date' ? 'selected' : ''}>Date</option></select></div></div>${optionsHtml}<div class="mt-5 flex items-center justify-end gap-3 border-t border-gray-200/50 pt-4"><label class="text-[10px] font-bold text-brand-muted uppercase cursor-pointer" for="req-${field.id}">Required</label><input type="checkbox" id="req-${field.id}" class="custom-checkbox" ${field.required ? 'checked' : ''} onchange="window.updateField('${field.id}', 'required', this.checked)"></div></div>`;
             });
-            lucide.createIcons();
+            if(window.lucide) lucide.createIcons();
         };
 
-       window.resetExcomForm = () => {
+        window.resetExcomForm = () => {
             document.getElementById('excomForm').reset();
             document.getElementById('excomId').value = '';
             document.getElementById('excomExistingImageUrl').value = ''; 
             document.getElementById('excomFileName').textContent = 'No file chosen';
-            // ഓർഡർ നമ്പർ റീസെറ്റ് ചെയ്യാൻ
             if(document.getElementById('excomOrder')) document.getElementById('excomOrder').value = '1'; 
             window.excomSelectedFile = null; 
             document.getElementById('excomFormTitle').textContent = 'Add Team Member';
@@ -1675,22 +1676,16 @@
             }
         };
 
-        // എഡിറ്റ് ചെയ്യുമ്പോൾ ഓർഡർ നമ്പർ കൂടി എടുക്കാൻ 'order' എന്ന് കൂട്ടി ചേർത്തിട്ടുണ്ട് 
         window.editExcomMember = (id, name, role, img, insta, linkedin, order) => {
             document.getElementById('excomId').value = id;
             document.getElementById('excomName').value = name;
             document.getElementById('excomRole').value = role;
-            
-            // ഓർഡർ നമ്പർ ഇൻപുട്ട് ബോക്സിലേക്ക് കൊടുക്കാൻ
-            if(document.getElementById('excomOrder')) {
-                document.getElementById('excomOrder').value = (order !== 'undefined' && order != null) ? order : '1';
-            }
-            
+            if(document.getElementById('excomOrder')) { document.getElementById('excomOrder').value = (order !== 'undefined' && order != null) ? order : '1'; }
             document.getElementById('excomExistingImageUrl').value = img !== 'undefined' ? img : '';
             document.getElementById('excomFileName').textContent = (img && img !== 'undefined' && img !== '') ? 'Existing Image Saved' : 'No file chosen';
             window.excomSelectedFile = null;
-            document.getElementById('excomInsta').value = insta !== 'undefined' ? insta : '';
-            document.getElementById('excomLinkedIn').value = linkedin !== 'undefined' ? linkedin : '';
+            const exInsta = document.getElementById('excomInsta'); if(exInsta) exInsta.value = insta !== 'undefined' ? insta : '';
+            const exLinked = document.getElementById('excomLinkedIn'); if(exLinked) exLinked.value = linkedin !== 'undefined' ? linkedin : '';
             document.getElementById('excomFormTitle').textContent = 'Edit Member';
             document.getElementById('excomSubmitBtn').textContent = 'Update Member';
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1703,63 +1698,34 @@
             }
         };
 
-        window.resetSibForm = () => { document.getElementById('sibAdminForm').reset(); document.getElementById('sibDocId').value = ''; document.getElementById('sibExistingImageUrl').value = ''; document.getElementById('sibImageName').textContent = 'No file chosen'; document.getElementById('sibSubmitBtn').innerText = 'Save Case'; };
-window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { document.getElementById('sibDocId').value = id; document.getElementById('sibWeek').value = week; document.getElementById('sibDay').value = day; document.getElementById('sibClue').value = clue; document.getElementById('sibAnswer').value = answer; document.getElementById('sibExistingImageUrl').value = letterUrl !== 'undefined' ? letterUrl : ''; document.getElementById('sibImageName').textContent = letterUrl ? 'Image Saved' : 'No file chosen'; document.getElementById('sibStatus').value = isLocked === 'true' ? 'Locked' : 'Unlocked'; document.getElementById('sibSubmitBtn').innerText = 'Update Case'; window.scrollTo({ top: 0, behavior: 'smooth' }); };
-        
+        window.resetSibForm = () => { 
+            document.getElementById('sibAdminForm').reset(); 
+            document.getElementById('sibDocId').value = ''; 
+            document.getElementById('sibExistingImageUrl').value = ''; 
+            document.getElementById('sibImageName').textContent = 'No file chosen'; 
+            document.getElementById('sibSubmitBtn').innerText = 'Save Case'; 
+        };
+
+        window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { 
+            document.getElementById('sibDocId').value = id; 
+            document.getElementById('sibWeek').value = week; 
+            document.getElementById('sibDay').value = day; 
+            document.getElementById('sibClue').value = clue; 
+            document.getElementById('sibAnswer').value = answer; 
+            document.getElementById('sibExistingImageUrl').value = letterUrl !== 'undefined' ? letterUrl : ''; 
+            document.getElementById('sibImageName').textContent = letterUrl && letterUrl !== 'undefined' && letterUrl !== '' ? 'Image Saved' : 'No file chosen'; 
+            document.getElementById('sibStatus').value = isLocked === 'true' ? 'Locked' : 'Unlocked'; 
+            document.getElementById('sibSubmitBtn').innerText = 'Update Case'; 
+            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        };
     </script>
 
     <!-- FIREBASE AND APP LOGIC -->
-   <script type="module">
-        // Downgraded to 10.8.0 for ultimate stability with WebChannels
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signOut, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, onSnapshot, getDocs, increment, writeBatch, orderBy, initializeFirestore, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-       
-    const cmsTeamForm = document.getElementById('cmsTeamForm');
-        if(cmsTeamForm) {
-            cmsTeamForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btn = document.getElementById('cmsEventSubmitBtn'); 
-                const originalText = btn.innerText;
-                btn.disabled = true; 
-                btn.innerText = "Uploading...";
-                
-                try {
-                    const file = document.getElementById('cmsEventPhoto').files[0];
-                    let downloadURL = "";
-                    
-                    // ഫോട്ടോ ഉണ്ടെങ്കിൽ മാത്രം അപ്‌ലോഡ് ചെയ്യുക (അല്ലെങ്കിൽ error വരാതിരിക്കാൻ)
-                    if (file) {
-                        const storageRef = ref(storage, 'event_posters/' + Date.now() + '_' + file.name);
-                        const uploadTask = await uploadBytesResumable(storageRef, file);
-                        downloadURL = await getDownloadURL(uploadTask.ref);
-                    } else {
-                        throw new Error("Please select an event poster image.");
-                    }
-
-                    // ഡാറ്റ ശരിയായ 'latest_event' കളക്ഷനിലേക്ക് സേവ് ചെയ്യുന്നു
-                    await addDoc(collection(db, "latest_event"), {
-                        title: document.getElementById('cmsEventTitle').value,
-                        tag: document.getElementById('cmsEventTag').value,
-                        desc: document.getElementById('cmsEventDesc').value,
-                        link: document.getElementById('cmsEventLink').value,
-                        imageUrl: downloadURL,
-                        timestamp: Date.now()
-                    });
-                    
-                    window.showToast("Home Page Event Updated Successfully!", "success");
-                    cmsTeamForm.reset();
-                    
-                } catch(error) {
-                    console.error(error);
-                    window.showToast("Error: " + error.message, "error");
-                } finally {
-                    btn.disabled = false; 
-                    btn.innerText = originalText;
-                }
-            });
-        }
 
         const firebaseConfig = { 
             apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8", 
@@ -1772,15 +1738,9 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        // Force long-polling instead of WebSockets/WebChannels to stop the ERR_NAME_NOT_RESOLVED crashes
-        const db = initializeFirestore(app, {
-            experimentalForceLongPolling: true
-        });
+        const db = initializeFirestore(app, { experimentalForceLongPolling: true });
         const storage = getStorage(app);
         
-        const getCol = (name) => collection(db, name);
-        const getDocRef = (name, id) => doc(db, name, id);
-
         window.allUsersData = []; 
         window.projectsData = [];
         window.fundsData = [];
@@ -1788,16 +1748,17 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
         window.excomMeetingsData = []; 
         window.currentUserEmail = ""; 
         window.db = db;
+        window.deleteDoc = deleteDoc; window.doc = doc;
         
         window.logActivity = async (action, details) => {
-            try { await addDoc(getCol("logs"), { action: action, details: details, admin: window.currentUserEmail || 'System', timestamp: Date.now() }); } 
+            try { await addDoc(collection(db, "logs"), { action: action, details: details, admin: window.currentUserEmail || 'System', timestamp: Date.now() }); } 
             catch (e) { console.error("Failed to log activity:", e); }
         };
 
         window.toggleFeatureStatus = async (id, currentStatus) => {
             try {
                 const newStatus = currentStatus === 'Active' ? 'Draft' : 'Active';
-                await updateDoc(getDocRef("features", id), { status: newStatus });
+                await updateDoc(doc(db, "features", id), { status: newStatus });
                 await window.logActivity("Feature Toggled", `Feature changed to ${newStatus}`);
             } catch(e) { window.showToast("Failed to toggle feature: " + e.message, "error"); }
         };
@@ -1805,7 +1766,7 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
         window.fulfillReward = async (id, phone, name, item, userId) => {
             if(!(await window.customConfirm(`Mark ${item} as fulfilled for ${name}?`))) return;
             try {
-                await updateDoc(getDocRef("redemptions", id), { status: 'Fulfilled' });
+                await updateDoc(doc(db, "redemptions", id), { status: 'Fulfilled' });
                 await window.logActivity("Reward Fulfilled", `Fulfilled ${item} for ${name}`);
                 window.showToast("Reward Fulfilled", "success");
             } catch(e) { window.showToast("Error: " + e.message, "error"); }
@@ -1814,8 +1775,8 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
         window.refundReward = async (id, userId, cost) => {
             if(!(await window.customConfirm(`Refund ${cost} points to this user?`))) return;
             try {
-                await updateDoc(getDocRef("redemptions", id), { status: 'Refunded' });
-                await updateDoc(getDocRef("users", userId), { points: increment(cost) });
+                await updateDoc(doc(db, "redemptions", id), { status: 'Refunded' });
+                await updateDoc(doc(db, "users", userId), { points: increment(cost) });
                 await window.logActivity("Reward Refunded", `Refunded ${cost} pts`);
                 window.showToast("Refunded successfully", "success");
             } catch(e) { window.showToast("Error: " + e.message, "error"); }
@@ -1826,20 +1787,18 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
             const el2 = document.getElementById('editUserName');
             const el3 = document.getElementById('editUserRole');
             if(el1 && el2 && el3) {
-                el1.value = id;
-                el2.textContent = name;
-                el3.value = role || 'student';
+                el1.value = id; el2.textContent = name; el3.value = role || 'student';
                 window.toggleEditUserModal(true);
             }
         };
 
         window.updateKanbanStatus = async (projectId, newStatus) => {
-            await updateDoc(getDocRef("projects", projectId), { status: newStatus });
+            await updateDoc(doc(db, "projects", projectId), { status: newStatus });
             await window.logActivity("Pipeline Updated", `Project moved to ${newStatus}`);
         };
 
         window.copyToClipboard = (text) => {
-            navigator.clipboard.writeText(text).then(() => { window.showToast("Caption copied to clipboard!", "success"); }).catch(err => { console.error('Failed to copy: ', err); });
+            navigator.clipboard.writeText(text).then(() => { window.showToast("Copied to clipboard!", "success"); }).catch(err => { console.error('Failed to copy: ', err); });
         };
         
         let roleChartInstance = null; 
@@ -1853,14 +1812,14 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
                 window.currentUserEmail = user.email || 'Admin User'; 
                 safeSetText('adminEmailDisplay', window.currentUserEmail); 
                 
-                const userDocRef = getDocRef("users", user.uid);
+                const userDocRef = doc(db, "users", user.uid);
                 try {
                     const snap = await getDoc(userDocRef);
                     if(!snap.exists() || snap.data().role !== 'admin') {
                         await setDoc(userDocRef, { role: 'admin', email: window.currentUserEmail, name: 'Admin Dashboard', timestamp: Date.now() }, { merge: true });
                         await new Promise(r => setTimeout(r, 1000));
                     }
-                } catch(e) { console.error("Failed to setup admin role:", e); }
+                } catch(e) { console.error("Setup error:", e); }
                 
                 initSync();
                 if(window.renderFormBuilderFields) window.renderFormBuilderFields();
@@ -1874,12 +1833,10 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
             if(form) form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const btn = e.target.querySelector('button[type="submit"]');
-                const oldTxt = btn.innerText;
-                btn.disabled = true; btn.innerText = "Processing...";
+                const oldTxt = btn.innerText; btn.disabled = true; btn.innerText = "Processing...";
                 try {
-                    await addDoc(getCol(collectionStr), { ...payloadFn(), timestamp: Date.now() });
-                    window.showToast(msg, "success");
-                    e.target.reset();
+                    await addDoc(collection(db, collectionStr), { ...payloadFn(), timestamp: Date.now() });
+                    window.showToast(msg, "success"); e.target.reset();
                 } catch(err) { window.showToast(err.message, "error"); } 
                 finally { btn.disabled = false; btn.innerText = oldTxt; }
             });
@@ -1893,11 +1850,9 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
 
         const fundsForm = document.getElementById('fundsForm');
         if(fundsForm) fundsForm.addEventListener('submit', async(e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button'); 
-            btn.disabled = true; btn.innerHTML = "Saving...";
+            e.preventDefault(); const btn = e.target.querySelector('button'); btn.disabled = true; btn.innerHTML = "Saving...";
             try {
-                await addDoc(getCol("funds"), { type: document.getElementById('fundType').value, amount: parseFloat(document.getElementById('fundAmount').value), desc: document.getElementById('fundDesc').value, timestamp: Date.now() });
+                await addDoc(collection(db, "funds"), { type: document.getElementById('fundType').value, amount: parseFloat(document.getElementById('fundAmount').value), desc: document.getElementById('fundDesc').value, timestamp: Date.now() });
                 window.showToast("Record Saved", "success"); e.target.reset();
             } catch(e) { window.showToast(e.message, "error"); } 
             finally { btn.disabled = false; btn.innerHTML = "Save Record"; }
@@ -1905,31 +1860,25 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
 
         const questForm = document.getElementById('questForm');
         if(questForm) questForm.addEventListener('submit', async(e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button'); 
-            btn.disabled = true; btn.innerHTML = "Publishing...";
+            e.preventDefault(); const btn = e.target.querySelector('button'); btn.disabled = true; btn.innerHTML = "Publishing...";
             try {
-                await addDoc(getCol("quests"), { title: document.getElementById('questTitle').value, reward: parseInt(document.getElementById('questReward').value), desc: document.getElementById('questDesc').value, timestamp: Date.now() });
+                await addDoc(collection(db, "quests"), { title: document.getElementById('questTitle').value, reward: parseInt(document.getElementById('questReward').value), desc: document.getElementById('questDesc').value, timestamp: Date.now() });
                 window.showToast("Quest published!", "success"); e.target.reset();
             } catch(e) { window.showToast(e.message, "error"); } 
             finally { btn.disabled = false; btn.innerHTML = "Publish Quest"; }
         });
 
-       
-
         window.deleteUser = async (id, name) => {
             if(!(await window.customConfirm(`WARNING: Are you sure you want to permanently delete '${name}'?`))) return;
-            try { await deleteDoc(getDocRef("users", id)); await window.logActivity("User Deleted", name); window.showToast("User deleted", "success"); } 
+            try { await deleteDoc(doc(db, "users", id)); await window.logActivity("User Deleted", name); window.showToast("User deleted", "success"); } 
             catch(e) { window.showToast(e.message, "error"); }
         };
         
         window.toggleUserStatus = async (id, isDisabled) => {
             if(!(await window.customConfirm(`Are you sure you want to ${isDisabled ? 'Enable' : 'Disable'} this user?`))) return;
-            try { await updateDoc(getDocRef("users", id), { disabled: !isDisabled }); await window.logActivity("User Status", `${isDisabled?'Enabled':'Disabled'} ${id}`); window.showToast("User status updated", "success"); } 
+            try { await updateDoc(doc(db, "users", id), { disabled: !isDisabled }); await window.logActivity("User Status", `${isDisabled?'Enabled':'Disabled'} ${id}`); window.showToast("User status updated", "success"); } 
             catch(e) { window.showToast(e.message, "error"); }
         };
-
-        window.deleteDoc = deleteDoc; window.doc = doc;
 
         window.openExcomAttendanceModal = () => { 
             const m = document.getElementById('excomModal');
@@ -1937,7 +1886,7 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
                 document.getElementById('excomMeetingTitle').value = ''; document.getElementById('excomMeetingDate').value = ''; 
                 document.getElementById('saveExcomBtn').disabled = false; document.getElementById('saveExcomBtn').innerHTML = 'Save Log'; 
                 document.querySelectorAll('.excom-status-select').forEach(s => s.value = 'Absent'); 
-                m.classList.remove('hidden'); lucide.createIcons(); 
+                m.classList.remove('hidden'); if(window.lucide) lucide.createIcons(); 
             }
         };
 
@@ -1953,8 +1902,8 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
                 const batch = writeBatch(db); let presentCount = 0; let absentCount = 0;
                 document.querySelectorAll('.att-checkbox').forEach(cb => { 
                     const uid = cb.value; const isPresent = cb.checked; const studentName = cb.dataset.name;
-                    batch.set(doc(getCol("attendance")), { eventName: eventName, date: date, uid: uid, studentName: studentName, status: isPresent ? 'Present' : 'Absent', timestamp: Date.now() });
-                    if(isPresent) { batch.update(getDocRef("users", uid), { points: increment(50) }); presentCount++; } 
+                    batch.set(doc(collection(db, "attendance")), { eventName: eventName, date: date, uid: uid, studentName: studentName, status: isPresent ? 'Present' : 'Absent', timestamp: Date.now() });
+                    if(isPresent) { batch.update(doc(db, "users", uid), { points: increment(50) }); presentCount++; } 
                     else { absentCount++; }
                 });
                 await batch.commit(); 
@@ -2004,6 +1953,27 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
             });
         }
 
+        const cmsTeamForm = document.getElementById('cmsTeamForm');
+        if(cmsTeamForm) {
+            cmsTeamForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('cmsEventSubmitBtn'); 
+                const originalText = btn.innerText;
+                btn.disabled = true; btn.innerText = "Uploading...";
+                try {
+                    const file = document.getElementById('cmsEventPhoto').files[0];
+                    let downloadURL = "";
+                    if (file) {
+                        const storageRef = ref(storage, 'event_posters/' + Date.now() + '_' + file.name);
+                        const uploadTask = await uploadBytesResumable(storageRef, file);
+                        downloadURL = await getDownloadURL(uploadTask.ref);
+                    } else { throw new Error("Please select an event poster image."); }
+                    await addDoc(collection(db, "latest_event"), { title: document.getElementById('cmsEventTitle').value, tag: document.getElementById('cmsEventTag').value, desc: document.getElementById('cmsEventDesc').value, link: document.getElementById('cmsEventLink').value, imageUrl: downloadURL, timestamp: Date.now() });
+                    window.showToast("Home Page Event Updated!", "success"); cmsTeamForm.reset();
+                } catch(error) { window.showToast("Error: " + error.message, "error"); } finally { btn.disabled = false; btn.innerText = originalText; }
+            });
+        }
+
         const excomForm = document.getElementById('excomForm');
         if(excomForm) {
             excomForm.addEventListener('submit', async (e) => {
@@ -2011,14 +1981,14 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
                 try {
                     const id = document.getElementById('excomId').value;
                     let finalImageUrl = document.getElementById('excomExistingImageUrl').value; 
-                    if (window.excomSelectedFile) { btn.innerHTML = `<div class="spinner w-4 h-4 mr-2 border-t-white"></div> Uploading...`; finalImageUrl = await window.uploadToDrive(window.excomSelectedFile); }
-                   const data = { 
+                    if (window.excomSelectedFile) { btn.innerHTML = `<div class="spinner inline-block w-4 h-4 mr-2"></div> Uploading...`; finalImageUrl = await window.uploadToDrive(window.excomSelectedFile); }
+                    const data = { 
                         name: document.getElementById('excomName').value.trim(), 
                         role: document.getElementById('excomRole').value.trim(), 
-                        order: parseInt(document.getElementById('excomOrder').value) || 99, // <--- ഇത് ചേർക്കുക
+                        order: parseInt(document.getElementById('excomOrder').value) || 99, 
                         imageUrl: finalImageUrl, 
-                        instaLink: document.getElementById('excomInsta').value.trim(), 
-                        linkedinLink: document.getElementById('excomLinkedIn').value.trim(), 
+                        instaLink: document.getElementById('excomInsta') ? document.getElementById('excomInsta').value.trim() : '', 
+                        linkedinLink: document.getElementById('excomLinkedIn') ? document.getElementById('excomLinkedIn').value.trim() : '', 
                         timestamp: Date.now() 
                     };
                     if(id) { await updateDoc(doc(db, "excom", id), data); window.showToast("Member updated successfully!", "success"); } 
@@ -2035,7 +2005,7 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
             }
         };
 
-        window.toggleItemStatus = async (id, status) => { await updateDoc(getDocRef("inventory", id), { status: status }); await window.logActivity("Inventory Update", `Changed item status to ${status}`); };
+        window.toggleItemStatus = async (id, status) => { await updateDoc(doc(db, "inventory", id), { status: status }); await window.logActivity("Inventory Update", `Changed item status to ${status}`); };
         window.handleNewsImage = (e) => { window.newsImageFile = e.target.files[0]; document.getElementById('newsFileName').textContent = e.target.files[0].name; };
         window.handleGalleryImages = (e) => { window.galleryImages = Array.from(e.target.files); document.getElementById('galleryFileName').textContent = `${window.galleryImages.length} files selected`; };
 
@@ -2043,7 +2013,7 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
         if(editUserForm) {
             editUserForm.addEventListener('submit', async (e) => {
                 e.preventDefault(); const id = document.getElementById('editUserId').value; const role = document.getElementById('editUserRole').value;
-                try { await updateDoc(getDocRef("users", id), { role: role }); await window.logActivity("User Updated", `Role changed to ${role} for ${id}`); window.showToast("User role updated", "success"); window.toggleEditUserModal(false); } catch (err) { window.showToast(err.message, "error"); }
+                try { await updateDoc(doc(db, "users", id), { role: role }); await window.logActivity("User Updated", `Role changed to ${role} for ${id}`); window.showToast("User role updated", "success"); window.toggleEditUserModal(false); } catch (err) { window.showToast(err.message, "error"); }
             });
         }
 
@@ -2053,7 +2023,7 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
                 e.preventDefault(); const btn = document.getElementById('submitAddUserBtn'); btn.disabled = true; btn.innerText = "Processing...";
                 try {
                     const name = document.getElementById('newUserName').value; const email = document.getElementById('newUserEmail').value; const uid = document.getElementById('newUserUid').value || generateId();
-                    await setDoc(getDocRef("users", uid), { name, email, role: 'student', points: 0, timestamp: Date.now() });
+                    await setDoc(doc(db, "users", uid), { name, email, role: 'student', points: 0, timestamp: Date.now() });
                     window.showToast("User added", "success"); window.toggleAddUserModal(false); e.target.reset();
                 } catch(err) { window.showToast(err.message, "error"); } 
                 finally { btn.disabled = false; btn.innerText = "Add User"; }
@@ -2064,9 +2034,11 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
         if(editPhoneForm) {
             editPhoneForm.addEventListener('submit', async (e) => {
                 e.preventDefault(); const id = document.getElementById('editPhoneUserId').value; const phone = document.getElementById('editPhoneInput').value;
-                try { await updateDoc(getDocRef("users", id), { phone: phone }); await window.logActivity("Phone Updated", `Phone for ${id}`); window.showToast("Phone updated", "success"); window.toggleEditPhoneModal(false); } catch (err) { window.showToast(err.message, "error"); }
+                try { await updateDoc(doc(db, "users", id), { phone: phone }); await window.logActivity("Phone Updated", `Phone for ${id}`); window.showToast("Phone updated", "success"); window.toggleEditPhoneModal(false); } catch (err) { window.showToast(err.message, "error"); }
             });
-// SIB FORM HANDLER (WITH IMAGE UPLOAD)
+        }
+
+        // SIB FORM HANDLER (WITH IMAGE UPLOAD)
         const sibAdminForm = document.getElementById('sibAdminForm');
         if(sibAdminForm) {
             sibAdminForm.addEventListener('submit', async (e) => {
@@ -2081,7 +2053,6 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
                     const file = document.getElementById('sibLetterImage').files[0];
                     let letterUrl = document.getElementById('sibExistingImageUrl').value;
                     
-                    // പുതിയ ഇമേജ് ഉണ്ടെങ്കിൽ അപ്‌ലോഡ് ചെയ്യുന്നു
                     if (file) {
                         const storageRef = ref(storage, 'sib_letters/' + Date.now() + '_' + file.name);
                         const uploadTask = await uploadBytesResumable(storageRef, file);
@@ -2107,52 +2078,6 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
             });
         }
 
-      window.resetSibForm = () => {
-            document.getElementById('sibAdminForm').reset();
-            document.getElementById('sibDocId').value = '';
-            document.getElementById('sibExistingImageUrl').value = '';
-            document.getElementById('sibImageName').textContent = 'No file chosen';
-            document.getElementById('sibSubmitBtn').innerText = 'Save Case';
-        };
-
-        window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => {
-            document.getElementById('sibDocId').value = id;
-            document.getElementById('sibWeek').value = week;
-            document.getElementById('sibDay').value = day;
-            document.getElementById('sibClue').value = clue;
-            document.getElementById('sibAnswer').value = answer;
-            document.getElementById('sibExistingImageUrl').value = letterUrl !== 'undefined' ? letterUrl : '';
-            document.getElementById('sibImageName').textContent = (letterUrl && letterUrl !== 'undefined' && letterUrl !== '') ? 'Existing Image Saved' : 'No file chosen';
-            document.getElementById('sibStatus').value = isLocked === 'true' ? 'Locked' : 'Unlocked';
-            document.getElementById('sibSubmitBtn').innerText = 'Update Case';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-       
-     // SIB SYNC (Startup Detective)
-                onSnapshot(collection(db, "startup_detective"), (snap) => {
-                    let rawList = []; snap.forEach(d => rawList.push({ id: d.id, ...d.data() }));
-                    rawList.sort((a, b) => { if(a.week === b.week) return a.day - b.day; return a.week.localeCompare(b.week); });
-                    let h = '';
-                    if(rawList.length === 0) h = '<tr><td colspan="4" class="text-center py-10 text-brand-muted text-xs uppercase font-bold">No cases created yet.</td></tr>';
-                    
-                    rawList.forEach(c => {
-                        const badge = !c.isLocked ? `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-green-200/50 bg-green-50/50 text-green-600">Unlocked</span>` : `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-red-200/50 bg-red-50/50 text-red-600">Locked</span>`;
-                        const safeClue = escapeHTML(c.clue); const safeAns = escapeHTML(c.answer); const safeUrl = escapeHTML(c.letterUrl);
-
-                        h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 text-sm">
-                            <td class="px-6 py-4"><div class="font-bold text-gray-900 font-mono tracking-widest text-sm uppercase">${c.week.replace('w','Week ')}</div><div class="text-[10px] text-brand-teal uppercase font-bold mt-1">Day ${c.day}</div></td>
-                            <td class="px-6 py-4"><div class="font-bold text-green-700 text-xs font-mono mb-1">ANS: ${c.answer}</div><div class="text-xs text-gray-500 line-clamp-2 max-w-sm italic font-medium">"${c.clue}"</div></td>
-                            <td class="px-6 py-4 text-center">${badge}</td>
-                            <td class="px-6 py-4 text-center flex justify-center gap-2">
-                                <!-- ഇവിടെ editSibCase ൽ safeUrl ആണ് പാസ് ചെയ്യുന്നത് -->
-                                <button onclick="window.editSibCase('${c.id}', '${c.week}', '${c.day}', \`${safeClue}\`, \`${safeAns}\`, \`${safeUrl}\`, '${c.isLocked}')" class="text-brand-teal bg-white border border-gray-100 p-2 rounded-lg"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                                <button onclick="window.deleteDoc(window.doc(window.db,'startup_detective','${c.id}'))" class="text-red-500 bg-white border border-gray-100 p-2 rounded-lg"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                            </td>
-                        </tr>`;
-                    });
-                    if(document.getElementById('sibAdminListBody')) { document.getElementById('sibAdminListBody').innerHTML = h; lucide.createIcons(); }
-                });
-       
         const managePointsForm = document.getElementById('managePointsForm');
         if(managePointsForm) {
             managePointsForm.addEventListener('submit', async (e) => {
@@ -2162,29 +2087,24 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
                 const btn = e.target.querySelector('button[type="submit"]'); btn.disabled = true; btn.innerText = "Updating...";
                 try {
                     const adjustment = (action === 'deduct') ? -amount : amount;
-                    await updateDoc(getDocRef("users", userId), { 
-    points: increment(adjustment),
-    pointHistory: arrayUnion({
-        reason: reason,
-        amount: amount, 
-        type: action, 
-        timestamp: Date.now()
-    })
-});
+                    await updateDoc(doc(db, "users", userId), { 
+                        points: increment(adjustment),
+                        pointHistory: arrayUnion({ reason: reason, amount: amount, type: action, timestamp: Date.now() })
+                    });
                     await window.logActivity("Points Updated", `${action.toUpperCase()} ${amount} pts for ${userId}. Reason: ${reason}`);
                     window.showToast("Points updated", "success"); document.getElementById('pointsModal').classList.add('hidden'); e.target.reset();
                 } catch (err) { window.showToast("Error: " + err.message, "error"); } 
                 finally { btn.disabled = false; btn.innerText = "Submit"; }
             });
         }
-       
+        
         window.submitExcomAttendance = async () => {
             const title = document.getElementById('excomMeetingTitle').value.trim(); const date = document.getElementById('excomMeetingDate').value;
             if(!title || !date) return window.showToast("Fill meeting name and date.", "error");
             const attendanceRecords = Array.from(document.querySelectorAll('.excom-status-select')).map(sel => ({ id: sel.dataset.id, name: sel.dataset.name, status: sel.value }));
             const btn = document.getElementById('saveExcomBtn'); btn.disabled = true; btn.innerHTML = 'Saving...';
             try {
-                await addDoc(getCol("excom_meetings"), { title: title, date: date, attendance: attendanceRecords, timestamp: Date.now(), loggedBy: window.currentUserEmail }); 
+                await addDoc(collection(db, "excom_meetings"), { title: title, date: date, attendance: attendanceRecords, timestamp: Date.now(), loggedBy: window.currentUserEmail }); 
                 await window.logActivity("ExCom Logged", `Meeting: ${date}`); window.showToast("Saved!", "success"); document.getElementById('excomModal').classList.add('hidden');
             } catch(e) { window.showToast(e.message, "error"); btn.disabled = false; btn.innerHTML = 'Save Log'; }
         };
@@ -2203,53 +2123,24 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
 
         window.updateTaskStatus = async (id, newStatus) => { try { await updateDoc(doc(db, "excom_tasks", id), { status: newStatus }); } catch(e) { window.showToast(e.message, "error"); } };
         window.deleteTask = async (id) => { if(await window.customConfirm(`Are you sure you want to delete this task?`)) { try { await deleteDoc(doc(db, "excom_tasks", id)); window.showToast("Task deleted", "success"); } catch(e) { window.showToast(e.message, "error"); } } };
-       
-
+        
         // ================= SYNC ALL DATABASES (The Master Snapshot function) =================
         function initSync() {
             // 1. Users
-            onSnapshot(getCol("users"), (snap) => {
+            onSnapshot(collection(db, "users"), (snap) => {
                 let uHtml = '', pointsHtml = '', certHtml = '', attHtml = '', excomHtml = '';
                 let excomModalHtml = '';
                 let usersList = []; let studentCount = 0, excomCount = 0, adminCount = 0;
-                document.getElementById('totalUsersCount').textContent = snap.size;
-                safeSetText('directoryUserCount', snap.size);
+                if(document.getElementById('totalUsersCount')) document.getElementById('totalUsersCount').textContent = snap.size;
+                if(document.getElementById('directoryUserCount')) document.getElementById('directoryUserCount').textContent = snap.size;
 
                 snap.forEach(d => {
                     const data = d.data(); usersList.push({ id: d.id, ...data });
                     if(data.role === 'admin') adminCount++; else if(data.role === 'excom') excomCount++; else studentCount++;
                 });
 
-                // SIB SYNC
-onSnapshot(collection(db, "startup_detective"), (snap) => {
-    let rawList = []; snap.forEach(d => rawList.push({ id: d.id, ...d.data() }));
-    // Week ഉം Day ഉം വെച്ച് സോർട്ട് ചെയ്യുന്നു
-    rawList.sort((a, b) => { if(a.week === b.week) return a.day - b.day; return a.week.localeCompare(b.week); });
-    
-    let h = '';
-    if(rawList.length === 0) h = '<tr><td colspan="4" class="text-center py-10 text-gray-400 text-xs font-bold">No cases created yet.</td></tr>';
-    
-    rawList.forEach(c => {
-        const badge = !c.isLocked ? `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-green-200 text-green-600 bg-green-50">Unlocked</span>` : `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-red-200 text-red-600 bg-red-50">Locked</span>`;
-        const safeClue = window.escapeHTML ? window.escapeHTML(c.clue) : c.clue.replace(/'/g, "\\'"); 
-        const safeAns = window.escapeHTML ? window.escapeHTML(c.answer) : c.answer; 
-        const safeUrl = window.escapeHTML ? window.escapeHTML(c.letterUrl) : c.letterUrl;
-
-        h += `<tr class="border-b border-gray-100 hover:bg-gray-50 text-sm">
-            <td class="px-6 py-4"><div class="font-bold text-gray-900 font-mono text-sm uppercase">${c.week.replace('w','Week ')}</div><div class="text-[10px] text-teal-600 uppercase font-bold mt-1">Day ${c.day}</div></td>
-            <td class="px-6 py-4"><div class="font-bold text-green-700 text-xs font-mono mb-1">ANS: ${c.answer}</div><div class="text-xs text-gray-500 italic">"${c.clue}"</div></td>
-            <td class="px-6 py-4 text-center">${badge}</td>
-            <td class="px-6 py-4 text-center flex justify-center gap-2">
-                <button onclick="window.editSibCase('${c.id}', '${c.week}', '${c.day}', \`${safeClue}\`, \`${safeAns}\`, \`${safeUrl}\`, '${c.isLocked}')" class="text-teal-600 border border-gray-200 p-2 rounded-lg bg-white"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                <button onclick="window.deleteDoc(window.doc(window.db,'startup_detective','${c.id}'))" class="text-red-500 border border-gray-200 p-2 rounded-lg bg-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-            </td>
-        </tr>`;
-    });
-    if(document.getElementById('sibAdminListBody')) { document.getElementById('sibAdminListBody').innerHTML = h; if(window.lucide) lucide.createIcons(); }
-});
-                
                 window.allUsersData = usersList;
-                if(roleChartInstance) roleChartInstance.destroy();
+                if(typeof roleChartInstance !== 'undefined' && roleChartInstance) roleChartInstance.destroy();
                 const ctxRole = document.getElementById('roleChart');
                 if(ctxRole && (studentCount > 0 || excomCount > 0 || adminCount > 0)) {
                     roleChartInstance = new Chart(ctxRole, { type: 'doughnut', data: { labels: ['Students', 'ExCom', 'Admins'], datasets: [{ data: [studentCount, excomCount, adminCount], backgroundColor: ['#007b70', '#805ad5', '#ef4444'], borderWidth: 0 }] }, options: { cutout: '75%', plugins: { legend: { position: 'bottom' } } } });
@@ -2257,7 +2148,7 @@ onSnapshot(collection(db, "startup_detective"), (snap) => {
 
                 usersList.sort((a,b) => (b.points || 0) - (a.points || 0));
                 usersList.forEach(u => {
-                    const safeName = escapeHTML(u.name || "Unknown"); const safeEmail = escapeHTML(u.email || "No Email"); let safePhone = u.phone ? escapeHTML(u.phone) : "No Phone";
+                    const safeName = window.escapeHTML(u.name || "Unknown"); const safeEmail = window.escapeHTML(u.email || "No Email"); let safePhone = u.phone ? window.escapeHTML(u.phone) : "No Phone";
                     const isGoogle = u.authProvider === 'google' || u.googleLogin === true;
                     const authBadge = isGoogle ? `<span class="bg-gray-100/50 text-gray-700 px-2 py-0.5 rounded text-[8px] uppercase tracking-widest flex items-center gap-1 w-max mt-1 border border-gray-200/50"><i class="fab fa-google"></i> Google</span>` : `<span class="bg-white/50 text-gray-500 px-2 py-0.5 rounded text-[8px] uppercase tracking-widest flex items-center gap-1 w-max mt-1 border border-gray-100/50"><i class="fas fa-envelope"></i> Email</span>`;
                     const points = u.points || 0;
@@ -2270,12 +2161,12 @@ onSnapshot(collection(db, "startup_detective"), (snap) => {
                     const toggleStatusColor = !u.disabled ? 'text-yellow-600 hover:bg-yellow-50/50' : 'text-green-600 hover:bg-green-50/50';
                     const toggleIcon = !u.disabled ? 'user-minus' : 'user-check';
 
-                    uHtml += `<tr class="border-b border-gray-100/50 hover:bg-white/40 transition-colors text-sm"><td class="px-4 py-4 text-center"><input type="checkbox" class="user-select-cb custom-checkbox" value="${u.id}"></td><td class="px-6 py-4 font-bold text-gray-900">${safeName}</td><td class="px-6 py-4"><div class="text-sm text-gray-600">${safeEmail}</div><div class="flex items-center gap-2 mt-1"><div class="text-[10px] text-brand-muted font-mono"><i class="fab fa-whatsapp mr-1 text-[#25D366]"></i> ${safePhone}</div><button onclick="openEditPhone('${u.id}', '${safeName}', '${safePhone}')" class="text-brand-teal hover:text-teal-700 transition-colors"><i data-lucide="pencil" class="w-3 h-3"></i></button></div>${authBadge}</td><td class="px-6 py-4 text-center">${roleBadge}</td><td class="px-6 py-4 text-center">${statusBadge}</td><td class="px-6 py-4 text-center flex justify-center gap-2 items-center"><button onclick="prepareEditUser('${u.id}', '${safeName}', '${u.role||'student'}')" class="text-brand-teal bg-white/50 hover:bg-white p-2 rounded-lg transition-colors shadow-sm border border-gray-100"><i data-lucide="edit-2" class="w-4 h-4"></i></button><button onclick="toggleUserStatus('${u.id}', ${!!u.disabled})" class="${toggleStatusColor} bg-white/50 border border-gray-100 p-2 rounded-lg transition-colors shadow-sm"><i data-lucide="${toggleIcon}" class="w-4 h-4"></i></button><button onclick="deleteUser('${u.id}', '${safeName}')" class="text-red-500 bg-white/50 hover:bg-red-50 border border-gray-100 p-2 rounded-lg transition-colors shadow-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
-                    pointsHtml += `<tr class="border-b border-gray-100/50 hover:bg-white/40 transition-colors text-sm"><td class="px-6 py-4 font-bold text-gray-900">${safeName}</td><td class="px-6 py-4 text-xs text-brand-muted font-mono">${safeEmail}<br><span class="text-[9px] text-gray-400">ID: ${u.id}</span></td><td class="px-6 py-4 text-center text-brand-teal font-display font-black text-xl">${points}</td><td class="px-6 py-4 flex justify-center gap-2"><button onclick="preparePointsAction('${u.id}', '${safeName}', 'add')" class="bg-teal-50 hover:bg-teal-100 border border-teal-200 text-brand-teal p-2 rounded-lg transition-colors flex items-center gap-1 text-[10px] font-bold uppercase"><i data-lucide="plus" class="w-3 h-3"></i> Add</button><button onclick="preparePointsAction('${u.id}', '${safeName}', 'deduct')" class="bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 p-2 rounded-lg transition-colors flex items-center gap-1 text-[10px] font-bold uppercase"><i data-lucide="minus" class="w-3 h-3"></i> Deduct</button></td></tr>`;
+                    uHtml += `<tr class="border-b border-gray-100/50 hover:bg-white/40 transition-colors text-sm"><td class="px-4 py-4 text-center"><input type="checkbox" class="user-select-cb custom-checkbox" value="${u.id}"></td><td class="px-6 py-4 font-bold text-gray-900">${safeName}</td><td class="px-6 py-4"><div class="text-sm text-gray-600">${safeEmail}</div><div class="flex items-center gap-2 mt-1"><div class="text-[10px] text-brand-muted font-mono"><i class="fab fa-whatsapp mr-1 text-[#25D366]"></i> ${safePhone}</div><button onclick="window.openEditPhone('${u.id}', '${safeName}', '${safePhone}')" class="text-brand-teal hover:text-teal-700 transition-colors"><i data-lucide="pencil" class="w-3 h-3"></i></button></div>${authBadge}</td><td class="px-6 py-4 text-center">${roleBadge}</td><td class="px-6 py-4 text-center">${statusBadge}</td><td class="px-6 py-4 text-center flex justify-center gap-2 items-center"><button onclick="window.prepareEditUser('${u.id}', '${safeName}', '${u.role||'student'}')" class="text-brand-teal bg-white/50 hover:bg-white p-2 rounded-lg transition-colors shadow-sm border border-gray-100"><i data-lucide="edit-2" class="w-4 h-4"></i></button><button onclick="window.toggleUserStatus('${u.id}', ${!!u.disabled})" class="${toggleStatusColor} bg-white/50 border border-gray-100 p-2 rounded-lg transition-colors shadow-sm"><i data-lucide="${toggleIcon}" class="w-4 h-4"></i></button><button onclick="window.deleteUser('${u.id}', '${safeName}')" class="text-red-500 bg-white/50 hover:bg-red-50 border border-gray-100 p-2 rounded-lg transition-colors shadow-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
+                    pointsHtml += `<tr class="border-b border-gray-100/50 hover:bg-white/40 transition-colors text-sm"><td class="px-6 py-4 font-bold text-gray-900">${safeName}</td><td class="px-6 py-4 text-xs text-brand-muted font-mono">${safeEmail}<br><span class="text-[9px] text-gray-400">ID: ${u.id}</span></td><td class="px-6 py-4 text-center text-brand-teal font-display font-black text-xl">${points}</td><td class="px-6 py-4 flex justify-center gap-2"><button onclick="window.preparePointsAction('${u.id}', '${safeName}', 'add')" class="bg-teal-50 hover:bg-teal-100 border border-teal-200 text-brand-teal p-2 rounded-lg transition-colors flex items-center gap-1 text-[10px] font-bold uppercase"><i data-lucide="plus" class="w-3 h-3"></i> Add</button><button onclick="window.preparePointsAction('${u.id}', '${safeName}', 'deduct')" class="bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 p-2 rounded-lg transition-colors flex items-center gap-1 text-[10px] font-bold uppercase"><i data-lucide="minus" class="w-3 h-3"></i> Deduct</button></td></tr>`;
 
                     if(u.role === 'student' || u.role === 'excom') {
                         certHtml += `<tr class="border-b border-gray-100/50 hover:bg-white/40"><td class="px-6 py-4 text-center"><input type="checkbox" class="cert-checkbox custom-checkbox" value="${u.id}" data-name="${safeName}" data-email="${safeEmail}" data-phone="${safePhone}"></td><td class="text-sm font-bold text-gray-900">${safeName}</td></tr>`;
-                        attHtml += `<tr class="border-b border-gray-100/50 hover:bg-white/40 cursor-pointer" onclick="toggleAttCheck('${u.id}')"><td class="px-6 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${u.id}" value="${u.id}" data-name="${safeName}"></td><td class="text-sm font-bold text-gray-900">${safeName}</td><td class="text-xs text-brand-muted">${safeEmail}</td></tr>`;
+                        attHtml += `<tr class="border-b border-gray-100/50 hover:bg-white/40 cursor-pointer" onclick="window.toggleAttCheck('${u.id}')"><td class="px-6 py-4 text-center"><input type="checkbox" class="att-checkbox custom-checkbox" id="att-${u.id}" value="${u.id}" data-name="${safeName}"></td><td class="text-sm font-bold text-gray-900">${safeName}</td><td class="text-xs text-brand-muted">${safeEmail}</td></tr>`;
                     }
                     if(u.role === 'excom') {
                         excomHtml += `<div class="flex justify-between items-center bg-white/60 border border-white p-4 rounded-xl mb-3 shadow-sm"><span class="font-bold text-sm text-gray-900">${safeName}</span><span class="text-[9px] font-bold text-brand-teal border border-teal-200 bg-teal-50 px-3 py-1.5 rounded-md">ExCom</span></div>`;
@@ -2304,53 +2195,39 @@ onSnapshot(collection(db, "startup_detective"), (snap) => {
                 if(document.getElementById('excomMembersList')) document.getElementById('excomMembersList').innerHTML = excomHtml;
                 if(document.getElementById('excomAttendanceList')) document.getElementById('excomAttendanceList').innerHTML = excomModalHtml;
 
-                lucide.createIcons();
+                if(window.lucide) lucide.createIcons();
             }, (err) => console.error("Users Sync Error:", err));
-// SIB SYNC (Startup Detective)
-            onSnapshot(getCol("startup_detective"), (snap) => {
-                let rawList = []; 
-                snap.forEach(d => rawList.push({ id: d.id, ...d.data() }));
-                
-                // Sort by Week, then by Day
-                rawList.sort((a, b) => {
-                    if(a.week === b.week) return a.day - b.day;
-                    return a.week.localeCompare(b.week);
-                });
 
+            // SIB SYNC (Startup Detective Image Upload)
+            onSnapshot(collection(db, "startup_detective"), (snap) => {
+                let rawList = []; snap.forEach(d => rawList.push({ id: d.id, ...d.data() }));
+                // Week ഉം Day ഉം വെച്ച് സോർട്ട് ചെയ്യുന്നു
+                rawList.sort((a, b) => { if(a.week === b.week) return a.day - b.day; return a.week.localeCompare(b.week); });
+                
                 let h = '';
-                if(rawList.length === 0) h = '<tr><td colspan="4" class="text-center py-10 text-brand-muted text-xs uppercase font-bold tracking-widest">No cases created yet.</td></tr>';
+                if(rawList.length === 0) h = '<tr><td colspan="4" class="text-center py-10 text-gray-400 text-xs font-bold">No cases created yet.</td></tr>';
                 
                 rawList.forEach(c => {
-                    const badge = !c.isLocked 
-                        ? `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-green-200/50 bg-green-50/50 text-green-600">Unlocked</span>`
-                        : `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-red-200/50 bg-red-50/50 text-red-600">Locked</span>`;
-                    
-                    const safeClue = escapeHTML(c.clue);
-                    const safeAns = escapeHTML(c.answer);
-                    const safeLetter = escapeHTML(c.letterContent);
+                    const badge = !c.isLocked ? `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-green-200 text-green-600 bg-green-50">Unlocked</span>` : `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-red-200 text-red-600 bg-red-50">Locked</span>`;
+                    const safeClue = window.escapeHTML(c.clue).replace(/'/g, "\\'"); 
+                    const safeAns = window.escapeHTML(c.answer); 
+                    const safeUrl = window.escapeHTML(c.letterUrl);
 
-                    h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 transition-colors text-sm">
-                        <td class="px-6 py-4">
-                            <div class="font-bold text-gray-900 font-mono tracking-widest text-sm uppercase">${c.week.replace('w','Week ')}</div>
-                            <div class="text-[10px] text-brand-teal uppercase font-bold mt-1">Day ${c.day}</div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="font-bold text-green-700 text-xs font-mono mb-1">ANS: ${c.answer}</div>
-                            <div class="text-xs text-gray-500 line-clamp-2 max-w-sm italic font-medium">"${c.clue}"</div>
-                        </td>
+                    h += `<tr class="border-b border-gray-100 hover:bg-gray-50 text-sm">
+                        <td class="px-6 py-4"><div class="font-bold text-gray-900 font-mono text-sm uppercase">${c.week.replace('w','Week ')}</div><div class="text-[10px] text-teal-600 uppercase font-bold mt-1">Day ${c.day}</div></td>
+                        <td class="px-6 py-4"><div class="font-bold text-green-700 text-xs font-mono mb-1">ANS: ${c.answer}</div><div class="text-xs text-gray-500 italic">"${c.clue}"</div></td>
                         <td class="px-6 py-4 text-center">${badge}</td>
                         <td class="px-6 py-4 text-center flex justify-center gap-2">
-                            <button onclick="window.editSibCase('${c.id}', '${c.week}', '${c.day}', \`${safeClue}\`, \`${safeAns}\`, \`${safeLetter}\`, '${c.isLocked}')" class="text-brand-teal bg-white hover:bg-gray-50 border border-gray-100 p-2 rounded-lg transition-colors shadow-sm"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                            <button onclick="window.deleteDoc(window.doc(window.db,'startup_detective','${c.id}'))" class="text-red-500 bg-white hover:bg-red-50 border border-gray-100 p-2 rounded-lg transition-colors shadow-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <button onclick="window.editSibCase('${c.id}', '${c.week}', '${c.day}', \`${safeClue}\`, \`${safeAns}\`, \`${safeUrl}\`, '${c.isLocked}')" class="text-teal-600 border border-gray-200 p-2 rounded-lg bg-white"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                            <button onclick="window.deleteDoc(window.doc(window.db,'startup_detective','${c.id}'))" class="text-red-500 border border-gray-200 p-2 rounded-lg bg-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </td>
                     </tr>`;
                 });
-                const tbody = document.getElementById('sibAdminListBody');
-                if(tbody) { tbody.innerHTML = h; lucide.createIcons(); }
-            }, (err) => console.error("SIB Sync Error:", err));
+                if(document.getElementById('sibAdminListBody')) { document.getElementById('sibAdminListBody').innerHTML = h; if(window.lucide) lucide.createIcons(); }
+            });
             
             // 2. Kanban Projects
-            onSnapshot(getCol("projects"), (snap) => {
+            onSnapshot(collection(db, "projects"), (snap) => {
                 window.projectsData = []; let pendingHtml = '', apprHtml = '', protoHtml = '', fundHtml = '', incHtml = '';
                 let pCount=0, aCount=0, prCount=0, fCount=0, iCount=0;
                 let rawList = []; snap.forEach(d => rawList.push({id: d.id, ...d.data()})); rawList.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
@@ -2358,56 +2235,59 @@ onSnapshot(collection(db, "startup_detective"), (snap) => {
                 rawList.forEach(p => {
                     window.projectsData.push(p); const status = p.status || 'Pending Review';
                     let aiBadge = p.aiFeedback ? `<span class="ml-2 text-[8px] bg-brand-teal/10 text-brand-teal px-2 py-0.5 rounded border border-teal-200"><i class="fas fa-sparkles"></i> AI</span>` : "";
-                    const card = `<div class="kanban-card bg-white border border-gray-100 p-4 rounded-xl hover:border-brand-teal transition-colors shadow-sm" id="card-${p.id}" draggable="true" ondragstart="drag(event)"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-gray-900 text-sm leading-tight">${p.title}</h4></div><div class="flex items-center gap-2 mb-3"><span class="text-[9px] text-gray-500 uppercase tracking-widest font-mono bg-gray-50 px-2 py-0.5 rounded border border-gray-100">${p.tech}</span>${aiBadge}</div><p class="text-[10px] text-brand-muted line-clamp-2 leading-relaxed mb-3">${p.desc}</p><div class="text-[8px] text-gray-400 text-right">UID: ${p.uid ? p.uid.substring(0,8) : 'Unknown'}...</div></div>`;
+                    const card = `<div class="kanban-card bg-white border border-gray-100 p-4 rounded-xl hover:border-brand-teal transition-colors shadow-sm" id="card-${p.id}" draggable="true" ondragstart="window.drag(event)"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-gray-900 text-sm leading-tight">${window.escapeHTML(p.title)}</h4></div><div class="flex items-center gap-2 mb-3"><span class="text-[9px] text-gray-500 uppercase tracking-widest font-mono bg-gray-50 px-2 py-0.5 rounded border border-gray-100">${window.escapeHTML(p.tech)}</span>${aiBadge}</div><p class="text-[10px] text-brand-muted line-clamp-2 leading-relaxed mb-3">${window.escapeHTML(p.desc)}</p><div class="text-[8px] text-gray-400 text-right">UID: ${p.uid ? p.uid.substring(0,8) : 'Unknown'}...</div></div>`;
                     if(status === 'Pending Review') { pendingHtml += card; pCount++; } else if(status === 'Approved') { apprHtml += card; aCount++; } else if(status === 'Prototyping') { protoHtml += card; prCount++; } else if(status === 'Funded') { fundHtml += card; fCount++; } else if(status === 'Incubated') { incHtml += card; iCount++; }
                 });
                 
                 if(document.getElementById('col-Pending Review')) {
-                    document.getElementById('col-Pending Review').innerHTML = pendingHtml; document.getElementById('count-pending').textContent = pCount;
-                    document.getElementById('col-Approved').innerHTML = apprHtml; document.getElementById('count-approved').textContent = aCount;
-                    document.getElementById('col-Prototyping').innerHTML = protoHtml; document.getElementById('count-prototyping').textContent = prCount;
-                    document.getElementById('col-Funded').innerHTML = fundHtml; document.getElementById('count-funded').textContent = fCount;
-                    document.getElementById('col-Incubated').innerHTML = incHtml; document.getElementById('count-incubated').textContent = iCount;
-                    safeSetText('overviewStartups', aCount+prCount+fCount+iCount); 
+                    document.getElementById('col-Pending Review').innerHTML = pendingHtml; if(document.getElementById('count-pending')) document.getElementById('count-pending').textContent = pCount;
+                    document.getElementById('col-Approved').innerHTML = apprHtml; if(document.getElementById('count-approved')) document.getElementById('count-approved').textContent = aCount;
+                    document.getElementById('col-Prototyping').innerHTML = protoHtml; if(document.getElementById('count-prototyping')) document.getElementById('count-prototyping').textContent = prCount;
+                    document.getElementById('col-Funded').innerHTML = fundHtml; if(document.getElementById('count-funded')) document.getElementById('count-funded').textContent = fCount;
+                    document.getElementById('col-Incubated').innerHTML = incHtml; if(document.getElementById('count-incubated')) document.getElementById('count-incubated').textContent = iCount;
+                    if(document.getElementById('overviewStartups')) document.getElementById('overviewStartups').textContent = aCount+prCount+fCount+iCount; 
                 }
             });
 
             // 3. Funds
-            onSnapshot(getCol("funds"), (snap) => {
+            onSnapshot(collection(db, "funds"), (snap) => {
                 window.fundsData = []; let rawList = []; snap.forEach(d => rawList.push({id: d.id, ...d.data()})); rawList.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
                 let h = '', inc = 0, exp = 0;
                 rawList.forEach(f => {
                     window.fundsData.push(f); const color = f.type === 'Income' ? 'text-green-600' : 'text-red-500'; const sign = f.type === 'Income' ? '+' : '-';
                     if(f.type === 'Income') inc += parseFloat(f.amount); else exp += parseFloat(f.amount);
-                    h += `<tr class="border-b border-gray-100/50 hover:bg-white/40"><td class="px-6 py-4 text-[10px] font-mono text-brand-muted">${new Date(f.timestamp).toLocaleDateString()}</td><td class="px-6 py-4 text-gray-900 text-sm font-medium">${f.desc}</td><td class="px-6 py-4 text-right font-bold font-mono ${color}">${sign}₹${f.amount}</td></tr>`;
+                    h += `<tr class="border-b border-gray-100/50 hover:bg-white/40"><td class="px-6 py-4 text-[10px] font-mono text-brand-muted">${new Date(f.timestamp).toLocaleDateString()}</td><td class="px-6 py-4 text-gray-900 text-sm font-medium">${window.escapeHTML(f.desc)}</td><td class="px-6 py-4 text-right font-bold font-mono ${color}">${sign}₹${f.amount}</td></tr>`;
                 });
                 window.fundsBalance = inc - exp;
-                safeSetText('fundTotalIncome', inc.toLocaleString()); safeSetText('fundTotalExpense', exp.toLocaleString()); safeSetText('fundBalance', window.fundsBalance.toLocaleString()); safeSetText('overviewFunds', window.fundsBalance.toLocaleString()); 
+                if(document.getElementById('fundTotalIncome')) document.getElementById('fundTotalIncome').textContent = inc.toLocaleString(); 
+                if(document.getElementById('fundTotalExpense')) document.getElementById('fundTotalExpense').textContent = exp.toLocaleString(); 
+                if(document.getElementById('fundBalance')) document.getElementById('fundBalance').textContent = window.fundsBalance.toLocaleString(); 
+                if(document.getElementById('overviewFunds')) document.getElementById('overviewFunds').textContent = window.fundsBalance.toLocaleString(); 
                 if(document.getElementById('fundsListBody')) document.getElementById('fundsListBody').innerHTML = h || '<tr><td colspan="3" class="text-center py-8 text-brand-muted">No records found.</td></tr>';
             });
 
             // 4. Quests
-            onSnapshot(getCol("quests"), (snap) => {
+            onSnapshot(collection(db, "quests"), (snap) => {
                 let h = '';
                 snap.forEach(d => {
                     const q = d.data();
-                    h += `<div class="glass-panel p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-orange-200/50"><div><div class="flex items-center gap-3 mb-2"><i class="fas fa-gem text-orange-500 text-xl"></i><h4 class="font-bold text-gray-900 text-lg">${q.title}</h4></div><p class="text-xs text-brand-muted">${q.desc}</p></div><div class="flex flex-col items-end gap-2 shrink-0"><span class="text-xl font-display font-black text-yellow-600">+${q.reward} <span class="text-[10px]">PTS</span></span><button onclick="window.deleteDoc(window.doc(window.db,'quests','${d.id}'))" class="text-[9px] uppercase tracking-widest text-red-500 hover:underline font-bold">Delete Quest</button></div></div>`;
+                    h += `<div class="glass-panel p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-orange-200/50"><div><div class="flex items-center gap-3 mb-2"><i class="fas fa-gem text-orange-500 text-xl"></i><h4 class="font-bold text-gray-900 text-lg">${window.escapeHTML(q.title)}</h4></div><p class="text-xs text-brand-muted">${window.escapeHTML(q.desc)}</p></div><div class="flex flex-col items-end gap-2 shrink-0"><span class="text-xl font-display font-black text-yellow-600">+${q.reward} <span class="text-[10px]">PTS</span></span><button onclick="window.deleteDoc(window.doc(window.db,'quests','${d.id}'))" class="text-[9px] uppercase tracking-widest text-red-500 hover:underline font-bold">Delete Quest</button></div></div>`;
                 });
                 if(document.getElementById('questsListBody')) document.getElementById('questsListBody').innerHTML = h || '<div class="glass-panel p-10 text-center text-brand-muted text-xs font-bold uppercase tracking-widest border border-white/50">No active quests.</div>';
             });
 
             // 5. Features
-            onSnapshot(getCol("features"), (snap) => {
+            onSnapshot(collection(db, "features"), (snap) => {
                 let html = ''; if(snap.empty) html = '<div class="text-center py-6 text-brand-muted text-[10px] uppercase font-bold tracking-widest border border-dashed border-gray-300 rounded-xl">No active features.</div>';
                 snap.forEach(d => {
                     const f = d.data(); const statusColor = f.status === 'Active' ? 'text-green-600 bg-green-50/50 border-green-200' : 'text-yellow-600 bg-yellow-50/50 border-yellow-200';
-                    html += `<div class="bg-white/40 border border-gray-100 p-5 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-brand-teal/30 transition-colors shadow-sm"><div><div class="flex items-center gap-3 mb-1"><h4 class="font-bold text-gray-900 text-sm">${f.title}</h4><span class="px-2 py-0.5 rounded text-[8px] uppercase tracking-widest font-bold border ${statusColor}">${f.status}</span><span class="px-2 py-0.5 rounded text-[8px] uppercase tracking-widest font-bold bg-white text-gray-500 border border-gray-200">${f.target}</span></div><p class="text-xs text-brand-muted">${f.description}</p></div><div class="flex gap-2"><button onclick="window.toggleFeatureStatus('${d.id}', '${f.status}')" class="bg-white hover:bg-gray-50 border border-gray-100 text-gray-700 p-2 rounded-lg transition-colors text-[10px] uppercase font-bold tracking-widest shadow-sm"><i data-lucide="power" class="w-4 h-4"></i></button><button onclick="window.deleteDoc(window.doc(window.db,'features','${d.id}'))" class="bg-red-50 hover:bg-red-100 border border-red-100 text-red-500 p-2 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div>`;
+                    html += `<div class="bg-white/40 border border-gray-100 p-5 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-brand-teal/30 transition-colors shadow-sm"><div><div class="flex items-center gap-3 mb-1"><h4 class="font-bold text-gray-900 text-sm">${window.escapeHTML(f.title)}</h4><span class="px-2 py-0.5 rounded text-[8px] uppercase tracking-widest font-bold border ${statusColor}">${f.status}</span><span class="px-2 py-0.5 rounded text-[8px] uppercase tracking-widest font-bold bg-white text-gray-500 border border-gray-200">${f.target}</span></div><p class="text-xs text-brand-muted">${window.escapeHTML(f.description)}</p></div><div class="flex gap-2"><button onclick="window.toggleFeatureStatus('${d.id}', '${f.status}')" class="bg-white hover:bg-gray-50 border border-gray-100 text-gray-700 p-2 rounded-lg transition-colors text-[10px] uppercase font-bold tracking-widest shadow-sm"><i data-lucide="power" class="w-4 h-4"></i></button><button onclick="window.deleteDoc(window.doc(window.db,'features','${d.id}'))" class="bg-red-50 hover:bg-red-100 border border-red-100 text-red-500 p-2 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div>`;
                 });
-                if(document.getElementById('featuresListBody')) { document.getElementById('featuresListBody').innerHTML = html; lucide.createIcons(); }
+                if(document.getElementById('featuresListBody')) { document.getElementById('featuresListBody').innerHTML = html; if(window.lucide) lucide.createIcons(); }
             });
 
             // 6. Redemptions
-            onSnapshot(getCol("redemptions"), (snap) => {
+            onSnapshot(collection(db, "redemptions"), (snap) => {
                 let h = ''; if(snap.empty) h = '<tr><td colspan="5" class="text-center py-10 text-brand-muted text-xs uppercase font-bold tracking-widest">No orders yet.</td></tr>'; 
                 let rawList = []; snap.forEach(d => rawList.push({id:d.id, ...d.data()})); rawList.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
                 rawList.forEach(r => {
@@ -2417,58 +2297,62 @@ onSnapshot(collection(db, "startup_detective"), (snap) => {
 
                     let actions = '';
                     if(r.status === 'Pending') {
-                        actions = `<button onclick="window.fulfillReward('${r.id}', '${r.userPhone}', '${r.userName}', '${r.itemName}', '${r.userId}')" class="bg-green-50/50 hover:bg-green-100/50 text-green-600 border border-green-200/50 p-2 rounded-lg transition-colors shadow-sm"><i class="fas fa-check w-4 h-4"></i></button><button onclick="window.refundReward('${r.id}', '${r.userId}', ${r.cost})" class="bg-red-50/50 hover:bg-red-100/50 text-red-500 border border-red-200/50 p-2 rounded-lg transition-colors shadow-sm"><i class="fas fa-undo w-4 h-4"></i></button>`;
+                        actions = `<button onclick="window.fulfillReward('${r.id}', '${r.userPhone}', '${window.escapeHTML(r.userName)}', '${window.escapeHTML(r.itemName)}', '${r.userId}')" class="bg-green-50/50 hover:bg-green-100/50 text-green-600 border border-green-200/50 p-2 rounded-lg transition-colors shadow-sm"><i class="fas fa-check w-4 h-4"></i></button><button onclick="window.refundReward('${r.id}', '${r.userId}', ${r.cost})" class="bg-red-50/50 hover:bg-red-100/50 text-red-500 border border-red-200/50 p-2 rounded-lg transition-colors shadow-sm"><i class="fas fa-undo w-4 h-4"></i></button>`;
                     } else if (r.status === 'Fulfilled' && r.ticketId) {
                         actions = `<span class="text-[10px] text-brand-teal font-mono font-bold tracking-wider">${r.ticketId}</span>`;
                     }
-                    h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 transition-colors text-sm"><td class="px-6 py-4 text-gray-900 font-bold">${r.userName}</td><td class="px-6 py-4 text-gray-700 font-medium">${r.itemName} <span class="text-yellow-600 text-[10px] ml-1 font-bold">(${r.cost} pts)</span></td><td class="px-6 py-4 text-brand-muted text-[10px] font-mono">${new Date(r.timestamp).toLocaleDateString()}</td><td class="px-6 py-4">${badge}</td><td class="px-6 py-4 flex justify-center gap-2">${actions}</td></tr>`;
+                    h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 transition-colors text-sm"><td class="px-6 py-4 text-gray-900 font-bold">${window.escapeHTML(r.userName)}</td><td class="px-6 py-4 text-gray-700 font-medium">${window.escapeHTML(r.itemName)} <span class="text-yellow-600 text-[10px] ml-1 font-bold">(${r.cost} pts)</span></td><td class="px-6 py-4 text-brand-muted text-[10px] font-mono">${new Date(r.timestamp).toLocaleDateString()}</td><td class="px-6 py-4">${badge}</td><td class="px-6 py-4 flex justify-center gap-2">${actions}</td></tr>`;
                 });
                 if(document.getElementById('redemptionsList')) document.getElementById('redemptionsList').innerHTML = h;
             });
 
             // 7. Attendance Chart
-            onSnapshot(getCol("attendance"), (snap) => {
+            onSnapshot(collection(db, "attendance"), (snap) => {
                 let activityLog = []; snap.forEach(d => activityLog.push(d.data())); activityLog.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
                 let chartDataMap = {};
                 activityLog.slice(0, 50).reverse().forEach(log => { if(log.timestamp) { const dateString = new Date(log.timestamp).toLocaleDateString(undefined, {month: 'short', day:'numeric'}); chartDataMap[dateString] = (chartDataMap[dateString] || 0) + 1; } });
                 const labels = Object.keys(chartDataMap); const dataPoints = Object.values(chartDataMap);
                 
-                if(activityChartInstance) activityChartInstance.destroy();
+                if(typeof activityChartInstance !== 'undefined' && activityChartInstance) activityChartInstance.destroy();
                 const ctxAct = document.getElementById('activityChart');
-                if(ctxAct && labels.length > 0) {
+                if(ctxAct && labels.length > 0 && typeof Chart !== 'undefined') {
                     activityChartInstance = new Chart(ctxAct, { type: 'line', data: { labels: labels, datasets: [{ data: dataPoints, borderColor: '#007b70', backgroundColor: 'rgba(0, 123, 112, 0.1)', borderWidth: 3, fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } } });
                 }
             });
 
             // 8. Inventory
-            onSnapshot(getCol("inventory"), (snap) => {
+            onSnapshot(collection(db, "inventory"), (snap) => {
                 let h='', total=0, avail=0, borrowed=0;
                 snap.forEach(d => {
                     const id = d.id; const item = d.data(); total++; if(item.status === 'Available') avail++; else borrowed++;
                     const btn = item.status === 'Available' ? `<button onclick="window.toggleItemStatus('${id}', 'Borrowed')" class="bg-white border border-gray-200 px-4 py-2 rounded-lg text-[9px] uppercase font-bold text-gray-600 hover:bg-gray-50 transition-colors shadow-sm">Lend</button>` : `<button onclick="window.toggleItemStatus('${id}', 'Available')" class="bg-brand-teal/10 border border-brand-teal/20 text-brand-teal px-4 py-2 rounded-lg text-[9px] uppercase font-bold hover:bg-brand-teal/20 transition-colors shadow-sm">Return</button>`;
                     const statusBadge = item.status === 'Available' ? `<span class="text-[9px] uppercase tracking-widest px-3 py-1.5 rounded border border-green-200/50 text-green-600 bg-green-50/50 font-bold">${item.status}</span>` : `<span class="text-[9px] uppercase tracking-widest px-3 py-1.5 rounded border border-red-200/50 text-red-600 bg-red-50/50 font-bold">${item.status}</span>`;
-                    h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 text-sm font-light text-gray-800"><td class="px-6 py-4 font-bold text-gray-900">${item.name}</td><td class="text-[10px] text-brand-muted uppercase tracking-widest px-6">${item.category}</td><td class="px-6">${statusBadge}</td><td class="text-sm text-gray-600 px-6 font-medium">${item.holder||'-'}</td><td class="text-center flex justify-center gap-4 py-4 px-6">${btn}<button onclick="window.deleteDoc(window.doc(window.db,'inventory','${id}'))" class="text-red-500 bg-white hover:bg-red-50 p-2 rounded-lg transition-colors border border-gray-100 shadow-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
+                    h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 text-sm font-light text-gray-800"><td class="px-6 py-4 font-bold text-gray-900">${window.escapeHTML(item.name)}</td><td class="text-[10px] text-brand-muted uppercase tracking-widest px-6">${window.escapeHTML(item.category)}</td><td class="px-6">${statusBadge}</td><td class="text-sm text-gray-600 px-6 font-medium">${window.escapeHTML(item.holder||'-')}</td><td class="text-center flex justify-center gap-4 py-4 px-6">${btn}<button onclick="window.deleteDoc(window.doc(window.db,'inventory','${id}'))" class="text-red-500 bg-white hover:bg-red-50 p-2 rounded-lg transition-colors border border-gray-100 shadow-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`;
                 });
                 if(document.getElementById('inventoryListBody')) document.getElementById('inventoryListBody').innerHTML = h;
-                safeSetText('invTotalOverview', total); safeSetText('invTotal', total); safeSetText('invAvail', avail); safeSetText('invBorrowed', borrowed); lucide.createIcons();
+                if(document.getElementById('invTotalOverview')) document.getElementById('invTotalOverview').textContent = total; 
+                if(document.getElementById('invTotal')) document.getElementById('invTotal').textContent = total; 
+                if(document.getElementById('invAvail')) document.getElementById('invAvail').textContent = avail; 
+                if(document.getElementById('invBorrowed')) document.getElementById('invBorrowed').textContent = borrowed; 
+                if(window.lucide) lucide.createIcons();
             });
 
             // 9. System Logs
-            onSnapshot(getCol("logs"), (snap) => {
+            onSnapshot(collection(db, "logs"), (snap) => {
                 let h = ''; let rawList = []; snap.forEach(d => rawList.push(d.data())); rawList.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
-                rawList.slice(0, 50).forEach(l => { h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 text-sm"><td class="px-6 py-4 text-brand-muted font-mono text-[10px]">${new Date(l.timestamp).toLocaleString()}</td><td class="text-brand-teal font-bold uppercase tracking-widest text-[10px] px-6">${l.action}</td><td class="text-gray-700 px-6 font-medium">${l.details}</td><td class="text-gray-400 font-mono px-6 text-[10px]">${l.admin}</td></tr>`; });
+                rawList.slice(0, 50).forEach(l => { h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 text-sm"><td class="px-6 py-4 text-brand-muted font-mono text-[10px]">${new Date(l.timestamp).toLocaleString()}</td><td class="text-brand-teal font-bold uppercase tracking-widest text-[10px] px-6">${window.escapeHTML(l.action)}</td><td class="text-gray-700 px-6 font-medium">${window.escapeHTML(l.details)}</td><td class="text-gray-400 font-mono px-6 text-[10px]">${window.escapeHTML(l.admin)}</td></tr>`; });
                 if(document.getElementById('logsListBody')) document.getElementById('logsListBody').innerHTML = h;
             });
 
             // 10. ExCom Meetings
-            onSnapshot(getCol("excom_meetings"), (snap) => {
+            onSnapshot(collection(db, "excom_meetings"), (snap) => {
                 window.excomMeetingsData = []; let rawList = []; snap.forEach(d => rawList.push({ id: d.id, ...d.data() })); rawList.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
                 let h = '';
                 rawList.forEach(m => {
                     window.excomMeetingsData.push(m);
-                    h += `<div class="bg-white/50 border border-white p-5 rounded-2xl mb-4 hover:border-brand-teal/30 transition-colors shadow-sm"><div class="flex justify-between items-start mb-4"><h4 class="font-bold text-gray-900 text-sm uppercase tracking-wide">${m.title}</h4><span class="text-[9px] text-brand-muted font-mono bg-white px-2 py-1 border border-gray-100 rounded">${m.date}</span></div><button onclick="window.printExcomMeeting('${m.id}')" class="text-[10px] bg-white border border-gray-200 text-gray-700 hover:text-brand-teal py-3 rounded-xl uppercase tracking-widest font-bold w-full flex justify-center gap-2 shadow-sm transition-colors"><i data-lucide="printer" class="w-3 h-3"></i> Print Report</button></div>`;
+                    h += `<div class="bg-white/50 border border-white p-5 rounded-2xl mb-4 hover:border-brand-teal/30 transition-colors shadow-sm"><div class="flex justify-between items-start mb-4"><h4 class="font-bold text-gray-900 text-sm uppercase tracking-wide">${window.escapeHTML(m.title)}</h4><span class="text-[9px] text-brand-muted font-mono bg-white px-2 py-1 border border-gray-100 rounded">${window.escapeHTML(m.date)}</span></div><button onclick="window.printExcomMeeting('${m.id}')" class="text-[10px] bg-white border border-gray-200 text-gray-700 hover:text-brand-teal py-3 rounded-xl uppercase tracking-widest font-bold w-full flex justify-center gap-2 shadow-sm transition-colors"><i data-lucide="printer" class="w-3 h-3"></i> Print Report</button></div>`;
                 });
-                if(document.getElementById('excomMeetingsList')) { document.getElementById('excomMeetingsList').innerHTML = h; lucide.createIcons(); }
+                if(document.getElementById('excomMeetingsList')) { document.getElementById('excomMeetingsList').innerHTML = h; if(window.lucide) lucide.createIcons(); }
             });
 
             // 11. Kanban Tasks
@@ -2482,128 +2366,76 @@ onSnapshot(collection(db, "startup_detective"), (snap) => {
                     else if(status === 'inprogress') { prevStatus = 'todo'; prevIcon = 'arrow-left'; nextStatus = 'completed'; nextIcon = 'check'; }
                     else if(status === 'completed') { prevStatus = 'inprogress'; prevIcon = 'arrow-left'; }
 
-                    const safeAvatar = `https://api.dicebear.com/9.x/notionists/svg?seed=${data.assignee}`;
-                    lists[status] += `<div class="bg-white/80 backdrop-blur p-5 rounded-2xl border border-white shadow-sm hover:shadow-md hover:border-brand-teal/30 transition-all group relative mb-4"><div class="flex justify-between items-start mb-3"><span class="text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-md border ${priorityColors[data.priority]}">${data.priority}</span><button onclick="window.deleteTask('${id}')" class="text-gray-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div><h4 class="font-bold text-gray-900 text-sm mb-2">${data.title}</h4><p class="text-xs text-brand-muted line-clamp-2 mb-4 leading-relaxed font-medium">${data.description}</p><div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100/50"><div class="flex items-center gap-2"><img src="${safeAvatar}" class="w-7 h-7 rounded-full bg-white border border-gray-200"><span class="text-[10px] font-bold text-gray-600 truncate max-w-[80px]">${data.assignee}</span></div><div class="flex gap-1.5">${prevStatus ? `<button onclick="window.updateTaskStatus('${id}', '${prevStatus}')" class="w-8 h-8 rounded-xl bg-white border border-gray-100 hover:bg-gray-50 flex items-center justify-center text-gray-500 transition-colors shadow-sm"><i data-lucide="${prevIcon}" class="w-3.5 h-3.5"></i></button>` : ''}${nextStatus ? `<button onclick="window.updateTaskStatus('${id}', '${nextStatus}')" class="w-8 h-8 rounded-xl border ${status === 'inprogress' ? 'bg-green-50 border-green-100 text-green-600 hover:bg-green-100' : 'bg-brand-teal/10 border-brand-teal/20 text-brand-teal hover:bg-brand-teal/20'} flex items-center justify-center transition-colors shadow-sm"><i data-lucide="${nextIcon}" class="w-3.5 h-3.5"></i></button>` : ''}</div></div></div>`;
+                    const safeAvatar = `https://api.dicebear.com/9.x/notionists/svg?seed=${window.escapeHTML(data.assignee)}`;
+                    lists[status] += `<div class="bg-white/80 backdrop-blur p-5 rounded-2xl border border-white shadow-sm hover:shadow-md hover:border-brand-teal/30 transition-all group relative mb-4"><div class="flex justify-between items-start mb-3"><span class="text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-md border ${priorityColors[data.priority]}">${window.escapeHTML(data.priority)}</span><button onclick="window.deleteTask('${id}')" class="text-gray-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div><h4 class="font-bold text-gray-900 text-sm mb-2">${window.escapeHTML(data.title)}</h4><p class="text-xs text-brand-muted line-clamp-2 mb-4 leading-relaxed font-medium">${window.escapeHTML(data.description)}</p><div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100/50"><div class="flex items-center gap-2"><img src="${safeAvatar}" class="w-7 h-7 rounded-full bg-white border border-gray-200"><span class="text-[10px] font-bold text-gray-600 truncate max-w-[80px]">${window.escapeHTML(data.assignee)}</span></div><div class="flex gap-1.5">${prevStatus ? `<button onclick="window.updateTaskStatus('${id}', '${prevStatus}')" class="w-8 h-8 rounded-xl bg-white border border-gray-100 hover:bg-gray-50 flex items-center justify-center text-gray-500 transition-colors shadow-sm"><i data-lucide="${prevIcon}" class="w-3.5 h-3.5"></i></button>` : ''}${nextStatus ? `<button onclick="window.updateTaskStatus('${id}', '${nextStatus}')" class="w-8 h-8 rounded-xl border ${status === 'inprogress' ? 'bg-green-50 border-green-100 text-green-600 hover:bg-green-100' : 'bg-brand-teal/10 border-brand-teal/20 text-brand-teal hover:bg-brand-teal/20'} flex items-center justify-center transition-colors shadow-sm"><i data-lucide="${nextIcon}" class="w-3.5 h-3.5"></i></button>` : ''}</div></div></div>`;
                 });
                 ['todo', 'inprogress', 'completed'].forEach(s => {
                     const listEl = document.getElementById(`list-${s}`); const countEl = document.getElementById(`count-${s}`);
                     if(listEl) listEl.innerHTML = lists[s] || `<div class="text-center py-6 text-brand-muted text-[10px] uppercase font-bold tracking-widest border border-dashed border-gray-300 rounded-xl">No Tasks</div>`;
                     if(countEl) countEl.textContent = counts[s];
                 });
-                if (typeof lucide !== 'undefined') lucide.createIcons();
+                if (window.lucide) lucide.createIcons();
             });
 
             // 12. Media Drop
-            onSnapshot(query(getCol("marketing_assets"), orderBy("timestamp", "desc")), (snap) => {
+            onSnapshot(query(collection(db, "marketing_assets"), orderBy("timestamp", "desc")), (snap) => {
                 let h = ''; if(snap.empty) h = '<div class="col-span-full text-center py-10 text-brand-muted text-xs font-bold uppercase tracking-widest border border-dashed border-gray-300 rounded-2xl">No media assets.</div>';
                 snap.forEach(d => {
                     const m = d.data();
-                    h += `<div class="glass-panel overflow-hidden flex flex-col group relative hover:border-brand-teal/50 transition-colors"><button onclick="window.deleteDoc(window.doc(window.db, 'marketing_assets', '${d.id}'))" class="absolute top-3 right-3 bg-white/80 backdrop-blur text-gray-500 hover:text-red-500 p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity z-10 shadow-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button><div class="h-48 bg-gray-100 relative"><img src="${m.imageUrl}" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" alt="${m.title}"><div class="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-[9px] uppercase tracking-widest text-brand-teal font-bold shadow-sm">${new Date(m.timestamp).toLocaleDateString()}</div></div><div class="p-5 flex flex-col flex-grow"><h4 class="font-bold text-sm text-gray-900 mb-2">${m.title} <span class="text-[9px] font-normal text-brand-muted ml-2 block sm:inline">by ${m.uploader}</span></h4><p class="text-[10px] text-brand-muted line-clamp-3 leading-relaxed mb-4 flex-grow italic font-medium">"${m.caption}"</p><div class="flex gap-2 mt-auto pt-3 border-t border-gray-100/50"><a href="${m.imageUrl}" target="_blank" download class="flex-1 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 py-2.5 rounded-xl text-[9px] uppercase tracking-widest font-bold text-center transition-colors shadow-sm">View Asset</a><button onclick="window.copyToClipboard('${escapeHTML(m.caption)}')" class="flex-1 bg-brand-teal/10 hover:bg-brand-teal/20 text-brand-teal border border-brand-teal/20 py-2.5 rounded-xl text-[9px] uppercase tracking-widest font-bold transition-colors shadow-sm">Copy Caption</button></div></div></div>`;
+                    h += `<div class="glass-panel overflow-hidden flex flex-col group relative hover:border-brand-teal/50 transition-colors"><button onclick="window.deleteDoc(window.doc(window.db, 'marketing_assets', '${d.id}'))" class="absolute top-3 right-3 bg-white/80 backdrop-blur text-gray-500 hover:text-red-500 p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity z-10 shadow-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button><div class="h-48 bg-gray-100 relative"><img src="${window.escapeHTML(m.imageUrl)}" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" alt="${window.escapeHTML(m.title)}"><div class="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-[9px] uppercase tracking-widest text-brand-teal font-bold shadow-sm">${new Date(m.timestamp).toLocaleDateString()}</div></div><div class="p-5 flex flex-col flex-grow"><h4 class="font-bold text-sm text-gray-900 mb-2">${window.escapeHTML(m.title)} <span class="text-[9px] font-normal text-brand-muted ml-2 block sm:inline">by ${window.escapeHTML(m.uploader)}</span></h4><p class="text-[10px] text-brand-muted line-clamp-3 leading-relaxed mb-4 flex-grow italic font-medium">"${window.escapeHTML(m.caption)}"</p><div class="flex gap-2 mt-auto pt-3 border-t border-gray-100/50"><a href="${window.escapeHTML(m.imageUrl)}" target="_blank" download class="flex-1 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 py-2.5 rounded-xl text-[9px] uppercase tracking-widest font-bold text-center transition-colors shadow-sm">View Asset</a><button onclick="window.copyToClipboard('${window.escapeHTML(m.caption).replace(/'/g, "\\'")}')" class="flex-1 bg-brand-teal/10 hover:bg-brand-teal/20 text-brand-teal border border-brand-teal/20 py-2.5 rounded-xl text-[9px] uppercase tracking-widest font-bold transition-colors shadow-sm">Copy Caption</button></div></div></div>`;
                 });
-                if(document.getElementById('adminMediaGalleryContainer')) { document.getElementById('adminMediaGalleryContainer').innerHTML = h; lucide.createIcons(); }
+                if(document.getElementById('adminMediaGalleryContainer')) { document.getElementById('adminMediaGalleryContainer').innerHTML = h; if(window.lucide) lucide.createIcons(); }
             });
 
             // 13. Mentorship Logs
-            onSnapshot(query(getCol("mentorship_logs"), orderBy("timestamp", "desc")), (snap) => {
+            onSnapshot(query(collection(db, "mentorship_logs"), orderBy("timestamp", "desc")), (snap) => {
                 let h = ''; if(snap.empty) h = '<div class="text-center py-10 text-brand-muted text-xs font-bold uppercase tracking-widest border border-dashed border-gray-300 rounded-2xl">No mentorship logs yet.</div>';
                 snap.forEach(d => {
                     const l = d.data();
-                    h += `<div class="bg-white/40 border border-white p-5 rounded-2xl relative group mb-4 hover:border-brand-teal/40 transition-colors shadow-sm"><button onclick="window.deleteDoc(window.doc(window.db, 'mentorship_logs', '${d.id}'))" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="trash-2" class="w-4 h-4"></i></button><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 border border-cyan-200 shrink-0 shadow-sm"><i data-lucide="rocket" class="w-5 h-5"></i></div><div><h4 class="font-bold text-sm text-gray-900 leading-tight mb-1">${l.startupName}</h4><p class="text-[9px] text-brand-muted uppercase tracking-widest font-mono font-bold">${new Date(l.timestamp).toLocaleString()} • By ${l.mentor}</p></div></div><p class="text-xs text-gray-700 leading-relaxed bg-white/80 backdrop-blur p-4 rounded-xl border border-white shadow-sm font-medium">${l.notes}</p></div>`;
+                    h += `<div class="bg-white/40 border border-white p-5 rounded-2xl relative group mb-4 hover:border-brand-teal/40 transition-colors shadow-sm"><button onclick="window.deleteDoc(window.doc(window.db, 'mentorship_logs', '${d.id}'))" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="trash-2" class="w-4 h-4"></i></button><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 border border-cyan-200 shrink-0 shadow-sm"><i data-lucide="rocket" class="w-5 h-5"></i></div><div><h4 class="font-bold text-sm text-gray-900 leading-tight mb-1">${window.escapeHTML(l.startupName)}</h4><p class="text-[9px] text-brand-muted uppercase tracking-widest font-mono font-bold">${new Date(l.timestamp).toLocaleString()} • By ${window.escapeHTML(l.mentor)}</p></div></div><p class="text-xs text-gray-700 leading-relaxed bg-white/80 backdrop-blur p-4 rounded-xl border border-white shadow-sm font-medium">${window.escapeHTML(l.notes)}</p></div>`;
                 });
-                if(document.getElementById('adminMentorshipLogsContainer')) { document.getElementById('adminMentorshipLogsContainer').innerHTML = h; lucide.createIcons(); }
+                if(document.getElementById('adminMentorshipLogsContainer')) { document.getElementById('adminMentorshipLogsContainer').innerHTML = h; if(window.lucide) lucide.createIcons(); }
             });
 
             // 14. Submitted Docs (Minutes & Finance)
-            onSnapshot(query(getCol("meeting_minutes"), orderBy("timestamp", "desc")), (snap) => {
+            onSnapshot(query(collection(db, "meeting_minutes"), orderBy("timestamp", "desc")), (snap) => {
                 let h = ''; if(snap.empty) h = '<tr><td colspan="4" class="text-center py-6 text-brand-muted text-[10px] uppercase font-bold">No minutes uploaded</td></tr>';
                 snap.forEach(d => {
                     const m = d.data();
-                    h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 text-sm"><td class="px-6 py-4 text-gray-900 font-bold">${m.title}</td><td class="px-6 py-4 text-brand-muted text-[10px] font-mono font-bold">${m.date}</td><td class="px-6 py-4 text-brand-muted text-[10px] uppercase font-bold">${m.uploadedBy}</td><td class="px-6 py-4 text-center flex justify-center gap-2"><a href="${m.fileUrl}" target="_blank" class="text-brand-teal bg-brand-teal/10 hover:bg-brand-teal/20 border border-brand-teal/20 px-3 py-1.5 rounded-lg text-[9px] uppercase font-bold tracking-widest shadow-sm">View</a><button onclick="window.deleteDoc(window.doc(window.db, 'meeting_minutes', '${d.id}'))" class="text-red-500 bg-white hover:bg-red-50 border border-gray-100 p-1.5 rounded-lg shadow-sm"><i data-lucide="trash-2" class="w-3 h-3"></i></button></td></tr>`;
+                    h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 text-sm"><td class="px-6 py-4 text-gray-900 font-bold">${window.escapeHTML(m.title)}</td><td class="px-6 py-4 text-brand-muted text-[10px] font-mono font-bold">${window.escapeHTML(m.date)}</td><td class="px-6 py-4 text-brand-muted text-[10px] uppercase font-bold">${window.escapeHTML(m.uploadedBy)}</td><td class="px-6 py-4 text-center flex justify-center gap-2"><a href="${window.escapeHTML(m.fileUrl)}" target="_blank" class="text-brand-teal bg-brand-teal/10 hover:bg-brand-teal/20 border border-brand-teal/20 px-3 py-1.5 rounded-lg text-[9px] uppercase font-bold tracking-widest shadow-sm">View</a><button onclick="window.deleteDoc(window.doc(window.db, 'meeting_minutes', '${d.id}'))" class="text-red-500 bg-white hover:bg-red-50 border border-gray-100 p-1.5 rounded-lg shadow-sm"><i data-lucide="trash-2" class="w-3 h-3"></i></button></td></tr>`;
                 });
-                if(document.getElementById('adminMinutesListBody')) { document.getElementById('adminMinutesListBody').innerHTML = h; lucide.createIcons(); }
+                if(document.getElementById('adminMinutesListBody')) { document.getElementById('adminMinutesListBody').innerHTML = h; if(window.lucide) lucide.createIcons(); }
             });
 
-            onSnapshot(query(getCol("finance_docs"), orderBy("timestamp", "desc")), (snap) => {
+            onSnapshot(query(collection(db, "finance_docs"), orderBy("timestamp", "desc")), (snap) => {
                 let h = ''; if(snap.empty) h = '<tr><td colspan="5" class="text-center py-6 text-brand-muted text-[10px] uppercase font-bold">No finance docs uploaded</td></tr>';
                 snap.forEach(d => {
                     const m = d.data();
-                    h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 text-sm"><td class="px-6 py-4 text-gray-900 font-bold">${m.title} <br><span class="text-[9px] text-green-600 uppercase tracking-widest">${m.type}</span></td><td class="px-6 py-4 text-gray-900 font-mono font-bold">${m.amount ? '₹'+m.amount : '-'}</td><td class="px-6 py-4 text-brand-muted text-[10px] font-mono font-bold">${m.date}</td><td class="px-6 py-4 text-brand-muted text-[10px] uppercase font-bold">${m.uploadedBy}</td><td class="px-6 py-4 text-center flex justify-center gap-2"><a href="${m.fileUrl}" target="_blank" class="text-green-600 bg-green-50 hover:bg-green-100 border border-green-200 px-3 py-1.5 rounded-lg text-[9px] uppercase font-bold tracking-widest shadow-sm">View</a><button onclick="window.deleteDoc(window.doc(window.db, 'finance_docs', '${d.id}'))" class="text-red-500 bg-white hover:bg-red-50 border border-gray-100 p-1.5 rounded-lg shadow-sm"><i data-lucide="trash-2" class="w-3 h-3"></i></button></td></tr>`;
+                    h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 text-sm"><td class="px-6 py-4 text-gray-900 font-bold">${window.escapeHTML(m.title)} <br><span class="text-[9px] text-green-600 uppercase tracking-widest">${window.escapeHTML(m.type)}</span></td><td class="px-6 py-4 text-gray-900 font-mono font-bold">${m.amount ? '₹'+m.amount : '-'}</td><td class="px-6 py-4 text-brand-muted text-[10px] font-mono font-bold">${window.escapeHTML(m.date)}</td><td class="px-6 py-4 text-brand-muted text-[10px] uppercase font-bold">${window.escapeHTML(m.uploadedBy)}</td><td class="px-6 py-4 text-center flex justify-center gap-2"><a href="${window.escapeHTML(m.fileUrl)}" target="_blank" class="text-green-600 bg-green-50 hover:bg-green-100 border border-green-200 px-3 py-1.5 rounded-lg text-[9px] uppercase font-bold tracking-widest shadow-sm">View</a><button onclick="window.deleteDoc(window.doc(window.db, 'finance_docs', '${d.id}'))" class="text-red-500 bg-white hover:bg-red-50 border border-gray-100 p-1.5 rounded-lg shadow-sm"><i data-lucide="trash-2" class="w-3 h-3"></i></button></td></tr>`;
                 });
-                if(document.getElementById('adminFinanceListBody')) { document.getElementById('adminFinanceListBody').innerHTML = h; lucide.createIcons(); }
+                if(document.getElementById('adminFinanceListBody')) { document.getElementById('adminFinanceListBody').innerHTML = h; if(window.lucide) lucide.createIcons(); }
             });
 
-            onSnapshot(getCol("announcements"), s => safeSetText('totalAnnouncementsCount', s.size), err => console.error("Announcements Sync:", err));
-            onSnapshot(getCol("eventForms"), s => { 
-                safeSetText('activeFormsCount', s.size); let h=''; 
-                s.forEach(d => { h += `<div class="bg-white/40 border border-white p-4 rounded-xl flex justify-between items-center mb-3 shadow-sm"><span class="text-sm font-bold text-gray-800 flex items-center gap-3"><i data-lucide="file-text" class="w-4 h-4 text-brand-teal"></i> ${d.data().title}</span><button onclick="window.deleteDoc(window.doc(window.db,'eventForms','${d.id}'))" class="text-red-500 bg-white hover:bg-red-50 px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors border border-gray-100 shadow-sm">Delete</button></div>`; }); 
-                if(document.getElementById('activeFormsList')) { document.getElementById('activeFormsList').innerHTML = h || '<div class="text-center py-6 text-brand-muted text-[10px]">No active forms</div>'; lucide.createIcons(); }
+            onSnapshot(collection(db, "announcements"), s => { if(document.getElementById('totalAnnouncementsCount')) document.getElementById('totalAnnouncementsCount').textContent = s.size; }, err => console.error("Announcements Sync:", err));
+            
+            onSnapshot(collection(db, "eventForms"), s => { 
+                if(document.getElementById('activeFormsCount')) document.getElementById('activeFormsCount').textContent = s.size; 
+                let h=''; 
+                s.forEach(d => { h += `<div class="bg-white/40 border border-white p-4 rounded-xl flex justify-between items-center mb-3 shadow-sm"><span class="text-sm font-bold text-gray-800 flex items-center gap-3"><i data-lucide="file-text" class="w-4 h-4 text-brand-teal"></i> ${window.escapeHTML(d.data().title)}</span><button onclick="window.deleteDoc(window.doc(window.db,'eventForms','${d.id}'))" class="text-red-500 bg-white hover:bg-red-50 px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors border border-gray-100 shadow-sm">Delete</button></div>`; }); 
+                if(document.getElementById('activeFormsList')) { document.getElementById('activeFormsList').innerHTML = h || '<div class="text-center py-6 text-brand-muted text-[10px]">No active forms</div>'; if(window.lucide) lucide.createIcons(); }
             });
-        // 15. STARTUP DETECTIVE (SIB) SYNC
-            onSnapshot(getCol("sib_cases"), (snap) => {
-                let h = '';
-                if(snap.empty) h = '<tr><td colspan="4" class="text-center py-8 text-brand-muted">No case files active.</td></tr>';
-                snap.forEach(d => {
-                    const c = d.data();
-                    const badge = c.status === 'Active' 
-                        ? `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-green-200/50 bg-green-50/50 text-green-600">Active</span>`
-                        : `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-red-200/50 bg-red-50/50 text-red-600">Locked</span>`;
-                    
-                    h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 transition-colors text-sm">
-                        <td class="px-6 py-4">
-                            <div class="font-bold text-gray-900 font-mono tracking-widest text-base">${c.code}</div>
-                            <div class="text-[10px] text-brand-teal uppercase font-bold">${c.week}</div>
-                        </td>
-                        <td class="px-6 py-4 text-xs text-gray-500 line-clamp-2 max-w-xs italic font-medium">"${c.content}"</td>
-                        <td class="px-6 py-4 text-center">${badge}</td>
-                        <td class="px-6 py-4 text-center">
-                            <button onclick="window.deleteDoc(window.doc(window.db,'sib_cases','${d.id}'))" class="bg-white hover:bg-red-50 border border-gray-100 text-red-500 p-2 rounded-lg transition-colors shadow-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                        </td>
-                    </tr>`;
-                });
-                if(document.getElementById('sibListBody')) {
-                    document.getElementById('sibListBody').innerHTML = h;
-                    lucide.createIcons();
-                }
-            }, (err) => console.error("SIB Sync Error:", err));
+            
+        } // <-- END OF initSync()
 
-          // 16. CORE TEAM / EXCOM CMS SYNC (ORDER FIXED)
-            onSnapshot(getCol("excom"), (snap) => {
-                let rawList = [];
-                snap.forEach(d => rawList.push({ id: d.id, ...d.data() }));
-                
-                // Order അനുസരിച്ച് ചെറുതിൽ നിന്ന് വലുതിലേക്ക് (1, 2, 3...) സോർട്ട് ചെയ്യുന്നു
-                rawList.sort((a, b) => (a.order || 99) - (b.order || 99));
+        // Auth Listener
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                initSync();
+            } else {
+                // Not logged in
+            }
+        });
 
-                let h = '';
-                if(rawList.length === 0) h = '<tr><td colspan="3" class="text-center py-10 text-brand-muted text-xs tracking-widest uppercase font-bold">No members added yet.</td></tr>';
-                
-                rawList.forEach(data => {
-                    const id = data.id;
-                    const safeImg = data.imageUrl || `https://api.dicebear.com/9.x/initials/svg?seed=${data.name}`;
-                    
-                    h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 transition-colors">
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-3">
-                                <span class="text-xs font-bold text-gray-400 font-mono w-4">#${data.order || '-'}</span>
-                                <img src="${safeImg}" class="w-12 h-12 rounded-full object-cover border border-white shadow-sm">
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="font-bold text-gray-900 text-sm mb-1">${data.name}</div>
-                            <div class="text-[9px] uppercase tracking-widest text-brand-teal font-bold bg-teal-50 inline-block px-2 py-1 rounded-md border border-teal-200/50">${data.role}</div>
-                        </td>
-                        <td class="px-6 py-4 text-center flex justify-center gap-2 mt-2">
-                            <button onclick="window.editExcomMember('${id}', '${escapeHTML(data.name)}', '${escapeHTML(data.role)}', '${data.imageUrl}', '${escapeHTML(data.instaLink||'')}', '${escapeHTML(data.linkedinLink||'')}', '${data.order}')" class="text-brand-teal bg-white/50 p-2.5 rounded-xl hover:bg-white transition-colors shadow-sm border border-gray-100"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                            <button onclick="window.deleteExcomMember('${id}', '${escapeHTML(data.name)}')" class="text-red-500 bg-white/50 p-2.5 rounded-xl hover:bg-red-50 transition-colors shadow-sm border border-gray-100"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                        </td>
-                    </tr>`;
-                });
-                if(document.getElementById('excomListBody')) {
-                    document.getElementById('excomListBody').innerHTML = h;
-                    lucide.createIcons();
-                }
-            }, (err) => console.error("Core Team Sync Error:", err));
-        }
     </script>
 </body>
 </html>
