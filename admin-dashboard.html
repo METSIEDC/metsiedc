@@ -1595,7 +1595,7 @@
         import { getAuth, signOut, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, onSnapshot, increment, writeBatch, orderBy, initializeFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-       
+       import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, deleteDoc, setDoc, query, onSnapshot, getDocs, increment, writeBatch, orderBy, initializeFirestore, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     const cmsTeamForm = document.getElementById('cmsTeamForm');
         if(cmsTeamForm) {
             cmsTeamForm.addEventListener('submit', async (e) => {
@@ -1946,7 +1946,15 @@
                 const btn = e.target.querySelector('button[type="submit"]'); btn.disabled = true; btn.innerText = "Updating...";
                 try {
                     const adjustment = (action === 'deduct') ? -amount : amount;
-                    await updateDoc(getDocRef("users", userId), { points: increment(adjustment) });
+                    await updateDoc(getDocRef("users", userId), { 
+    points: increment(adjustment),
+    pointHistory: arrayUnion({
+        reason: reason,
+        amount: amount, 
+        type: action, 
+        timestamp: Date.now()
+    })
+});
                     await window.logActivity("Points Updated", `${action.toUpperCase()} ${amount} pts for ${userId}. Reason: ${reason}`);
                     window.showToast("Points updated", "success"); document.getElementById('pointsModal').classList.add('hidden'); e.target.reset();
                 } catch (err) { window.showToast("Error: " + err.message, "error"); } 
