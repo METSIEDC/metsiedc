@@ -2076,10 +2076,8 @@
                     const file = document.getElementById('sibSecureFileInput').files[0];
                     let letterUrl = document.getElementById('sibExistingImageUrl').value;
                     
-                    if (file) {
-                        const storageRef = ref(storage, 'sib_letters/' + Date.now() + '_' + file.name);
-                        const uploadTask = await uploadBytesResumable(storageRef, file);
-                        letterUrl = await getDownloadURL(uploadTask.ref);
+                if (file) {
+                        letterUrl = await window.uploadToDrive(file);
                     } else if (!letterUrl) {
                         throw new Error("Please upload a Task Letter image!");
                     }
