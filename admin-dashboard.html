@@ -159,6 +159,13 @@
                 <span class="ml-4 font-semibold text-left flex-grow">Attendance</span>
             </button>
 
+            <!-- SIB Control Button -->
+            <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-brand-teal/60 uppercase tracking-widest">Events & Games</div>
+            <button onclick="showTab('sib')" id="nav-sib" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm text-green-700 font-bold bg-green-50/50 border border-green-200/50">
+                <div class="w-6 flex justify-center flex-shrink-0"><i data-lucide="search-code" class="w-5 h-5 text-green-600"></i></div>
+                <span class="ml-4 text-left flex-grow">S.I.B Control</span>
+            </button>
+
             <!-- Workspace Section -->
             <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-brand-teal/60 uppercase tracking-widest">Workspace</div>
             
@@ -277,6 +284,12 @@
             <button onclick="showTab('overview'); toggleMobileSidebar()" class="sidebar-link active w-full flex items-center px-4 py-3.5 text-sm font-semibold rounded-xl">Dashboard</button>
             <button onclick="showTab('users'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm font-semibold rounded-xl">User Directory</button>
             <button onclick="showTab('pipeline'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm font-semibold rounded-xl">Startup Pipeline</button>
+            <!-- SIB Control Button -->
+            <div class="pt-6 pb-2 px-4 text-[10px] font-bold text-brand-teal/60 uppercase tracking-widest">Events & Games</div>
+            <button onclick="showTab('sib')" id="nav-sib" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm text-green-700 font-bold bg-green-50/50 border border-green-200/50">
+                <div class="w-6 flex justify-center flex-shrink-0"><i data-lucide="search-code" class="w-5 h-5 text-green-600"></i></div>
+                <span class="ml-4 text-left flex-grow">S.I.B Control</span>
+            </button>
             <button onclick="showTab('funds'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm font-semibold rounded-xl">Funds Ledger</button>
             <button onclick="showTab('adminTasks'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm font-semibold rounded-xl">ExCom Tasks</button>
             <button onclick="showTab('manageTeam'); toggleMobileSidebar()" class="sidebar-link w-full flex items-center px-4 py-3.5 text-sm font-semibold rounded-xl">Core Team</button>
@@ -616,7 +629,91 @@
                     </div>
                 </div>
             </div>
+<!-- ===================== S.I.B CONTROL PANEL ===================== -->
+            <div id="sibSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full">
+                <div class="flex justify-between items-center mb-6 border-b border-gray-200/50 pb-6">
+                    <div>
+                        <h2 class="text-2xl font-display font-bold text-gray-900 tracking-tight flex items-center gap-3 mb-1">
+                            <i data-lucide="search-code" class="w-6 h-6 text-brand-teal"></i> S.I.B Control Panel
+                        </h2>
+                        <p class="text-brand-muted text-sm font-medium">Manage case files, clues, and exact answers for Startup Detective.</p>
+                    </div>
+                </div>
 
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
+                    <!-- Form -->
+                    <div class="xl:col-span-1 glass-panel p-6 bg-white/60">
+                        <h3 class="text-xs font-bold text-gray-800 mb-6 uppercase tracking-widest border-b border-gray-200/50 pb-4">Configure Case File</h3>
+                        <form id="sibAdminForm" class="space-y-4">
+                            <input type="hidden" id="sibDocId">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-brand-muted mb-1 uppercase tracking-widest">Week</label>
+                                    <select id="sibWeek" class="glass-input w-full py-2.5 px-3 rounded-xl text-sm font-bold text-gray-700" required>
+                                        <option value="w1">Week 1</option>
+                                        <option value="w2">Week 2</option>
+                                        <option value="w3">Week 3</option>
+                                        <option value="w4">Week 4</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-brand-muted mb-1 uppercase tracking-widest">Day</label>
+                                    <select id="sibDay" class="glass-input w-full py-2.5 px-3 rounded-xl text-sm font-bold text-gray-700" required>
+                                        <option value="1">Day 1</option><option value="2">Day 2</option><option value="3">Day 3</option>
+                                        <option value="4">Day 4</option><option value="5">Day 5</option><option value="6">Day 6</option><option value="7">Day 7</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] font-bold text-brand-muted mb-1 uppercase tracking-widest">The Clue (Public)</label>
+                                <textarea id="sibClue" class="glass-input w-full py-3 px-4 rounded-xl text-sm resize-none" rows="3" placeholder="e.g. They didn't sell a product; they sold an experience..." required></textarea>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] font-bold text-brand-muted mb-1 uppercase tracking-widest">Exact Answer</label>
+                                <input type="text" id="sibAnswer" class="glass-input w-full py-3 px-4 rounded-xl text-sm font-mono font-bold text-green-700 uppercase tracking-widest" placeholder="e.g. APPLE" required>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold text-brand-muted mb-1 uppercase tracking-widest">Letter Content (Revealed on success)</label>
+                                <textarea id="sibLetter" class="glass-input w-full py-3 px-4 rounded-xl text-sm leading-relaxed resize-none" rows="5" placeholder="<p>Detective,</p><p>Good job cracking the first firewall...</p>" required></textarea>
+                            </div>
+
+                            <div class="flex items-center justify-between bg-white border border-gray-200/50 p-3 rounded-xl shadow-sm">
+                                <label class="text-[10px] font-bold text-gray-700 uppercase tracking-widest">Unlock this day?</label>
+                                <select id="sibStatus" class="glass-input py-1.5 px-2 rounded-lg border-gray-200 text-xs font-bold outline-none cursor-pointer">
+                                    <option value="Locked" class="text-red-500">Locked</option>
+                                    <option value="Unlocked" class="text-green-600">Unlocked</option>
+                                </select>
+                            </div>
+
+                            <div class="pt-2 flex gap-2">
+                                <button type="button" onclick="window.resetSibForm()" class="flex-1 btn-light py-3 rounded-xl text-[10px] uppercase font-bold">Clear</button>
+                                <button type="submit" id="sibSubmitBtn" class="flex-1 btn-primary py-3 rounded-xl text-[10px] uppercase tracking-widest font-bold">Save Case</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- List -->
+                    <div class="xl:col-span-2 glass-panel overflow-hidden flex flex-col max-h-[750px]">
+                        <table class="w-full text-left">
+                            <thead class="bg-white/80 backdrop-blur border-b border-gray-200/50 text-[10px] uppercase tracking-[0.2em] font-bold text-brand-muted sticky top-0 z-10">
+                                <tr>
+                                    <th class="px-6 py-4 w-24">Target</th>
+                                    <th class="px-6 py-4">Clue & Answer</th>
+                                    <th class="px-6 py-4 text-center w-24">Status</th>
+                                    <th class="px-6 py-4 text-center w-24">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sibAdminListBody" class="divide-y divide-gray-100/50 text-sm overflow-y-auto">
+                                <tr><td colspan="4" class="text-center py-10 text-brand-muted text-xs uppercase font-bold tracking-widest">Loading Cases...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
             <!-- EX-COM TASK BOARD SECTION -->
             <div id="adminTasksSection" class="tab-content hidden space-y-6 max-w-7xl mx-auto w-full pt-6">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-end pb-6 mb-2 gap-4">
@@ -1804,6 +1901,8 @@
             finally { btn.disabled = false; btn.innerHTML = "Publish Quest"; }
         });
 
+       
+
         window.deleteUser = async (id, name) => {
             if(!(await window.customConfirm(`WARNING: Are you sure you want to permanently delete '${name}'?`))) return;
             try { await deleteDoc(getDocRef("users", id)); await window.logActivity("User Deleted", name); window.showToast("User deleted", "success"); } 
@@ -1954,7 +2053,53 @@
                 try { await updateDoc(getDocRef("users", id), { phone: phone }); await window.logActivity("Phone Updated", `Phone for ${id}`); window.showToast("Phone updated", "success"); window.toggleEditPhoneModal(false); } catch (err) { window.showToast(err.message, "error"); }
             });
         }
+// SIB FORM HANDLER
+        const sibAdminForm = document.getElementById('sibAdminForm');
+        if(sibAdminForm) {
+            sibAdminForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('sibSubmitBtn'); 
+                const originalText = btn.innerText; btn.disabled = true; btn.innerText = "Saving...";
+                try {
+                    const week = document.getElementById('sibWeek').value;
+                    const day = document.getElementById('sibDay').value;
+                    const docId = `${week}_D${day}`; // Ensures uniqueness like "w1_D1"
+                    
+                    const data = { 
+                        week: week,
+                        day: parseInt(day),
+                        clue: document.getElementById('sibClue').value.trim(), 
+                        answer: document.getElementById('sibAnswer').value.trim().toUpperCase(), 
+                        letterContent: document.getElementById('sibLetter').value.trim(), 
+                        isLocked: document.getElementById('sibStatus').value === 'Locked',
+                        timestamp: Date.now() 
+                    };
+                    
+                    await setDoc(doc(db, "startup_detective", docId), data);
+                    window.showToast("Case File Updated!", "success");
+                    window.resetSibForm();
+                } catch(err) { window.showToast(err.message, "error"); } 
+                finally { btn.disabled = false; btn.innerText = originalText; }
+            });
+        }
 
+        window.resetSibForm = () => {
+            document.getElementById('sibAdminForm').reset();
+            document.getElementById('sibDocId').value = '';
+            document.getElementById('sibSubmitBtn').innerText = 'Save Case';
+        };
+
+        window.editSibCase = (id, week, day, clue, answer, letter, isLocked) => {
+            document.getElementById('sibDocId').value = id;
+            document.getElementById('sibWeek').value = week;
+            document.getElementById('sibDay').value = day;
+            document.getElementById('sibClue').value = clue;
+            document.getElementById('sibAnswer').value = answer;
+            document.getElementById('sibLetter').value = letter;
+            document.getElementById('sibStatus').value = isLocked === 'true' ? 'Locked' : 'Unlocked';
+            document.getElementById('sibSubmitBtn').innerText = 'Update Case';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
         const managePointsForm = document.getElementById('managePointsForm');
         if(managePointsForm) {
             managePointsForm.addEventListener('submit', async (e) => {
@@ -2079,7 +2224,49 @@
 
                 lucide.createIcons();
             }, (err) => console.error("Users Sync Error:", err));
+// SIB SYNC (Startup Detective)
+            onSnapshot(getCol("startup_detective"), (snap) => {
+                let rawList = []; 
+                snap.forEach(d => rawList.push({ id: d.id, ...d.data() }));
+                
+                // Sort by Week, then by Day
+                rawList.sort((a, b) => {
+                    if(a.week === b.week) return a.day - b.day;
+                    return a.week.localeCompare(b.week);
+                });
 
+                let h = '';
+                if(rawList.length === 0) h = '<tr><td colspan="4" class="text-center py-10 text-brand-muted text-xs uppercase font-bold tracking-widest">No cases created yet.</td></tr>';
+                
+                rawList.forEach(c => {
+                    const badge = !c.isLocked 
+                        ? `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-green-200/50 bg-green-50/50 text-green-600">Unlocked</span>`
+                        : `<span class="px-2 py-1 rounded text-[9px] uppercase font-bold border border-red-200/50 bg-red-50/50 text-red-600">Locked</span>`;
+                    
+                    const safeClue = escapeHTML(c.clue);
+                    const safeAns = escapeHTML(c.answer);
+                    const safeLetter = escapeHTML(c.letterContent);
+
+                    h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 transition-colors text-sm">
+                        <td class="px-6 py-4">
+                            <div class="font-bold text-gray-900 font-mono tracking-widest text-sm uppercase">${c.week.replace('w','Week ')}</div>
+                            <div class="text-[10px] text-brand-teal uppercase font-bold mt-1">Day ${c.day}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="font-bold text-green-700 text-xs font-mono mb-1">ANS: ${c.answer}</div>
+                            <div class="text-xs text-gray-500 line-clamp-2 max-w-sm italic font-medium">"${c.clue}"</div>
+                        </td>
+                        <td class="px-6 py-4 text-center">${badge}</td>
+                        <td class="px-6 py-4 text-center flex justify-center gap-2">
+                            <button onclick="window.editSibCase('${c.id}', '${c.week}', '${c.day}', \`${safeClue}\`, \`${safeAns}\`, \`${safeLetter}\`, '${c.isLocked}')" class="text-brand-teal bg-white hover:bg-gray-50 border border-gray-100 p-2 rounded-lg transition-colors shadow-sm"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                            <button onclick="window.deleteDoc(window.doc(window.db,'startup_detective','${c.id}'))" class="text-red-500 bg-white hover:bg-red-50 border border-gray-100 p-2 rounded-lg transition-colors shadow-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </td>
+                    </tr>`;
+                });
+                const tbody = document.getElementById('sibAdminListBody');
+                if(tbody) { tbody.innerHTML = h; lucide.createIcons(); }
+            }, (err) => console.error("SIB Sync Error:", err));
+            
             // 2. Kanban Projects
             onSnapshot(getCol("projects"), (snap) => {
                 window.projectsData = []; let pendingHtml = '', apprHtml = '', protoHtml = '', fundHtml = '', incHtml = '';
