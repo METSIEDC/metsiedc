@@ -678,18 +678,13 @@
                             </div>
 
              <!-- IMAGE UPLOAD FOR SIB -->
-                       <div>
+                  <div>
                                 <label class="block text-[10px] font-bold text-brand-muted mb-1 uppercase tracking-widest">Task Letter Image</label>
                                 <div class="flex items-center gap-3">
-                                    <!-- Label ന് പകരം Button ഉപയോഗിക്കുന്നു -->
-                                    <button type="button" onclick="document.getElementById('sibLetterImage').click()" class="bg-brand-teal/10 text-brand-teal px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest cursor-pointer border border-brand-teal/20 hover:bg-brand-teal/20 transition-colors">
+                                    <button type="button" onclick="document.getElementById('sibLetterImage').click()" class="bg-brand-teal/10 text-brand-teal px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-brand-teal/20 hover:bg-brand-teal/20 transition-colors">
                                         Browse Image
                                     </button>
-                                    
-                                    <!-- Hidden File Input -->
-                                    <input type="file" id="sibLetterImage" style="display: none;" accept="image/*" onchange="document.getElementById('sibImageName').innerText = this.files[0] ? this.files[0].name : 'No file chosen'">
-                                    
-                                    <!-- Name Display -->
+                                    <input type="file" id="sibLetterImage" class="hidden" accept="image/*">
                                     <span id="sibImageName" class="text-[10px] text-brand-muted font-medium truncate w-32">No file chosen</span>
                                 </div>
                                 <input type="hidden" id="sibExistingImageUrl">
@@ -1350,15 +1345,29 @@
         window.openGlobalScanner = (type) => window.showToast("Scanner initialized: " + type, "info");
         window.closeGlobalScanner = () => console.log("Scanner closed");
 
-        document.addEventListener('DOMContentLoaded', () => { 
+   document.addEventListener('DOMContentLoaded', () => { 
             lucide.createIcons();
             if(typeof Chart !== 'undefined') {
                 Chart.defaults.color = '#718096'; 
                 Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
             }
             if(window.renderFormBuilderFields) window.renderFormBuilderFields();
-        });
 
+            // S.I.B Image Name Changer (ഇതാണ് പുതിയ കോഡ്)
+            const sibImgInput = document.getElementById('sibLetterImage');
+            if(sibImgInput) {
+                sibImgInput.addEventListener('change', function() {
+                    const nameDisplay = document.getElementById('sibImageName');
+                    if(this.files && this.files[0]) {
+                        nameDisplay.innerText = this.files[0].name;
+                        nameDisplay.classList.add('text-brand-teal', 'font-bold'); // പേര് വരുമ്പോൾ കളർ മാറും
+                    } else {
+                        nameDisplay.innerText = 'No file chosen';
+                        nameDisplay.classList.remove('text-brand-teal', 'font-bold');
+                    }
+                });
+            }
+        });
         function toggleMobileSidebar() { 
             const menu = document.getElementById('mobile-sidebar'); 
             const overlay = document.getElementById('mobile-sidebar-overlay'); 
