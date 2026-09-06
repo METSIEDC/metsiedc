@@ -569,6 +569,7 @@
                                 <label class="block text-[10px] font-bold text-brand-muted mb-1 uppercase tracking-widest">Role / Designation</label>
                                 <input type="text" id="excomRole" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm" placeholder="e.g. CEO, Developer" required>
                             </div>
+                            <div><label class="block text-[10px] font-bold text-brand-muted mb-1 uppercase tracking-widest">Display Order</label><input type="number" id="excomOrder" class="glass-input w-full rounded-xl py-2.5 px-4 text-sm" placeholder="e.g. 1 (Top position)" value="1" required></div>
                             <div>
                                 <label class="block text-[10px] font-bold text-brand-muted mb-2 uppercase tracking-widest">Profile Image</label>
                                 <div class="flex items-center gap-3">
@@ -1548,11 +1549,13 @@
             lucide.createIcons();
         };
 
-        window.resetExcomForm = () => {
+       window.resetExcomForm = () => {
             document.getElementById('excomForm').reset();
             document.getElementById('excomId').value = '';
             document.getElementById('excomExistingImageUrl').value = ''; 
             document.getElementById('excomFileName').textContent = 'No file chosen';
+            // ഓർഡർ നമ്പർ റീസെറ്റ് ചെയ്യാൻ
+            if(document.getElementById('excomOrder')) document.getElementById('excomOrder').value = '1'; 
             window.excomSelectedFile = null; 
             document.getElementById('excomFormTitle').textContent = 'Add Team Member';
             document.getElementById('excomSubmitBtn').textContent = 'Save Member';
@@ -1565,10 +1568,17 @@
             }
         };
 
-        window.editExcomMember = (id, name, role, img, insta, linkedin) => {
+        // എഡിറ്റ് ചെയ്യുമ്പോൾ ഓർഡർ നമ്പർ കൂടി എടുക്കാൻ 'order' എന്ന് കൂട്ടി ചേർത്തിട്ടുണ്ട് 
+        window.editExcomMember = (id, name, role, img, insta, linkedin, order) => {
             document.getElementById('excomId').value = id;
             document.getElementById('excomName').value = name;
             document.getElementById('excomRole').value = role;
+            
+            // ഓർഡർ നമ്പർ ഇൻപുട്ട് ബോക്സിലേക്ക് കൊടുക്കാൻ
+            if(document.getElementById('excomOrder')) {
+                document.getElementById('excomOrder').value = (order !== 'undefined' && order != null) ? order : '1';
+            }
+            
             document.getElementById('excomExistingImageUrl').value = img !== 'undefined' ? img : '';
             document.getElementById('excomFileName').textContent = (img && img !== 'undefined' && img !== '') ? 'Existing Image Saved' : 'No file chosen';
             window.excomSelectedFile = null;
@@ -1889,7 +1899,15 @@
                     const id = document.getElementById('excomId').value;
                     let finalImageUrl = document.getElementById('excomExistingImageUrl').value; 
                     if (window.excomSelectedFile) { btn.innerHTML = `<div class="spinner w-4 h-4 mr-2 border-t-white"></div> Uploading...`; finalImageUrl = await window.uploadToDrive(window.excomSelectedFile); }
-                    const data = { name: document.getElementById('excomName').value.trim(), role: document.getElementById('excomRole').value.trim(), imageUrl: finalImageUrl, instaLink: document.getElementById('excomInsta').value.trim(), linkedinLink: document.getElementById('excomLinkedIn').value.trim(), timestamp: Date.now() };
+                   const data = { 
+                        name: document.getElementById('excomName').value.trim(), 
+                        role: document.getElementById('excomRole').value.trim(), 
+                        order: parseInt(document.getElementById('excomOrder').value) || 99, // <--- ഇത് ചേർക്കുക
+                        imageUrl: finalImageUrl, 
+                        instaLink: document.getElementById('excomInsta').value.trim(), 
+                        linkedinLink: document.getElementById('excomLinkedIn').value.trim(), 
+                        timestamp: Date.now() 
+                    };
                     if(id) { await updateDoc(doc(db, "excom", id), data); window.showToast("Member updated successfully!", "success"); } 
                     else { await addDoc(collection(db, "excom"), data); window.showToast("New member added!", "success"); }
                     window.resetExcomForm();
@@ -2279,22 +2297,34 @@
                 }
             }, (err) => console.error("SIB Sync Error:", err));
 
-            // 16. CORE TEAM / EXCOM CMS SYNC (THE FIX)
+          // 16. CORE TEAM / EXCOM CMS SYNC (ORDER FIXED)
             onSnapshot(getCol("excom"), (snap) => {
+                let rawList = [];
+                snap.forEach(d => rawList.push({ id: d.id, ...d.data() }));
+                
+                // Order അനുസരിച്ച് ചെറുതിൽ നിന്ന് വലുതിലേക്ക് (1, 2, 3...) സോർട്ട് ചെയ്യുന്നു
+                rawList.sort((a, b) => (a.order || 99) - (b.order || 99));
+
                 let h = '';
-                if(snap.empty) h = '<tr><td colspan="3" class="text-center py-10 text-brand-muted text-xs tracking-widest uppercase font-bold">No members added yet.</td></tr>';
-                snap.forEach(d => {
-                    const data = d.data(); const id = d.id;
+                if(rawList.length === 0) h = '<tr><td colspan="3" class="text-center py-10 text-brand-muted text-xs tracking-widest uppercase font-bold">No members added yet.</td></tr>';
+                
+                rawList.forEach(data => {
+                    const id = data.id;
                     const safeImg = data.imageUrl || `https://api.dicebear.com/9.x/initials/svg?seed=${data.name}`;
                     
                     h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 transition-colors">
-                        <td class="px-6 py-4"><img src="${safeImg}" class="w-12 h-12 rounded-full object-cover border border-white shadow-sm"></td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-bold text-gray-400 font-mono w-4">#${data.order || '-'}</span>
+                                <img src="${safeImg}" class="w-12 h-12 rounded-full object-cover border border-white shadow-sm">
+                            </div>
+                        </td>
                         <td class="px-6 py-4">
                             <div class="font-bold text-gray-900 text-sm mb-1">${data.name}</div>
                             <div class="text-[9px] uppercase tracking-widest text-brand-teal font-bold bg-teal-50 inline-block px-2 py-1 rounded-md border border-teal-200/50">${data.role}</div>
                         </td>
                         <td class="px-6 py-4 text-center flex justify-center gap-2 mt-2">
-                            <button onclick="window.editExcomMember('${id}', '${escapeHTML(data.name)}', '${escapeHTML(data.role)}', '${data.imageUrl}', '${escapeHTML(data.instaLink||'')}', '${escapeHTML(data.linkedinLink||'')}')" class="text-brand-teal bg-white/50 p-2.5 rounded-xl hover:bg-white transition-colors shadow-sm border border-gray-100"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                            <button onclick="window.editExcomMember('${id}', '${escapeHTML(data.name)}', '${escapeHTML(data.role)}', '${data.imageUrl}', '${escapeHTML(data.instaLink||'')}', '${escapeHTML(data.linkedinLink||'')}', '${data.order}')" class="text-brand-teal bg-white/50 p-2.5 rounded-xl hover:bg-white transition-colors shadow-sm border border-gray-100"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
                             <button onclick="window.deleteExcomMember('${id}', '${escapeHTML(data.name)}')" class="text-red-500 bg-white/50 p-2.5 rounded-xl hover:bg-red-50 transition-colors shadow-sm border border-gray-100"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </td>
                     </tr>`;
@@ -2304,8 +2334,6 @@
                     lucide.createIcons();
                 }
             }, (err) => console.error("Core Team Sync Error:", err));
-
-        } // <-- End of initSync() function
     </script>
 </body>
 </html>
