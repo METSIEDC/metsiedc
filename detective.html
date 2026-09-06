@@ -1,203 +1,438 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIB Portal | Startup Detective</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Typewriter font for the classified look -->
-    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+    <title>S.I.B - Startup Detective | MET's IEDC</title>
     
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        cinzel: ['Cinzel', 'serif'],
+                        typewriter: ['Courier Prime', 'monospace'],
+                    },
+                    colors: {
+                        sib: {
+                            dark: '#0a0b10',
+                            blue: '#3b82f6',
+                            glow: '#60a5fa',
+                            paper: '#f4ebd8',
+                            ink: '#1a1a1a',
+                            red: '#dc2626'
+                        }
+                    },
+                    animation: {
+                        'flicker': 'flicker 3s linear infinite',
+                        'scanline': 'scanline 8s linear infinite',
+                    },
+                    keyframes: {
+                        flicker: {
+                            '0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100%': { opacity: 1 },
+                            '20%, 21.999%, 63%, 63.999%, 65%, 69.999%': { opacity: 0.4 }
+                        },
+                        scanline: {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(100vh)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        body {
-            background-color: #0a0a0a;
-            color: #22c55e;
-            font-family: 'Courier New', Courier, monospace;
+        body { background-color: #0a0b10; color: #e2e8f0; overflow-x: hidden; }
+        
+        .bg-grid-pattern {
             background-image: 
-                radial-gradient(#111827 1px, transparent 1px),
-                radial-gradient(#111827 1px, transparent 1px);
-            background-position: 0 0, 20px 20px;
-            background-size: 40px 40px;
+                linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
         }
 
-        .typewriter-font { font-family: 'Special Elite', cursive; }
-
-        .scanline {
-            width: 100%;
-            height: 100px;
-            z-index: 9999;
-            position: absolute;
-            pointer-events: none;
-            background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(34,197,94,0.1) 50%, rgba(0,0,0,0) 100%);
-            opacity: 0.1;
-            animation: scanline 6s linear infinite;
-        }
-
-        @keyframes scanline {
-            0% { top: -100px; }
-            100% { top: 100%; }
-        }
-
+        .text-glow { text-shadow: 0 0 20px rgba(96, 165, 250, 0.6); }
+        .box-glow { box-shadow: 0 0 30px rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); }
+        
         .paper-texture {
             background-color: #f4ebd8;
             background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
             color: #1a1a1a;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.8);
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 20px 50px rgba(0,0,0,0.8);
         }
 
         .red-stamp {
-            color: #dc2626;
-            border: 4px solid #dc2626;
-            transform: rotate(-15deg);
-            padding: 4px 12px;
-            border-radius: 8px;
-            opacity: 0.8;
-            font-weight: bold;
+            color: #dc2626; border: 4px solid #dc2626; transform: rotate(-15deg);
+            padding: 4px 12px; border-radius: 8px; opacity: 0.8; font-weight: 900; letter-spacing: 2px;
         }
 
-        .blink { animation: blinker 1s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0; } }
+        /* Terminal Input */
+        .terminal-input { background: transparent; border: none; outline: none; color: #22c55e; width: 100%; text-transform: uppercase; font-family: monospace; }
+        
+        /* Scanline Overlay */
+        .scanline-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 20px;
+            background: linear-gradient(to bottom, transparent, rgba(59,130,246,0.2), transparent);
+            pointer-events: none; z-index: 50;
+        }
+        
+        ::-webkit-scrollbar { width: 6px; } 
+        ::-webkit-scrollbar-track { background: #0a0b10; } 
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 3px; }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-    <div class="scanline"></div>
+<body class="bg-grid-pattern relative min-h-screen flex flex-col font-sans antialiased selection:bg-sib-blue selection:text-white">
 
-    <!-- MAIN TERMINAL LOGIN -->
-    <div id="loginScreen" class="w-full max-w-md bg-black border border-green-500/30 rounded-lg p-8 relative shadow-[0_0_30px_rgba(34,197,94,0.15)] z-10">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold tracking-widest text-green-500 mb-2">S.I.B.</h1>
-            <p class="text-xs tracking-[0.3em] text-green-500/70">STARTUP INTELLIGENCE BUREAU</p>
-            <p class="text-[10px] mt-4 text-gray-500">AUTHORIZED ACCESS ONLY</p>
-        </div>
+    <div class="scanline-overlay animate-scanline"></div>
 
-        <form id="clueForm" onsubmit="handleClueSubmit(event)">
-            <div class="mb-6">
-                <label class="block text-xs text-green-500/80 mb-2">> ENTER CLEARANCE CODE</label>
-                <input type="text" id="clueCode" autocomplete="off" class="w-full bg-black border-2 border-green-500 text-green-400 p-3 outline-none font-bold text-center tracking-widest uppercase focus:bg-green-900/10 focus:shadow-[0_0_15px_rgba(34,197,94,0.3)] transition-all" placeholder="[_ _ _ _ _ _]">
-            </div>
-            <button type="submit" id="submitBtn" class="w-full bg-green-500 text-black font-bold tracking-widest py-3 hover:bg-green-400 transition-colors uppercase">
-                Decrypt Case File
-            </button>
-        </form>
-        <p id="errorMsg" class="text-red-500 text-xs text-center mt-4 hidden blink">> ACCESS DENIED. INVALID CODE.</p>
-    </div>
-
-    <!-- TERMINAL LOADING SCREEN -->
-    <div id="loadingScreen" class="hidden w-full max-w-2xl z-10">
-        <p id="loadingText" class="text-sm md:text-base leading-relaxed tracking-wider"></p>
-    </div>
-
-    <!-- CLASSIFIED LETTER (REVEALED) -->
-    <div id="letterScreen" class="hidden w-full max-w-3xl z-20">
-        <div class="paper-texture p-8 md:p-12 relative rotate-1">
-            <!-- Stamps -->
-            <div class="absolute top-8 right-8 red-stamp text-2xl font-serif">TOP SECRET</div>
-            <div class="absolute bottom-10 left-10 red-stamp text-xl font-serif" style="transform: rotate(5deg); opacity: 0.6;">CLASSIFIED</div>
-
-            <!-- Letter Header -->
-            <div class="border-b-2 border-black/80 pb-4 mb-6">
-                <h2 class="text-3xl typewriter-font font-bold tracking-tighter">CASE FILE: #001</h2>
-                <p class="text-sm font-bold mt-2">DATE: <span id="currentDate"></span></p>
-                <p class="text-sm font-bold">TO: Lead Detective</p>
-                <p class="text-sm font-bold">FROM: S.I.B Headquarters</p>
-            </div>
-
-            <!-- Letter Body (This content will come from Firebase later) -->
-            <div class="typewriter-font text-base md:text-lg leading-relaxed space-y-4">
-                <p>Detective,</p>
-                <p>If you are reading this, you have successfully bypassed our preliminary security checks. Welcome to the Hunt for the Next Unicorn.</p>
-                <p>Your first target is a company that redefined an entire industry, yet started in a small room with no formal funding. Look closely at the market patterns from 2008. They didn't sell a product; they sold an experience.</p>
-                
-                <div class="bg-black/10 p-4 border border-black/20 my-4">
-                    <p class="font-bold">EVIDENCE ATTACHED:</p>
-                    <ul class="list-disc pl-5 mt-2 text-sm">
-                        <li>Founder was rejected by 10 investors.</li>
-                        <li>Their first logo was drawn on a napkin.</li>
-                        <li>Headquarters shifted from a garage to Silicon Valley in 6 months.</li>
-                    </ul>
-                </div>
-
-                <p>Find their first pitch deck. That is your next objective.</p>
-                <p>Do not trust everything you read. Trust the data.</p>
-            </div>
-
-            <!-- Signature -->
-            <div class="mt-12 pt-6 border-t border-black/20">
-                <p class="font-bold">Director of Intelligence,</p>
-                <p class="typewriter-font italic text-xl mt-2">Manna & Team</p>
-                <p class="text-xs mt-1">IEDC MSEM</p>
-            </div>
-        </div>
+    <!-- ==========================================
+         VIEW 1: LANDING PAGE
+         ========================================== -->
+    <div id="view-landing" class="flex-grow flex flex-col items-center justify-center p-6 relative z-10 w-full min-h-screen">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0a0b10_80%)] pointer-events-none"></div>
         
-        <div class="text-center mt-6">
-            <button onclick="location.reload()" class="text-gray-500 hover:text-white text-xs tracking-widest underline">< END SESSION</button>
+        <div class="relative z-10 text-center max-w-4xl mx-auto flex flex-col items-center">
+            <p class="text-xs md:text-sm tracking-[0.4em] text-gray-400 font-bold mb-6">MET'S SCHOOL OF ENGINEERING STARTUP CELL</p>
+            
+            <h2 class="text-4xl md:text-6xl font-cinzel font-bold text-gray-200 tracking-widest mb-2">STARTUP</h2>
+            <h1 class="text-6xl md:text-8xl font-cinzel font-black text-sib-blue text-glow animate-flicker tracking-tighter mb-6">DETECTIVE</h1>
+            
+            <p class="text-lg md:text-xl text-gray-300 font-light italic mb-10 max-w-2xl mx-auto">
+                "Every successful startup leaves clues. Can you decode them before everyone else?"
+            </p>
+            
+            <div class="flex items-center gap-4 mb-12">
+                <div class="h-[1px] w-12 bg-gray-600"></div>
+                <h3 class="text-2xl font-cinzel font-bold tracking-[0.3em] text-gray-400">S I B</h3>
+                <div class="h-[1px] w-12 bg-gray-600"></div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-6 w-full max-w-md">
+                <button onclick="openKnowMore()" class="flex-1 border border-gray-600 hover:border-gray-300 text-gray-300 hover:text-white py-4 px-6 rounded-none tracking-widest text-xs font-bold uppercase transition-all bg-black/50 backdrop-blur">
+                    Know More
+                </button>
+                <button onclick="switchView('view-gameboard')" class="flex-1 bg-sib-blue hover:bg-blue-400 text-black py-4 px-6 rounded-none tracking-widest text-xs font-bold uppercase transition-all shadow-[0_0_20px_rgba(59,130,246,0.4)]">
+                    Start The Game
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- Javascript Logic -->
-    <script>
-        // Set current date on the letter
-        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-GB');
+    <!-- ==========================================
+         VIEW 2: GAME BOARD (WEEKS & DAYS)
+         ========================================== -->
+    <div id="view-gameboard" class="hidden flex-col w-full min-h-screen relative z-10">
+        <header class="p-6 border-b border-gray-800 bg-black/80 backdrop-blur flex justify-between items-center sticky top-0 z-20">
+            <div class="flex items-center gap-4">
+                <button onclick="switchView('view-landing')" class="text-gray-400 hover:text-white transition-colors"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                <div>
+                    <h2 class="text-xl font-cinzel font-bold text-sib-blue tracking-widest">S.I.B Database</h2>
+                    <p class="text-[9px] uppercase tracking-[0.2em] text-gray-500">Authorized Personnel Only</p>
+                </div>
+            </div>
+            <div class="text-right hidden sm:block">
+                <p class="text-[10px] text-green-500 font-typewriter blink">STATUS: SECURE CONNECTION</p>
+            </div>
+        </header>
 
-        function handleClueSubmit(e) {
-            e.preventDefault();
-            const code = document.getElementById('clueCode').value.trim().toUpperCase();
-            const errorMsg = document.getElementById('errorMsg');
-            const btn = document.getElementById('submitBtn');
-
-            // 1. (LATER) Here you will write Firebase code to check if 'code' exists in 'case_files'
-            // For now, we use a hardcoded demo code: "SIB-001"
+        <main class="flex-grow p-6 md:p-12 max-w-6xl mx-auto w-full">
+            <h3 class="text-xs text-gray-400 uppercase tracking-[0.3em] mb-8 border-b border-gray-800 pb-2">Select Investigation Phase</h3>
             
-            if (code === 'SIB-001') {
-                // Success!
-                errorMsg.classList.add('hidden');
-                document.getElementById('loginScreen').classList.add('hidden');
-                startDecryptionAnimation();
-            } else {
-                // Failed!
-                errorMsg.classList.remove('hidden');
-                document.getElementById('clueCode').value = '';
-                btn.classList.add('bg-red-600');
-                btn.textContent = 'ACCESS DENIED';
-                setTimeout(() => {
-                    btn.classList.remove('bg-red-600');
-                    btn.textContent = 'DECRYPT CASE FILE';
-                }, 1500);
+            <!-- Week Selection Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12" id="weekGrid">
+                <!-- Generated via JS -->
+            </div>
+
+            <!-- Days Grid (Shows when a week is selected) -->
+            <div id="daysContainer" class="hidden">
+                <h3 class="text-xs text-gray-400 uppercase tracking-[0.3em] mb-6 flex justify-between items-end border-b border-gray-800 pb-2">
+                    <span id="selectedWeekTitle" class="text-sib-blue font-bold text-sm">WEEK 1</span>
+                    <span>Case Files</span>
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4" id="daysGrid">
+                    <!-- Generated via JS -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ==========================================
+         VIEW 3: TASK LETTER REVEAL
+         ========================================== -->
+    <div id="view-letter" class="hidden flex-col items-center justify-start min-h-screen p-4 md:p-10 relative z-20 bg-black/95">
+        <button onclick="switchView('view-gameboard')" class="absolute top-6 left-6 text-gray-400 hover:text-white flex items-center gap-2 text-xs uppercase tracking-widest font-bold">
+            <i data-lucide="x-square" class="w-4 h-4"></i> Close File
+        </button>
+
+        <div class="paper-texture w-full max-w-3xl mt-12 p-8 md:p-16 relative rotate-[-0.5deg]">
+            <!-- Stamps -->
+            <div class="absolute top-8 right-8 red-stamp text-xl md:text-3xl font-cinzel">TOP SECRET</div>
+            <div class="absolute bottom-12 left-8 red-stamp text-lg md:text-xl font-cinzel" style="transform: rotate(5deg); opacity: 0.6;">CLASSIFIED</div>
+            <div class="absolute top-8 left-8 text-black/40"><i data-lucide="fingerprint" class="w-16 h-16 opacity-50"></i></div>
+
+            <!-- Header -->
+            <div class="border-b-2 border-black/80 pb-6 mb-8 mt-10">
+                <div class="text-center mb-6">
+                    <h1 class="text-2xl md:text-4xl font-cinzel font-black tracking-widest uppercase">Task Letter</h1>
+                    <p class="text-xs font-typewriter font-bold tracking-widest mt-1">FILE NO: IEDC/METS/<span id="letterFileNo"></span></p>
+                </div>
+                <div class="font-typewriter text-sm font-bold grid grid-cols-2 gap-4">
+                    <p>TO: S.I.B Lead Detective</p>
+                    <p class="text-right">DATE: <span id="letterDate"></span></p>
+                    <p>STATUS: <span class="bg-black text-white px-2 py-0.5">UNSEALED</span></p>
+                </div>
+            </div>
+
+            <!-- Content injected by JS -->
+            <div id="letterContentArea" class="font-typewriter text-sm md:text-base leading-relaxed space-y-5 text-black font-semibold">
+                <!-- Content goes here -->
+            </div>
+
+            <!-- Footer Signature -->
+            <div class="mt-16 pt-8 border-t border-black/30 flex justify-between items-end">
+                <div class="font-typewriter text-xs font-bold text-black/60">
+                    <p>ISSUED BY:</p>
+                    <p>STUDENT LEAD I & II</p>
+                    <p>INNOVATION & ENTREPRENEURSHIP DEV CENTRE</p>
+                </div>
+                <div class="text-right">
+                    <img src="https://api.dicebear.com/9.x/initials/svg?seed=Admin&backgroundColor=transparent&textColor=000" class="w-16 h-16 opacity-50 ml-auto mb-2 grayscale" style="filter: contrast(200%);" alt="Signature">
+                    <p class="font-cinzel font-bold text-sm">DIRECTOR, S.I.B</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MODALS
+         ========================================== -->
+    
+    <!-- Know More Modal (Image 2) -->
+    <div id="modal-knowmore" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
+        <button onclick="closeModals()" class="absolute top-6 right-6 text-white hover:text-red-500 transition-colors"><i data-lucide="x" class="w-8 h-8"></i></button>
+        <!-- User instructed to replace this placeholder with their image -->
+        <img src="assets/images/poster2.jpeg" alt="Event Details" class="max-w-full max-h-[90vh] object-contain box-glow border border-gray-800 rounded-lg" onerror="this.src='https://images.unsplash.com/photo-1618044733300-9472054094ee?q=80&w=800&auto=format&fit=crop'; this.alt='Placeholder Image - Replace src with your WhatsApp image';">
+    </div>
+
+    <!-- Terminal Decryption Modal -->
+    <div id="modal-terminal" class="fixed inset-0 bg-black/95 backdrop-blur z-[100] hidden flex items-center justify-center p-4">
+        <div class="w-full max-w-lg bg-[#050505] border border-gray-800 rounded shadow-2xl overflow-hidden font-typewriter">
+            <!-- Terminal Header -->
+            <div class="bg-gray-900 px-4 py-2 flex items-center justify-between border-b border-gray-800">
+                <span class="text-[10px] text-gray-400">sib_decryption_tool.exe</span>
+                <button onclick="closeModals()" class="text-gray-500 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <!-- Terminal Body -->
+            <div class="p-6 h-80 flex flex-col">
+                <div id="terminalOutput" class="text-green-500 text-xs leading-relaxed mb-4 flex-grow overflow-y-auto">
+                    > INITIATING DECRYPTION SEQUENCE...<br>
+                    > TARGET: <span id="termDayTarget" class="text-white"></span><br>
+                    > CLUE: <span id="termClue" class="text-yellow-400"></span><br><br>
+                    > AWAITING DETECTIVE INPUT...
+                </div>
+                
+                <form id="decryptionForm" class="mt-auto border-t border-gray-800 pt-4 flex items-center gap-2">
+                    <span class="text-green-500 font-bold">></span>
+                    <input type="text" id="terminalInput" class="terminal-input" placeholder="ENTER ANSWER..." autocomplete="off" required>
+                    <button type="submit" class="hidden"></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // ==========================================
+        // ADMIN DATA STRUCTURE (Mock for Firebase)
+        // You will replace this object by fetching from Firebase in the Admin Dashboard
+        // ==========================================
+        const gameData = {
+            weeks: [
+                { id: 'w1', title: 'Week 01', subtitle: 'Identify The Startup', active: true },
+                { id: 'w2', title: 'Week 02', subtitle: 'Investigation Report', active: true },
+                { id: 'w3', title: 'Week 03', subtitle: 'Operation Phoenix', active: false },
+                { id: 'w4', title: 'Week 04', subtitle: 'Final Investigation', active: false }
+            ],
+            days: {
+                'w1': [
+                    { day: 1, locked: false, clue: "They didn't sell a product; they sold an experience. Think 2007, a simple presentation.", answer: "APPLE", letterContent: "<p>Detective,</p><p>Good job cracking the first firewall. The target company revolutionized mobile communication.</p><p><strong>YOUR TASK:</strong><br>Submit a 1-page report detailing their initial marketing strategy.</p>" },
+                    { day: 2, locked: true, clue: "Started as a DVD rental service by mail.", answer: "NETFLIX", letterContent: "<p>They pivoted before pivot was a buzzword.</p><p><strong>YOUR TASK:</strong><br>Analyze their transition from physical to digital distribution.</p>" },
+                    // ... Generate up to 7 days
+                    { day: 3, locked: true, clue: "Database locked. Admin must upload clue.", answer: "XXX", letterContent: "" },
+                    { day: 4, locked: true, clue: "Database locked.", answer: "XXX", letterContent: "" },
+                    { day: 5, locked: true, clue: "Database locked.", answer: "XXX", letterContent: "" },
+                    { day: 6, locked: true, clue: "Database locked.", answer: "XXX", letterContent: "" },
+                    { day: 7, locked: true, clue: "Database locked.", answer: "XXX", letterContent: "" }
+                ],
+                'w2': [
+                    { day: 1, locked: true, clue: "Admin has not initiated this sequence.", answer: "ADMIN", letterContent: "Pending..." },
+                    { day: 2, locked: true, clue: "Admin has not initiated this sequence.", answer: "ADMIN", letterContent: "Pending..." },
+                    { day: 3, locked: true, clue: "Admin has not initiated this sequence.", answer: "ADMIN", letterContent: "Pending..." },
+                    { day: 4, locked: true, clue: "Admin has not initiated this sequence.", answer: "ADMIN", letterContent: "Pending..." },
+                    { day: 5, locked: true, clue: "Admin has not initiated this sequence.", answer: "ADMIN", letterContent: "Pending..." },
+                    { day: 6, locked: true, clue: "Admin has not initiated this sequence.", answer: "ADMIN", letterContent: "Pending..." },
+                    { day: 7, locked: true, clue: "Admin has not initiated this sequence.", answer: "ADMIN", letterContent: "Pending..." }
+                ]
+            }
+        };
+
+        // State variables
+        let currentWeekId = null;
+        let currentDayData = null;
+
+        // ==========================================
+        // UI NAVIGATION FUNCTIONS
+        // ==========================================
+        function switchView(viewId) {
+            document.getElementById('view-landing').classList.add('hidden');
+            document.getElementById('view-gameboard').classList.add('hidden');
+            document.getElementById('view-letter').classList.add('hidden');
+            
+            document.getElementById(viewId).classList.remove('hidden');
+            document.getElementById(viewId).classList.add('flex');
+
+            if(viewId === 'view-gameboard') {
+                renderWeeks();
             }
         }
 
-        // Fake Terminal Animation Effect
-        function startDecryptionAnimation() {
-            const loadingScreen = document.getElementById('loadingScreen');
-            const loadingText = document.getElementById('loadingText');
-            loadingScreen.classList.remove('hidden');
-
-            const lines = [
-                "> Establishing secure connection to S.I.B Mainframe...",
-                "> Verifying clearance code...",
-                "> Code Accepted.",
-                "> Bypassing firewall...",
-                "> Decrypting case file #001...",
-                "> Extracting payload...",
-                "> ACCESS GRANTED."
-            ];
-
-            let lineIndex = 0;
-            loadingText.innerHTML = '';
-
-            const interval = setInterval(() => {
-                if (lineIndex < lines.length) {
-                    loadingText.innerHTML += lines[lineIndex] + '<br>';
-                    lineIndex++;
-                } else {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        loadingScreen.classList.add('hidden');
-                        document.getElementById('letterScreen').classList.remove('hidden');
-                    }, 800);
-                }
-            }, 400); // Speed of the text appearing
+        function openKnowMore() {
+            document.getElementById('modal-knowmore').classList.remove('hidden');
         }
+
+        function closeModals() {
+            document.getElementById('modal-knowmore').classList.add('hidden');
+            document.getElementById('modal-terminal').classList.add('hidden');
+            document.getElementById('terminalInput').value = '';
+        }
+
+        // ==========================================
+        // GAME BOARD RENDER LOGIC
+        // ==========================================
+        function renderWeeks() {
+            const grid = document.getElementById('weekGrid');
+            grid.innerHTML = '';
+            
+            gameData.weeks.forEach(w => {
+                const borderClass = w.active ? 'border-sib-blue hover:shadow-[0_0_15px_rgba(59,130,246,0.2)]' : 'border-gray-800 opacity-50 cursor-not-allowed';
+                const icon = w.active ? '<i data-lucide="unlock" class="text-sib-blue w-5 h-5"></i>' : '<i data-lucide="lock" class="text-gray-600 w-5 h-5"></i>';
+                
+                grid.innerHTML += `
+                    <div onclick="if('${w.active}' === 'true') selectWeek('${w.id}', '${w.title}')" class="box-glow bg-black/40 border p-6 cursor-pointer transition-all flex flex-col items-center text-center group ${borderClass}">
+                        <div class="mb-4">${icon}</div>
+                        <h3 class="text-xl font-cinzel font-bold text-white mb-2 group-hover:text-sib-blue transition-colors">${w.title}</h3>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-widest">${w.subtitle}</p>
+                    </div>
+                `;
+            });
+            lucide.createIcons();
+        }
+
+        function selectWeek(weekId, weekTitle) {
+            currentWeekId = weekId;
+            document.getElementById('daysContainer').classList.remove('hidden');
+            document.getElementById('selectedWeekTitle').textContent = weekTitle;
+            
+            const grid = document.getElementById('daysGrid');
+            grid.innerHTML = '';
+            
+            const days = gameData.days[weekId] || [];
+            
+            days.forEach(d => {
+                const isReady = d.clue && d.clue !== "Database locked."; // Simple check if admin uploaded a clue
+                const bgClass = d.locked 
+                    ? (isReady ? 'bg-gray-900 border-gray-700 hover:border-sib-blue' : 'bg-gray-900/30 border-gray-800 opacity-40 cursor-not-allowed')
+                    : 'bg-sib-blue/20 border-sib-blue text-sib-blue'; // Unlocked state
+                
+                const icon = d.locked ? 'lock' : 'file-text';
+                
+                grid.innerHTML += `
+                    <button onclick="if('${isReady}' === 'true' && '${d.locked}' === 'true') openTerminal(${d.day}); else if('${d.locked}' === 'false') revealLetter(${d.day});" 
+                            class="aspect-square border flex flex-col items-center justify-center p-2 rounded transition-all ${bgClass}">
+                        <span class="font-cinzel text-xl font-bold mb-1">D${d.day}</span>
+                        <i data-lucide="${icon}" class="w-4 h-4 opacity-70"></i>
+                    </button>
+                `;
+            });
+            lucide.createIcons();
+            
+            // Scroll to days container
+            document.getElementById('daysContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ==========================================
+        // DECRYPTION TERMINAL LOGIC
+        // ==========================================
+        function openTerminal(dayNum) {
+            currentDayData = gameData.days[currentWeekId].find(d => d.day === dayNum);
+            
+            document.getElementById('termDayTarget').textContent = `WEEK ${currentWeekId.replace('w','')} / DAY ${dayNum}`;
+            document.getElementById('termClue').textContent = currentDayData.clue;
+            
+            document.getElementById('modal-terminal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('terminalInput').focus(), 100);
+        }
+
+        document.getElementById('decryptionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const input = document.getElementById('terminalInput');
+            const output = document.getElementById('terminalOutput');
+            const answer = input.value.trim().toUpperCase();
+            
+            input.disabled = true;
+            output.innerHTML += `<br><span class="text-white">> ${answer}</span><br>`;
+            
+            // Validate Answer (In real app, do this via Firebase to prevent cheating)
+            setTimeout(() => {
+                if(answer === currentDayData.answer) {
+                    output.innerHTML += `<span class="text-sib-blue">> DECRYPTION SUCCESSFUL. KEY MATCHED.</span><br>`;
+                    output.innerHTML += `> OPENING CASE FILE...`;
+                    
+                    // Mark as unlocked in local state (Save to Firebase here later)
+                    currentDayData.locked = false; 
+                    
+                    setTimeout(() => {
+                        closeModals();
+                        selectWeek(currentWeekId, document.getElementById('selectedWeekTitle').textContent); // Refresh grid
+                        revealLetter(currentDayData.day);
+                    }, 1000);
+                } else {
+                    output.innerHTML += `<span class="text-red-500">> ACCESS DENIED. INCORRECT KEY.</span><br>`;
+                    output.innerHTML += `> AWAITING DETECTIVE INPUT...`;
+                    input.value = '';
+                    input.disabled = false;
+                    input.focus();
+                    
+                    // Scroll terminal to bottom
+                    output.scrollTop = output.scrollHeight;
+                }
+            }, 800);
+        });
+
+        // ==========================================
+        // REVEAL LETTER LOGIC
+        // ==========================================
+        function revealLetter(dayNum) {
+            const data = gameData.days[currentWeekId].find(d => d.day === dayNum);
+            
+            const today = new Date();
+            document.getElementById('letterDate').textContent = today.toLocaleDateString('en-GB');
+            document.getElementById('letterFileNo').textContent = `${today.getFullYear()}/W${currentWeekId.replace('w','')}/D${dayNum}`;
+            
+            document.getElementById('letterContentArea').innerHTML = data.letterContent;
+            
+            switchView('view-letter');
+        }
+
     </script>
 </body>
 </html>
