@@ -2602,8 +2602,8 @@ onSnapshot(collection(db, "startup_detective"), (snap) => {
                     lucide.createIcons();
                 }
             }, (err) => console.error("Core Team Sync Error:", err));
-      });
+    } // <-- ഇത് if(user) നെ ക്ലോസ് ചെയ്യുന്നു 
+        }); // <-- ഇത് onAuthStateChanged നെ ക്ലോസ് ചെയ്യുന്നു
     </script>
-</script>
 </body>
 </html>
