@@ -678,15 +678,12 @@
                             </div>
 
              <!-- IMAGE UPLOAD FOR SIB -->
-                  <div>
+               <div>
                                 <label class="block text-[10px] font-bold text-brand-muted mb-1 uppercase tracking-widest">Task Letter Image</label>
-                                <div class="flex items-center gap-3">
-                                    <button type="button" onclick="document.getElementById('sibLetterImage').click()" class="bg-brand-teal/10 text-brand-teal px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-brand-teal/20 hover:bg-brand-teal/20 transition-colors">
-                                        Browse Image
-                                    </button>
-                                    <input type="file" id="sibLetterImage" class="hidden" accept="image/*">
-                                    <span id="sibImageName" class="text-[10px] text-brand-muted font-medium truncate w-32">No file chosen</span>
-                                </div>
+                                <!-- Native File Input (No Javascript needed for showing name) -->
+                                <input type="file" id="sibLetterImage" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-brand-teal/10 file:text-brand-teal hover:file:bg-brand-teal/20 transition-all cursor-pointer bg-white border border-gray-200/50 rounded-xl">
+                                
+                                <div id="sibImageName" class="text-[10px] text-brand-teal font-bold mt-1.5"></div>
                                 <input type="hidden" id="sibExistingImageUrl">
                             </div>
                             
@@ -1721,25 +1718,26 @@
             }
         };
 
-        window.resetSibForm = () => { 
-            document.getElementById('sibAdminForm').reset(); 
-            document.getElementById('sibDocId').value = ''; 
-            document.getElementById('sibExistingImageUrl').value = ''; 
-            document.getElementById('sibImageName').textContent = 'No file chosen'; 
-            document.getElementById('sibSubmitBtn').innerText = 'Save Case'; 
+       window.resetSibForm = () => {
+            document.getElementById('sibAdminForm').reset();
+            document.getElementById('sibDocId').value = '';
+            document.getElementById('sibExistingImageUrl').value = '';
+            document.getElementById('sibImageName').textContent = ''; 
+            document.getElementById('sibSubmitBtn').innerText = 'Save Case';
         };
 
-        window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { 
-            document.getElementById('sibDocId').value = id; 
-            document.getElementById('sibWeek').value = week; 
-            document.getElementById('sibDay').value = day; 
-            document.getElementById('sibClue').value = clue; 
-            document.getElementById('sibAnswer').value = answer; 
-            document.getElementById('sibExistingImageUrl').value = letterUrl !== 'undefined' ? letterUrl : ''; 
-            document.getElementById('sibImageName').textContent = letterUrl && letterUrl !== 'undefined' && letterUrl !== '' ? 'Image Saved' : 'No file chosen'; 
-            document.getElementById('sibStatus').value = isLocked === 'true' ? 'Locked' : 'Unlocked'; 
-            document.getElementById('sibSubmitBtn').innerText = 'Update Case'; 
-            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => {
+            document.getElementById('sibDocId').value = id;
+            document.getElementById('sibWeek').value = week;
+            document.getElementById('sibDay').value = day;
+            document.getElementById('sibClue').value = clue;
+            document.getElementById('sibAnswer').value = answer;
+            document.getElementById('sibExistingImageUrl').value = letterUrl !== 'undefined' ? letterUrl : '';
+            // എഡിറ്റ് ചെയ്യുമ്പോൾ മാത്രം നിലവിലുള്ള ഇമേജ് ഉണ്ടെന്ന് കാണിക്കാൻ:
+            document.getElementById('sibImageName').textContent = (letterUrl && letterUrl !== 'undefined' && letterUrl !== '') ? '✓ Existing Image Saved' : '';
+            document.getElementById('sibStatus').value = isLocked === 'true' ? 'Locked' : 'Unlocked';
+            document.getElementById('sibSubmitBtn').innerText = 'Update Case';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
     </script>
 
