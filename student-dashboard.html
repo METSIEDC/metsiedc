@@ -430,10 +430,9 @@
 
     <!-- FIREBASE AND APP LOGIC -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, query, where, orderBy, getDocs, limit, increment, writeBatch, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, query, where, orderBy, getDocs, limit, increment, writeBatch, onSnapshot, initializeFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         // Initialize Lucide Icons
         lucide.createIcons();
 
@@ -447,9 +446,12 @@
             appId: "1:954403413150:web:2523a3377f15a3d6002f8f" 
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+       const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+// Force long-polling to prevent connection crashes
+const db = initializeFirestore(app, {
+    experimentalForceLongPolling: true
+});
         
         window.db = db;
         window.currentUserId = null;
@@ -992,9 +994,9 @@
             }
         });
 
-        // --- AUTH & DATA LOAD (WITH LIVE SYNC FOR POINTS) ---
-        import { arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+     // --- AUTH & DATA LOAD (WITH LIVE SYNC FOR POINTS) ---
+import { arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 window.currentUserId = user.uid;
