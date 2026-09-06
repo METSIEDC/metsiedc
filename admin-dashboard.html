@@ -1861,6 +1861,7 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
                         await new Promise(r => setTimeout(r, 1000));
                     }
                 } catch(e) { console.error("Failed to setup admin role:", e); }
+                
                 initSync();
                 if(window.renderFormBuilderFields) window.renderFormBuilderFields();
             } else { 
@@ -2602,8 +2603,7 @@ onSnapshot(collection(db, "startup_detective"), (snap) => {
                     lucide.createIcons();
                 }
             }, (err) => console.error("Core Team Sync Error:", err));
-    } // <-- ഇത് if(user) നെ ക്ലോസ് ചെയ്യുന്നു 
-        } // <-- ഇത് onAuthStateChanged നെ ക്ലോസ് ചെയ്യുന്നു
+        }
     </script>
 </body>
 </html>
