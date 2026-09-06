@@ -2065,9 +2065,7 @@ window.editSibCase = (id, week, day, clue, answer, letterUrl, isLocked) => { doc
                 e.preventDefault(); const id = document.getElementById('editPhoneUserId').value; const phone = document.getElementById('editPhoneInput').value;
                 try { await updateDoc(getDocRef("users", id), { phone: phone }); await window.logActivity("Phone Updated", `Phone for ${id}`); window.showToast("Phone updated", "success"); window.toggleEditPhoneModal(false); } catch (err) { window.showToast(err.message, "error"); }
             });
-        }
 // SIB FORM HANDLER (WITH IMAGE UPLOAD)
-      // SIB FORM HANDLER (WITH IMAGE UPLOAD)
         const sibAdminForm = document.getElementById('sibAdminForm');
         if(sibAdminForm) {
             sibAdminForm.addEventListener('submit', async (e) => {
