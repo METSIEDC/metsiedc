@@ -19,28 +19,15 @@
                         typewriter: ['Courier Prime', 'monospace'],
                     },
                     colors: {
-                        sib: {
-                            dark: '#0a0b10',
-                            blue: '#3b82f6',
-                            glow: '#60a5fa',
-                            paper: '#f4ebd8',
-                            ink: '#1a1a1a',
-                            red: '#dc2626'
-                        }
+                        sib: { dark: '#0a0b10', blue: '#3b82f6', glow: '#60a5fa' }
                     },
                     animation: {
                         'flicker': 'flicker 3s linear infinite',
                         'scanline': 'scanline 8s linear infinite',
                     },
                     keyframes: {
-                        flicker: {
-                            '0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100%': { opacity: 1 },
-                            '20%, 21.999%, 63%, 63.999%, 65%, 69.999%': { opacity: 0.4 }
-                        },
-                        scanline: {
-                            '0%': { transform: 'translateY(-100%)' },
-                            '100%': { transform: 'translateY(100vh)' }
-                        }
+                        flicker: { '0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100%': { opacity: 1 }, '20%, 21.999%, 63%, 63.999%, 65%, 69.999%': { opacity: 0.4 } },
+                        scanline: { '0%': { transform: 'translateY(-100%)' }, '100%': { transform: 'translateY(100vh)' } }
                     }
                 }
             }
@@ -49,14 +36,7 @@
 
     <style>
         body { background-color: #0a0b10; color: #e2e8f0; overflow-x: hidden; }
-        
-        .bg-grid-pattern {
-            background-image: 
-                linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
-            background-size: 30px 30px;
-        }
-
+        .bg-grid-pattern { background-image: linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px); background-size: 30px 30px; }
         .text-glow { text-shadow: 0 0 20px rgba(96, 165, 250, 0.6); }
         .box-glow { box-shadow: 0 0 30px rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); }
         
@@ -67,24 +47,15 @@
             box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 20px 50px rgba(0,0,0,0.8);
         }
 
-        .red-stamp {
-            color: #dc2626; border: 4px solid #dc2626; transform: rotate(-15deg);
-            padding: 4px 12px; border-radius: 8px; opacity: 0.8; font-weight: 900; letter-spacing: 2px;
-        }
-
-        /* Terminal Input */
+        .red-stamp { color: #dc2626; border: 4px solid #dc2626; transform: rotate(-10deg); padding: 6px 16px; border-radius: 8px; opacity: 0.8; font-weight: 900; letter-spacing: 2px; display: inline-block;}
         .terminal-input { background: transparent; border: none; outline: none; color: #22c55e; width: 100%; text-transform: uppercase; font-family: monospace; }
-        
-        /* Scanline Overlay */
-        .scanline-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 20px;
-            background: linear-gradient(to bottom, transparent, rgba(59,130,246,0.2), transparent);
-            pointer-events: none; z-index: 50;
-        }
+        .scanline-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 20px; background: linear-gradient(to bottom, transparent, rgba(59,130,246,0.2), transparent); pointer-events: none; z-index: 50; }
         
         ::-webkit-scrollbar { width: 6px; } 
         ::-webkit-scrollbar-track { background: #0a0b10; } 
         ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 3px; }
+        .blink { animation: blinker 1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
     </style>
 </head>
 <body class="bg-grid-pattern relative min-h-screen flex flex-col font-sans antialiased selection:bg-sib-blue selection:text-white">
@@ -98,18 +69,19 @@
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0a0b10_80%)] pointer-events-none"></div>
         
         <div class="relative z-10 text-center max-w-4xl mx-auto flex flex-col items-center">
-            <p class="text-xs md:text-sm tracking-[0.4em] text-gray-400 font-bold mb-6">MET'S SCHOOL OF ENGINEERING STARTUP CELL</p>
+            <p class="text-xs md:text-sm tracking-[0.4em] text-gray-400 font-bold mb-6">IEDC MSEM | MET'S SCHOOL OF ENGINEERING</p>
             
             <h2 class="text-4xl md:text-6xl font-cinzel font-bold text-gray-200 tracking-widest mb-2">STARTUP</h2>
-            <h1 class="text-6xl md:text-8xl font-cinzel font-black text-sib-blue text-glow animate-flicker tracking-tighter mb-6">DETECTIVE</h1>
+            <h1 class="text-6xl md:text-8xl md:text-[10rem] font-cinzel font-black text-sib-blue text-glow animate-flicker tracking-tighter mb-6">DETECTIVE</h1>
             
-            <p class="text-lg md:text-xl text-gray-300 font-light italic mb-10 max-w-2xl mx-auto">
+            <h3 class="text-xl md:text-2xl font-cinzel text-gray-300 font-bold tracking-widest mb-4">THE HUNT FOR THE NEXT UNICORN</h3>
+            <p class="text-sm md:text-lg text-gray-400 font-typewriter italic mb-10 max-w-2xl mx-auto">
                 "Every successful startup leaves clues. Can you decode them before everyone else?"
             </p>
             
             <div class="flex items-center gap-4 mb-12">
                 <div class="h-[1px] w-12 bg-gray-600"></div>
-                <h3 class="text-2xl font-cinzel font-bold tracking-[0.3em] text-gray-400">S I B</h3>
+                <h3 class="text-3xl font-cinzel font-black tracking-[0.3em] text-gray-400 text-glow">S I B</h3>
                 <div class="h-[1px] w-12 bg-gray-600"></div>
             </div>
 
@@ -118,7 +90,7 @@
                     Know More
                 </button>
                 <button onclick="switchView('view-gameboard')" class="flex-1 bg-sib-blue hover:bg-blue-400 text-black py-4 px-6 rounded-none tracking-widest text-xs font-bold uppercase transition-all shadow-[0_0_20px_rgba(59,130,246,0.4)]">
-                    Start The Game
+                    Start Investigation
                 </button>
             </div>
         </div>
@@ -144,68 +116,51 @@
         <main class="flex-grow p-6 md:p-12 max-w-6xl mx-auto w-full">
             <h3 class="text-xs text-gray-400 uppercase tracking-[0.3em] mb-8 border-b border-gray-800 pb-2">Select Investigation Phase</h3>
             
-            <!-- Week Selection Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12" id="weekGrid">
-                <!-- Generated via JS -->
+                <!-- Static Week Boxes -->
+                <div onclick="selectWeek('w1', 'Week 01')" class="box-glow bg-black/40 border border-sib-blue hover:shadow-[0_0_15px_rgba(59,130,246,0.2)] p-6 cursor-pointer transition-all flex flex-col items-center text-center group">
+                    <div class="mb-4"><i data-lucide="unlock" class="text-sib-blue w-5 h-5"></i></div><h3 class="text-xl font-cinzel font-bold text-white mb-2 group-hover:text-sib-blue transition-colors">Week 01</h3><p class="text-[10px] text-gray-400 uppercase tracking-widest">Identify The Startup</p>
+                </div>
+                <div onclick="selectWeek('w2', 'Week 02')" class="box-glow bg-black/40 border border-sib-blue hover:shadow-[0_0_15px_rgba(59,130,246,0.2)] p-6 cursor-pointer transition-all flex flex-col items-center text-center group">
+                    <div class="mb-4"><i data-lucide="unlock" class="text-sib-blue w-5 h-5"></i></div><h3 class="text-xl font-cinzel font-bold text-white mb-2 group-hover:text-sib-blue transition-colors">Week 02</h3><p class="text-[10px] text-gray-400 uppercase tracking-widest">Investigation Report</p>
+                </div>
+                <div onclick="selectWeek('w3', 'Week 03')" class="box-glow bg-black/40 border border-sib-blue hover:shadow-[0_0_15px_rgba(59,130,246,0.2)] p-6 cursor-pointer transition-all flex flex-col items-center text-center group">
+                    <div class="mb-4"><i data-lucide="unlock" class="text-sib-blue w-5 h-5"></i></div><h3 class="text-xl font-cinzel font-bold text-white mb-2 group-hover:text-sib-blue transition-colors">Week 03</h3><p class="text-[10px] text-gray-400 uppercase tracking-widest">Operation Phoenix</p>
+                </div>
+                <div onclick="selectWeek('w4', 'Week 04')" class="box-glow bg-black/40 border border-sib-blue hover:shadow-[0_0_15px_rgba(59,130,246,0.2)] p-6 cursor-pointer transition-all flex flex-col items-center text-center group">
+                    <div class="mb-4"><i data-lucide="unlock" class="text-sib-blue w-5 h-5"></i></div><h3 class="text-xl font-cinzel font-bold text-white mb-2 group-hover:text-sib-blue transition-colors">Week 04</h3><p class="text-[10px] text-gray-400 uppercase tracking-widest">Final Investigation</p>
+                </div>
             </div>
 
-            <!-- Days Grid (Shows when a week is selected) -->
+            <!-- Days Grid -->
             <div id="daysContainer" class="hidden">
                 <h3 class="text-xs text-gray-400 uppercase tracking-[0.3em] mb-6 flex justify-between items-end border-b border-gray-800 pb-2">
                     <span id="selectedWeekTitle" class="text-sib-blue font-bold text-sm">WEEK 1</span>
                     <span>Case Files</span>
                 </h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4" id="daysGrid">
-                    <!-- Generated via JS -->
+                    <!-- Populated dynamically via Firebase -->
                 </div>
             </div>
         </main>
     </div>
 
     <!-- ==========================================
-         VIEW 3: TASK LETTER REVEAL
+         VIEW 3: TASK LETTER REVEAL (IMAGE BASED)
          ========================================== -->
     <div id="view-letter" class="hidden flex-col items-center justify-start min-h-screen p-4 md:p-10 relative z-20 bg-black/95">
-        <button onclick="switchView('view-gameboard')" class="absolute top-6 left-6 text-gray-400 hover:text-white flex items-center gap-2 text-xs uppercase tracking-widest font-bold">
+        <button onclick="switchView('view-gameboard')" class="absolute top-6 left-6 text-gray-400 hover:text-white flex items-center gap-2 text-xs uppercase tracking-widest font-bold z-30 bg-black/50 p-3 rounded backdrop-blur">
             <i data-lucide="x-square" class="w-4 h-4"></i> Close File
         </button>
 
-        <div class="paper-texture w-full max-w-3xl mt-12 p-8 md:p-16 relative rotate-[-0.5deg]">
-            <!-- Stamps -->
-            <div class="absolute top-8 right-8 red-stamp text-xl md:text-3xl font-cinzel">TOP SECRET</div>
-            <div class="absolute bottom-12 left-8 red-stamp text-lg md:text-xl font-cinzel" style="transform: rotate(5deg); opacity: 0.6;">CLASSIFIED</div>
-            <div class="absolute top-8 left-8 text-black/40"><i data-lucide="fingerprint" class="w-16 h-16 opacity-50"></i></div>
-
-            <!-- Header -->
-            <div class="border-b-2 border-black/80 pb-6 mb-8 mt-10">
-                <div class="text-center mb-6">
-                    <h1 class="text-2xl md:text-4xl font-cinzel font-black tracking-widest uppercase">Task Letter</h1>
-                    <p class="text-xs font-typewriter font-bold tracking-widest mt-1">FILE NO: IEDC/METS/<span id="letterFileNo"></span></p>
-                </div>
-                <div class="font-typewriter text-sm font-bold grid grid-cols-2 gap-4">
-                    <p>TO: S.I.B Lead Detective</p>
-                    <p class="text-right">DATE: <span id="letterDate"></span></p>
-                    <p>STATUS: <span class="bg-black text-white px-2 py-0.5">UNSEALED</span></p>
-                </div>
+        <div class="w-full max-w-4xl mt-12 relative animate-flicker">
+            <div class="text-center mb-6">
+                <p class="text-green-500 font-typewriter text-xs mb-2 blink">> DECRYPTION COMPLETE. RENDERING IMAGE FILE...</p>
+                <div class="red-stamp font-cinzel text-xl absolute -top-4 -right-4 z-10">TOP SECRET</div>
             </div>
-
-            <!-- Content injected by JS -->
-            <div id="letterContentArea" class="font-typewriter text-sm md:text-base leading-relaxed space-y-5 text-black font-semibold">
-                <!-- Content goes here -->
-            </div>
-
-            <!-- Footer Signature -->
-            <div class="mt-16 pt-8 border-t border-black/30 flex justify-between items-end">
-                <div class="font-typewriter text-xs font-bold text-black/60">
-                    <p>ISSUED BY:</p>
-                    <p>STUDENT LEAD I & II</p>
-                    <p>INNOVATION & ENTREPRENEURSHIP DEV CENTRE</p>
-                </div>
-                <div class="text-right">
-                    <img src="https://api.dicebear.com/9.x/initials/svg?seed=Admin&backgroundColor=transparent&textColor=000" class="w-16 h-16 opacity-50 ml-auto mb-2 grayscale" style="filter: contrast(200%);" alt="Signature">
-                    <p class="font-cinzel font-bold text-sm">DIRECTOR, S.I.B</p>
-                </div>
-            </div>
+            
+            <!-- THE ADMIN UPLOADED IMAGE REVEALS HERE -->
+            <img id="letterImageDisplay" src="" alt="Classified Task Letter" class="w-full h-auto border-4 border-[#1a1a1a] shadow-[0_0_50px_rgba(0,0,0,0.8)] filter sepia-[0.2] contrast-[1.1] rounded-sm">
         </div>
     </div>
 
@@ -213,33 +168,138 @@
          MODALS
          ========================================== -->
     
-    <!-- Know More Modal (Image 2) -->
-    <div id="modal-knowmore" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
-        <button onclick="closeModals()" class="absolute top-6 right-6 text-white hover:text-red-500 transition-colors"><i data-lucide="x" class="w-8 h-8"></i></button>
-        <!-- User instructed to replace this placeholder with their image -->
-        <img src="assets/images/poster2.jpeg" alt="Event Details" class="max-w-full max-h-[90vh] object-contain box-glow border border-gray-800 rounded-lg" onerror="this.src='https://images.unsplash.com/photo-1618044733300-9472054094ee?q=80&w=800&auto=format&fit=crop'; this.alt='Placeholder Image - Replace src with your WhatsApp image';">
+    <!-- KNOW MORE MODAL (HTML Recreated from Poster 2) -->
+    <div id="modal-knowmore" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[100] hidden items-center justify-center p-4">
+        <button onclick="closeModals()" class="absolute top-6 right-6 text-white hover:text-red-500 transition-colors z-50"><i data-lucide="x" class="w-8 h-8"></i></button>
+        
+        <div class="paper-texture w-full max-w-5xl max-h-[90vh] overflow-y-auto p-6 md:p-12 relative rounded shadow-2xl custom-scrollbar text-[#1a1a1a]">
+            <!-- Stamps -->
+            <div class="absolute top-6 right-6 md:top-12 md:right-12 red-stamp text-2xl md:text-4xl font-cinzel z-10">TOP SECRET</div>
+            <p class="text-xs font-typewriter font-bold tracking-widest mb-6">FILE NO: IEDC/MET'S/2026/SP/05</p>
+
+            <div class="text-center border-b-2 border-black/80 pb-6 mb-8">
+                <h1 class="text-5xl md:text-7xl font-cinzel font-black tracking-tighter text-[#690000]">TASK 03</h1>
+                <h2 class="text-3xl md:text-5xl font-cinzel font-bold text-white bg-[#690000] inline-block px-4 py-1 mt-2 tracking-widest">STARTUP DETECTIVE</h2>
+                <h3 class="text-xl md:text-2xl font-serif italic font-bold mt-3">The Hunt for the Next Unicorn</h3>
+            </div>
+
+            <div class="space-y-8 font-serif">
+                <!-- Objective -->
+                <div>
+                    <h3 class="text-xl font-bold border-b border-black/30 pb-1 mb-3 text-[#690000]">OBJECTIVE</h3>
+                    <p class="text-sm md:text-base leading-relaxed font-medium">To enhance entrepreneurial thinking, market research, analytical skills and business strategy by investigating real-world startups through a month-long mystery challenge.<br><strong>You are now a part of the Startup Intelligence Bureau (SIB). Decode the clues. Analyze the truth. Solve the case.</strong></p>
+                </div>
+
+                <!-- Team Formation & Mission Overview Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-black/5 p-5 border border-black/20 rounded">
+                        <h3 class="text-lg font-bold text-[#690000] flex items-center gap-2 mb-3"><i data-lucide="users" class="w-5 h-5"></i> TEAM FORMATION</h3>
+                        <ul class="list-disc pl-5 text-sm font-medium space-y-1">
+                            <li>2 members per team.</li>
+                            <li>One member will act as the Lead Detective.</li>
+                            <li>Teams must remain unchanged throughout the challenge.</li>
+                            <li>All submissions must be made before the announced deadlines.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold border-b border-black/30 pb-1 mb-3 text-[#690000]">MISSION OVERVIEW</h3>
+                        <p class="text-sm leading-relaxed font-medium">A 4-week investigation challenge. Each week, a new Case File. Each Case File, a new set of clues. Every clue brings you closer to the truth. Only the sharpest detectives will crack the case.</p>
+                    </div>
+                </div>
+
+                <!-- Weekly Breakdown Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                    <div class="border border-black/40 p-4 bg-[#e8deca]">
+                        <h4 class="font-bold text-center border-b border-black/40 pb-2 mb-2 text-[#690000]">WEEK 01</h4>
+                        <p class="text-xs font-bold mb-2">CASE FILE 001<br>IDENTIFY THE STARTUP</p>
+                        <p class="text-[10px] mb-2 leading-tight">Decode the clues and identify the mystery startup.</p>
+                        <p class="text-[10px] font-bold">Deliverable:<br>• 1-Page Investigation Report</p>
+                    </div>
+                    <div class="border border-black/40 p-4 bg-[#e8deca]">
+                        <h4 class="font-bold text-center border-b border-black/40 pb-2 mb-2 text-[#690000]">WEEK 02</h4>
+                        <p class="text-xs font-bold mb-2">INVESTIGATION REPORT</p>
+                        <p class="text-[10px] mb-2 leading-tight">Deep dive into the startup. Analyze everything.</p>
+                        <p class="text-[10px] font-bold">Deliverables:<br>• Detailed Report (PDF)<br>• 3-Min Presentation</p>
+                    </div>
+                    <div class="border border-black/40 p-4 bg-[#e8deca]">
+                        <h4 class="font-bold text-center border-b border-black/40 pb-2 mb-2 text-[#690000]">WEEK 03</h4>
+                        <p class="text-xs font-bold mb-2">OPERATION PHOENIX</p>
+                        <p class="text-[10px] mb-2 leading-tight">You are the new leadership. Redesign. Rebuild. Rise.</p>
+                        <p class="text-[10px] font-bold">Deliverable:<br>• 5-Slide Pitch Deck</p>
+                    </div>
+                    <div class="border border-black/40 p-4 bg-[#e8deca]">
+                        <h4 class="font-bold text-center border-b border-black/40 pb-2 mb-2 text-[#690000]">WEEK 04</h4>
+                        <p class="text-xs font-bold mb-2">FINAL INVESTIGATION</p>
+                        <p class="text-[10px] mb-2 leading-tight">A new case. New clues. Final presentation.</p>
+                        <p class="text-[10px] font-bold">Deliverable:<br>• Final Presentation & Q&A</p>
+                    </div>
+                </div>
+
+                <!-- Footer Sections -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8 border-t-2 border-black/50 pt-8">
+                    <div>
+                        <h3 class="text-lg font-bold text-[#690000] mb-3">EVALUATION CRITERIA</h3>
+                        <ul class="text-xs space-y-1 font-typewriter font-bold flex flex-col gap-2">
+                            <li class="flex justify-between border-b border-black/20 border-dashed pb-1"><span>Investigation Accuracy</span> <span>20</span></li>
+                            <li class="flex justify-between border-b border-black/20 border-dashed pb-1"><span>Research Quality</span> <span>20</span></li>
+                            <li class="flex justify-between border-b border-black/20 border-dashed pb-1"><span>Business Analysis</span> <span>20</span></li>
+                            <li class="flex justify-between border-b border-black/20 border-dashed pb-1"><span>Innovation & Thinking</span> <span>20</span></li>
+                            <li class="flex justify-between border-b border-black/20 border-dashed pb-1"><span>Presentation</span> <span>20</span></li>
+                            <li class="flex justify-between font-black text-sm mt-2"><span>TOTAL</span> <span>100</span></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-[#690000] mb-3">SPECIAL MISSIONS</h3>
+                        <p class="text-[10px] italic mb-2">Surprise missions may be released throughout the challenge. Complete them to earn bonus points.</p>
+                        <ul class="text-[10px] font-bold list-disc pl-4 space-y-1">
+                            <li>Flash Case Files</li>
+                            <li>Founder Identification</li>
+                            <li>Hidden Clues</li>
+                            <li>Funding Mystery</li>
+                            <li>Startup Logo Puzzle</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-[#690000] mb-3">GENERAL INSTRUCTIONS</h3>
+                        <ul class="text-[10px] font-bold list-disc pl-4 space-y-2">
+                            <li>Use only authentic and credible sources.</li>
+                            <li>Reports must be original and based on independent analysis.</li>
+                            <li>AI-generated content without proper understanding will not be accepted.</li>
+                            <li>Proper references must be included.</li>
+                            <li>Decision of the Evaluation Committee will be final.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="text-center mt-12 pt-6 border-t-2 border-black/80 font-cinzel">
+                    <p class="text-xl md:text-2xl font-black text-[#690000]">Every clue matters. Every decision changes the outcome.</p>
+                    <p class="text-lg md:text-xl font-bold mt-2">Think like a Founder. Investigate like a Detective.</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Terminal Decryption Modal -->
-    <div id="modal-terminal" class="fixed inset-0 bg-black/95 backdrop-blur z-[100] hidden flex items-center justify-center p-4">
-        <div class="w-full max-w-lg bg-[#050505] border border-gray-800 rounded shadow-2xl overflow-hidden font-typewriter">
+    <div id="modal-terminal" class="fixed inset-0 bg-black/95 backdrop-blur z-[100] hidden items-center justify-center p-4">
+        <div class="w-full max-w-xl bg-[#050505] border border-gray-800 rounded shadow-[0_0_40px_rgba(34,197,94,0.1)] overflow-hidden font-typewriter">
             <!-- Terminal Header -->
             <div class="bg-gray-900 px-4 py-2 flex items-center justify-between border-b border-gray-800">
                 <span class="text-[10px] text-gray-400">sib_decryption_tool.exe</span>
                 <button onclick="closeModals()" class="text-gray-500 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
             </div>
             <!-- Terminal Body -->
-            <div class="p-6 h-80 flex flex-col">
-                <div id="terminalOutput" class="text-green-500 text-xs leading-relaxed mb-4 flex-grow overflow-y-auto">
+            <div class="p-6 h-96 flex flex-col">
+                <div id="terminalOutput" class="text-green-500 text-sm leading-relaxed mb-4 flex-grow overflow-y-auto custom-scrollbar">
                     > INITIATING DECRYPTION SEQUENCE...<br>
-                    > TARGET: <span id="termDayTarget" class="text-white"></span><br>
-                    > CLUE: <span id="termClue" class="text-yellow-400"></span><br><br>
+                    > TARGET: <span id="termDayTarget" class="text-white font-bold"></span><br><br>
+                    > INTERCEPTED CLUE:<br>
+                    > <span id="termClue" class="text-yellow-400 font-bold"></span><br><br>
                     > AWAITING DETECTIVE INPUT...
                 </div>
                 
-                <form id="decryptionForm" class="mt-auto border-t border-gray-800 pt-4 flex items-center gap-2">
+                <form id="decryptionForm" class="mt-auto border-t border-gray-800 pt-4 flex items-center gap-3">
                     <span class="text-green-500 font-bold">></span>
-                    <input type="text" id="terminalInput" class="terminal-input" placeholder="ENTER ANSWER..." autocomplete="off" required>
+                    <input type="text" id="terminalInput" class="terminal-input text-lg" placeholder="ENTER STARTUP NAME..." autocomplete="off" required>
                     <button type="submit" class="hidden"></button>
                 </form>
             </div>
@@ -247,140 +307,138 @@
     </div>
 
 
-    <script>
-        // Initialize Icons
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Initialize Lucide Icons
         lucide.createIcons();
 
-        // ==========================================
-        // ADMIN DATA STRUCTURE (Mock for Firebase)
-        // You will replace this object by fetching from Firebase in the Admin Dashboard
-        // ==========================================
-        const gameData = {
-            weeks: [
-                { id: 'w1', title: 'Week 01', subtitle: 'Identify The Startup', active: true },
-                { id: 'w2', title: 'Week 02', subtitle: 'Investigation Report', active: true },
-                { id: 'w3', title: 'Week 03', subtitle: 'Operation Phoenix', active: false },
-                { id: 'w4', title: 'Week 04', subtitle: 'Final Investigation', active: false }
-            ],
-            days: {
-                'w1': [
-                    { day: 1, locked: false, clue: "They didn't sell a product; they sold an experience. Think 2007, a simple presentation.", answer: "APPLE", letterContent: "<p>Detective,</p><p>Good job cracking the first firewall. The target company revolutionized mobile communication.</p><p><strong>YOUR TASK:</strong><br>Submit a 1-page report detailing their initial marketing strategy.</p>" },
-                    { day: 2, locked: true, clue: "Started as a DVD rental service by mail.", answer: "NETFLIX", letterContent: "<p>They pivoted before pivot was a buzzword.</p><p><strong>YOUR TASK:</strong><br>Analyze their transition from physical to digital distribution.</p>" },
-                    // ... Generate up to 7 days
-                    { day: 3, locked: true, clue: "Database locked. Admin must upload clue.", answer: "XXX", letterContent: "" },
-                    { day: 4, locked: true, clue: "Database locked.", answer: "XXX", letterContent: "" },
-                    { day: 5, locked: true, clue: "Database locked.", answer: "XXX", letterContent: "" },
-                    { day: 6, locked: true, clue: "Database locked.", answer: "XXX", letterContent: "" },
-                    { day: 7, locked: true, clue: "Database locked.", answer: "XXX", letterContent: "" }
-                ],
-                'w2': [
-                    { day: 1, locked: true, clue: "Admin has not initiated this sequence.", answer: "ADMIN", letterContent: "Pending..." },
-                    { day: 2, locked: true, clue: "Admin has not initiated this sequence.", answer: "ADMIN", letterContent: "Pending..." },
-                    { day: 3, locked: true, clue: "Admin has not initiated this sequence.", answer: "ADMIN", letterContent: "Pending..." },
-                    { day: 4, locked: true, clue: "Admin has not initiated this sequence.", answer: "ADMIN", letterContent: "Pending..." },
-                    { day: 5, locked: true, clue: "Admin has not initiated this sequence.", answer: "ADMIN", letterContent: "Pending..." },
-                    { day: 6, locked: true, clue: "Admin has not initiated this sequence.", answer: "ADMIN", letterContent: "Pending..." },
-                    { day: 7, locked: true, clue: "Admin has not initiated this sequence.", answer: "ADMIN", letterContent: "Pending..." }
-                ]
-            }
+        // Firebase Config (Replace with your actual config)
+        const firebaseConfig = { 
+            apiKey: "AIzaSyAIn9hB7Hx4Nwwk5Ar9bE3tFuo40VkBcc8", 
+            authDomain: "metsiedc-3010e.firebaseapp.com", 
+            projectId: "metsiedc-3010e", 
+            storageBucket: "metsiedc-3010e.firebasestorage.app", 
+            messagingSenderId: "954403413150", 
+            appId: "1:954403413150:web:2523a3377f15a3d6002f8f" 
         };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
         // State variables
-        let currentWeekId = null;
-        let currentDayData = null;
+        window.gameData = {};
+        window.currentWeekId = null;
+        window.currentDayData = null;
+
+        // Fetch Live Data from Admin Dashboard
+        onSnapshot(collection(db, "startup_detective"), (snap) => {
+            window.gameData = {};
+            snap.forEach(doc => {
+                const d = doc.data();
+                if(!window.gameData[d.week]) window.gameData[d.week] = [];
+                window.gameData[d.week].push(d);
+            });
+            
+            // Re-render days if a week is currently open
+            if(window.currentWeekId) window.selectWeek(window.currentWeekId, document.getElementById('selectedWeekTitle').textContent);
+        });
 
         // ==========================================
         // UI NAVIGATION FUNCTIONS
         // ==========================================
-        function switchView(viewId) {
+        window.switchView = (viewId) => {
             document.getElementById('view-landing').classList.add('hidden');
             document.getElementById('view-gameboard').classList.add('hidden');
             document.getElementById('view-letter').classList.add('hidden');
             
             document.getElementById(viewId).classList.remove('hidden');
             document.getElementById(viewId).classList.add('flex');
+        };
 
-            if(viewId === 'view-gameboard') {
-                renderWeeks();
-            }
-        }
-
-        function openKnowMore() {
+        window.openKnowMore = () => {
             document.getElementById('modal-knowmore').classList.remove('hidden');
-        }
+            document.getElementById('modal-knowmore').classList.add('flex');
+        };
 
-        function closeModals() {
+        window.closeModals = () => {
             document.getElementById('modal-knowmore').classList.add('hidden');
             document.getElementById('modal-terminal').classList.add('hidden');
             document.getElementById('terminalInput').value = '';
-        }
+        };
 
         // ==========================================
         // GAME BOARD RENDER LOGIC
         // ==========================================
-        function renderWeeks() {
-            const grid = document.getElementById('weekGrid');
-            grid.innerHTML = '';
-            
-            gameData.weeks.forEach(w => {
-                const borderClass = w.active ? 'border-sib-blue hover:shadow-[0_0_15px_rgba(59,130,246,0.2)]' : 'border-gray-800 opacity-50 cursor-not-allowed';
-                const icon = w.active ? '<i data-lucide="unlock" class="text-sib-blue w-5 h-5"></i>' : '<i data-lucide="lock" class="text-gray-600 w-5 h-5"></i>';
-                
-                grid.innerHTML += `
-                    <div onclick="if('${w.active}' === 'true') selectWeek('${w.id}', '${w.title}')" class="box-glow bg-black/40 border p-6 cursor-pointer transition-all flex flex-col items-center text-center group ${borderClass}">
-                        <div class="mb-4">${icon}</div>
-                        <h3 class="text-xl font-cinzel font-bold text-white mb-2 group-hover:text-sib-blue transition-colors">${w.title}</h3>
-                        <p class="text-[10px] text-gray-400 uppercase tracking-widest">${w.subtitle}</p>
-                    </div>
-                `;
-            });
-            lucide.createIcons();
-        }
-
-        function selectWeek(weekId, weekTitle) {
-            currentWeekId = weekId;
+        window.selectWeek = (weekId, weekTitle) => {
+            window.currentWeekId = weekId;
             document.getElementById('daysContainer').classList.remove('hidden');
             document.getElementById('selectedWeekTitle').textContent = weekTitle;
             
             const grid = document.getElementById('daysGrid');
             grid.innerHTML = '';
             
-            const days = gameData.days[weekId] || [];
+            // Get days for this week from Firebase data
+            const days = window.gameData[weekId] || [];
             
-            days.forEach(d => {
-                const isReady = d.clue && d.clue !== "Database locked."; // Simple check if admin uploaded a clue
-                const bgClass = d.locked 
-                    ? (isReady ? 'bg-gray-900 border-gray-700 hover:border-sib-blue' : 'bg-gray-900/30 border-gray-800 opacity-40 cursor-not-allowed')
-                    : 'bg-sib-blue/20 border-sib-blue text-sib-blue'; // Unlocked state
+            // Generate exactly 7 days
+            for(let i=1; i<=7; i++) {
+                const dayData = days.find(d => d.day === i);
                 
-                const icon = d.locked ? 'lock' : 'file-text';
-                
-                grid.innerHTML += `
-                    <button onclick="if('${isReady}' === 'true' && '${d.locked}' === 'true') openTerminal(${d.day}); else if('${d.locked}' === 'false') revealLetter(${d.day});" 
-                            class="aspect-square border flex flex-col items-center justify-center p-2 rounded transition-all ${bgClass}">
-                        <span class="font-cinzel text-xl font-bold mb-1">D${d.day}</span>
-                        <i data-lucide="${icon}" class="w-4 h-4 opacity-70"></i>
-                    </button>
-                `;
-            });
+                // If admin has set the day AND unlocked it
+                if(dayData && dayData.isLocked === false) {
+                    grid.innerHTML += `
+                        <button onclick="window.openTerminal(${i})" class="aspect-square border flex flex-col items-center justify-center p-2 rounded transition-all bg-sib-blue/20 border-sib-blue text-sib-blue hover:bg-sib-blue/30 shadow-[0_0_15px_rgba(59,130,246,0.3)] group">
+                            <span class="font-cinzel text-xl font-bold mb-1">DAY ${i}</span>
+                            <i data-lucide="unlock" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                        </button>
+                    `;
+                } 
+                // If admin has created the day but LOCKED it
+                else if (dayData && dayData.isLocked === true) {
+                    grid.innerHTML += `
+                        <button class="aspect-square border flex flex-col items-center justify-center p-2 rounded transition-all bg-gray-900 border-gray-700 text-gray-500 cursor-not-allowed">
+                            <span class="font-cinzel text-xl font-bold mb-1">DAY ${i}</span>
+                            <i data-lucide="lock" class="w-4 h-4"></i>
+                        </button>
+                    `;
+                }
+                // If Admin hasn't created the day yet at all
+                else {
+                    grid.innerHTML += `
+                        <button class="aspect-square border flex flex-col items-center justify-center p-2 rounded transition-all bg-gray-900/30 border-gray-800 opacity-40 cursor-not-allowed">
+                            <span class="font-cinzel text-xl font-bold mb-1">DAY ${i}</span>
+                            <i data-lucide="lock" class="w-4 h-4 opacity-50"></i>
+                        </button>
+                    `;
+                }
+            }
             lucide.createIcons();
-            
-            // Scroll to days container
             document.getElementById('daysContainer').scrollIntoView({ behavior: 'smooth' });
-        }
+        };
 
         // ==========================================
         // DECRYPTION TERMINAL LOGIC
         // ==========================================
-        function openTerminal(dayNum) {
-            currentDayData = gameData.days[currentWeekId].find(d => d.day === dayNum);
+        window.openTerminal = (dayNum) => {
+            window.currentDayData = window.gameData[window.currentWeekId].find(d => d.day === dayNum);
             
-            document.getElementById('termDayTarget').textContent = `WEEK ${currentWeekId.replace('w','')} / DAY ${dayNum}`;
-            document.getElementById('termClue').textContent = currentDayData.clue;
+            document.getElementById('termDayTarget').textContent = `WEEK ${window.currentWeekId.replace('w','')} / DAY ${dayNum}`;
+            document.getElementById('termClue').textContent = window.currentDayData.clue;
             
+            const terminalOutput = document.getElementById('terminalOutput');
+            terminalOutput.innerHTML = `
+                > INITIATING DECRYPTION SEQUENCE...<br>
+                > TARGET: <span id="termDayTarget" class="text-white font-bold">WEEK ${window.currentWeekId.replace('w','')} / DAY ${dayNum}</span><br><br>
+                > INTERCEPTED CLUE:<br>
+                > <span id="termClue" class="text-yellow-400 font-bold">${window.currentDayData.clue}</span><br><br>
+                > AWAITING DETECTIVE INPUT...
+            `;
+
             document.getElementById('modal-terminal').classList.remove('hidden');
+            document.getElementById('modal-terminal').classList.add('flex');
             setTimeout(() => document.getElementById('terminalInput').focus(), 100);
-        }
+        };
 
         document.getElementById('decryptionForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -391,47 +449,37 @@
             input.disabled = true;
             output.innerHTML += `<br><span class="text-white">> ${answer}</span><br>`;
             
-            // Validate Answer (In real app, do this via Firebase to prevent cheating)
             setTimeout(() => {
-                if(answer === currentDayData.answer) {
+                if(answer === window.currentDayData.answer.toUpperCase()) {
                     output.innerHTML += `<span class="text-sib-blue">> DECRYPTION SUCCESSFUL. KEY MATCHED.</span><br>`;
-                    output.innerHTML += `> OPENING CASE FILE...`;
-                    
-                    // Mark as unlocked in local state (Save to Firebase here later)
-                    currentDayData.locked = false; 
+                    output.innerHTML += `> RENDERING IMAGE FILE...`;
                     
                     setTimeout(() => {
-                        closeModals();
-                        selectWeek(currentWeekId, document.getElementById('selectedWeekTitle').textContent); // Refresh grid
-                        revealLetter(currentDayData.day);
-                    }, 1000);
+                        window.closeModals();
+                        window.revealLetter(window.currentDayData);
+                    }, 1500);
                 } else {
-                    output.innerHTML += `<span class="text-red-500">> ACCESS DENIED. INCORRECT KEY.</span><br>`;
-                    output.innerHTML += `> AWAITING DETECTIVE INPUT...`;
+                    output.innerHTML += `<span class="text-red-500 font-bold">> ACCESS DENIED. INCORRECT KEY.</span><br>`;
+                    output.innerHTML += `> RE-AWAITING DETECTIVE INPUT...`;
                     input.value = '';
                     input.disabled = false;
                     input.focus();
-                    
-                    // Scroll terminal to bottom
                     output.scrollTop = output.scrollHeight;
                 }
             }, 800);
         });
 
         // ==========================================
-        // REVEAL LETTER LOGIC
+        // REVEAL LETTER LOGIC (SHOWS IMAGE)
         // ==========================================
-        function revealLetter(dayNum) {
-            const data = gameData.days[currentWeekId].find(d => d.day === dayNum);
+        window.revealLetter = (data) => {
+            // Set the image src to the URL uploaded by Admin
+            const imgDisplay = document.getElementById('letterImageDisplay');
+            imgDisplay.src = data.letterUrl;
             
-            const today = new Date();
-            document.getElementById('letterDate').textContent = today.toLocaleDateString('en-GB');
-            document.getElementById('letterFileNo').textContent = `${today.getFullYear()}/W${currentWeekId.replace('w','')}/D${dayNum}`;
-            
-            document.getElementById('letterContentArea').innerHTML = data.letterContent;
-            
-            switchView('view-letter');
-        }
+            // Switch view
+            window.switchView('view-letter');
+        };
 
     </script>
 </body>
