@@ -678,10 +678,10 @@
                             </div>
 
              <!-- IMAGE UPLOAD FOR SIB -->
-               <div>
+             <div>
                                 <label class="block text-[10px] font-bold text-brand-muted mb-1 uppercase tracking-widest">Task Letter Image</label>
-                                <!-- Native File Input (No Javascript needed for showing name) -->
-                                <input type="file" id="sibLetterImage" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-brand-teal/10 file:text-brand-teal hover:file:bg-brand-teal/20 transition-all cursor-pointer bg-white border border-gray-200/50 rounded-xl">
+                                <!-- പുതിയ ID: sibSecureFileInput -->
+                                <input type="file" id="sibSecureFileInput" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-brand-teal/10 file:text-brand-teal hover:file:bg-brand-teal/20 transition-all cursor-pointer bg-white border border-gray-200/50 rounded-xl">
                                 
                                 <div id="sibImageName" class="text-[10px] text-brand-teal font-bold mt-1.5"></div>
                                 <input type="hidden" id="sibExistingImageUrl">
@@ -2060,6 +2060,7 @@
         }
 
         // SIB FORM HANDLER (WITH IMAGE UPLOAD)
+   // SIB FORM HANDLER (WITH IMAGE UPLOAD)
         const sibAdminForm = document.getElementById('sibAdminForm');
         if(sibAdminForm) {
             sibAdminForm.addEventListener('submit', async (e) => {
@@ -2071,7 +2072,8 @@
                     const day = document.getElementById('sibDay').value;
                     const docId = `${week}_D${day}`; 
                     
-                    const file = document.getElementById('sibLetterImage').files[0];
+                    // ഇവിടെ പുതിയ ID (sibSecureFileInput) കൊടുത്തിട്ടുണ്ട്
+                    const file = document.getElementById('sibSecureFileInput').files[0];
                     let letterUrl = document.getElementById('sibExistingImageUrl').value;
                     
                     if (file) {
@@ -2093,7 +2095,12 @@
                     
                     await setDoc(doc(db, "startup_detective", docId), data);
                     window.showToast("Case File Deployed!", "success");
-                    window.resetSibForm();
+                    
+                    // Reset Form
+                    document.getElementById('sibAdminForm').reset();
+                    document.getElementById('sibDocId').value = '';
+                    document.getElementById('sibExistingImageUrl').value = '';
+                    document.getElementById('sibImageName').textContent = '';
                 } catch(err) { window.showToast(err.message, "error"); } 
                 finally { btn.disabled = false; btn.innerText = originalText; }
             });
@@ -2430,6 +2437,46 @@
                 if(document.getElementById('adminMentorshipLogsContainer')) { document.getElementById('adminMentorshipLogsContainer').innerHTML = h; if(window.lucide) lucide.createIcons(); }
             });
 
+            // 2. EXCOM CMS (ORDER FIXED)
+            onSnapshot(collection(db, "excom"), (snap) => {
+                try {
+                    let rawList = []; 
+                    snap.forEach(d => rawList.push({ id: d.id, ...d.data() }));
+                    rawList.sort((a, b) => (a.order || 99) - (b.order || 99));
+                    
+                    let h = '';
+                    if(rawList.length === 0) h = '<tr><td colspan="3" class="text-center py-10 text-brand-muted text-xs uppercase font-bold">No members yet.</td></tr>';
+                    
+                    rawList.forEach(data => {
+                        // Data ഇല്ലാത്ത അവസ്ഥ വന്നാൽ എറർ ഒഴിവാക്കാൻ:
+                        const name = data.name || 'Unknown';
+                        const role = data.role || 'Member';
+                        
+                        // Edit ബട്ടണിൽ പാസ്സ് ചെയ്യുമ്പോൾ എറർ വരാതിരിക്കാൻ:
+                        const safeName = name.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeRole = role.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                        const safeImg = data.imageUrl || `https://api.dicebear.com/9.x/initials/svg?seed=${name}`;
+                        
+                        h += `<tr class="border-b border-gray-100/50 hover:bg-white/40 text-sm">
+                            <td class="px-6 py-4 flex items-center gap-3"><span class="text-xs font-bold text-gray-400 font-mono w-4">#${data.order || '-'}</span><img src="${safeImg}" class="w-12 h-12 rounded-full object-cover"></td>
+                            <td class="px-6 py-4"><div class="font-bold text-gray-900 mb-1">${name}</div><div class="text-[9px] text-brand-teal uppercase font-bold bg-teal-50 inline-block px-2 py-1 rounded border">${role}</div></td>
+                            <td class="px-6 py-4 text-center flex justify-center gap-2 mt-2">
+                                <button onclick="window.editExcomMember('${data.id}', '${safeName}', '${safeRole}', '${data.imageUrl || ''}', '', '', '${data.order || 1}')" class="text-brand-teal bg-white/50 p-2.5 rounded-xl border border-gray-100"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                                <button onclick="window.deleteExcomMember('${data.id}', '${safeName}')" class="text-red-500 bg-white/50 p-2.5 rounded-xl border border-gray-100"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </td>
+                        </tr>`;
+                    });
+                    
+                    const tbody = document.getElementById('excomListBody');
+                    if(tbody) { 
+                        tbody.innerHTML = h; 
+                        if(window.lucide) lucide.createIcons(); 
+                    }
+                } catch(error) {
+                    console.error("ExCom Load Error: ", error);
+                }
+            });
+
             // 14. Submitted Docs (Minutes & Finance)
             onSnapshot(query(collection(db, "meeting_minutes"), orderBy("timestamp", "desc")), (snap) => {
                 let h = ''; if(snap.empty) h = '<tr><td colspan="4" class="text-center py-6 text-brand-muted text-[10px] uppercase font-bold">No minutes uploaded</td></tr>';
@@ -2457,6 +2504,7 @@
                 s.forEach(d => { h += `<div class="bg-white/40 border border-white p-4 rounded-xl flex justify-between items-center mb-3 shadow-sm"><span class="text-sm font-bold text-gray-800 flex items-center gap-3"><i data-lucide="file-text" class="w-4 h-4 text-brand-teal"></i> ${window.escapeHTML(d.data().title)}</span><button onclick="window.deleteDoc(window.doc(window.db,'eventForms','${d.id}'))" class="text-red-500 bg-white hover:bg-red-50 px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors border border-gray-100 shadow-sm">Delete</button></div>`; }); 
                 if(document.getElementById('activeFormsList')) { document.getElementById('activeFormsList').innerHTML = h || '<div class="text-center py-6 text-brand-muted text-[10px]">No active forms</div>'; if(window.lucide) lucide.createIcons(); }
             });
+            
             
         } // <-- END OF initSync()
 
