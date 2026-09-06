@@ -2076,8 +2076,9 @@
                     const file = document.getElementById('sibSecureFileInput').files[0];
                     let letterUrl = document.getElementById('sibExistingImageUrl').value;
                     
-                if (file) {
-                        letterUrl = await window.uploadToDrive(file);
+               if (file) {
+                        btn.innerHTML = `<div class="spinner inline-block w-4 h-4 mr-2 border-t-white"></div> Uploading...`;
+                        letterUrl = await window.uploadToDrive(file); // Drive-ലേക്ക് നേരിട്ട് അപ്‌ലോഡ് ചെയ്യുന്നു
                     } else if (!letterUrl) {
                         throw new Error("Please upload a Task Letter image!");
                     }
